@@ -1,5 +1,8 @@
 # Iroko Framework
 
+> **🌐 Visit the full site:** [https://iroko-framework.github.io/iroko-framework/](https://iroko-framework.github.io/iroko-framework/)
+
+
 **Semantic vocabulary for governing access to Afro-Atlantic sacred knowledge systems**
 
 The Iroko Framework provides controlled vocabularies and access governance mechanisms for documenting sacred plant knowledge, spiritual entities, ritual processes, and archival materials in Afro-Atlantic traditions.
