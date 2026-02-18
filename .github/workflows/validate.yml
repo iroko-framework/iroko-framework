@@ -1,0 +1,45 @@
+# Automatic validation on every commit
+name: Validate Vocabularies
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'vocab/*.ttl'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'vocab/*.ttl'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install rapper
+      run: sudo apt-get install -y raptor2-utils
+    
+    - name: Validate Turtle files
+      run: bash scripts/validate_ttl.sh
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install Python dependencies
+      run: pip install rdflib
+    
+    - name: Generate HTML documentation
+      run: python3 scripts/generate_vocab_html.py
+    
+    - name: Commit generated HTML
+      if: github.event_name == 'push'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add vocab/*.html
+        git diff --quiet && git diff --staged --quiet || git commit -m "Auto-generate HTML documentation"
+        git push
