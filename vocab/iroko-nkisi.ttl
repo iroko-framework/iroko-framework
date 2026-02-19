@@ -1,0 +1,696 @@
+# -*- coding: utf-8 -*-
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iroko: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#> .
+@prefix nkisi: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi#> .
+
+<https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi>
+    a owl:Ontology ;
+    dcterms:title "Iroko Framework: Nkisi Module (Spiritual Entities)"@en ;
+    dcterms:description "Vocabulary for documenting spiritual entities across Afro-Atlantic traditions. Covers orisa, lwa, mpungo/inquice, vodun, egun, ajogun, nature spirits, Espiritismo guides and commissions, and Ori. Supports path/camino modeling, shrine documentation, and syncretic identity tracking."@en ;
+    dcterms:creator "Iroko Historical Society" ;
+    dcterms:created "2026-02-18"^^xsd:date ;
+    dcterms:modified "2026-02-18"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    owl:versionIRI <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi/1.0.0> ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    rdfs:seeAlso <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi.html> ;
+    rdfs:comment "This module documents spiritual entities in Afro-Atlantic traditions. Entity type, domain, paths/caminos, offerings, and shrine records are modeled here. Syncretic Catholic saint correspondences are tracked via nkisi:syncreticIdentity to prevent santos from being lost in classification. For access governance infrastructure see iroko-core. For plant associations see iroko-ewe."@en ;
+    owl:imports <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core> .
+
+# ===================================================================
+# CLASSES
+# ===================================================================
+
+nkisi:SpiritualEntity
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Spiritual Entity"@en ;
+    rdfs:comment "A divine power, ancestral spirit, nature spirit, adversarial force, or personal essence recognized and engaged within an Afro-Atlantic tradition. Includes orisa, lwa, mpungo/inquice, vodun, egun, ajogun, Ori, Espiritismo guides and commissions, and spirits of place and element."@en ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:Path
+    a owl:Class ;
+    rdfs:label "Path"@en ;
+    rdfs:comment "A distinct manifestation, aspect, or camino of a spiritual entity. Paths share the parent entity's fundamental nature but have distinct domains, temperaments, colors, numbers, offerings, and sometimes distinct syncretic identities. Example: Oya Yansa (fierce warrior aspect) vs. Oya Igbale (governess of the cemetery). Paths are not separate entities but distinct faces of the same power."@en ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:Offering
+    a owl:Class ;
+    rdfs:label "Offering"@en ;
+    rdfs:comment "A material or symbolic offering given to a spiritual entity. Includes food, drink, objects, colors, animals, and actions. General offering categories are public; specific quantities, combinations, and preparation details are access-restricted."@en ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:Shrine
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredSpecimen ;
+    rdfs:label "Shrine"@en ;
+    rdfs:comment "A consecrated physical space or vessel housing a spiritual entity. Includes ile (houses), soperas, nganga, peristyle altars, and boveda. Shrine records link physical location and custody to the entity and tradition. Operational shrine details are access-restricted."@en ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+# ===================================================================
+# PROPERTIES - Entity Classification
+# ===================================================================
+
+nkisi:entityType
+    a owl:ObjectProperty ;
+    rdfs:label "entity type"@en ;
+    rdfs:comment "Classification of this spiritual entity within the EntityType scheme. Values: nkisi:entityType-orisa, nkisi:entityType-lwa-rada, nkisi:entityType-lwa-petwo, nkisi:entityType-lwa-ghede, nkisi:entityType-mpungo-inquice, nkisi:entityType-vodun, nkisi:entityType-ori, nkisi:entityType-egun, nkisi:entityType-nfumbe, nkisi:entityType-espiritu-guia, nkisi:entityType-espiritu-commission, nkisi:entityType-spirit-of-place, nkisi:entityType-spirit-of-element, nkisi:entityType-ajogun. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:commissionType
+    a owl:ObjectProperty ;
+    rdfs:label "commission type"@en ;
+    rdfs:comment "For espiritu-commission entities: the specific commission they belong to. Values from CommissionTypeScheme. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:domain
+    a owl:DatatypeProperty ;
+    rdfs:label "domain"@en ;
+    rdfs:comment "The sphere of influence or governance of this entity. Example: iron, war, roads (Ogun); love, rivers, beauty (Oshun); wind, death, transformation (Oya). Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:syncreticIdentity
+    a owl:DatatypeProperty ;
+    rdfs:label "syncretic identity"@en ;
+    rdfs:comment "Catholic saint or other syncretic correspondence for this entity. Prevents santos from slipping through classification gaps. Example: Shango syncretizes with Santa Barbara in Lucumi; Ogou with Saint Jacques in Vodou. Free text to accommodate regional and lineage variation. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:traditionalName
+    a owl:DatatypeProperty ;
+    rdfs:label "traditional name"@en ;
+    rdfs:comment "Name of this entity in its tradition of origin. May differ from diaspora names. Example: Sango (Yoruba continental) vs. Shango (Lucumi) vs. Xango (Candomble). Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:alternateNames
+    a owl:DatatypeProperty ;
+    rdfs:label "alternate names"@en ;
+    rdfs:comment "Other names, honorifics, or tradition-specific designations for this entity across traditions. Example: Babalu Aye (Lucumi) / Obaluaye (Candomble) / Sakpata (Fon). Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:temperament
+    a owl:ObjectProperty ;
+    rdfs:label "temperament"@en ;
+    rdfs:comment "General temperament classification. Values from TemperamentScheme: nkisi:temperament-cool-sweet, nkisi:temperament-hot-fierce, nkisi:temperament-transformative, nkisi:temperament-liminal. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+# ===================================================================
+# PROPERTIES - Correspondences (Public)
+# ===================================================================
+
+nkisi:color
+    a owl:DatatypeProperty ;
+    rdfs:label "color"@en ;
+    rdfs:comment "Sacred color or color combination associated with this entity. Example: white (Obatala), yellow and gold (Oshun), red and white (Shango). Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:number
+    a owl:DatatypeProperty ;
+    rdfs:label "sacred number"@en ;
+    rdfs:comment "Sacred number or numbers associated with this entity. Example: 8 (Oshun), 16 (Obatala), 4 and 6 (Shango). Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:day
+    a owl:DatatypeProperty ;
+    rdfs:label "sacred day"@en ;
+    rdfs:comment "Day of the week or calendar feast day associated with this entity. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:element
+    a owl:DatatypeProperty ;
+    rdfs:label "element"@en ;
+    rdfs:comment "Natural element or sphere associated with this entity. Example: ocean (Yemaya), river (Oshun), cemetery (Oya Igbale, Baron Samedi), forest (Ochosi, Ogun). Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:offeringGeneral
+    a owl:ObjectProperty ;
+    rdfs:label "offering (general)"@en ;
+    rdfs:comment "General category of offering accepted by this entity. Values from OfferingTypeScheme. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:plantAssociation
+    a owl:ObjectProperty ;
+    rdfs:label "plant association"@en ;
+    rdfs:comment "Plants associated with this entity. Links to ewe:Plant instances. Inverse of ewe:entityAssociation. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+# ===================================================================
+# PROPERTIES - Restricted Correspondences
+# ===================================================================
+
+nkisi:offeringDetailed
+    a owl:DatatypeProperty ;
+    rdfs:label "offering (detailed)"@en ;
+    rdfs:comment "Specific offering details: exact foods, quantities, preparation methods. Access: initiated-only."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "initiated-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:taboo
+    a owl:DatatypeProperty ;
+    rdfs:label "taboo"@en ;
+    rdfs:comment "Prohibitions associated with this entity: foods, behaviors, or materials to avoid. Access: community-only."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "community-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:salutation
+    a owl:DatatypeProperty ;
+    rdfs:label "salutation"@en ;
+    rdfs:comment "Formal greeting or praise name used when addressing this entity in ceremony. Access: initiated-only."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "initiated-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:invocationText
+    a owl:DatatypeProperty ;
+    rdfs:label "invocation text"@en ;
+    rdfs:comment "Exact prayers, songs, or invocations used to call this entity. OPERATIONAL ONLY - never exported to RDF. Access: no-access."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "no-access" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:secretName
+    a owl:DatatypeProperty ;
+    rdfs:label "secret name"@en ;
+    rdfs:comment "Esoteric or secret name used only in restricted ceremonial contexts. OPERATIONAL ONLY - never exported to RDF. Access: no-access."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "no-access" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+# ===================================================================
+# PROPERTIES - Relational
+# ===================================================================
+
+nkisi:path
+    a owl:ObjectProperty ;
+    rdfs:label "path"@en ;
+    rdfs:comment "Links a SpiritualEntity to its known Path instances (caminos/avatars). A single entity may have many paths. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range nkisi:Path ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:relatedEntity
+    a owl:ObjectProperty ;
+    rdfs:label "related entity"@en ;
+    rdfs:comment "Another spiritual entity with a significant relationship to this one. Example: Elegba and Ogun (road and iron); Oya and Shango (consort). Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range nkisi:SpiritualEntity ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:shrine
+    a owl:ObjectProperty ;
+    rdfs:label "shrine"@en ;
+    rdfs:comment "Links a spiritual entity to a documented shrine or vessel. Access: community-only."@en ;
+    rdfs:domain nkisi:SpiritualEntity ;
+    rdfs:range nkisi:Shrine ;
+    iroko:minimumAccessLevel "community-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+# ===================================================================
+# PROPERTIES - Path Class
+# ===================================================================
+
+nkisi:parentEntity
+    a owl:ObjectProperty ;
+    rdfs:label "parent entity"@en ;
+    rdfs:comment "The SpiritualEntity of which this Path is an aspect or manifestation."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range nkisi:SpiritualEntity ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:pathName
+    a owl:DatatypeProperty ;
+    rdfs:label "path name"@en ;
+    rdfs:comment "The name of this specific path or camino. Example: Oya Yansa, Oya Igbale, Oshun Ibu Kole, Obatala Ocha Grinan. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:pathDomain
+    a owl:DatatypeProperty ;
+    rdfs:label "path domain"@en ;
+    rdfs:comment "The specific domain of this path, which may differ from the parent entity's general domain. Example: Oshun Ibu Kole governs vultures and transformation, distinct from Oshun's general river domain. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:pathColor
+    a owl:DatatypeProperty ;
+    rdfs:label "path color"@en ;
+    rdfs:comment "Color specific to this path, which may differ from the parent entity's general colors. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:pathNumber
+    a owl:DatatypeProperty ;
+    rdfs:label "path number"@en ;
+    rdfs:comment "Sacred number specific to this path. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:pathTemperament
+    a owl:ObjectProperty ;
+    rdfs:label "path temperament"@en ;
+    rdfs:comment "Temperament of this specific path. Values from TemperamentScheme. A path may have a different temperament than its parent entity. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:pathSyncreticIdentity
+    a owl:DatatypeProperty ;
+    rdfs:label "path syncretic identity"@en ;
+    rdfs:comment "Catholic saint or other syncretic correspondence specific to this path, if different from parent entity. Example: some paths of Oshun correspond to Our Lady of Charity; others to Our Lady of Candelaria. Access: public-unrestricted."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:pathOfferingDetailed
+    a owl:DatatypeProperty ;
+    rdfs:label "path offering (detailed)"@en ;
+    rdfs:comment "Offering details specific to this path. May differ significantly from parent entity offerings. Access: initiated-only."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "initiated-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:pathTaboo
+    a owl:DatatypeProperty ;
+    rdfs:label "path taboo"@en ;
+    rdfs:comment "Prohibitions specific to this path. Access: community-only."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "community-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+nkisi:lineageNotes
+    a owl:DatatypeProperty ;
+    rdfs:label "lineage notes"@en ;
+    rdfs:comment "Notes on which lineages recognize this path and any contested aspects of its identity or attributes. Access: community-only."@en ;
+    rdfs:domain nkisi:Path ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "community-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+
+# ===================================================================
+# CONCEPT SCHEME: Entity Type
+# ===================================================================
+
+nkisi:EntityTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Entity Type Classification"@en ;
+    dcterms:description "Classification of spiritual entity types across Afro-Atlantic traditions. Organized by ontological category: divine powers, personal essence, ancestral spirits, nature spirits, and adversarial forces."@en ;
+    skos:hasTopConcept nkisi:entityType-orisa,
+                       nkisi:entityType-vodun,
+                       nkisi:entityType-lwa-rada,
+                       nkisi:entityType-lwa-petwo,
+                       nkisi:entityType-lwa-ghede,
+                       nkisi:entityType-mpungo-inquice,
+                       nkisi:entityType-ori,
+                       nkisi:entityType-egun,
+                       nkisi:entityType-nfumbe,
+                       nkisi:entityType-espiritu-guia,
+                       nkisi:entityType-espiritu-commission,
+                       nkisi:entityType-spirit-of-place,
+                       nkisi:entityType-spirit-of-element,
+                       nkisi:entityType-ajogun .
+
+# --- Divine Powers ---
+
+nkisi:entityType-orisa
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Orisa"@en ;
+    skos:altLabel "Orisha"@en, "Orixa"@en ;
+    skos:definition "Divine forces in Yoruba and Yoruba-derived traditions (Lucumi, Candomble Ketu, Trinidad Orisha, Oyotunji). Orisa are cosmic powers governing natural and human domains, each with specific attributes, offerings, colors, and numbers."@en .
+
+nkisi:entityType-vodun
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Vodun"@en ;
+    skos:altLabel "Vodu"@en ;
+    skos:definition "Divine forces in Fon/Ewe-derived traditions including Arara in Cuba. Related to but distinct from Haitian lwa; represents the continental Dahomean tradition."@en .
+
+nkisi:entityType-lwa-rada
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Lwa (Rada)"@en ;
+    skos:altLabel "Loa Rada"@en ;
+    skos:definition "Spirits of the Rada nanchon in Haitian Vodou. Generally cool, sweet, and beneficent in temperament. Primary Fon/Dahomey origins. Received with white and light colors."@en .
+
+nkisi:entityType-lwa-petwo
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Lwa (Petwo)"@en ;
+    skos:altLabel "Loa Petro"@en ;
+    skos:definition "Spirits of the Petwo nanchon in Haitian Vodou. Hot, fierce, and transformative in temperament. Kongo, New World maroon, and creole origins. Associated with fire and gunpowder."@en .
+
+nkisi:entityType-lwa-ghede
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Lwa (Ghede)"@en ;
+    skos:altLabel "Loa Gede"@en, "Gede"@en ;
+    skos:definition "Spirits of the Ghede nanchon in Haitian Vodou. Govern death, sexuality, resurrection, and the boundary between living and dead. Liminal in temperament. Composite New World origins distinct from both Rada and Petwo."@en .
+
+nkisi:entityType-mpungo-inquice
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Mpungo/Inquice"@en ;
+    skos:altLabel "Mpungu"@en, "Inquice"@en ;
+    skos:definition "Divine forces in Bantu-derived traditions: Mpungo in Palo Monte and Mayombe, Inquice in Candomble Angola. These are the same cosmic powers known by different names in the Kongo religious continuum. Example: Zarabanda (Palo) corresponds to Ogum (Candomble Angola)."@en .
+
+# --- Personal Essence ---
+
+nkisi:entityType-ori
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Ori"@en ;
+    skos:definition "The individual divine head and personal destiny in Yoruba and Yoruba-derived traditions. Not an external spirit but the innermost self and personal divine principle. Ori has a shrine (ile ori), receives rogacion and propitiation, and is considered the most important force in an individual's life. Its guidance supersedes that of the orisa."@en ;
+    skos:scopeNote "Ori is ontologically distinct from the orisa — personal rather than cosmic, internal rather than external. It should not be classified under orisa."@en .
+
+# --- Ancestral Spirits ---
+
+nkisi:entityType-egun
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Egun"@en ;
+    skos:altLabel "The Dead"@en, "Ancestors"@en, "Eggun"@en ;
+    skos:definition "The ancestral dead across Afro-Atlantic traditions. Not tradition-specific: encompasses egungún (Yoruba), the dead honored at boveda (Espiritismo), ancestral courts in Vodou, and the honored dead in all traditions where ancestors are engaged. The dead precede and supersede the orisa and lwa in most traditions."@en ;
+    skos:scopeNote "Egun as a category is deliberately cross-traditional. Tradition-specific practices of ancestral engagement are documented via the iroko:tradition property on individual instances."@en .
+
+nkisi:entityType-nfumbe
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Nfumbe"@en ;
+    skos:definition "The human dead bound to a nganga in Palo Monte and Mayombe. Ontologically distinct from free ancestors (egun): the nfumbe enters a specific contractual and coercive relationship with the Palero and the nganga vessel. The nfumbe works within the nganga and is not free."@en ;
+    skos:scopeNote "Nfumbe should not be classified as egun. The bound nature of the nfumbe is a defining characteristic with significant ethical and archival implications."@en .
+
+nkisi:entityType-espiritu-guia
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Espiritu Guia"@en ;
+    skos:altLabel "Spirit Guide"@en, "Guide"@en ;
+    skos:definition "A personal spirit guide in the Espiritismo tradition. Part of an individual's cuadro espiritual (spiritual frame). Guides may be ancestral relatives, historical figures, or evolved spirits assigned to assist a specific person. Identified through mediumship and misa espiritual."@en .
+
+nkisi:entityType-espiritu-commission
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Espiritu de Commission"@en ;
+    skos:altLabel "Commission Spirit"@en ;
+    skos:definition "A spirit belonging to a named commission (comision) in Espiritismo. Commissions are groups of spirits sharing a common historical, cultural, or archetypal identity. Commission type is documented via nkisi:commissionType property and the CommissionTypeScheme."@en .
+
+# --- Nature and Place Spirits ---
+
+nkisi:entityType-spirit-of-place
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Spirit of Place"@en ;
+    skos:altLabel "Faires"@en, "Woodland Spirit"@en, "Spirit of the Land"@en ;
+    skos:definition "Spirits tied to specific locations, landscapes, or natural features: forests, rivers, crossroads, mountains, specific trees or stones. Not the dead, not divine powers, not malevolent by nature. Engaged through offering and acknowledgment. Found across multiple traditions including Hoodoo and syncretic folk practices."@en ;
+    skos:scopeNote "The term Faires may reflect crossover from European folk traditions into Hoodoo and syncretic contexts. Terminological certainty varies by regional tradition. Document tradition-specific terminology via nkisi:alternateNames and iroko:tradition on individual instances."@en .
+
+nkisi:entityType-spirit-of-element
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Spirit of Element"@en ;
+    skos:altLabel "Elemental Spirit"@en ;
+    skos:definition "Spirits governing elemental forces — water, wind, fire, earth, lightning — not otherwise classified as orisa, lwa, or other named divine powers. Includes elemental presences recognized in folk traditions and syncretic contexts."@en .
+
+# --- Adversarial Forces ---
+
+nkisi:entityType-ajogun
+    a skos:Concept ;
+    skos:inScheme nkisi:EntityTypeScheme ;
+    skos:prefLabel "Ajogun"@en ;
+    skos:altLabel "Adversarial Force"@en ;
+    skos:definition "Adversarial cosmic forces in Yoruba cosmology. The principal Ajogun are Iku (Death), Arun (Disease), Ofo (Loss), Egba (Paralysis), Oran (Legal Trouble), Epe (Curse), Ewon (Imprisonment), and Ese (all other afflictions). Powerful forces that are propitiated or deflected rather than worshipped. Not deities; not ancestors; ontologically distinct from orisa."@en ;
+    skos:scopeNote "Ajogun are not evil spirits in a moral sense but cosmic forces of adversity that must be balanced. Their propitiation is a legitimate archival and ritual category distinct from orisa worship."@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Commission Type
+# ===================================================================
+
+nkisi:CommissionTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Commission Type Classification"@en ;
+    dcterms:description "Named commissions (comisiones) in Espiritismo. Each commission represents a group of spirits sharing a common historical, cultural, or archetypal identity. Documented on espiritu-commission entities via nkisi:commissionType."@en ;
+    skos:hasTopConcept nkisi:commission-africano,
+                       nkisi:commission-indio,
+                       nkisi:commission-gitano,
+                       nkisi:commission-madama,
+                       nkisi:commission-arabe,
+                       nkisi:commission-congo,
+                       nkisi:commission-marinero,
+                       nkisi:commission-medical,
+                       nkisi:commission-celestial,
+                       nkisi:commission-intranquil .
+
+nkisi:commission-africano
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Africano"@en ;
+    skos:definition "Commission of African spirits, often depicted as enslaved Africans or African elders. Work with strength, protection, and grounding. Among the most powerful commissions."@en .
+
+nkisi:commission-indio
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Indio"@en ;
+    skos:altLabel "Native American"@en ;
+    skos:definition "Commission of Indigenous American spirits. Work with nature, healing, and the land. Common in Cuban, Puerto Rican, and Dominican Espiritismo reflecting indigenous Taino presence."@en .
+
+nkisi:commission-gitano
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Gitano"@en ;
+    skos:altLabel "Gypsy"@en ;
+    skos:definition "Commission of Romani spirits. Work with divination, luck, commerce, and love. Often approached for card reading and matters of fortune."@en .
+
+nkisi:commission-madama
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Madama"@en ;
+    skos:definition "Commission of maternal African or Afro-Caribbean women spirits, often depicted as market women or healers. Work with protection, home, healing, and practical matters."@en .
+
+nkisi:commission-arabe
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Arabe"@en ;
+    skos:altLabel "Arab"@en, "Moro"@en ;
+    skos:definition "Commission of Arab or Moorish spirits. Work with commerce, prosperity, and esoteric knowledge. Reflect historical Moorish presence in Iberian culture transmitted to the Caribbean."@en .
+
+nkisi:commission-congo
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Congo"@en ;
+    skos:definition "Commission of Kongo-derived spirits in Espiritismo. Work with earthy, transformative, and protective matters. Bridge between Espiritismo and Palo traditions in syncretic practice."@en .
+
+nkisi:commission-marinero
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Marinero"@en ;
+    skos:altLabel "Sailor"@en ;
+    skos:definition "Commission of sailor or seafaring spirits. Work with travel, navigation, and matters of the sea. Reflect Caribbean maritime culture."@en .
+
+nkisi:commission-medical
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Medical Commission"@en ;
+    skos:altLabel "Comision Medica"@en ;
+    skos:definition "Commission of spirits who were doctors, healers, or medical practitioners in life. Work with healing and health matters. Sometimes called upon in misa for diagnosis."@en .
+
+nkisi:commission-celestial
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Celestial Commission"@en ;
+    skos:altLabel "Comision Celestial"@en ;
+    skos:definition "Commission of highly evolved or elevated spirits associated with light, purity, and spiritual advancement. May include spirits identified as angels or exalted ancestors."@en .
+
+nkisi:commission-intranquil
+    a skos:Concept ;
+    skos:inScheme nkisi:CommissionTypeScheme ;
+    skos:prefLabel "Intranquil Spirit"@en ;
+    skos:altLabel "Espiritu Intranquilo"@en ;
+    skos:definition "Spirits who died in conflict, trauma, or without resolution. Worked cautiously; associated with unrest and unfinished business. Distinct from the other commissions in that they are engaged for specific workings rather than as ongoing guides."@en ;
+    skos:scopeNote "Intranquil spirits occupy a contested category in Espiritismo — some practitioners consider them dangerous and do not work with them. Document lineage position via iroko:contestedNotes."@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Temperament
+# ===================================================================
+
+nkisi:TemperamentScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Temperament Classification"@en ;
+    dcterms:description "Temperament or spiritual disposition of an entity or path. Reflects the nature and quality of the entity's energy and how it is approached in ritual."@en ;
+    skos:hasTopConcept nkisi:temperament-cool-sweet,
+                       nkisi:temperament-hot-fierce,
+                       nkisi:temperament-transformative,
+                       nkisi:temperament-liminal .
+
+nkisi:temperament-cool-sweet
+    a skos:Concept ;
+    skos:inScheme nkisi:TemperamentScheme ;
+    skos:prefLabel "Cool/Sweet"@en ;
+    skos:altLabel "Frio"@en, "Rada"@en ;
+    skos:definition "Entities of cool, gentle, beneficent energy. Approached with white and light colors, cool water, and gentle offerings. Example: Obatala, Yemaya (certain paths), Rada lwa."@en .
+
+nkisi:temperament-hot-fierce
+    a skos:Concept ;
+    skos:inScheme nkisi:TemperamentScheme ;
+    skos:prefLabel "Hot/Fierce"@en ;
+    skos:altLabel "Caliente"@en, "Petwo"@en ;
+    skos:definition "Entities of hot, intense, warrior energy. Approached with fire, iron, rum, and strong offerings. Example: Ogun, Shango, Petwo lwa."@en .
+
+nkisi:temperament-transformative
+    a skos:Concept ;
+    skos:inScheme nkisi:TemperamentScheme ;
+    skos:prefLabel "Transformative"@en ;
+    skos:definition "Entities whose primary nature is change, transition, and transformation. Neither simply cool nor hot; work with both destruction and creation. Example: Oya, Elegba."@en .
+
+nkisi:temperament-liminal
+    a skos:Concept ;
+    skos:inScheme nkisi:TemperamentScheme ;
+    skos:prefLabel "Liminal"@en ;
+    skos:definition "Entities who exist at thresholds — between life and death, sacred and profane, this world and the next. Example: Ghede lwa, Eshu/Elegba as gatekeeper, Oya Igbale."@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Offering Type
+# ===================================================================
+
+nkisi:OfferingTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Offering Type Classification"@en ;
+    dcterms:description "General categories of offerings given to spiritual entities. Specific quantities and preparation are access-restricted; these general categories are public."@en ;
+    skos:hasTopConcept nkisi:offering-food,
+                       nkisi:offering-drink,
+                       nkisi:offering-animal,
+                       nkisi:offering-object,
+                       nkisi:offering-plant,
+                       nkisi:offering-candle-light,
+                       nkisi:offering-water,
+                       nkisi:offering-money-coin,
+                       nkisi:offering-cloth-fabric,
+                       nkisi:offering-music-song,
+                       nkisi:offering-labor-action .
+
+nkisi:offering-food
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Food"@en ;
+    skos:definition "Prepared or natural foods offered to an entity. Specific foods are tradition and entity specific."@en .
+
+nkisi:offering-drink
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Drink"@en ;
+    skos:definition "Liquids offered to an entity: water, rum, wine, honey, etc."@en .
+
+nkisi:offering-animal
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Animal"@en ;
+    skos:definition "Animal sacrifice or offering. Category is public; specific animals, method, and context are initiated-only."@en .
+
+nkisi:offering-object
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Sacred Object"@en ;
+    skos:definition "Ritual objects, implements, or symbolic items offered or dedicated to an entity."@en .
+
+nkisi:offering-plant
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Plant/Herb"@en ;
+    skos:definition "Plants, flowers, or herbal preparations offered to an entity. Links to ewe:Plant instances."@en .
+
+nkisi:offering-candle-light
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Candle/Light"@en ;
+    skos:definition "Candles or other light sources offered or burned for an entity."@en .
+
+nkisi:offering-water
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Water"@en ;
+    skos:definition "Fresh water, ocean water, river water, or blessed water offered to an entity."@en .
+
+nkisi:offering-money-coin
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Money/Coin"@en ;
+    skos:definition "Coins or currency offered to an entity, particularly common with Elegba, Oshun, and market-oriented spirits."@en .
+
+nkisi:offering-cloth-fabric
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Cloth/Fabric"@en ;
+    skos:definition "Fabric, beads, or clothing offered or draped for an entity in the entity's sacred colors."@en .
+
+nkisi:offering-music-song
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Music/Song"@en ;
+    skos:definition "Songs, drumming, or music performed in honor of an entity. General category is public; specific songs and rhythms are initiated-only."@en .
+
+nkisi:offering-labor-action
+    a skos:Concept ;
+    skos:inScheme nkisi:OfferingTypeScheme ;
+    skos:prefLabel "Labor/Action"@en ;
+    skos:definition "Dedicated labor, service, or action performed as offering. Example: building a shrine, completing a vow, acts of charity associated with an entity's domain."@en .

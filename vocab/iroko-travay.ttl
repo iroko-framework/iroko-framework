@@ -1,0 +1,635 @@
+# -*- coding: utf-8 -*-
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iroko: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#> .
+@prefix nkisi: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi#> .
+@prefix travay: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay#> .
+
+<https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay>
+    a owl:Ontology ;
+    dcterms:title "Iroko Framework: Travay Module (Ritual Processes)"@en ;
+    dcterms:description "Vocabulary for documenting ritual processes in Afro-Atlantic traditions. Covers ceremonies, initiatory rites, and ceremonial sequences. Distinguishes ongoing ceremonial practice from threshold initiation events. Access control is at the property level — the existence and general nature of ceremonies is public; operational sequences and details are restricted."@en ;
+    dcterms:creator "Iroko Historical Society" ;
+    dcterms:created "2026-02-18"^^xsd:date ;
+    dcterms:modified "2026-02-18"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    owl:versionIRI <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay/1.0.0> ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    rdfs:seeAlso <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay.html> ;
+    rdfs:comment "This module documents ritual processes across Afro-Atlantic traditions. The name Travay (from Haitian Vodou: travay, work) reflects the active nature of ritual engagement. Access control is at the property level throughout this module: the existence of a ceremony is public, its general purpose is public, operational details are restricted. For spiritual entities see iroko-nkisi. For plant use in ceremony see iroko-ewe."@en ;
+    owl:imports <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core> .
+
+# ===================================================================
+# CLASSES
+# ===================================================================
+
+travay:RitualProcess
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Ritual Process"@en ;
+    rdfs:comment "Base class for any structured ceremonial activity in an Afro-Atlantic tradition. Subclassed into Ceremony (recurring practice) and InitiatoryRite (threshold event). General process type, presiding entity, and tradition are public; operational sequences and instructions are restricted."@en ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:Ceremony
+    a owl:Class ;
+    rdfs:subClassOf travay:RitualProcess ;
+    rdfs:label "Ceremony"@en ;
+    rdfs:comment "A recurring ritual event that can be performed multiple times for one or many participants. Examples: bembe, tambor, wemilere, misa espiritual, rogacion de cabeza, ebbo, despojos, velacion. Ceremonies are ongoing practice rather than threshold events."@en ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:InitiatoryRite
+    a owl:Class ;
+    rdfs:subClassOf travay:RitualProcess ;
+    rdfs:label "Initiatory Rite"@en ;
+    rdfs:comment "A threshold ceremony that permanently changes the initiant's spiritual status. Examples: kariocha (making Ocha), mano de Orula, abo faca, pinaldo, rayamiento (Palo), kanzo (Vodou), feitura (Candomble). Initiatory rites are non-repeatable transformations. Operational details are initiated-elder access."@en ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:CeremonialSequence
+    a owl:Class ;
+    rdfs:label "Ceremonial Sequence"@en ;
+    rdfs:comment "An ordered set of steps within a RitualProcess. The existence of a sequence and its general structure are documented. Access control is at the property level: sequence step labels are initiated-only; operational content within each step is no-access."@en ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+# ===================================================================
+# PROPERTIES - Core Process Classification
+# ===================================================================
+
+travay:processType
+    a owl:ObjectProperty ;
+    rdfs:label "process type"@en ;
+    rdfs:comment "Classification of this ritual process. Values from ProcessTypeScheme. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:processName
+    a owl:DatatypeProperty ;
+    rdfs:label "process name"@en ;
+    rdfs:comment "The name of this ritual process in its tradition. Example: Rogacion de Cabeza, Kariocha, Kanzo, Tambor de Fundamento. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:alternateNames
+    a owl:DatatypeProperty ;
+    rdfs:label "alternate names"@en ;
+    rdfs:comment "Other names for this process across lineages or traditions. Example: Kariocha also called Hacer el Santo, Making Ocha. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:purposeDescription
+    a owl:DatatypeProperty ;
+    rdfs:label "purpose description"@en ;
+    rdfs:comment "General description of the purpose and outcome of this ritual process. Non-operational. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:presidingEntity
+    a owl:ObjectProperty ;
+    rdfs:label "presiding entity"@en ;
+    rdfs:comment "The spiritual entity (orisa, lwa, etc.) for whom or by whose authority this ceremony is performed. Links to nkisi:SpiritualEntity. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range nkisi:SpiritualEntity ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:requiredAuthority
+    a owl:ObjectProperty ;
+    rdfs:label "required authority"@en ;
+    rdfs:comment "The level of initiation or authority required to lead this process. Values from AuthorityLevelScheme. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:participantRole
+    a owl:ObjectProperty ;
+    rdfs:label "participant role"@en ;
+    rdfs:comment "Roles that participants may hold in this process. Values from ParticipantRoleScheme. Multiple values allowed. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:typicalDuration
+    a owl:DatatypeProperty ;
+    rdfs:label "typical duration"@en ;
+    rdfs:comment "General duration of this process. Example: one day, three days, seven days, one year and seven days. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:timingRequirement
+    a owl:ObjectProperty ;
+    rdfs:label "timing requirement"@en ;
+    rdfs:comment "Whether this process has specific timing requirements. Values from TimingRequirementScheme. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:plantUse
+    a owl:ObjectProperty ;
+    rdfs:label "plant use"@en ;
+    rdfs:comment "Plants used in this ritual process. Links to ewe:Plant instances. General association is public; specific quantities and combinations are initiated-only. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:prerequisiteProcess
+    a owl:ObjectProperty ;
+    rdfs:label "prerequisite process"@en ;
+    rdfs:comment "A RitualProcess that must be completed before this one. Example: receiving Warriors before kariocha. Links to travay:RitualProcess instances. Access: public-unrestricted."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range travay:RitualProcess ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+# ===================================================================
+# PROPERTIES - Initiation Specific
+# ===================================================================
+
+travay:initiationLevel
+    a owl:ObjectProperty ;
+    rdfs:label "initiation level"@en ;
+    rdfs:comment "The level of initiation conferred by this InitiatoryRite. Values from InitiationLevelScheme. Access: public-unrestricted."@en ;
+    rdfs:domain travay:InitiatoryRite ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:conferredTitle
+    a owl:DatatypeProperty ;
+    rdfs:label "conferred title"@en ;
+    rdfs:comment "Title or designation conferred upon completion of this initiatory rite. Example: Olorisha, Babalawo, Mambo, Houngan, Tata Nkisi. Access: public-unrestricted."@en ;
+    rdfs:domain travay:InitiatoryRite ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:sponsorRequirement
+    a owl:DatatypeProperty ;
+    rdfs:label "sponsor requirement"@en ;
+    rdfs:comment "Whether a godparent or existing initiate must sponsor this initiation. General requirement is public. Access: public-unrestricted."@en ;
+    rdfs:domain travay:InitiatoryRite ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "public-unrestricted" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+# ===================================================================
+# PROPERTIES - Restricted
+# ===================================================================
+
+travay:operationalNotes
+    a owl:DatatypeProperty ;
+    rdfs:label "operational notes"@en ;
+    rdfs:comment "Contextual notes about how this process is conducted in practice. Not a step-by-step sequence; general practitioner guidance. Access: community-only."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "community-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:sequence
+    a owl:ObjectProperty ;
+    rdfs:label "sequence"@en ;
+    rdfs:comment "Links a RitualProcess to its CeremonialSequence. Access: initiated-only."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range travay:CeremonialSequence ;
+    iroko:minimumAccessLevel "initiated-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:materialRequirements
+    a owl:DatatypeProperty ;
+    rdfs:label "material requirements"@en ;
+    rdfs:comment "Detailed list of materials, implements, and quantities required. Access: initiated-only."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "initiated-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:lineageVariations
+    a owl:DatatypeProperty ;
+    rdfs:label "lineage variations"@en ;
+    rdfs:comment "Documented variations in how different lineages or houses conduct this process. Access: initiated-only."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "initiated-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:secretComponents
+    a owl:DatatypeProperty ;
+    rdfs:label "secret components"@en ;
+    rdfs:comment "Components of this process restricted to initiated elders. OPERATIONAL ONLY - never exported to RDF. Access: no-access."@en ;
+    rdfs:domain travay:RitualProcess ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "no-access" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+# ===================================================================
+# PROPERTIES - CeremonialSequence
+# ===================================================================
+
+travay:sequenceStep
+    a owl:DatatypeProperty ;
+    rdfs:label "sequence step"@en ;
+    rdfs:comment "A numbered step label within the ceremonial sequence. The label is visible; operational content is governed separately. Access: initiated-only."@en ;
+    rdfs:domain travay:CeremonialSequence ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "initiated-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:sequenceStepDescription
+    a owl:DatatypeProperty ;
+    rdfs:label "sequence step description"@en ;
+    rdfs:comment "General description of what occurs at this step, without operational specifics. Access: initiated-only."@en ;
+    rdfs:domain travay:CeremonialSequence ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "initiated-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:sequenceStepOperational
+    a owl:DatatypeProperty ;
+    rdfs:label "sequence step (operational)"@en ;
+    rdfs:comment "Exact operational instructions for this step. OPERATIONAL ONLY - never exported to RDF. Access: no-access."@en ;
+    rdfs:domain travay:CeremonialSequence ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel "no-access" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+travay:sequenceOrder
+    a owl:DatatypeProperty ;
+    rdfs:label "sequence order"@en ;
+    rdfs:comment "Integer indicating the position of this step within the full sequence. Access: initiated-only."@en ;
+    rdfs:domain travay:CeremonialSequence ;
+    rdfs:range xsd:integer ;
+    iroko:minimumAccessLevel "initiated-only" ;
+    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+
+# ===================================================================
+# CONCEPT SCHEME: Process Type
+# ===================================================================
+
+travay:ProcessTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Process Type Classification"@en ;
+    dcterms:description "Classification of ritual process types across Afro-Atlantic traditions."@en ;
+    skos:hasTopConcept travay:processType-divination,
+                       travay:processType-cleansing,
+                       travay:processType-head-feeding,
+                       travay:processType-ancestor-veneration,
+                       travay:processType-possession-ceremony,
+                       travay:processType-sacrifice-offering,
+                       travay:processType-healing,
+                       travay:processType-protection,
+                       travay:processType-initiation-reception,
+                       travay:processType-initiation-full,
+                       travay:processType-elevation,
+                       travay:processType-feast-celebration,
+                       travay:processType-funerary,
+                       travay:processType-community-working .
+
+travay:processType-divination
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Divination"@en ;
+    skos:definition "Ritual consultation for guidance. Includes Ifa consultation, dilogun reading, chamalongos in Palo, and card reading in Espiritismo context. Public category; specific methods and interpretations are access-restricted."@en .
+
+travay:processType-cleansing
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Cleansing/Purification"@en ;
+    skos:altLabel "Despojo"@en, "Limpieza"@en ;
+    skos:definition "Ritual cleansing of a person, object, or space. Removes negative energies, spiritual impurities, or adversarial influences. Includes despojos, limpiezas, spiritual baths, and space cleansings."@en .
+
+travay:processType-head-feeding
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Head Feeding/Rogation"@en ;
+    skos:altLabel "Rogacion de Cabeza"@en ;
+    skos:definition "Ritual feeding and cooling of the head (Ori) with white foods and prayers. Strengthens personal destiny and calms spiritual disturbances. One of the most fundamental ceremonies across Yoruba-derived traditions."@en .
+
+travay:processType-ancestor-veneration
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Ancestor Veneration"@en ;
+    skos:altLabel "Misa Espiritual"@en, "Egun ceremony"@en ;
+    skos:definition "Ceremonies specifically directed to the ancestral dead. Includes misa espiritual (Espiritismo), egungún masquerade, boveda work, and ituto (funeral rites for initiates)."@en .
+
+travay:processType-possession-ceremony
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Possession Ceremony"@en ;
+    skos:altLabel "Bembe"@en, "Tambor"@en, "Wemilere"@en, "Fet"@en ;
+    skos:definition "Ceremony in which spirits may manifest through initiated practitioners. Includes tambor, bembe, wemilere (Lucumi), Vodou fet, Candomble xire. Drumming, singing, and dance are central."@en .
+
+travay:processType-sacrifice-offering
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Sacrifice/Major Offering"@en ;
+    skos:altLabel "Ebbo"@en, "Matanza"@en ;
+    skos:definition "Ceremonies involving animal sacrifice or major offerings to spiritual entities. General category is public; specific animals, quantities, and procedures are initiated-only or initiated-elder."@en .
+
+travay:processType-healing
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Healing"@en ;
+    skos:definition "Ceremonial processes directed toward physical, spiritual, or psychological healing. May combine plant use, prayer, divination, and direct spiritual intervention."@en .
+
+travay:processType-protection
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Protection"@en ;
+    skos:definition "Ceremonial processes establishing or strengthening spiritual protection for a person, household, or space."@en .
+
+travay:processType-initiation-reception
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Initiation - Reception"@en ;
+    skos:altLabel "Receiving"@en ;
+    skos:definition "Reception of sacred objects conferring a level of initiation without full head initiation. Examples: receiving Warriors, receiving Olokun, receiving necklaces. Creates formal relationship with specific entities."@en .
+
+travay:processType-initiation-full
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Initiation - Full"@en ;
+    skos:altLabel "Head Initiation"@en ;
+    skos:definition "Full head initiation permanently transforming the initiant's spiritual status. Examples: kariocha (Lucumi), kanzo (Vodou), rayamiento (Palo), feitura (Candomble). The most restricted process type."@en .
+
+travay:processType-elevation
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Elevation/Levantamiento"@en ;
+    skos:definition "Ceremony to elevate the spirit of a deceased person or clear unresolved spiritual burdens. Common in Espiritismo and Lucumi death rites."@en .
+
+travay:processType-feast-celebration
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Feast/Celebration"@en ;
+    skos:altLabel "Cumpleanos de Santo"@en ;
+    skos:definition "Celebration ceremonies: anniversary of initiation, feast days of entities, communal celebrations."@en .
+
+travay:processType-funerary
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Funerary"@en ;
+    skos:altLabel "Ituto"@en, "Axexe"@en ;
+    skos:definition "Death and funeral ceremonies specific to initiated practitioners. Includes ituto (Lucumi), axexe (Candomble), and rites handling spiritual obligations of deceased initiates."@en .
+
+travay:processType-community-working
+    a skos:Concept ;
+    skos:inScheme travay:ProcessTypeScheme ;
+    skos:prefLabel "Community Working"@en ;
+    skos:definition "Collective ceremonial work on behalf of a house, lineage, or community rather than an individual. Includes cabildo ceremonies, community ebbos, and house-level divination."@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Authority Level
+# ===================================================================
+
+travay:AuthorityLevelScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Authority Level Classification"@en ;
+    dcterms:description "Level of initiation or authority required to lead or perform a ritual process."@en ;
+    skos:hasTopConcept travay:authority-any-practitioner,
+                       travay:authority-initiated,
+                       travay:authority-olorisha,
+                       travay:authority-babalawo,
+                       travay:authority-elder-designation,
+                       travay:authority-tradition-specific .
+
+travay:authority-any-practitioner
+    a skos:Concept ;
+    skos:inScheme travay:AuthorityLevelScheme ;
+    skos:prefLabel "Any Practitioner"@en ;
+    skos:definition "Can be performed by any person regardless of initiation status. Example: basic ancestor veneration at boveda, spiritual baths using common herbs."@en .
+
+travay:authority-initiated
+    a skos:Concept ;
+    skos:inScheme travay:AuthorityLevelScheme ;
+    skos:prefLabel "Initiated Practitioner"@en ;
+    skos:definition "Requires initiation but not a specific level or title. General initiation into the tradition is sufficient."@en .
+
+travay:authority-olorisha
+    a skos:Concept ;
+    skos:inScheme travay:AuthorityLevelScheme ;
+    skos:prefLabel "Olorisha / Equivalent"@en ;
+    skos:altLabel "Head-initiated"@en ;
+    skos:definition "Requires full head initiation: kariocha in Lucumi, kanzo in Vodou, feitura in Candomble, or equivalent in other traditions."@en .
+
+travay:authority-babalawo
+    a skos:Concept ;
+    skos:inScheme travay:AuthorityLevelScheme ;
+    skos:prefLabel "Babalawo / Ifa Priest"@en ;
+    skos:definition "Requires Ifa initiation specifically. Certain ceremonies and all Ifa-based divination require Babalawo authority."@en .
+
+travay:authority-elder-designation
+    a skos:Concept ;
+    skos:inScheme travay:AuthorityLevelScheme ;
+    skos:prefLabel "Elder Designation"@en ;
+    skos:definition "Requires recognition as an elder or authority holder within the tradition, beyond basic initiation. Community recognition is required in addition to initiation level."@en .
+
+travay:authority-tradition-specific
+    a skos:Concept ;
+    skos:inScheme travay:AuthorityLevelScheme ;
+    skos:prefLabel "Tradition-Specific Authority"@en ;
+    skos:definition "Authority requirements are tradition-specific and cannot be generalized. Document via travay:operationalNotes with tradition context."@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Participant Role
+# ===================================================================
+
+travay:ParticipantRoleScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Participant Role Classification"@en ;
+    dcterms:description "Roles that participants may hold within a ritual process."@en ;
+    skos:hasTopConcept travay:role-lead-officiant,
+                       travay:role-co-officiant,
+                       travay:role-initiant,
+                       travay:role-godparent,
+                       travay:role-witness,
+                       travay:role-musician,
+                       travay:role-helper,
+                       travay:role-community-member,
+                       travay:role-medium .
+
+travay:role-lead-officiant
+    a skos:Concept ;
+    skos:inScheme travay:ParticipantRoleScheme ;
+    skos:prefLabel "Lead Officiant"@en ;
+    skos:altLabel "Oriaté"@en, "Houngan"@en, "Mambo"@en, "Tata"@en ;
+    skos:definition "The principal authority leading the ceremony. Title varies by tradition."@en .
+
+travay:role-co-officiant
+    a skos:Concept ;
+    skos:inScheme travay:ParticipantRoleScheme ;
+    skos:prefLabel "Co-Officiant"@en ;
+    skos:definition "A supporting officiant with authority to perform portions of the ceremony."@en .
+
+travay:role-initiant
+    a skos:Concept ;
+    skos:inScheme travay:ParticipantRoleScheme ;
+    skos:prefLabel "Initiant"@en ;
+    skos:altLabel "Iyawo"@en, "Initiate"@en ;
+    skos:definition "The person receiving initiation or the primary recipient of the ceremony."@en .
+
+travay:role-godparent
+    a skos:Concept ;
+    skos:inScheme travay:ParticipantRoleScheme ;
+    skos:prefLabel "Godparent/Sponsor"@en ;
+    skos:altLabel "Padrino"@en, "Madrina"@en, "Parrain"@en, "Marraine"@en ;
+    skos:definition "The initiated sponsor responsible for the initiant's spiritual formation and ceremonial participation."@en .
+
+travay:role-witness
+    a skos:Concept ;
+    skos:inScheme travay:ParticipantRoleScheme ;
+    skos:prefLabel "Witness"@en ;
+    skos:definition "An initiated practitioner present to witness and validate the ceremony."@en .
+
+travay:role-musician
+    a skos:Concept ;
+    skos:inScheme travay:ParticipantRoleScheme ;
+    skos:prefLabel "Musician/Drummer"@en ;
+    skos:altLabel "Akpwon"@en, "Tambolero"@en ;
+    skos:definition "Drummer, singer, or musician providing ceremonial music. May have specific initiation requirements depending on tradition and ceremony type."@en .
+
+travay:role-helper
+    a skos:Concept ;
+    skos:inScheme travay:ParticipantRoleScheme ;
+    skos:prefLabel "Helper/Aide"@en ;
+    skos:definition "Initiated helper assisting with logistical or supporting ceremonial tasks."@en .
+
+travay:role-community-member
+    a skos:Concept ;
+    skos:inScheme travay:ParticipantRoleScheme ;
+    skos:prefLabel "Community Member"@en ;
+    skos:definition "General attendee, potentially uninitiated, present for community portions of the ceremony."@en .
+
+travay:role-medium
+    a skos:Concept ;
+    skos:inScheme travay:ParticipantRoleScheme ;
+    skos:prefLabel "Medium"@en ;
+    skos:altLabel "Horse"@en, "Chwal"@en ;
+    skos:definition "Practitioner who may receive spiritual possession during the ceremony. In Espiritismo context, medium for spirit communication."@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Initiation Level
+# ===================================================================
+
+travay:InitiationLevelScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Initiation Level Classification"@en ;
+    dcterms:description "Levels of initiation conferred by initiatory rites. General structure is cross-traditional; specific levels are tradition-dependent."@en ;
+    skos:hasTopConcept travay:initiationLevel-reception,
+                       travay:initiationLevel-necklaces,
+                       travay:initiationLevel-warriors,
+                       travay:initiationLevel-head-initiation,
+                       travay:initiationLevel-ifa,
+                       travay:initiationLevel-tradition-specific .
+
+travay:initiationLevel-reception
+    a skos:Concept ;
+    skos:inScheme travay:InitiationLevelScheme ;
+    skos:prefLabel "Reception Level"@en ;
+    skos:definition "General category for receiving sacred objects or marks without full head initiation. The entry level of formal initiation in most traditions."@en .
+
+travay:initiationLevel-necklaces
+    a skos:Concept ;
+    skos:inScheme travay:InitiationLevelScheme ;
+    skos:prefLabel "Necklaces/Elekes"@en ;
+    skos:altLabel "Collares"@en ;
+    skos:definition "Reception of consecrated beaded necklaces in Lucumi tradition. First formal step. Confers relationship with specific orisa represented."@en .
+
+travay:initiationLevel-warriors
+    a skos:Concept ;
+    skos:inScheme travay:InitiationLevelScheme ;
+    skos:prefLabel "Warriors"@en ;
+    skos:altLabel "Los Guerreros"@en ;
+    skos:definition "Reception of Eleggua, Ogun, Ochosi, and Osun in Lucumi tradition. Protects the initiant and opens roads. Prerequisite for kariocha."@en .
+
+travay:initiationLevel-head-initiation
+    a skos:Concept ;
+    skos:inScheme travay:InitiationLevelScheme ;
+    skos:prefLabel "Head Initiation"@en ;
+    skos:altLabel "Kariocha"@en, "Kanzo"@en, "Feitura"@en, "Rayamiento"@en ;
+    skos:definition "Full head initiation permanently establishing the initiant as a priest or priestess. Specific name varies by tradition."@en .
+
+travay:initiationLevel-ifa
+    a skos:Concept ;
+    skos:inScheme travay:InitiationLevelScheme ;
+    skos:prefLabel "Ifa Initiation"@en ;
+    skos:altLabel "Babalawo initiation"@en, "Mano de Orula"@en ;
+    skos:definition "Initiation into the Ifa priesthood. Mano de Orula (hand of Orula) is a preliminary in Lucumi; full Babalawo initiation is the complete level."@en .
+
+travay:initiationLevel-tradition-specific
+    a skos:Concept ;
+    skos:inScheme travay:InitiationLevelScheme ;
+    skos:prefLabel "Tradition-Specific Level"@en ;
+    skos:definition "Initiation levels that do not map to general categories. Document with tradition context via iroko:tradition and travay:operationalNotes."@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Timing Requirement
+# ===================================================================
+
+travay:TimingRequirementScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Timing Requirement Classification"@en ;
+    dcterms:description "Whether a ritual process has specific timing requirements."@en ;
+    skos:hasTopConcept travay:timing-any-time,
+                       travay:timing-divination-prescribed,
+                       travay:timing-lunar-phase,
+                       travay:timing-calendar-feast,
+                       travay:timing-annual-cycle,
+                       travay:timing-life-event,
+                       travay:timing-emergency .
+
+travay:timing-any-time
+    a skos:Concept ;
+    skos:inScheme travay:TimingRequirementScheme ;
+    skos:prefLabel "Any Time"@en ;
+    skos:definition "No specific timing requirement; may be performed as needed."@en .
+
+travay:timing-divination-prescribed
+    a skos:Concept ;
+    skos:inScheme travay:TimingRequirementScheme ;
+    skos:prefLabel "Divination-Prescribed"@en ;
+    skos:definition "Timing determined through divination consultation. The appropriate time is revealed rather than predetermined."@en .
+
+travay:timing-lunar-phase
+    a skos:Concept ;
+    skos:inScheme travay:TimingRequirementScheme ;
+    skos:prefLabel "Lunar Phase"@en ;
+    skos:definition "Must be performed during a specific phase of the moon."@en .
+
+travay:timing-calendar-feast
+    a skos:Concept ;
+    skos:inScheme travay:TimingRequirementScheme ;
+    skos:prefLabel "Calendar/Feast Day"@en ;
+    skos:definition "Associated with a specific calendar date or feast day of the presiding entity."@en .
+
+travay:timing-annual-cycle
+    a skos:Concept ;
+    skos:inScheme travay:TimingRequirementScheme ;
+    skos:prefLabel "Annual Cycle"@en ;
+    skos:definition "Performed on an annual cycle, such as anniversary of initiation."@en .
+
+travay:timing-life-event
+    a skos:Concept ;
+    skos:inScheme travay:TimingRequirementScheme ;
+    skos:prefLabel "Life Event"@en ;
+    skos:definition "Triggered by a specific life event: birth, death, marriage, illness, major transition."@en .
+
+travay:timing-emergency
+    a skos:Concept ;
+    skos:inScheme travay:TimingRequirementScheme ;
+    skos:prefLabel "Emergency/As Needed"@en ;
+    skos:definition "Performed in response to urgent spiritual or physical crisis without time constraint."@en .
