@@ -389,29 +389,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
----
-
-## Updated Repository Structure
-```
-iroko-framework/
-├── vocab/
-│   ├── iroko-core.ttl          ← Machine-readable (updated - no instances)
-│   ├── iroko-core.html         ← Human-readable (NEW)
-│   ├── iroko-ewe.ttl           ← Machine-readable (updated - no instances)
-│   └── iroko-ewe.html          ← Human-readable (NEW)
-│
-├── data/
-│   ├── plants-public.ttl       ← Minimal public data (names only)
-│   └── README.md
-│
-├── examples/
-│   ├── plant-minimal.ttl       ← Example: public plant (fictional)
-│   ├── plant-full.ttl          ← Example: full plant (fictional, for docs)
-│   └── how-to-use.md
-│
-├── scripts/
-│   ├── export_minimal_public_data.py
-│   └── generate_vocab_html.py  ← NEW: Auto-generate HTML from TTL
-│
-└── README.md
