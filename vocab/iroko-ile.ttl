@@ -1,0 +1,840 @@
+# -*- coding: utf-8 -*-
+# ===================================================================
+# IROKO FRAMEWORK — ILÉ MODULE
+# Lineage, Houses, Initiation Genealogy, and Religious Authority
+# Namespace: https://www.irokosociety.org/iroko-framework/ile#
+# Version: 1.0.0 | February 2026
+# Dependencies: iroko-core, schema.org, FOAF, PROV-O
+# ===================================================================
+
+@prefix ile:     <https://www.irokosociety.org/iroko-framework/ile#> .
+@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix nkisi:   <https://www.irokosociety.org/iroko-framework/nkisi#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix schema:  <https://schema.org/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+
+<https://www.irokosociety.org/iroko-framework/ile>
+    a owl:Ontology ;
+    rdfs:label "Iroko Ilé Module"@en ;
+    dcterms:title "Iroko Ilé: Lineage, Houses, and Religious Authority"@en ;
+    dcterms:description "Vocabulary for documenting Afro-Atlantic religious houses, lineage structures, initiation genealogy, authority transmission, and schism events. Extends schema:Organization and FOAF with tradition-specific governance and lineage modeling."@en ;
+    dcterms:created "2026-02-21"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports <https://www.irokosociety.org/iroko-framework/core> .
+
+# ===================================================================
+# CLASSES
+# ===================================================================
+
+ile:House
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity, schema:Organization ;
+    rdfs:label "House"@en ;
+    rdfs:comment "A religious house, temple, or community organized around a lineage and founding elder. Encompasses ilé (Lucumí/Candomblé), terreiro (Candomblé/Umbanda), hounfò (Vodou), ile orisha, and analogous institutions. Subclass of schema:Organization for interoperability with external directories."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:Cabildo
+    a owl:Class ;
+    rdfs:subClassOf ile:House ;
+    rdfs:label "Cabildo"@en ;
+    rdfs:comment "A Cuban colonial-era mutual aid and religious society organized by African ethnic identity. Cabildos were the institutional vessels for Lucumí, Arará, Kongo, and other traditions in Cuba. Distinct from contemporary houses in legal form and historical structure. May have successor houses linked via ile:successorHouse."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:Lineage
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Lineage"@en ;
+    rdfs:comment "A rama, branch, or transmission line descending from a founding house or practitioner. Represents what makes a specific lineage distinct from others within the same tradition: liturgical variations, oriki, priestly protocols, or founding relationships."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:InitiationEvent
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Initiation Event"@en ;
+    rdfs:comment "A specific ceremony creating a formal genealogical link between initiator and initiate. The primary mechanism by which lineage is transmitted and authority is conferred. Access to records is typically initiated-only; existence of the event may be public."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:Authority
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Religious Authority"@en ;
+    rdfs:comment "A religious title or position held by a practitioner, authorizing specific ritual functions within a tradition. Linked to the person (foaf:Person), the house, and the authority figure who conferred it. Distinct from iroko:ContestedAuthority in core, which models disputed titles at the category level — ile:Authority models specific individual instances."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:SchismEvent
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Schism Event"@en ;
+    rdfs:comment "A documented lineage split creating a new house from an existing one. Records the parent house, child house, date, cause, and parties involved. Often sensitive; access level is typically community-restricted or initiated-only."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+# ===================================================================
+# PROPERTIES — House
+# ===================================================================
+
+ile:houseType
+    a owl:ObjectProperty ;
+    rdfs:label "house type"@en ;
+    rdfs:comment "Institutional form of the house. Range: ile:HouseTypeScheme."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:foundingDate
+    a owl:DatatypeProperty ;
+    rdfs:label "founding date"@en ;
+    rdfs:subPropertyOf schema:foundingDate ;
+    rdfs:domain ile:House ;
+    rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:founder
+    a owl:ObjectProperty ;
+    rdfs:label "founder"@en ;
+    rdfs:subPropertyOf schema:founder ;
+    rdfs:comment "The founding practitioner of the house. Range: foaf:Person."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:location
+    a owl:ObjectProperty ;
+    rdfs:label "location"@en ;
+    rdfs:subPropertyOf schema:location ;
+    rdfs:comment "Geographic location of the house. May be city/country only for active houses; full address behind access control."@en ;
+    rdfs:domain ile:House ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:lineageParent
+    a owl:ObjectProperty ;
+    rdfs:label "lineage parent"@en ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:comment "The house from which this house descends through initiation. Equivalent to godparent-house in common practice."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:lineageChild
+    a owl:ObjectProperty ;
+    rdfs:label "lineage child"@en ;
+    rdfs:comment "A house that descends from this house through initiation. Inverse of ile:lineageParent."@en ;
+    owl:inverseOf ile:lineageParent ;
+    rdfs:domain ile:House ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:affiliatedHouse
+    a owl:ObjectProperty ;
+    rdfs:label "affiliated house"@en ;
+    rdfs:comment "A house with recognized but non-hierarchical affiliation: alliance, shared lineage recognition, or ongoing ceremonial cooperation."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:successorHouse
+    a owl:ObjectProperty ;
+    rdfs:label "successor house"@en ;
+    rdfs:comment "For historical cabildos: the contemporary house that descends from or claims continuity with this institution."@en ;
+    rdfs:domain ile:Cabildo ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:traditionPracticed
+    a owl:ObjectProperty ;
+    rdfs:label "tradition practiced"@en ;
+    rdfs:comment "Tradition(s) practiced in this house. Range: iroko:TraditionScheme in core."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:governanceStructure
+    a owl:ObjectProperty ;
+    rdfs:label "governance structure"@en ;
+    rdfs:comment "How authority and decision-making are structured within the house. Range: ile:GovernanceModelScheme."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:multiTradition
+    a owl:DatatypeProperty ;
+    rdfs:label "multi-tradition"@en ;
+    rdfs:comment "True if the house actively practices more than one distinct tradition."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range xsd:boolean ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:publicPresence
+    a owl:DatatypeProperty ;
+    rdfs:label "public presence"@en ;
+    rdfs:comment "True if the house maintains a publicly known identity (website, social media, public events). False does not imply the house is secret — many houses simply operate privately."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range xsd:boolean ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:membershipEstimate
+    a owl:DatatypeProperty ;
+    rdfs:label "membership estimate"@en ;
+    rdfs:subPropertyOf schema:numberOfEmployees ;
+    rdfs:comment "Approximate number of initiated members. Text to allow ranges or qualitative descriptions."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:hasLineage
+    a owl:ObjectProperty ;
+    rdfs:label "has lineage"@en ;
+    rdfs:comment "Links a house to a formal Lineage record documenting its rama characteristics."@en ;
+    rdfs:domain ile:House ;
+    rdfs:range ile:Lineage ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+# ===================================================================
+# PROPERTIES — Lineage
+# ===================================================================
+
+ile:foundingHouse
+    a owl:ObjectProperty ;
+    rdfs:label "founding house"@en ;
+    rdfs:comment "The house from which this lineage (rama/branch) originates."@en ;
+    rdfs:domain ile:Lineage ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:lineageCharacteristics
+    a owl:DatatypeProperty ;
+    rdfs:label "lineage characteristics"@en ;
+    rdfs:comment "Description of what distinguishes this rama: liturgical variations, oriki, priestly protocols, founding relationships, regional practices."@en ;
+    rdfs:domain ile:Lineage ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:lineageTradition
+    a owl:ObjectProperty ;
+    rdfs:label "lineage tradition"@en ;
+    rdfs:domain ile:Lineage ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+# ===================================================================
+# PROPERTIES — Initiation Event
+# ===================================================================
+
+ile:initiationType
+    a owl:ObjectProperty ;
+    rdfs:label "initiation type"@en ;
+    rdfs:comment "Type of initiation ceremony. Range: ile:InitiationTypeScheme."@en ;
+    rdfs:domain ile:InitiationEvent ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:eventDate
+    a owl:DatatypeProperty ;
+    rdfs:label "event date"@en ;
+    rdfs:domain ile:InitiationEvent ;
+    rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:eventHouse
+    a owl:ObjectProperty ;
+    rdfs:label "event house"@en ;
+    rdfs:comment "The house in which the initiation took place."@en ;
+    rdfs:domain ile:InitiationEvent ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:initiator
+    a owl:ObjectProperty ;
+    rdfs:label "initiator"@en ;
+    rdfs:subPropertyOf prov:wasAttributedTo ;
+    rdfs:comment "The authority figure who performed the initiation. Range: ile:Authority."@en ;
+    rdfs:domain ile:InitiationEvent ;
+    rdfs:range ile:Authority ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:initiatedPerson
+    a owl:ObjectProperty ;
+    rdfs:label "initiated person"@en ;
+    rdfs:comment "The person who received initiation. Range: foaf:Person. Highly sensitive — access no-access by default except to the individual and their house."@en ;
+    rdfs:domain ile:InitiationEvent ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-no-access ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:initiationWitness
+    a owl:ObjectProperty ;
+    rdfs:label "initiation witness"@en ;
+    rdfs:comment "Witnesses present at the initiation. Range: foaf:Person. Sensitive; access no-access by default."@en ;
+    rdfs:domain ile:InitiationEvent ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-no-access ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:entityCrowned
+    a owl:ObjectProperty ;
+    rdfs:label "entity crowned"@en ;
+    rdfs:comment "For head initiations: the orisha/entity seated on the initiate's head. Range: nkisi:SpiritualEntity."@en ;
+    rdfs:domain ile:InitiationEvent ;
+    rdfs:range iroko:SacredEntity ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:itaPerformed
+    a owl:DatatypeProperty ;
+    rdfs:label "itá performed"@en ;
+    rdfs:comment "True if a life reading (itá) was conducted as part of this initiation."@en ;
+    rdfs:domain ile:InitiationEvent ;
+    rdfs:range xsd:boolean ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:transmissionMethod
+    a owl:ObjectProperty ;
+    rdfs:label "transmission method"@en ;
+    rdfs:comment "How the authority or knowledge was transmitted. Range: ile:TransmissionTypeScheme."@en ;
+    rdfs:domain ile:InitiationEvent ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+# ===================================================================
+# PROPERTIES — Authority
+# ===================================================================
+
+ile:authorityHolder
+    a owl:ObjectProperty ;
+    rdfs:label "authority holder"@en ;
+    rdfs:comment "The person holding this title. Range: foaf:Person."@en ;
+    rdfs:domain ile:Authority ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:authorityTitle
+    a owl:ObjectProperty ;
+    rdfs:label "authority title"@en ;
+    rdfs:comment "The formal title held. Range: ile:AuthorityTitleScheme."@en ;
+    rdfs:domain ile:Authority ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:authorityScope
+    a owl:DatatypeProperty ;
+    rdfs:label "authority scope"@en ;
+    rdfs:comment "What ritual functions this title authorizes."@en ;
+    rdfs:domain ile:Authority ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:grantedBy
+    a owl:ObjectProperty ;
+    rdfs:label "granted by"@en ;
+    rdfs:subPropertyOf prov:wasAttributedTo ;
+    rdfs:comment "The authority figure who conferred this title. Range: ile:Authority."@en ;
+    rdfs:domain ile:Authority ;
+    rdfs:range ile:Authority ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:conferralDate
+    a owl:DatatypeProperty ;
+    rdfs:label "conferral date"@en ;
+    rdfs:domain ile:Authority ;
+    rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:authorityHouse
+    a owl:ObjectProperty ;
+    rdfs:label "authority house"@en ;
+    rdfs:comment "The house within which this authority is recognized."@en ;
+    rdfs:domain ile:Authority ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:authorityTradition
+    a owl:ObjectProperty ;
+    rdfs:label "authority tradition"@en ;
+    rdfs:domain ile:Authority ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+# ===================================================================
+# PROPERTIES — Schism Event
+# ===================================================================
+
+ile:schismParentHouse
+    a owl:ObjectProperty ;
+    rdfs:label "schism parent house"@en ;
+    rdfs:domain ile:SchismEvent ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:schismChildHouse
+    a owl:ObjectProperty ;
+    rdfs:label "schism child house"@en ;
+    rdfs:domain ile:SchismEvent ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:schismDate
+    a owl:DatatypeProperty ;
+    rdfs:label "schism date"@en ;
+    rdfs:domain ile:SchismEvent ;
+    rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:schismCause
+    a owl:DatatypeProperty ;
+    rdfs:label "schism cause"@en ;
+    rdfs:comment "Documented reason for the lineage split. Often contested; use iroko:contestedNotes alongside."@en ;
+    rdfs:domain ile:SchismEvent ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-restricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+ile:schismParty
+    a owl:ObjectProperty ;
+    rdfs:label "schism party"@en ;
+    rdfs:comment "Persons involved in the schism. Range: foaf:Person. Sensitive."@en ;
+    rdfs:domain ile:SchismEvent ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
+
+# ===================================================================
+# CONCEPT SCHEME: House Types (12 values)
+# ===================================================================
+
+ile:HouseTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "House Types"@en ;
+    skos:prefLabel "House Types"@en ;
+    skos:prefLabel "Tipos de casa religiosa"@es ;
+    skos:prefLabel "Types de maison religieuse"@fr ;
+    skos:prefLabel "Tipos de casa religiosa"@pt ;
+    skos:prefLabel "Àwọn iru ilé ẹ̀sìn"@yo ;
+    skos:hasTopConcept ile:houseType-ile-orisha,
+                       ile:houseType-terreiro,
+                       ile:houseType-hounfo,
+                       ile:houseType-cabildo,
+                       ile:houseType-sosyete,
+                       ile:houseType-ile-ifa,
+                       ile:houseType-egbe,
+                       ile:houseType-palero-house,
+                       ile:houseType-espiritismo-centre,
+                       ile:houseType-abakua-potencia,
+                       ile:houseType-study-group,
+                       ile:houseType-other .
+
+ile:houseType-ile-orisha
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Ilé Orisha"@en ;
+    skos:prefLabel "Ilé Orisha"@es ;
+    skos:definition "Lucumí/Candomblé Ketu house organized around Orisha worship."@en .
+
+ile:houseType-terreiro
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Terreiro"@en ;
+    skos:prefLabel "Terreiro"@pt ;
+    skos:definition "Brazilian ritual space for Candomblé, Umbanda, or Quimbanda practice."@en .
+
+ile:houseType-hounfo
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Hounfò"@en ;
+    skos:prefLabel "Hounfò"@fr ;
+    skos:definition "Haitian Vodou temple and its associated community."@en .
+
+ile:houseType-cabildo
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Cabildo"@en ;
+    skos:prefLabel "Cabildo"@es ;
+    skos:definition "Cuban colonial mutual aid and religious society organized by African ethnic identity. Use ile:Cabildo subclass for records of this type."@en .
+
+ile:houseType-sosyete
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Sosyete"@en ;
+    skos:prefLabel "Sosyete"@fr ;
+    skos:definition "Haitian Vodou society, often with named lineage and territorial identity."@en .
+
+ile:houseType-ile-ifa
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Ilé Ifá"@en ;
+    skos:definition "House organized primarily around Ifá divination practice and Babaláwo lineage."@en .
+
+ile:houseType-egbe
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Egbé"@en ;
+    skos:prefLabel "Egbé"@yo ;
+    skos:definition "Association or society organized around a specific orisha or shared ritual purpose."@en .
+
+ile:houseType-palero-house
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Palo House"@en ;
+    skos:prefLabel "Casa de Palo"@es ;
+    skos:definition "House organized around Palo Monte/Mayombe practice and nganga custody."@en .
+
+ile:houseType-espiritismo-centre
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Espiritismo Centre"@en ;
+    skos:prefLabel "Centro de Espiritismo"@es ;
+    skos:definition "Centre for Kardecist or Afro-influenced Espiritismo practice."@en .
+
+ile:houseType-abakua-potencia
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Abakuá Potencia"@en ;
+    skos:prefLabel "Potencia Abakuá"@es ;
+    skos:definition "An Abakuá lodge (potencia). Abakuá is a Cuban secret society of Calabari/Cross River origin."@en .
+
+ile:houseType-study-group
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Study / Learning Group"@en ;
+    skos:definition "An informal group organized for learning, not yet constituted as a full house."@en .
+
+ile:houseType-other
+    a skos:Concept ; skos:inScheme ile:HouseTypeScheme ;
+    skos:prefLabel "Other"@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Authority Titles (20 values)
+# ===================================================================
+
+ile:AuthorityTitleScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Religious Authority Titles"@en ;
+    skos:prefLabel "Religious Authority Titles"@en ;
+    skos:prefLabel "Títulos de autoridad religiosa"@es ;
+    skos:hasTopConcept ile:title-babalawo,
+                       ile:title-iyanifa,
+                       ile:title-olorisha,
+                       ile:title-iyalosha,
+                       ile:title-babalosha,
+                       ile:title-olofista,
+                       ile:title-olu-iroko,
+                       ile:title-houngan,
+                       ile:title-mambo,
+                       ile:title-tata-nkisi,
+                       ile:title-yaya-nkisi,
+                       ile:title-pai-de-santo,
+                       ile:title-mae-de-santo,
+                       ile:title-ekpe-member,
+                       ile:title-abakua-member,
+                       ile:title-omo-orisha,
+                       ile:title-alagba,
+                       ile:title-araba,
+                       ile:title-osugbo,
+                       ile:title-other .
+
+ile:title-babalawo
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Babaláwo"@en ; skos:prefLabel "Babaláwo"@yo ;
+    skos:definition "Initiated Ifá priest. Authorized to perform Ifá divination and related ceremonies."@en ;
+    iroko:tradition iroko:tradition-lucumi .
+
+ile:title-iyanifa
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Iyanifa"@en ; skos:prefLabel "Iyanifa"@yo ;
+    skos:definition "Female Ifá priest. Recognition is contested across lineages; use iroko:contestedStatus when applicable."@en ;
+    skos:scopeNote "The recognition of Iyanifa is a live dispute in Lucumí communities. ile:Authority records for this title should carry iroko:contestedStatus and iroko:contestedNotes."@en .
+
+ile:title-olorisha
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Olorisha"@en ;
+    skos:definition "Initiated Orisha priest of any gender. General term covering Iyalosha and Babalosha."@en .
+
+ile:title-iyalosha
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Iyalosha"@en ; skos:altLabel "Iyalorisha"@en ; skos:altLabel "Madrina"@es ;
+    skos:definition "Senior female Orisha priest with the authority to initiate others."@en .
+
+ile:title-babalosha
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Babalosha"@en ; skos:altLabel "Babalorishaisha"@en ; skos:altLabel "Padrino"@es ;
+    skos:definition "Senior male Orisha priest with the authority to initiate others."@en .
+
+ile:title-olofista
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Olofista"@en ;
+    skos:definition "Priest initiated into the Olofin mysteries. Among the highest initiatory grades in Lucumí."@en .
+
+ile:title-olu-iroko
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Olu-Iroko"@en ; skos:prefLabel "Olu-Iròkò"@yo ;
+    skos:definition "Consecration to the Iroko tree spirit. Rare; received through specific lineage authorization."@en .
+
+ile:title-houngan
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Houngan"@en ; skos:prefLabel "Oungan"@ht ;
+    skos:definition "Male Haitian Vodou priest."@en .
+
+ile:title-mambo
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Mambo"@en ; skos:prefLabel "Manbo"@ht ;
+    skos:definition "Female Haitian Vodou priest."@en .
+
+ile:title-tata-nkisi
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Tata Nkisi"@en ; skos:prefLabel "Tata Nkisi"@es ;
+    skos:definition "Male initiated priest in Palo Monte with authority over an nganga."@en .
+
+ile:title-yaya-nkisi
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Yaya Nkisi"@en ;
+    skos:definition "Female initiated priest in Palo Monte with authority over an nganga."@en .
+
+ile:title-pai-de-santo
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Pai de Santo"@en ; skos:prefLabel "Pai de Santo"@pt ;
+    skos:definition "Male head of a Brazilian terreiro."@en .
+
+ile:title-mae-de-santo
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Mãe de Santo"@en ; skos:prefLabel "Mãe de Santo"@pt ;
+    skos:definition "Female head of a Brazilian terreiro."@en .
+
+ile:title-ekpe-member
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Ekpe Member"@en ;
+    skos:definition "Initiated member of the Ekpe leopard society (Cross River / Calabari tradition)."@en .
+
+ile:title-abakua-member
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Abakuá Member"@en ; skos:prefLabel "Abakuá"@es ;
+    skos:definition "Initiated member of an Abakuá potencia."@en .
+
+ile:title-omo-orisha
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Omo Orisha"@en ; skos:prefLabel "Omo Orisha"@yo ;
+    skos:definition "Initiated child of an orisha. General term for those who have completed kariosha/asiento."@en .
+
+ile:title-alagba
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Alagba"@en ; skos:prefLabel "Alagba"@yo ;
+    skos:definition "Senior elder in a Yoruba-derived tradition, often with lineage-wide ceremonial authority."@en .
+
+ile:title-araba
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Araba"@en ; skos:prefLabel "Araba"@yo ;
+    skos:definition "Chief Babaláwo in a Yoruba community or lineage. Highest recognized Ifá authority."@en .
+
+ile:title-osugbo
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Osugbo Member"@en ; skos:altLabel "Ogboni"@yo ;
+    skos:definition "Member of the Osugbo/Ogboni earth society, holding judicial and spiritual authority."@en .
+
+ile:title-other
+    a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
+    skos:prefLabel "Other"@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Initiation Types (13 values)
+# ===================================================================
+
+ile:InitiationTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Initiation Types"@en ;
+    skos:hasTopConcept ile:initiation-kariosha,
+                       ile:initiation-mano-orula,
+                       ile:initiation-warriors,
+                       ile:initiation-necklaces,
+                       ile:initiation-ifa,
+                       ile:initiation-olofin,
+                       ile:initiation-kanzo,
+                       ile:initiation-couche,
+                       ile:initiation-rayisman,
+                       ile:initiation-palo-rayamiento,
+                       ile:initiation-abakua,
+                       ile:initiation-egbe,
+                       ile:initiation-other .
+
+ile:initiation-kariosha
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Kariosha"@en ; skos:altLabel "Asiento"@es ; skos:altLabel "Making Ocha"@en ;
+    skos:definition "Full head initiation in Lucumí/Candomblé Ketu. An orisha is seated on the initiate's head."@en .
+
+ile:initiation-mano-orula
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Mano de Orula"@es ; skos:altLabel "Awofakan / Ikofa"@en ;
+    skos:definition "Reception of Orula's hand. First level of Ifá initiation, open to non-Babaláwo."@en .
+
+ile:initiation-warriors
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Warriors"@en ; skos:altLabel "Los Guerreros"@es ;
+    skos:definition "Reception of the warrior orishas: Elegua, Ogun, Ochosi, and Osun."@en .
+
+ile:initiation-necklaces
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Necklaces"@en ; skos:altLabel "Collares"@es ; skos:altLabel "Elekes"@en ;
+    skos:definition "Reception of the five sacred beaded necklaces. Often the first formal initiation in Lucumí."@en .
+
+ile:initiation-ifa
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Ifá Initiation"@en ; skos:altLabel "Itefa"@en ;
+    skos:definition "Full initiation into the Ifá corpus, conferring the title of Babaláwo."@en .
+
+ile:initiation-olofin
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Olofin Initiation"@en ;
+    skos:definition "Reception of the Olofin mysteries. Among the highest grades in Lucumí practice."@en ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+ile:initiation-kanzo
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Kanzo"@en ;
+    skos:definition "Haitian Vodou initiation ceremony. Levels include Sur Pwen, Hounsi Kanzo, Si Pwen, and Asogwe."@en .
+
+ile:initiation-couche
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Couche"@en ; skos:prefLabel "Kouche"@ht ;
+    skos:definition "The lying-in period component of Vodou kanzo initiation."@en .
+
+ile:initiation-rayisman
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Rayisman"@en ; skos:prefLabel "Rayisman"@ht ;
+    skos:definition "Haitian Vodou ceremony of recognition and elevation within a sosyete."@en .
+
+ile:initiation-palo-rayamiento
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Rayamiento"@es ; skos:altLabel "Palo Initiation"@en ;
+    skos:definition "Palo Monte/Mayombe initiation ceremony marking entry into a munanso."@en .
+
+ile:initiation-abakua
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Abakuá Initiation"@en ; skos:prefLabel "Iniciación Abakuá"@es ;
+    skos:definition "Initiation into an Abakuá potencia."@en .
+
+ile:initiation-egbe
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Egbé Initiation"@en ; skos:prefLabel "Inisiación de Egbé"@es ;
+    skos:definition "Initiation into an Egbé society or association."@en .
+
+ile:initiation-other
+    a skos:Concept ; skos:inScheme ile:InitiationTypeScheme ;
+    skos:prefLabel "Other"@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Governance Models (8 values)
+# ===================================================================
+
+ile:GovernanceModelScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Governance Models"@en ;
+    skos:hasTopConcept ile:governance-single-elder,
+                       ile:governance-elder-council,
+                       ile:governance-lineage-federation,
+                       ile:governance-democratic,
+                       ile:governance-hereditary,
+                       ile:governance-age-grade,
+                       ile:governance-gender-divided,
+                       ile:governance-other .
+
+ile:governance-single-elder
+    a skos:Concept ; skos:inScheme ile:GovernanceModelScheme ;
+    skos:prefLabel "Single Elder Authority"@en ;
+    skos:definition "One recognized head (Iyalosha, Babalosha, Mambo, etc.) with primary authority."@en .
+
+ile:governance-elder-council
+    a skos:Concept ; skos:inScheme ile:GovernanceModelScheme ;
+    skos:prefLabel "Elder Council"@en ;
+    skos:definition "Collective of recognized elders sharing governance authority."@en .
+
+ile:governance-lineage-federation
+    a skos:Concept ; skos:inScheme ile:GovernanceModelScheme ;
+    skos:prefLabel "Lineage Federation"@en ;
+    skos:definition "Federated structure of affiliated houses under loose shared authority."@en .
+
+ile:governance-democratic
+    a skos:Concept ; skos:inScheme ile:GovernanceModelScheme ;
+    skos:prefLabel "Democratic / Consensus"@en ;
+    skos:definition "Decisions made by member consensus or elected leadership."@en .
+
+ile:governance-hereditary
+    a skos:Concept ; skos:inScheme ile:GovernanceModelScheme ;
+    skos:prefLabel "Hereditary"@en ;
+    skos:definition "Leadership passes through biological or ritual family succession."@en .
+
+ile:governance-age-grade
+    a skos:Concept ; skos:inScheme ile:GovernanceModelScheme ;
+    skos:prefLabel "Age-Grade"@en ;
+    skos:definition "Authority structured by seniority within initiation grade rather than individual title."@en .
+
+ile:governance-gender-divided
+    a skos:Concept ; skos:inScheme ile:GovernanceModelScheme ;
+    skos:prefLabel "Gender-Divided Authority"@en ;
+    skos:definition "Male and female authorities govern separate domains within the same institution."@en .
+
+ile:governance-other
+    a skos:Concept ; skos:inScheme ile:GovernanceModelScheme ;
+    skos:prefLabel "Other"@en .
+
+# ===================================================================
+# CONCEPT SCHEME: Transmission Types (5 values)
+# ===================================================================
+
+ile:TransmissionTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Knowledge Transmission Types"@en ;
+    skos:hasTopConcept ile:transmission-embodied,
+                       ile:transmission-oral,
+                       ile:transmission-written,
+                       ile:transmission-combined,
+                       ile:transmission-divination-prescribed .
+
+ile:transmission-embodied
+    a skos:Concept ; skos:inScheme ile:TransmissionTypeScheme ;
+    skos:prefLabel "Embodied"@en ;
+    skos:definition "Knowledge transmitted through physical ceremony, practice, and direct experiential transmission. Cannot be fully conveyed through text."@en .
+
+ile:transmission-oral
+    a skos:Concept ; skos:inScheme ile:TransmissionTypeScheme ;
+    skos:prefLabel "Oral"@en ;
+    skos:definition "Transmitted through speech, song, proverb, and oral recitation."@en .
+
+ile:transmission-written
+    a skos:Concept ; skos:inScheme ile:TransmissionTypeScheme ;
+    skos:prefLabel "Written"@en ;
+    skos:definition "Transmitted through notebooks, libreta, manuscripts, or printed texts."@en .
+
+ile:transmission-combined
+    a skos:Concept ; skos:inScheme ile:TransmissionTypeScheme ;
+    skos:prefLabel "Combined"@en ;
+    skos:definition "Transmission involves both embodied/oral and written components."@en .
+
+ile:transmission-divination-prescribed
+    a skos:Concept ; skos:inScheme ile:TransmissionTypeScheme ;
+    skos:prefLabel "Divination-Prescribed"@en ;
+    skos:definition "The specific form of transmission was determined by divination rather than fixed protocol."@en .
