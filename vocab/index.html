@@ -1,145 +1,699 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iroko Framework Vocabularies</title>
-    <link rel="stylesheet" href="../assets/vocab-style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iroko Framework — Controlled Vocabularies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Tokens ─────────────────────────────────────────── */
+    :root {
+      --ink:        #1c2118;
+      --ink-mid:    #3d4a36;
+      --ink-soft:   #6b7a62;
+      --paper:      #f7f4ed;
+      --paper-warm: #ede9df;
+      --rule:       rgba(28,33,24,.12);
+      --rule-strong:rgba(28,33,24,.25);
+      --green:      #2e4a1e;
+      --green-mid:  #4a7035;
+      --terracotta: #8b3a1a;
+      --gold:       #a07830;
+      --accent-bg:  #f0ebe0;
+
+      --mono: 'DM Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+      --serif:'Cormorant Garamond', Georgia, serif;
+    }
+
+    /* ── Reset ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    a { color: var(--green); text-decoration: none; }
+    a:hover { color: var(--terracotta); }
+
+    /* ── Layout ─────────────────────────────────────────── */
+    .page-wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── Breadcrumb ─────────────────────────────────────── */
+    .breadcrumb {
+      padding: 1.1rem 2rem;
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .08em;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--rule);
+    }
+    .breadcrumb a { color: var(--ink-soft); }
+    .breadcrumb a:hover { color: var(--green); }
+    .breadcrumb span { margin: 0 .4em; opacity: .5; }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .site-header {
+      padding: 3.5rem 2rem 2.5rem;
+      border-bottom: 2px solid var(--ink);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+      align-items: end;
+    }
+
+    .header-logo img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .header-title h1 {
+      font-family: var(--serif);
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-weight: 600;
+      letter-spacing: -.01em;
+      line-height: 1.1;
+      color: var(--green);
+    }
+
+    .header-title .subtitle {
+      font-size: .88rem;
+      color: var(--ink-soft);
+      margin-top: .45rem;
+      font-weight: 300;
+      max-width: 60ch;
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-pill {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border: 1px solid var(--rule-strong);
+      padding: .2em .7em;
+      border-radius: 2px;
+    }
+
+    /* ── Section label ───────────────────────────────────── */
+    .section-label {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      padding: 2.5rem 0 1rem;
+    }
+
+    /* ── Module Grid ─────────────────────────────────────── */
+    .module-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    /* ── Module Row ──────────────────────────────────────── */
+    .module-row {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      border-top: 1px solid var(--rule);
+      transition: background .15s ease;
+    }
+
+    .module-row:last-child { border-bottom: 1px solid var(--rule); }
+
+    .module-row:hover { background: var(--accent-bg); }
+
+    /* Left column */
+    .module-identity {
+      padding: 1.8rem 2rem 1.8rem 0;
+      border-right: 1px solid var(--rule);
+    }
+
+    .module-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .18em .6em;
+      border-radius: 2px;
+      margin-bottom: .75rem;
+    }
+
+    .tag-core       { background: var(--green); color: #fff; }
+    .tag-botanical  { background: #3a5e28; color: #fff; }
+    .tag-entities   { background: #5c3d8f; color: #fff; }
+    .tag-ritual     { background: #7a3520; color: #fff; }
+    .tag-lineage    { background: #4a3010; color: #fff; }
+
+    .module-name {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+      display: block;
+    }
+
+    .module-name a { color: inherit; }
+    .module-name a:hover { color: var(--green); }
+
+    .module-subtitle {
+      font-size: .78rem;
+      color: var(--ink-soft);
+      margin-top: .25rem;
+      font-style: italic;
+      font-family: var(--serif);
+    }
+
+    .module-ns {
+      margin-top: 1rem;
+      font-family: var(--mono);
+      font-size: .72rem;
+      color: var(--green-mid);
+    }
+
+    .module-version {
+      font-family: var(--mono);
+      font-size: .65rem;
+      color: var(--ink-soft);
+      margin-top: .2rem;
+    }
+
+    /* Right column */
+    .module-detail {
+      padding: 1.8rem 0 1.8rem 2rem;
+    }
+
+    .module-desc {
+      font-size: .87rem;
+      color: var(--ink-mid);
+      line-height: 1.6;
+      max-width: 68ch;
+      margin-bottom: 1.1rem;
+    }
+
+    /* Stats row */
+    .module-stats {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.1rem;
+      border: 1px solid var(--rule-strong);
+      border-radius: 3px;
+      overflow: hidden;
+      width: fit-content;
+    }
+
+    .stat-cell {
+      padding: .45rem .9rem;
+      border-right: 1px solid var(--rule-strong);
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .stat-cell:last-child { border-right: none; }
+
+    .stat-n {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--green);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      display: block;
+      margin-top: .2rem;
+    }
+
+    /* Contents detail */
+    .module-contents {
+      font-size: .8rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .contents-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: .3rem;
+      margin-bottom: .2rem;
+    }
+
+    .contents-key {
+      font-family: var(--mono);
+      font-size: .68rem;
+      color: var(--ink-soft);
+      padding-top: .02em;
+    }
+
+    .contents-val { color: var(--ink-mid); }
+
+    /* Action links */
+    .module-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.1rem;
+      align-items: center;
+    }
+
+    .action-primary {
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--green);
+      border: 1px solid var(--green);
+      padding: .3em 1em;
+      border-radius: 2px;
+      transition: all .15s;
+    }
+
+    .action-primary:hover {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .action-secondary {
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border: 1px solid var(--rule-strong);
+      padding: .3em 1em;
+      border-radius: 2px;
+      transition: all .15s;
+    }
+
+    .action-secondary:hover {
+      background: var(--paper-warm);
+      color: var(--ink);
+    }
+
+    .action-ghost {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .action-ghost:hover { color: var(--green); }
+
+    /* ── Info section ────────────────────────────────────── */
+    .info-section {
+      margin: 3.5rem 0;
+      padding-top: 2.5rem;
+      border-top: 2px solid var(--ink);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .info-block h2 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+
+    .info-block p {
+      font-size: .87rem;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      margin-bottom: .75rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin: 0;
+    }
+
+    .feature-list li {
+      font-size: .84rem;
+      color: var(--ink-mid);
+      padding: .5rem 0;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .75rem;
+      align-items: start;
+    }
+
+    .feature-list li::before {
+      content: '→';
+      font-family: var(--mono);
+      color: var(--green-mid);
+      font-size: .8rem;
+      margin-top: .05em;
+    }
+
+    .feature-list strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .resource-list {
+      list-style: none;
+    }
+
+    .resource-list li {
+      padding: .45rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .resource-list a {
+      font-size: .84rem;
+      font-family: var(--sans);
+    }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--rule);
+      padding: 1.5rem 0 2.5rem;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: .05em;
+      color: var(--ink-soft);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: .05em;
+      color: var(--ink-soft);
+    }
+
+    .footer-links a:hover { color: var(--green); }
+
+    /* ── Responsive ─────────────────────────────────────── */
+    @media (max-width: 780px) {
+      .site-header { grid-template-columns: 1fr; gap: 1rem; }
+      .module-row  { grid-template-columns: 1fr; }
+      .module-identity { border-right: none; border-bottom: 1px solid var(--rule); padding-bottom: 1rem; }
+      .module-detail { padding-left: 0; }
+      .info-section { grid-template-columns: 1fr; gap: 2rem; }
+      .module-stats { flex-wrap: wrap; }
+    }
+  </style>
 </head>
 <body>
 
-    <nav class="breadcrumb">
-        <a href="../index.html">&#8592; Iroko Framework</a>
-    </nav>
+  <nav class="breadcrumb page-wrap">
+    <a href="../index.html">Iroko Framework</a>
+    <span>/</span>
+    Controlled Vocabularies
+  </nav>
 
-    <header>
-        <div class="header-inner">
-            <img class="brand-logo" src="../assets/ihs-logo.jpg" alt="Iroko Historical Society logo">
-            <div class="header-text">
-                <h1>Iroko Framework Vocabularies</h1>
-                <p class="subtitle">Semantic vocabularies for governing access to Afro-Atlantic sacred knowledge systems</p>
-            </div>
+  <div class="page-wrap">
+
+    <header class="site-header">
+      <div class="header-logo">
+        <img src="../assets/ihs-logo.jpg" alt="Iroko Historical Society">
+      </div>
+      <div class="header-title">
+        <h1>Controlled Vocabularies</h1>
+        <p class="subtitle">Semantic vocabularies for governing access to Afro-Atlantic sacred knowledge systems across ten thematic modules</p>
+        <div class="header-meta">
+          <span class="meta-pill">v1.0.0</span>
+          <span class="meta-pill">February 2026</span>
+          <span class="meta-pill">OWL · SKOS · RDF/TTL</span>
+          <span class="meta-pill">5 Modules Published</span>
         </div>
+      </div>
     </header>
 
-    <section class="vocab-list">
+    <p class="section-label">Published Modules</p>
 
-        <div class="vocab-card">
-            <h2><a href="iroko-core.html">Core Vocabulary</a></h2>
-            <p><strong>Namespace:</strong> <code>iroko:</code></p>
-            <p><strong>Version:</strong> 1.0.0</p>
-            <p>Cross-module infrastructure for governance and semantic integration. Provides access control, provenance tracking, contested knowledge modeling, and semantic linking capabilities.</p>
-            <dl>
-                <dt>Classes:</dt>
-                <dd>5 (SacredEntity, SacredSpecimen, LineageKnowledgeGraph, ContestedAuthority, DocumentaryEvidence)</dd>
+    <div class="module-grid">
 
-                <dt>Properties:</dt>
-                <dd>16 (tradition, accessLevel, epistemicType, etc.)</dd>
-
-                <dt>Concept Schemes:</dt>
-                <dd>6 (Traditions incl. Haitian Vodou, Access Levels, Epistemic Types, Sacred Status incl. Hereditary Custody &amp; Honored Rest, Custodial Relationships, Community Endorsement)</dd>
-            </dl>
-            <p class="vocab-links">
-                <a href="iroko-core.html">Browse</a> |
-                <a href="iroko-core.ttl">Download TTL</a> |
-                <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
-            </p>
+      <!-- CORE -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-core">Infrastructure</span>
+          <span class="module-name"><a href="iroko-core.html">Core Vocabulary</a></span>
+          <span class="module-subtitle">Cross-module governance infrastructure</span>
+          <div class="module-ns">iroko:</div>
+          <div class="module-version">v1.0.0 · iroko-core.ttl</div>
         </div>
-
-        <div class="vocab-card">
-            <h2><a href="iroko-ewe.html">Ewé Module (Sacred Plant Knowledge)</a></h2>
-            <p><strong>Namespace:</strong> <code>ewe:</code></p>
-            <p><strong>Version:</strong> 1.0.0</p>
-            <p>Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance over Darwin Core botanical data with field-level access control.</p>
-            <dl>
-                <dt>Classes:</dt>
-                <dd>3 (Plant, PlantPreparation, HerbariumSheet)</dd>
-
-                <dt>Properties:</dt>
-                <dd>18 (medicinalUse, ritualUse, harvestProtocol, preparationMethod, etc.)</dd>
-
-                <dt>Concept Schemes:</dt>
-                <dd>5 (Medicinal Uses, Ritual Uses, Plant Parts, Harvest Protocols, Preparation Methods)</dd>
-            </dl>
-            <p class="vocab-links">
-                <a href="iroko-ewe.html">Browse</a> |
-                <a href="iroko-ewe.ttl">Download TTL</a> |
-                <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
-            </p>
+        <div class="module-detail">
+          <p class="module-desc">Cross-module infrastructure for governance and semantic integration. Provides access control, provenance tracking, contested knowledge modeling, relationship assertion reification, sacred media metadata, and semantic linking capabilities.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">7</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">39</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">10</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">96</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">SacredEntity, SacredSpecimen, LineageKnowledgeGraph, ContestedAuthority, DocumentaryEvidence, RelationshipAssertion, SacredMedia</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Traditions (incl. Haitian Vodou, Ghede, Obeah, New Orleans Voodoo); Access Levels; Epistemic Types; Sacred Status; Custodial Relationships; Community Endorsement; Assertion Status; Media Types; Recording Context; Consent Status</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-core.html">Browse</a>
+            <a class="action-secondary" href="iroko-core.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
         </div>
+      </div>
 
-        <div class="vocab-card">
-            <h2><a href="iroko-nkisi.html">Nkisi Module (Spiritual Entities)</a></h2>
-            <p><strong>Namespace:</strong> <code>nkisi:</code></p>
-            <p><strong>Version:</strong> 1.0.0</p>
-            <p>Vocabulary for documenting spiritual entities across Afro-Atlantic traditions. Covers orisa, lwa, mpungo/inquice, vodun, egun, ajogun, Ori, Espiritismo guides and commissions, and spirits of place and element. Supports path/camino modeling and syncretic identity tracking.</p>
-            <dl>
-                <dt>Classes:</dt>
-                <dd>4 (SpiritualEntity, Path, Offering, Shrine)</dd>
-
-                <dt>Properties:</dt>
-                <dd>20 (entityType, commissionType, domain, syncreticIdentity, color, number, taboo, etc.)</dd>
-
-                <dt>Concept Schemes:</dt>
-                <dd>4 (Entity Types, Commission Types, Temperament, Offering Types)</dd>
-            </dl>
-            <p class="vocab-links">
-                <a href="iroko-nkisi.html">Browse</a> |
-                <a href="iroko-nkisi.ttl">Download TTL</a> |
-                <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
-            </p>
+      <!-- EWÉ -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-botanical">Botanical</span>
+          <span class="module-name"><a href="iroko-ewe.html">Ewé Module</a></span>
+          <span class="module-subtitle">Sacred plant knowledge</span>
+          <div class="module-ns">ewe:</div>
+          <div class="module-version">v1.0.0 · iroko-ewe.ttl</div>
         </div>
-
-        <div class="vocab-card">
-            <h2><a href="iroko-travay.html">Travay Module (Ritual Processes)</a></h2>
-            <p><strong>Namespace:</strong> <code>travay:</code></p>
-            <p><strong>Version:</strong> 1.0.0</p>
-            <p>Vocabulary for documenting ritual processes in Afro-Atlantic traditions. Distinguishes recurring ceremonies from threshold initiatory rites. Access control at the property level: the existence of a ceremony is public; operational sequences and details are restricted.</p>
-            <dl>
-                <dt>Classes:</dt>
-                <dd>4 (RitualProcess, Ceremony, InitiatoryRite, CeremonialSequence)</dd>
-
-                <dt>Properties:</dt>
-                <dd>18 (processType, presidingEntity, requiredAuthority, initiationLevel, sequence, etc.)</dd>
-
-                <dt>Concept Schemes:</dt>
-                <dd>5 (Process Types, Authority Levels, Participant Roles, Initiation Levels, Timing Requirements)</dd>
-            </dl>
-            <p class="vocab-links">
-                <a href="iroko-travay.html">Browse</a> |
-                <a href="iroko-travay.ttl">Download TTL</a> |
-                <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
-            </p>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance layered over Darwin Core botanical data, with field-level access control down to harvest protocol and preparation method.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">18</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">—</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">Plant, PlantPreparation, HerbariumSheet</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Medicinal Uses, Ritual Uses, Plant Parts, Harvest Protocols, Preparation Methods</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-ewe.html">Browse</a>
+            <a class="action-secondary" href="iroko-ewe.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
         </div>
+      </div>
 
-    </section>
+      <!-- NKISI -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-entities">Entities</span>
+          <span class="module-name"><a href="iroko-nkisi.html">Nkisi Module</a></span>
+          <span class="module-subtitle">Spiritual entities &amp; kinship</span>
+          <div class="module-ns">nkisi:</div>
+          <div class="module-version">v1.0.0 · iroko-nkisi.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting spiritual entities across Afro-Atlantic traditions. Covers orisa, lwa, mpungo, vodun, egun, ajogun, Ori, and spirits of place. Supports camino/path modeling, syncretic identity tracking, spirit kinship relations, and polarity modality.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">20</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">—</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">SpiritualEntity, Path, Offering, Shrine</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Entity Types, Commission Types, Temperament, Offering Types, Spirit Kinship Relations, Polarity &amp; Gender Modality</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-nkisi.html">Browse</a>
+            <a class="action-secondary" href="iroko-nkisi.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
 
-    <section class="info">
+      <!-- TRAVAY -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-ritual">Ritual</span>
+          <span class="module-name"><a href="iroko-travay.html">Travay Module</a></span>
+          <span class="module-subtitle">Ritual processes &amp; ceremonies</span>
+          <div class="module-ns">travay:</div>
+          <div class="module-version">v1.0.0 · iroko-travay.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting ritual processes in Afro-Atlantic traditions. Distinguishes recurring ceremonies from threshold initiatory rites. Access control operates at the property level: ceremony existence is public; operational sequences and material details are restricted.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">18</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">—</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">RitualProcess, Ceremony, InitiatoryRite, CeremonialSequence</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Process Types, Authority Levels, Participant Roles, Initiation Levels, Timing Requirements</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-travay.html">Browse</a>
+            <a class="action-secondary" href="iroko-travay.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ILÉ -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-lineage">Lineage</span>
+          <span class="module-name"><a href="iroko-ile.html">Ilé Module</a></span>
+          <span class="module-subtitle">Houses, lineage &amp; authority</span>
+          <div class="module-ns">ile:</div>
+          <div class="module-version">v1.0.0 · iroko-ile.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting Afro-Atlantic religious houses, lineage structures, initiation genealogy, authority transmission, and schism events. Extends schema:Organization and FOAF with tradition-specific governance and lineage modeling. Covers ilé, terreiro, hounfò, cabildo, and analogous institutions.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">38</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">58</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">House, Cabildo, Lineage, InitiationEvent, Authority, SchismEvent</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">House Types (12), Authority Titles (20), Initiation Types (13), Governance Models (8), Transmission Types (5)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-ile.html">Browse</a>
+            <a class="action-secondary" href="iroko-ile.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /module-grid -->
+
+    <!-- ── About ─────────────────────────────────────────── -->
+    <div class="info-section">
+      <div class="info-block">
         <h2>About the Iroko Framework</h2>
         <p>The Iroko Framework provides controlled vocabularies and access governance mechanisms for documenting sacred knowledge in Afro-Atlantic traditions. It supports postcustodial archival approaches where communities maintain authority over their knowledge while enabling semantic interoperability.</p>
-
-        <h3>Key Features</h3>
-        <ul>
-            <li><strong>Field-Level Access Control:</strong> Granular permissions from public-unrestricted to initiated-elder</li>
-            <li><strong>Contested Knowledge Support:</strong> Multiple lineage perspectives can coexist without requiring resolution</li>
-            <li><strong>Provenance Tracking:</strong> Oral transmission chains, fieldwork context, epistemic transparency</li>
-            <li><strong>Semantic Interoperability:</strong> Integrates with Darwin Core, SKOS, Dublin Core, PROV-O</li>
+        <p>All modules serialize to RDF/Turtle and integrate with standard external vocabularies including Darwin Core, Dublin Core, PROV-O, FOAF, and schema.org.</p>
+        <ul class="feature-list">
+          <li><div><strong>Field-Level Access Control</strong> — Granular permissions from public-unrestricted through initiated-elder, applied at the property level</div></li>
+          <li><div><strong>Contested Knowledge Support</strong> — Multiple lineage perspectives coexist through RelationshipAssertion reification without forcing resolution</div></li>
+          <li><div><strong>Provenance Tracking</strong> — Oral transmission chains, fieldwork context, epistemic transparency throughout</div></li>
+          <li><div><strong>Semantic Interoperability</strong> — Integrates Darwin Core, SKOS, Dublin Core, PROV-O, FOAF, schema.org</div></li>
+        </ul>
+      </div>
+      <div class="info-block">
+        <h2>Resources</h2>
+        <ul class="resource-list">
+          <li><a href="../docs/REUSE.md">How to Use These Vocabularies</a></li>
+          <li><a href="../docs/CONTRIBUTING.md">Contributing Guidelines</a></li>
+          <li><a href="../docs/ARCHITECTURE.md">Technical Architecture</a></li>
+          <li><a href="https://www.irokosociety.org/iroko-framework">Iroko Framework — irokosociety.org</a></li>
+          <li><a href="https://github.com/iroko-framework/iroko-framework">GitHub Repository</a></li>
         </ul>
 
-        <h3>Resources</h3>
-        <ul>
-            <li><a href="../docs/REUSE.md">How to Use These Vocabularies</a></li>
-            <li><a href="../docs/CONTRIBUTING.md">Contributing Guidelines</a></li>
-            <li><a href="../docs/ARCHITECTURE.md">Technical Architecture</a></li>
-            <li><a href="https://irokosociety.org">Iroko Historical Society</a></li>
+        <h2 style="margin-top:2rem;">Namespace Prefixes</h2>
+        <ul class="resource-list" style="font-family:var(--mono);font-size:.75rem;">
+          <li>iroko: &nbsp;<span style="color:var(--ink-soft)">https://www.irokosociety.org/iroko-framework/core#</span></li>
+          <li>ewe: &nbsp;&nbsp;&nbsp;<span style="color:var(--ink-soft)">https://www.irokosociety.org/iroko-framework/ewe#</span></li>
+          <li>nkisi: &nbsp;<span style="color:var(--ink-soft)">https://www.irokosociety.org/iroko-framework/nkisi#</span></li>
+          <li>travay:<span style="color:var(--ink-soft)"> https://www.irokosociety.org/iroko-framework/travay#</span></li>
+          <li>ile: &nbsp;&nbsp;&nbsp;<span style="color:var(--ink-soft)">https://www.irokosociety.org/iroko-framework/ile#</span></li>
         </ul>
-    </section>
+      </div>
+    </div>
 
-    <footer>
-        <p><strong>License:</strong> <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal (Public Domain)</a></p>
-        <p><strong>Contact:</strong> <a href="mailto:irokosociety@gmail.com">irokosociety@gmail.com</a> | <a href="https://irokosociety.org">irokosociety.org</a></p>
-        <p>&copy; 2026 Iroko Historical Society</p>
+    <footer class="site-footer">
+      <div class="footer-copy">
+        © 2026 Iroko Historical Society · CC0 1.0 Universal (Public Domain)
+      </div>
+      <div class="footer-links">
+        <a href="https://www.irokosociety.org">irokosociety.org</a>
+        <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
+        <a href="mailto:info@irokosociety.org">Contact</a>
+      </div>
     </footer>
+
+  </div><!-- /page-wrap -->
 
 </body>
 </html>
