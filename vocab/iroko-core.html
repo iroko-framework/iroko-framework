@@ -1,1086 +1,1613 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Core Vocabulary — Iroko Framework Vocabularies</title>
-  <link rel="stylesheet" href="../assets/iroko-style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iroko Framework Core Vocabulary</title>
+    <link rel="stylesheet" href="../assets/vocab-style.css">
 </head>
 <body>
+    <header>
+        <h1>Iroko Framework Core Vocabulary</h1>
+        <p class="subtitle">Cross-module infrastructure for governance and semantic integration of Afro-Atlantic sacred knowledge systems. Provides access control, provenance tracking, contested knowledge modeling, and semantic linking capabilities.</p>
+    </header>
+    
+    <div class="metadata">
+        <dl>
+            <dt>Namespace URI:</dt>
+            <dd><code>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core</code></dd>
+            
+            <dt>Version:</dt>
+            <dd>1.0.0</dd>
+            
+            <dt>Date:</dt>
+            <dd>2026-02-18</dd>
+            
+            <dt>Creator:</dt>
+            <dd>Iroko Historical Society</dd>
+            
+            <dt>License:</dt>
+            <dd><a href="https://creativecommons.org/publicdomain/zero/1.0/">1.0</a></dd>
+            
+            <dt>Formats:</dt>
+            <dd>
+                <a href="iroko-core.ttl">Turtle</a>
+            </dd>
+        </dl>
+    </div>
 
-<div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.0.0</span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="index.html">Vocabularies</a>
-    <a href="https://www.irokosociety.org/iroko-framework">irokosociety.org ↗</a>
-    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
-  </nav>
-</div>
+    <nav class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#classes">Classes</a>
+                <ul>
+                    <li><a href="#ContestedAuthority">Contested Authority</a></li>
+                    <li><a href="#DocumentaryEvidence">Documentary Evidence</a></li>
+                    <li><a href="#LineageKnowledgeGraph">Lineage Knowledge Graph</a></li>
+                    <li><a href="#RelationshipAssertion">Relationship Assertion</a></li>
+                    <li><a href="#SacredEntity">Sacred Entity</a></li>
+                    <li><a href="#SacredMedia">Sacred Media</a></li>
+                    <li><a href="#SacredSpecimen">Sacred Specimen</a></li>
+                </ul>
+            </li>
+            <li><a href="#properties">Properties</a>
+                <ul>
+                    <li><a href="#accessLevel">access level</a></li>
+                    <li><a href="#assertionLineage">assertion lineage</a></li>
+                    <li><a href="#assertionNote">assertion note</a></li>
+                    <li><a href="#assertionObject">assertion object</a></li>
+                    <li><a href="#assertionScope">assertion scope</a></li>
+                    <li><a href="#assertionStatus">assertion status</a></li>
+                    <li><a href="#assertionSubject">assertion subject</a></li>
+                    <li><a href="#communityEndorsement">community endorsement</a></li>
+                    <li><a href="#communityReleaseApproval">community release approval</a></li>
+                    <li><a href="#competingClaim">competing claim</a></li>
+                    <li><a href="#contestedNotes">contested notes</a></li>
+                    <li><a href="#contestedStatus">contested status</a></li>
+                    <li><a href="#custodialRelationship">custodial relationship</a></li>
+                    <li><a href="#depictedCeremony">depicted ceremony</a></li>
+                    <li><a href="#depictedEntity">depicted entity</a></li>
+                    <li><a href="#depicts">depicts</a></li>
+                    <li><a href="#documents">documents</a></li>
+                    <li><a href="#mediaDuration">duration</a></li>
+                    <li><a href="#epistemicType">epistemic type</a></li>
+                    <li><a href="#fieldworkProvenance">fieldwork provenance</a></li>
+                    <li><a href="#hasRelationshipAssertion">has relationship assertion</a></li>
+                    <li><a href="#instrumentation">instrumentation</a></li>
+                    <li><a href="#languageOfPerformance">language of performance</a></li>
+                    <li><a href="#mediaFormat">media format</a></li>
+                    <li><a href="#mediaType">media type</a></li>
+                    <li><a href="#minimumAccessLevel">minimum access level</a></li>
+                    <li><a href="#oralTransmissionChain">oral transmission chain</a></li>
+                    <li><a href="#recordingContext">recording context</a></li>
+                    <li><a href="#recordingDate">recording date</a></li>
+                    <li><a href="#recordingLocation">recording location</a></li>
+                    <li><a href="#recordist">recordist</a></li>
+                    <li><a href="#rejectingLineages">rejecting lineages</a></li>
+                    <li><a href="#relatedTradition">related tradition</a></li>
+                    <li><a href="#relationType">relation type</a></li>
+                    <li><a href="#sacredStatus">sacred status</a></li>
+                    <li><a href="#sourceRelationship">source relationship</a></li>
+                    <li><a href="#subjectConsentStatus">subject consent status</a></li>
+                    <li><a href="#supportingLineages">supporting lineages</a></li>
+                    <li><a href="#tradition">tradition</a></li>
+                </ul>
+            </li>
+            <li><a href="#concept-schemes">Concept Schemes</a>
+                <ul>
+                    <li><a href="#AccessLevelScheme">Access Level Classification</a></li>
+                    <li><a href="#AssertionStatusScheme">Assertion Status</a></li>
+                    <li><a href="#CommunityEndorsementScheme">Community Endorsement Status</a></li>
+                    <li><a href="#ConsentStatusScheme">Consent Status</a></li>
+                    <li><a href="#CustodialRelationshipScheme">Custodial Relationship</a></li>
+                    <li><a href="#EpistemicTypeScheme">Epistemic Source Type</a></li>
+                    <li><a href="#MediaTypeScheme">Media Type</a></li>
+                    <li><a href="#RecordingContextScheme">Recording Context</a></li>
+                    <li><a href="#SacredStatusScheme">Sacred Object Status</a></li>
+                    <li><a href="#TraditionScheme">Tradition Classification</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
 
-<div class="page-wrap">
+    <section id="classes">
+        <h2>Classes</h2>
 
-  <p class="breadcrumb">
-    <a href="../index.html">Iroko Framework</a>
-    <span>/</span>
-    <a href="index.html">Vocabularies</a>
-    <span>/</span>
-    Core Vocabulary
-  </p>
+        <div class="term" id="ContestedAuthority">
+            <h3>Contested Authority</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#ContestedAuthority</div>
+            <span class="term-type">CLASS</span>
+            
+            <div class="term-description">
+                <p>An authority (religious title, position, or role) whose legitimacy or historical continuity is disputed across lineages. Example: Iyanifa (women Ifa priests) - some lineages affirm historical continuity, others claim modern innovation.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"Contested Authority"@en</dd>
+            </dl>
+        </div>
 
-  <header class="vocab-header">
-    <div class="vocab-header-logo">
-      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
-    </div>
-    <div>
-      <span class="module-tag tag-core">Infrastructure</span>
-      <h1>Core Vocabulary</h1>
-      <p class="subtitle">Cross-module governance infrastructure</p>
-      <div class="header-meta">
-        <span class="meta-pill">iroko:  https://www.irokosociety.org/iroko-framework/core#</span>
-        <span class="meta-pill">v1.0.0</span>
-        <span class="meta-pill"><a href="iroko-core.ttl" style="color:inherit;">Download TTL ↓</a></span>
-        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
-      </div>
-    </div>
-  </header>
+        <div class="term" id="DocumentaryEvidence">
+            <h3>Documentary Evidence</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#DocumentaryEvidence</div>
+            <span class="term-type">CLASS</span>
+            
+            <div class="term-description">
+                <p>Umbrella class for archival materials (photographs, manuscripts, audio recordings, herbarium specimens) that document sacred knowledge practices. Maps to schema:CreativeWork in RDF serialization.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"Documentary Evidence"@en</dd>
+            </dl>
+        </div>
 
+        <div class="term" id="LineageKnowledgeGraph">
+            <h3>Lineage Knowledge Graph</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#LineageKnowledgeGraph</div>
+            <span class="term-type">CLASS</span>
+            
+            <div class="term-description">
+                <p>A named graph representing one lineage's perspective on contested knowledge. Enables multiple community-endorsed positions to coexist without requiring resolution. Core mechanism for postcustodial knowledge governance.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"Lineage Knowledge Graph"@en</dd>
+                <dt>Subclass Of:</dt>
+                <dd><code>Entity</code></dd>
+            </dl>
+        </div>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Cross-module infrastructure for governance and semantic integration. Provides access control, provenance tracking, contested knowledge modeling, relationship assertion reification, sacred media metadata, and semantic linking capabilities. All other Iroko modules depend on this vocabulary.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">7</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">39</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">10</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">96</span><span class="stat-label">Concepts</span></div>
-    </div>
-  </div>
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">7 classes</span>
-    </div>
-    <div class="class-card">
-      <div class="class-name">ContestedAuthority</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Contested Authority</div>
-      
-      <p class="class-def">An authority (religious title, position, or role) whose legitimacy or historical continuity is disputed across lineages. Example: Iyanifa (women Ifa priests) - some lineages affirm historical continuity, others claim modern innovation.</p>
-    </div>
-    <div class="class-card">
-      <div class="class-name">DocumentaryEvidence</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Documentary Evidence</div>
-      
-      <p class="class-def">Umbrella class for archival materials (photographs, manuscripts, audio recordings, herbarium specimens) that document sacred knowledge practices. Maps to schema:CreativeWork in RDF serialization.</p>
-    </div>
-    <div class="class-card">
-      <div class="class-name">LineageKnowledgeGraph</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Lineage Knowledge Graph</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Entity</span></div>
-      <p class="class-def">A named graph representing one lineage&#x27;s perspective on contested knowledge. Enables multiple community-endorsed positions to coexist without requiring resolution. Core mechanism for postcustodial knowledge governance.</p>
-    </div>
-    <div class="class-card">
-      <div class="class-name">RelationshipAssertion</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Relationship Assertion</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">A structured reification node recording a claimed relationship between two entities, including its provenance, assertion status, and any lineage scope. Enables competing claims to coexist without requiring resolution.</p>
-    </div>
-    <div class="class-card">
-      <div class="class-name">SacredEntity</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Entity</div>
-      
-      <p class="class-def">Top-level class for any tradition-specific concept within the Iroko Framework. All module-specific classes (Plant, SpiritualEntity, RitualProcess, etc.) are subclasses of this.</p>
-    </div>
-    <div class="class-card">
-      <div class="class-name">SacredMedia</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Media</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Documentary Evidence</span></div>
-      <p class="class-def">Audio, photographic, or video records of sacred knowledge, ceremonies, instruments, or practitioners. Extends DocumentaryEvidence with media-specific metadata including format, instrumentation, consent status, and depicted entities.</p>
-    </div>
-    <div class="class-card">
-      <div class="class-name">SacredSpecimen</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Specimen</div>
-      
-      <p class="class-def">Distinguishes objects that maintain active sacred status (consecrated, in ritual use) from decommissioned objects or museum specimens. Used to track the ritual life cycle of material culture.</p>
-    </div>
-  </div>
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">39 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="prop-name">accessLevel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">access level</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Governs who may view this knowledge. Values: iroko:access-public-unrestricted, iroko:access-public-no-amplification, iroko:access-community-only, iroko:access-initiated-only, iroko:access-initiated-elder, iroko:access-no-access. Applied at record level and/or field level.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">assertionLineage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion lineage</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Relationship Assertion → langString</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">The specific lineage, house, or community within which this assertion holds. Used when assertionStatus is lineage-specific.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">assertionNote</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion note</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Relationship Assertion → langString</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Free-text note explaining the basis, source, or dispute surrounding the relationship claim. Language-tagged.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">assertionObject</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion object</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Relationship Assertion → Sacred Entity</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">The entity that is the object of the relationship claim. Named assertionObject (not object) to avoid shadowing rdf:object.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">assertionScope</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion scope</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Relationship Assertion → langString</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Optional: restricts the claim to a specific camino, aspect, or manifestation. Example: &#x27;Applies only to Obatala Ayaguna, not to Obatala Orishaoko.&#x27;</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">assertionStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Relationship Assertion → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Whether the claim is consensual, lineage-specific, or contested. Range: iroko:AssertionStatusScheme.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">assertionSubject</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion subject</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Relationship Assertion → Sacred Entity</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">The entity that is the subject of the relationship claim. Named assertionSubject (not subject) to avoid shadowing rdf:subject.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">communityEndorsement</span><br><span style="font-size:.75rem;color:var(--ink-soft);">community endorsement</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Status of community review and approval. Values: iroko:endorsement-unreviewed, iroko:endorsement-community-reviewed, iroko:endorsement-elder-approved, iroko:endorsement-contested, iroko:endorsement-withdrawn, iroko:endorsement-pending-review. Flips institutional authority model by centering community validation.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">communityReleaseApproval</span><br><span style="font-size:.75rem;color:var(--ink-soft);">community release approval</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → boolean</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Whether the relevant religious community or house has approved release of this media.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">competingClaim</span><br><span style="font-size:.75rem;color:var(--ink-soft);">competing claim</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Entity</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Links to a prov:Entity representing an alternative position on this contested knowledge. Typically references a named graph containing a lineage&#x27;s assertion. Multiple claims may coexist.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">contestedNotes</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contested notes</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Entity → string</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Free-text description of the nature of contestation. What specifically is disputed and by whom.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">contestedStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contested status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Entity → boolean</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Boolean indicating whether this entity&#x27;s attributes, existence, or interpretation are disputed across lineages. If true, see iroko:competingClaim for alternative positions.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">custodialRelationship</span><br><span style="font-size:.75rem;color:var(--ink-soft);">custodial relationship</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Specimen → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Nature of custody for sacred objects. Values: iroko:custodial-community-held, iroko:custodial-institutional-with-access, iroko:custodial-institutional-disputed, iroko:custodial-repatriation-active, iroko:custodial-private-collection, iroko:custodial-unknown-location, iroko:custodial-shared-custody, iroko:custodial-lineage-succession, iroko:custodial-under-negotiation. Supports postcustodial tracking.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">depictedCeremony</span><br><span style="font-size:.75rem;color:var(--ink-soft);">depicted ceremony</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → —</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Links media to the ritual process it documents. Range: travay:RitualProcess.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">depictedEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">depicted entity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → —</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Spiritual entity depicted or invoked in the media. Range: nkisi:SpiritualEntity.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">depicts</span><br><span style="font-size:.75rem;color:var(--ink-soft);">depicts</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Documentary Evidence → —</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Links archival materials to the entities they depict. Example: photograph depicts Obatala altar, herbarium sheet depicts plant specimen. Cross-module linking property.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">documents</span><br><span style="font-size:.75rem;color:var(--ink-soft);">documents</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Documentary Evidence → —</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Links archival materials to practices or events they document. Example: audio recording documents ceremony, photograph documents initiation. Cross-module linking property.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">mediaDuration</span><br><span style="font-size:.75rem;color:var(--ink-soft);">duration</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → duration</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Duration of audio or video in ISO 8601 format (e.g. PT3M42S).</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">epistemicType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">epistemic type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Epistemological source classification. Values: iroko:epistemicType-continuous-oral-transmission, iroko:epistemicType-published-ethnography, iroko:epistemicType-fieldwork-recording, iroko:epistemicType-archival-document, iroko:epistemicType-material-culture, iroko:epistemicType-ritual-performance, iroko:epistemicType-reconstructed-from-text, iroko:epistemicType-claimed-revelation, iroko:epistemicType-political-reinterpretation. Enables transparency about knowledge sources.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">fieldworkProvenance</span><br><span style="font-size:.75rem;color:var(--ink-soft);">fieldwork provenance</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Entity → string</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Details of fieldwork context if this knowledge derives from direct ethnographic observation. Location, date, circumstances, informant relationship.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">hasRelationshipAssertion</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has relationship assertion</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Relationship Assertion</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Links a SacredEntity to a RelationshipAssertion node describing a claimed relationship.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">instrumentation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">instrumentation</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → langString</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">For audio: instruments present in the recording. Example: batá, güiro, agogó.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">languageOfPerformance</span><br><span style="font-size:.75rem;color:var(--ink-soft);">language of performance</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → string</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">BCP 47 language tag of the language spoken or sung in the recording.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">mediaFormat</span><br><span style="font-size:.75rem;color:var(--ink-soft);">media format</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → string</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Technical format of the file. Example: FLAC, WAV, TIFF, JPEG, MP4.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">mediaType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">media type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">The format category of the media record: audio, photograph, video, etc.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">minimumAccessLevel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">minimum access level</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">— → —</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Annotation property used on other properties to indicate the minimum access level required to view their values. Used in vocabulary documentation and RDF export filtering.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">oralTransmissionChain</span><br><span style="font-size:.75rem;color:var(--ink-soft);">oral transmission chain</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Entity → string</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Documented chain of oral transmission for this knowledge. Example: Elder A (Havana) to Elder B (Matanzas) to Informant C (2018). No Dublin Core equivalent for this culturally specific provenance pattern.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">recordingContext</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recording context</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Whether the recording was made in a field, ceremonial, studio, or archival context.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">recordingDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recording date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → date</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc"></td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">recordingLocation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recording location</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → langString</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Location where the recording was made. May be general (city/country) for access-controlled records.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">recordist</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recordist</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → langString</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Person who made the recording or took the photograph.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">rejectingLineages</span><br><span style="font-size:.75rem;color:var(--ink-soft);">rejecting lineages</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Entity → string</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Text list of lineages or houses that reject this position on contested knowledge. Example: Most Cuban Lucumi houses, Ile-Ife traditional authorities.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">relatedTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">related tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Links to related traditions when knowledge spans multiple systems. Example: a practice present in both Lucumi and Candomble with local variations.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">relationType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">relation type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Relationship Assertion → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">The type of relationship being asserted. Range: any concept from a kinship, succession, or structural relation scheme.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">sacredStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sacred status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Specimen → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Current ritual status of an object. Values: iroko:sacredStatus-consecrated-active, iroko:sacredStatus-decommissioned, iroko:sacredStatus-museum-specimen, iroko:sacredStatus-replica-teaching, iroko:sacredStatus-awaiting-consecration, iroko:sacredStatus-contested-consecration, iroko:sacredStatus-unknown. Distinguishes living practice from documentation.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">sourceRelationship</span><br><span style="font-size:.75rem;color:var(--ink-soft);">source relationship</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Nature of relationship to source tradition for reconstructed or reclaimed practices. Primarily used in Sankofa module.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">subjectConsentStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">subject consent status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Whether consent was obtained from the practitioners or community depicted. Range: iroko:ConsentStatusScheme.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">supportingLineages</span><br><span style="font-size:.75rem;color:var(--ink-soft);">supporting lineages</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Entity → string</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Text list of lineages or houses that endorse this position on contested knowledge. Example: Oyotunji Village, Oshun Temple (Oshogbo), select Candomble houses.</td>
-        </tr>
-        <tr>
-          <td><span class="prop-name">tradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Concept</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">The Afro-Atlantic tradition to which this entity belongs. Values from controlled vocabulary: iroko:tradition-lucumi, iroko:tradition-candomble-ketu, iroko:tradition-vodou-rada, etc. First-class governance dimension, not just subject tagging.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">10 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Access Level Classification</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Hierarchical classification of access restrictions for sacred knowledge.</p>
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">Community Only</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-community-only</div>
-          <p class="concept-def">Accessible to verified community members (practitioners, scholars with community relationships). Requires authentication.</p>
-          
+        <div class="term" id="RelationshipAssertion">
+            <h3>Relationship Assertion</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#RelationshipAssertion</div>
+            <span class="term-type">CLASS</span>
+            
+            <div class="term-description">
+                <p>A structured reification node recording a claimed relationship between two entities, including its provenance, assertion status, and any lineage scope. Enables competing claims to coexist without requiring resolution.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"Relationship Assertion"@en</dd>
+                <dt>Subclass Of:</dt>
+                <dd><code>SacredEntity</code></dd>
+            </dl>
         </div>
-        <div class="concept-item">
-          <div class="concept-label">Initiated Elder</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-initiated-elder</div>
-          <p class="concept-def">Requires elder designation within tradition — those recognized by their community as having authority to access lineage-specific teachings, complex ceremonial knowledge, and restricted spiritual technologies. Not merely initiated, but recognized as elder or authority holder.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Initiated Only</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-initiated-only</div>
-          <p class="concept-def">Accessible only to initiated practitioners whose initiation has been verified. Detailed preparation methods, quantities, combinations.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">No Access</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-no-access</div>
-          <p class="concept-def">Operational or internal use only. Never exported to RDF. Invocation texts, secret names, internal notes.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Public - No Amplification</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-public-no-amplification</div>
-          <p class="concept-def">Publicly viewable but should not be amplified, shared widely, or used for commercial purposes.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Public - Unrestricted</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-public-unrestricted</div>
-          <p class="concept-def">Freely accessible to anyone. No authentication required.</p>
-          
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Assertion Status</span>
-        <span class="scheme-count">3 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms describing whether a claim is widely agreed, lineage-specific, or actively disputed. Used with iroko:RelationshipAssertion and any contested property across all modules.</p>
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">Contested</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">assertion-contested</div>
-          <p class="concept-def">The claim is actively disputed; multiple contradictory positions exist across lineages.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Lineage-Specific</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">assertion-lineage-specific</div>
-          <p class="concept-def">The claim is recognized within a specific lineage or house but not universally.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Widely Attested</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">assertion-consensual</div>
-          <p class="concept-def">The claim is affirmed by multiple independent lineages or sources. Positive attestation of agreement, not merely the absence of known dispute.</p>
-          
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Community Endorsement Status</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Classification of community review and approval status.</p>
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">Community-Reviewed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-community-reviewed</div>
-          <p class="concept-def">Reviewed by community members but not yet formally approved by elders.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Contested</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-contested</div>
-          <p class="concept-def">Disputed across community; multiple contradictory positions exist.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Elder-Approved</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-elder-approved</div>
-          <p class="concept-def">Formally approved by recognized community elders or authorities.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Pending Review</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-pending-review</div>
-          <p class="concept-def">Under active review by community authorities.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Unreviewed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-unreviewed</div>
-          <p class="concept-def">Has not yet been reviewed by community authorities.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Withdrawn</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-withdrawn</div>
-          <p class="concept-def">Previously endorsed but subsequently withdrawn by community.</p>
-          
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Consent Status</span>
-        <span class="scheme-count">5 concepts</span>
-      </div>
-      
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">Community-Authorized</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-community-authorized</div>
-          <p class="concept-def">Recording authorized by community leadership or house authority on behalf of participants.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Documented Consent</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-documented</div>
-          <p class="concept-def">Written or formally recorded consent obtained from subject(s) and/or community.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Not Obtained</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-not-obtained</div>
-          <p class="concept-def">No consent was sought or obtained. Access should be governed accordingly.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Unknown</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-unknown</div>
-          <p class="concept-def">Consent status cannot be determined from available documentation.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Verbal (Undocumented)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-verbal-undocumented</div>
-          <p class="concept-def">Consent was given verbally but not formally documented.</p>
-          
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Custodial Relationship</span>
-        <span class="scheme-count">9 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Classification of custodial arrangements for sacred objects.</p>
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">Community-Held</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-community-held</div>
-          <p class="concept-def">Object held and controlled by originating community.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Institutional Holding Disputed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-institutional-disputed</div>
-          <p class="concept-def">Institution holds object; community disputes legitimacy of custody.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Institutional Holding with Community Access</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-institutional-with-access</div>
-          <p class="concept-def">Institution holds object but community maintains access and consultation rights.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Lineage Succession</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-lineage-succession</div>
-          <p class="concept-def">Object received through lineage or house transmission. The current custodian holds the object by virtue of succession from a prior keeper through recognized lineage or house relationships. Paired with sacredStatus-hereditary-custody on the object record.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Private Collection</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-private-collection</div>
-          <p class="concept-def">Held in private collection, access restricted.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Repatriation Claim Active</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-repatriation-active</div>
-          <p class="concept-def">Active claim for repatriation to community of origin.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Shared Custody</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-shared-custody</div>
-          <p class="concept-def">Custody shared between institution and community through formal agreement.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Under Negotiation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-under-negotiation</div>
-          <p class="concept-def">Custody arrangement currently under negotiation.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Unknown Location</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-unknown-location</div>
-          <p class="concept-def">Current location unknown; object documented but whereabouts unclear.</p>
-          
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Epistemic Source Type</span>
-        <span class="scheme-count">10 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Classification of knowledge sources for epistemological transparency.</p>
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">Archival Document</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-archival-document</div>
-          <p class="concept-def">Historical documents (manuscripts, letters, official records).</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Claimed Direct Revelation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-claimed-revelation</div>
-          <p class="concept-def">Knowledge claimed to be received through direct spiritual revelation or channeling.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Continuous Oral Transmission</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-continuous-oral-transmission</div>
-          <p class="concept-def">Knowledge transmitted orally across generations without interruption.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Fieldwork Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-fieldwork-recording</div>
-          <p class="concept-def">Direct ethnographic observation and documentation by researchers.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Material Culture</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-material-culture</div>
-          <p class="concept-def">Knowledge inferred from physical objects, ritual implements, or architecture.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Political Reinterpretation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-political-reinterpretation</div>
-          <p class="concept-def">Deliberate reinterpretation of existing tradition for political, social, or liberation purposes.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Published Ethnography</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-published-ethnography</div>
-          <p class="concept-def">Knowledge documented in academic or popular ethnographic publications.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Reconstructed from Text</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-reconstructed-from-text</div>
-          <p class="concept-def">Knowledge reconstructed from ancient texts or historical documents without living transmission.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Ritual Performance (Embodied)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-ritual-performance</div>
-          <p class="concept-def">Knowledge transmitted through embodied practice, dance, gesture, and music.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Speculative Reconstruction</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-speculative-reconstruction</div>
-          <p class="concept-def">Theoretical reconstruction based on fragmentary evidence or comparative analysis.</p>
-          
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Media Type</span>
-        <span class="scheme-count">5 concepts</span>
-      </div>
-      
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">Audio Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-audio</div>
-          
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Ephemera</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-ephemera</div>
-          <p class="concept-def">Printed or handwritten items of transient purpose: programs, invitations, ritual schedules, advertisements for religious events.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Manuscript</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-manuscript</div>
-          
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Photograph</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-photograph</div>
-          
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Video Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-video</div>
-          
-          
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Recording Context</span>
-        <span class="scheme-count">4 concepts</span>
-      </div>
-      
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">Archival Transfer</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recordingContext-archival-transfer</div>
-          <p class="concept-def">Digitized or transferred from an existing archival recording; original context may predate the Iroko archive.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Ceremonial Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recordingContext-ceremonial</div>
-          <p class="concept-def">Recorded during or as part of an active ceremony or ritual.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Field Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recordingContext-field</div>
-          <p class="concept-def">Recorded in situ during fieldwork, not in a controlled environment.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Studio Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recordingContext-studio</div>
-          <p class="concept-def">Recorded in a studio or controlled environment, outside active ceremonial context.</p>
-          
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Sacred Object Status</span>
-        <span class="scheme-count">9 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Classification of ritual life cycle status for sacred objects.</p>
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">Awaiting Consecration</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-awaiting-consecration</div>
-          <p class="concept-def">Object prepared but not yet consecrated.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Consecrated/Active Use</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-consecrated-active</div>
-          <p class="concept-def">Object is consecrated and actively used in ritual practice.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Contested Consecration</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-contested-consecration</div>
-          <p class="concept-def">Consecration status disputed across lineages.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Decommissioned</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-decommissioned</div>
-          <p class="concept-def">Object has been ritually deactivated or decommissioned but retains historical significance.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Hereditary Custody</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-hereditary-custody</div>
-          <p class="concept-def">Object has passed to a new keeper through lineage or house succession and is actively maintained. Custodial responsibility has transferred but sacred status and care protocols remain continuous.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Honored Rest</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-honored-rest</div>
-          <p class="concept-def">Object has been retired from active ritual use but continues to be tended with respect and veneration. Distinguished from decommissioned in that no formal ritual deactivation has occurred — the object rests rather than being withdrawn.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Museum Specimen</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-museum-specimen</div>
-          <p class="concept-def">Object held in museum or archive for documentation, not ritual use.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Replica/Teaching Object</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-replica-teaching</div>
-          <p class="concept-def">Replica created for educational purposes, never consecrated.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Unknown Status</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-unknown</div>
-          <p class="concept-def">Sacred status unknown or unclear from available documentation.</p>
-          
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Tradition Classification</span>
-        <span class="scheme-count">39 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled vocabulary of Afro-Atlantic tradition classifications.</p>
-      <div class="concept-list">
-        <div class="concept-item">
-          <div class="concept-label">21 Divisiones</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-21-divisiones</div>
-          <p class="concept-def">Dominican syncretic tradition with Vodou and Espiritismo influences.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Abakua</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-abakua</div>
-          <p class="concept-def">Calabari/Efik-derived all-male secret society in Cuba.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Afro-Indigenous</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-afro-indigenous</div>
-          <p class="concept-def">Traditions that blend African and Indigenous American religious elements.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Akan-Derived</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-akan-derived</div>
-          <p class="concept-def">Traditions with primary roots in Akan religious culture.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Arara</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-arara</div>
-          <p class="concept-def">Fon/Ewe-derived tradition in Cuba.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Ausar Auset Society</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-ausar-auset</div>
-          <p class="concept-def">Kemetic-centered spiritual organization founded by Ra Un Nefer Amen.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Bantu-Derived</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-bantu-derived</div>
-          <p class="concept-def">Traditions with primary roots in Bantu and Kongo religious culture.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Calabari/Cross River</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-calabari</div>
-          <p class="concept-def">Traditions rooted in Efik, Ejagham, and Cross River peoples.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Candomble Angola</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-candomble-angola</div>
-          <p class="concept-def">Bantu-derived Candomble tradition in Brazil (Angola nation).</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Candomble Jeje</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-candomble-jeje</div>
-          <p class="concept-def">Fon/Ewe-derived Candomble tradition in Brazil (Jeje nation).</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Candomble Ketu</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-candomble-ketu</div>
-          <p class="concept-def">Yoruba-derived Candomble tradition in Brazil (Nago/Ketu nation).</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Ekpe</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-ekpe</div>
-          <p class="concept-def">Continental Efik/Ejagham leopard society in Cross River region.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Espiritismo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-espiritismo</div>
-          <p class="concept-def">Spiritist tradition with African, Catholic, and Kardecist influences in the Caribbean.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Fon/Ewe-Derived</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-fon-ewe-derived</div>
-          <p class="concept-def">Traditions with primary roots in Fon and Ewe religious culture from Dahomey.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Garifuna</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-garifuna</div>
-          <p class="concept-def">Afro-Indigenous tradition of Garifuna people (Central America, Caribbean).</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Haitian Vodou</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-haitian-vodou</div>
-          <p class="concept-def">The creolized sacred tradition of Haiti, encompassing multiple nanchon (nations) with distinct African, Kongo, and New World origins. Internal distinctions (Rada, Petwo, Ghede) reflect different spiritual lineages and temperaments rather than a single ethnic root.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Hoodoo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-hoodoo</div>
-          <p class="concept-def">African-American magical and healing tradition in the US South.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Kemetic Orthodoxy</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-kemetic-orthodoxy</div>
-          <p class="concept-def">Reconstructed Ancient Egyptian religion (Tamara Siuda lineage).</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Kemetic/Revivalist</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-kemetic</div>
-          <p class="concept-def">Traditions reconstructing or reviving Ancient Egyptian (Kemetic) religious practice.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Kromanti</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-kromanti</div>
-          <p class="concept-def">Akan-derived practices in Jamaica and Suriname.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Kumina</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-kumina</div>
-          <p class="concept-def">Afro-Jamaican tradition with Bantu origins.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Lucumi</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-lucumi</div>
-          <p class="concept-def">Yoruba-derived tradition in Cuba.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">New Orleans Voodoo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-new-orleans-voodoo</div>
-          <p class="concept-def">The syncretic sacred tradition of New Orleans and Louisiana, incorporating Haitian Vodou lwa, Kongo-derived practices, Native American (Houma, Choctaw) influences, and Catholic folk magic. Contemporary practice diverges considerably from Haitian Vodou house structure. Shaped by the specific history of Louisiana&#x27;s slave trade and Creole culture.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Obeah</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-obeah</div>
-          <p class="concept-def">A category of spiritual practice found across the Anglophone Caribbean (Jamaica, Trinidad, Guyana, Barbados, and others). Works with ancestral and nature spirits for healing, protection, and harm. African roots are debated — proposed origins include Igbo dibia, Akan obeayifo, and Efik sources. Systematically criminalized under British colonial law across the Caribbean; this criminalization history shapes the archival record significantly and must be considered in access and provenance documentation.</p>
-          <p class="concept-def" style="font-style:italic;">Obeah&#x27;s criminalization history means archival materials documenting its practice are often court records, colonial surveillance documents, or suppressed oral accounts. Access governance and provenance tracking are especially important for Obeah-related materials.</p>
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Oyotunji</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-oyotunji</div>
-          <p class="concept-def">African-centered Yoruba revivalist tradition founded in South Carolina.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Palo Mayombe</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-palo-mayombe</div>
-          <p class="concept-def">Branch of Palo emphasizing darker or transformative spiritual work.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Palo Monte</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-palo-monte</div>
-          <p class="concept-def">Bantu-derived Kongo religious tradition in Cuba.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Pan-African Political-Spiritual</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-pan-african</div>
-          <p class="concept-def">Traditions that integrate African religious identity with political liberation frameworks.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Quimbanda</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-quimbanda</div>
-          <p class="concept-def">Brazilian tradition focused on exu spirits and transformative work.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Rastafari</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-rastafari</div>
-          <p class="concept-def">Afrocentric religious and political movement from Jamaica.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Syncretic/Creole</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-syncretic</div>
-          <p class="concept-def">Traditions that deliberately blend multiple African, European, or Indigenous religious streams.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Trinidad Orisha</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-trinidad-orisha</div>
-          <p class="concept-def">Yoruba-derived tradition in Trinidad and Tobago.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Umbanda</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-umbanda</div>
-          <p class="concept-def">Brazilian syncretic tradition blending African, Indigenous, and Spiritist influences.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Vodou Ghede</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-vodou-ghede</div>
-          <p class="concept-def">Ghede nanchon in Haitian Vodou. Governs death, sexuality, resurrection, and the boundary between living and dead. Composite origins drawing on New World cemetery and ancestor cult practices, with Fon, Kongo, and creole influences. Neither Rada nor Petwo; a separate nation with its own liturgical character.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Vodou Petwo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-vodou-petwo</div>
-          <p class="concept-def">Petwo nanchon in Haitian Vodou. Hot, fierce rites with Kongo, New World maroon, and creole origins. Associated with transformative and protective lwa. Distinct from but related to Rada.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Vodou Rada</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-vodou-rada</div>
-          <p class="concept-def">Rada nanchon in Haitian Vodou. Cool, sweet rites with primary Fon/Dahomey origins. Associated with elder, beneficent lwa.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Winti</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-winti</div>
-          <p class="concept-def">Afro-Surinamese tradition with Akan and other West African influences.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Yoruba (continental)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-yoruba-continental</div>
-          <p class="concept-def">Continental Yoruba religious practices in southwestern Nigeria.</p>
-          
-        </div>
-        <div class="concept-item">
-          <div class="concept-label">Yoruba-Derived</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-yoruba-derived</div>
-          <p class="concept-def">Traditions with primary roots in Yoruba religious culture.</p>
-          
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      License: CC0 1.0 Universal (Public Domain)
-    </div>
-    <div class="footer-links">
-      <a href="https://www.irokosociety.org">irokosociety.org</a>
-      <a href="../index.html">Home</a>
-      <a href="index.html">Vocabularies</a>
-    </div>
-  </footer>
+        <div class="term" id="SacredEntity">
+            <h3>Sacred Entity</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#SacredEntity</div>
+            <span class="term-type">CLASS</span>
+            
+            <div class="term-description">
+                <p>Top-level class for any tradition-specific concept within the Iroko Framework. All module-specific classes (Plant, SpiritualEntity, RitualProcess, etc.) are subclasses of this.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"Sacred Entity"@en</dd>
+            </dl>
+        </div>
 
-</div>
+        <div class="term" id="SacredMedia">
+            <h3>Sacred Media</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#SacredMedia</div>
+            <span class="term-type">CLASS</span>
+            
+            <div class="term-description">
+                <p>Audio, photographic, or video records of sacred knowledge, ceremonies, instruments, or practitioners. Extends DocumentaryEvidence with media-specific metadata including format, instrumentation, consent status, and depicted entities.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"Sacred Media"@en</dd>
+                <dt>Subclass Of:</dt>
+                <dd><code>DocumentaryEvidence</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="SacredSpecimen">
+            <h3>Sacred Specimen</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#SacredSpecimen</div>
+            <span class="term-type">CLASS</span>
+            
+            <div class="term-description">
+                <p>Distinguishes objects that maintain active sacred status (consecrated, in ritual use) from decommissioned objects or museum specimens. Used to track the ritual life cycle of material culture.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"Sacred Specimen"@en</dd>
+            </dl>
+        </div>
+    </section>
+
+    <section id="properties">
+        <h2>Properties</h2>
+
+        <div class="term" id="accessLevel">
+            <h3>access level</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#accessLevel</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Governs who may view this knowledge. Values: iroko:access-public-unrestricted, iroko:access-public-no-amplification, iroko:access-community-only, iroko:access-initiated-only, iroko:access-initiated-elder, iroko:access-no-access. Applied at record level and/or field level.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"access level"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>public-unrestricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="assertionLineage">
+            <h3>assertion lineage</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#assertionLineage</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>The specific lineage, house, or community within which this assertion holds. Used when assertionStatus is lineage-specific.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"assertion lineage"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>RelationshipAssertion</code></dd>
+                <dt>Range:</dt>
+                <dd><code>langString</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="assertionNote">
+            <h3>assertion note</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#assertionNote</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Free-text note explaining the basis, source, or dispute surrounding the relationship claim. Language-tagged.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"assertion note"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>RelationshipAssertion</code></dd>
+                <dt>Range:</dt>
+                <dd><code>langString</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="assertionObject">
+            <h3>assertion object</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#assertionObject</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>The entity that is the object of the relationship claim. Named assertionObject (not object) to avoid shadowing rdf:object.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"assertion object"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>RelationshipAssertion</code></dd>
+                <dt>Range:</dt>
+                <dd><code>SacredEntity</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="assertionScope">
+            <h3>assertion scope</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#assertionScope</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Optional: restricts the claim to a specific camino, aspect, or manifestation. Example: 'Applies only to Obatala Ayaguna, not to Obatala Orishaoko.'</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"assertion scope"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>RelationshipAssertion</code></dd>
+                <dt>Range:</dt>
+                <dd><code>langString</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="assertionStatus">
+            <h3>assertion status</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#assertionStatus</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Whether the claim is consensual, lineage-specific, or contested. Range: iroko:AssertionStatusScheme.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"assertion status"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>RelationshipAssertion</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="assertionSubject">
+            <h3>assertion subject</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#assertionSubject</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>The entity that is the subject of the relationship claim. Named assertionSubject (not subject) to avoid shadowing rdf:subject.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"assertion subject"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>RelationshipAssertion</code></dd>
+                <dt>Range:</dt>
+                <dd><code>SacredEntity</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="communityEndorsement">
+            <h3>community endorsement</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#communityEndorsement</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Status of community review and approval. Values: iroko:endorsement-unreviewed, iroko:endorsement-community-reviewed, iroko:endorsement-elder-approved, iroko:endorsement-contested, iroko:endorsement-withdrawn, iroko:endorsement-pending-review. Flips institutional authority model by centering community validation.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"community endorsement"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="communityReleaseApproval">
+            <h3>community release approval</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#communityReleaseApproval</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Whether the relevant religious community or house has approved release of this media.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"community release approval"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>boolean</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-community-restricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="competingClaim">
+            <h3>competing claim</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#competingClaim</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Links to a prov:Entity representing an alternative position on this contested knowledge. Typically references a named graph containing a lineage's assertion. Multiple claims may coexist.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"competing claim"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Entity</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="contestedNotes">
+            <h3>contested notes</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#contestedNotes</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Free-text description of the nature of contestation. What specifically is disputed and by whom.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"contested notes"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>string</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="contestedStatus">
+            <h3>contested status</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#contestedStatus</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Boolean indicating whether this entity's attributes, existence, or interpretation are disputed across lineages. If true, see iroko:competingClaim for alternative positions.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"contested status"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>boolean</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="custodialRelationship">
+            <h3>custodial relationship</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#custodialRelationship</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Nature of custody for sacred objects. Values: iroko:custodial-community-held, iroko:custodial-institutional-with-access, iroko:custodial-institutional-disputed, iroko:custodial-repatriation-active, iroko:custodial-private-collection, iroko:custodial-unknown-location, iroko:custodial-shared-custody, iroko:custodial-lineage-succession, iroko:custodial-under-negotiation. Supports postcustodial tracking.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"custodial relationship"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredSpecimen</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="depictedCeremony">
+            <h3>depicted ceremony</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#depictedCeremony</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Links media to the ritual process it documents. Range: travay:RitualProcess.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"depicted ceremony"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-community-restricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="depictedEntity">
+            <h3>depicted entity</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#depictedEntity</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Spiritual entity depicted or invoked in the media. Range: nkisi:SpiritualEntity.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"depicted entity"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-public-unrestricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="depicts">
+            <h3>depicts</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#depicts</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Links archival materials to the entities they depict. Example: photograph depicts Obatala altar, herbarium sheet depicts plant specimen. Cross-module linking property.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"depicts"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>DocumentaryEvidence</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="documents">
+            <h3>documents</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#documents</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Links archival materials to practices or events they document. Example: audio recording documents ceremony, photograph documents initiation. Cross-module linking property.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"documents"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>DocumentaryEvidence</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="mediaDuration">
+            <h3>duration</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#mediaDuration</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Duration of audio or video in ISO 8601 format (e.g. PT3M42S).</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"duration"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>duration</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-public-unrestricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="epistemicType">
+            <h3>epistemic type</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#epistemicType</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Epistemological source classification. Values: iroko:epistemicType-continuous-oral-transmission, iroko:epistemicType-published-ethnography, iroko:epistemicType-fieldwork-recording, iroko:epistemicType-archival-document, iroko:epistemicType-material-culture, iroko:epistemicType-ritual-performance, iroko:epistemicType-reconstructed-from-text, iroko:epistemicType-claimed-revelation, iroko:epistemicType-political-reinterpretation. Enables transparency about knowledge sources.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"epistemic type"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="fieldworkProvenance">
+            <h3>fieldwork provenance</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#fieldworkProvenance</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Details of fieldwork context if this knowledge derives from direct ethnographic observation. Location, date, circumstances, informant relationship.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"fieldwork provenance"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>string</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="hasRelationshipAssertion">
+            <h3>has relationship assertion</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#hasRelationshipAssertion</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Links a SacredEntity to a RelationshipAssertion node describing a claimed relationship.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"has relationship assertion"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>RelationshipAssertion</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="instrumentation">
+            <h3>instrumentation</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#instrumentation</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>For audio: instruments present in the recording. Example: batá, güiro, agogó.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"instrumentation"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>langString</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-public-unrestricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="languageOfPerformance">
+            <h3>language of performance</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#languageOfPerformance</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>BCP 47 language tag of the language spoken or sung in the recording.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"language of performance"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>string</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-public-unrestricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="mediaFormat">
+            <h3>media format</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#mediaFormat</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Technical format of the file. Example: FLAC, WAV, TIFF, JPEG, MP4.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"media format"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>string</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-public-unrestricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="mediaType">
+            <h3>media type</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#mediaType</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>The format category of the media record: audio, photograph, video, etc.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"media type"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-public-unrestricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="minimumAccessLevel">
+            <h3>minimum access level</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#minimumAccessLevel</div>
+            <span class="term-type">ANNOTATION PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Annotation property used on other properties to indicate the minimum access level required to view their values. Used in vocabulary documentation and RDF export filtering.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"minimum access level"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Annotation Property</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="oralTransmissionChain">
+            <h3>oral transmission chain</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#oralTransmissionChain</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Documented chain of oral transmission for this knowledge. Example: Elder A (Havana) to Elder B (Matanzas) to Informant C (2018). No Dublin Core equivalent for this culturally specific provenance pattern.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"oral transmission chain"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>string</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="recordingContext">
+            <h3>recording context</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#recordingContext</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Whether the recording was made in a field, ceremonial, studio, or archival context.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"recording context"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-public-unrestricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="recordingDate">
+            <h3>recording date</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#recordingDate</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p></p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"recording date"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>date</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-public-unrestricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="recordingLocation">
+            <h3>recording location</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#recordingLocation</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Location where the recording was made. May be general (city/country) for access-controlled records.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"recording location"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>langString</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-community-restricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="recordist">
+            <h3>recordist</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#recordist</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Person who made the recording or took the photograph.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"recordist"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>langString</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-community-restricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="rejectingLineages">
+            <h3>rejecting lineages</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#rejectingLineages</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Text list of lineages or houses that reject this position on contested knowledge. Example: Most Cuban Lucumi houses, Ile-Ife traditional authorities.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"rejecting lineages"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>Entity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>string</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="relatedTradition">
+            <h3>related tradition</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#relatedTradition</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Links to related traditions when knowledge spans multiple systems. Example: a practice present in both Lucumi and Candomble with local variations.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"related tradition"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="relationType">
+            <h3>relation type</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#relationType</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>The type of relationship being asserted. Range: any concept from a kinship, succession, or structural relation scheme.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"relation type"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>RelationshipAssertion</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="sacredStatus">
+            <h3>sacred status</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#sacredStatus</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Current ritual status of an object. Values: iroko:sacredStatus-consecrated-active, iroko:sacredStatus-decommissioned, iroko:sacredStatus-museum-specimen, iroko:sacredStatus-replica-teaching, iroko:sacredStatus-awaiting-consecration, iroko:sacredStatus-contested-consecration, iroko:sacredStatus-unknown. Distinguishes living practice from documentation.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"sacred status"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredSpecimen</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="sourceRelationship">
+            <h3>source relationship</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#sourceRelationship</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Nature of relationship to source tradition for reconstructed or reclaimed practices. Primarily used in Sankofa module.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"source relationship"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="subjectConsentStatus">
+            <h3>subject consent status</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#subjectConsentStatus</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Whether consent was obtained from the practitioners or community depicted. Range: iroko:ConsentStatusScheme.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"subject consent status"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredMedia</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+                <dt>Minimum Access Level:</dt>
+                <dd>https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#access-community-restricted</dd>
+            </dl>
+        </div>
+
+        <div class="term" id="supportingLineages">
+            <h3>supporting lineages</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#supportingLineages</div>
+            <span class="term-type">DATATYPE PROPERTY</span>
+            
+            <div class="term-description">
+                <p>Text list of lineages or houses that endorse this position on contested knowledge. Example: Oyotunji Village, Oshun Temple (Oshogbo), select Candomble houses.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"supporting lineages"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Datatype Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>Entity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>string</code></dd>
+            </dl>
+        </div>
+
+        <div class="term" id="tradition">
+            <h3>tradition</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#tradition</div>
+            <span class="term-type">OBJECT PROPERTY</span>
+            
+            <div class="term-description">
+                <p>The Afro-Atlantic tradition to which this entity belongs. Values from controlled vocabulary: iroko:tradition-lucumi, iroko:tradition-candomble-ketu, iroko:tradition-vodou-rada, etc. First-class governance dimension, not just subject tagging.</p>
+            </div>
+            
+            <dl class="term-properties">
+                <dt>Label:</dt>
+                <dd>"tradition"@en</dd>
+                
+                <dt>Type:</dt>
+                <dd><code>Object Property</code></dd>
+                <dt>Domain:</dt>
+                <dd><code>SacredEntity</code></dd>
+                <dt>Range:</dt>
+                <dd><code>Concept</code></dd>
+            </dl>
+        </div>
+    </section>
+
+    <section id="concept-schemes">
+        <h2>Concept Schemes</h2>
+
+        <div class="term" id="AccessLevelScheme">
+            <h3>Access Level Classification</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#AccessLevelScheme</div>
+            
+            <p>Hierarchical classification of access restrictions for sacred knowledge.</p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>Community Only</strong>
+                    <small>Rank: 3</small><br>
+                    <small>Accessible to verified community members (practitioners, scholars with community relationships). Requires authentication.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Initiated Elder</strong>
+                    <small>Rank: 5</small><br>
+                    <small>Requires elder designation within tradition — those recognized by their community as having authority to access lineage-specific teachings, complex ceremonial knowledge, and restricted spiritual technologies. Not merely initiated, but recognized as elder or authority holder.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Initiated Only</strong>
+                    <small>Rank: 4</small><br>
+                    <small>Accessible only to initiated practitioners whose initiation has been verified. Detailed preparation methods, quantities, combinations.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>No Access</strong>
+                    <small>Rank: 99</small><br>
+                    <small>Operational or internal use only. Never exported to RDF. Invocation texts, secret names, internal notes.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Public - No Amplification</strong>
+                    <small>Rank: 2</small><br>
+                    <small>Publicly viewable but should not be amplified, shared widely, or used for commercial purposes.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Public - Unrestricted</strong>
+                    <small>Rank: 1</small><br>
+                    <small>Freely accessible to anyone. No authentication required.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="term" id="AssertionStatusScheme">
+            <h3>Assertion Status</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#AssertionStatusScheme</div>
+            
+            <p>Controlled terms describing whether a claim is widely agreed, lineage-specific, or actively disputed. Used with iroko:RelationshipAssertion and any contested property across all modules.</p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>Contested</strong>
+                    <small>The claim is actively disputed; multiple contradictory positions exist across lineages.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Lineage-Specific</strong>
+                    <small>The claim is recognized within a specific lineage or house but not universally.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Widely Attested</strong>
+                    <small>The claim is affirmed by multiple independent lineages or sources. Positive attestation of agreement, not merely the absence of known dispute.</small>
+                    <small>Also: Cross-lineage consensus, Uncontested</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="term" id="CommunityEndorsementScheme">
+            <h3>Community Endorsement Status</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#CommunityEndorsementScheme</div>
+            
+            <p>Classification of community review and approval status.</p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>Community-Reviewed</strong>
+                    <small>Reviewed by community members but not yet formally approved by elders.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Contested</strong>
+                    <small>Disputed across community; multiple contradictory positions exist.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Elder-Approved</strong>
+                    <small>Formally approved by recognized community elders or authorities.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Pending Review</strong>
+                    <small>Under active review by community authorities.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Unreviewed</strong>
+                    <small>Has not yet been reviewed by community authorities.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Withdrawn</strong>
+                    <small>Previously endorsed but subsequently withdrawn by community.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="term" id="ConsentStatusScheme">
+            <h3>Consent Status</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#ConsentStatusScheme</div>
+            
+            <p></p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>Community-Authorized</strong>
+                    <small>Recording authorized by community leadership or house authority on behalf of participants.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Documented Consent</strong>
+                    <small>Written or formally recorded consent obtained from subject(s) and/or community.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Not Obtained</strong>
+                    <small>No consent was sought or obtained. Access should be governed accordingly.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Unknown</strong>
+                    <small>Consent status cannot be determined from available documentation.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Verbal (Undocumented)</strong>
+                    <small>Consent was given verbally but not formally documented.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="term" id="CustodialRelationshipScheme">
+            <h3>Custodial Relationship</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#CustodialRelationshipScheme</div>
+            
+            <p>Classification of custodial arrangements for sacred objects.</p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>Community-Held</strong>
+                    <small>Object held and controlled by originating community.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Institutional Holding Disputed</strong>
+                    <small>Institution holds object; community disputes legitimacy of custody.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Institutional Holding with Community Access</strong>
+                    <small>Institution holds object but community maintains access and consultation rights.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Lineage Succession</strong>
+                    <small>Object received through lineage or house transmission. The current custodian holds the object by virtue of succession from a prior keeper through recognized lineage or house relationships. Paired with sacredStatus-hereditary-custody on the object record.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Private Collection</strong>
+                    <small>Held in private collection, access restricted.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Repatriation Claim Active</strong>
+                    <small>Active claim for repatriation to community of origin.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Shared Custody</strong>
+                    <small>Custody shared between institution and community through formal agreement.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Under Negotiation</strong>
+                    <small>Custody arrangement currently under negotiation.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Unknown Location</strong>
+                    <small>Current location unknown; object documented but whereabouts unclear.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="term" id="EpistemicTypeScheme">
+            <h3>Epistemic Source Type</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#EpistemicTypeScheme</div>
+            
+            <p>Classification of knowledge sources for epistemological transparency.</p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>Archival Document</strong>
+                    <small>Historical documents (manuscripts, letters, official records).</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Claimed Direct Revelation</strong>
+                    <small>Knowledge claimed to be received through direct spiritual revelation or channeling.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Continuous Oral Transmission</strong>
+                    <small>Knowledge transmitted orally across generations without interruption.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Fieldwork Recording</strong>
+                    <small>Direct ethnographic observation and documentation by researchers.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Material Culture</strong>
+                    <small>Knowledge inferred from physical objects, ritual implements, or architecture.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Political Reinterpretation</strong>
+                    <small>Deliberate reinterpretation of existing tradition for political, social, or liberation purposes.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Published Ethnography</strong>
+                    <small>Knowledge documented in academic or popular ethnographic publications.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Reconstructed from Text</strong>
+                    <small>Knowledge reconstructed from ancient texts or historical documents without living transmission.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Ritual Performance (Embodied)</strong>
+                    <small>Knowledge transmitted through embodied practice, dance, gesture, and music.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Speculative Reconstruction</strong>
+                    <small>Theoretical reconstruction based on fragmentary evidence or comparative analysis.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="term" id="MediaTypeScheme">
+            <h3>Media Type</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#MediaTypeScheme</div>
+            
+            <p></p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>Audio Recording</strong>
+                </div>
+                <div class="concept-item">
+                    <strong>Ephemera</strong>
+                    <small>Printed or handwritten items of transient purpose: programs, invitations, ritual schedules, advertisements for religious events.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Manuscript</strong>
+                </div>
+                <div class="concept-item">
+                    <strong>Photograph</strong>
+                </div>
+                <div class="concept-item">
+                    <strong>Video Recording</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="term" id="RecordingContextScheme">
+            <h3>Recording Context</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#RecordingContextScheme</div>
+            
+            <p></p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>Archival Transfer</strong>
+                    <small>Digitized or transferred from an existing archival recording; original context may predate the Iroko archive.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Ceremonial Recording</strong>
+                    <small>Recorded during or as part of an active ceremony or ritual.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Field Recording</strong>
+                    <small>Recorded in situ during fieldwork, not in a controlled environment.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Studio Recording</strong>
+                    <small>Recorded in a studio or controlled environment, outside active ceremonial context.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="term" id="SacredStatusScheme">
+            <h3>Sacred Object Status</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#SacredStatusScheme</div>
+            
+            <p>Classification of ritual life cycle status for sacred objects.</p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>Awaiting Consecration</strong>
+                    <small>Object prepared but not yet consecrated.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Consecrated/Active Use</strong>
+                    <small>Object is consecrated and actively used in ritual practice.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Contested Consecration</strong>
+                    <small>Consecration status disputed across lineages.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Decommissioned</strong>
+                    <small>Object has been ritually deactivated or decommissioned but retains historical significance.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Hereditary Custody</strong>
+                    <small>Object has passed to a new keeper through lineage or house succession and is actively maintained. Custodial responsibility has transferred but sacred status and care protocols remain continuous.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Honored Rest</strong>
+                    <small>Object has been retired from active ritual use but continues to be tended with respect and veneration. Distinguished from decommissioned in that no formal ritual deactivation has occurred — the object rests rather than being withdrawn.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Museum Specimen</strong>
+                    <small>Object held in museum or archive for documentation, not ritual use.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Replica/Teaching Object</strong>
+                    <small>Replica created for educational purposes, never consecrated.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Unknown Status</strong>
+                    <small>Sacred status unknown or unclear from available documentation.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="term" id="TraditionScheme">
+            <h3>Tradition Classification</h3>
+            <div class="term-uri">https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#TraditionScheme</div>
+            
+            <p>Controlled vocabulary of Afro-Atlantic tradition classifications.</p>
+            
+            <div class="concept-list">
+                <div class="concept-item">
+                    <strong>21 Divisiones</strong>
+                    <small>Dominican syncretic tradition with Vodou and Espiritismo influences.</small>
+                    <small>Also: Dominican Vodu</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Abakua</strong>
+                    <small>Calabari/Efik-derived all-male secret society in Cuba.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Afro-Indigenous</strong>
+                    <small>Traditions that blend African and Indigenous American religious elements.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Akan-Derived</strong>
+                    <small>Traditions with primary roots in Akan religious culture.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Arara</strong>
+                    <small>Fon/Ewe-derived tradition in Cuba.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Ausar Auset Society</strong>
+                    <small>Kemetic-centered spiritual organization founded by Ra Un Nefer Amen.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Bantu-Derived</strong>
+                    <small>Traditions with primary roots in Bantu and Kongo religious culture.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Calabari/Cross River</strong>
+                    <small>Traditions rooted in Efik, Ejagham, and Cross River peoples.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Candomble Angola</strong>
+                    <small>Bantu-derived Candomble tradition in Brazil (Angola nation).</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Candomble Jeje</strong>
+                    <small>Fon/Ewe-derived Candomble tradition in Brazil (Jeje nation).</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Candomble Ketu</strong>
+                    <small>Yoruba-derived Candomble tradition in Brazil (Nago/Ketu nation).</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Ekpe</strong>
+                    <small>Continental Efik/Ejagham leopard society in Cross River region.</small>
+                    <small>Also: Egbo</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Espiritismo</strong>
+                    <small>Spiritist tradition with African, Catholic, and Kardecist influences in the Caribbean.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Fon/Ewe-Derived</strong>
+                    <small>Traditions with primary roots in Fon and Ewe religious culture from Dahomey.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Garifuna</strong>
+                    <small>Afro-Indigenous tradition of Garifuna people (Central America, Caribbean).</small>
+                    <small>Also: Dugu</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Haitian Vodou</strong>
+                    <small>The creolized sacred tradition of Haiti, encompassing multiple nanchon (nations) with distinct African, Kongo, and New World origins. Internal distinctions (Rada, Petwo, Ghede) reflect different spiritual lineages and temperaments rather than a single ethnic root.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Hoodoo</strong>
+                    <small>African-American magical and healing tradition in the US South.</small>
+                    <small>Also: Conjure, Rootwork</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Kemetic Orthodoxy</strong>
+                    <small>Reconstructed Ancient Egyptian religion (Tamara Siuda lineage).</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Kemetic/Revivalist</strong>
+                    <small>Traditions reconstructing or reviving Ancient Egyptian (Kemetic) religious practice.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Kromanti</strong>
+                    <small>Akan-derived practices in Jamaica and Suriname.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Kumina</strong>
+                    <small>Afro-Jamaican tradition with Bantu origins.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Lucumi</strong>
+                    <small>Yoruba-derived tradition in Cuba.</small>
+                    <small>Also: Regla de Ocha, Santeria</small>
+                </div>
+                <div class="concept-item">
+                    <strong>New Orleans Voodoo</strong>
+                    <small>The syncretic sacred tradition of New Orleans and Louisiana, incorporating Haitian Vodou lwa, Kongo-derived practices, Native American (Houma, Choctaw) influences, and Catholic folk magic. Contemporary practice diverges considerably from Haitian Vodou house structure. Shaped by the specific history of Louisiana's slave trade and Creole culture.</small>
+                    <small>Also: Louisiana Voodoo</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Obeah</strong>
+                    <small>A category of spiritual practice found across the Anglophone Caribbean (Jamaica, Trinidad, Guyana, Barbados, and others). Works with ancestral and nature spirits for healing, protection, and harm. African roots are debated — proposed origins include Igbo dibia, Akan obeayifo, and Efik sources. Systematically criminalized under British colonial law across the Caribbean; this criminalization history shapes the archival record significantly and must be considered in access and provenance documentation.</small>
+                    <small>Also: Obi, Obia</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Oyotunji</strong>
+                    <small>African-centered Yoruba revivalist tradition founded in South Carolina.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Palo Mayombe</strong>
+                    <small>Branch of Palo emphasizing darker or transformative spiritual work.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Palo Monte</strong>
+                    <small>Bantu-derived Kongo religious tradition in Cuba.</small>
+                    <small>Also: Regla de Congo</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Pan-African Political-Spiritual</strong>
+                    <small>Traditions that integrate African religious identity with political liberation frameworks.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Quimbanda</strong>
+                    <small>Brazilian tradition focused on exu spirits and transformative work.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Rastafari</strong>
+                    <small>Afrocentric religious and political movement from Jamaica.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Syncretic/Creole</strong>
+                    <small>Traditions that deliberately blend multiple African, European, or Indigenous religious streams.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Trinidad Orisha</strong>
+                    <small>Yoruba-derived tradition in Trinidad and Tobago.</small>
+                    <small>Also: Shango Baptist</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Umbanda</strong>
+                    <small>Brazilian syncretic tradition blending African, Indigenous, and Spiritist influences.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Vodou Ghede</strong>
+                    <small>Ghede nanchon in Haitian Vodou. Governs death, sexuality, resurrection, and the boundary between living and dead. Composite origins drawing on New World cemetery and ancestor cult practices, with Fon, Kongo, and creole influences. Neither Rada nor Petwo; a separate nation with its own liturgical character.</small>
+                    <small>Also: Gede</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Vodou Petwo</strong>
+                    <small>Petwo nanchon in Haitian Vodou. Hot, fierce rites with Kongo, New World maroon, and creole origins. Associated with transformative and protective lwa. Distinct from but related to Rada.</small>
+                    <small>Also: Petro</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Vodou Rada</strong>
+                    <small>Rada nanchon in Haitian Vodou. Cool, sweet rites with primary Fon/Dahomey origins. Associated with elder, beneficent lwa.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Winti</strong>
+                    <small>Afro-Surinamese tradition with Akan and other West African influences.</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Yoruba (continental)</strong>
+                    <small>Continental Yoruba religious practices in southwestern Nigeria.</small>
+                    <small>Also: Nigerian Yoruba</small>
+                </div>
+                <div class="concept-item">
+                    <strong>Yoruba-Derived</strong>
+                    <small>Traditions with primary roots in Yoruba religious culture.</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Generated on 2026-02-21 13:19:18</p>
+        <p>
+            <a href="https://iroko.org">Iroko Historical Society</a> | 
+            <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
+        </p>
+    </footer>
 </body>
 </html>
