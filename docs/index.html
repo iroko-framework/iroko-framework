@@ -1,147 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iroko Framework Documentation</title>
-    <link rel="stylesheet" href="../assets/vocab-style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation — Iroko Framework</title>
+  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <style>
+    /* Doc-page-specific additions */
+    .doc-row {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      border-top: 1px solid var(--rule);
+      transition: background .15s;
+    }
+    .doc-row:last-child { border-bottom: 1px solid var(--rule); }
+    .doc-row:hover { background: var(--paper-warm); }
+
+    .doc-identity {
+      padding: 1.6rem 2rem 1.6rem 0;
+      border-right: 1px solid var(--rule);
+    }
+
+    .doc-audience {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .16em .55em;
+      border-radius: 2px;
+      margin-bottom: .65rem;
+    }
+
+    .audience-dev      { background: var(--navy);    color: #fff; }
+    .audience-adopt    { background: var(--green);   color: #fff; }
+    .audience-arch     { background: #3a3a1a;        color: #fff; }
+
+    .doc-name {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+      display: block;
+    }
+
+    .doc-name a { color: inherit; }
+    .doc-name a:hover { color: var(--green); }
+
+    .doc-subtitle {
+      font-size: .76rem;
+      color: var(--ink-soft);
+      margin-top: .2rem;
+      font-style: italic;
+      font-family: var(--serif);
+    }
+
+    .doc-detail {
+      padding: 1.6rem 0 1.6rem 2rem;
+    }
+
+    .doc-desc {
+      font-size: .86rem;
+      color: var(--ink-mid);
+      line-height: 1.6;
+      max-width: 68ch;
+      margin-bottom: 1rem;
+    }
+
+    .doc-contents {
+      list-style: none;
+      margin-bottom: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .1rem 1.5rem;
+    }
+
+    .doc-contents li {
+      font-size: .78rem;
+      color: var(--ink-soft);
+      padding: .2rem 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      gap: .5rem;
+      align-items: baseline;
+    }
+
+    .doc-contents li::before {
+      content: '–';
+      font-family: var(--mono);
+      color: var(--rule-strong);
+      flex-shrink: 0;
+    }
+
+    .doc-actions {
+      display: flex;
+      gap: .75rem;
+      align-items: center;
+    }
+
+    /* Getting started grid */
+    .gs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: .75rem;
+      margin-top: .75rem;
+    }
+
+    .gs-card {
+      border: 1px solid var(--rule-strong);
+      border-radius: 3px;
+      padding: 1rem 1.1rem;
+      transition: background .15s;
+    }
+
+    .gs-card:hover { background: var(--paper-warm); }
+
+    .gs-role {
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: .4rem;
+    }
+
+    .gs-action {
+      font-size: .84rem;
+      color: var(--ink-mid);
+      line-height: 1.5;
+    }
+
+    .gs-action a {
+      font-weight: 500;
+      color: var(--green);
+    }
+
+    @media (max-width: 800px) {
+      .doc-row      { grid-template-columns: 1fr; }
+      .doc-identity { border-right: none; border-bottom: 1px solid var(--rule); padding-bottom: 1rem; }
+      .doc-detail   { padding-left: 0; }
+      .doc-contents { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Iroko Framework Documentation</h1>
-        <p class="subtitle">Technical documentation, usage guides, and contribution guidelines</p>
-    </header>
-    
-    <nav class="breadcrumb">
-        <a href="../">← Back to Main</a> | 
-        <a href="../vocab/">Browse Vocabularies</a>
-    </nav>
-    
-    <section class="doc-list">
-        <div class="doc-card">
-            <h2><a href="CONTRIBUTING.html">Contributing Guide</a></h2>
-            <p class="doc-meta">For developers and vocabulary maintainers</p>
-            <p>Complete guide to setting up your development environment, editing vocabularies, validating changes, and deploying updates. Includes installation instructions for Python, RDF tools, and GitHub workflows.</p>
-            <ul class="doc-topics">
-                <li>Development setup (Python, dependencies)</li>
-                <li>Editing vocabulary files (TTL syntax)</li>
-                <li>Validation and testing</li>
-                <li>HTML generation from RDF</li>
-                <li>Deployment workflow</li>
-                <li>Pull request guidelines</li>
-            </ul>
-            <p class="doc-links">
-                <a href="CONTRIBUTING.md">View on GitHub</a>
-            </p>
-        </div>
-        
-        <div class="doc-card">
-            <h2><a href="REUSE.html">Vocabulary Reuse Guide</a></h2>
-            <p class="doc-meta">For institutions adopting the Iroko Framework</p>
-            <p>How other archives, museums, universities, and cultural institutions can use the Iroko Framework vocabularies. Explains how to adopt the vocabulary with your own access policies and provides integration examples.</p>
-            <ul class="doc-topics">
-                <li>Understanding the vocabulary structure</li>
-                <li>Choosing your access policy approach</li>
-                <li>Integration with existing systems</li>
-                <li>RDF/TTL usage examples</li>
-                <li>Querying and SPARQL patterns</li>
-                <li>Interoperability with Darwin Core, SKOS</li>
-            </ul>
-            <p class="doc-links">
-                <a href="REUSE.md">View on GitHub</a>
-            </p>
-        </div>
-        
-        <div class="doc-card">
-            <h2><a href="ARCHITECTURE.html">Technical Architecture</a></h2>
-            <p class="doc-meta">For developers and system architects</p>
-            <p>Deep dive into the technical architecture of the Iroko Framework. Covers the separation between vocabulary definitions and operational data, URI strategies, deployment infrastructure, and the relationship between the vocabulary repository and operational archive.</p>
-            <ul class="doc-topics">
-                <li>System architecture overview</li>
-                <li>Vocabulary vs. data separation</li>
-                <li>URI permanence strategy</li>
-                <li>Access control implementation</li>
-                <li>Export and synchronization workflows</li>
-                <li>Technology stack details</li>
-                <li>Future module planning</li>
-            </ul>
-            <p class="doc-links">
-                <a href="ARCHITECTURE.md">View on GitHub</a>
-            </p>
-        </div>
-    </section>
-    
-    <section class="quick-links">
-        <h2>Quick Links</h2>
-        <div class="link-grid">
-            <div class="link-card">
-                <h3>Browse Vocabularies</h3>
-                <p>View the complete vocabulary documentation</p>
-                <a href="../vocab/" class="button">View Vocabularies →</a>
-            </div>
-            
-            <div class="link-card">
-                <h3>Download RDF</h3>
-                <p>Get the machine-readable vocabulary files</p>
-                <ul class="plain-list">
-                    <li><a href="../vocab/iroko-core.ttl">iroko-core.ttl</a></li>
-                    <li><a href="../vocab/iroko-ewe.ttl">iroko-ewe.ttl</a></li>
-                </ul>
-            </div>
-            
-            <div class="link-card">
-                <h3>Example Data</h3>
-                <p>See how to use the vocabularies</p>
-                <a href="../examples/" class="button">View Examples →</a>
-            </div>
-            
-            <div class="link-card">
-                <h3>Public Data</h3>
-                <p>Browse published plant names</p>
-                <a href="../data/" class="button">View Data →</a>
-            </div>
-        </div>
-    </section>
-    
-    <section class="getting-started">
-        <h2>Getting Started</h2>
-        
-        <div class="start-path">
-            <h3>I want to use this vocabulary in my project</h3>
-            <p>→ Start with <a href="REUSE.md"><strong>Vocabulary Reuse Guide</strong></a></p>
-        </div>
-        
-        <div class="start-path">
-            <h3>I want to contribute to the vocabulary</h3>
-            <p>→ Start with <a href="CONTRIBUTING.md"><strong>Contributing Guide</strong></a></p>
-        </div>
-        
-        <div class="start-path">
-            <h3>I want to understand the technical design</h3>
-            <p>→ Start with <a href="ARCHITECTURE.md"><strong>Technical Architecture</strong></a></p>
-        </div>
-        
-        <div class="start-path">
-            <h3>I want to see the vocabularies</h3>
-            <p>→ Browse <a href="../vocab/"><strong>Vocabulary Documentation</strong></a></p>
-        </div>
-    </section>
-    
-    <section class="info">
-        <h2>About the Iroko Framework</h2>
-        <p>The Iroko Framework provides semantic vocabularies for governing access to sacred knowledge in Afro-Atlantic traditions. It enables institutions to document cultural heritage while maintaining community control over sensitive information through field-level access governance.</p>
-        
-        <h3>Project Links</h3>
-        <ul>
-            <li><strong>Website:</strong> <a href="https://irokosociety.org">irokosociety.org</a></li>
-            <li><strong>GitHub:</strong> <a href="https://github.com/iroko-framework/iroko-framework">iroko-framework</a></li>
-            <li><strong>Email:</strong> <a href="mailto:irokosociety@gmail.com">irokosociety@gmail.com</a></li>
+
+<div class="top-bar">
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.0.0</span>
+  <nav class="top-bar-links">
+    <a href="../index.html">Home</a>
+    <a href="../vocab/">Vocabularies</a>
+    <a href="https://www.irokosociety.org/iroko-framework">irokosociety.org ↗</a>
+    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+  </nav>
+</div>
+
+<div class="page-wrap">
+
+  <p class="breadcrumb">
+    <a href="../index.html">Iroko Framework</a>
+    <span>/</span>
+    Documentation
+  </p>
+
+  <header class="vocab-header">
+    <div class="vocab-header-logo">
+      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
+    </div>
+    <div>
+      <h1>Documentation</h1>
+      <p class="subtitle">Technical guides, usage instructions, and contribution guidelines for the Iroko Framework</p>
+      <div class="header-meta">
+        <span class="meta-pill">v1.0.0</span>
+        <span class="meta-pill">February 2026</span>
+        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework/tree/main/docs" style="color:inherit;">View on GitHub ↗</a></span>
+      </div>
+    </div>
+  </header>
+
+  <p class="section-label">Guides</p>
+
+  <div class="module-grid">
+
+    <!-- Contributing -->
+    <div class="doc-row">
+      <div class="doc-identity">
+        <span class="doc-audience audience-dev">Developers</span>
+        <span class="doc-name"><a href="CONTRIBUTING.html">Contributing Guide</a></span>
+        <span class="doc-subtitle">Vocabulary development &amp; maintenance</span>
+      </div>
+      <div class="doc-detail">
+        <p class="doc-desc">Complete guide to setting up your development environment, editing vocabularies, validating changes, and deploying updates. For vocabulary maintainers and developers contributing to the Iroko Framework.</p>
+        <ul class="doc-contents">
+          <li>Development setup (Python, dependencies)</li>
+          <li>Editing vocabulary files (TTL syntax)</li>
+          <li>Validation and testing</li>
+          <li>HTML generation from RDF</li>
+          <li>Deployment workflow</li>
+          <li>Pull request guidelines</li>
         </ul>
-    </section>
-    
-    <footer>
-        <p><strong>License:</strong> <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal (Public Domain)</a></p>
-        <p>&copy; 2026 Iroko Historical Society</p>
-    </footer>
+        <div class="doc-actions">
+          <a class="action-primary" href="CONTRIBUTING.html">Read Guide</a>
+          <a class="action-secondary" href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/CONTRIBUTING.md">View on GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reuse -->
+    <div class="doc-row">
+      <div class="doc-identity">
+        <span class="doc-audience audience-adopt">Adopters</span>
+        <span class="doc-name"><a href="REUSE.html">Vocabulary Reuse Guide</a></span>
+        <span class="doc-subtitle">Institutions adopting the Iroko Framework</span>
+      </div>
+      <div class="doc-detail">
+        <p class="doc-desc">How archives, museums, universities, and cultural institutions can adopt the Iroko Framework vocabularies. Explains how to apply the vocabulary with institution-specific access policies and provides integration patterns.</p>
+        <ul class="doc-contents">
+          <li>Understanding vocabulary structure</li>
+          <li>Choosing your access policy approach</li>
+          <li>Integration with existing systems</li>
+          <li>RDF/TTL usage examples</li>
+          <li>SPARQL query patterns</li>
+          <li>Darwin Core &amp; SKOS interoperability</li>
+        </ul>
+        <div class="doc-actions">
+          <a class="action-primary" href="REUSE.html">Read Guide</a>
+          <a class="action-secondary" href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/REUSE.md">View on GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Architecture -->
+    <div class="doc-row">
+      <div class="doc-identity">
+        <span class="doc-audience audience-arch">Architecture</span>
+        <span class="doc-name"><a href="ARCHITECTURE.html">Technical Architecture</a></span>
+        <span class="doc-subtitle">System design &amp; infrastructure</span>
+      </div>
+      <div class="doc-detail">
+        <p class="doc-desc">Deep dive into the technical architecture of the Iroko Framework. Covers the separation between vocabulary definitions and operational data, URI strategies, deployment infrastructure, and the relationship between the vocabulary repository and operational archive.</p>
+        <ul class="doc-contents">
+          <li>System architecture overview</li>
+          <li>Vocabulary vs. data separation</li>
+          <li>URI permanence strategy</li>
+          <li>Access control implementation</li>
+          <li>Export and synchronization workflows</li>
+          <li>Technology stack details</li>
+        </ul>
+        <div class="doc-actions">
+          <a class="action-primary" href="ARCHITECTURE.html">Read Guide</a>
+          <a class="action-secondary" href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/ARCHITECTURE.md">View on GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /module-grid -->
+
+  <!-- Getting started -->
+  <p class="section-label">Getting Started</p>
+
+  <div class="gs-grid">
+    <div class="gs-card">
+      <div class="gs-role">Using the vocabulary</div>
+      <div class="gs-action">Start with the <a href="REUSE.html">Vocabulary Reuse Guide</a> for adoption patterns, access policy examples, and integration with your existing systems.</div>
+    </div>
+    <div class="gs-card">
+      <div class="gs-role">Contributing</div>
+      <div class="gs-action">Start with the <a href="CONTRIBUTING.html">Contributing Guide</a> for development setup, TTL editing conventions, and the pull request workflow.</div>
+    </div>
+    <div class="gs-card">
+      <div class="gs-role">Technical design</div>
+      <div class="gs-action">Start with <a href="ARCHITECTURE.html">Technical Architecture</a> for URI strategies, vocabulary/data separation, and deployment infrastructure.</div>
+    </div>
+    <div class="gs-card">
+      <div class="gs-role">Browsing vocabularies</div>
+      <div class="gs-action">Go directly to <a href="../vocab/">Vocabulary Documentation</a> to browse all published modules, classes, properties, and concept schemes.</div>
+    </div>
+  </div>
+
+  <!-- Lower grid -->
+  <div class="lower-grid">
+    <div class="lower-block">
+      <h2>About the Iroko Framework</h2>
+      <p>The Iroko Framework provides semantic vocabularies for governing access to sacred knowledge in Afro-Atlantic traditions. It enables institutions to document cultural heritage while maintaining community control over sensitive information through field-level access governance.</p>
+      <p>All vocabularies serialize to RDF/Turtle and integrate with Darwin Core, Dublin Core, PROV-O, FOAF, and schema.org.</p>
+      <ul class="feature-list">
+        <li><div><strong>Postcustodial Approach</strong> — Communities retain authority; the archive serves the tradition, not the institution</div></li>
+        <li><div><strong>Field-Level Access Control</strong> — Six-tier permissions applied per property, not per record</div></li>
+        <li><div><strong>Standards-Aligned</strong> — W3C RDF/OWL/SKOS, Linked Open Data best practices</div></li>
+        <li><div><strong>Semantic Interoperability</strong> — Integrates Darwin Core, SKOS, PROV-O, FOAF, schema.org</div></li>
+      </ul>
+    </div>
+    <div class="lower-block">
+      <h2>Project Links</h2>
+      <ul class="dl-list">
+        <li><span class="dl-name"><a href="https://www.irokosociety.org">irokosociety.org</a></span><span class="dl-meta">Project website</span></li>
+        <li><span class="dl-name"><a href="https://github.com/iroko-framework/iroko-framework">GitHub Repository</a></span><span class="dl-meta">Source &amp; issues</span></li>
+        <li><span class="dl-name"><a href="../vocab/">Vocabulary Documentation</a></span><span class="dl-meta">5 published modules</span></li>
+        <li><span class="dl-name"><a href="mailto:info@irokosociety.org">info@irokosociety.org</a></span><span class="dl-meta">Contact</span></li>
+      </ul>
+
+      <h2 style="margin-top:2rem;">License</h2>
+      <p>All Iroko Framework vocabularies are released under <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal (Public Domain)</a>. You are free to use, adapt, and redistribute without restriction.</p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-left">
+      Iroko Historical Society<br>
+      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
+      License: CC0 1.0 Universal (Public Domain)
+    </div>
+    <div class="footer-links">
+      <a href="https://www.irokosociety.org">irokosociety.org</a>
+      <a href="../index.html">Home</a>
+      <a href="../vocab/">Vocabularies</a>
+      <a href="mailto:info@irokosociety.org">Contact</a>
+    </div>
+  </footer>
+
+</div>
 </body>
 </html>

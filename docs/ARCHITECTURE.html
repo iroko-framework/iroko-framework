@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Architecture — Iroko Framework</title>
+  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <style>
+    .doc-body { max-width: 72ch; }
+    .doc-body h2 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--green);
+      margin: 2rem 0 .75rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .doc-body h3 {
+      font-family: var(--sans);
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin: 1.25rem 0 .4rem;
+      letter-spacing: .02em;
+    }
+    .doc-body p {
+      font-size: .88rem;
+      color: var(--ink-mid);
+      line-height: 1.7;
+      margin-bottom: .75rem;
+    }
+    .doc-body ul, .doc-body ol {
+      margin: .5rem 0 .75rem 1.5rem;
+    }
+    .doc-body li {
+      font-size: .86rem;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      margin-bottom: .25rem;
+    }
+    .doc-body code {
+      font-family: var(--mono);
+      font-size: .8em;
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      padding: .1em .35em;
+      border-radius: 2px;
+      color: var(--green-mid);
+    }
+    .doc-body pre {
+      font-family: var(--mono);
+      font-size: .76rem;
+      line-height: 1.65;
+      background: var(--paper-warm);
+      border: 1px solid var(--rule-strong);
+      border-radius: 3px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      margin: .75rem 0 1rem;
+      color: var(--ink-mid);
+    }
+    .doc-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+    .doc-body strong { font-weight: 500; color: var(--ink); }
+    .doc-body a { color: var(--green); }
+    .doc-body a:hover { color: var(--terracotta); }
+    .doc-nav {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.0.0</span>
+  <nav class="top-bar-links">
+    <a href="../index.html">Home</a>
+    <a href="../vocab/">Vocabularies</a>
+    <a href="index.html">Documentation</a>
+    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+  </nav>
+</div>
+
+<div class="page-wrap">
+
+  <p class="breadcrumb">
+    <a href="../index.html">Iroko Framework</a>
+    <span>/</span>
+    <a href="index.html">Documentation</a>
+    <span>/</span>
+    Technical Architecture
+  </p>
+
+  <header class="vocab-header">
+    <div class="vocab-header-logo">
+      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
+    </div>
+    <div>
+      <span class="module-tag tag-graphic">Architecture</span>
+      <h1>Technical Architecture</h1>
+      <p class="subtitle">System design, URI strategy, and deployment infrastructure</p>
+      <div class="header-meta">
+        <span class="meta-pill">v1.0.0</span>
+        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/ARCHITECTURE.md" style="color:inherit;">View on GitHub ↗</a></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="doc-body" style="margin-top:2rem;">
+
+    <h2>Overview</h2>
+    <p>The Iroko Framework separates vocabulary publication (what terms mean) from data publication (actual records). The GitHub Pages site at <code>iroko-framework.github.io/iroko-framework</code> publishes the vocabulary definitions. The operational archive — which holds actual sacred knowledge records — is governed by <code>irokosociety.org</code> with API-mediated access.</p>
+
+    <h2>System Architecture</h2>
+    <pre><code>┌─────────────────────────────────────────────────────────┐
+│  VOCABULARY REPOSITORY (this site)                      │
+│  iroko-framework.github.io/iroko-framework              │
+│  - RDF/Turtle vocabulary files (.ttl)                   │
+│  - HTML browse pages (generated)                        │
+│  - Public namespace URIs                                │
+│  - CC0 — fully public                                   │
+└─────────────────────────────────────────────────────────┘
+                          ↓ terms reference
+┌─────────────────────────────────────────────────────────┐
+│  OPERATIONAL ARCHIVE (irokosociety.org)                 │
+│  - Actual sacred knowledge records                      │
+│  - Access-controlled API                                │
+│  - Community authorization layer                        │
+│  - Not publicly accessible                              │
+└─────────────────────────────────────────────────────────┘</code></pre>
+
+    <h2>Vocabulary vs. Data Separation</h2>
+    <p>The distinction is intentional and principled. Publishing the vocabulary openly (CC0) enables interoperability: any institution can adopt these terms, integrate with Darwin Core or SKOS systems, and describe their own holdings using a shared vocabulary. Publishing the data openly would expose sacred knowledge without community authorization.</p>
+    <p>The Iroko Historical Society publishes:</p>
+    <ul>
+      <li>Full vocabulary (all classes, properties, concept schemes) — public, CC0</li>
+      <li>Minimal public data (scientific plant names, vernacular names) — public</li>
+    </ul>
+    <p>The Iroko Historical Society does not publish:</p>
+    <ul>
+      <li>Ritual use details, harvest protocols, preparation methods</li>
+      <li>Initiation records, initiate identities, witness lists</li>
+      <li>Operational ceremony sequences</li>
+      <li>Any records marked <code>iroko:access-no-access</code></li>
+    </ul>
+
+    <h2>URI Strategy</h2>
+    <h3>Vocabulary terms (namespace URIs)</h3>
+    <p>Vocabulary terms use <code>https://www.irokosociety.org/iroko-framework/{module}#</code> as the base namespace. These URIs are stable and permanent — changing a term's URI is a breaking change requiring a version increment.</p>
+    <pre><code>iroko:  https://www.irokosociety.org/iroko-framework/core#
+ewe:    https://www.irokosociety.org/iroko-framework/ewe#
+nkisi:  https://www.irokosociety.org/iroko-framework/nkisi#
+travay: https://www.irokosociety.org/iroko-framework/travay#
+ile:    https://www.irokosociety.org/iroko-framework/ile#</code></pre>
+    <h3>Data instance URIs</h3>
+    <p>Individual records (plant instances, house records, etc.) use <code>https://www.irokosociety.org/iroko-framework/{module}/{ID}</code>. The Ewé plant data currently uses <code>ewe:Plant0001</code> through <code>ewe:Plant000n</code> as local identifiers in the pilot dataset.</p>
+
+    <h2>Access Control Implementation</h2>
+    <p>Access control in the Iroko Framework operates at the property level, not the record level. This means a single plant record can have some fields public (scientific name) and others restricted (harvest protocol). The <code>iroko:minimumAccessLevel</code> annotation on each property declares the minimum access tier required to see that field's value.</p>
+    <p>Implementing institutions enforce access in their application layer — the vocabulary itself documents the intent but cannot enforce it. The recommended pattern is to filter SPARQL results by access level before returning data to the client.</p>
+
+    <h2>HTML Generation Pipeline</h2>
+    <p>The vocabulary browse pages (<code>iroko-core.html</code>, etc.) are generated programmatically from the TTL source files using <code>generate_browse_pages.py</code>. The script uses <code>rdflib</code> to parse the TTL and renders classes, properties, and concept schemes into the shared HTML template.</p>
+    <pre><code>TTL source → rdflib parse → Python render → HTML output
+                 ↑                               ↓
+         iroko-style.css              iroko-{module}.html</code></pre>
+    <p>The HTML files are committed to the repository alongside the TTL — GitHub Pages serves both. When a TTL is updated, the corresponding HTML must be regenerated and committed in the same push.</p>
+
+    <h2>Technology Stack</h2>
+    <ul>
+      <li><strong>Vocabulary format:</strong> RDF/Turtle (OWL + SKOS)</li>
+      <li><strong>HTML generation:</strong> Python 3 + rdflib</li>
+      <li><strong>Hosting:</strong> GitHub Pages (static)</li>
+      <li><strong>Styling:</strong> Pure CSS (Cormorant Garamond, DM Mono, DM Sans via Google Fonts)</li>
+      <li><strong>External standards:</strong> Darwin Core, SKOS, Dublin Core, PROV-O, FOAF, schema.org</li>
+    </ul>
+
+    <h2>Future Module Planning</h2>
+    <p>Five additional modules are in development: Marca (divination systems), Ékpè (sacred societies), Vèvè (graphic sign systems), Ngoma (sacred music), and Sankofa (reclamation movements). Each will follow the same TTL-first, generated-HTML pattern. When all ten modules are complete, the HTML generation pipeline will be automated via GitHub Actions to eliminate manual regeneration.</p>
+
+  </div>
+
+  <div class="doc-nav">
+    <a class="action-primary" href="index.html">← All Documentation</a>
+    <a class="action-secondary" href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/ARCHITECTURE.md">View Markdown on GitHub ↗</a>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-left">
+      Iroko Historical Society<br>
+      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
+      License: CC0 1.0 Universal (Public Domain)
+    </div>
+    <div class="footer-links">
+      <a href="https://www.irokosociety.org">irokosociety.org</a>
+      <a href="../index.html">Home</a>
+      <a href="../vocab/">Vocabularies</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Reuse Guide — Iroko Framework</title>
+  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <style>
+    .doc-body { max-width: 72ch; }
+    .doc-body h2 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--green);
+      margin: 2rem 0 .75rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .doc-body h3 {
+      font-family: var(--sans);
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin: 1.25rem 0 .4rem;
+      letter-spacing: .02em;
+    }
+    .doc-body p {
+      font-size: .88rem;
+      color: var(--ink-mid);
+      line-height: 1.7;
+      margin-bottom: .75rem;
+    }
+    .doc-body ul, .doc-body ol {
+      margin: .5rem 0 .75rem 1.5rem;
+    }
+    .doc-body li {
+      font-size: .86rem;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      margin-bottom: .25rem;
+    }
+    .doc-body code {
+      font-family: var(--mono);
+      font-size: .8em;
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      padding: .1em .35em;
+      border-radius: 2px;
+      color: var(--green-mid);
+    }
+    .doc-body pre {
+      font-family: var(--mono);
+      font-size: .76rem;
+      line-height: 1.65;
+      background: var(--paper-warm);
+      border: 1px solid var(--rule-strong);
+      border-radius: 3px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      margin: .75rem 0 1rem;
+      color: var(--ink-mid);
+    }
+    .doc-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+    .doc-body strong { font-weight: 500; color: var(--ink); }
+    .doc-body a { color: var(--green); }
+    .doc-body a:hover { color: var(--terracotta); }
+    .doc-nav {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.0.0</span>
+  <nav class="top-bar-links">
+    <a href="../index.html">Home</a>
+    <a href="../vocab/">Vocabularies</a>
+    <a href="index.html">Documentation</a>
+    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+  </nav>
+</div>
+
+<div class="page-wrap">
+
+  <p class="breadcrumb">
+    <a href="../index.html">Iroko Framework</a>
+    <span>/</span>
+    <a href="index.html">Documentation</a>
+    <span>/</span>
+    Vocabulary Reuse Guide
+  </p>
+
+  <header class="vocab-header">
+    <div class="vocab-header-logo">
+      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
+    </div>
+    <div>
+      <span class="module-tag tag-core">Adopters</span>
+      <h1>Vocabulary Reuse Guide</h1>
+      <p class="subtitle">Adopting the Iroko Framework for your institution</p>
+      <div class="header-meta">
+        <span class="meta-pill">v1.0.0</span>
+        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/REUSE.md" style="color:inherit;">View on GitHub ↗</a></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="doc-body" style="margin-top:2rem;">
+
+    <h2>Overview</h2>
+    <p>The Iroko Framework vocabularies are released under CC0 (public domain) and designed for adoption by any institution documenting Afro-Atlantic cultural materials. This guide explains how to incorporate the vocabulary into your system and calibrate the access control model to your institutional context.</p>
+
+    <h2>Understanding the Vocabulary Structure</h2>
+    <p>The framework consists of five published modules plus a shared CSS/generator infrastructure:</p>
+    <ul>
+      <li><strong>iroko-core</strong> — Cross-cutting governance: access control, epistemic types, provenance, contested knowledge, relationship assertions, sacred media</li>
+      <li><strong>iroko-ewe</strong> — Sacred plant knowledge, layered over Darwin Core</li>
+      <li><strong>iroko-nkisi</strong> — Spiritual entities (orisa, lwa, mpungo, etc.) with path/camino modeling</li>
+      <li><strong>iroko-travay</strong> — Ritual processes with property-level access control</li>
+      <li><strong>iroko-ile</strong> — Religious houses, lineage, initiation genealogy, and authority</li>
+    </ul>
+    <p>The Core module is a dependency for all others. You can adopt individual modules without adopting the full framework.</p>
+
+    <h2>Choosing Your Access Policy</h2>
+    <p>Every property in the Iroko vocabulary carries an <code>iroko:minimumAccessLevel</code> annotation. This is the <em>recommended</em> minimum — your institution sets its own thresholds based on your relationship with the communities whose knowledge you hold.</p>
+    <ul>
+      <li><strong>Universities</strong> drawing from published ethnographies may expose more fields publicly</li>
+      <li><strong>Temple archives</strong> holding active ceremonial records should restrict more aggressively</li>
+      <li><strong>Museums</strong> with mixed holdings (public exhibits + restricted donor records) can apply per-record or per-collection policies</li>
+      <li><strong>Researchers</strong> should apply community authorization requirements before publishing field data</li>
+    </ul>
+
+    <h2>RDF/TTL Usage Examples</h2>
+    <h3>Prefix declarations</h3>
+    <pre><code>@prefix iroko:  &lt;https://www.irokosociety.org/iroko-framework/core#&gt; .
+@prefix ewe:    &lt;https://www.irokosociety.org/iroko-framework/ewe#&gt; .
+@prefix nkisi:  &lt;https://www.irokosociety.org/iroko-framework/nkisi#&gt; .
+@prefix travay: &lt;https://www.irokosociety.org/iroko-framework/travay#&gt; .
+@prefix ile:    &lt;https://www.irokosociety.org/iroko-framework/ile#&gt; .</code></pre>
+    <h3>Describing a plant record</h3>
+    <pre><code>ex:Plant0001 a ewe:Plant ;
+    dcterms:title "Iroko"@en ;
+    skos:prefLabel "Ìròkò"@yo, "Iroko"@en, "Iroko"@es ;
+    dwc:scientificName "Milicia excelsa" ;
+    ewe:ritualUse ewe:ritual-cosmological ;
+    ewe:medicinalUse ewe:medicinal-general-tonic ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    ewe:harvestProtocol ewe:harvest-offering-required ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .</code></pre>
+    <h3>Applying access control in queries</h3>
+    <pre><code># SPARQL: retrieve only public-unrestricted properties
+SELECT ?property ?value WHERE {
+  ex:Plant0001 ?property ?value .
+  ?property iroko:minimumAccessLevel iroko:access-public-unrestricted .
+}</code></pre>
+
+    <h2>Integration with Existing Systems</h2>
+    <h3>Darwin Core (botanical records)</h3>
+    <p>The Ewé module is designed to layer over Darwin Core. Use Darwin Core properties for standard botanical fields (<code>dwc:scientificName</code>, <code>dwc:vernacularName</code>, etc.) and Iroko properties for ritual and sacred knowledge fields. The Iroko <code>ewe:Plant</code> class is a subclass of <code>iroko:SacredEntity</code>, which is compatible with Darwin Core occurrence records via <code>dwc:Occurrence</code>.</p>
+    <h3>SKOS thesauri</h3>
+    <p>All Iroko concept schemes are valid SKOS and can be imported into any SKOS-compatible thesaurus management system. The framework uses <code>skos:inScheme</code>, <code>skos:hasTopConcept</code>, <code>skos:prefLabel</code>, and <code>skos:definition</code> throughout.</p>
+    <h3>Dublin Core</h3>
+    <p>Use <code>dcterms:bibliographicCitation</code> for source references, <code>dcterms:created</code> for record creation dates, and <code>dcterms:description</code> for general descriptions. The Iroko vocabulary does not duplicate these.</p>
+
+    <h2>SPARQL Patterns</h2>
+    <h3>Find all entities with contested status</h3>
+    <pre><code>SELECT ?entity ?notes WHERE {
+  ?entity iroko:contestedStatus true ;
+          iroko:contestedNotes ?notes .
+}</code></pre>
+    <h3>Find all initiation events for a specific house</h3>
+    <pre><code>SELECT ?event ?type ?date WHERE {
+  ?event a ile:InitiationEvent ;
+         ile:eventHouse ex:MyHouse ;
+         ile:initiationType ?type ;
+         ile:eventDate ?date .
+}</code></pre>
+
+    <h2>Getting Help</h2>
+    <p>Open an issue on the <a href="https://github.com/iroko-framework/iroko-framework">GitHub repository</a> or contact <a href="mailto:info@irokosociety.org">info@irokosociety.org</a> with questions about adoption or integration.</p>
+
+  </div>
+
+  <div class="doc-nav">
+    <a class="action-primary" href="index.html">← All Documentation</a>
+    <a class="action-secondary" href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/REUSE.md">View Markdown on GitHub ↗</a>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-left">
+      Iroko Historical Society<br>
+      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
+      License: CC0 1.0 Universal (Public Domain)
+    </div>
+    <div class="footer-links">
+      <a href="https://www.irokosociety.org">irokosociety.org</a>
+      <a href="../index.html">Home</a>
+      <a href="../vocab/">Vocabularies</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
