@@ -1,0 +1,85 @@
+@prefix iroko:   <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+iroko:IrokoAssertionModule
+  a owl:Ontology ;
+  dcterms:title "Iroko Assertion Module"@en ;
+  dcterms:description "Generic assertion nodes for property-level governance. Complements iroko:RelationshipAssertion and contested knowledge patterns."@en .
+
+########
+# Generic Assertion (applies to any claim)
+########
+
+iroko:Assertion a owl:Class ;
+  rdfs:label "Assertion"@en ;
+  rdfs:comment "A first-class statement node representing a single claim. Use to attach authority, access level, provenance, and contested status at the property level."@en .
+
+# Keep your existing RelationshipAssertion, but make it a subtype
+iroko:RelationshipAssertion a owl:Class ;
+  rdfs:subClassOf iroko:Assertion .
+
+########
+# Ritual Authority as an Agent
+########
+
+iroko:RitualAuthority a owl:Class ;
+  rdfs:label "Ritual Authority"@en ;
+  rdfs:comment "An authority that can authorize assertions (lineage, house, cabildo, council, elder). Modeled as a PROV agent."@en ;
+  rdfs:subClassOf prov:Agent .
+
+iroko:authorizedBy a owl:ObjectProperty ;
+  rdfs:label "authorized by"@en ;
+  rdfs:domain iroko:Assertion ;
+  rdfs:range iroko:RitualAuthority .
+
+########
+# Assertion triple slots (you already have subject and object in places)
+# These standardize the n-ary pattern.
+########
+
+iroko:assertionSubject a owl:ObjectProperty ;
+  rdfs:label "assertion subject"@en ;
+  rdfs:domain iroko:Assertion .
+
+iroko:assertionPredicate a owl:ObjectProperty ;
+  rdfs:label "assertion predicate"@en ;
+  rdfs:domain iroko:Assertion .
+
+iroko:assertionObject a owl:ObjectProperty ;
+  rdfs:label "assertion object"@en ;
+  rdfs:domain iroko:Assertion .
+
+########
+# Align with your existing governance terms
+########
+
+# You already have iroko:accessLevel. Make it explicitly applicable to Assertion.
+iroko:accessLevel a owl:ObjectProperty ;
+  rdfs:domain iroko:Assertion .
+
+# You already have contested status fields. Make contestedStatus explicitly applicable to Assertion too.
+iroko:contestedStatus a owl:ObjectProperty ;
+  rdfs:domain iroko:Assertion .
+
+########
+# Optional, but useful: capture event-level provenance while keeping your existing recording fields
+########
+
+iroko:FieldworkEvent a owl:Class ;
+  rdfs:label "Fieldwork Event"@en ;
+  rdfs:subClassOf prov:Activity .
+
+iroko:recordedInEvent a owl:ObjectProperty ;
+  rdfs:label "recorded in event"@en ;
+  rdfs:domain iroko:Assertion ;
+  rdfs:range iroko:FieldworkEvent .
+
+iroko:recordedOn a owl:DatatypeProperty ;
+  rdfs:label "recorded on"@en ;
+  rdfs:domain iroko:Assertion ;
+  rdfs:range xsd:date .
