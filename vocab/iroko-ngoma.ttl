@@ -1,0 +1,619 @@
+# -*- coding: utf-8 -*-
+# ===================================================================
+# IROKO FRAMEWORK — NGOMA MODULE
+# Sacred Music, Rhythms, Songs, Instruments, and Drum Sets
+# Namespace: https://www.irokosociety.org/iroko-framework/ngoma#
+# Version: 1.0.0 | February 2026
+# Dependencies: iroko-core, iroko-nkisi, iroko-travay, iroko-ile
+# ===================================================================
+#
+# Coverage: Sacred drumming lineages (Lucumí/Añá, Haitian Vodou Rada/Petwo,
+#   Candomblé rum/rumpi/lé, Palo Monte nkómo), praise songs (oriki, canto),
+#   sacred drum sets, toque-entity relationships, possession-trigger rhythms,
+#   and musician authority lineages across Afro-Atlantic traditions.
+#
+# Ngoma (Bantu) — drum, medicine, ceremony, healing; used here as the
+#   module name for sacred music documentation across all traditions.
+#
+# Scope distinction: This module covers music as a cultural and archival
+#   object: rhythms, songs, instruments, drum sets, and musician lineages.
+#   The ritual processes in which music is performed are documented in
+#   iroko-travay. The entities called by specific rhythms link to iroko-nkisi.
+#   Musician authority lineages link to iroko-ile.
+#
+# Access philosophy: Rhythm names and their associated entities are
+#   community-restricted. Toque sequences, song texts, and drum preparation
+#   protocols are initiated-only to elder-only. Drum set lineage identity
+#   (specifically Añá bàtá in Lucumí tradition) carries the most restricted
+#   access in this module.
+# ===================================================================
+
+@prefix ngoma:   <https://www.irokosociety.org/iroko-framework/ngoma#> .
+@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix nkisi:   <https://www.irokosociety.org/iroko-framework/nkisi#> .
+@prefix travay:  <https://www.irokosociety.org/iroko-framework/travay#> .
+@prefix ile:     <https://www.irokosociety.org/iroko-framework/ile#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix mo:      <http://purl.org/ontology/mo/> .
+
+<https://www.irokosociety.org/iroko-framework/ngoma>
+    a owl:Ontology ;
+    rdfs:label "Iroko Ngoma Module"@en ;
+    dcterms:title "Iroko Ngoma: Sacred Music, Rhythms, Songs, and Instruments"@en ;
+    dcterms:description "Vocabulary for documenting sacred music across Afro-Atlantic traditions. Covers ritual rhythms and their entity associations, sacred songs and verse corpora, consecrated drum sets and their lineages, and musician authority transmission. Integrates with the Music Ontology (mo:) where applicable. Access control distinguishes public knowledge (rhythm names, entity associations) from restricted operational detail (toque sequences, song texts, drum preparation)."@en ;
+    dcterms:created "2026-02-22"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports <https://www.irokosociety.org/iroko-framework/core> .
+
+# ===================================================================
+# CLASSES
+# ===================================================================
+
+ngoma:SacredRhythm
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Sacred Rhythm"@en ;
+    rdfs:comment "A tradition-specific ritual drumming pattern with defined entity associations, ceremonial function, and authority requirements for performance. In Lucumí: a toque or canto. In Haitian Vodou: a tanbou rhythm for a specific lwa. In Candomblé: a xirê toque. Each rhythm is identified by its name, entity association, tradition, and lineage variant. Rhythm names are community-restricted; possession-trigger status and toque sequences are initiated-only."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:SacredSong
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Sacred Song"@en ;
+    rdfs:comment "A song, chant, or liturgical vocal composition used in Afro-Atlantic ceremonial contexts. Includes oriki (Yorùbá praise poetry), canto de entrada (Lucumí invocation songs), chanson Vodou, and analogous forms. Songs may be classified by entity addressed, ceremony type, and liturgical language. Song text is among the most sensitive data in this module: song existence and entity association are community-restricted; text and melodic structure are initiated-only to elder-only."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:SacredInstrument
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Sacred Instrument"@en ;
+    rdfs:comment "A musical instrument used in Afro-Atlantic sacred contexts, which may be consecrated, named, or otherwise distinguished from secular instruments of the same type. Examples: a set of consecrated bàtá drums; Vodou rada drums (manman, seconde, bula); Candomblé rum/rumpi/lé. An instrument may have its own name, lineage, and history. The instrument type is public; consecration status and internal names are community-restricted."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:SacredDrumSet
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Sacred Drum Set"@en ;
+    rdfs:comment "A formally recognized set of consecrated drums understood as a unified sacred entity within a tradition. In Lucumí: the Añá bàtá set, which holds the spirit of Añá and requires specific initiation (Aña or Olubatá) to play. In Haitian Vodou: the Rada drum battery (manman, seconde, bula). In Candomblé: the atabaque trio (rum, rumpi, lé). A drum set may have its own name, lineage, house affiliation, and reception date. The Añá bàtá in particular carries highly restricted esoteric status; set identity and lineage are initiated-only."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:MusicianLineage
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Musician Lineage"@en ;
+    rdfs:comment "A documented chain of transmission from master musician to apprentice, governing the right to play specific sacred instruments, lead specific rhythms, or perform specific songs. In Lucumí: Olubatá lineages with specific Añá initiations. In Candomblé: ogan lineages. Musician lineages are community knowledge in general form; specific transmission records are initiated-only."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+# ===================================================================
+# PROPERTIES — SacredRhythm
+# ===================================================================
+
+ngoma:rhythmName
+    a owl:DatatypeProperty ;
+    rdfs:label "rhythm name"@en ;
+    rdfs:comment "The conventional name of the rhythm in the tradition's liturgical language. Language-tagged. Community-restricted."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:rhythmAlternateName
+    a owl:DatatypeProperty ;
+    rdfs:label "alternate rhythm name"@en ;
+    rdfs:comment "Alternative or regional names for this rhythm. Language-tagged."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:rhythmFamily
+    a owl:ObjectProperty ;
+    rdfs:label "rhythm family"@en ;
+    rdfs:comment "The broad rhythmic family or tradition category. Range: ngoma:RhythmFamilyScheme."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:rhythmFunction
+    a owl:ObjectProperty ;
+    rdfs:label "rhythm function"@en ;
+    rdfs:comment "The ceremonial function of this rhythm. Range: ngoma:RhythmFunctionScheme."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:entityCalled
+    a owl:ObjectProperty ;
+    rdfs:label "entity called"@en ;
+    rdfs:comment "The spiritual entity primarily associated with this rhythm — the entity this rhythm is sung/played for or that it invites. Range: nkisi:SpiritualEntity. Community-restricted."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range nkisi:SpiritualEntity ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:possessionTrigger
+    a owl:DatatypeProperty ;
+    rdfs:label "possession trigger"@en ;
+    rdfs:comment "Whether this rhythm is understood to trigger or invite spirit possession when performed correctly. Initiated-only: this knowledge is operationally significant and not appropriate for public documentation."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range xsd:boolean ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:rhythmNotation
+    a owl:DatatypeProperty ;
+    rdfs:label "rhythm notation"@en ;
+    rdfs:comment "Onomatopoeic or phonetic notation of the rhythm pattern (e.g., 'kon-ko-lo' for a specific bàtá pattern). Community-restricted."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:toqueSequence
+    a owl:DatatypeProperty ;
+    rdfs:label "toque sequence"@en ;
+    rdfs:comment "The full performance sequence: how this rhythm is introduced, developed, and resolved within a ceremony. Initiated-elder only: toque sequences are core esoteric knowledge of the musician lineage."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-elder ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:ceremonyContext
+    a owl:ObjectProperty ;
+    rdfs:label "ceremony context"@en ;
+    rdfs:comment "The ritual process in which this rhythm is performed. Range: travay:RitualProcess."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range travay:RitualProcess ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:transmissionLineage
+    a owl:ObjectProperty ;
+    rdfs:label "transmission lineage"@en ;
+    rdfs:comment "The musician lineage through which this rhythm is transmitted. Range: ngoma:MusicianLineage."@en ;
+    rdfs:domain ngoma:SacredRhythm ;
+    rdfs:range ngoma:MusicianLineage ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+# ===================================================================
+# PROPERTIES — SacredSong
+# ===================================================================
+
+ngoma:songTitle
+    a owl:DatatypeProperty ;
+    rdfs:label "song title"@en ;
+    rdfs:comment "The title or opening phrase identifying this song. Language-tagged. Community-restricted."@en ;
+    rdfs:domain ngoma:SacredSong ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:songFunction
+    a owl:ObjectProperty ;
+    rdfs:label "song function"@en ;
+    rdfs:comment "The ceremonial function of this song. Range: ngoma:SongFunctionScheme."@en ;
+    rdfs:domain ngoma:SacredSong ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:songLanguage
+    a owl:DatatypeProperty ;
+    rdfs:label "liturgical language"@en ;
+    rdfs:comment "The liturgical language in which this song is performed (e.g., Lucumí/Yorùbá, Fon, Kikongo, Haitian Kreyòl). Language tag."@en ;
+    rdfs:domain ngoma:SacredSong ;
+    rdfs:range xsd:language ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:songText
+    a owl:DatatypeProperty ;
+    rdfs:label "song text"@en ;
+    rdfs:comment "The full text of the song as transmitted in the lineage. Initiated-elder only: sacred song texts are among the most sensitive items in this corpus, equivalent to verse corpora in the Marca module."@en ;
+    rdfs:domain ngoma:SacredSong ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-elder ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:songTranslation
+    a owl:DatatypeProperty ;
+    rdfs:label "song translation"@en ;
+    rdfs:comment "Translation of song text into a non-liturgical language. Initiated-only: translations reveal meaning even without the liturgical text."@en ;
+    rdfs:domain ngoma:SacredSong ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:associatedRhythm
+    a owl:ObjectProperty ;
+    rdfs:label "associated rhythm"@en ;
+    rdfs:comment "The rhythm pattern that accompanies this song."@en ;
+    rdfs:domain ngoma:SacredSong ;
+    rdfs:range ngoma:SacredRhythm ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:songEntity
+    a owl:ObjectProperty ;
+    rdfs:label "song entity"@en ;
+    rdfs:comment "The spiritual entity addressed or invoked by this song. Range: nkisi:SpiritualEntity."@en ;
+    rdfs:domain ngoma:SacredSong ;
+    rdfs:range nkisi:SpiritualEntity ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+# ===================================================================
+# PROPERTIES — SacredInstrument / SacredDrumSet
+# ===================================================================
+
+ngoma:instrumentType
+    a owl:ObjectProperty ;
+    rdfs:label "instrument type"@en ;
+    rdfs:comment "The type of sacred instrument. Range: ngoma:InstrumentTypeScheme."@en ;
+    rdfs:domain ngoma:SacredInstrument ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:instrumentName
+    a owl:DatatypeProperty ;
+    rdfs:label "instrument name"@en ;
+    rdfs:comment "The name of this specific consecrated instrument or set. For Añá bàtá: the name of the drum set. Community-restricted."@en ;
+    rdfs:domain ngoma:SacredInstrument ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:consecrationDate
+    a owl:DatatypeProperty ;
+    rdfs:label "consecration date"@en ;
+    rdfs:comment "Date the instrument was consecrated or born. For Añá bàtá: the date of Aña reception."@en ;
+    rdfs:domain ngoma:SacredInstrument ;
+    rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:houseAffiliation
+    a owl:ObjectProperty ;
+    rdfs:label "house affiliation"@en ;
+    rdfs:comment "The religious house with which this instrument or drum set is affiliated. Range: ile:House."@en ;
+    rdfs:domain ngoma:SacredInstrument ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:setComponents
+    a owl:DatatypeProperty ;
+    rdfs:label "set components"@en ;
+    rdfs:comment "Description of the drums in a consecrated set (e.g., iyá, itótele, okónkolo for bàtá). Community-restricted."@en ;
+    rdfs:domain ngoma:SacredDrumSet ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:setLineage
+    a owl:ObjectProperty ;
+    rdfs:label "drum set lineage"@en ;
+    rdfs:comment "The musician lineage to which this drum set belongs. Particularly important for Añá bàtá: the Olubatá lineage determines performance rights and toque knowledge. Initiated-only."@en ;
+    rdfs:domain ngoma:SacredDrumSet ;
+    rdfs:range ngoma:MusicianLineage ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:addaEspiritualStatus
+    a owl:DatatypeProperty ;
+    rdfs:label "esoteric status notes"@en ;
+    rdfs:comment "Free-text description of the esoteric or sacred status of this instrument, including any restrictions on who may touch, play, or be present. Initiated-elder only."@en ;
+    rdfs:domain ngoma:SacredDrumSet ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-elder ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+# ===================================================================
+# PROPERTIES — MusicianLineage
+# ===================================================================
+
+ngoma:lineageName
+    a owl:DatatypeProperty ;
+    rdfs:label "lineage name"@en ;
+    rdfs:comment "The name of this musician lineage or school. Community-restricted."@en ;
+    rdfs:domain ngoma:MusicianLineage ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:lineageFounder
+    a owl:ObjectProperty ;
+    rdfs:label "lineage founder"@en ;
+    rdfs:comment "The founding master musician of this lineage. Range: foaf:Person."@en ;
+    rdfs:domain ngoma:MusicianLineage ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:lineageHouse
+    a owl:ObjectProperty ;
+    rdfs:label "lineage house"@en ;
+    rdfs:comment "The religious house through which this musician lineage operates. Range: ile:House."@en ;
+    rdfs:domain ngoma:MusicianLineage ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+ngoma:authorityRequirement
+    a owl:ObjectProperty ;
+    rdfs:label "authority requirement"@en ;
+    rdfs:comment "The initiation or authority title required to perform in this lineage. Range: ile:AuthorityTitleScheme concept."@en ;
+    rdfs:domain ngoma:MusicianLineage ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ngoma> .
+
+# ===================================================================
+# CONCEPT SCHEMES
+# ===================================================================
+
+# --- Rhythm Families ---
+
+ngoma:RhythmFamilyScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Rhythm Families"@en ;
+    skos:prefLabel "Rhythm Families"@en ;
+    skos:prefLabel "Familias de ritmos sagrados"@es ;
+    skos:prefLabel "Familles de rythmes sacrés"@fr ;
+    skos:prefLabel "Famílias de ritmos sagrados"@pt ;
+    skos:prefLabel "Àwọn ìdílé ìlù mímọ́"@yo ;
+    skos:hasTopConcept ngoma:family-lucumi-bata,
+                       ngoma:family-lucumi-guiro,
+                       ngoma:family-vodou-rada,
+                       ngoma:family-vodou-petwo,
+                       ngoma:family-candomble-ketu,
+                       ngoma:family-candomble-angola,
+                       ngoma:family-palo,
+                       ngoma:family-yoruba-continental,
+                       ngoma:family-other .
+
+ngoma:family-lucumi-bata
+    a skos:Concept ; skos:inScheme ngoma:RhythmFamilyScheme ;
+    skos:prefLabel "Lucumí — Bàtá (Añá)"@en ;
+    skos:prefLabel "Bàtá de Aña"@es ;
+    skos:definition "Rhythms performed on the consecrated Añá bàtá drum set in Lucumí/Ocha tradition. Requires Olubatá authority and Aña initiation to lead. Considered the highest-authority drumming tradition in Lucumí; specific toques are associated with specific Orisha and are operationally significant."@en .
+
+ngoma:family-lucumi-guiro
+    a skos:Concept ; skos:inScheme ngoma:RhythmFamilyScheme ;
+    skos:prefLabel "Lucumí — Güiro / Cajón"@en ;
+    skos:definition "Rhythms performed on non-consecrated shakers, cajón, or güiro in Lucumí contexts. Used in güiro ceremonies and some Espiritismo-adjacent practice. Less restricted than bàtá but still tradition-specific."@en .
+
+ngoma:family-vodou-rada
+    a skos:Concept ; skos:inScheme ngoma:RhythmFamilyScheme ;
+    skos:prefLabel "Haitian Vodou — Rada"@en ;
+    skos:prefLabel "Vodou Rada"@fr ;
+    skos:definition "Rhythms of the Rada nation in Haitian Vodou, associated with the cool, beneficent lwa (primarily Fon-derived: Lasirèn, Loko, Ayizan, Danbala). Performed on the Rada drum battery."@en .
+
+ngoma:family-vodou-petwo
+    a skos:Concept ; skos:inScheme ngoma:RhythmFamilyScheme ;
+    skos:prefLabel "Haitian Vodou — Petwo"@en ;
+    skos:prefLabel "Vodou Petwo"@fr ;
+    skos:definition "Rhythms of the Petwo nation in Haitian Vodou, associated with fiercer and more demanding lwa (often Kongo-derived). Distinguished by faster tempos and specific drum preparation practices."@en .
+
+ngoma:family-candomble-ketu
+    a skos:Concept ; skos:inScheme ngoma:RhythmFamilyScheme ;
+    skos:prefLabel "Candomblé — Ketu (Yorùbá)"@en ;
+    skos:prefLabel "Candomblé Ketu"@pt ;
+    skos:definition "Rhythms of the Ketu (Yorùbá-derived) nation in Candomblé, performed on the atabaque trio (rum, rumpi, lé). The xirê sequence calls each Orixá in a defined order."@en .
+
+ngoma:family-candomble-angola
+    a skos:Concept ; skos:inScheme ngoma:RhythmFamilyScheme ;
+    skos:prefLabel "Candomblé — Angola (Bantu)"@en ;
+    skos:prefLabel "Candomblé Angola"@pt ;
+    skos:definition "Rhythms of the Angola (Bantu/Kongo-derived) nation in Candomblé. Maculelê, capoeira, and samba de roda exist in relationship with Angola ritual music."@en .
+
+ngoma:family-palo
+    a skos:Concept ; skos:inScheme ngoma:RhythmFamilyScheme ;
+    skos:prefLabel "Palo Monte / Kongo-derived"@en ;
+    skos:prefLabel "Palo Monte"@es ;
+    skos:definition "Rhythms of Palo Monte and related Cuban Bantu-Atlantic traditions, performed on nkómo drums and associated percussion. Tata Nganga authority determines performance rights for restricted rhythms."@en .
+
+ngoma:family-yoruba-continental
+    a skos:Concept ; skos:inScheme ngoma:RhythmFamilyScheme ;
+    skos:prefLabel "Yorùbá (continental)"@en ;
+    skos:prefLabel "Yorùbá"@yo ;
+    skos:definition "Sacred rhythms in continental Yorùbá practice, including dundun (talking drum), bàtá, and sakara traditions as practiced in Nigeria and Benin."@en .
+
+ngoma:family-other
+    a skos:Concept ; skos:inScheme ngoma:RhythmFamilyScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Rhythm family not covered by existing concepts. Use skos:scopeNote to describe."@en .
+
+# --- Rhythm Functions ---
+
+ngoma:RhythmFunctionScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Rhythm Functions"@en ;
+    skos:prefLabel "Rhythm Functions"@en ;
+    skos:prefLabel "Funciones del ritmo sagrado"@es ;
+    skos:prefLabel "Fonctions du rythme sacré"@fr ;
+    skos:prefLabel "Funções do ritmo sagrado"@pt ;
+    skos:prefLabel "Àwọn iṣẹ́ ìlù mímọ́"@yo ;
+    skos:hasTopConcept ngoma:func-invocation,
+                       ngoma:func-salutation,
+                       ngoma:func-possession-induction,
+                       ngoma:func-farewell,
+                       ngoma:func-processional,
+                       ngoma:func-healing,
+                       ngoma:func-initiation,
+                       ngoma:func-funerary,
+                       ngoma:func-entertainment .
+
+ngoma:func-invocation
+    a skos:Concept ; skos:inScheme ngoma:RhythmFunctionScheme ;
+    skos:prefLabel "Invocation"@en ;
+    skos:definition "The rhythm calls a specific spiritual entity into the ceremonial space."@en .
+
+ngoma:func-salutation
+    a skos:Concept ; skos:inScheme ngoma:RhythmFunctionScheme ;
+    skos:prefLabel "Salutation / greeting"@en ;
+    skos:definition "The rhythm formally greets and honors an entity without necessarily seeking possession. Often the opening toque in a sequence."@en .
+
+ngoma:func-possession-induction
+    a skos:Concept ; skos:inScheme ngoma:RhythmFunctionScheme ;
+    skos:prefLabel "Possession induction"@en ;
+    skos:definition "The rhythm is specifically associated with inducing or deepening spirit possession in a prepared recipient. Initiated-only detail."@en .
+
+ngoma:func-farewell
+    a skos:Concept ; skos:inScheme ngoma:RhythmFunctionScheme ;
+    skos:prefLabel "Farewell / departure"@en ;
+    skos:definition "The rhythm signals or facilitates the departure of a spiritual entity from the ceremonial space."@en .
+
+ngoma:func-processional
+    a skos:Concept ; skos:inScheme ngoma:RhythmFunctionScheme ;
+    skos:prefLabel "Processional"@en ;
+    skos:definition "The rhythm accompanies movement through ceremonial space or between spaces."@en .
+
+ngoma:func-healing
+    a skos:Concept ; skos:inScheme ngoma:RhythmFunctionScheme ;
+    skos:prefLabel "Healing ceremony"@en ;
+    skos:definition "The rhythm is performed as part of a healing or cleansing ceremony."@en .
+
+ngoma:func-initiation
+    a skos:Concept ; skos:inScheme ngoma:RhythmFunctionScheme ;
+    skos:prefLabel "Initiation ceremony"@en ;
+    skos:definition "The rhythm is performed specifically during initiatory ceremonies and is restricted to those contexts."@en .
+
+ngoma:func-funerary
+    a skos:Concept ; skos:inScheme ngoma:RhythmFunctionScheme ;
+    skos:prefLabel "Funerary / ancestral"@en ;
+    skos:definition "The rhythm is performed in funerary, Egungun, or ancestral veneration contexts."@en .
+
+ngoma:func-entertainment
+    a skos:Concept ; skos:inScheme ngoma:RhythmFunctionScheme ;
+    skos:prefLabel "Entertainment / public"@en ;
+    skos:definition "The rhythm has an accepted public or entertainment role alongside its sacred function (e.g., folkloric bàtá performances)."@en .
+
+# --- Instrument Types ---
+
+ngoma:InstrumentTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Instrument Types"@en ;
+    skos:prefLabel "Instrument Types"@en ;
+    skos:prefLabel "Tipos de instrumento sagrado"@es ;
+    skos:prefLabel "Types d'instrument sacré"@fr ;
+    skos:prefLabel "Tipos de instrumento sagrado"@pt ;
+    skos:prefLabel "Àwọn ìrú ohun-èlò ìlù mímọ́"@yo ;
+    skos:hasTopConcept ngoma:inst-bata,
+                       ngoma:inst-atabaque,
+                       ngoma:inst-rada-drum,
+                       ngoma:inst-petwo-drum,
+                       ngoma:inst-nkomo,
+                       ngoma:inst-shekere,
+                       ngoma:inst-agogo,
+                       ngoma:inst-other .
+
+ngoma:inst-bata
+    a skos:Concept ; skos:inScheme ngoma:InstrumentTypeScheme ;
+    skos:prefLabel "Bàtá"@en ;
+    skos:prefLabel "Bàtá"@yo ;
+    skos:definition "Two-headed conical hourglass drum of Yorùbá origin. In Lucumí tradition, the consecrated Añá bàtá set (iyá, itótele, okónkolo) is the highest-authority drum. Requires Olubatá/Aña initiation to play in sacred contexts."@en .
+
+ngoma:inst-atabaque
+    a skos:Concept ; skos:inScheme ngoma:InstrumentTypeScheme ;
+    skos:prefLabel "Atabaque"@en ;
+    skos:prefLabel "Atabaque"@pt ;
+    skos:definition "Single-headed conical drum used in Candomblé in sets of three (rum/grande, rumpi/médio, lé/pequeno). May be consecrated; the rum (largest) typically leads."@en .
+
+ngoma:inst-rada-drum
+    a skos:Concept ; skos:inScheme ngoma:InstrumentTypeScheme ;
+    skos:prefLabel "Rada drum battery"@en ;
+    skos:prefLabel "Tambou Rada"@fr ;
+    skos:definition "The three-drum Haitian Vodou Rada battery: manman (largest), seconde (middle), bula (smallest). Associated with cool, Fon-derived lwa."@en .
+
+ngoma:inst-petwo-drum
+    a skos:Concept ; skos:inScheme ngoma:InstrumentTypeScheme ;
+    skos:prefLabel "Petwo drum"@en ;
+    skos:prefLabel "Tambou Petwo"@fr ;
+    skos:definition "Drums used in Haitian Vodou Petwo nation ceremonies. Prepared differently from Rada drums; tighter skin tuning and faster tempo."@en .
+
+ngoma:inst-nkomo
+    a skos:Concept ; skos:inScheme ngoma:InstrumentTypeScheme ;
+    skos:prefLabel "Nkómo (Palo)"@en ;
+    skos:prefLabel "Nkómo"@es ;
+    skos:definition "Drums used in Palo Monte ceremonies. The nkómo tradition derives from Bantu/Kongo drumming practice. Different preparation and restriction protocols than bàtá."@en .
+
+ngoma:inst-shekere
+    a skos:Concept ; skos:inScheme ngoma:InstrumentTypeScheme ;
+    skos:prefLabel "Shekeré / Güiro"@en ;
+    skos:prefLabel "Shekeré"@yo ;
+    skos:definition "Gourd rattle with bead netting used across Yorùbá-derived and related traditions. Consecrated shekeré are used in Orisha ceremonies; güiro refers to the Cuban variant."@en .
+
+ngoma:inst-agogo
+    a skos:Concept ; skos:inScheme ngoma:InstrumentTypeScheme ;
+    skos:prefLabel "Agogô (bell)"@en ;
+    skos:prefLabel "Agogô"@yo ;
+    skos:definition "Double or single iron bell providing the timeline in many Afro-Atlantic rhythm traditions. Associated with Ogun/Ogou in Lucumí and Vodou contexts."@en .
+
+ngoma:inst-other
+    a skos:Concept ; skos:inScheme ngoma:InstrumentTypeScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Sacred instrument type not covered by existing concepts."@en .
+
+# --- Song Functions ---
+
+ngoma:SongFunctionScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Song Functions"@en ;
+    skos:prefLabel "Song Functions"@en ;
+    skos:prefLabel "Funciones del canto sagrado"@es ;
+    skos:prefLabel "Fonctions du chant sacré"@fr ;
+    skos:prefLabel "Funções do canto sagrado"@pt ;
+    skos:prefLabel "Àwọn iṣẹ́ orin mímọ́"@yo ;
+    skos:hasTopConcept ngoma:song-invocation,
+                       ngoma:song-praise,
+                       ngoma:song-narrative,
+                       ngoma:song-initiation,
+                       ngoma:song-funerary,
+                       ngoma:song-healing,
+                       ngoma:song-other .
+
+ngoma:song-invocation
+    a skos:Concept ; skos:inScheme ngoma:SongFunctionScheme ;
+    skos:prefLabel "Invocation"@en ;
+    skos:definition "Song that calls or invites a spiritual entity. Primary function of canto de entrada and analogous opening songs."@en .
+
+ngoma:song-praise
+    a skos:Concept ; skos:inScheme ngoma:SongFunctionScheme ;
+    skos:prefLabel "Praise / Oriki"@en ;
+    skos:definition "Song that honors and praises an entity or ancestor without necessarily seeking presence. Oriki are the primary Yorùbá form."@en .
+
+ngoma:song-narrative
+    a skos:Concept ; skos:inScheme ngoma:SongFunctionScheme ;
+    skos:prefLabel "Narrative / Pataki"@en ;
+    skos:definition "Song that tells a story about an entity, an ancestor, or a sacred event."@en .
+
+ngoma:song-initiation
+    a skos:Concept ; skos:inScheme ngoma:SongFunctionScheme ;
+    skos:prefLabel "Initiation ceremony"@en ;
+    skos:definition "Songs performed specifically within initiatory rites, restricted to those contexts."@en .
+
+ngoma:song-funerary
+    a skos:Concept ; skos:inScheme ngoma:SongFunctionScheme ;
+    skos:prefLabel "Funerary / ancestral"@en ;
+    skos:definition "Songs performed in Ituto, Egungun, or other funerary and ancestral contexts."@en .
+
+ngoma:song-healing
+    a skos:Concept ; skos:inScheme ngoma:SongFunctionScheme ;
+    skos:prefLabel "Healing"@en ;
+    skos:definition "Songs performed as part of healing or cleansing interventions."@en .
+
+ngoma:song-other
+    a skos:Concept ; skos:inScheme ngoma:SongFunctionScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Song function not covered by existing concepts."@en .

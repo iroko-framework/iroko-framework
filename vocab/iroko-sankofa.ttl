@@ -1,0 +1,552 @@
+# -*- coding: utf-8 -*-
+# ===================================================================
+# IROKO FRAMEWORK — SANKOFA MODULE
+# Reclamation Movements, Diaspora Returns, and Reconstructed Practice
+# Namespace: https://www.irokosociety.org/iroko-framework/sankofa#
+# Version: 1.0.0 | February 2026
+# Dependencies: iroko-core, iroko-ile, iroko-nkisi, iroko-travay
+# ===================================================================
+#
+# Sankofa (Akan/Twi): "Se wo were fi na wosankofa a yenkyi" —
+#   "It is not wrong to go back for what you forgot."
+#   The Adinkra symbol: a bird looking backwards while moving forward.
+#   Used here as the module name for documentation of African diaspora
+#   reclamation, return, and reconstructed practice movements.
+#
+# Coverage: Africanization movements within diaspora traditions (Lucumí
+#   decolonization; Candomblé re-Africanization), diaspora returns to
+#   African source communities, reconstructed traditions from documentary
+#   evidence, heritage-site relationships, lineage recovery projects,
+#   and the semantic relationship modeling between diaspora and source
+#   traditions.
+#
+# Scope: This module documents movements and relationships as cultural
+#   and historical phenomena, without adjudicating their authenticity.
+#   All claims of relationship between diaspora and source traditions
+#   are modeled as assertions (linking to iroko-core RelationshipAssertion)
+#   to reflect the contested and negotiated nature of reclamation.
+# ===================================================================
+
+@prefix sankofa: <https://www.irokosociety.org/iroko-framework/sankofa#> .
+@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix ile:     <https://www.irokosociety.org/iroko-framework/ile#> .
+@prefix nkisi:   <https://www.irokosociety.org/iroko-framework/nkisi#> .
+@prefix travay:  <https://www.irokosociety.org/iroko-framework/travay#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix schema:  <https://schema.org/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+
+<https://www.irokosociety.org/iroko-framework/sankofa>
+    a owl:Ontology ;
+    rdfs:label "Iroko Sankofa Module"@en ;
+    dcterms:title "Iroko Sankofa: Reclamation Movements and Diaspora Returns"@en ;
+    dcterms:description "Vocabulary for documenting revitalization and reclamation movements, diaspora returns to African source communities, reconstructed traditions, and heritage relationships across Afro-Atlantic traditions. Models the semantic relationships between diaspora practice and African source traditions without adjudicating authenticity. All tradition-relationship claims are modeled as assertions (iroko:RelationshipAssertion) to reflect their contested and negotiated character."@en ;
+    dcterms:created "2026-02-22"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports <https://www.irokosociety.org/iroko-framework/core> .
+
+# ===================================================================
+# CLASSES
+# ===================================================================
+
+sankofa:ReclamationMovement
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity, schema:Event ;
+    rdfs:label "Reclamation Movement"@en ;
+    rdfs:comment "An organized or semi-organized community effort to recover, revitalize, or Africanize a diaspora religious tradition. Examples: the Candomblé re-Africanization movement beginning in the 1930s–70s (Mãe Aninha, Martiniano do Bonfim, and later the SECNEB research agenda); the Lucumí decolonization efforts removing Catholic syncretism from Ocha practice; the Ifá revival in Trinidad and other diaspora communities seeking direct Yorùbá validation; the African American Ifá reclamation beginning in the late 20th century. A movement is documented without adjudicating whether its claims of authenticity are correct."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:DiasporaReturn
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Diaspora Return"@en ;
+    rdfs:comment "A documented instance of a diaspora practitioner or community making contact with, seeking validation from, or receiving initiation within an African source community. Examples: Cuban Babalawos traveling to Yorùbáland for Ifá validation; Haitian Vodouisants conducting ceremonies in Benin at Ouidah; Candomblé priests initiating in West Africa. A diaspora return may be documented as an event, a relationship, or a formal protocol exchange. The outcomes of such encounters — including mutual recognition or rejection — should be documented without taking sides."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:ReconstructedPractice
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Reconstructed Practice"@en ;
+    rdfs:comment "A religious practice or tradition that has been assembled or restored from documentary sources, scholarly research, or cross-tradition synthesis rather than direct lineage transmission. Examples: reconstructed Yorùbá practice in communities without living initiatory lineage; synthesis traditions drawing on Farrow, Bascom, or Verger ethnographic documentation; Neo-African traditions developed from scholarly sources in North America or Europe. The reconstruction method and its evidentiary basis are the core data here; the framework makes no judgment about the resulting practice's validity."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:HeritageRelationship
+    a owl:Class ;
+    rdfs:subClassOf iroko:RelationshipAssertion ;
+    rdfs:label "Heritage Relationship"@en ;
+    rdfs:comment "A formal assertion of the relationship between a diaspora tradition and its claimed African source tradition. Subclass of iroko:RelationshipAssertion: the claim is documented with its source, asserter, and status (widely attested, lineage-specific, or contested) without requiring resolution. Examples: the documented Yorùbá–Lucumí relationship; the contested specificity of Fon vs. Ewe sources for Haitian Vodou Rada; the debated connection between specific Cuban Abakuá potencias and Cross River Ékpè lodges."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+# ===================================================================
+# PROPERTIES — ReclamationMovement
+# ===================================================================
+
+sankofa:movementName
+    a owl:DatatypeProperty ;
+    rdfs:label "movement name"@en ;
+    rdfs:comment "The name or designation of this reclamation or revitalization movement. Language-tagged."@en ;
+    rdfs:domain sankofa:ReclamationMovement ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:movementType
+    a owl:ObjectProperty ;
+    rdfs:label "movement type"@en ;
+    rdfs:comment "The typological category of this movement. Range: sankofa:MovementTypeScheme."@en ;
+    rdfs:domain sankofa:ReclamationMovement ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:targetTradition
+    a owl:ObjectProperty ;
+    rdfs:label "target tradition"@en ;
+    rdfs:comment "The diaspora tradition this movement seeks to reclaim or revitalize. Range: iroko:TraditionScheme concept."@en ;
+    rdfs:domain sankofa:ReclamationMovement ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:sourceTradition
+    a owl:ObjectProperty ;
+    rdfs:label "source tradition"@en ;
+    rdfs:comment "The African tradition identified as the reclamation's reference point. Range: iroko:TraditionScheme concept."@en ;
+    rdfs:domain sankofa:ReclamationMovement ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:originDate
+    a owl:DatatypeProperty ;
+    rdfs:label "origin date"@en ;
+    rdfs:comment "Approximate date the movement began."@en ;
+    rdfs:domain sankofa:ReclamationMovement ;
+    rdfs:range xsd:gYear ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:keyFigures
+    a owl:ObjectProperty ;
+    rdfs:label "key figures"@en ;
+    rdfs:comment "Principal practitioners, scholars, or leaders associated with this movement. Range: foaf:Person."@en ;
+    rdfs:domain sankofa:ReclamationMovement ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:movementOutcome
+    a owl:ObjectProperty ;
+    rdfs:label "movement outcome"@en ;
+    rdfs:comment "The documented or ongoing result of this movement. Range: sankofa:MovementOutcomeScheme."@en ;
+    rdfs:domain sankofa:ReclamationMovement ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:movementContestation
+    a owl:DatatypeProperty ;
+    rdfs:label "contestation notes"@en ;
+    rdfs:comment "Notes on how this movement has been received, resisted, or debated within and outside the tradition community."@en ;
+    rdfs:domain sankofa:ReclamationMovement ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+# ===================================================================
+# PROPERTIES — DiasporaReturn
+# ===================================================================
+
+sankofa:returnDate
+    a owl:DatatypeProperty ;
+    rdfs:label "return date"@en ;
+    rdfs:domain sankofa:DiasporaReturn ;
+    rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:returnType
+    a owl:ObjectProperty ;
+    rdfs:label "return type"@en ;
+    rdfs:comment "The nature of the return encounter. Range: sankofa:ReturnTypeScheme."@en ;
+    rdfs:domain sankofa:DiasporaReturn ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:returningCommunity
+    a owl:ObjectProperty ;
+    rdfs:label "returning community"@en ;
+    rdfs:comment "The diaspora house or community making the return. Range: ile:House."@en ;
+    rdfs:domain sankofa:DiasporaReturn ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:hostCommunity
+    a owl:ObjectProperty ;
+    rdfs:label "host community"@en ;
+    rdfs:comment "The African community or institution receiving the diaspora visitors. Range: ile:House."@en ;
+    rdfs:domain sankofa:DiasporaReturn ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:returnOutcome
+    a owl:DatatypeProperty ;
+    rdfs:label "return outcome"@en ;
+    rdfs:comment "The documented result of this return: mutual recognition, initiation, rejection, or ongoing relationship. Free-text."@en ;
+    rdfs:domain sankofa:DiasporaReturn ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:returnContestation
+    a owl:DatatypeProperty ;
+    rdfs:label "contestation notes"@en ;
+    rdfs:comment "How this return has been evaluated or contested within the broader tradition community."@en ;
+    rdfs:domain sankofa:DiasporaReturn ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+# ===================================================================
+# PROPERTIES — ReconstructedPractice
+# ===================================================================
+
+sankofa:reconstructionMethod
+    a owl:ObjectProperty ;
+    rdfs:label "reconstruction method"@en ;
+    rdfs:comment "The primary method used to reconstruct this practice. Range: sankofa:ReconstructionMethodScheme."@en ;
+    rdfs:domain sankofa:ReconstructedPractice ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:evidentiarySources
+    a owl:ObjectProperty ;
+    rdfs:label "evidentiary sources"@en ;
+    rdfs:comment "The documentary, scholarly, or oral sources used as the basis for reconstruction. Range: iroko:DocumentaryEvidence."@en ;
+    rdfs:domain sankofa:ReconstructedPractice ;
+    rdfs:range iroko:DocumentaryEvidence ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:currentCommunity
+    a owl:ObjectProperty ;
+    rdfs:label "current practicing community"@en ;
+    rdfs:comment "The house or community practicing this reconstructed tradition. Range: ile:House."@en ;
+    rdfs:domain sankofa:ReconstructedPractice ;
+    rdfs:range ile:House ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:communityRecognition
+    a owl:ObjectProperty ;
+    rdfs:label "community recognition status"@en ;
+    rdfs:comment "Whether and how this reconstructed practice has been recognized by source tradition communities. Range: sankofa:RecognitionStatusScheme."@en ;
+    rdfs:domain sankofa:ReconstructedPractice ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+# ===================================================================
+# PROPERTIES — HeritageRelationship
+# ===================================================================
+
+sankofa:diasporaTradition
+    a owl:ObjectProperty ;
+    rdfs:label "diaspora tradition"@en ;
+    rdfs:comment "The diaspora side of the claimed heritage relationship. Range: iroko:TraditionScheme concept."@en ;
+    rdfs:domain sankofa:HeritageRelationship ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:africanTradition
+    a owl:ObjectProperty ;
+    rdfs:label "African source tradition"@en ;
+    rdfs:comment "The African source tradition claimed in this heritage relationship. Range: iroko:TraditionScheme concept."@en ;
+    rdfs:domain sankofa:HeritageRelationship ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:relationshipType
+    a owl:ObjectProperty ;
+    rdfs:label "relationship type"@en ;
+    rdfs:comment "The type of heritage relationship claimed. Range: sankofa:HeritageRelationshipTypeScheme."@en ;
+    rdfs:domain sankofa:HeritageRelationship ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+sankofa:evidenceBase
+    a owl:DatatypeProperty ;
+    rdfs:label "evidence base"@en ;
+    rdfs:comment "Summary of the scholarly and community evidence supporting or complicating this heritage relationship claim."@en ;
+    rdfs:domain sankofa:HeritageRelationship ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/sankofa> .
+
+# ===================================================================
+# CONCEPT SCHEMES
+# ===================================================================
+
+# --- Movement Types ---
+
+sankofa:MovementTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Reclamation Movement Types"@en ;
+    skos:prefLabel "Reclamation Movement Types"@en ;
+    skos:prefLabel "Tipos de movimiento de reclamación"@es ;
+    skos:prefLabel "Types de mouvement de réclamation"@fr ;
+    skos:prefLabel "Tipos de movimento de reclamação"@pt ;
+    skos:prefLabel "Àwọn ìrú ìgbiyànjú ìpadàbọ̀"@yo ;
+    skos:hasTopConcept sankofa:type-re-africanization,
+                       sankofa:type-decolonization,
+                       sankofa:type-purification,
+                       sankofa:type-validation-seeking,
+                       sankofa:type-reconstruction,
+                       sankofa:type-repatriation,
+                       sankofa:type-heritage-tourism,
+                       sankofa:type-other .
+
+sankofa:type-re-africanization
+    a skos:Concept ; skos:inScheme sankofa:MovementTypeScheme ;
+    skos:prefLabel "Re-Africanization"@en ;
+    skos:prefLabel "Re-africanización"@es ;
+    skos:prefLabel "Ré-africanisation"@fr ;
+    skos:definition "Efforts to restore African elements to diaspora traditions that have been transformed by colonialism, syncretism, or assimilation. Exemplified by the Candomblé re-Africanization movement in Bahia and the movement to remove Catholic saint imagery from Lucumí/Ocha practice."@en .
+
+sankofa:type-decolonization
+    a skos:Concept ; skos:inScheme sankofa:MovementTypeScheme ;
+    skos:prefLabel "Decolonization"@en ;
+    skos:prefLabel "Descolonización"@es ;
+    skos:prefLabel "Décolonisation"@fr ;
+    skos:definition "Specifically framed efforts to identify and remove colonial impositions (Catholic syncretism, colonial-era secrecy requirements, European naming conventions) from a diaspora tradition. Overlaps with re-Africanization but emphasizes the political critique of colonialism."@en .
+
+sankofa:type-purification
+    a skos:Concept ; skos:inScheme sankofa:MovementTypeScheme ;
+    skos:prefLabel "Purification / orthodoxy movement"@en ;
+    skos:definition "Efforts within a tradition community to establish or enforce a more 'authentic' or 'pure' practice, often by marginalizing innovations perceived as non-traditional. May be conservative (defending existing diaspora practice) or reformist (seeking African models)."@en .
+
+sankofa:type-validation-seeking
+    a skos:Concept ; skos:inScheme sankofa:MovementTypeScheme ;
+    skos:prefLabel "Validation-seeking"@en ;
+    skos:definition "Efforts by diaspora practitioners to obtain formal recognition, initiation, or endorsement from African source communities or their representatives. May involve travel, correspondence, or receiving African elders in diaspora contexts."@en .
+
+sankofa:type-reconstruction
+    a skos:Concept ; skos:inScheme sankofa:MovementTypeScheme ;
+    skos:prefLabel "Tradition reconstruction"@en ;
+    skos:definition "Efforts to create or restore a practice from documentary, archaeological, or cross-tradition scholarly sources where direct lineage transmission has been lost."@en .
+
+sankofa:type-repatriation
+    a skos:Concept ; skos:inScheme sankofa:MovementTypeScheme ;
+    skos:prefLabel "Repatriation"@en ;
+    skos:definition "Physical return of diaspora people to African source communities, creating new hybrid communities and exchanges. Examples: Brazilian returnee (aguda/tabom) communities in West Africa who brought diaspora Candomblé elements back to Benin and Nigeria."@en .
+
+sankofa:type-heritage-tourism
+    a skos:Concept ; skos:inScheme sankofa:MovementTypeScheme ;
+    skos:prefLabel "Heritage tourism / pilgrimage"@en ;
+    skos:definition "Organized or individual diaspora visits to African source sites for spiritual, cultural, or commemorative purposes. Distinguished from DiasporaReturn in being primarily observational rather than initiatory."@en .
+
+sankofa:type-other
+    a skos:Concept ; skos:inScheme sankofa:MovementTypeScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Movement type not covered by existing concepts."@en .
+
+# --- Return Types ---
+
+sankofa:ReturnTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Diaspora Return Types"@en ;
+    skos:prefLabel "Diaspora Return Types"@en ;
+    skos:prefLabel "Tipos de retorno diaspórico"@es ;
+    skos:prefLabel "Types de retour diasporique"@fr ;
+    skos:prefLabel "Tipos de retorno diaspórico"@pt ;
+    skos:prefLabel "Àwọn ìrú ìpadàbọ̀ ará ìjìnlẹ̀ ayé"@yo ;
+    skos:hasTopConcept sankofa:return-initiation,
+                       sankofa:return-consultation,
+                       sankofa:return-protocol-exchange,
+                       sankofa:return-ceremony-participation,
+                       sankofa:return-research,
+                       sankofa:return-other .
+
+sankofa:return-initiation
+    a skos:Concept ; skos:inScheme sankofa:ReturnTypeScheme ;
+    skos:prefLabel "African initiation"@en ;
+    skos:definition "Diaspora practitioner receives initiation in Africa within a source tradition."@en .
+
+sankofa:return-consultation
+    a skos:Concept ; skos:inScheme sankofa:ReturnTypeScheme ;
+    skos:prefLabel "Consultation / divination"@en ;
+    skos:definition "Diaspora practitioner receives divination or consultation from African authority figures."@en .
+
+sankofa:return-protocol-exchange
+    a skos:Concept ; skos:inScheme sankofa:ReturnTypeScheme ;
+    skos:prefLabel "Protocol / knowledge exchange"@en ;
+    skos:definition "Formal exchange of liturgical, ceremonial, or governance knowledge between diaspora and African communities."@en .
+
+sankofa:return-ceremony-participation
+    a skos:Concept ; skos:inScheme sankofa:ReturnTypeScheme ;
+    skos:prefLabel "Ceremony participation"@en ;
+    skos:definition "Diaspora practitioner participates in African ceremonies without receiving initiation."@en .
+
+sankofa:return-research
+    a skos:Concept ; skos:inScheme sankofa:ReturnTypeScheme ;
+    skos:prefLabel "Research / ethnographic"@en ;
+    skos:definition "Diaspora practitioner or scholar conducts fieldwork in African source communities."@en .
+
+sankofa:return-other
+    a skos:Concept ; skos:inScheme sankofa:ReturnTypeScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Return type not covered by existing concepts."@en .
+
+# --- Reconstruction Methods ---
+
+sankofa:ReconstructionMethodScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Reconstruction Methods"@en ;
+    skos:prefLabel "Reconstruction Methods"@en ;
+    skos:prefLabel "Métodos de reconstrucción"@es ;
+    skos:prefLabel "Méthodes de reconstruction"@fr ;
+    skos:prefLabel "Métodos de reconstrução"@pt ;
+    skos:prefLabel "Àwọn ọ̀nà ìtúnpadà"@yo ;
+    skos:hasTopConcept sankofa:method-ethnographic,
+                       sankofa:method-archival,
+                       sankofa:method-oral-tradition,
+                       sankofa:method-cross-tradition-synthesis,
+                       sankofa:method-community-consensus,
+                       sankofa:method-other .
+
+sankofa:method-ethnographic
+    a skos:Concept ; skos:inScheme sankofa:ReconstructionMethodScheme ;
+    skos:prefLabel "Published ethnographic sources"@en ;
+    skos:definition "Reconstruction based primarily on published ethnographic literature (Bascom, Farrow, Verger, Cabrera, Herskovits, etc.)."@en .
+
+sankofa:method-archival
+    a skos:Concept ; skos:inScheme sankofa:ReconstructionMethodScheme ;
+    skos:prefLabel "Archival / documentary sources"@en ;
+    skos:definition "Reconstruction based on primary archival sources: colonial records, religious registers, fieldwork notes, photographs."@en .
+
+sankofa:method-oral-tradition
+    a skos:Concept ; skos:inScheme sankofa:ReconstructionMethodScheme ;
+    skos:prefLabel "Oral tradition and living practitioners"@en ;
+    skos:definition "Reconstruction based on oral transmission from living elders or communities with partial survival of the tradition."@en .
+
+sankofa:method-cross-tradition-synthesis
+    a skos:Concept ; skos:inScheme sankofa:ReconstructionMethodScheme ;
+    skos:prefLabel "Cross-tradition synthesis"@en ;
+    skos:definition "Reconstruction by synthesizing elements from multiple related surviving traditions to fill gaps in a fragmented one."@en .
+
+sankofa:method-community-consensus
+    a skos:Concept ; skos:inScheme sankofa:ReconstructionMethodScheme ;
+    skos:prefLabel "Community deliberation and consensus"@en ;
+    skos:definition "Reconstruction through formal community process: elders and practitioners deliberating together to establish or restore practice."@en .
+
+sankofa:method-other
+    a skos:Concept ; skos:inScheme sankofa:ReconstructionMethodScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Reconstruction method not covered by existing concepts."@en .
+
+# --- Heritage Relationship Types ---
+
+sankofa:HeritageRelationshipTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Heritage Relationship Types"@en ;
+    skos:prefLabel "Heritage Relationship Types"@en ;
+    skos:prefLabel "Tipos de relación patrimonial"@es ;
+    skos:prefLabel "Types de relation patrimoniale"@fr ;
+    skos:prefLabel "Tipos de relação patrimonial"@pt ;
+    skos:prefLabel "Àwọn ìrú ìbátan àṣà ìní"@yo ;
+    skos:hasTopConcept sankofa:rel-direct-descent,
+                       sankofa:rel-parallel-development,
+                       sankofa:rel-influence,
+                       sankofa:rel-reconstructed,
+                       sankofa:rel-claimed-disputed,
+                       sankofa:rel-other .
+
+sankofa:rel-direct-descent
+    a skos:Concept ; skos:inScheme sankofa:HeritageRelationshipTypeScheme ;
+    skos:prefLabel "Direct descent (widely attested)"@en ;
+    skos:definition "The diaspora tradition descends directly from the African source tradition through documented enslaved practitioner transmission. Widely recognized by scholars and both communities."@en .
+
+sankofa:rel-parallel-development
+    a skos:Concept ; skos:inScheme sankofa:HeritageRelationshipTypeScheme ;
+    skos:prefLabel "Parallel development from shared source"@en ;
+    skos:definition "The diaspora and African traditions share a common ancestor but developed in parallel rather than one descending from the other."@en .
+
+sankofa:rel-influence
+    a skos:Concept ; skos:inScheme sankofa:HeritageRelationshipTypeScheme ;
+    skos:prefLabel "Historical influence"@en ;
+    skos:definition "The African tradition influenced the diaspora tradition without a direct descent relationship. Elements were adopted or adapted."@en .
+
+sankofa:rel-reconstructed
+    a skos:Concept ; skos:inScheme sankofa:HeritageRelationshipTypeScheme ;
+    skos:prefLabel "Reconstructed / claimed"@en ;
+    skos:definition "The relationship is based on reconstruction from historical evidence rather than surviving living transmission."@en .
+
+sankofa:rel-claimed-disputed
+    a skos:Concept ; skos:inScheme sankofa:HeritageRelationshipTypeScheme ;
+    skos:prefLabel "Claimed but contested"@en ;
+    skos:definition "The diaspora tradition claims a relationship to the African source, but this claim is disputed by scholars, the African community, or other diaspora communities."@en .
+
+sankofa:rel-other
+    a skos:Concept ; skos:inScheme sankofa:HeritageRelationshipTypeScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Heritage relationship type not covered by existing concepts."@en .
+
+# --- Recognition Status ---
+
+sankofa:RecognitionStatusScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Recognition Status"@en ;
+    skos:prefLabel "Recognition Status"@en ;
+    skos:prefLabel "Estado de reconocimiento"@es ;
+    skos:prefLabel "Statut de reconnaissance"@fr ;
+    skos:prefLabel "Status de reconhecimento"@pt ;
+    skos:prefLabel "Ipò ìdásílẹ̀"@yo ;
+    skos:hasTopConcept sankofa:recognition-formally-recognized,
+                       sankofa:recognition-informally-recognized,
+                       sankofa:recognition-disputed,
+                       sankofa:recognition-not-sought,
+                       sankofa:recognition-rejected,
+                       sankofa:recognition-pending .
+
+sankofa:recognition-formally-recognized
+    a skos:Concept ; skos:inScheme sankofa:RecognitionStatusScheme ;
+    skos:prefLabel "Formally recognized"@en ;
+    skos:definition "The reconstructed or diaspora practice has received formal recognition from a source tradition authority."@en .
+
+sankofa:recognition-informally-recognized
+    a skos:Concept ; skos:inScheme sankofa:RecognitionStatusScheme ;
+    skos:prefLabel "Informally recognized"@en ;
+    skos:definition "Recognition exists through interpersonal relationships and mutual respect without formal institutional endorsement."@en .
+
+sankofa:recognition-disputed
+    a skos:Concept ; skos:inScheme sankofa:RecognitionStatusScheme ;
+    skos:prefLabel "Disputed"@en ;
+    skos:definition "Some source tradition representatives recognize the practice; others do not. Contested."@en .
+
+sankofa:recognition-not-sought
+    a skos:Concept ; skos:inScheme sankofa:RecognitionStatusScheme ;
+    skos:prefLabel "Not sought"@en ;
+    skos:definition "The community practices without seeking external recognition, asserting autonomy over its own validity."@en .
+
+sankofa:recognition-rejected
+    a skos:Concept ; skos:inScheme sankofa:RecognitionStatusScheme ;
+    skos:prefLabel "Rejected"@en ;
+    skos:definition "Source tradition authorities have formally rejected or declined to recognize this practice or community."@en .
+
+sankofa:recognition-pending
+    a skos:Concept ; skos:inScheme sankofa:RecognitionStatusScheme ;
+    skos:prefLabel "Pending"@en ;
+    skos:definition "Recognition process is underway; outcome not yet determined."@en .

@@ -1,0 +1,646 @@
+# -*- coding: utf-8 -*-
+# ===================================================================
+# IROKO FRAMEWORK — VÈVÈ MODULE
+# Graphic Sign Systems, Sacred Diagrams, and Esoteric Scripts
+# Namespace: https://www.irokosociety.org/iroko-framework/veve#
+# Version: 1.0.0 | February 2026
+# Dependencies: iroko-core, iroko-nkisi, iroko-travay, iroko-ekpe
+# ===================================================================
+#
+# Coverage: Vèvè (Haitian Vodou), Firma/Patipemba (Palo Monte/Kongo),
+#   Ponto Riscado (Umbanda/Quimbanda), Anaforuana (Abakuá/Ékpè),
+#   Nsibidi (Ejagham/Cross River), Adinkra (Akan), Cosmogram (Kongo),
+#   and analogous graphic sign systems across Afro-Atlantic traditions.
+#
+# Scope distinction: This module covers graphic signs as semiotic and
+#   ritual objects — their system, form, function, medium, and surface.
+#   The spiritual entities invoked by signs are documented in iroko-nkisi.
+#   The ritual sequences in which signs are drawn are documented in
+#   iroko-travay. The initiatory societies that use Nsibidi/Anaforuana
+#   are documented in iroko-ekpe.
+#
+# Access philosophy: Sign system names and general typology are public.
+#   Individual sign names and their basic functions are community-restricted
+#   in active traditions. Operational detail — drawing sequence, material
+#   preparation, specific invocations — is initiated-only to elder-only.
+#   Some Abakuá Anaforuana signs are protected at no-access level by
+#   tradition authority.
+# ===================================================================
+
+@prefix veve:    <https://www.irokosociety.org/iroko-framework/veve#> .
+@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix nkisi:   <https://www.irokosociety.org/iroko-framework/nkisi#> .
+@prefix travay:  <https://www.irokosociety.org/iroko-framework/travay#> .
+@prefix ekpe:    <https://www.irokosociety.org/iroko-framework/ekpe#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+
+<https://www.irokosociety.org/iroko-framework/veve>
+    a owl:Ontology ;
+    rdfs:label "Iroko Vèvè Module"@en ;
+    dcterms:title "Iroko Vèvè: Graphic Sign Systems and Sacred Diagrams"@en ;
+    dcterms:description "Vocabulary for documenting graphic sign systems, sacred diagrams, and esoteric scripts across Afro-Atlantic traditions. Covers Vèvè (Vodou), Firma/Patipemba (Palo), Ponto Riscado (Umbanda/Quimbanda), Anaforuana (Abakuá), Nsibidi (Ejagham), Adinkra (Akan), and Kongo cosmograms. Access control runs from public (sign system typology) through initiated-elder (operational drawing sequences) and no-access (selected Anaforuana protected by tradition authority)."@en ;
+    dcterms:created "2026-02-22"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports <https://www.irokosociety.org/iroko-framework/core> .
+
+# ===================================================================
+# CLASSES
+# ===================================================================
+
+veve:GraphicSign
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Graphic Sign"@en ;
+    rdfs:comment "A discrete ritual diagram, symbol, or graphic mark belonging to a sacred sign system. Each sign has a conventional form, a tradition-specific name, and one or more ceremonial functions. Examples: a specific Vodou vèvè drawn for Ogou Feray; an Abakuá Anaforuana sign protecting a potencia's territory; a Palo firma drawn to open a Nganga. The sign's form and name are community-restricted in active traditions; its operational use and drawing sequence are initiated-only."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:SignSystem
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Sign System"@en ;
+    rdfs:comment "A tradition-specific graphic communication system consisting of a defined corpus of signs with shared visual grammar, drawing conventions, and ceremonial functions. Examples: the Vodou vèvè corpus; the Palo Monte firma/patipemba tradition; Ejagham Nsibidi; Abakuá Anaforuana; Akan Adinkra. A sign system is identified by tradition, geographic origin, and governing authority. The existence of a system and its name are public; its internal grammar and full sign inventory may be restricted."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:SignInstance
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label "Sign Instance"@en ;
+    rdfs:comment "A specific documented occurrence of a graphic sign: a particular vèvè drawn at a specific ceremony, a firma traced before a consultation, an Adinkra stamped on cloth. Distinct from the abstract sign type (veve:GraphicSign). Records medium, surface, date, ritual context, and photographer/recorder where available. Photographic documentation of sign instances is community-restricted; the sign's existence is public."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:SignCorpus
+    a owl:Class ;
+    rdfs:subClassOf iroko:LineageKnowledgeGraph ;
+    rdfs:label "Sign Corpus"@en ;
+    rdfs:comment "The complete inventory of graphic signs held and transmitted by a specific lineage, house, or tradition community. Different lineages within the same tradition may hold different signs or use the same sign with different operational meanings. A sign corpus is lineage-specific and represents a distinct LineageKnowledgeGraph."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+# ===================================================================
+# PROPERTIES — SignSystem
+# ===================================================================
+
+veve:systemType
+    a owl:ObjectProperty ;
+    rdfs:label "system type"@en ;
+    rdfs:comment "Typological classification of the sign system. Range: veve:SignSystemTypeScheme."@en ;
+    rdfs:domain veve:SignSystem ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:signCount
+    a owl:DatatypeProperty ;
+    rdfs:label "sign count"@en ;
+    rdfs:comment "The approximate number of discrete signs in the system. Community-restricted for active traditions with protected inventories."@en ;
+    rdfs:domain veve:SignSystem ;
+    rdfs:range xsd:integer ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:governingAuthority
+    a owl:ObjectProperty ;
+    rdfs:label "governing authority"@en ;
+    rdfs:comment "The title or institution with authority over this sign system. For Anaforuana: the Abakuá potencia leadership. For Vodou vèvè: the Houngan/Mambo body. Community-restricted."@en ;
+    rdfs:domain veve:SignSystem ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+# ===================================================================
+# PROPERTIES — GraphicSign
+# ===================================================================
+
+veve:signName
+    a owl:DatatypeProperty ;
+    rdfs:label "sign name"@en ;
+    rdfs:comment "The canonical name of the sign in the tradition's language. Language-tagged. Community-restricted for active traditions."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:signAlternateName
+    a owl:DatatypeProperty ;
+    rdfs:label "alternate name"@en ;
+    rdfs:comment "Alternative or regional names for this sign. Language-tagged."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:signSystem
+    a owl:ObjectProperty ;
+    rdfs:label "sign system"@en ;
+    rdfs:comment "The graphic sign system to which this sign belongs."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range veve:SignSystem ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:signFunction
+    a owl:ObjectProperty ;
+    rdfs:label "sign function"@en ;
+    rdfs:comment "The primary ceremonial function of this sign. Range: veve:SignFunctionScheme."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:invokedEntity
+    a owl:ObjectProperty ;
+    rdfs:label "invoked entity"@en ;
+    rdfs:comment "The spiritual entity primarily associated with or invoked by this sign. Range: nkisi:SpiritualEntity. Community-restricted."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range nkisi:SpiritualEntity ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:signMeaning
+    a owl:DatatypeProperty ;
+    rdfs:label "sign meaning"@en ;
+    rdfs:comment "The semantic or esoteric meaning of the sign as transmitted within the lineage. Initiated-only."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:drawingSequence
+    a owl:DatatypeProperty ;
+    rdfs:label "drawing sequence"@en ;
+    rdfs:comment "The step-by-step sequence in which the sign must be drawn. The directionality and order of strokes often carries operational significance. Initiated-elder only."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-elder ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:directionality
+    a owl:DatatypeProperty ;
+    rdfs:label "directionality"@en ;
+    rdfs:comment "Whether and how orientation of the sign affects its function (e.g., inverted signs in some Palo and Kongo traditions activate opposite polarity). Initiated-only."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:colorSignificance
+    a owl:DatatypeProperty ;
+    rdfs:label "color significance"@en ;
+    rdfs:comment "The ritual significance of colors used with this sign, where applicable. Initiated-only."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:relatedSign
+    a owl:ObjectProperty ;
+    rdfs:label "related sign"@en ;
+    rdfs:comment "A sign within the same system that shares visual elements, modifies this sign's function, or is typically drawn in sequence with it."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range veve:GraphicSign ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:geographicVariation
+    a owl:DatatypeProperty ;
+    rdfs:label "geographic variation"@en ;
+    rdfs:comment "Description of known regional or lineage-specific variations in the form of this sign. Community-restricted."@en ;
+    rdfs:domain veve:GraphicSign ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+# ===================================================================
+# PROPERTIES — SignInstance
+# ===================================================================
+
+veve:instanceSign
+    a owl:ObjectProperty ;
+    rdfs:label "sign type"@en ;
+    rdfs:comment "The abstract GraphicSign of which this is a specific drawn instance."@en ;
+    rdfs:domain veve:SignInstance ;
+    rdfs:range veve:GraphicSign ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:drawingMedium
+    a owl:ObjectProperty ;
+    rdfs:label "drawing medium"@en ;
+    rdfs:comment "The material used to draw this instance. Range: veve:DrawingMediumScheme."@en ;
+    rdfs:domain veve:SignInstance ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:drawingSurface
+    a owl:ObjectProperty ;
+    rdfs:label "drawing surface"@en ;
+    rdfs:comment "The surface on or within which this instance was drawn. Range: veve:DrawingSurfaceScheme."@en ;
+    rdfs:domain veve:SignInstance ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:permanence
+    a owl:ObjectProperty ;
+    rdfs:label "permanence"@en ;
+    rdfs:comment "Whether this instance is ephemeral, temporary, or permanent. Range: veve:PermanenceScheme."@en ;
+    rdfs:domain veve:SignInstance ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:ceremonyContext
+    a owl:ObjectProperty ;
+    rdfs:label "ceremony context"@en ;
+    rdfs:comment "The ritual process in which this sign instance was drawn. Range: travay:RitualProcess. Initiated-only."@en ;
+    rdfs:domain veve:SignInstance ;
+    rdfs:range travay:RitualProcess ;
+    iroko:minimumAccessLevel iroko:access-initiated-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:drawnBy
+    a owl:ObjectProperty ;
+    rdfs:label "drawn by"@en ;
+    rdfs:comment "The practitioner who drew this sign instance. Range: foaf:Person. Community-restricted."@en ;
+    rdfs:domain veve:SignInstance ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+veve:documentationRecord
+    a owl:ObjectProperty ;
+    rdfs:label "documentation record"@en ;
+    rdfs:comment "Photographic, rubbing, or tracing record of this sign instance. Range: iroko:SacredMedia. Community-restricted: documentation should not enable replication."@en ;
+    rdfs:domain veve:SignInstance ;
+    rdfs:range iroko:SacredMedia ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/veve> .
+
+# ===================================================================
+# CONCEPT SCHEMES
+# ===================================================================
+
+# --- Sign System Types ---
+
+veve:SignSystemTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Sign System Types"@en ;
+    skos:prefLabel "Sign System Types"@en ;
+    skos:prefLabel "Tipos de sistema de signos sagrados"@es ;
+    skos:prefLabel "Types de systèmes de signes sacrés"@fr ;
+    skos:prefLabel "Tipos de sistema de signos sagrados"@pt ;
+    skos:prefLabel "Àwọn ìrú ètò àmì mímọ́"@yo ;
+    skos:hasTopConcept veve:system-veve,
+                       veve:system-firma,
+                       veve:system-ponto-riscado,
+                       veve:system-anaforuana,
+                       veve:system-nsibidi,
+                       veve:system-adinkra,
+                       veve:system-cosmogram,
+                       veve:system-other .
+
+veve:system-veve
+    a skos:Concept ; skos:inScheme veve:SignSystemTypeScheme ;
+    skos:prefLabel "Vèvè (Haitian Vodou)"@en ;
+    skos:prefLabel "Vèvè"@fr ;
+    skos:definition "The graphic sign system of Haitian Vodou, consisting of elaborate diagrams drawn in flour, cornmeal, ash, or gunpowder on the ground or altar surface to invoke and represent specific lwa. Each lwa has one or more canonical vèvè; regional and lineage variations are well-documented. Drawn at the opening of ceremonies and during possession rites."@en .
+
+veve:system-firma
+    a skos:Concept ; skos:inScheme veve:SignSystemTypeScheme ;
+    skos:prefLabel "Firma / Patipemba (Palo Monte)"@en ;
+    skos:prefLabel "Firma / Patipemba"@es ;
+    skos:altLabel "Prenda signature"@en ;
+    skos:definition "The Kongo-derived graphic sign system of Palo Monte and related Cuban-Bantu traditions. Firmas are drawn to open, close, seal, and communicate with Nganga (spirit vessels) and their governing Mpungo. Patipemba are specific ground-drawing configurations. The directionality and polarity of firmas is operationally significant."@en .
+
+veve:system-ponto-riscado
+    a skos:Concept ; skos:inScheme veve:SignSystemTypeScheme ;
+    skos:prefLabel "Ponto Riscado (Umbanda/Quimbanda)"@en ;
+    skos:prefLabel "Ponto Riscado"@pt ;
+    skos:definition "The graphic sign system of Brazilian Umbanda and Quimbanda, consisting of drawn points (pontos) associated with Orixás, Exus, and Pombagiras. Related to but distinct from Palo Monte firmás; developed in the Brazilian context with syncretic elements from African, Indigenous, and Spiritist sources."@en .
+
+veve:system-anaforuana
+    a skos:Concept ; skos:inScheme veve:SignSystemTypeScheme ;
+    skos:prefLabel "Anaforuana (Abakuá)"@en ;
+    skos:prefLabel "Anaforuana"@es ;
+    skos:definition "The esoteric graphic script of the Abakuá society in Cuba, derived from Ejagham Nsibidi through enslaved Cross River practitioners. Anaforuana signs represent potencia territories, spiritual forces, and society knowledge. Among the most protected sign systems in the Afro-Atlantic world; specific signs are restricted to initiated members at specific grades. Related to but institutionally distinct from Nsibidi."@en ;
+    skos:scopeNote "Many Anaforuana signs are protected at initiated-only or no-access level by potencia authority. Researchers must obtain community approval before documenting or publishing specific signs."@en .
+
+veve:system-nsibidi
+    a skos:Concept ; skos:inScheme veve:SignSystemTypeScheme ;
+    skos:prefLabel "Nsibidi (Ejagham/Cross River)"@en ;
+    skos:prefLabel "Nsibidi"@en ;
+    skos:definition "An ideographic script and graphic sign system originating among the Ejagham and neighboring Cross River peoples of Nigeria and Cameroon. Used by Ékpè society members for communication, record-keeping, and ceremonial marking. Nsibidi predates colonial contact; some signs are public while esoteric variants remain restricted to Ékpè initiates. Ancestor system to Cuban Abakuá Anaforuana."@en .
+
+veve:system-adinkra
+    a skos:Concept ; skos:inScheme veve:SignSystemTypeScheme ;
+    skos:prefLabel "Adinkra (Akan)"@en ;
+    skos:prefLabel "Adinkra"@en ;
+    skos:definition "A system of visual symbols originating among the Akan of Ghana and Côte d'Ivoire, each symbol encoding a proverb, concept, or value. Traditionally stamped on cloth for funerary and ceremonial use. More publicly documented than many Afro-Atlantic sign systems due to widespread commercial adoption, though ceremonial uses retain their gravity. Increasingly present in diaspora contexts."@en ;
+    skos:scopeNote "While many Adinkra symbols are widely published, their ceremonial and mortuary use context should be documented with appropriate respect for Akan tradition authority."@en .
+
+veve:system-cosmogram
+    a skos:Concept ; skos:inScheme veve:SignSystemTypeScheme ;
+    skos:prefLabel "Kongo Cosmogram"@en ;
+    skos:prefLabel "Cosmograma Kongo"@es ;
+    skos:altLabel "Dikenga"@en ;
+    skos:definition "The foundational Kongo cosmological diagram (dikenga dia Kongo) representing the cyclical journey of the soul through the four moments of the sun. A cross-in-circle form that underlies both Palo Monte firmás and traces of Kongo spiritual geography throughout the Afro-Atlantic diaspora. Foundational to understanding other Kongo-derived sign systems."@en .
+
+veve:system-other
+    a skos:Concept ; skos:inScheme veve:SignSystemTypeScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Graphic sign system not covered by existing concepts. Use skos:scopeNote to describe."@en .
+
+# --- Sign Functions ---
+
+veve:SignFunctionScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Sign Functions"@en ;
+    skos:prefLabel "Sign Functions"@en ;
+    skos:prefLabel "Funciones del signo"@es ;
+    skos:prefLabel "Fonctions du signe"@fr ;
+    skos:prefLabel "Funções do signo"@pt ;
+    skos:prefLabel "Àwọn iṣẹ́ àmì"@yo ;
+    skos:hasTopConcept veve:func-invocation,
+                       veve:func-protection,
+                       veve:func-identification,
+                       veve:func-consecration,
+                       veve:func-communication,
+                       veve:func-territorial,
+                       veve:func-healing,
+                       veve:func-binding,
+                       veve:func-sealing,
+                       veve:func-opening,
+                       veve:func-narrative .
+
+veve:func-invocation
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Invocation"@en ;
+    skos:definition "The sign calls or invites a spiritual entity into the ceremonial space. Primary function of most Vodou vèvè and Palo firmas."@en .
+
+veve:func-protection
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Protection"@en ;
+    skos:definition "The sign creates a boundary of spiritual protection around a person, object, or space."@en .
+
+veve:func-identification
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Identification / Territory"@en ;
+    skos:definition "The sign identifies a house, potencia, lineage, or practitioner's affiliation. Primary function of Anaforuana territorial marks."@en .
+
+veve:func-consecration
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Consecration"@en ;
+    skos:definition "The sign activates or consecrates an object, person, or space for sacred use."@en .
+
+veve:func-communication
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Communication"@en ;
+    skos:definition "The sign transmits information or messages between practitioners or between practitioners and spiritual forces."@en .
+
+veve:func-territorial
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Territorial marking"@en ;
+    skos:definition "The sign marks the boundary or domain of a spiritual entity, house, or society. Particularly important in Abakuá Anaforuana."@en .
+
+veve:func-healing
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Healing"@en ;
+    skos:definition "The sign is drawn as part of a healing intervention, calling protective forces around the patient."@en .
+
+veve:func-binding
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Binding"@en ;
+    skos:definition "The sign constrains or binds a force or entity. Initiated-only detail."@en .
+
+veve:func-sealing
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Sealing"@en ;
+    skos:definition "The sign closes or concludes a ceremony or seals a spiritual agreement."@en .
+
+veve:func-opening
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Opening"@en ;
+    skos:definition "The sign opens a ceremony, a spiritual pathway, or a sacred space for work."@en .
+
+veve:func-narrative
+    a skos:Concept ; skos:inScheme veve:SignFunctionScheme ;
+    skos:prefLabel "Narrative / Recording"@en ;
+    skos:definition "The sign records an event, tells a story, or encodes historical knowledge. Characteristic of Nsibidi's documentary function."@en .
+
+# --- Drawing Media ---
+
+veve:DrawingMediumScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Drawing Media"@en ;
+    skos:prefLabel "Drawing Media"@en ;
+    skos:prefLabel "Medios de dibujo"@es ;
+    skos:prefLabel "Médias de dessin"@fr ;
+    skos:prefLabel "Meios de desenho"@pt ;
+    skos:prefLabel "Àwọn ohun ìkọ̀"@yo ;
+    skos:hasTopConcept veve:medium-flour,
+                       veve:medium-cornmeal,
+                       veve:medium-chalk-white,
+                       veve:medium-chalk-colored,
+                       veve:medium-ash,
+                       veve:medium-gunpowder,
+                       veve:medium-cascarilla,
+                       veve:medium-charcoal,
+                       veve:medium-blood,
+                       veve:medium-paint,
+                       veve:medium-carved,
+                       veve:medium-ink,
+                       veve:medium-other .
+
+veve:medium-flour
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Wheat flour"@en ;
+    skos:prefLabel "Harina de trigo"@es ;
+    skos:prefLabel "Farine de blé"@fr ;
+    skos:definition "Refined wheat flour, the most common medium for Haitian Vodou vèvè."@en .
+
+veve:medium-cornmeal
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Cornmeal"@en ;
+    skos:prefLabel "Harina de maíz"@es ;
+    skos:definition "Ground cornmeal used for vèvè and some Lucumí ground drawings."@en .
+
+veve:medium-chalk-white
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "White chalk (cascarilla)"@en ;
+    skos:prefLabel "Efun / Cascarilla"@yo ;
+    skos:definition "White chalk or powdered eggshell (cascarilla/efun) used for protective and cooling signs in Lucumí, Palo, and Vodou traditions."@en .
+
+veve:medium-chalk-colored
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Colored chalk"@en ;
+    skos:definition "Pigmented chalk in tradition-specific colors, used for signs associated with particular spiritual forces or chromatic requirements."@en .
+
+veve:medium-ash
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Ash"@en ;
+    skos:definition "Wood ash or specific burned materials used for cooling, ancestral, and threshold-crossing signs."@en .
+
+veve:medium-gunpowder
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Gunpowder"@en ;
+    skos:prefLabel "Pólvora"@es ;
+    skos:definition "Gunpowder used in Palo Monte firmás and some Vodou vèvè for Ogou/Oggun-family entities. Associated with warrior and fire forces."@en .
+
+veve:medium-cascarilla
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Cascarilla (eggshell powder)"@en ;
+    skos:definition "Powdered eggshell (cascarilla), a cooling and purifying medium used across multiple Afro-Atlantic traditions."@en .
+
+veve:medium-charcoal
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Charcoal"@en ;
+    skos:definition "Ground charcoal used for ancestral, funerary, and dark-force-related signs."@en .
+
+veve:medium-blood
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Blood"@en ;
+    skos:definition "Animal or human blood used as a drawing medium in highly restricted ceremonies. Initiated-elder access for operational detail."@en .
+
+veve:medium-paint
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Paint"@en ;
+    skos:definition "Commercial or natural paint used for wall murals, cloth stamping, or semi-permanent sign installation. Common in Adinkra cloth production."@en .
+
+veve:medium-carved
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Carved / incised"@en ;
+    skos:definition "Signs carved or incised into wood, stone, metal, or other materials for permanent installation."@en .
+
+veve:medium-ink
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Ink"@en ;
+    skos:definition "Ink applied with pen, brush, or stamp. Common in Nsibidi documentation and Adinkra cloth stamping."@en .
+
+veve:medium-other
+    a skos:Concept ; skos:inScheme veve:DrawingMediumScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Drawing medium not covered by existing concepts."@en .
+
+# --- Drawing Surfaces ---
+
+veve:DrawingSurfaceScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Drawing Surfaces"@en ;
+    skos:prefLabel "Drawing Surfaces"@en ;
+    skos:prefLabel "Superficies de dibujo"@es ;
+    skos:prefLabel "Surfaces de dessin"@fr ;
+    skos:prefLabel "Superfícies de desenho"@pt ;
+    skos:prefLabel "Àwọn ilẹ̀ ìkọ̀"@yo ;
+    skos:hasTopConcept veve:surface-ground,
+                       veve:surface-floor,
+                       veve:surface-wall,
+                       veve:surface-altar,
+                       veve:surface-door,
+                       veve:surface-body,
+                       veve:surface-object,
+                       veve:surface-cloth,
+                       veve:surface-paper,
+                       veve:surface-tree,
+                       veve:surface-water,
+                       veve:surface-other .
+
+veve:surface-ground
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Ground / earth"@en ;
+    skos:definition "Bare earth or dirt surface, often at crossroads or outdoor ceremony spaces."@en .
+
+veve:surface-floor
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Floor (interior)"@en ;
+    skos:definition "Interior floor of a temple, hounfò, or ilé. The most common surface for Vodou vèvè."@en .
+
+veve:surface-wall
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Wall"@en ;
+    skos:definition "Interior or exterior wall surface. Used for semi-permanent protective signs."@en .
+
+veve:surface-altar
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Altar surface"@en ;
+    skos:definition "The surface of an altar, throne, or ritual table."@en .
+
+veve:surface-door
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Door / threshold"@en ;
+    skos:definition "Door, doorframe, or threshold — boundary surfaces with protective and liminal significance."@en .
+
+veve:surface-body
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Body (skin)"@en ;
+    skos:definition "The skin of a practitioner or initiate. Used for protective and initiatory markings."@en .
+
+veve:surface-object
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Sacred object"@en ;
+    skos:definition "A consecrated object, vessel, drum, or implement."@en .
+
+veve:surface-cloth
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Cloth / fabric"@en ;
+    skos:definition "Fabric or cloth, particularly for Adinkra stamping and some Vodou ceremonial use."@en .
+
+veve:surface-paper
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Paper / document"@en ;
+    skos:definition "Paper, parchment, or documentary material. Used in some Palo and Espiritismo contexts."@en .
+
+veve:surface-tree
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Tree / bark"@en ;
+    skos:definition "Living tree or bark surface. Used in some outdoor and forest-spirit ceremonies."@en .
+
+veve:surface-water
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Water surface"@en ;
+    skos:definition "A body of water, basin, or liquid surface. Used in some healing and cooling ceremonies."@en .
+
+veve:surface-other
+    a skos:Concept ; skos:inScheme veve:DrawingSurfaceScheme ;
+    skos:prefLabel "Other"@en ;
+    skos:definition "Drawing surface not covered by existing concepts."@en .
+
+# --- Permanence ---
+
+veve:PermanenceScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Sign Permanence"@en ;
+    skos:prefLabel "Sign Permanence"@en ;
+    skos:prefLabel "Permanencia del signo"@es ;
+    skos:prefLabel "Permanence du signe"@fr ;
+    skos:prefLabel "Permanência do signo"@pt ;
+    skos:prefLabel "Ìṣẹ́ àkókò àmì"@yo ;
+    skos:hasTopConcept veve:perm-ephemeral,
+                       veve:perm-temporary,
+                       veve:perm-semi-permanent,
+                       veve:perm-permanent .
+
+veve:perm-ephemeral
+    a skos:Concept ; skos:inScheme veve:PermanenceScheme ;
+    skos:prefLabel "Ephemeral"@en ;
+    skos:definition "Destroyed or erased immediately after use as part of the ceremony (e.g., vèvè covered by dance, flour swept away)."@en .
+
+veve:perm-temporary
+    a skos:Concept ; skos:inScheme veve:PermanenceScheme ;
+    skos:prefLabel "Temporary"@en ;
+    skos:definition "Fades naturally or is ritually removed after the ceremony concludes (e.g., ground drawings exposed to weather)."@en .
+
+veve:perm-semi-permanent
+    a skos:Concept ; skos:inScheme veve:PermanenceScheme ;
+    skos:prefLabel "Semi-permanent"@en ;
+    skos:definition "Remains for an extended period but is understood to be renewable (e.g., wall signs, painted objects, cloth)."@en .
+
+veve:perm-permanent
+    a skos:Concept ; skos:inScheme veve:PermanenceScheme ;
+    skos:prefLabel "Permanent"@en ;
+    skos:definition "Intended to endure: carved stone or metal, tattooed or scarified body marks, Nsibidi on permanent objects."@en .
