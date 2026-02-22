@@ -1,0 +1,149 @@
+# iroko-narrative.ttl
+@prefix iroko:   <https://iroko-framework.org/ontology/iroko#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+iroko:IrokoNarrativeModule
+  a owl:Ontology ;
+  dcterms:title "Iroko Narrative Module"@en ;
+  dcterms:description "Narratives, variants, testimonies, and contested claims, designed to preserve story variation and authority scoping."@en .
+
+########
+# Core classes
+########
+
+iroko:Narrative a owl:Class ;
+  rdfs:label "Narrative"@en ;
+  rdfs:comment "A narrative cluster that may have multiple variants across place, time, and authorities."@en .
+
+iroko:NarrativeVariant a owl:Class ;
+  rdfs:label "Narrative Variant"@en ;
+  rdfs:comment "A specific telling, transcript, or rendering of a narrative within a context."@en .
+
+iroko:Testimony a owl:Class ;
+  rdfs:label "Testimony"@en ;
+  rdfs:comment "A narrated account offered by a participant or witness. Can be tied to a narrative variant and to assertion-level claims."@en ;
+  rdfs:subClassOf iroko:NarrativeVariant .
+
+iroko:Fieldnote a owl:Class ;
+  rdfs:label "Fieldnote"@en ;
+  rdfs:comment "Researcher-authored note, observation, or analytic memo. Treat as a narrative variant with clear authorship."@en ;
+  rdfs:subClassOf iroko:NarrativeVariant .
+
+iroko:StoryLineage a owl:Class ;
+  rdfs:label "Story Lineage"@en ;
+  rdfs:comment "A lineage or transmission chain for a narrative, separate from biological kinship."@en .
+
+iroko:KinshipClaim a owl:Class ;
+  rdfs:label "Kinship Claim"@en ;
+  rdfs:comment "A claim about relationships (father, sibling, ancestor) that may be contested and authority-scoped. Implemented as an iroko:Assertion instance, typed for clarity."@en ;
+  rdfs:subClassOf iroko:Assertion .
+
+iroko:InterpretiveStance a owl:Class ;
+  rdfs:label "Interpretive Stance"@en ;
+  rdfs:subClassOf skos:Concept .
+
+########
+# Properties
+########
+
+iroko:hasNarrativeVariant a owl:ObjectProperty ;
+  rdfs:label "has narrative variant"@en ;
+  rdfs:domain iroko:Narrative ;
+  rdfs:range iroko:NarrativeVariant .
+
+iroko:narratedBy a owl:ObjectProperty ;
+  rdfs:label "narrated by"@en ;
+  rdfs:domain iroko:NarrativeVariant ;
+  rdfs:range prov:Agent .
+
+iroko:narrativeText a owl:DatatypeProperty ;
+  rdfs:label "narrative text"@en ;
+  rdfs:domain iroko:NarrativeVariant ;
+  rdfs:range xsd:string .
+
+iroko:narrativeLanguage a owl:DatatypeProperty ;
+  rdfs:label "narrative language"@en ;
+  rdfs:domain iroko:NarrativeVariant ;
+  rdfs:range xsd:string .
+
+iroko:variantCreatedOn a owl:DatatypeProperty ;
+  rdfs:label "variant created on"@en ;
+  rdfs:domain iroko:NarrativeVariant ;
+  rdfs:range xsd:date .
+
+iroko:variantPlace a owl:ObjectProperty ;
+  rdfs:label "variant place"@en ;
+  rdfs:comment "Place where the telling occurred or was recorded."@en ;
+  rdfs:domain iroko:NarrativeVariant .
+
+iroko:variantEvent a owl:ObjectProperty ;
+  rdfs:label "variant event"@en ;
+  rdfs:comment "Fieldwork event that captured this variant."@en ;
+  rdfs:domain iroko:NarrativeVariant ;
+  rdfs:range iroko:FieldworkEvent .
+
+iroko:variantAuthority a owl:ObjectProperty ;
+  rdfs:label "variant authority"@en ;
+  rdfs:comment "Authority context recognized for this narrative variant."@en ;
+  rdfs:domain iroko:NarrativeVariant ;
+  rdfs:range iroko:Authority .
+
+iroko:interpretiveStance a owl:ObjectProperty ;
+  rdfs:label "interpretive stance"@en ;
+  rdfs:comment "Tags the narrative variant with an interpretive stance, for example literal, allegorical, diagnostic, initiatory."@en ;
+  rdfs:domain iroko:NarrativeVariant ;
+  rdfs:range iroko:InterpretiveStance .
+
+iroko:aboutEntity a owl:ObjectProperty ;
+  rdfs:label "about entity"@en ;
+  rdfs:comment "Links a narrative (or variant) to entities it concerns, such as a spirit, plant, place, or ritual."@en ;
+  rdfs:domain iroko:NarrativeVariant .
+
+iroko:supportsAssertion a owl:ObjectProperty ;
+  rdfs:label "supports assertion"@en ;
+  rdfs:comment "Links a narrative variant to one or more iroko:Assertion nodes it supports or motivates."@en ;
+  rdfs:domain iroko:NarrativeVariant ;
+  rdfs:range iroko:Assertion .
+
+iroko:transmissionFrom a owl:ObjectProperty ;
+  rdfs:label "transmission from"@en ;
+  rdfs:domain iroko:StoryLineage ;
+  rdfs:range prov:Agent .
+
+iroko:transmissionTo a owl:ObjectProperty ;
+  rdfs:label "transmission to"@en ;
+  rdfs:domain iroko:StoryLineage ;
+  rdfs:range prov:Agent .
+
+iroko:transmissionNote a owl:DatatypeProperty ;
+  rdfs:label "transmission note"@en ;
+  rdfs:domain iroko:StoryLineage ;
+  rdfs:range xsd:string .
+
+########
+# Interpretive stances (starter)
+########
+
+iroko:Stance_Literal a iroko:InterpretiveStance ; skos:prefLabel "Literal"@en .
+iroko:Stance_Allegorical a iroko:InterpretiveStance ; skos:prefLabel "Allegorical"@en .
+iroko:Stance_Diagnostic a iroko:InterpretiveStance ; skos:prefLabel "Diagnostic"@en .
+iroko:Stance_Initiatory a iroko:InterpretiveStance ; skos:prefLabel "Initiatory"@en .
+
+########
+# Minimal relationship predicate pattern for kinship claims
+########
+
+iroko:relatedAs a owl:ObjectProperty ;
+  rdfs:label "related as"@en ;
+  rdfs:comment "Predicate for kinship and relational claims when you want to treat relationship types as SKOS concepts."@en ;
+  rdfs:range skos:Concept .
+
+iroko:Kinship_Father a skos:Concept ; skos:prefLabel "father"@en .
+iroko:Kinship_Brother a skos:Concept ; skos:prefLabel "brother"@en .
+iroko:Kinship_Sister a skos:Concept ; skos:prefLabel "sister"@en .
+iroko:Kinship_Ancestor a skos:Concept ; skos:prefLabel "ancestor"@en .
