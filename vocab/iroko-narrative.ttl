@@ -1,272 +1,513 @@
-@prefix iroko:    <https://ontology.irokosociety.org/core/> .
-@prefix iroko-na: <https://ontology.irokosociety.org/narrative/> .
-@prefix ile:     <https://ontology.irokosociety.org/ile/> .
-@prefix iroko-ag: <https://ontology.irokosociety.org/agency/> .
-@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
-@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+# -*- coding: utf-8 -*-
+# ==========================================================================
+# Iroko Framework — Narrative Module  v1.0.0
+# ==========================================================================
+# Namespace: https://www.irokosociety.org/iroko-framework/narrative#
+# Prefix:    narr:
+# Requires:  iroko-core v2.0.0
+#            iroko-authority v1.0.0 (for auth:Authority range on variantAuthority)
+#
+# Full narrative modeling layer — builds on the thin Core spine
+# (iroko:Narrative, iroko:NarrativeVariant, iroko:TextSegment,
+#  iroko:Commentary) and adds:
+#   • StoryLineage — narrative transmission chains
+#   • KinshipClaim — contested relational claims as Assertion subtype
+#   • InterpretiveStance — classification of hermeneutic approach
+#   • Testimony / Fieldnote — typed NarrativeVariant subclasses
+#   • Kinship concept vocabulary
+#   • NarrativeRole, SegmentType, VariantRelationType schemes
+#   • Links to sacred agents (agency module) and authority module
+#
+# RELATIONSHIP TO CORE SPINE
+# --------------------------
+# iroko:Narrative, iroko:NarrativeVariant, iroko:TextSegment,
+# iroko:Commentary are defined in Core so any domain module can
+# attach narratives without importing this full module.
+# Everything here is additive and optional at the domain level.
+# ==========================================================================
+
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix auth:    <https://www.irokosociety.org/iroko-framework/authority#> .
+@prefix ag:      <https://www.irokosociety.org/iroko-framework/agency#> .
+@prefix narr:    <https://www.irokosociety.org/iroko-framework/narrative#> .
 
-<https://ontology.irokosociety.org/narrative/>
+<https://www.irokosociety.org/iroko-framework/narrative>
     a owl:Ontology ;
-    rdfs:label "Iroko narrative module"@en ;
-    dcterms:description "Optional narrative expansion for the Iroko ontology. Builds on the narrative spine in core and adds roles, segment types, and variant relations. Includes lineage stewardship hooks via ile: without forcing domain modules to depend on this file."@en ;
-    dcterms:creator "Iroko Historical Society"@en ;
-    dcterms:issued "2026-02-22"^^xsd:date ;
-    dcterms:license <https://ontology.irokosociety.org/policy/terms-of-use> ;
-    dcterms:isPartOf <https://ontology.irokosociety.org/> ;
-    dcterms:requires <https://ontology.irokosociety.org/core/> ;
-    dcterms:requires <https://ontology.irokosociety.org/ile/> ;
-    dcterms:references <https://ontology.irokosociety.org/agency/> .
+    dcterms:title "Iroko Narrative Module"@en ;
+    dcterms:description "Full narrative modeling for Afro-Atlantic sacred knowledge systems. Covers story transmission chains, contested kinship claims, testimonies, fieldnotes, interpretive stances, and narrative variant relationships. Builds on the thin narrative spine in iroko-core v2.0.0."@en ;
+    dcterms:creator "Iroko Historical Society" ;
+    dcterms:issued "2026-02-23"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
+    dcterms:requires <https://www.irokosociety.org/iroko-framework/core> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/agency> ;
+    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
 
-# ===================================================================
-# ROLE SCHEME (optional, for narrators, elders, communities, and more)
-# ===================================================================
 
-iroko-na:NarrativeRole
+# ===========================================================================
+# CLASSES — additive to Core spine
+# ===========================================================================
+
+narr:Testimony
+    a owl:Class ;
+    rdfs:subClassOf iroko:NarrativeVariant ;
+    rdfs:label "Testimony"@en ;
+    rdfs:comment "A narrated account offered by a participant or witness. A Testimony is a NarrativeVariant with an identified speaker whose presence or role is itself the epistemic claim — the content derives its authority from the speaker's position."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:Fieldnote
+    a owl:Class ;
+    rdfs:subClassOf iroko:NarrativeVariant ;
+    rdfs:label "Fieldnote"@en ;
+    rdfs:comment "Researcher-authored note, observation, or analytic memo. Treated as a NarrativeVariant with explicit authorship and interpretive stance to keep researcher voice distinct from community voice."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:StoryLineage
+    a owl:Class ;
+    rdfs:label "Story Lineage"@en ;
+    rdfs:comment "A transmission chain for a narrative — who transmitted the story to whom, in what context. Separate from biological kinship. Models oral transmission provenance."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:KinshipClaim
+    a owl:Class ;
+    rdfs:subClassOf iroko:Assertion ;
+    rdfs:label "Kinship Claim"@en ;
+    rdfs:comment "A claim about relationships between entities (spirit-father, spirit-sibling, ancestor, etc.) that may be contested and authority-scoped. Implemented as an iroko:Assertion subtype so it inherits full assertion governance: authorizedBy, accessLevel, contestedStatus, assertionStatus."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:InterpretiveStance
     a owl:Class ;
     rdfs:subClassOf skos:Concept ;
-    rdfs:label "Narrative Role"@en ;
-    rdfs:comment "A SKOS concept describing an agent role within a narrative context (narrator, elder, witness, chorus, community, and similar roles)."@en .
+    rdfs:label "Interpretive Stance"@en ;
+    rdfs:comment "A hermeneutic or epistemological approach to reading a narrative or variant. Tags the reading frame rather than the content."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
-iroko-na:NarrativeRoleScheme
-    a skos:ConceptScheme ;
-    rdfs:label "Narrative Roles"@en ;
-    dcterms:description "Controlled terms for narrative roles. Roles are descriptive and may vary by lineage, community, and context."@en ;
-    skos:hasTopConcept
-        iroko-na:role-narrator,
-        iroko-na:role-elder,
-        iroko-na:role-witness,
-        iroko-na:role-chorus,
-        iroko-na:role-community,
-        iroko-na:role-officiant,
-        iroko-na:role-unknown .
 
-iroko-na:role-narrator
-    a iroko-na:NarrativeRole ;
-    skos:inScheme iroko-na:NarrativeRoleScheme ;
-    skos:prefLabel "Narrator"@en ;
-    skos:definition "Agent asserted to narrate or tell the story."@en .
+# ===========================================================================
+# PROPERTIES — narrative variant detail
+# ===========================================================================
 
-iroko-na:role-elder
-    a iroko-na:NarrativeRole ;
-    skos:inScheme iroko-na:NarrativeRoleScheme ;
-    skos:prefLabel "Elder"@en ;
-    skos:definition "Agent asserted to speak or authorize as an elder within a community or house."@en .
-
-iroko-na:role-witness
-    a iroko-na:NarrativeRole ;
-    skos:inScheme iroko-na:NarrativeRoleScheme ;
-    skos:prefLabel "Witness"@en ;
-    skos:definition "Agent asserted to witness, attest, or confirm a narrative element."@en .
-
-iroko-na:role-chorus
-    a iroko-na:NarrativeRole ;
-    skos:inScheme iroko-na:NarrativeRoleScheme ;
-    skos:prefLabel "Chorus"@en ;
-    skos:definition "Collective voice asserted to respond, repeat, or accompany a narrative telling."@en .
-
-iroko-na:role-community
-    a iroko-na:NarrativeRole ;
-    skos:inScheme iroko-na:NarrativeRoleScheme ;
-    skos:prefLabel "Community"@en ;
-    skos:definition "A community is asserted to hold, endorse, or steward a narrative or variant."@en .
-
-iroko-na:role-officiant
-    a iroko-na:NarrativeRole ;
-    skos:inScheme iroko-na:NarrativeRoleScheme ;
-    skos:prefLabel "Officiant"@en ;
-    skos:definition "Agent asserted to officiate, guide, or ritually frame a narrative performance."@en .
-
-iroko-na:role-unknown
-    a iroko-na:NarrativeRole ;
-    skos:inScheme iroko-na:NarrativeRoleScheme ;
-    skos:prefLabel "Unknown"@en ;
-    skos:definition "Narrative role not known or not recorded."@en .
-
-# ===================================================================
-# SEGMENT TYPE SCHEME (optional, useful for Odu and essay workflows)
-# ===================================================================
-
-iroko-na:SegmentType
-    a owl:Class ;
-    rdfs:subClassOf skos:Concept ;
-    rdfs:label "Segment Type"@en ;
-    rdfs:comment "A SKOS concept describing the type of a TextSegment (verse, episode, stanza, chant line, prayer, prohibition, praise-name, and similar types)."@en .
-
-iroko-na:SegmentTypeScheme
-    a skos:ConceptScheme ;
-    rdfs:label "Segment Types"@en ;
-    dcterms:description "Controlled terms for text segment types."@en ;
-    skos:hasTopConcept
-        iroko-na:seg-verse,
-        iroko-na:seg-episode,
-        iroko-na:seg-stanza,
-        iroko-na:seg-chant-line,
-        iroko-na:seg-prayer,
-        iroko-na:seg-prohibition,
-        iroko-na:seg-praise-name,
-        iroko-na:seg-gloss,
-        iroko-na:seg-unknown .
-
-iroko-na:seg-verse
-    a iroko-na:SegmentType ;
-    skos:inScheme iroko-na:SegmentTypeScheme ;
-    skos:prefLabel "Verse"@en ;
-    skos:definition "A verse-level segment."@en .
-
-iroko-na:seg-episode
-    a iroko-na:SegmentType ;
-    skos:inScheme iroko-na:SegmentTypeScheme ;
-    skos:prefLabel "Episode"@en ;
-    skos:definition "An episode or scene-level segment."@en .
-
-iroko-na:seg-stanza
-    a iroko-na:SegmentType ;
-    skos:inScheme iroko-na:SegmentTypeScheme ;
-    skos:prefLabel "Stanza"@en ;
-    skos:definition "A stanza-level segment."@en .
-
-iroko-na:seg-chant-line
-    a iroko-na:SegmentType ;
-    skos:inScheme iroko-na:SegmentTypeScheme ;
-    skos:prefLabel "Chant Line"@en ;
-    skos:definition "A line of chant, song, or call-and-response segment."@en .
-
-iroko-na:seg-prayer
-    a iroko-na:SegmentType ;
-    skos:inScheme iroko-na:SegmentTypeScheme ;
-    skos:prefLabel "Prayer"@en ;
-    skos:definition "A prayer segment."@en .
-
-iroko-na:seg-prohibition
-    a iroko-na:SegmentType ;
-    skos:inScheme iroko-na:SegmentTypeScheme ;
-    skos:prefLabel "Prohibition"@en ;
-    skos:definition "A prohibition or restriction segment."@en .
-
-iroko-na:seg-praise-name
-    a iroko-na:SegmentType ;
-    skos:inScheme iroko-na:SegmentTypeScheme ;
-    skos:prefLabel "Praise-Name"@en ;
-    skos:definition "A praise-name or praise-epithet segment."@en .
-
-iroko-na:seg-gloss
-    a iroko-na:SegmentType ;
-    skos:inScheme iroko-na:SegmentTypeScheme ;
-    skos:prefLabel "Gloss"@en ;
-    skos:definition "A gloss or explanatory annotation segment."@en .
-
-iroko-na:seg-unknown
-    a iroko-na:SegmentType ;
-    skos:inScheme iroko-na:SegmentTypeScheme ;
-    skos:prefLabel "Unknown"@en ;
-    skos:definition "Segment type not known or not recorded."@en .
-
-# ===================================================================
-# VARIANT RELATION TYPE SCHEME (optional)
-# ===================================================================
-
-iroko-na:VariantRelationType
-    a owl:Class ;
-    rdfs:subClassOf skos:Concept ;
-    rdfs:label "Variant Relation Type"@en ;
-    rdfs:comment "A SKOS concept describing how two narrative variants relate (close variant, contested, derived, harmonized, and similar relations)."@en .
-
-iroko-na:VariantRelationTypeScheme
-    a skos:ConceptScheme ;
-    rdfs:label "Variant Relation Types"@en ;
-    dcterms:description "Controlled terms for relationships between narrative variants."@en ;
-    skos:hasTopConcept
-        iroko-na:var-close,
-        iroko-na:var-contested,
-        iroko-na:var-derived,
-        iroko-na:var-harmonized,
-        iroko-na:var-unknown .
-
-iroko-na:var-close
-    a iroko-na:VariantRelationType ;
-    skos:inScheme iroko-na:VariantRelationTypeScheme ;
-    skos:prefLabel "Close Variant"@en ;
-    skos:definition "Variants asserted to be closely related tellings."@en .
-
-iroko-na:var-contested
-    a iroko-na:VariantRelationType ;
-    skos:inScheme iroko-na:VariantRelationTypeScheme ;
-    skos:prefLabel "Contested Relation"@en ;
-    skos:definition "The relationship between variants is asserted to be contested."@en .
-
-iroko-na:var-derived
-    a iroko-na:VariantRelationType ;
-    skos:inScheme iroko-na:VariantRelationTypeScheme ;
-    skos:prefLabel "Derived"@en ;
-    skos:definition "A variant is asserted to derive from another variant."@en .
-
-iroko-na:var-harmonized
-    a iroko-na:VariantRelationType ;
-    skos:inScheme iroko-na:VariantRelationTypeScheme ;
-    skos:prefLabel "Harmonized"@en ;
-    skos:definition "A variant is asserted to harmonize multiple tellings or sources."@en .
-
-iroko-na:var-unknown
-    a iroko-na:VariantRelationType ;
-    skos:inScheme iroko-na:VariantRelationTypeScheme ;
-    skos:prefLabel "Unknown"@en ;
-    skos:definition "Variant relation type not known or not recorded."@en .
-
-# ===================================================================
-# PROPERTIES (light-touch hooks, no heavy constraints)
-# ===================================================================
-
-iroko-na:hasNarrativeRole
+narr:narratedBy
     a owl:ObjectProperty ;
-    rdfs:label "has narrative role"@en ;
-    rdfs:comment "Associates an agent with a NarrativeRole in relation to a narrative resource or performance context."@en ;
-    rdfs:range iroko-na:NarrativeRole .
-
-iroko-na:hasSegmentType
-    a owl:ObjectProperty ;
-    rdfs:label "has segment type"@en ;
-    rdfs:comment "Associates a TextSegment with a SegmentType concept."@en ;
-    rdfs:domain iroko:TextSegment ;
-    rdfs:range iroko-na:SegmentType .
-
-iroko-na:relatedVariant
-    a owl:ObjectProperty ;
-    rdfs:label "related variant"@en ;
-    rdfs:comment "Relates one NarrativeVariant to another. Use iroko-na:variantRelationType to qualify the relation."@en ;
+    rdfs:label "narrated by"@en ;
+    rdfs:comment "The person or agent who narrated this variant. Range: foaf:Person or prov:Agent. For sovereignty-aligned archives: consider access governance on the identity of narrators."@en ;
     rdfs:domain iroko:NarrativeVariant ;
-    rdfs:range iroko:NarrativeVariant .
+    rdfs:range prov:Agent ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
-iroko-na:variantRelationType
+narr:narrativeText
+    a owl:DatatypeProperty ;
+    rdfs:label "narrative text"@en ;
+    rdfs:comment "The text of this narrative variant. Language-tagged. Access governed by iroko:accessLevel on the variant instance."@en ;
+    rdfs:domain iroko:NarrativeVariant ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:narrativeLanguage
+    a owl:DatatypeProperty ;
+    rdfs:label "narrative language"@en ;
+    rdfs:comment "BCP 47 language tag of the language in which the variant is expressed."@en ;
+    rdfs:domain iroko:NarrativeVariant ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:variantCreatedOn
+    a owl:DatatypeProperty ;
+    rdfs:label "variant created on"@en ;
+    rdfs:comment "Date on which this narrative variant was recorded, transcribed, or published."@en ;
+    rdfs:domain iroko:NarrativeVariant ;
+    rdfs:range xsd:date ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:variantPlace
+    a owl:ObjectProperty ;
+    rdfs:label "variant place"@en ;
+    rdfs:comment "Place where the telling occurred or was recorded."@en ;
+    rdfs:domain iroko:NarrativeVariant ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:variantEvent
+    a owl:ObjectProperty ;
+    rdfs:label "variant event"@en ;
+    rdfs:comment "The FieldworkEvent or ritual event that captured or generated this narrative variant."@en ;
+    rdfs:domain iroko:NarrativeVariant ;
+    rdfs:range iroko:FieldworkEvent ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:variantAuthority
+    a owl:ObjectProperty ;
+    rdfs:label "variant authority"@en ;
+    rdfs:comment "The Authority context recognized for this variant. Which lineage or house endorses this telling as authoritative."@en ;
+    rdfs:domain iroko:NarrativeVariant ;
+    rdfs:range iroko:RitualAuthority ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:variantRelation
+    a owl:ObjectProperty ;
+    rdfs:label "variant relation"@en ;
+    rdfs:comment "Typed relationship between two NarrativeVariants. Range: narr:VariantRelationTypeScheme concepts."@en ;
+    rdfs:domain iroko:NarrativeVariant ;
+    rdfs:range iroko:NarrativeVariant ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:variantRelationType
     a owl:ObjectProperty ;
     rdfs:label "variant relation type"@en ;
-    rdfs:comment "Qualifies a relatedVariant link with a VariantRelationType concept. Use on a RelationshipAssertion node when you need contested or attributed relations."@en ;
-    rdfs:range iroko-na:VariantRelationType .
+    rdfs:comment "Classifies the nature of a variant relationship — close variant, contested, derived, harmonized, lineage-bound."@en ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
-# Lineage stewardship hooks
-iroko-na:stewardedByHouse
+narr:interpretiveStance
     a owl:ObjectProperty ;
-    rdfs:label "stewarded by house"@en ;
-    rdfs:comment "Associates a narrative resource with an ile:House that stewards it."@en ;
-    rdfs:range ile:House .
+    rdfs:label "interpretive stance"@en ;
+    rdfs:comment "Tags a NarrativeVariant or Commentary with an interpretive hermeneutic frame."@en ;
+    rdfs:range narr:InterpretiveStance ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
-iroko-na:endorsedByLineage
+narr:aboutEntity
     a owl:ObjectProperty ;
-    rdfs:label "endorsed by lineage"@en ;
-    rdfs:comment "Associates a narrative resource with an ile:Lineage that endorses or carries a telling."@en ;
-    rdfs:range ile:Lineage .
+    rdfs:label "about entity"@en ;
+    rdfs:comment "Links a narrative or variant to entities it concerns — a spirit, plant, place, ritual, person, or any other resource."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
-iroko-na:authorizedBy
+narr:supportsAssertion
     a owl:ObjectProperty ;
-    rdfs:label "authorized by"@en ;
-    rdfs:comment "Associates a narrative resource with an ile:Authority used as an authorization reference."@en ;
-    rdfs:range ile:Authority .
+    rdfs:label "supports assertion"@en ;
+    rdfs:comment "Links a NarrativeVariant to iroko:Assertion nodes it supports or motivates. The narrative is the evidentiary basis for the assertion."@en ;
+    rdfs:domain iroko:NarrativeVariant ;
+    rdfs:range iroko:Assertion ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
-# Optional agent hook (compatible with agency module if used)
-iroko-na:featuresSacredAgent
+narr:narrativeRole
+    a owl:ObjectProperty ;
+    rdfs:label "narrative role"@en ;
+    rdfs:comment "The role played by a participant in a narrative event — narrator, elder, witness, chorus, officiant, etc."@en ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:featuresSacredAgent
     a owl:ObjectProperty ;
     rdfs:label "features sacred agent"@en ;
-    rdfs:comment "Associates a narrative resource or segment with a sacred agent (spirit or similar) referenced in the telling."@en ;
-    rdfs:range iroko-ag:SacredAgent .
+    rdfs:comment "Links a narrative or variant to a sacred agent (spirit, ancestor) who appears as an actor within the narrative content."@en ;
+    rdfs:range ag:SacredAgent ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+# -- KinshipClaim properties ------------------------------------------------
+
+narr:claimSubject
+    a owl:ObjectProperty ;
+    rdfs:label "claim subject"@en ;
+    rdfs:comment "The entity about whom the kinship claim is made."@en ;
+    rdfs:domain narr:KinshipClaim ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:claimObject
+    a owl:ObjectProperty ;
+    rdfs:label "claim object"@en ;
+    rdfs:comment "The entity to whom the subject is related by this claim."@en ;
+    rdfs:domain narr:KinshipClaim ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:relatedAs
+    a owl:ObjectProperty ;
+    rdfs:label "related as"@en ;
+    rdfs:comment "The type of kinship or relational bond asserted. Range: concepts from narr:KinshipTypeScheme or tradition-specific kinship schemes."@en ;
+    rdfs:domain narr:KinshipClaim ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+# -- StoryLineage properties ------------------------------------------------
+
+narr:transmissionFrom
+    a owl:ObjectProperty ;
+    rdfs:label "transmission from"@en ;
+    rdfs:comment "The agent who transmitted this story to the next link in the chain."@en ;
+    rdfs:domain narr:StoryLineage ;
+    rdfs:range prov:Agent ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:transmissionTo
+    a owl:ObjectProperty ;
+    rdfs:label "transmission to"@en ;
+    rdfs:comment "The agent who received this story."@en ;
+    rdfs:domain narr:StoryLineage ;
+    rdfs:range prov:Agent ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:transmissionNote
+    a owl:DatatypeProperty ;
+    rdfs:label "transmission note"@en ;
+    rdfs:comment "Free-text note on context, mode, or conditions of transmission."@en ;
+    rdfs:domain narr:StoryLineage ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:transmissionDate
+    a owl:DatatypeProperty ;
+    rdfs:label "transmission date"@en ;
+    rdfs:comment "Date or date range of this transmission event."@en ;
+    rdfs:domain narr:StoryLineage ;
+    rdfs:range xsd:date ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+narr:hasStoryLineage
+    a owl:ObjectProperty ;
+    rdfs:label "has story lineage"@en ;
+    rdfs:comment "Links a Narrative or NarrativeVariant to a StoryLineage node documenting its transmission chain."@en ;
+    rdfs:range narr:StoryLineage ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+
+# NOTE: iroko:hasTemporalVariation (Core) may be used on NarrativeVariant
+# or StoryLineage instances to qualify time-bound transmission regimes.
+
+
+# ===========================================================================
+# CONCEPT SCHEMES
+# ===========================================================================
+
+# --- Narrative Role --------------------------------------------------------
+
+narr:NarrativeRoleScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Narrative Roles"@en ;
+    dcterms:description "Roles of participants in narrative events."@en ;
+    skos:hasTopConcept narr:role-narrator,
+                       narr:role-elder,
+                       narr:role-witness,
+                       narr:role-community,
+                       narr:role-officiant,
+                       narr:role-chorus,
+                       narr:role-researcher .
+
+narr:role-narrator
+    a skos:Concept ; skos:inScheme narr:NarrativeRoleScheme ;
+    skos:prefLabel "Narrator"@en ;
+    skos:definition "Primary teller or transmitter of the narrative."@en .
+
+narr:role-elder
+    a skos:Concept ; skos:inScheme narr:NarrativeRoleScheme ;
+    skos:prefLabel "Elder"@en ;
+    skos:definition "Recognized elder whose presence carries governance weight."@en .
+
+narr:role-witness
+    a skos:Concept ; skos:inScheme narr:NarrativeRoleScheme ;
+    skos:prefLabel "Witness"@en ;
+    skos:definition "Person whose presence authorizes or validates the telling."@en .
+
+narr:role-community
+    a skos:Concept ; skos:inScheme narr:NarrativeRoleScheme ;
+    skos:prefLabel "Community"@en ;
+    skos:definition "Collective community voice or assembled participants."@en .
+
+narr:role-officiant
+    a skos:Concept ; skos:inScheme narr:NarrativeRoleScheme ;
+    skos:prefLabel "Officiant"@en ;
+    skos:definition "Ritual officiant whose role shapes the telling."@en .
+
+narr:role-chorus
+    a skos:Concept ; skos:inScheme narr:NarrativeRoleScheme ;
+    skos:prefLabel "Chorus"@en ;
+    skos:definition "Collective voice responding to or accompanying the narrator."@en .
+
+narr:role-researcher
+    a skos:Concept ; skos:inScheme narr:NarrativeRoleScheme ;
+    skos:prefLabel "Researcher"@en ;
+    skos:definition "Ethnographer, archivist, or scholar whose authorship must be distinguished from community voice."@en .
+
+# --- Segment Type ----------------------------------------------------------
+
+narr:SegmentTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Segment Types"@en ;
+    dcterms:description "Types of addressable narrative segments."@en ;
+    skos:hasTopConcept narr:segType-verse,
+                       narr:segType-episode,
+                       narr:segType-chant-line,
+                       narr:segType-prayer,
+                       narr:segType-prohibition,
+                       narr:segType-praise-name,
+                       narr:segType-gloss,
+                       narr:segType-rubric .
+
+narr:segType-verse
+    a skos:Concept ; skos:inScheme narr:SegmentTypeScheme ;
+    skos:prefLabel "Verse"@en .
+
+narr:segType-episode
+    a skos:Concept ; skos:inScheme narr:SegmentTypeScheme ;
+    skos:prefLabel "Episode"@en .
+
+narr:segType-chant-line
+    a skos:Concept ; skos:inScheme narr:SegmentTypeScheme ;
+    skos:prefLabel "Chant Line"@en .
+
+narr:segType-prayer
+    a skos:Concept ; skos:inScheme narr:SegmentTypeScheme ;
+    skos:prefLabel "Prayer"@en .
+
+narr:segType-prohibition
+    a skos:Concept ; skos:inScheme narr:SegmentTypeScheme ;
+    skos:prefLabel "Prohibition"@en ;
+    skos:definition "A stated prohibition or interdiction within the narrative."@en .
+
+narr:segType-praise-name
+    a skos:Concept ; skos:inScheme narr:SegmentTypeScheme ;
+    skos:prefLabel "Praise Name"@en ;
+    skos:altLabel "Oriki"@yo .
+
+narr:segType-gloss
+    a skos:Concept ; skos:inScheme narr:SegmentTypeScheme ;
+    skos:prefLabel "Gloss"@en ;
+    skos:definition "An explanatory note or translation embedded within the narrative."@en .
+
+narr:segType-rubric
+    a skos:Concept ; skos:inScheme narr:SegmentTypeScheme ;
+    skos:prefLabel "Rubric"@en ;
+    skos:definition "A heading, liturgical direction, or structural marker in the narrative."@en .
+
+# --- Variant Relation Type -------------------------------------------------
+
+narr:VariantRelationTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Variant Relation Types"@en ;
+    dcterms:description "Classification of the relationship between two narrative variants."@en ;
+    skos:hasTopConcept narr:varRel-close,
+                       narr:varRel-contested,
+                       narr:varRel-derived,
+                       narr:varRel-harmonized,
+                       narr:varRel-lineage-bound,
+                       narr:varRel-translation .
+
+narr:varRel-close
+    a skos:Concept ; skos:inScheme narr:VariantRelationTypeScheme ;
+    skos:prefLabel "Close Variant"@en ;
+    skos:definition "Two variants sharing the same core content with minor differences."@en .
+
+narr:varRel-contested
+    a skos:Concept ; skos:inScheme narr:VariantRelationTypeScheme ;
+    skos:prefLabel "Contested"@en ;
+    skos:definition "Two variants that contradict each other on a key claim."@en .
+
+narr:varRel-derived
+    a skos:Concept ; skos:inScheme narr:VariantRelationTypeScheme ;
+    skos:prefLabel "Derived"@en ;
+    skos:definition "One variant clearly derives from or expands upon the other."@en .
+
+narr:varRel-harmonized
+    a skos:Concept ; skos:inScheme narr:VariantRelationTypeScheme ;
+    skos:prefLabel "Harmonized"@en ;
+    skos:definition "A variant produced by reconciling two or more divergent tellings."@en .
+
+narr:varRel-lineage-bound
+    a skos:Concept ; skos:inScheme narr:VariantRelationTypeScheme ;
+    skos:prefLabel "Lineage-Bound"@en ;
+    skos:definition "A variant that applies only within a specific lineage — not a deviation, but a legitimate lineage-specific telling."@en .
+
+narr:varRel-translation
+    a skos:Concept ; skos:inScheme narr:VariantRelationTypeScheme ;
+    skos:prefLabel "Translation"@en ;
+    skos:definition "A variant that is a translation into another language, which may introduce interpretive differences."@en .
+
+# --- Interpretive Stance ---------------------------------------------------
+
+narr:InterpretiveStanceScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Interpretive Stances"@en ;
+    dcterms:description "Hermeneutic approaches to reading or transmitting a narrative."@en ;
+    skos:hasTopConcept narr:stance-literal,
+                       narr:stance-allegorical,
+                       narr:stance-diagnostic,
+                       narr:stance-initiatory,
+                       narr:stance-analytic,
+                       narr:stance-polemic .
+
+narr:stance-literal
+    a narr:InterpretiveStance ; skos:inScheme narr:InterpretiveStanceScheme ;
+    skos:prefLabel "Literal"@en .
+
+narr:stance-allegorical
+    a narr:InterpretiveStance ; skos:inScheme narr:InterpretiveStanceScheme ;
+    skos:prefLabel "Allegorical"@en .
+
+narr:stance-diagnostic
+    a narr:InterpretiveStance ; skos:inScheme narr:InterpretiveStanceScheme ;
+    skos:prefLabel "Diagnostic"@en ;
+    skos:definition "Reading the narrative as a diagnostic tool — for divination, consultation, or situational assessment."@en .
+
+narr:stance-initiatory
+    a narr:InterpretiveStance ; skos:inScheme narr:InterpretiveStanceScheme ;
+    skos:prefLabel "Initiatory"@en ;
+    skos:definition "Reading reserved for or shaped by initiatory context."@en .
+
+narr:stance-analytic
+    a narr:InterpretiveStance ; skos:inScheme narr:InterpretiveStanceScheme ;
+    skos:prefLabel "Analytic"@en ;
+    skos:definition "Researcher or scholarly reading, necessarily outside community interpretive authority."@en .
+
+narr:stance-polemic
+    a narr:InterpretiveStance ; skos:inScheme narr:InterpretiveStanceScheme ;
+    skos:prefLabel "Polemic"@en ;
+    skos:definition "Narrative produced or shaped by an argument about tradition, authority, or lineage legitimacy."@en .
+
+# --- Kinship Types (starter set) ------------------------------------------
+
+narr:KinshipTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Kinship Types"@en ;
+    dcterms:description "Relational categories for kinship and lineage claims, particularly in sacred genealogies and spirit family assertions."@en ;
+    skos:hasTopConcept narr:kinship-father,
+                       narr:kinship-mother,
+                       narr:kinship-brother,
+                       narr:kinship-sister,
+                       narr:kinship-ancestor,
+                       narr:kinship-child,
+                       narr:kinship-owner,
+                       narr:kinship-road .
+
+narr:kinship-father
+    a skos:Concept ; skos:inScheme narr:KinshipTypeScheme ;
+    skos:prefLabel "father"@en ; skos:prefLabel "padre"@es .
+
+narr:kinship-mother
+    a skos:Concept ; skos:inScheme narr:KinshipTypeScheme ;
+    skos:prefLabel "mother"@en ; skos:prefLabel "madre"@es .
+
+narr:kinship-brother
+    a skos:Concept ; skos:inScheme narr:KinshipTypeScheme ;
+    skos:prefLabel "brother"@en ; skos:prefLabel "hermano"@es .
+
+narr:kinship-sister
+    a skos:Concept ; skos:inScheme narr:KinshipTypeScheme ;
+    skos:prefLabel "sister"@en ; skos:prefLabel "hermana"@es .
+
+narr:kinship-ancestor
+    a skos:Concept ; skos:inScheme narr:KinshipTypeScheme ;
+    skos:prefLabel "ancestor"@en ; skos:prefLabel "ancestro"@es .
+
+narr:kinship-child
+    a skos:Concept ; skos:inScheme narr:KinshipTypeScheme ;
+    skos:prefLabel "child"@en ; skos:prefLabel "hijo/hija"@es .
+
+narr:kinship-owner
+    a skos:Concept ; skos:inScheme narr:KinshipTypeScheme ;
+    skos:prefLabel "owner/patron"@en ;
+    skos:definition "Describes the relationship between an orisha or lwa and the practitioner over whom they have primary claim."@en .
+
+narr:kinship-road
+    a skos:Concept ; skos:inScheme narr:KinshipTypeScheme ;
+    skos:prefLabel "road/camino"@en ; skos:altLabel "camino"@es ;
+    skos:definition "Describes a relationship between aspects of a spirit or between a spirit and a tradition-specific manifestation."@en .

@@ -1,0 +1,381 @@
+# -*- coding: utf-8 -*-
+# ==========================================================================
+# Iroko Framework — Authority Module  v1.0.0
+# ==========================================================================
+# Namespace: https://www.irokosociety.org/iroko-framework/authority#
+# Prefix:    auth:
+# Requires:  iroko-core v2.0.0
+#
+# Full development of iroko:RitualAuthority — the governance stub
+# defined in Core. This module adds:
+#   • Jurisdiction modeling
+#   • Authority basis (what the authority rests on)
+#   • Authority type classification
+#   • Ritual role classification
+#   • Authority recognition networks
+#   • Temporal validity bounds
+#   • Starter concept instances for all four classification schemes
+#
+# RELATIONSHIP TO OTHER MODULES
+# ------------------------------
+# iroko:RitualAuthority (Core stub) — the class authorized to sign
+#   assertions. auth:Authority extends this stub.
+# ile:ReligiousOffice (iroko-ile.ttl) — a specific held title or
+#   position by an individual practitioner (Babalawo, Iyalorisha, etc.).
+#   This is distinct: auth:Authority is a governance entity; a
+#   ReligiousOffice is an instance of a credential held by a person.
+# iroko-assertion.ttl / iroko-narrative.ttl — both use
+#   iroko:authorizedBy pointing to iroko:RitualAuthority, which
+#   auth:Authority subclasses.
+# ==========================================================================
+
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix auth:    <https://www.irokosociety.org/iroko-framework/authority#> .
+
+<https://www.irokosociety.org/iroko-framework/authority>
+    a owl:Ontology ;
+    dcterms:title "Iroko Authority Module"@en ;
+    dcterms:description "Full governance model for ritual authority, jurisdiction, and authorization basis. Extends the iroko:RitualAuthority stub in Core with jurisdiction modeling, authority type and basis classification, ritual roles, recognition networks, and temporal validity. Used to authorize assertion-level claims across all modules."@en ;
+    dcterms:creator "Iroko Historical Society" ;
+    dcterms:issued "2026-02-23"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
+    dcterms:requires <https://www.irokosociety.org/iroko-framework/core> ;
+    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
+
+
+# ===========================================================================
+# PRIMARY CLASS
+# Extends the Core stub. PROV alignment (rdfs:subClassOf prov:Agent)
+# lives in iroko-align-prov.ttl.
+# ===========================================================================
+
+auth:Authority
+    a owl:Class ;
+    rdfs:subClassOf iroko:RitualAuthority ;
+    rdfs:label "Authority"@en ;
+    rdfs:comment "A jurisdictional authority capable of authorizing assertion-level claims and governance decisions. May represent a lineage, cabildo, religious house, elder council, or recognized individual in a governance role. Extends the iroko:RitualAuthority stub in Core. For the individual's held credential (title, office), see ile:ReligiousOffice."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+
+# ===========================================================================
+# CLASSIFICATION CLASSES
+# Subclass skos:Concept so concept schemes can type their members.
+# ===========================================================================
+
+auth:AuthorityType
+    a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Authority Type"@en ;
+    rdfs:comment "Classifies the structural form of an authority — lineage, house, cabildo, council, individual elder, etc."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:AuthorityBasis
+    a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Authority Basis"@en ;
+    rdfs:comment "What the authority rests on: lineage succession, consecration, appointment, community recognition, divinatory selection, or other basis."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:RitualRole
+    a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Ritual Role"@en ;
+    rdfs:comment "The functional role an authority occupies within a ritual governance system — elder, priest, archivist-steward, witness, etc. Distinct from ile:ReligiousOffice (specific held title) — RitualRole is a classification concept."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:Jurisdiction
+    a owl:Class ;
+    rdfs:label "Jurisdiction"@en ;
+    rdfs:comment "A place, house, cabildo, lineage territory, nation, or other bounded domain in which an authority is recognized. May be geographic, genealogical, or institutional."@en ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+
+# ===========================================================================
+# PROPERTIES
+# ===========================================================================
+
+auth:authorityType
+    a owl:ObjectProperty ;
+    rdfs:label "authority type"@en ;
+    rdfs:comment "Classifies an Authority instance by its structural form."@en ;
+    rdfs:domain auth:Authority ;
+    rdfs:range auth:AuthorityType ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:authorityBasis
+    a owl:ObjectProperty ;
+    rdfs:label "authority basis"@en ;
+    rdfs:comment "What the authority rests on — the epistemic or social foundation for its recognition."@en ;
+    rdfs:domain auth:Authority ;
+    rdfs:range auth:AuthorityBasis ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:ritualRole
+    a owl:ObjectProperty ;
+    rdfs:label "ritual role"@en ;
+    rdfs:comment "The functional governance role this authority occupies."@en ;
+    rdfs:domain auth:Authority ;
+    rdfs:range auth:RitualRole ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:hasJurisdiction
+    a owl:ObjectProperty ;
+    rdfs:label "has jurisdiction"@en ;
+    rdfs:comment "Links an authority to the domain(s) where it is recognized."@en ;
+    rdfs:domain auth:Authority ;
+    rdfs:range auth:Jurisdiction ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:recognizedBy
+    a owl:ObjectProperty ;
+    rdfs:label "recognized by"@en ;
+    rdfs:comment "Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments."@en ;
+    rdfs:domain auth:Authority ;
+    rdfs:range auth:Authority ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:jurisdictionLabel
+    a owl:DatatypeProperty ;
+    rdfs:label "jurisdiction label"@en ;
+    rdfs:comment "Human-readable name for this jurisdiction."@en ;
+    rdfs:domain auth:Jurisdiction ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:jurisdictionType
+    a owl:DatatypeProperty ;
+    rdfs:label "jurisdiction type"@en ;
+    rdfs:comment "Short classifer for the jurisdiction type: 'geographic', 'genealogical', 'institutional', 'diasporic', etc."@en ;
+    rdfs:domain auth:Jurisdiction ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:validFrom
+    a owl:DatatypeProperty ;
+    rdfs:label "valid from"@en ;
+    rdfs:comment "Date from which the authority's governance standing is recognized or effective."@en ;
+    rdfs:domain auth:Authority ;
+    rdfs:range xsd:date ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:validUntil
+    a owl:DatatypeProperty ;
+    rdfs:label "valid until"@en ;
+    rdfs:comment "Date until which the authority's governance standing is recognized. Absence of this property does not imply perpetual validity — use iroko:contestedStatus where appropriate."@en ;
+    rdfs:domain auth:Authority ;
+    rdfs:range xsd:date ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:culturalFrame
+    a owl:DatatypeProperty ;
+    rdfs:label "cultural frame"@en ;
+    rdfs:comment "Short label for the tradition frame within which this authority operates. Example: Lucumi, Palo, Espiritismo, Vodou, Candomble. Use iroko:tradition for linked-data-typed values."@en ;
+    rdfs:domain auth:Authority ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+auth:authorityNote
+    a owl:DatatypeProperty ;
+    rdfs:label "authority note"@en ;
+    rdfs:comment "Free-text note on the nature, history, or contested aspects of this authority's standing."@en ;
+    rdfs:domain auth:Authority ;
+    rdfs:range rdf:langString ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
+
+# NOTE: iroko:hasTemporalVariation (Core) may be used on auth:Authority
+# instances to qualify time-bound validity regimes without redefinition.
+
+
+# ===========================================================================
+# CONCEPT SCHEMES
+# ===========================================================================
+
+# --- Authority Type --------------------------------------------------------
+
+auth:AuthorityTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Authority Types"@en ;
+    dcterms:description "Structural classification of ritual authority entities."@en ;
+    skos:hasTopConcept auth:authorityType-lineage,
+                       auth:authorityType-house,
+                       auth:authorityType-cabildo,
+                       auth:authorityType-council,
+                       auth:authorityType-individual-elder,
+                       auth:authorityType-divinatory-office .
+
+auth:authorityType-lineage
+    a auth:AuthorityType ;
+    skos:inScheme auth:AuthorityTypeScheme ;
+    skos:prefLabel "Lineage Authority"@en ;
+    skos:definition "Authority vested in a descent line or transmission chain."@en .
+
+auth:authorityType-house
+    a auth:AuthorityType ;
+    skos:inScheme auth:AuthorityTypeScheme ;
+    skos:prefLabel "House Authority"@en ;
+    skos:definition "Authority vested in a religious house (ile, sosyete, cabildo house, etc.)."@en .
+
+auth:authorityType-cabildo
+    a auth:AuthorityType ;
+    skos:inScheme auth:AuthorityTypeScheme ;
+    skos:prefLabel "Cabildo Authority"@en ;
+    skos:definition "Authority vested in a cabildo or mutual aid association with ritual governance functions."@en .
+
+auth:authorityType-council
+    a auth:AuthorityType ;
+    skos:inScheme auth:AuthorityTypeScheme ;
+    skos:prefLabel "Council Authority"@en ;
+    skos:definition "Authority vested in a collective governing council of elders or priests."@en .
+
+auth:authorityType-individual-elder
+    a auth:AuthorityType ;
+    skos:inScheme auth:AuthorityTypeScheme ;
+    skos:prefLabel "Individual Elder Authority"@en ;
+    skos:definition "Authority vested in a recognized individual elder acting in their own governance capacity."@en .
+
+auth:authorityType-divinatory-office
+    a auth:AuthorityType ;
+    skos:inScheme auth:AuthorityTypeScheme ;
+    skos:prefLabel "Divinatory Office"@en ;
+    skos:definition "Authority vested in a specific divinatory office — Babalawo, Oluwo, Houngan Asogwe, etc. — rather than the individual holder."@en .
+
+# --- Authority Basis -------------------------------------------------------
+
+auth:AuthorityBasisScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Authority Bases"@en ;
+    dcterms:description "What a ritual authority rests on — the social and epistemic foundation for recognition."@en ;
+    skos:hasTopConcept auth:basis-succession,
+                       auth:basis-consecration,
+                       auth:basis-appointment,
+                       auth:basis-community-recognition,
+                       auth:basis-divinatory-selection,
+                       auth:basis-hereditary,
+                       auth:basis-contested .
+
+auth:basis-succession
+    a auth:AuthorityBasis ;
+    skos:inScheme auth:AuthorityBasisScheme ;
+    skos:prefLabel "Lineage Succession"@en ;
+    skos:definition "Authority derives from recognized succession in a transmission line."@en .
+
+auth:basis-consecration
+    a auth:AuthorityBasis ;
+    skos:inScheme auth:AuthorityBasisScheme ;
+    skos:prefLabel "Consecration"@en ;
+    skos:definition "Authority derives from a ritual consecration event."@en .
+
+auth:basis-appointment
+    a auth:AuthorityBasis ;
+    skos:inScheme auth:AuthorityBasisScheme ;
+    skos:prefLabel "Appointment"@en ;
+    skos:definition "Authority derives from formal appointment by a recognized governing body."@en .
+
+auth:basis-community-recognition
+    a auth:AuthorityBasis ;
+    skos:inScheme auth:AuthorityBasisScheme ;
+    skos:prefLabel "Community Recognition"@en ;
+    skos:definition "Authority derives from informal but sustained community acknowledgment."@en .
+
+auth:basis-divinatory-selection
+    a auth:AuthorityBasis ;
+    skos:inScheme auth:AuthorityBasisScheme ;
+    skos:prefLabel "Divinatory Selection"@en ;
+    skos:definition "Authority derives from selection through divination (Ifa, oracle, sortition, etc.)."@en .
+
+auth:basis-hereditary
+    a auth:AuthorityBasis ;
+    skos:inScheme auth:AuthorityBasisScheme ;
+    skos:prefLabel "Hereditary"@en ;
+    skos:definition "Authority derives from family lineage independent of formal consecration or appointment."@en .
+
+auth:basis-contested
+    a auth:AuthorityBasis ;
+    skos:inScheme auth:AuthorityBasisScheme ;
+    skos:prefLabel "Contested Basis"@en ;
+    skos:definition "The basis of the authority is itself disputed across lineages or houses."@en .
+
+# --- Ritual Role -----------------------------------------------------------
+
+auth:RitualRoleScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Ritual Roles"@en ;
+    dcterms:description "Functional roles within ritual governance systems."@en ;
+    skos:hasTopConcept auth:role-elder,
+                       auth:role-priest,
+                       auth:role-archivist-steward,
+                       auth:role-witness,
+                       auth:role-diviner,
+                       auth:role-community-delegate .
+
+auth:role-elder
+    a auth:RitualRole ;
+    skos:inScheme auth:RitualRoleScheme ;
+    skos:prefLabel "Elder"@en .
+
+auth:role-priest
+    a auth:RitualRole ;
+    skos:inScheme auth:RitualRoleScheme ;
+    skos:prefLabel "Priest"@en .
+
+auth:role-archivist-steward
+    a auth:RitualRole ;
+    skos:inScheme auth:RitualRoleScheme ;
+    skos:prefLabel "Archivist-Steward"@en ;
+    skos:definition "Recognized steward of archival materials within a tradition or house."@en .
+
+auth:role-witness
+    a auth:RitualRole ;
+    skos:inScheme auth:RitualRoleScheme ;
+    skos:prefLabel "Witness"@en ;
+    skos:definition "Person whose presence authorizes or validates an assertion or event record."@en .
+
+auth:role-diviner
+    a auth:RitualRole ;
+    skos:inScheme auth:RitualRoleScheme ;
+    skos:prefLabel "Diviner"@en .
+
+auth:role-community-delegate
+    a auth:RitualRole ;
+    skos:inScheme auth:RitualRoleScheme ;
+    skos:prefLabel "Community Delegate"@en ;
+    skos:definition "Person acting in an authorized representative capacity on behalf of a house or community."@en .
+
+
+# ===========================================================================
+# EXAMPLE JURISDICTION INSTANCES (optional pattern — extend as needed)
+# ===========================================================================
+
+auth:jurisdiction-havana
+    a auth:Jurisdiction ;
+    auth:jurisdictionLabel "Havana"@en, "La Habana"@es ;
+    auth:jurisdictionType "geographic" .
+
+auth:jurisdiction-matanzas
+    a auth:Jurisdiction ;
+    auth:jurisdictionLabel "Matanzas"@en ;
+    auth:jurisdictionType "geographic" .
+
+auth:jurisdiction-cap-haitien
+    a auth:Jurisdiction ;
+    auth:jurisdictionLabel "Cap-Haïtien"@fr, "Cap-Haitien"@en ;
+    auth:jurisdictionType "geographic" .
+
+auth:jurisdiction-port-au-prince
+    a auth:Jurisdiction ;
+    auth:jurisdictionLabel "Port-au-Prince"@fr ;
+    auth:jurisdictionType "geographic" .
+
+auth:jurisdiction-salvador-bahia
+    a auth:Jurisdiction ;
+    auth:jurisdictionLabel "Salvador, Bahia"@pt, "Salvador, Bahia"@en ;
+    auth:jurisdictionType "geographic" .

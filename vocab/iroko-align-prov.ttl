@@ -1,26 +1,99 @@
-@prefix iroko:    <https://ontology.irokosociety.org/core/> .
-@prefix iroko-ag: <https://ontology.irokosociety.org/agency/> .
-@prefix prov:    <http://www.w3.org/ns/prov#> .
-@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+# -*- coding: utf-8 -*-
+# ==========================================================================
+# Iroko Framework — PROV-O Alignment  v1.0.0
+# ==========================================================================
+# Namespace: https://www.irokosociety.org/iroko-framework/align/prov#
+# Requires:  iroko-core v2.0.0
+#            iroko-agency v1.0.0
+#            iroko-authority v1.0.0
+#
+# Reference-only alignment to PROV-O (http://www.w3.org/ns/prov#).
+#
+# STRATEGY: Subclass alignment only.
+# • No owl:equivalentClass
+# • No owl:imports
+# • No semantic collapse
+#
+# Subclassing means:
+#   Iroko classes remain sovereign — they are specializations of PROV
+#   classes, not replacements. A SPARQL query over prov:Agent will
+#   find iroko sacred agents and authorities. A query over iroko
+#   classes finds only iroko resources. Neither overwrites the other.
+#
+# This file should be loaded OPTIONALLY for interoperability contexts.
+# It is not required for the core framework to function.
+# ==========================================================================
+
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix ag:      <https://www.irokosociety.org/iroko-framework/agency#> .
+@prefix auth:    <https://www.irokosociety.org/iroko-framework/authority#> .
 
-<https://ontology.irokosociety.org/align/prov/>
+<https://www.irokosociety.org/iroko-framework/align/prov>
     a owl:Ontology ;
-    rdfs:label "Iroko alignment with PROV-O (reference only)"@en ;
-    dcterms:description "Reference-only alignment to PROV-O. This module declares subclass alignments to support interoperability. It does not owl:imports PROV-O, and it does not assert equivalence."@en ;
-    dcterms:creator "Iroko Historical Society"@en ;
-    dcterms:issued "2026-02-22"^^xsd:date ;
-    dcterms:license <https://ontology.irokosociety.org/policy/terms-of-use> ;
-    dcterms:isPartOf <https://ontology.irokosociety.org/> .
+    dcterms:title "Iroko Framework — PROV-O Alignment"@en ;
+    dcterms:description "Reference-only subclass alignment to PROV-O. Declares that Iroko agents, events, entities, and policies are specializations of PROV classes to support interoperability. Does not use owl:imports or owl:equivalentClass — Iroko classes remain semantically sovereign."@en ;
+    dcterms:creator "Iroko Historical Society" ;
+    dcterms:issued "2026-02-23"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
+    dcterms:requires <https://www.irokosociety.org/iroko-framework/core> ;
+    dcterms:requires <https://www.irokosociety.org/iroko-framework/agency> ;
+    dcterms:requires <https://www.irokosociety.org/iroko-framework/authority> ;
+    rdfs:seeAlso <http://www.w3.org/ns/prov#> .
 
-# Agents
-iroko-ag:SacredAgent rdfs:subClassOf prov:Agent .
 
-# Activities (events)
-iroko-ag:RitualEvent rdfs:subClassOf prov:Activity .
+# ===========================================================================
+# AGENTS
+# Sacred agents and ritual authorities are specializations of prov:Agent.
+# ===========================================================================
 
-# Entities (claims, policies, records)
-iroko:RelationshipAssertion rdfs:subClassOf prov:Entity .
-iroko:AccessPolicy          rdfs:subClassOf prov:Entity .
+ag:SacredAgent
+    rdfs:subClassOf prov:Agent .
+
+# auth:Authority extends iroko:RitualAuthority which is the Core stub.
+# We align the Core stub to prov:Agent — everything that subclasses it
+# (auth:Authority and any tradition-specific authority subclasses)
+# inherits the alignment transitively.
+iroko:RitualAuthority
+    rdfs:subClassOf prov:Agent .
+
+
+# ===========================================================================
+# ACTIVITIES (events)
+# Ritual events are specializations of prov:Activity.
+# ===========================================================================
+
+ag:RitualEvent
+    rdfs:subClassOf prov:Activity .
+
+# FieldworkEvent in Core — fieldwork is a prov:Activity
+iroko:FieldworkEvent
+    rdfs:subClassOf prov:Activity .
+
+
+# ===========================================================================
+# ENTITIES (claims, policies, knowledge graphs)
+# ===========================================================================
+
+# Assertions are provenance entities — claims with tracked provenance
+iroko:Assertion
+    rdfs:subClassOf prov:Entity .
+
+# AccessPolicy nodes are provenance entities — governed artifacts
+iroko:AccessPolicy
+    rdfs:subClassOf prov:Entity .
+
+# LineageKnowledgeGraph is a named graph — a prov:Entity by definition
+# (already declared in Core; alignment restated here for completeness)
+iroko:LineageKnowledgeGraph
+    rdfs:subClassOf prov:Entity .
+
+# DocumentaryEvidence — archival records are prov:Entity
+iroko:DocumentaryEvidence
+    rdfs:subClassOf prov:Entity .

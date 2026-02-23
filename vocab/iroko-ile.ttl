@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # ===================================================================
 # IROKO FRAMEWORK — ILÉ MODULE
-# Lineage, Houses, Initiation Genealogy, and Religious Authority
+# Lineage, Houses, Initiation Genealogy, and Religious Office
 # Namespace: https://www.irokosociety.org/iroko-framework/ile#
 # Version: 1.0.0 | February 2026
 # Dependencies: iroko-core, schema.org, FOAF, PROV-O
@@ -23,7 +23,7 @@
 <https://www.irokosociety.org/iroko-framework/ile>
     a owl:Ontology ;
     rdfs:label "Iroko Ilé Module"@en ;
-    dcterms:title "Iroko Ilé: Lineage, Houses, and Religious Authority"@en ;
+    dcterms:title "Iroko Ilé: Lineage, Houses, and Religious Office"@en ;
     dcterms:description "Vocabulary for documenting Afro-Atlantic religious houses, lineage structures, initiation genealogy, authority transmission, and schism events. Extends schema:Organization and FOAF with tradition-specific governance and lineage modeling."@en ;
     dcterms:created "2026-02-21"^^xsd:date ;
     owl:versionInfo "1.0.0" ;
@@ -61,11 +61,11 @@ ile:InitiationEvent
     rdfs:comment "A specific ceremony creating a formal genealogical link between initiator and initiate. The primary mechanism by which lineage is transmitted and authority is conferred. Access to records is typically initiated-only; existence of the event may be public."@en ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
 
-ile:Authority
+ile:ReligiousOffice
     a owl:Class ;
     rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:label "Religious Authority"@en ;
-    rdfs:comment "A religious title or position held by a practitioner, authorizing specific ritual functions within a tradition. Linked to the person (foaf:Person), the house, and the authority figure who conferred it. Distinct from iroko:ContestedAuthority in core, which models disputed titles at the category level — ile:Authority models specific individual instances."@en ;
+    rdfs:label "Religious Office"@en ;
+    rdfs:comment "A religious title or position held by a practitioner, authorizing specific ritual functions within a tradition. Linked to the person (foaf:Person), the house, and the authority figure who conferred it. Distinct from iroko:ContestedAuthority in core, which models disputed titles at the category level — ile:ReligiousOffice models specific individual instances."@en ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
 
 ile:SchismEvent
@@ -273,9 +273,9 @@ ile:initiator
     a owl:ObjectProperty ;
     rdfs:label "initiator"@en ;
     rdfs:subPropertyOf prov:wasAttributedTo ;
-    rdfs:comment "The authority figure who performed the initiation. Range: ile:Authority."@en ;
+    rdfs:comment "The authority figure who performed the initiation. Range: ile:ReligiousOffice."@en ;
     rdfs:domain ile:InitiationEvent ;
-    rdfs:range ile:Authority ;
+    rdfs:range ile:ReligiousOffice ;
     iroko:minimumAccessLevel iroko:access-initiated-only ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
 
@@ -325,14 +325,14 @@ ile:transmissionMethod
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
 
 # ===================================================================
-# PROPERTIES — Authority
+# PROPERTIES — ReligiousOffice
 # ===================================================================
 
 ile:authorityHolder
     a owl:ObjectProperty ;
     rdfs:label "authority holder"@en ;
     rdfs:comment "The person holding this title. Range: foaf:Person."@en ;
-    rdfs:domain ile:Authority ;
+    rdfs:domain ile:ReligiousOffice ;
     rdfs:range foaf:Person ;
     iroko:minimumAccessLevel iroko:access-community-restricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
@@ -341,7 +341,7 @@ ile:authorityTitle
     a owl:ObjectProperty ;
     rdfs:label "authority title"@en ;
     rdfs:comment "The formal title held. Range: ile:AuthorityTitleScheme."@en ;
-    rdfs:domain ile:Authority ;
+    rdfs:domain ile:ReligiousOffice ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
@@ -350,7 +350,7 @@ ile:authorityScope
     a owl:DatatypeProperty ;
     rdfs:label "authority scope"@en ;
     rdfs:comment "What ritual functions this title authorizes."@en ;
-    rdfs:domain ile:Authority ;
+    rdfs:domain ile:ReligiousOffice ;
     rdfs:range rdf:langString ;
     iroko:minimumAccessLevel iroko:access-community-restricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
@@ -359,16 +359,16 @@ ile:grantedBy
     a owl:ObjectProperty ;
     rdfs:label "granted by"@en ;
     rdfs:subPropertyOf prov:wasAttributedTo ;
-    rdfs:comment "The authority figure who conferred this title. Range: ile:Authority."@en ;
-    rdfs:domain ile:Authority ;
-    rdfs:range ile:Authority ;
+    rdfs:comment "The authority figure who conferred this title. Range: ile:ReligiousOffice."@en ;
+    rdfs:domain ile:ReligiousOffice ;
+    rdfs:range ile:ReligiousOffice ;
     iroko:minimumAccessLevel iroko:access-community-restricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
 
 ile:conferralDate
     a owl:DatatypeProperty ;
     rdfs:label "conferral date"@en ;
-    rdfs:domain ile:Authority ;
+    rdfs:domain ile:ReligiousOffice ;
     rdfs:range xsd:date ;
     iroko:minimumAccessLevel iroko:access-community-restricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
@@ -377,7 +377,7 @@ ile:authorityHouse
     a owl:ObjectProperty ;
     rdfs:label "authority house"@en ;
     rdfs:comment "The house within which this authority is recognized."@en ;
-    rdfs:domain ile:Authority ;
+    rdfs:domain ile:ReligiousOffice ;
     rdfs:range ile:House ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
@@ -385,7 +385,7 @@ ile:authorityHouse
 ile:authorityTradition
     a owl:ObjectProperty ;
     rdfs:label "authority tradition"@en ;
-    rdfs:domain ile:Authority ;
+    rdfs:domain ile:ReligiousOffice ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ile> .
@@ -530,13 +530,13 @@ ile:houseType-other
     skos:prefLabel "Other"@en .
 
 # ===================================================================
-# CONCEPT SCHEME: Authority Titles (20 values)
+# CONCEPT SCHEME: Religious Office Titles (20 values)
 # ===================================================================
 
 ile:AuthorityTitleScheme
     a skos:ConceptScheme ;
-    rdfs:label "Religious Authority Titles"@en ;
-    skos:prefLabel "Religious Authority Titles"@en ;
+    rdfs:label "Religious Office Titles"@en ;
+    skos:prefLabel "Religious Office Titles"@en ;
     skos:prefLabel "Títulos de autoridad religiosa"@es ;
     skos:hasTopConcept ile:title-babalawo,
                        ile:title-iyanifa,
@@ -569,7 +569,7 @@ ile:title-iyanifa
     a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
     skos:prefLabel "Iyanifa"@en ; skos:prefLabel "Iyanifa"@yo ;
     skos:definition "Female Ifá priest. Recognition is contested across lineages; use iroko:contestedStatus when applicable."@en ;
-    skos:scopeNote "The recognition of Iyanifa is a live dispute in Lucumí communities. ile:Authority records for this title should carry iroko:contestedStatus and iroko:contestedNotes."@en .
+    skos:scopeNote "The recognition of Iyanifa is a live dispute in Lucumí communities. ile:ReligiousOffice records for this title should carry iroko:contestedStatus and iroko:contestedNotes."@en .
 
 ile:title-olorisha
     a skos:Concept ; skos:inScheme ile:AuthorityTitleScheme ;
