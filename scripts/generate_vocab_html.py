@@ -74,8 +74,15 @@ MODULE_CONFIG = {
         "tag_text": "Narrative",
         "prefix":   "narr:",
     },
+    "iroko-manifestation": {
+        "title":    "Manifestation Module — Sacred Agent Modes",
+        "subtitle": "Manifestation modes and media: possession, dream, divination, symbolic presence",
+        "tag_cls":  "tag-manifestation",
+        "tag_text": "Manifestation",
+        "prefix":   "mani:",
+    },
 
-    # Layer 2 — Domain modules
+    # Layer 3 — Domain modules
     "iroko-ewe": {
         "title":    "Ewé Module — Sacred Plant Knowledge",
         "subtitle": "Ritual use governance over botanical data",
@@ -233,7 +240,7 @@ def get_meta(g):
     return {
         "uri":      str(uri),
         "desc":     description_en(g, uri),
-        "version":  str(g.value(uri, OWL.versionInfo) or "1.0.0"),
+        "version":  str(g.value(uri, OWL.versionInfo) or "2.0.0"),
         "issued":   str(g.value(uri, DCTERMS.issued)   or ""),
         "modified": str(g.value(uri, DCTERMS.modified) or ""),
     }
@@ -312,7 +319,7 @@ def generate_html(ttl_path, output_path, cfg):
 
     ns_uri   = meta.get("uri", "")
     ns_pfx   = ns_uri + "#" if ns_uri and not ns_uri.endswith("#") else ns_uri
-    version  = meta.get("version", "1.0.0")
+    version  = meta.get("version", "2.0.0")
     title    = cfg["title"]
     subtitle = cfg["subtitle"]
     tag_cls  = cfg["tag_cls"]
@@ -341,6 +348,17 @@ def generate_html(ttl_path, output_path, cfg):
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{h(title)} — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
+  <style>
+    /* ── Logo size toggle ─────────────────────────────────────────────
+       Change --logo-size to resize the logo on all vocab browse pages.
+       Options tried: 60px · 72px · 88px · 100px · 120px
+    ─────────────────────────────────────────────────────────────────── */
+    :root {{ --logo-size: 88px; }}
+
+    .vocab-header         {{ align-items: flex-start; }}
+    .vocab-header-logo    {{ padding-top: .2rem; flex-shrink: 0; }}
+    .vocab-header-logo img {{ width: var(--logo-size); height: auto; display: block; }}
+  </style>
 </head>
 <body>
 
@@ -406,7 +424,7 @@ def generate_html(ttl_path, output_path, cfg):
                         + ", ".join(f'<span style="color:var(--green-mid)">{h(s)}</span>'
                                     for s in cls["supers"])
                         + "</div>")
-            W(f"""    <div class="class-card">
+            W(f"""    <div class="class-card" id="cls-{h(cls["id"])}">
       <div class="class-name">{h(cls["id"])}</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">{h(cls["label"])}</div>
       {hier}
@@ -436,7 +454,7 @@ def generate_html(ttl_path, output_path, cfg):
         for prop in props:
             type_css = "prop-type-obj" if prop["type"] == "Object" else "prop-type-data"
             badge    = access_badge(prop["access_uri"]) if prop["access_uri"] else ""
-            W(f"""        <tr>
+            W(f"""        <tr id="prop-{h(prop["id"])}">
           <td><span class="prop-name">{h(prop["id"])}</span><br><span style="font-size:.75rem;color:var(--ink-soft);">{h(prop["label"])}</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge {type_css}">{h(prop["type"])}</span></td>
           <td class="prop-domain-range">{h(prop["domain"])} → {h(prop["range"])}</td>
@@ -465,7 +483,7 @@ def generate_html(ttl_path, output_path, cfg):
                 W(f'      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">{h(scheme["desc"])}</p>')
             W('      <div class="concept-list">')
             for concept in scheme["concepts"]:
-                W(f"""        <div class="concept-item">
+                W(f"""        <div class="concept-item" id="concept-{h(concept["id"])}">
           <div class="concept-label">{h(concept["label"])}</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">{h(concept["id"])}</div>
           <p class="concept-def">{h(concept["definition"])}</p>""")

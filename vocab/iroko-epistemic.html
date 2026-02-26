@@ -5,11 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Epistemic Module — Knowledge Gating — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
+  <style>
+    /* ── Logo size toggle ─────────────────────────────────────────────
+       Change --logo-size to resize the logo on all vocab browse pages.
+       Options tried: 60px · 72px · 88px · 100px · 120px
+    ─────────────────────────────────────────────────────────────────── */
+    :root { --logo-size: 88px; }
+
+    .vocab-header         { align-items: flex-start; }
+    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
+    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
+  </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.0.0</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -30,7 +41,7 @@
 
   <header class="vocab-header">
     <div class="vocab-header-logo">
-      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
+      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
     </div>
     <div>
       <span class="module-tag tag-epistemic">Epistemic</span>
@@ -60,31 +71,31 @@
       <span class="term-section-title">Classes</span>
       <span class="term-section-count">5 classes</span>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-ConstraintBasis">
       <div class="class-name">ConstraintBasis</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Constraint Basis</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Concept</span></div>
       <p class="class-def">A SKOS concept describing the basis for an epistemic constraint: initiation, lineage, community mandate, ritual condition, safety, or unknown.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-DisclosurePermission">
       <div class="class-name">DisclosurePermission</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Disclosure Permission</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Epistemic Constraint</span></div>
       <p class="class-def">An epistemic constraint asserting that disclosure is permitted under specified conditions. The conditions may be temporal, initiatory, lineage-bound, or community-mandated.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-DisclosureRestriction">
       <div class="class-name">DisclosureRestriction</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Disclosure Restriction</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Epistemic Constraint</span></div>
       <p class="class-def">An epistemic constraint asserting that disclosure is restricted, limited, or prohibited under specified conditions.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-EpistemicConstraint">
       <div class="class-name">EpistemicConstraint</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Epistemic Constraint</div>
       
       <p class="class-def">A constraint describing conditions under which knowledge may be disclosed, withheld, transformed, or restricted. The abstract superclass — use DisclosurePermission, DisclosureRestriction, or SanctionedDisclosure for typed instances. iroko:hasTemporalVariation (Core) may be applied to qualify constraints that vary by season, cycle, or ritual state.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-SanctionedDisclosure">
       <div class="class-name">SanctionedDisclosure</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sanctioned Disclosure</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Epistemic Constraint</span></div>
@@ -108,35 +119,35 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="prop-constraintCondition">
           <td><span class="prop-name">constraintCondition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">constraint condition</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Epistemic Constraint → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">Explicit condition statement for this constraint. May reference initiation levels, temporal variation, community mandate, or ritual state. Complements iroko:hasTemporalVariation for non-temporal conditions.</td>
         </tr>
-        <tr>
+        <tr id="prop-constraintNote">
           <td><span class="prop-name">constraintNote</span><br><span style="font-size:.75rem;color:var(--ink-soft);">constraint note</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Epistemic Constraint → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">Free-text description of the epistemic constraint — what it restricts or permits and why.</td>
         </tr>
-        <tr>
+        <tr id="prop-constraintSanctionedBy">
           <td><span class="prop-name">constraintSanctionedBy</span><br><span style="font-size:.75rem;color:var(--ink-soft);">constraint sanctioned by</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Sanctioned Disclosure → RitualAuthority</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">Links a SanctionedDisclosure to the auth:Authority that must sanction the disclosure.</td>
         </tr>
-        <tr>
+        <tr id="prop-hasConstraintBasis">
           <td><span class="prop-name">hasConstraintBasis</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has constraint basis</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Epistemic Constraint → Constraint Basis</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">Associates an EpistemicConstraint with a ConstraintBasis concept classifying its foundation.</td>
         </tr>
-        <tr>
+        <tr id="prop-hasEpistemicConstraint">
           <td><span class="prop-name">hasEpistemicConstraint</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has epistemic constraint</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">— → Epistemic Constraint</td>
@@ -159,43 +170,43 @@
       </div>
       <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms describing the foundation for epistemic constraints on sacred knowledge.</p>
       <div class="concept-list">
-        <div class="concept-item">
+        <div class="concept-item" id="concept-basis-community-mandate">
           <div class="concept-label">Community Mandate</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-community-mandate</div>
           <p class="concept-def">Constraint basis asserted as a community mandate or collective governance decision.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-basis-gender-regime">
           <div class="concept-label">Gender Regime</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-gender-regime</div>
           <p class="concept-def">Constraint basis asserted as a tradition-specific gender regime governing access. These are culturally defined and may be contested — model with iroko:contestedStatus where appropriate.</p>
           <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Gender-based constraints vary significantly across lineages and are often the subject of active debate. Record the constraint as asserted; use iroko:contestedStatus and iroko:assertionStatus to represent disputed cases.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-basis-initiation">
           <div class="concept-label">Initiation</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-initiation</div>
           <p class="concept-def">Constraint basis asserted as initiation level or initiatory boundary. Knowledge may not cross to the uninitiated.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-basis-lineage">
           <div class="concept-label">Lineage</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-lineage</div>
           <p class="concept-def">Constraint basis asserted as lineage affiliation. Knowledge belongs to a specific transmission line.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-basis-ritual-condition">
           <div class="concept-label">Ritual Condition</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-ritual-condition</div>
           <p class="concept-def">Constraint basis asserted as a ritual state or condition — mourning period, ritual preparation, post-initiation obligation, etc.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-basis-safety">
           <div class="concept-label">Safety</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-safety</div>
           <p class="concept-def">Constraint basis asserted as safety or harm prevention — knowledge that could cause spiritual, physical, or social harm if disclosed.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-basis-temporal">
           <div class="concept-label">Temporal</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-temporal</div>
           <p class="concept-def">Constraint basis asserted as time-bound — a festival period, mourning cycle, ritual season, or other temporal regime. Use with iroko:hasTemporalVariation for structured modeling.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-basis-unknown">
           <div class="concept-label">Unknown</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-unknown</div>
           <p class="concept-def">Constraint basis not known or not recorded.</p>

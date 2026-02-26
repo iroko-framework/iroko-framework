@@ -5,11 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Marca Module — Divination Systems — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
+  <style>
+    /* ── Logo size toggle ─────────────────────────────────────────────
+       Change --logo-size to resize the logo on all vocab browse pages.
+       Options tried: 60px · 72px · 88px · 100px · 120px
+    ─────────────────────────────────────────────────────────────────── */
+    :root { --logo-size: 88px; }
+
+    .vocab-header         { align-items: flex-start; }
+    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
+    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
+  </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.0.0</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -30,7 +41,7 @@
 
   <header class="vocab-header">
     <div class="vocab-header-logo">
-      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
+      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
     </div>
     <div>
       <span class="module-tag tag-divination">Divination</span>
@@ -46,7 +57,7 @@
   </header>
 
   <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Vocabulary for documenting divination systems, sacred signs, reading records, and verse corpora across Afro-Atlantic traditions. Covers Ifá, Dilogún, Fá, Obi, Chamalongo, and analogous systems. Access control is applied at the property level: sign names and system typologies are public; verse texts, reading details, and prescribed works are restricted.</p>
+    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting divination systems, sacred signs, reading records, and verse corpora across Afro-Atlantic traditions. Covers Ifá (256 odù), Dilogún, Fá, Obi, Chamalongo, and analogous systems. Sign names and system typologies are public; verse texts, reading details, and prescribed works are restricted at the property level. Use with iroko-authority to document who may perform or transmit readings; iroko-narrative for verse corpus transmission chains and patakí variant relationships.</p>
     <div class="module-stats" style="margin-top:1rem;">
       <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
       <div class="stat-cell"><span class="stat-n">29</span><span class="stat-label">Properties</span></div>
@@ -60,31 +71,31 @@
       <span class="term-section-title">Classes</span>
       <span class="term-section-count">5 classes</span>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-DivinationCorpus">
       <div class="class-name">DivinationCorpus</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination Corpus</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">LineageKnowledgeGraph</span></div>
       <p class="class-def">The complete body of verses, prescriptions, proverbs, and interpretive commentary associated with a divination system as transmitted through a specific lineage. Distinct from the system itself (which is the abstract framework) and from individual verses (which are its units). A corpus is lineage-specific: Ifá lineages in Havana may hold different verse inventories than those in Lagos or Trinidad, each representing a distinct corpus.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-DivinationReading">
       <div class="class-name">DivinationReading</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination Reading</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
       <p class="class-def">A specific divination event performed for a recipient by an authorized diviner. Records the sign(s) that appeared, the outcome polarity (iré/osogbo), prescribed works, and the entities indicated. Reading records are among the most sensitive data in the framework: recipient identity is no-access; the date and officiant are community-restricted; the prescribed work and entity are initiated-only.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-DivinationSign">
       <div class="class-name">DivinationSign</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination Sign</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
       <p class="class-def">A discrete sign, figure, or configuration within a divination system. In Ifá: one of 256 odù (each identified by primary + secondary throw). In Dilogún: one of 16 principal signs (odù Dilogún, omieros, and their paths). In Fá: du figures. In Chamalongo: one of 5 configurations. Each sign has an associated corpus of verses, prescriptions, and spirit-entity relationships. The sign&#x27;s name and number are public; verses and prescribed works are restricted.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-DivinationSystem">
       <div class="class-name">DivinationSystem</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination System</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
       <p class="class-def">A tradition-specific divination system consisting of a defined corpus of signs, casting methods, and interpretive frameworks. Examples: Ifá (256 odù, palm nut or chain casting), Dilogún (16 principal signs, cowrie casting), Fá (Fon parallel to Ifá), Obi (4-part binary coconut or kola reading), Chamalongo (Palo Kongo coconut/bone divination). A DivinationSystem belongs to one or more traditions and may have regional variants.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-DivinationVerse">
       <div class="class-name">DivinationVerse</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination Verse</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
@@ -108,203 +119,203 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="prop-signAlternateName">
           <td><span class="prop-name">signAlternateName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">alternate sign name</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Sign → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">Alternative name for the sign in another tradition or regional variant. Ifá odù Ogbe Meji = Fá du Gbèmèzọ. Language-tagged.</td>
         </tr>
-        <tr>
+        <tr id="prop-authorizedPractitioner">
           <td><span class="prop-name">authorizedPractitioner</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authorized practitioner type</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination System → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">The authority title required to cast this system. In Ifá: Babalawo. In Dilogún: Olorisha with dilogún authorization. In Fá: Bokonon. Range: ile:AuthorityTitleScheme.</td>
         </tr>
-        <tr>
+        <tr id="prop-castingMedium">
           <td><span class="prop-name">castingMedium</span><br><span style="font-size:.75rem;color:var(--ink-soft);">casting medium</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination System → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">The physical medium used to cast or generate the sign in this system. Examples: ikin (palm nuts), okuele/ekuele (divining chain), owó dilogún (cowries), obi (coconut), obi kola (kola nut), chamalongo (coconut shells or bones). Range: marca:CastingMediumScheme.</td>
         </tr>
-        <tr>
+        <tr id="prop-genderRestriction">
           <td><span class="prop-name">genderRestriction</span><br><span style="font-size:.75rem;color:var(--ink-soft);">gender restriction</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination System → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">Documents tradition-specific restrictions on who may cast this system, expressed as a free-text note. For Ifá in the Lucumí tradition: historically restricted to initiated men (Babalawos); contested in some lineages and diaspora communities. This property records the documented practice of the lineage being described, not a normative judgment.</td>
         </tr>
-        <tr>
+        <tr id="prop-governingEntity">
           <td><span class="prop-name">governingEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">governing entity</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Sign → SpiritualEntity</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">The spirit or deity principally associated with this sign across the tradition. In Ifá: Ogbe Meji is governed by Obatala; Oshé Meji by Oshun. This is a tradition-level association, not reading-specific. Range: nkisi:SpiritualEntity.</td>
         </tr>
-        <tr>
+        <tr id="prop-prescribedEntity">
           <td><span class="prop-name">prescribedEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">prescribed entity</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Reading → SpiritualEntity</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
           <td class="prop-desc">The spiritual entity indicated by the reading as requiring propitiation, attention, or ceremony. Range: nkisi:SpiritualEntity.</td>
         </tr>
-        <tr>
+        <tr id="prop-prescribedWork">
           <td><span class="prop-name">prescribedWork</span><br><span style="font-size:.75rem;color:var(--ink-soft);">prescribed work</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Reading → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
           <td class="prop-desc">The ebó, rogation, ceremony, or spiritual work prescribed as a result of this reading. Range: marca:EboTypeScheme. Among the most sensitive data: links divination outcome to specific prescribed action.</td>
         </tr>
-        <tr>
+        <tr id="prop-primarySign">
           <td><span class="prop-name">primarySign</span><br><span style="font-size:.75rem;color:var(--ink-soft);">primary sign</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Sign → Divination Sign</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">In composite systems (Ifá), the sign generated by the first cast. The primary odù of a compound figure.</td>
         </tr>
-        <tr>
+        <tr id="prop-readingDate">
           <td><span class="prop-name">readingDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading date</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Reading → date</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">readingDate</td>
         </tr>
-        <tr>
+        <tr id="prop-readingNotes">
           <td><span class="prop-name">readingNotes</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading notes</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Reading → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
           <td class="prop-desc">Free-text notes from the diviner. Elder-only: may contain specific operational detail.</td>
         </tr>
-        <tr>
+        <tr id="prop-readingOfficiant">
           <td><span class="prop-name">readingOfficiant</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading officiant</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Reading → Person</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">The diviner who performed the reading. Range: foaf:Person. Community-restricted to protect practitioner privacy unless the officiant has consented to public attribution.</td>
         </tr>
-        <tr>
+        <tr id="prop-readingOutcome">
           <td><span class="prop-name">readingOutcome</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading outcome</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Reading → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
           <td class="prop-desc">Whether the sign came iré (positive polarity) or osogbo (negative polarity) in this reading. Range: marca:OutcomeTypeScheme.</td>
         </tr>
-        <tr>
+        <tr id="prop-readingRecipient">
           <td><span class="prop-name">readingRecipient</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading recipient</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Reading → Person</td>
           <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
           <td class="prop-desc">The person for whom the reading was performed. No-access: reading recipients have a reasonable expectation of confidentiality. Stored internally for provenance tracking only.</td>
         </tr>
-        <tr>
+        <tr id="prop-secondarySign">
           <td><span class="prop-name">secondarySign</span><br><span style="font-size:.75rem;color:var(--ink-soft);">secondary sign</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Sign → Divination Sign</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">In composite systems (Ifá), the sign generated by the second cast. Together with primarySign, identifies the full odù compound.</td>
         </tr>
-        <tr>
+        <tr id="prop-signCount">
           <td><span class="prop-name">signCount</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign count</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination System → integer</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">The number of discrete signs in the system. Ifá: 256. Dilogún: 16 principal + odu meji. Chamalongo: 5.</td>
         </tr>
-        <tr>
+        <tr id="prop-signName">
           <td><span class="prop-name">signName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign name</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Sign → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">The canonical name of the divination sign in the tradition&#x27;s liturgical language. For Ifá: the odù name (e.g., Ogbe Meji, Oyeku Ofun). For Dilogún: the odù name (e.g., Okana, Eji Oko). Language-tagged.</td>
         </tr>
-        <tr>
+        <tr id="prop-signNumber">
           <td><span class="prop-name">signNumber</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign number</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Sign → string</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">The numeric identifier for this sign within its system. For Dilogún: 1–16. For Ifá: the composite index of primary (1–16) and secondary (1–16) throw.</td>
         </tr>
-        <tr>
+        <tr id="prop-signProverb">
           <td><span class="prop-name">signProverb</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign proverb</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Sign → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">The principal proverb (owe) associated with this sign. Proverbs are often publicly known and shared in scholarly literature. Language-tagged.</td>
         </tr>
-        <tr>
+        <tr id="prop-signReceived">
           <td><span class="prop-name">signReceived</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign received</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Reading → Divination Sign</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
           <td class="prop-desc">The divination sign(s) that appeared in this reading.</td>
         </tr>
-        <tr>
+        <tr id="prop-signSystem">
           <td><span class="prop-name">signSystem</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign system</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Sign → Divination System</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">The divination system to which this sign belongs.</td>
         </tr>
-        <tr>
+        <tr id="prop-signTaboo">
           <td><span class="prop-name">signTaboo</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign taboo</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Sign → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
           <td class="prop-desc">A prohibition (eewo) traditionally associated with this sign. Taboos relate to foods, behaviors, materials, or associations that persons born under this sign or receiving this sign in reading should avoid.</td>
         </tr>
-        <tr>
+        <tr id="prop-systemType">
           <td><span class="prop-name">systemType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">system type</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination System → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">Typological classification of the divination system. Range: marca:DivinationSystemScheme.</td>
         </tr>
-        <tr>
+        <tr id="prop-signVerseCorpus">
           <td><span class="prop-name">signVerseCorpus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse corpus</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Sign → Divination Corpus</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
           <td class="prop-desc">The set of DivinationVerse instances in a specific lineage&#x27;s corpus for this sign. The existence of a corpus is public; the verse content is initiated-elder only.</td>
         </tr>
-        <tr>
+        <tr id="prop-verseLineage">
           <td><span class="prop-name">verseLineage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse lineage</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Verse → House</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">The ile or lineage corpus from which this verse version derives. Different lineages may hold different versions of verses for the same sign.</td>
         </tr>
-        <tr>
+        <tr id="prop-verseSign">
           <td><span class="prop-name">verseSign</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse sign</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Verse → Divination Sign</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">The divination sign to which this verse belongs.</td>
         </tr>
-        <tr>
+        <tr id="prop-verseSource">
           <td><span class="prop-name">verseSource</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse source</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Divination Verse → DocumentaryEvidence</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">Provenance of this verse record: oral transmission, field recording, published collection. Range: iroko:DocumentaryEvidence.</td>
         </tr>
-        <tr>
+        <tr id="prop-verseText">
           <td><span class="prop-name">verseText</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse text</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Verse → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
           <td class="prop-desc">The full text of the verse. Elder-only: ese Ifá and analogous verses are among the most sacred and operationally powerful materials in the tradition. Their disclosure outside authorized transmission is a serious breach.</td>
         </tr>
-        <tr>
+        <tr id="prop-verseTheme">
           <td><span class="prop-name">verseTheme</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse theme</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Verse → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
           <td class="prop-desc">Thematic summary of the verse&#x27;s principal narrative or prescription, without reproducing the text. Initiated-only.</td>
         </tr>
-        <tr>
+        <tr id="prop-verseTitle">
           <td><span class="prop-name">verseTitle</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse title</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Divination Verse → langString</td>
@@ -327,42 +338,42 @@
       </div>
       <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">CastingMediumScheme</p>
       <div class="concept-list">
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-chamalongo-coconut">
           <div class="concept-label">Chamalongo (coconut shells)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-chamalongo-coconut</div>
           <p class="concept-def">Four coconut shell halves prepared and consecrated for Chamalongo divination in Palo traditions.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-chamalongo-bone">
           <div class="concept-label">Chamalongo (prepared bones/discs)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-chamalongo-bone</div>
           <p class="concept-def">Prepared bones or discs used as an alternative casting medium for Chamalongo. The specific preparation is lineage-specific and restricted.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-ikin">
           <div class="concept-label">Ikin (palm nuts)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-ikin</div>
           <p class="concept-def">Sacred palm nuts (ikin Ifá, obi Ifá) used by Babalawos for Ifá divination. Considered the highest-authority casting medium in Lucumí/Yorùbá tradition.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-obi-coconut">
           <div class="concept-label">Obi Abata (coconut)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-obi-coconut</div>
           <p class="concept-def">Coconut divided into four pieces for Obi divination.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-obi-kola">
           <div class="concept-label">Obi Kola (kola nut)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-obi-kola</div>
           <p class="concept-def">Kola nut divided into lobes for Obi divination. More traditional form in continental Yorùbá practice.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-okuele">
           <div class="concept-label">Okuele / Ekuele (divining chain)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-okuele</div>
           <p class="concept-def">Eight-piece divining chain of alternating concave and convex seed halves used by Babalawos as a faster alternative to palm nut casting in Ifá.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-other">
           <div class="concept-label">Other</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-other</div>
           <p class="concept-def">Casting medium not covered by existing concepts.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-cowrie">
           <div class="concept-label">Owó Dilogún (cowrie shells)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-cowrie</div>
           <p class="concept-def">Sixteen cowrie shells used in Dilogún divination by authorized Olorisha.</p>
@@ -376,47 +387,47 @@
       </div>
       <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">OutcomeTypeScheme</p>
       <div class="concept-list">
-        <div class="concept-item">
+        <div class="concept-item" id="concept-outcome-ire">
           <div class="concept-label">Iré (positive)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire</div>
           <p class="concept-def">A sign comes with positive polarity. The indicated blessings are accessible. Prescribed works (ebó) confirm and open the path.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-outcome-ire-aiku">
           <div class="concept-label">Iré Aiku (long life)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire-aiku</div>
           <p class="concept-def">Iré of long life. The sign comes with the blessing of longevity.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-outcome-ire-are">
           <div class="concept-label">Iré Aré (victory)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire-are</div>
           <p class="concept-def">Iré of victory or achievement. The sign comes with the blessing of success in endeavor.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-outcome-ire-omo">
           <div class="concept-label">Iré Omo (children)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire-omo</div>
           <p class="concept-def">Iré of children or generativity. The sign comes with the blessing of progeny or creative fruitfulness.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-outcome-ire-owo">
           <div class="concept-label">Iré Owó (wealth)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire-owo</div>
           <p class="concept-def">Iré of prosperity. The sign comes with the blessing of material abundance.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-outcome-osogbo">
           <div class="concept-label">Osogbo (negative)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-osogbo</div>
           <p class="concept-def">A sign comes with negative polarity. The indicated difficulties or blockages are present. Prescribed works (ebó) are required to avert or mitigate.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-outcome-osogbo-arun">
           <div class="concept-label">Osogbo Arun (illness)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-osogbo-arun</div>
           <p class="concept-def">Osogbo of illness or physical affliction.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-outcome-osogbo-iku">
           <div class="concept-label">Osogbo Ikú (death)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-osogbo-iku</div>
           <p class="concept-def">Osogbo of death or severe loss. The most serious category; requires immediate and specific ebó.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-outcome-osogbo-ojú">
           <div class="concept-label">Osogbo Ojú (enmity)</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-osogbo-ojú</div>
           <p class="concept-def">Osogbo of enemies or opposition. The negative force indicated involves interpersonal conflict or hostility.</p>
@@ -430,48 +441,48 @@
       </div>
       <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">DivinationSystemScheme</p>
       <div class="concept-list">
-        <div class="concept-item">
+        <div class="concept-item" id="concept-system-chamalongo">
           <div class="concept-label">Chamalongo</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-chamalongo</div>
           <p class="concept-def">Kongo-derived divination using four coconut shell halves or prepared bones/discs. Generates 5 configurations. Used in Palo Monte and related Bantu-Atlantic traditions. Practiced by authorized Paleros (Tatas and Yayas).</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-system-derle">
           <div class="concept-label">Derlé</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-derle</div>
           <p class="concept-def">Card-based or object-based divination associated with Espiritismo and Haitian Vodou mesa blanca practice. Distinct from African-derived binary casting systems.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-system-dilogún">
           <div class="concept-label">Dilogún</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-dilogún</div>
           <p class="concept-def">Cowrie shell divination using 16 shells (owó dilogún) to generate 16 principal signs. Practiced by authorized Olorisha. Used in Lucumí/Ocha, Candomblé, and related traditions. Shares sign names with Ifá odù but distinct system, corpus, and authority structure.</p>
           <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Lineage-specific variations exist in casting protocol, sign count, and authority requirements.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-system-fa">
           <div class="concept-label">Fá</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-fa</div>
           <p class="concept-def">The Fon and Ewe divination system cognate to Ifá, using palm nuts or a divining chain to generate du figures. Practiced by Bokonon (male diviners). The du corpus is distinct from but related to Yorùbá odù. Primary in Benin, Togo, and Haitian Vodou communities with Rada/Fon lineages.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-system-ifa">
           <div class="concept-label">Ifá</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-ifa</div>
           <p class="concept-def">The Yorùbá-derived divination system using ikin (palm nuts) or okuele (divining chain) to generate 256 binary odù configurations. Practiced by authorized Babalawos. Versions found in Lucumí (Cuba), Candomblé de Ifá (Brazil), Trinidadian Orisha, and continental Yorùbá communities.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-system-ita">
           <div class="concept-label">Itá</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-ita</div>
           <p class="concept-def">The extended Ifá reading performed for an individual at initiation (kariosha, itá de kariosha) or as a life-path consultation. Typically multi-sign, conducted by a Babalawo, and interpreted by Olorisha elders. The itá record is among the most sensitive personal documents in the tradition.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-system-obi">
           <div class="concept-label">Obi</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-obi</div>
           <p class="concept-def">Four-piece binary divination using coconut (obi abata) or kola nut (obi kola). Generates 5 configurations from the binary state of four pieces. Used across Lucumí, Candomblé, and Yorùbá traditions for confirmation and yes/no queries. Less elaborate than Ifá or Dilogún but widely practiced.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-system-other">
           <div class="concept-label">Other</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-other</div>
           <p class="concept-def">Divination system not covered by existing concepts. Use skos:scopeNote to describe.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-system-vititi-nfinda">
           <div class="concept-label">Vititi Nfinda</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-vititi-nfinda</div>
           <p class="concept-def">Mirror or reflective-surface divination used in Palo Monte for spiritual vision and consultation. Complementary to but distinct from Chamalongo; requires specific nganga authorization.</p>
@@ -485,42 +496,42 @@
       </div>
       <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">EboTypeScheme</p>
       <div class="concept-list">
-        <div class="concept-item">
+        <div class="concept-item" id="concept-ebo-abstention">
           <div class="concept-label">Abstention / Prohibition</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-abstention</div>
           <p class="concept-def">A behavioral abstention or avoidance prescribed by the reading: specific foods, colors, locations, or activities to avoid for a defined period.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-ebo-adimú">
           <div class="concept-label">Adimu</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-adimú</div>
           <p class="concept-def">A food or vegetable offering (without blood) to an Orisha. Accessible outside of full ebó; considered the first step in propitiation.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-ebo-sacrifice">
           <div class="concept-label">Animal sacrifice</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-sacrifice</div>
           <p class="concept-def">Ritual sacrifice of an animal specified by the reading. Species, preparation, and allocation are operational details held at initiated-only access.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-ebo-ebo">
           <div class="concept-label">Ebó</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-ebo</div>
           <p class="concept-def">A prescribed offering to the Orisha or Ifá indicated by the reading. Includes specific materials, animals, foods, or objects. Operational details are initiated-only.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-ebo-ceremony">
           <div class="concept-label">Full ceremony</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-ceremony</div>
           <p class="concept-def">A prescribed ceremony (initiation, reception of Orisha, specific feast) indicated by the reading as necessary.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-ebo-rogacion">
           <div class="concept-label">Head Rogation</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-rogacion</div>
           <p class="concept-def">A cleansing and feeding of the head (ori/eleda) using specific cool and white materials. One of the most commonly prescribed works across Lucumí and related traditions.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-ebo-etutu">
           <div class="concept-label">Itutu / Etutu</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-etutu</div>
           <p class="concept-def">A cooling or pacifying ceremony, often performed after death, severe osogbo, or to address Egun. Requires specific authority and materials.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-ebo-cleansing">
           <div class="concept-label">Spiritual cleansing</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-cleansing</div>
           <p class="concept-def">A full-body or environmental cleansing (despojo, limpieza) using herbs, waters, or other materials prescribed by the reading.</p>
@@ -533,7 +544,6 @@
     <div class="footer-left">
       Iroko Historical Society<br>
       Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      Issued 2026-02-21<br>
       License: CC0 1.0 Universal (Public Domain)
     </div>
     <div class="footer-links">

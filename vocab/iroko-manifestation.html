@@ -3,13 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manifestation Module — Agent Manifestation Modes — Iroko Framework Vocabularies</title>
+  <title>Manifestation Module — Sacred Agent Modes — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
+  <style>
+    /* ── Logo size toggle ─────────────────────────────────────────────
+       Change --logo-size to resize the logo on all vocab browse pages.
+       Options tried: 60px · 72px · 88px · 100px · 120px
+    ─────────────────────────────────────────────────────────────────── */
+    :root { --logo-size: 88px; }
+
+    .vocab-header         { align-items: flex-start; }
+    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
+    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
+  </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.0.0</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -25,17 +36,17 @@
     <span>/</span>
     <a href="index.html">Vocabularies</a>
     <span>/</span>
-    Manifestation Module — Agent Manifestation Modes
+    Manifestation Module — Sacred Agent Modes
   </p>
 
   <header class="vocab-header">
     <div class="vocab-header-logo">
-      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
+      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
     </div>
     <div>
       <span class="module-tag tag-manifestation">Manifestation</span>
-      <h1>Manifestation Module — Agent Manifestation Modes</h1>
-      <p class="subtitle">Manifestation modes and media for sacred agent appearance events</p>
+      <h1>Manifestation Module — Sacred Agent Modes</h1>
+      <p class="subtitle">Manifestation modes and media: possession, dream, divination, symbolic presence</p>
       <div class="header-meta">
         <span class="meta-pill">mani:&nbsp;&nbsp;https://www.irokosociety.org/iroko-framework/manifestation#</span>
         <span class="meta-pill">v1.0.0</span>
@@ -60,19 +71,19 @@
       <span class="term-section-title">Classes</span>
       <span class="term-section-count">3 classes</span>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-ManifestationMode">
       <div class="class-name">ManifestationMode</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Manifestation Mode</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Concept</span></div>
       <p class="class-def">A SKOS concept describing how a sacred agent is asserted to manifest. Values from mani:ManifestationModeScheme. These are descriptive, not metaphysical — they record what is asserted within a tradition&#x27;s own terms.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-Medium">
       <div class="class-name">Medium</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Medium</div>
       
       <p class="class-def">A person, object, place, text, or instrument through which manifestation is asserted to occur.</p>
     </div>
-    <div class="class-card">
+    <div class="class-card" id="cls-MediumType">
       <div class="class-name">MediumType</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Medium Type</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Concept</span></div>
@@ -96,28 +107,28 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr id="prop-hasManifestationMode">
           <td><span class="prop-name">hasManifestationMode</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has manifestation mode</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">ManifestationEvent → Manifestation Mode</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">Associates a ag:ManifestationEvent or iroko:Assertion node with a mani:ManifestationMode concept describing the asserted mode of appearance.</td>
         </tr>
-        <tr>
+        <tr id="prop-hasMediumType">
           <td><span class="prop-name">hasMediumType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has medium type</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Medium → Medium Type</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">Associates a mani:Medium with a mani:MediumType concept.</td>
         </tr>
-        <tr>
+        <tr id="prop-hasTemporalVariation">
           <td><span class="prop-name">hasTemporalVariation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has temporal variation</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">— → TemporalVariation</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">Qualifies a manifestation mode, medium, or event with an iroko:TemporalVariation node, for cases where the mode of manifestation shifts by ritual calendar, initiation cycle, or seasonal regime.</td>
         </tr>
-        <tr>
+        <tr id="prop-manifestsThroughMedium">
           <td><span class="prop-name">manifestsThroughMedium</span><br><span style="font-size:.75rem;color:var(--ink-soft);">manifests through medium</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">ManifestationEvent → Medium</td>
@@ -140,42 +151,42 @@
       </div>
       <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms for modes in which sacred agents are asserted to manifest. These are descriptive categories that may vary by tradition, lineage, or temporal regime.</p>
       <div class="concept-list">
-        <div class="concept-item">
+        <div class="concept-item" id="concept-mode-auditory">
           <div class="concept-label">Auditory</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-auditory</div>
           <p class="concept-def">Manifestation asserted to occur through sound, voice, or auditory sign.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-mode-divination">
           <div class="concept-label">Divination</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-divination</div>
           <p class="concept-def">Manifestation asserted to occur through divination, oracle, or interpretive instrument.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-mode-dream">
           <div class="concept-label">Dream</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-dream</div>
           <p class="concept-def">Manifestation asserted to occur through dream or dream visitation.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-mode-embodied">
           <div class="concept-label">Embodied</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-embodied</div>
           <p class="concept-def">Manifestation asserted to occur in embodied, physical form.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-mode-possession">
           <div class="concept-label">Possession</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-possession</div>
           <p class="concept-def">Manifestation asserted to occur through possession or mounting of a human medium.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-mode-symbolic">
           <div class="concept-label">Symbolic</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-symbolic</div>
           <p class="concept-def">Manifestation asserted to occur through symbols, signs, or indirect representation.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-mode-territorial">
           <div class="concept-label">Territorial</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-territorial</div>
           <p class="concept-def">Manifestation asserted to be bound to or expressed through a specific place, site, or territory.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-mode-unknown">
           <div class="concept-label">Unknown</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-unknown</div>
           <p class="concept-def">Manifestation mode not known or not recorded in available sources.</p>
@@ -189,32 +200,32 @@
       </div>
       <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms for types of media through which sacred agent manifestation is asserted to occur.</p>
       <div class="concept-list">
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-instrument">
           <div class="concept-label">Instrument</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-instrument</div>
           <p class="concept-def">A musical, divinatory, or ritual instrument serves as the medium.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-object">
           <div class="concept-label">Object</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-object</div>
           <p class="concept-def">A material object (vessel, tool, consecrated item) serves as the medium.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-person">
           <div class="concept-label">Person</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-person</div>
           <p class="concept-def">A human person serves as the medium of manifestation.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-place">
           <div class="concept-label">Place</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-place</div>
           <p class="concept-def">A place, site, natural feature, or territory serves as the medium.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-text">
           <div class="concept-label">Text</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-text</div>
           <p class="concept-def">A text, inscription, verse, or document serves as the medium.</p>
         </div>
-        <div class="concept-item">
+        <div class="concept-item" id="concept-medium-unknown">
           <div class="concept-label">Unknown</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-unknown</div>
           <p class="concept-def">Medium type not known or not recorded in available sources.</p>
