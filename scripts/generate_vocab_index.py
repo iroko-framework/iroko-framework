@@ -7,7 +7,7 @@ class, property, and concept — with a live search filter, type facets,
 module facets, and direct anchor links into the individual browse pages.
 
 Usage:
-    python generate_vocab_index.py                  # writes vocab/iroko-index.html
+    python generate_vocab_index.py                  # writes vocab/iroko-termlist.html
     python generate_vocab_index.py --output PATH    # write to explicit path
     python generate_vocab_index.py --ttl-dir DIR    # read TTLs from DIR
 
@@ -522,7 +522,7 @@ def build_parser() -> argparse.ArgumentParser:
         description="Generate the Iroko Framework full vocabulary index page."
     )
     p.add_argument("--output", "-o", metavar="PATH",
-                   help="Output HTML path (default: vocab/iroko-index.html alongside TTLs)")
+                   help="Output HTML path (default: vocab/iroko-termlist.html alongside TTLs)")
     p.add_argument("--ttl-dir", metavar="DIR",
                    help="Directory containing the .ttl files (default: same dir as this script's parent/vocab/)")
     return p
@@ -554,7 +554,7 @@ def main():
     if args.output:
         out_path = Path(args.output)
     else:
-        out_path = ttl_dir / "iroko-index.html"
+        out_path = ttl_dir / "iroko-termlist.html"
 
     print(f"Reading TTLs from: {ttl_dir}")
     print(f"Writing index to:  {out_path}")

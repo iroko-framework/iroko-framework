@@ -353,7 +353,7 @@ def generate_html(ttl_path, output_path, cfg):
        Change --logo-size to resize the logo on all vocab browse pages.
        Options tried: 60px · 72px · 88px · 100px · 120px
     ─────────────────────────────────────────────────────────────────── */
-    :root {{ --logo-size: 88px; }}
+    :root {{ --logo-size: 256px; }}
 
     .vocab-header         {{ align-items: flex-start; }}
     .vocab-header-logo    {{ padding-top: .2rem; flex-shrink: 0; }}
