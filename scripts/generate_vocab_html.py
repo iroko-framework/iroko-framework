@@ -10,7 +10,9 @@ Usage:
 
 TTLs intentionally excluded (no MODULE_CONFIG entry):
   iroko-align-prov   — reference-only PROV-O alignment; 0 user-facing terms
-  iroko-assertion    — superseded; all content now in iroko-core v2.0.0 (DELETE THIS FILE)
+  iroko-nkisi-patch  — broken syntax, superseded
+  ewe-plants-v0_2_1  — legacy instance data file, not a vocabulary
+  iroko-vocab-v0_2_1 — superseded version
 """
 
 from rdflib import Graph, Namespace, RDF, RDFS, OWL, SKOS, URIRef
@@ -24,14 +26,20 @@ IROKO = Namespace("https://www.irokosociety.org/iroko-framework/core#")
 # ---------------------------------------------------------------------------
 # MODULE_CONFIG
 # Keys = TTL filename stem. tag_cls must match a .tag-* class in iroko-style.css.
-# Ordered by layer: Core → Infrastructure → Domain
 # ---------------------------------------------------------------------------
 MODULE_CONFIG = {
 
     # Layer 0 — Core
     "iroko-core": {
         "title":    "Core Vocabulary",
-        "subtitle": "Cross-module governance infrastructure · v2.0.0",
+        "subtitle": "Cross-module governance infrastructure",
+        "tag_cls":  "tag-core",
+        "tag_text": "Core",
+        "prefix":   "iroko:",
+    },
+    "iroko-core-v2": {
+        "title":    "Core Vocabulary v2.0",
+        "subtitle": "Assertion model · Temporal variation · Narrative spine · Access policies",
         "tag_cls":  "tag-core",
         "tag_text": "Core",
         "prefix":   "iroko:",
@@ -66,13 +74,6 @@ MODULE_CONFIG = {
         "tag_text": "Narrative",
         "prefix":   "narr:",
     },
-    "iroko-manifestation": {
-        "title":    "Manifestation Module — Agent Manifestation Modes",
-        "subtitle": "Manifestation modes and media for sacred agent appearance events",
-        "tag_cls":  "tag-manifestation",
-        "tag_text": "Manifestation",
-        "prefix":   "mani:",
-    },
 
     # Layer 2 — Domain modules
     "iroko-ewe": {
@@ -99,6 +100,13 @@ MODULE_CONFIG = {
     "iroko-ile": {
         "title":    "Ilé Module — Houses, Lineage & Religious Office",
         "subtitle": "Religious institutions, initiation genealogy, and office transmission",
+        "tag_cls":  "tag-lineage",
+        "tag_text": "Lineage",
+        "prefix":   "ile:",
+    },
+    "iroko-ile-v2": {
+        "title":    "Ilé Module v2 — Houses, Lineage & Religious Office",
+        "subtitle": "ile:Authority renamed to ile:ReligiousOffice; aligned with authority module",
         "tag_cls":  "tag-lineage",
         "tag_text": "Lineage",
         "prefix":   "ile:",
@@ -226,7 +234,7 @@ def get_meta(g):
         "uri":      str(uri),
         "desc":     description_en(g, uri),
         "version":  str(g.value(uri, OWL.versionInfo) or "1.0.0"),
-        "issued":   str(g.value(uri, DCTERMS.issued)   or g.value(uri, DCTERMS.created) or ""),
+        "issued":   str(g.value(uri, DCTERMS.issued)   or ""),
         "modified": str(g.value(uri, DCTERMS.modified) or ""),
     }
 
@@ -261,18 +269,11 @@ def get_properties(g):
     return sorted(out, key=lambda x: x["label"])
 
 def get_schemes(g):
-    """
-    Extract SKOS concept schemes and their members.
-
-    Handles both plain skos:Concept instances and typed concept instances
-    (e.g. auth:AuthorityType, ep:ConstraintBasis) that use skos:inScheme
-    but are not declared as skos:Concept. Both patterns are valid SKOS.
-    """
     out = []
     for scheme in g.subjects(RDF.type, SKOS.ConceptScheme):
+        # Try dcterms:description first (used in all Iroko TTLs), then skos:definition
         desc = description_en(g, scheme) or definition_en(g, scheme)
         concepts = []
-        # Use skos:inScheme membership regardless of rdf:type — catches typed instances
         for concept in g.subjects(SKOS.inScheme, scheme):
             concepts.append({
                 "id":         local(str(concept)),
@@ -344,7 +345,7 @@ def generate_html(ttl_path, output_path, cfg):
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v{h(version)}</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -365,7 +366,7 @@ def generate_html(ttl_path, output_path, cfg):
 
   <header class="vocab-header">
     <div class="vocab-header-logo">
-      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
+      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
     </div>
     <div>
       <span class="module-tag {h(tag_cls)}">{h(tag_text)}</span>
