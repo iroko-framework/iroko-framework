@@ -41,14 +41,18 @@
 
 <https://www.irokosociety.org/iroko-framework/authority>
     a owl:Ontology ;
-    dcterms:title "Iroko Authority Module"@en ;
-    dcterms:description "Full governance model for ritual authority, jurisdiction, and authorization basis. Extends the iroko:RitualAuthority stub in Core with jurisdiction modeling, authority type and basis classification, ritual roles, recognition networks, and temporal validity. Used to authorize assertion-level claims across all modules."@en ;
+    dcterms:title "Iroko Framework: Authority Module"@en ;
+    dcterms:description "Governance Layer module. Full governance model for ritual authority, jurisdiction, and authorization basis. Extends the iroko:RitualAuthority stub in Core with jurisdiction modeling, authority type and basis classification, ritual roles, recognition networks, and temporal validity. Used to authorize assertion-level claims across all modules. Commonly paired with iroko-epistemic for constraint-aware archives."@en ;
     dcterms:creator "Iroko Historical Society" ;
     dcterms:issued "2026-02-23"^^xsd:date ;
+    dcterms:modified "2026-02-25"^^xsd:date ;
     owl:versionInfo "1.0.0" ;
+    owl:versionIRI <https://www.irokosociety.org/iroko-framework/authority/1.0.0> ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
     dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
     dcterms:requires <https://www.irokosociety.org/iroko-framework/core> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/agency> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/epistemic> ;
     rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
 
 
@@ -109,6 +113,7 @@ auth:authorityType
     rdfs:comment "Classifies an Authority instance by its structural form."@en ;
     rdfs:domain auth:Authority ;
     rdfs:range auth:AuthorityType ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:authorityBasis
@@ -117,6 +122,7 @@ auth:authorityBasis
     rdfs:comment "What the authority rests on — the epistemic or social foundation for its recognition."@en ;
     rdfs:domain auth:Authority ;
     rdfs:range auth:AuthorityBasis ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:ritualRole
@@ -125,6 +131,7 @@ auth:ritualRole
     rdfs:comment "The functional governance role this authority occupies."@en ;
     rdfs:domain auth:Authority ;
     rdfs:range auth:RitualRole ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:hasJurisdiction
@@ -133,6 +140,7 @@ auth:hasJurisdiction
     rdfs:comment "Links an authority to the domain(s) where it is recognized."@en ;
     rdfs:domain auth:Authority ;
     rdfs:range auth:Jurisdiction ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:recognizedBy
@@ -141,6 +149,7 @@ auth:recognizedBy
     rdfs:comment "Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments."@en ;
     rdfs:domain auth:Authority ;
     rdfs:range auth:Authority ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:jurisdictionLabel
@@ -149,6 +158,7 @@ auth:jurisdictionLabel
     rdfs:comment "Human-readable name for this jurisdiction."@en ;
     rdfs:domain auth:Jurisdiction ;
     rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:jurisdictionType
@@ -157,6 +167,7 @@ auth:jurisdictionType
     rdfs:comment "Short classifer for the jurisdiction type: 'geographic', 'genealogical', 'institutional', 'diasporic', etc."@en ;
     rdfs:domain auth:Jurisdiction ;
     rdfs:range xsd:string ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:validFrom
@@ -165,6 +176,7 @@ auth:validFrom
     rdfs:comment "Date from which the authority's governance standing is recognized or effective."@en ;
     rdfs:domain auth:Authority ;
     rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:validUntil
@@ -173,6 +185,7 @@ auth:validUntil
     rdfs:comment "Date until which the authority's governance standing is recognized. Absence of this property does not imply perpetual validity — use iroko:contestedStatus where appropriate."@en ;
     rdfs:domain auth:Authority ;
     rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:culturalFrame
@@ -181,6 +194,7 @@ auth:culturalFrame
     rdfs:comment "Short label for the tradition frame within which this authority operates. Example: Lucumi, Palo, Espiritismo, Vodou, Candomble. Use iroko:tradition for linked-data-typed values."@en ;
     rdfs:domain auth:Authority ;
     rdfs:range xsd:string ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 auth:authorityNote
@@ -189,6 +203,7 @@ auth:authorityNote
     rdfs:comment "Free-text note on the nature, history, or contested aspects of this authority's standing."@en ;
     rdfs:domain auth:Authority ;
     rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/authority> .
 
 # NOTE: iroko:hasTemporalVariation (Core) may be used on auth:Authority

@@ -5,23 +5,26 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix iroko: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#> .
-@prefix nkisi: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi#> .
-@prefix travay: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay#> .
+@prefix iroko:  <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix nkisi:  <https://www.irokosociety.org/iroko-framework/nkisi#> .
+@prefix travay: <https://www.irokosociety.org/iroko-framework/travay#> .
 
-<https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay>
+<https://www.irokosociety.org/iroko-framework/travay>
     a owl:Ontology ;
     dcterms:title "Iroko Framework: Travay Module (Ritual Processes)"@en ;
-    dcterms:description "Vocabulary for documenting ritual processes in Afro-Atlantic traditions. Covers ceremonies, initiatory rites, and ceremonial sequences. Distinguishes ongoing ceremonial practice from threshold initiation events. Access control is at the property level — the existence and general nature of ceremonies is public; operational sequences and details are restricted."@en ;
+    dcterms:description "Domain module. Vocabulary for documenting ritual processes in Afro-Atlantic traditions. Covers ceremonies, initiatory rites, and ceremonial sequences. Distinguishes ongoing ceremonial practice from threshold initiation events. Access control is at the property level — existence and general nature of ceremonies is public; operational sequences and details are restricted. Use with iroko-authority to document who may perform or authorize a ceremony; iroko-epistemic to model disclosure constraints on operational sequences; iroko-nkisi for the spiritual entities invoked."@en ;
     dcterms:creator "Iroko Historical Society" ;
     dcterms:created "2026-02-18"^^xsd:date ;
-    dcterms:modified "2026-02-18"^^xsd:date ;
+    dcterms:modified "2026-02-25"^^xsd:date ;
     owl:versionInfo "1.0.0" ;
-    owl:versionIRI <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay/1.0.0> ;
+    owl:versionIRI <https://www.irokosociety.org/iroko-framework/travay/1.0.0> ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    rdfs:seeAlso <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay.html> ;
-    rdfs:comment "This module documents ritual processes across Afro-Atlantic traditions. The name Travay (from Haitian Vodou: travay, work) reflects the active nature of ritual engagement. Access control is at the property level throughout this module: the existence of a ceremony is public, its general purpose is public, operational details are restricted. For spiritual entities see iroko-nkisi. For plant use in ceremony see iroko-ewe."@en ;
-    owl:imports <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core> .
+    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
+    owl:imports <https://www.irokosociety.org/iroko-framework/core> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/epistemic> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/nkisi> ;
+    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
 
 # ===================================================================
 # CLASSES
@@ -32,27 +35,27 @@ travay:RitualProcess
     rdfs:subClassOf iroko:SacredEntity ;
     rdfs:label "Ritual Process"@en ;
     rdfs:comment "Base class for any structured ceremonial activity in an Afro-Atlantic tradition. Subclassed into Ceremony (recurring practice) and InitiatoryRite (threshold event). General process type, presiding entity, and tradition are public; operational sequences and instructions are restricted."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:Ceremony
     a owl:Class ;
     rdfs:subClassOf travay:RitualProcess ;
     rdfs:label "Ceremony"@en ;
     rdfs:comment "A recurring ritual event that can be performed multiple times for one or many participants. Examples: bembe, tambor, wemilere, misa espiritual, rogacion de cabeza, ebbo, despojos, velacion. Ceremonies are ongoing practice rather than threshold events."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:InitiatoryRite
     a owl:Class ;
     rdfs:subClassOf travay:RitualProcess ;
     rdfs:label "Initiatory Rite"@en ;
     rdfs:comment "A threshold ceremony that permanently changes the initiant's spiritual status. Examples: kariocha (making Ocha), mano de Orula, abo faca, pinaldo, rayamiento (Palo), kanzo (Vodou), feitura (Candomble). Initiatory rites are non-repeatable transformations. Operational details are initiated-elder access."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:CeremonialSequence
     a owl:Class ;
     rdfs:label "Ceremonial Sequence"@en ;
     rdfs:comment "An ordered set of steps within a RitualProcess. The existence of a sequence and its general structure are documented. Access control is at the property level: sequence step labels are initiated-only; operational content within each step is no-access."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 # ===================================================================
 # PROPERTIES - Core Process Classification
@@ -65,7 +68,7 @@ travay:processType
     rdfs:domain travay:RitualProcess ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:processName
     a owl:DatatypeProperty ;
@@ -74,7 +77,7 @@ travay:processName
     rdfs:domain travay:RitualProcess ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:alternateNames
     a owl:DatatypeProperty ;
@@ -83,7 +86,7 @@ travay:alternateNames
     rdfs:domain travay:RitualProcess ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:purposeDescription
     a owl:DatatypeProperty ;
@@ -92,7 +95,7 @@ travay:purposeDescription
     rdfs:domain travay:RitualProcess ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:presidingEntity
     a owl:ObjectProperty ;
@@ -101,7 +104,7 @@ travay:presidingEntity
     rdfs:domain travay:RitualProcess ;
     rdfs:range nkisi:SpiritualEntity ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:requiredAuthority
     a owl:ObjectProperty ;
@@ -110,7 +113,7 @@ travay:requiredAuthority
     rdfs:domain travay:RitualProcess ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:participantRole
     a owl:ObjectProperty ;
@@ -119,7 +122,7 @@ travay:participantRole
     rdfs:domain travay:RitualProcess ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:typicalDuration
     a owl:DatatypeProperty ;
@@ -128,7 +131,7 @@ travay:typicalDuration
     rdfs:domain travay:RitualProcess ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:timingRequirement
     a owl:ObjectProperty ;
@@ -137,7 +140,7 @@ travay:timingRequirement
     rdfs:domain travay:RitualProcess ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:plantUse
     a owl:ObjectProperty ;
@@ -145,7 +148,7 @@ travay:plantUse
     rdfs:comment "Plants used in this ritual process. Links to ewe:Plant instances. General association is public; specific quantities and combinations are initiated-only. Access: public-unrestricted."@en ;
     rdfs:domain travay:RitualProcess ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:prerequisiteProcess
     a owl:ObjectProperty ;
@@ -154,7 +157,7 @@ travay:prerequisiteProcess
     rdfs:domain travay:RitualProcess ;
     rdfs:range travay:RitualProcess ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 # ===================================================================
 # PROPERTIES - Initiation Specific
@@ -167,7 +170,7 @@ travay:initiationLevel
     rdfs:domain travay:InitiatoryRite ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:conferredTitle
     a owl:DatatypeProperty ;
@@ -176,7 +179,7 @@ travay:conferredTitle
     rdfs:domain travay:InitiatoryRite ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:sponsorRequirement
     a owl:DatatypeProperty ;
@@ -185,7 +188,7 @@ travay:sponsorRequirement
     rdfs:domain travay:InitiatoryRite ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 # ===================================================================
 # PROPERTIES - Restricted
@@ -198,7 +201,7 @@ travay:operationalNotes
     rdfs:domain travay:RitualProcess ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:sequence
     a owl:ObjectProperty ;
@@ -207,7 +210,7 @@ travay:sequence
     rdfs:domain travay:RitualProcess ;
     rdfs:range travay:CeremonialSequence ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:materialRequirements
     a owl:DatatypeProperty ;
@@ -216,7 +219,7 @@ travay:materialRequirements
     rdfs:domain travay:RitualProcess ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:lineageVariations
     a owl:DatatypeProperty ;
@@ -225,7 +228,7 @@ travay:lineageVariations
     rdfs:domain travay:RitualProcess ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:secretComponents
     a owl:DatatypeProperty ;
@@ -234,7 +237,7 @@ travay:secretComponents
     rdfs:domain travay:RitualProcess ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "no-access" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 # ===================================================================
 # PROPERTIES - CeremonialSequence
@@ -247,7 +250,7 @@ travay:sequenceStep
     rdfs:domain travay:CeremonialSequence ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:sequenceStepDescription
     a owl:DatatypeProperty ;
@@ -256,7 +259,7 @@ travay:sequenceStepDescription
     rdfs:domain travay:CeremonialSequence ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:sequenceStepOperational
     a owl:DatatypeProperty ;
@@ -265,7 +268,7 @@ travay:sequenceStepOperational
     rdfs:domain travay:CeremonialSequence ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "no-access" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 travay:sequenceOrder
     a owl:DatatypeProperty ;
@@ -274,7 +277,7 @@ travay:sequenceOrder
     rdfs:domain travay:CeremonialSequence ;
     rdfs:range xsd:integer ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-travay> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/travay> .
 
 # ===================================================================
 # CONCEPT SCHEME: Process Type

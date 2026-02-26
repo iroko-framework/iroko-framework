@@ -11,7 +11,7 @@
 
   <!-- Top bar -->
   <div class="top-bar">
-    <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.0.0</span>
+    <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
     <nav class="top-bar-links">
       <a href="vocab/">Vocabularies</a>
       <a href="data/">Data</a>
@@ -40,42 +40,46 @@
           </div>
 
           <div class="hero-stats">
-            <div class="hstat"><span class="hstat-n">11</span><span class="hstat-label">Modules</span></div>
-            <div class="hstat"><span class="hstat-n">54</span><span class="hstat-label">Classes</span></div>
-            <div class="hstat"><span class="hstat-n">309</span><span class="hstat-label">Properties</span></div>
-            <div class="hstat"><span class="hstat-n">56</span><span class="hstat-label">Schemes</span></div>
-            <div class="hstat"><span class="hstat-n">511</span><span class="hstat-label">Concepts</span></div>
+            <div class="hstat"><span class="hstat-n">16</span><span class="hstat-label">Modules</span></div>
+            <div class="hstat"><span class="hstat-n">91</span><span class="hstat-label">Classes</span></div>
+            <div class="hstat"><span class="hstat-n">379</span><span class="hstat-label">Properties</span></div>
+            <div class="hstat"><span class="hstat-n">69</span><span class="hstat-label">Schemes</span></div>
+            <div class="hstat"><span class="hstat-n">602</span><span class="hstat-label">Concepts</span></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Modules -->
-    <p class="section-label">Vocabulary Modules</p>
+    <!-- ================================================================ -->
+    <!-- TIER 1: FOUNDATION                                               -->
+    <!-- ================================================================ -->
+    <p class="section-label">Foundation</p>
+    <p style="margin:-1rem 0 1.5rem;font-size:.85rem;color:var(--ink-soft);max-width:80ch;">The single module every other module depends on. Defines the core class hierarchy, access level governance (<code>iroko:minimumAccessLevel</code>, six levels), assertion reification, and concept schemes shared across all tiers.</p>
+
 
     <div class="module-grid">
 
       <!-- CORE -->
       <div class="module-row">
         <div class="module-identity">
-          <span class="module-tag tag-core">Infrastructure</span>
+          <span class="module-tag tag-core">Core</span>
           <span class="module-name"><a href="vocab/iroko-core.html">Core Vocabulary</a></span>
           <span class="module-subtitle">Cross-module governance infrastructure</span>
           <div class="module-ns">iroko:</div>
-          <div class="module-version">v1.0.0 · iroko-core.ttl</div>
+          <div class="module-version">v2.0.0 · iroko-core.ttl</div>
         </div>
         <div class="module-detail">
-          <p class="module-desc">Access control, provenance tracking, contested knowledge modeling, relationship assertion reification, sacred media metadata, and semantic linking. Foundation for all other modules.</p>
+          <p class="module-desc">Foundation for all other modules. Access control, provenance tracking, contested knowledge modeling, assertion governance, temporal variation, fieldwork capture, thin narrative spine, and sacred media metadata. v2.0.0 adds Assertion superclass, TemporalVariation, AccessPolicy, FieldworkEvent, and narrative primitives.</p>
           <div class="module-stats">
-            <div class="stat-cell"><span class="stat-n">7</span><span class="stat-label">Classes</span></div>
-            <div class="stat-cell"><span class="stat-n">38</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">16</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">58</span><span class="stat-label">Properties</span></div>
             <div class="stat-cell"><span class="stat-n">10</span><span class="stat-label">Schemes</span></div>
             <div class="stat-cell"><span class="stat-n">96</span><span class="stat-label">Concepts</span></div>
           </div>
           <div class="module-contents">
             <div class="contents-row">
               <span class="contents-key">Classes</span>
-              <span class="contents-val">SacredEntity, SacredSpecimen, LineageKnowledgeGraph, ContestedAuthority, DocumentaryEvidence, RelationshipAssertion, SacredMedia</span>
+              <span class="contents-val">SacredEntity, SacredSpecimen, LineageKnowledgeGraph, ContestedAuthority, DocumentaryEvidence, SacredMedia, Assertion, RelationshipAssertion, RitualAuthority, TemporalVariation, AccessPolicy, FieldworkEvent, Narrative, NarrativeVariant, TextSegment, Commentary</span>
             </div>
           </div>
           <div class="module-actions">
@@ -84,6 +88,176 @@
           </div>
         </div>
       </div>
+
+    </div><!-- /foundation module-grid -->
+
+    <!-- ================================================================ -->
+    <!-- TIER 2: GOVERNANCE LAYER                                         -->
+    <!-- ================================================================ -->
+    <p class="section-label" style="margin-top:3rem;">Governance Layer</p>
+    <p style="margin:-1rem 0 1.5rem;font-size:.85rem;color:var(--ink-soft);max-width:80ch;">Five composable modules that add sovereignty infrastructure to any domain module. None are required — load only what your use case needs. Each declares its cross-dependencies. See <a href="docs/ARCHITECTURE.html">Technical Architecture</a> for module combination patterns and the access-level enforcement contract.</p>
+
+    <div class="module-grid">
+
+      <!-- AGENCY -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-agency">Agency</span>
+          <span class="module-name"><a href="vocab/iroko-agency.html">Agency Module</a></span>
+          <span class="module-subtitle">Sacred agents &amp; ritual events</span>
+          <div class="module-ns">ag:</div>
+          <div class="module-version">v1.0.0 · iroko-agency.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Sovereignty-aligned agency model for sacred systems. Defines sacred agents (including spirits) and ritual events without metaphysical claims. Supports authorization and refusal events, stewardship mandates, and authorization chains. Designed to degrade gracefully — minimal use requires only SacredAgent, Spirit, and RitualEvent.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">10</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">8</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">—</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">—</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">SacredAgent, Spirit, RitualEvent, ManifestationEvent, AuthorizationEvent, RefusalEvent, RitualAction, AuthorizationChain, StewardshipMandate, RitualConsequence</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="vocab/iroko-agency.html">Browse</a>
+            <a class="action-secondary" href="vocab/iroko-agency.ttl">TTL</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUTHORITY -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-authority">Authority</span>
+          <span class="module-name"><a href="vocab/iroko-authority.html">Authority Module</a></span>
+          <span class="module-subtitle">Ritual governance &amp; jurisdiction</span>
+          <div class="module-ns">auth:</div>
+          <div class="module-version">v1.0.0 · iroko-authority.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Full development of the iroko:RitualAuthority stub in Core. Models authority types (lineage, house, cabildo, council, elder, divinatory office), authority basis (succession, consecration, community recognition, divinatory selection), jurisdiction, recognition networks, and temporal validity. Used to authorize assertion-level claims across all modules.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">11</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">19</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">Authority, AuthorityType, AuthorityBasis, RitualRole, Jurisdiction</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="vocab/iroko-authority.html">Browse</a>
+            <a class="action-secondary" href="vocab/iroko-authority.ttl">TTL</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- EPISTEMIC -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-epistemic">Epistemic</span>
+          <span class="module-name"><a href="vocab/iroko-epistemic.html">Epistemic Module</a></span>
+          <span class="module-subtitle">Knowledge gating &amp; disclosure governance</span>
+          <div class="module-ns">ep:</div>
+          <div class="module-version">v1.0.0 · iroko-epistemic.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Optional module for modeling epistemic constraints and disclosure permissions — "knowledge gating" in sovereignty-aware archives. Governs when, to whom, and under what conditions knowledge may be disclosed, withheld, or restricted. Distinguishes what may be known about a resource from who may access it. Complements iroko:accessLevel with finer-grained constraint modeling.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">1</span><span class="stat-label">Scheme</span></div>
+            <div class="stat-cell"><span class="stat-n">8</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">EpistemicConstraint, DisclosurePermission, DisclosureRestriction, SanctionedDisclosure, ConstraintBasis</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="vocab/iroko-epistemic.html">Browse</a>
+            <a class="action-secondary" href="vocab/iroko-epistemic.ttl">TTL</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NARRATIVE -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-narrative">Narrative</span>
+          <span class="module-name"><a href="vocab/iroko-narrative.html">Narrative Module</a></span>
+          <span class="module-subtitle">Sacred story systems &amp; transmission</span>
+          <div class="module-ns">narr:</div>
+          <div class="module-version">v1.0.0 · iroko-narrative.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Full narrative modeling layer built on the thin Core spine. Adds story transmission chains, contested kinship claims as Assertion subtypes, testimonies, fieldnotes, interpretive stances, and typed variant relationships. Covers odu verse traditions, patakí, konté, and equivalent narrative corpora across Afro-Atlantic traditions.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">22</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">35</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">Testimony, Fieldnote, StoryLineage, KinshipClaim, InterpretiveStance</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="vocab/iroko-narrative.html">Browse</a>
+            <a class="action-secondary" href="vocab/iroko-narrative.ttl">TTL</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MANIFESTATION -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-manifestation">Manifestation</span>
+          <span class="module-name"><a href="vocab/iroko-manifestation.html">Manifestation Module</a></span>
+          <span class="module-subtitle">Agent manifestation modes &amp; media</span>
+          <div class="module-ns">mani:</div>
+          <div class="module-version">v1.0.0 · iroko-manifestation.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Optional module for modeling how sacred agents are asserted to manifest — through embodiment, possession, dream, divination, symbolic presence, territorial claim, or auditory sign. Plugs into ag:ManifestationEvent and supports temporal variation where manifestation modes shift by ritual calendar or cycle.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">2</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">14</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">ManifestationMode, Medium, MediumType</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="vocab/iroko-manifestation.html">Browse</a>
+            <a class="action-secondary" href="vocab/iroko-manifestation.ttl">TTL</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /governance-layer module-grid -->
+
+    <!-- ================================================================ -->
+    <!-- TIER 3: DOMAIN MODULES                                           -->
+    <!-- ================================================================ -->
+    <p class="section-label" style="margin-top:3rem;">Domain Modules</p>
+    <p style="margin:-1rem 0 1.5rem;font-size:.85rem;color:var(--ink-soft);max-width:80ch;">Ten tradition-specific vocabularies, each covering a distinct knowledge domain. All depend on iroko-core; each declares <code>dcterms:references</code> to the Governance Layer modules it is designed to work with.</p>
+
+    <div class="module-grid">
 
       <!-- EWÉ -->
       <div class="module-row">
@@ -95,7 +269,7 @@
           <div class="module-version">v1.0.0 · iroko-ewe.ttl</div>
         </div>
         <div class="module-detail">
-          <p class="module-desc">Ritual use governance layered over Darwin Core botanical data. Field-level access control from scientific names (public) through harvest protocols and preparation methods (initiated-only).</p>
+          <p class="module-desc">Ritual use governance layered over Darwin Core botanical data. Field-level access control from scientific names (public) through harvest protocols and preparation methods (initiated-only). Developed from Pierre Verger's ethnobotanical fieldwork corpus as proof-of-concept for the full framework.</p>
           <div class="module-stats">
             <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Classes</span></div>
             <div class="stat-cell"><span class="stat-n">22</span><span class="stat-label">Properties</span></div>
@@ -129,8 +303,8 @@
           <div class="module-stats">
             <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
             <div class="stat-cell"><span class="stat-n">31</span><span class="stat-label">Properties</span></div>
-            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Schemes</span></div>
-            <div class="stat-cell"><span class="stat-n">39</span><span class="stat-label">Concepts</span></div>
+            <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">54</span><span class="stat-label">Concepts</span></div>
           </div>
           <div class="module-contents">
             <div class="contents-row">
@@ -180,7 +354,7 @@
         <div class="module-identity">
           <span class="module-tag tag-lineage">Lineage</span>
           <span class="module-name"><a href="vocab/iroko-ile.html">Ilé Module</a></span>
-          <span class="module-subtitle">Houses, lineage &amp; authority</span>
+          <span class="module-subtitle">Houses, lineage &amp; religious office</span>
           <div class="module-ns">ile:</div>
           <div class="module-version">v1.0.0 · iroko-ile.ttl</div>
         </div>
@@ -195,7 +369,7 @@
           <div class="module-contents">
             <div class="contents-row">
               <span class="contents-key">Classes</span>
-              <span class="contents-val">House, Cabildo, Lineage, InitiationEvent, Authority, SchismEvent</span>
+              <span class="contents-val">House, Cabildo, Lineage, InitiationEvent, ReligiousOffice, SchismEvent</span>
             </div>
           </div>
           <div class="module-actions">
@@ -385,7 +559,7 @@
         </div>
       </div>
 
-    </div><!-- /module-grid -->
+    </div><!-- /domain-modules module-grid -->
 
     <!-- Lower two-column sections -->
     <div class="lower-grid">
@@ -427,26 +601,37 @@
         <h2>Key Features</h2>
         <ul class="feature-list">
           <li><div><strong>Field-Level Access Control</strong> — Six-tier permissions from public-unrestricted through initiated-elder, applied per property</div></li>
-          <li><div><strong>Contested Knowledge</strong> — RelationshipAssertion reification lets multiple lineage perspectives coexist without forcing resolution</div></li>
+          <li><div><strong>Contested Knowledge</strong> — Assertion reification lets multiple lineage perspectives coexist without forcing resolution</div></li>
           <li><div><strong>Provenance Tracking</strong> — Oral transmission chains, fieldwork context, epistemic type transparency throughout</div></li>
+          <li><div><strong>Sovereign Agency</strong> — Sacred agents, refusal events, and stewardship mandates model community authority without metaphysical claims</div></li>
           <li><div><strong>Postcustodial Design</strong> — Communities retain authority; the archive serves the tradition, not the institution</div></li>
           <li><div><strong>Semantic Interoperability</strong> — Integrates Darwin Core, SKOS, Dublin Core, PROV-O, FOAF, schema.org, OntoLex-Lemon</div></li>
           <li><div><strong>Standards-Aligned</strong> — W3C RDF/OWL/SKOS, Linked Open Data best practices</div></li>
         </ul>
 
         <h2 style="margin-top:2rem;">Download RDF</h2>
+        <p style="font-size:.8rem;color:var(--ink-soft);margin-bottom:.75rem;">Infrastructure</p>
         <ul class="dl-list">
-          <li><a class="dl-name" href="vocab/iroko-core.ttl">iroko-core.ttl</a><span class="dl-meta">846 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-ewe.ttl">iroko-ewe.ttl</a><span class="dl-meta">482 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-nkisi.ttl">iroko-nkisi.ttl</a><span class="dl-meta">490 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-travay.ttl">iroko-travay.ttl</a><span class="dl-meta">455 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-ile.ttl">iroko-ile.ttl</a><span class="dl-meta">647 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-marca.ttl">iroko-marca.ttl</a><span class="dl-meta">466 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-ekpe.ttl">iroko-ekpe.ttl</a><span class="dl-meta">467 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-veve.ttl">iroko-veve.ttl</a><span class="dl-meta">465 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-ngoma.ttl">iroko-ngoma.ttl</a><span class="dl-meta">435 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-sankofa.ttl">iroko-sankofa.ttl</a><span class="dl-meta">380 triples</span></li>
-          <li><a class="dl-name" href="vocab/iroko-qal.ttl">iroko-qal.ttl</a><span class="dl-meta">426 triples</span></li>
+          <li><a class="dl-name" href="vocab/iroko-core.ttl">iroko-core.ttl</a><span class="dl-meta">v2.0.0 · 1,344 lines</span></li>
+          <li><a class="dl-name" href="vocab/iroko-agency.ttl">iroko-agency.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-authority.ttl">iroko-authority.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-epistemic.ttl">iroko-epistemic.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-narrative.ttl">iroko-narrative.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-manifestation.ttl">iroko-manifestation.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-align-prov.ttl">iroko-align-prov.ttl</a><span class="dl-meta">PROV-O alignment · reference only</span></li>
+        </ul>
+        <p style="font-size:.8rem;color:var(--ink-soft);margin:.75rem 0 .75rem;">Domain</p>
+        <ul class="dl-list">
+          <li><a class="dl-name" href="vocab/iroko-ewe.ttl">iroko-ewe.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-nkisi.ttl">iroko-nkisi.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-travay.ttl">iroko-travay.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-ile.ttl">iroko-ile.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-marca.ttl">iroko-marca.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-ekpe.ttl">iroko-ekpe.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-veve.ttl">iroko-veve.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-ngoma.ttl">iroko-ngoma.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-sankofa.ttl">iroko-sankofa.ttl</a><span class="dl-meta">v1.0.0</span></li>
+          <li><a class="dl-name" href="vocab/iroko-qal.ttl">iroko-qal.ttl</a><span class="dl-meta">v1.0.0</span></li>
         </ul>
       </div>
 
@@ -456,8 +641,7 @@
     <div class="citation-block">
       <h2>Citation</h2>
       <pre class="citation-code">Iroko Historical Society. (2026). Iroko Framework: Semantic Vocabularies for
-Afro-Atlantic Sacred Knowledge Systems. Version 1.0.0.
-https://iroko-framework.github.io/iroko-framework/
+Afro-Atlantic Sacred Knowledge Systems. Version 2.0.0.
 https://www.irokosociety.org/iroko-framework</pre>
     </div>
 
@@ -471,10 +655,11 @@ https://www.irokosociety.org/iroko-framework</pre>
         <a href="https://www.irokosociety.org">irokosociety.org</a>
         <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
         <a href="vocab/">Vocabularies</a>
-        <a href="mailto:archives@irokosociety.org">Contact</a>
+        <a href="/cdn-cgi/l/email-protection#96f7e4f5feffe0f3e5d6ffe4f9fdf9e5f9f5fff3e2efb8f9e4f1">Contact</a>
       </div>
     </footer>
 
   </div><!-- /page-wrap -->
+
 </body>
 </html>

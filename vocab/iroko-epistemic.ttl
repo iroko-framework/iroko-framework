@@ -30,14 +30,17 @@
 
 <https://www.irokosociety.org/iroko-framework/epistemic>
     a owl:Ontology ;
-    dcterms:title "Iroko Epistemic Module"@en ;
-    dcterms:description "Optional module for modeling epistemic constraints and disclosure permissions. Enables sovereignty-aware archives to express conditions under which knowledge may be disclosed, withheld, transformed, or restricted without encoding the restricted knowledge itself."@en ;
+    dcterms:title "Iroko Framework: Epistemic Module"@en ;
+    dcterms:description "Governance Layer module. Optional module for modeling epistemic constraints and disclosure permissions — knowledge gating in sovereignty-aware archives. Enables archives to express conditions under which knowledge may be disclosed, withheld, transformed, or restricted without encoding the restricted knowledge itself. Distinct from iroko:accessLevel (who may access) — epistemic constraints govern the conditions and basis of disclosure. Commonly paired with iroko-authority."@en ;
     dcterms:creator "Iroko Historical Society" ;
     dcterms:issued "2026-02-23"^^xsd:date ;
+    dcterms:modified "2026-02-25"^^xsd:date ;
     owl:versionInfo "1.0.0" ;
+    owl:versionIRI <https://www.irokosociety.org/iroko-framework/epistemic/1.0.0> ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
     dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
     dcterms:requires <https://www.irokosociety.org/iroko-framework/core> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
     rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
 
 
@@ -89,6 +92,7 @@ ep:hasEpistemicConstraint
     rdfs:label "has epistemic constraint"@en ;
     rdfs:comment "Associates a record, assertion, access policy, or any resource with an EpistemicConstraint. The constraint governs what may be known about the resource, not merely who may access it — these are related but distinct."@en ;
     rdfs:range ep:EpistemicConstraint ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
 
 ep:hasConstraintBasis
@@ -97,6 +101,7 @@ ep:hasConstraintBasis
     rdfs:comment "Associates an EpistemicConstraint with a ConstraintBasis concept classifying its foundation."@en ;
     rdfs:domain ep:EpistemicConstraint ;
     rdfs:range ep:ConstraintBasis ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
 
 ep:constraintSanctionedBy
@@ -105,6 +110,7 @@ ep:constraintSanctionedBy
     rdfs:comment "Links a SanctionedDisclosure to the auth:Authority that must sanction the disclosure."@en ;
     rdfs:domain ep:SanctionedDisclosure ;
     rdfs:range iroko:RitualAuthority ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
 
 ep:constraintNote
@@ -113,6 +119,7 @@ ep:constraintNote
     rdfs:comment "Free-text description of the epistemic constraint — what it restricts or permits and why."@en ;
     rdfs:domain ep:EpistemicConstraint ;
     rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
 
 ep:constraintCondition
@@ -121,6 +128,7 @@ ep:constraintCondition
     rdfs:comment "Explicit condition statement for this constraint. May reference initiation levels, temporal variation, community mandate, or ritual state. Complements iroko:hasTemporalVariation for non-temporal conditions."@en ;
     rdfs:domain ep:EpistemicConstraint ;
     rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
 
 # NOTE: Use iroko:hasTemporalVariation (Core) on EpistemicConstraint

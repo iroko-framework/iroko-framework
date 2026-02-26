@@ -5,22 +5,25 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix iroko: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#> .
-@prefix nkisi: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi#> .
+@prefix iroko:  <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix nkisi:  <https://www.irokosociety.org/iroko-framework/nkisi#> .
 
-<https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi>
+<https://www.irokosociety.org/iroko-framework/nkisi>
     a owl:Ontology ;
     dcterms:title "Iroko Framework: Nkisi Module (Spiritual Entities)"@en ;
-    dcterms:description "Vocabulary for documenting spiritual entities across Afro-Atlantic traditions. Covers orisa, lwa, mpungo/inquice, vodun, egun, ajogun, nature spirits, Espiritismo guides and commissions, and Ori. Supports path/camino modeling, shrine documentation, and syncretic identity tracking."@en ;
+    dcterms:description "Domain module. Vocabulary for documenting spiritual entities across Afro-Atlantic traditions. Covers orisa, lwa, mpungo/inquice, vodun, egun, ajogun, nature spirits, Espiritismo guides and commissions, and Ori. Supports path/camino modeling, shrine documentation, and syncretic identity tracking. Use with iroko-agency for manifestation events; iroko-authority to govern who may assert claims about entity identity, kinship, or caminos; iroko-narrative for patakí, odù verse attribution, and contested kinship claims."@en ;
     dcterms:creator "Iroko Historical Society" ;
     dcterms:created "2026-02-18"^^xsd:date ;
-    dcterms:modified "2026-02-18"^^xsd:date ;
+    dcterms:modified "2026-02-25"^^xsd:date ;
     owl:versionInfo "1.0.0" ;
-    owl:versionIRI <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi/1.0.0> ;
+    owl:versionIRI <https://www.irokosociety.org/iroko-framework/nkisi/1.0.0> ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    rdfs:seeAlso <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi.html> ;
-    rdfs:comment "This module documents spiritual entities in Afro-Atlantic traditions. Entity type, domain, paths/caminos, offerings, and shrine records are modeled here. Syncretic Catholic saint correspondences are tracked via nkisi:syncreticIdentity to prevent santos from being lost in classification. For access governance infrastructure see iroko-core. For plant associations see iroko-ewe."@en ;
-    owl:imports <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core> .
+    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
+    owl:imports <https://www.irokosociety.org/iroko-framework/core> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/agency> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/narrative> ;
+    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
 
 # ===================================================================
 # CLASSES
@@ -31,26 +34,26 @@ nkisi:SpiritualEntity
     rdfs:subClassOf iroko:SacredEntity ;
     rdfs:label "Spiritual Entity"@en ;
     rdfs:comment "A divine power, ancestral spirit, nature spirit, adversarial force, or personal essence recognized and engaged within an Afro-Atlantic tradition. Includes orisa, lwa, mpungo/inquice, vodun, egun, ajogun, Ori, Espiritismo guides and commissions, and spirits of place and element."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:Path
     a owl:Class ;
     rdfs:label "Path"@en ;
     rdfs:comment "A distinct manifestation, aspect, or camino of a spiritual entity. Paths share the parent entity's fundamental nature but have distinct domains, temperaments, colors, numbers, offerings, and sometimes distinct syncretic identities. Example: Oya Yansa (fierce warrior aspect) vs. Oya Igbale (governess of the cemetery). Paths are not separate entities but distinct faces of the same power."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:Offering
     a owl:Class ;
     rdfs:label "Offering"@en ;
     rdfs:comment "A material or symbolic offering given to a spiritual entity. Includes food, drink, objects, colors, animals, and actions. General offering categories are public; specific quantities, combinations, and preparation details are access-restricted."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:Shrine
     a owl:Class ;
     rdfs:subClassOf iroko:SacredSpecimen ;
     rdfs:label "Shrine"@en ;
     rdfs:comment "A consecrated physical space or vessel housing a spiritual entity. Includes ile (houses), soperas, nganga, peristyle altars, and boveda. Shrine records link physical location and custody to the entity and tradition. Operational shrine details are access-restricted."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 # ===================================================================
 # PROPERTIES - Entity Classification
@@ -63,7 +66,7 @@ nkisi:entityType
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:commissionType
     a owl:ObjectProperty ;
@@ -72,7 +75,7 @@ nkisi:commissionType
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:domain
     a owl:DatatypeProperty ;
@@ -81,7 +84,7 @@ nkisi:domain
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:syncreticIdentity
     a owl:DatatypeProperty ;
@@ -90,7 +93,7 @@ nkisi:syncreticIdentity
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:traditionalName
     a owl:DatatypeProperty ;
@@ -99,7 +102,7 @@ nkisi:traditionalName
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:alternateNames
     a owl:DatatypeProperty ;
@@ -108,7 +111,7 @@ nkisi:alternateNames
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:temperament
     a owl:ObjectProperty ;
@@ -117,7 +120,7 @@ nkisi:temperament
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 # ===================================================================
 # PROPERTIES - Correspondences (Public)
@@ -130,7 +133,7 @@ nkisi:color
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:number
     a owl:DatatypeProperty ;
@@ -139,7 +142,7 @@ nkisi:number
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:day
     a owl:DatatypeProperty ;
@@ -148,7 +151,7 @@ nkisi:day
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:element
     a owl:DatatypeProperty ;
@@ -157,7 +160,7 @@ nkisi:element
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:offeringGeneral
     a owl:ObjectProperty ;
@@ -166,7 +169,7 @@ nkisi:offeringGeneral
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:plantAssociation
     a owl:ObjectProperty ;
@@ -174,7 +177,7 @@ nkisi:plantAssociation
     rdfs:comment "Plants associated with this entity. Links to ewe:Plant instances. Inverse of ewe:entityAssociation. Access: public-unrestricted."@en ;
     rdfs:domain nkisi:SpiritualEntity ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 # ===================================================================
 # PROPERTIES - Restricted Correspondences
@@ -187,7 +190,7 @@ nkisi:offeringDetailed
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:taboo
     a owl:DatatypeProperty ;
@@ -196,7 +199,7 @@ nkisi:taboo
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:salutation
     a owl:DatatypeProperty ;
@@ -205,7 +208,7 @@ nkisi:salutation
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:invocationText
     a owl:DatatypeProperty ;
@@ -214,7 +217,7 @@ nkisi:invocationText
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "no-access" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:secretName
     a owl:DatatypeProperty ;
@@ -223,7 +226,7 @@ nkisi:secretName
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "no-access" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 # ===================================================================
 # PROPERTIES - Relational
@@ -236,7 +239,7 @@ nkisi:path
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range nkisi:Path ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:relatedEntity
     a owl:ObjectProperty ;
@@ -245,7 +248,7 @@ nkisi:relatedEntity
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range nkisi:SpiritualEntity ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:shrine
     a owl:ObjectProperty ;
@@ -254,7 +257,7 @@ nkisi:shrine
     rdfs:domain nkisi:SpiritualEntity ;
     rdfs:range nkisi:Shrine ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 # ===================================================================
 # PROPERTIES - Path Class
@@ -266,7 +269,8 @@ nkisi:parentEntity
     rdfs:comment "The SpiritualEntity of which this Path is an aspect or manifestation."@en ;
     rdfs:domain nkisi:Path ;
     rdfs:range nkisi:SpiritualEntity ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:pathName
     a owl:DatatypeProperty ;
@@ -275,7 +279,7 @@ nkisi:pathName
     rdfs:domain nkisi:Path ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:pathDomain
     a owl:DatatypeProperty ;
@@ -284,7 +288,7 @@ nkisi:pathDomain
     rdfs:domain nkisi:Path ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:pathColor
     a owl:DatatypeProperty ;
@@ -293,7 +297,7 @@ nkisi:pathColor
     rdfs:domain nkisi:Path ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:pathNumber
     a owl:DatatypeProperty ;
@@ -302,7 +306,7 @@ nkisi:pathNumber
     rdfs:domain nkisi:Path ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:pathTemperament
     a owl:ObjectProperty ;
@@ -311,7 +315,7 @@ nkisi:pathTemperament
     rdfs:domain nkisi:Path ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:pathSyncreticIdentity
     a owl:DatatypeProperty ;
@@ -320,7 +324,7 @@ nkisi:pathSyncreticIdentity
     rdfs:domain nkisi:Path ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:pathOfferingDetailed
     a owl:DatatypeProperty ;
@@ -329,7 +333,7 @@ nkisi:pathOfferingDetailed
     rdfs:domain nkisi:Path ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:pathTaboo
     a owl:DatatypeProperty ;
@@ -338,7 +342,7 @@ nkisi:pathTaboo
     rdfs:domain nkisi:Path ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 nkisi:lineageNotes
     a owl:DatatypeProperty ;
@@ -347,7 +351,7 @@ nkisi:lineageNotes
     rdfs:domain nkisi:Path ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-nkisi> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/nkisi> .
 
 # ===================================================================
 # CONCEPT SCHEME: Entity Type

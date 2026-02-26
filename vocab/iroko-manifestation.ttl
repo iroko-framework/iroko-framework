@@ -1,187 +1,210 @@
-@prefix iroko:    <https://ontology.irokosociety.org/core/> .
-@prefix iroko-ag: <https://ontology.irokosociety.org/agency/> .
-@prefix iroko-ma: <https://ontology.irokosociety.org/manifestation/> .
-@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
-@prefix owl:     <http://www.w3.org/2002/07/owl#> .
-@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+# -*- coding: utf-8 -*-
+# ===================================================================
+# IROKO FRAMEWORK — MANIFESTATION MODULE
+# Agent Manifestation Modes and Media
+# Namespace: https://www.irokosociety.org/iroko-framework/manifestation#
+# Version: 1.0.0 | February 2026
+# Layer: Governance Layer (Infrastructure)
+# Dependencies: iroko-core, iroko-agency
+# ===================================================================
 
-<https://ontology.irokosociety.org/manifestation/>
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms:<http://purl.org/dc/terms/> .
+@prefix iroko:  <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix ag:     <https://www.irokosociety.org/iroko-framework/agency#> .
+@prefix mani:   <https://www.irokosociety.org/iroko-framework/manifestation#> .
+
+<https://www.irokosociety.org/iroko-framework/manifestation>
     a owl:Ontology ;
-    rdfs:label "Iroko manifestation module"@en ;
-    dcterms:description "Optional module for modeling manifestation modes and media. Designed to plug into iroko-ag:ManifestationEvent and to reuse iroko:TemporalVariation where temporal regimes matter."@en ;
-    dcterms:creator "Iroko Historical Society"@en ;
+    dcterms:title "Iroko Framework: Manifestation Module"@en ;
+    dcterms:description "Governance Layer module. Optional module for modeling how sacred agents are asserted to manifest — through embodied presence, possession, dream, divination, symbolic representation, territorial claim, auditory sign, or unknown mode. Designed to plug into ag:ManifestationEvent. Supports iroko:TemporalVariation where manifestation modes shift by ritual calendar or initiation cycle. Use with iroko-narrative to link manifestation events to the narrative records in which they are described, and iroko-authority to document which lineage context authorizes the assertion."@en ;
+    dcterms:creator "Iroko Historical Society" ;
     dcterms:issued "2026-02-22"^^xsd:date ;
-    dcterms:license <https://ontology.irokosociety.org/policy/terms-of-use> ;
-    dcterms:isPartOf <https://ontology.irokosociety.org/> ;
-    dcterms:requires <https://ontology.irokosociety.org/core/> ;
-    dcterms:requires <https://ontology.irokosociety.org/agency/> .
+    dcterms:modified "2026-02-25"^^xsd:date ;
+    owl:versionInfo "1.0.0" ;
+    owl:versionIRI <https://www.irokosociety.org/iroko-framework/manifestation/1.0.0> ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
+    dcterms:requires <https://www.irokosociety.org/iroko-framework/core> ;
+    dcterms:requires <https://www.irokosociety.org/iroko-framework/agency> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/narrative> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
+    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
 
 # ===================================================================
 # CLASSES
 # ===================================================================
 
-iroko-ma:ManifestationMode
+mani:ManifestationMode
     a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:label "Manifestation Mode"@en ;
-    rdfs:comment "A SKOS concept describing how a sacred agent is asserted to manifest (embodied, possession, dream, divination, symbolic, territorial, auditory, and similar modes)."@en .
+    rdfs:comment "A SKOS concept describing how a sacred agent is asserted to manifest. Values from mani:ManifestationModeScheme. These are descriptive, not metaphysical — they record what is asserted within a tradition's own terms."@en .
 
-iroko-ma:ManifestationModeScheme
-    a skos:ConceptScheme ;
-    rdfs:label "Manifestation Modes"@en ;
-    dcterms:description "Controlled terms for manifestation modes. These are descriptive categories and may vary by context, lineage, or temporal regime."@en ;
-    skos:hasTopConcept
-        iroko-ma:mode-embodied,
-        iroko-ma:mode-possession,
-        iroko-ma:mode-dream,
-        iroko-ma:mode-divination,
-        iroko-ma:mode-symbolic,
-        iroko-ma:mode-territorial,
-        iroko-ma:mode-auditory,
-        iroko-ma:mode-unknown .
-
-iroko-ma:Medium
+mani:Medium
     a owl:Class ;
     rdfs:label "Medium"@en ;
-    rdfs:comment "A medium through which manifestation is asserted to occur, such as a person, object, place, text, or instrument."@en .
+    rdfs:comment "A person, object, place, text, or instrument through which manifestation is asserted to occur."@en .
 
-iroko-ma:MediumType
+mani:MediumType
     a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:label "Medium Type"@en ;
-    rdfs:comment "A SKOS concept categorizing types of media used in manifestation assertions."@en .
-
-iroko-ma:MediumTypeScheme
-    a skos:ConceptScheme ;
-    rdfs:label "Medium Types"@en ;
-    dcterms:description "Controlled terms for medium types."@en ;
-    skos:hasTopConcept
-        iroko-ma:medium-person,
-        iroko-ma:medium-object,
-        iroko-ma:medium-place,
-        iroko-ma:medium-text,
-        iroko-ma:medium-instrument,
-        iroko-ma:medium-unknown .
+    rdfs:comment "A SKOS concept categorizing types of media used in manifestation assertions. Values from mani:MediumTypeScheme."@en .
 
 # ===================================================================
 # PROPERTIES
 # ===================================================================
 
-iroko-ma:hasManifestationMode
+mani:hasManifestationMode
     a owl:ObjectProperty ;
     rdfs:label "has manifestation mode"@en ;
-    rdfs:comment "Associates a ManifestationEvent or assertion node with a ManifestationMode concept."@en ;
-    rdfs:range iroko-ma:ManifestationMode .
+    rdfs:comment "Associates a ag:ManifestationEvent or iroko:Assertion node with a mani:ManifestationMode concept describing the asserted mode of appearance."@en ;
+    rdfs:domain ag:ManifestationEvent ;
+    rdfs:range mani:ManifestationMode ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
-iroko-ma:manifestsThroughMedium
+mani:manifestsThroughMedium
     a owl:ObjectProperty ;
     rdfs:label "manifests through medium"@en ;
-    rdfs:comment "Associates a ManifestationEvent with a Medium through which manifestation is asserted to occur."@en ;
-    rdfs:range iroko-ma:Medium .
+    rdfs:comment "Associates a ag:ManifestationEvent with the mani:Medium through which manifestation is asserted to occur."@en ;
+    rdfs:domain ag:ManifestationEvent ;
+    rdfs:range mani:Medium ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-iroko-ma:hasMediumType
+mani:hasMediumType
     a owl:ObjectProperty ;
     rdfs:label "has medium type"@en ;
-    rdfs:comment "Associates a Medium with a MediumType concept."@en ;
-    rdfs:range iroko-ma:MediumType .
+    rdfs:comment "Associates a mani:Medium with a mani:MediumType concept."@en ;
+    rdfs:domain mani:Medium ;
+    rdfs:range mani:MediumType ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
-# Cross-cutting temporal qualifier
-iroko-ma:hasTemporalVariation
+mani:hasTemporalVariation
     a owl:ObjectProperty ;
     rdfs:label "has temporal variation"@en ;
-    rdfs:comment "Reuses the core TemporalVariation scheme to qualify manifestation modes, media, or events where temporal regime matters."@en ;
-    rdfs:range iroko:TemporalVariation .
+    rdfs:comment "Qualifies a manifestation mode, medium, or event with an iroko:TemporalVariation node, for cases where the mode of manifestation shifts by ritual calendar, initiation cycle, or seasonal regime."@en ;
+    rdfs:range iroko:TemporalVariation ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
 # ===================================================================
-# CONCEPTS: Manifestation modes (starter set)
+# CONCEPT SCHEME: Manifestation Modes
 # ===================================================================
 
-iroko-ma:mode-embodied
-    a iroko-ma:ManifestationMode ;
-    skos:inScheme iroko-ma:ManifestationModeScheme ;
+mani:ManifestationModeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Manifestation Modes"@en ;
+    dcterms:description "Controlled terms for modes in which sacred agents are asserted to manifest. These are descriptive categories that may vary by tradition, lineage, or temporal regime."@en ;
+    skos:hasTopConcept
+        mani:mode-embodied,
+        mani:mode-possession,
+        mani:mode-dream,
+        mani:mode-divination,
+        mani:mode-symbolic,
+        mani:mode-territorial,
+        mani:mode-auditory,
+        mani:mode-unknown .
+
+mani:mode-embodied
+    a mani:ManifestationMode ;
+    skos:inScheme mani:ManifestationModeScheme ;
     skos:prefLabel "Embodied"@en ;
-    skos:definition "Manifestation asserted to occur in embodied form."@en .
+    skos:definition "Manifestation asserted to occur in embodied, physical form."@en .
 
-iroko-ma:mode-possession
-    a iroko-ma:ManifestationMode ;
-    skos:inScheme iroko-ma:ManifestationModeScheme ;
+mani:mode-possession
+    a mani:ManifestationMode ;
+    skos:inScheme mani:ManifestationModeScheme ;
     skos:prefLabel "Possession"@en ;
-    skos:definition "Manifestation asserted to occur through possession or mounting of a medium."@en .
+    skos:definition "Manifestation asserted to occur through possession or mounting of a human medium."@en .
 
-iroko-ma:mode-dream
-    a iroko-ma:ManifestationMode ;
-    skos:inScheme iroko-ma:ManifestationModeScheme ;
+mani:mode-dream
+    a mani:ManifestationMode ;
+    skos:inScheme mani:ManifestationModeScheme ;
     skos:prefLabel "Dream"@en ;
-    skos:definition "Manifestation asserted to occur through dreams or dream visitation."@en .
+    skos:definition "Manifestation asserted to occur through dream or dream visitation."@en .
 
-iroko-ma:mode-divination
-    a iroko-ma:ManifestationMode ;
-    skos:inScheme iroko-ma:ManifestationModeScheme ;
+mani:mode-divination
+    a mani:ManifestationMode ;
+    skos:inScheme mani:ManifestationModeScheme ;
     skos:prefLabel "Divination"@en ;
-    skos:definition "Manifestation asserted to occur through divination, oracle, or interpretive instruments."@en .
+    skos:definition "Manifestation asserted to occur through divination, oracle, or interpretive instrument."@en .
 
-iroko-ma:mode-symbolic
-    a iroko-ma:ManifestationMode ;
-    skos:inScheme iroko-ma:ManifestationModeScheme ;
+mani:mode-symbolic
+    a mani:ManifestationMode ;
+    skos:inScheme mani:ManifestationModeScheme ;
     skos:prefLabel "Symbolic"@en ;
     skos:definition "Manifestation asserted to occur through symbols, signs, or indirect representation."@en .
 
-iroko-ma:mode-territorial
-    a iroko-ma:ManifestationMode ;
-    skos:inScheme iroko-ma:ManifestationModeScheme ;
+mani:mode-territorial
+    a mani:ManifestationMode ;
+    skos:inScheme mani:ManifestationModeScheme ;
     skos:prefLabel "Territorial"@en ;
-    skos:definition "Manifestation asserted to be bound to or expressed through a place or territory."@en .
+    skos:definition "Manifestation asserted to be bound to or expressed through a specific place, site, or territory."@en .
 
-iroko-ma:mode-auditory
-    a iroko-ma:ManifestationMode ;
-    skos:inScheme iroko-ma:ManifestationModeScheme ;
+mani:mode-auditory
+    a mani:ManifestationMode ;
+    skos:inScheme mani:ManifestationModeScheme ;
     skos:prefLabel "Auditory"@en ;
-    skos:definition "Manifestation asserted to occur through sound, voice, or hearing."@en .
+    skos:definition "Manifestation asserted to occur through sound, voice, or auditory sign."@en .
 
-iroko-ma:mode-unknown
-    a iroko-ma:ManifestationMode ;
-    skos:inScheme iroko-ma:ManifestationModeScheme ;
+mani:mode-unknown
+    a mani:ManifestationMode ;
+    skos:inScheme mani:ManifestationModeScheme ;
     skos:prefLabel "Unknown"@en ;
-    skos:definition "Manifestation mode not known or not recorded."@en .
+    skos:definition "Manifestation mode not known or not recorded in available sources."@en .
 
 # ===================================================================
-# CONCEPTS: Medium types (starter set)
+# CONCEPT SCHEME: Medium Types
 # ===================================================================
 
-iroko-ma:medium-person
-    a iroko-ma:MediumType ;
-    skos:inScheme iroko-ma:MediumTypeScheme ;
+mani:MediumTypeScheme
+    a skos:ConceptScheme ;
+    rdfs:label "Medium Types"@en ;
+    dcterms:description "Controlled terms for types of media through which sacred agent manifestation is asserted to occur."@en ;
+    skos:hasTopConcept
+        mani:medium-person,
+        mani:medium-object,
+        mani:medium-place,
+        mani:medium-text,
+        mani:medium-instrument,
+        mani:medium-unknown .
+
+mani:medium-person
+    a mani:MediumType ;
+    skos:inScheme mani:MediumTypeScheme ;
     skos:prefLabel "Person"@en ;
-    skos:definition "A human person serves as the medium."@en .
+    skos:definition "A human person serves as the medium of manifestation."@en .
 
-iroko-ma:medium-object
-    a iroko-ma:MediumType ;
-    skos:inScheme iroko-ma:MediumTypeScheme ;
+mani:medium-object
+    a mani:MediumType ;
+    skos:inScheme mani:MediumTypeScheme ;
     skos:prefLabel "Object"@en ;
-    skos:definition "A material object serves as the medium."@en .
+    skos:definition "A material object (vessel, tool, consecrated item) serves as the medium."@en .
 
-iroko-ma:medium-place
-    a iroko-ma:MediumType ;
-    skos:inScheme iroko-ma:MediumTypeScheme ;
+mani:medium-place
+    a mani:MediumType ;
+    skos:inScheme mani:MediumTypeScheme ;
     skos:prefLabel "Place"@en ;
-    skos:definition "A place, site, or territory serves as the medium."@en .
+    skos:definition "A place, site, natural feature, or territory serves as the medium."@en .
 
-iroko-ma:medium-text
-    a iroko-ma:MediumType ;
-    skos:inScheme iroko-ma:MediumTypeScheme ;
+mani:medium-text
+    a mani:MediumType ;
+    skos:inScheme mani:MediumTypeScheme ;
     skos:prefLabel "Text"@en ;
-    skos:definition "A text, inscription, or document serves as the medium."@en .
+    skos:definition "A text, inscription, verse, or document serves as the medium."@en .
 
-iroko-ma:medium-instrument
-    a iroko-ma:MediumType ;
-    skos:inScheme iroko-ma:MediumTypeScheme ;
+mani:medium-instrument
+    a mani:MediumType ;
+    skos:inScheme mani:MediumTypeScheme ;
     skos:prefLabel "Instrument"@en ;
-    skos:definition "An instrument (musical, divinatory, or ritual) serves as the medium."@en .
+    skos:definition "A musical, divinatory, or ritual instrument serves as the medium."@en .
 
-iroko-ma:medium-unknown
-    a iroko-ma:MediumType ;
-    skos:inScheme iroko-ma:MediumTypeScheme ;
+mani:medium-unknown
+    a mani:MediumType ;
+    skos:inScheme mani:MediumTypeScheme ;
     skos:prefLabel "Unknown"@en ;
-    skos:definition "Medium type not known or not recorded."@en .
+    skos:definition "Medium type not known or not recorded in available sources."@en .

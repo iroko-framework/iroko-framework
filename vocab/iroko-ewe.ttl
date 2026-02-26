@@ -7,22 +7,24 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix dwc: <http://rs.tdwg.org/dwc/terms/> .
 @prefix schema: <http://schema.org/> .
-@prefix iroko: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#> .
-@prefix ewe: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe#> .
+@prefix iroko: <https://www.irokosociety.org/iroko-framework/core#> .
+@prefix ewe:   <https://www.irokosociety.org/iroko-framework/ewe#> .
 
-<https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe>
+<https://www.irokosociety.org/iroko-framework/ewe>
     a owl:Ontology ;
     dcterms:title "Iroko Framework: Ewe Module (Sacred Plant Knowledge)"@en ;
-    dcterms:description "Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance over Darwin Core botanical data. Focus on medicinal and ritual applications, harvest protocols, preparation methods, and access control for operational knowledge."@en ;
+    dcterms:description "Domain module. Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance over Darwin Core botanical data. Focus on medicinal and ritual applications, harvest protocols, preparation methods, and access control for operational knowledge. Use with iroko-epistemic to model harvest and preparation constraints; with iroko-travay for ceremony context in which plants are deployed."@en ;
     dcterms:creator "Iroko Historical Society" ;
     dcterms:created "2026-02-17"^^xsd:date ;
-    dcterms:modified "2026-02-18"^^xsd:date ;
+    dcterms:modified "2026-02-25"^^xsd:date ;
     owl:versionInfo "1.0.0" ;
-    owl:versionIRI <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe/1.0.0> ;
+    owl:versionIRI <https://www.irokosociety.org/iroko-framework/ewe/1.0.0> ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    rdfs:seeAlso <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe.html> ;
-    rdfs:comment "This module extends Darwin Core for botanical description with Afro-Atlantic ritual and spiritual dimensions. Use Darwin Core for scientific classification and the Ewe module for sacred knowledge governance. Integration pattern: dwc:scientificName for binomial nomenclature; ewe:ritualUse for ceremonial applications; ewe:harvestProtocol for ritual harvest (community-only access); ewe:preparationMethodDetailed for exact instructions (initiated-only access). For usage examples see the /examples/ directory."@en ;
-    owl:imports <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core> .
+    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
+    owl:imports <https://www.irokosociety.org/iroko-framework/core> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/epistemic> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/travay> ;
+    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
 
 # ===================================================================
 # CLASSES
@@ -33,20 +35,20 @@ ewe:Plant
     rdfs:subClassOf iroko:SacredEntity ;
     rdfs:label "Plant"@en ;
     rdfs:comment "Sacred plant entity in Afro-Atlantic traditions. Corresponds to dwc:Occurrence in Darwin Core for botanical description. This class adds ritual, medicinal, and access governance dimensions."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:PlantPreparation
     a owl:Class ;
     rdfs:label "Plant Preparation"@en ;
     rdfs:comment "A prepared spiritual material combining specific plants with defined quantities and methods. Example: Omiero for Obatala (bath with 21 leaves of Akoko, Prodigiosa, Albahaca blanca)."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:HerbariumSheet
     a owl:Class ;
     rdfs:subClassOf iroko:DocumentaryEvidence ;
     rdfs:label "Herbarium Sheet"@en ;
     rdfs:comment "Physical plant specimen preserved for documentation. Links botanical voucher to plant record and archival photograph."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 # ===================================================================
 # PROPERTIES - Ritual and Medicinal Dimension
@@ -59,7 +61,7 @@ ewe:medicinalUse
     rdfs:domain ewe:Plant ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:ritualUse
     a owl:ObjectProperty ;
@@ -68,7 +70,7 @@ ewe:ritualUse
     rdfs:domain ewe:Plant ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:ritualContext
     a owl:DatatypeProperty ;
@@ -77,7 +79,7 @@ ewe:ritualContext
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:plantPart
     a owl:ObjectProperty ;
@@ -86,7 +88,7 @@ ewe:plantPart
     rdfs:domain ewe:Plant ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:harvestProtocol
     a owl:ObjectProperty ;
@@ -95,7 +97,7 @@ ewe:harvestProtocol
     rdfs:domain ewe:Plant ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:harvestProtocolDetailed
     a owl:DatatypeProperty ;
@@ -104,7 +106,7 @@ ewe:harvestProtocolDetailed
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:preparationMethod
     a owl:ObjectProperty ;
@@ -113,7 +115,7 @@ ewe:preparationMethod
     rdfs:domain ewe:Plant ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:preparationMethodDetailed
     a owl:DatatypeProperty ;
@@ -122,7 +124,7 @@ ewe:preparationMethodDetailed
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:contraindication
     a owl:DatatypeProperty ;
@@ -131,7 +133,7 @@ ewe:contraindication
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 # ===================================================================
 # PROPERTIES - Semantic Cross-Links
@@ -143,7 +145,7 @@ ewe:entityAssociation
     rdfs:comment "Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module. Access: public-unrestricted."@en ;
     rdfs:domain ewe:Plant ;
     iroko:minimumAccessLevel "public-unrestricted" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:processReference
     a owl:ObjectProperty ;
@@ -151,7 +153,7 @@ ewe:processReference
     rdfs:comment "Ritual process where this plant is used. Links to Travay module. Example: used in rogacion (head cooling ceremony). Access: community-only."@en ;
     rdfs:domain ewe:Plant ;
     iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:signReference
     a owl:ObjectProperty ;
@@ -159,7 +161,7 @@ ewe:signReference
     rdfs:comment "Divination sign that prescribes this plant. Links to Marca module. Example: Ogbe Meji prescribes Akoko for purification. Access: initiated-only."@en ;
     rdfs:domain ewe:Plant ;
     iroko:minimumAccessLevel "initiated-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 # ===================================================================
 # PROPERTIES - Naming and Provenance
@@ -171,7 +173,8 @@ ewe:nameCollision
     rdfs:comment "Boolean indicating if the same vernacular name refers to multiple distinct species. Example: Prodigiosa can refer to different plants in different regions."@en ;
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:boolean ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:collisionNotes
     a owl:DatatypeProperty ;
@@ -179,7 +182,8 @@ ewe:collisionNotes
     rdfs:comment "Explanation of name collision: which plants share the name, how to distinguish, regional variations."@en ;
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:geographicVariation
     a owl:DatatypeProperty ;
@@ -187,7 +191,8 @@ ewe:geographicVariation
     rdfs:comment "Regional differences in use, preparation, or identification. Example: In Matanzas, 9 leaves are standard; in Havana, 7 leaves."@en ;
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 # ===================================================================
 # PROPERTIES - Source Attribution
@@ -199,7 +204,8 @@ ewe:vergerReference
     rdfs:comment "Citation to Pierre Verger's plant documentation. Example: Verger 1995, p. 234."@en ;
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:cabreraReference
     a owl:DatatypeProperty ;
@@ -207,7 +213,8 @@ ewe:cabreraReference
     rdfs:comment "Citation to Lydia Cabrera's plant documentation. Example: Cabrera, El Monte, p. 156."@en ;
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:derenReference
     a owl:DatatypeProperty ;
@@ -215,7 +222,8 @@ ewe:derenReference
     rdfs:comment "Citation to Maya Deren's Vodou plant documentation."@en ;
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 # ===================================================================
 # PROPERTIES - Archival Integration
@@ -227,7 +235,8 @@ ewe:specimenNumber
     rdfs:comment "Herbarium catalog number or specimen identifier. Consider using dwc:catalogNumber on HerbariumSheet instances for interoperability."@en ;
     rdfs:domain ewe:HerbariumSheet ;
     rdfs:range xsd:string ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:photographicVoucher
     a owl:ObjectProperty ;
@@ -235,7 +244,8 @@ ewe:photographicVoucher
     rdfs:comment "Link to photographic documentation of this plant specimen. Consider using dwc:associatedMedia for interoperability with herbarium systems."@en ;
     rdfs:domain ewe:Plant ;
     rdfs:range iroko:DocumentaryEvidence ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 # ===================================================================
 # PROPERTIES - Operational (Never Exported)
@@ -248,7 +258,7 @@ ewe:invocationText
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "no-access" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 ewe:secretName
     a owl:DatatypeProperty ;
@@ -257,7 +267,7 @@ ewe:secretName
     rdfs:domain ewe:Plant ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel "no-access" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ewe> .
 
 # ===================================================================
 # CONCEPT SCHEME: Medicinal Use

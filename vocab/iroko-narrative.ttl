@@ -41,16 +41,20 @@
 
 <https://www.irokosociety.org/iroko-framework/narrative>
     a owl:Ontology ;
-    dcterms:title "Iroko Narrative Module"@en ;
-    dcterms:description "Full narrative modeling for Afro-Atlantic sacred knowledge systems. Covers story transmission chains, contested kinship claims, testimonies, fieldnotes, interpretive stances, and narrative variant relationships. Builds on the thin narrative spine in iroko-core v2.0.0."@en ;
+    dcterms:title "Iroko Framework: Narrative Module"@en ;
+    dcterms:description "Governance Layer module. Full narrative modeling for Afro-Atlantic sacred knowledge systems. Covers story transmission chains, contested kinship claims, testimonies, fieldnotes, interpretive stances, and narrative variant relationships. Builds on the thin narrative spine in iroko-core v2.0.0. Researcher voice (Fieldnote) is kept structurally distinct from community voice (Testimony). Use with iroko-authority to govern who may assert transmission claims, iroko-agency to link sacred agents to narrative appearances, and iroko-epistemic to constrain access to sensitive narrative content."@en ;
     dcterms:creator "Iroko Historical Society" ;
     dcterms:issued "2026-02-23"^^xsd:date ;
+    dcterms:modified "2026-02-25"^^xsd:date ;
     owl:versionInfo "1.0.0" ;
+    owl:versionIRI <https://www.irokosociety.org/iroko-framework/narrative/1.0.0> ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
     dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
     dcterms:requires <https://www.irokosociety.org/iroko-framework/core> ;
     dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
     dcterms:references <https://www.irokosociety.org/iroko-framework/agency> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/epistemic> ;
+    dcterms:references <https://www.irokosociety.org/iroko-framework/manifestation> ;
     rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
 
 
@@ -121,6 +125,7 @@ narr:narrativeLanguage
     rdfs:comment "BCP 47 language tag of the language in which the variant is expressed."@en ;
     rdfs:domain iroko:NarrativeVariant ;
     rdfs:range xsd:string ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:variantCreatedOn
@@ -129,6 +134,7 @@ narr:variantCreatedOn
     rdfs:comment "Date on which this narrative variant was recorded, transcribed, or published."@en ;
     rdfs:domain iroko:NarrativeVariant ;
     rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:variantPlace
@@ -136,6 +142,7 @@ narr:variantPlace
     rdfs:label "variant place"@en ;
     rdfs:comment "Place where the telling occurred or was recorded."@en ;
     rdfs:domain iroko:NarrativeVariant ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:variantEvent
@@ -144,6 +151,7 @@ narr:variantEvent
     rdfs:comment "The FieldworkEvent or ritual event that captured or generated this narrative variant."@en ;
     rdfs:domain iroko:NarrativeVariant ;
     rdfs:range iroko:FieldworkEvent ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:variantAuthority
@@ -152,6 +160,7 @@ narr:variantAuthority
     rdfs:comment "The Authority context recognized for this variant. Which lineage or house endorses this telling as authoritative."@en ;
     rdfs:domain iroko:NarrativeVariant ;
     rdfs:range iroko:RitualAuthority ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:variantRelation
@@ -160,6 +169,7 @@ narr:variantRelation
     rdfs:comment "Typed relationship between two NarrativeVariants. Range: narr:VariantRelationTypeScheme concepts."@en ;
     rdfs:domain iroko:NarrativeVariant ;
     rdfs:range iroko:NarrativeVariant ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:variantRelationType
@@ -167,6 +177,7 @@ narr:variantRelationType
     rdfs:label "variant relation type"@en ;
     rdfs:comment "Classifies the nature of a variant relationship — close variant, contested, derived, harmonized, lineage-bound."@en ;
     rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:interpretiveStance
@@ -174,12 +185,14 @@ narr:interpretiveStance
     rdfs:label "interpretive stance"@en ;
     rdfs:comment "Tags a NarrativeVariant or Commentary with an interpretive hermeneutic frame."@en ;
     rdfs:range narr:InterpretiveStance ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:aboutEntity
     a owl:ObjectProperty ;
     rdfs:label "about entity"@en ;
     rdfs:comment "Links a narrative or variant to entities it concerns — a spirit, plant, place, ritual, person, or any other resource."@en ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:supportsAssertion
@@ -188,6 +201,7 @@ narr:supportsAssertion
     rdfs:comment "Links a NarrativeVariant to iroko:Assertion nodes it supports or motivates. The narrative is the evidentiary basis for the assertion."@en ;
     rdfs:domain iroko:NarrativeVariant ;
     rdfs:range iroko:Assertion ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:narrativeRole
@@ -195,6 +209,7 @@ narr:narrativeRole
     rdfs:label "narrative role"@en ;
     rdfs:comment "The role played by a participant in a narrative event — narrator, elder, witness, chorus, officiant, etc."@en ;
     rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:featuresSacredAgent
@@ -202,6 +217,7 @@ narr:featuresSacredAgent
     rdfs:label "features sacred agent"@en ;
     rdfs:comment "Links a narrative or variant to a sacred agent (spirit, ancestor) who appears as an actor within the narrative content."@en ;
     rdfs:range ag:SacredAgent ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 # -- KinshipClaim properties ------------------------------------------------
@@ -211,6 +227,7 @@ narr:claimSubject
     rdfs:label "claim subject"@en ;
     rdfs:comment "The entity about whom the kinship claim is made."@en ;
     rdfs:domain narr:KinshipClaim ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:claimObject
@@ -218,6 +235,7 @@ narr:claimObject
     rdfs:label "claim object"@en ;
     rdfs:comment "The entity to whom the subject is related by this claim."@en ;
     rdfs:domain narr:KinshipClaim ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:relatedAs
@@ -226,6 +244,7 @@ narr:relatedAs
     rdfs:comment "The type of kinship or relational bond asserted. Range: concepts from narr:KinshipTypeScheme or tradition-specific kinship schemes."@en ;
     rdfs:domain narr:KinshipClaim ;
     rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 # -- StoryLineage properties ------------------------------------------------
@@ -254,6 +273,7 @@ narr:transmissionNote
     rdfs:comment "Free-text note on context, mode, or conditions of transmission."@en ;
     rdfs:domain narr:StoryLineage ;
     rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:transmissionDate
@@ -262,6 +282,7 @@ narr:transmissionDate
     rdfs:comment "Date or date range of this transmission event."@en ;
     rdfs:domain narr:StoryLineage ;
     rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 narr:hasStoryLineage
@@ -269,6 +290,7 @@ narr:hasStoryLineage
     rdfs:label "has story lineage"@en ;
     rdfs:comment "Links a Narrative or NarrativeVariant to a StoryLineage node documenting its transmission chain."@en ;
     rdfs:range narr:StoryLineage ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
 
 # NOTE: iroko:hasTemporalVariation (Core) may be used on NarrativeVariant
