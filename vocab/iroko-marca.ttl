@@ -1,649 +1,503 @@
-# -*- coding: utf-8 -*-
-# ===================================================================
-# IROKO FRAMEWORK — MARCA MODULE
-# Divination Systems, Signs, Readings, and Verse Corpora
-# Namespace: https://www.irokosociety.org/iroko-framework/marca#
-# Version: 2.0.0 | February 2026
-# Dependencies: iroko-core, iroko-ile, iroko-nkisi, iroko-travay
-# ===================================================================
-#
-# Coverage: Ifá (Lucumí/Yorùbá), Dilogún (Ocha/cowrie), Fá (Fon/Ewe),
-#   Obi (coconut/kola), Chamalongo (Palo Kongo), and analogous divination
-#   systems across Afro-Atlantic traditions.
-#
-# Access philosophy: The existence of divination systems and sign names
-#   is public. Verse corpora (ese Ifá, rezo), reading details, prescribed
-#   works, and operational sequences are community-restricted to
-#   initiated-elder depending on sensitivity.
-# ===================================================================
-
-@prefix marca:   <https://www.irokosociety.org/iroko-framework/marca#> .
-@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
-@prefix ile:     <https://www.irokosociety.org/iroko-framework/ile#> .
-@prefix nkisi:   <https://www.irokosociety.org/iroko-framework/nkisi#> .
-@prefix travay:  <https://www.irokosociety.org/iroko-framework/travay#> .
-@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
-@prefix owl:     <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix prov:    <http://www.w3.org/ns/prov#> .
-@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix iroko: <https://ontology.irokosociety.org/iroko#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://www.irokosociety.org/iroko-framework/marca>
-    a owl:Ontology ;
-    dcterms:title "Iroko Framework: Marca Module (Divination Systems and Sacred Sign Corpora)"@en ;
-    dcterms:description "Domain module. Vocabulary for documenting divination systems, sacred signs, reading records, and verse corpora across Afro-Atlantic traditions. Covers Ifá (256 odù), Dilogún, Fá, Obi, Chamalongo, and analogous systems. Sign names and system typologies are public; verse texts, reading details, and prescribed works are restricted at the property level. Use with iroko-authority to document who may perform or transmit readings; iroko-narrative for verse corpus transmission chains and patakí variant relationships."@en ;
-    dcterms:creator "Iroko Historical Society" ;
-    dcterms:created "2026-02-21"^^xsd:date ;
-    dcterms:modified "2026-02-25"^^xsd:date ;
-    owl:versionInfo "2.0.0" ;
-    owl:versionIRI <https://www.irokosociety.org/iroko-framework/marca/2.0.0> ;
-    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
-    owl:imports <https://www.irokosociety.org/iroko-framework/core> ;
-    dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
-    dcterms:references <https://www.irokosociety.org/iroko-framework/narrative> ;
-    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
-
-# ===================================================================
-# CLASSES
-# ===================================================================
-
-marca:DivinationSystem
-    a owl:Class ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:label "Divination System"@en ;
-    rdfs:comment "A tradition-specific divination system consisting of a defined corpus of signs, casting methods, and interpretive frameworks. Examples: Ifá (256 odù, palm nut or chain casting), Dilogún (16 principal signs, cowrie casting), Fá (Fon parallel to Ifá), Obi (4-part binary coconut or kola reading), Chamalongo (Palo Kongo coconut/bone divination). A DivinationSystem belongs to one or more traditions and may have regional variants."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:DivinationSign
-    a owl:Class ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:label "Divination Sign"@en ;
-    rdfs:comment "A discrete sign, figure, or configuration within a divination system. In Ifá: one of 256 odù (each identified by primary + secondary throw). In Dilogún: one of 16 principal signs (odù Dilogún, omieros, and their paths). In Fá: du figures. In Chamalongo: one of 5 configurations. Each sign has an associated corpus of verses, prescriptions, and spirit-entity relationships. The sign's name and number are public; verses and prescribed works are restricted."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:DivinationReading
-    a owl:Class ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:label "Divination Reading"@en ;
-    rdfs:comment "A specific divination event performed for a recipient by an authorized diviner. Records the sign(s) that appeared, the outcome polarity (iré/osogbo), prescribed works, and the entities indicated. Reading records are among the most sensitive data in the framework: recipient identity is no-access; the date and officiant are community-restricted; the prescribed work and entity are initiated-only."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:DivinationVerse
-    a owl:Class ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:label "Divination Verse"@en ;
-    rdfs:comment "A single verse, story, or pataki within a sign's corpus. In Ifá: an ese Ifá. In Dilogún: a rezo or pataki. In Fá: a hwenoho. Verses carry narrative, ethical, prescriptive, and esoteric content. They are the primary means by which divination knowledge is transmitted and applied. Verse text is initiated-elder access; the existence of a verse corpus for a sign is public."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:DivinationCorpus
-    a owl:Class ;
-    rdfs:subClassOf iroko:LineageKnowledgeGraph ;
-    rdfs:label "Divination Corpus"@en ;
-    rdfs:comment "The complete body of verses, prescriptions, proverbs, and interpretive commentary associated with a divination system as transmitted through a specific lineage. Distinct from the system itself (which is the abstract framework) and from individual verses (which are its units). A corpus is lineage-specific: Ifá lineages in Havana may hold different verse inventories than those in Lagos or Trinidad, each representing a distinct corpus."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-# ===================================================================
-# PROPERTIES — DivinationSystem
-# ===================================================================
-
-marca:systemType
-    a owl:ObjectProperty ;
-    rdfs:label "system type"@en ;
-    rdfs:comment "Typological classification of the divination system. Range: marca:DivinationSystemScheme."@en ;
-    rdfs:domain marca:DivinationSystem ;
-    rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:castingMedium
-    a owl:ObjectProperty ;
-    rdfs:label "casting medium"@en ;
-    rdfs:comment "The physical medium used to cast or generate the sign in this system. Examples: ikin (palm nuts), okuele/ekuele (divining chain), owó dilogún (cowries), obi (coconut), obi kola (kola nut), chamalongo (coconut shells or bones). Range: marca:CastingMediumScheme."@en ;
-    rdfs:domain marca:DivinationSystem ;
-    rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:signCount
-    a owl:DatatypeProperty ;
-    rdfs:label "sign count"@en ;
-    rdfs:comment "The number of discrete signs in the system. Ifá: 256. Dilogún: 16 principal + odu meji. Chamalongo: 5."@en ;
-    rdfs:domain marca:DivinationSystem ;
-    rdfs:range xsd:integer ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:authorizedPractitioner
-    a owl:ObjectProperty ;
+iroko:authorizedPractitioner a owl:ObjectProperty ;
     rdfs:label "authorized practitioner type"@en ;
-    rdfs:comment "The authority title required to cast this system. In Ifá: Babalawo. In Dilogún: Olorisha with dilogún authorization. In Fá: Bokonon. Range: ile:AuthorityTitleScheme."@en ;
-    rdfs:domain marca:DivinationSystem ;
+    rdfs:comment "The authority title required to cast this system. In Ifá: Babalawo. In Dilogún: Olorisha with dilogún authorization. In Fá: Bokonon. Range: iroko:AuthorityTitleScheme."@en ;
+    rdfs:domain iroko:DivinationSystem ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
     rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
-marca:genderRestriction
-    a owl:DatatypeProperty ;
+iroko:castingMedium a owl:ObjectProperty ;
+    rdfs:label "casting medium"@en ;
+    rdfs:comment "The physical medium used to cast or generate the sign in this system. Examples: ikin (palm nuts), okuele/ekuele (divining chain), owó dilogún (cowries), obi (coconut), obi kola (kola nut), chamalongo (coconut shells or bones). Range: iroko:CastingMediumScheme."@en ;
+    rdfs:domain iroko:DivinationSystem ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:genderRestriction a owl:DatatypeProperty ;
     rdfs:label "gender restriction"@en ;
     rdfs:comment "Documents tradition-specific restrictions on who may cast this system, expressed as a free-text note. For Ifá in the Lucumí tradition: historically restricted to initiated men (Babalawos); contested in some lineages and diaspora communities. This property records the documented practice of the lineage being described, not a normative judgment."@en ;
-    rdfs:domain marca:DivinationSystem ;
+    rdfs:domain iroko:DivinationSystem ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-# ===================================================================
-# PROPERTIES — DivinationSign
-# ===================================================================
+iroko:governingEntity a owl:ObjectProperty ;
+    rdfs:label "governing entity"@en ;
+    rdfs:comment "The spirit or deity principally associated with this sign across the tradition. In Ifá: Ogbe Meji is governed by Obatala; Oshé Meji by Oshun. This is a tradition-level association, not reading-specific. Range: iroko:SpiritualEntity."@en ;
+    rdfs:domain iroko:DivinationSign ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range iroko:SpiritualEntity ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-marca:signName
-    a owl:DatatypeProperty ;
-    rdfs:label "sign name"@en ;
-    rdfs:comment "The canonical name of the divination sign in the tradition's liturgical language. For Ifá: the odù name (e.g., Ogbe Meji, Oyeku Ofun). For Dilogún: the odù name (e.g., Okana, Eji Oko). Language-tagged."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+iroko:prescribedEntity a owl:ObjectProperty ;
+    rdfs:label "prescribed entity"@en ;
+    rdfs:comment "The spiritual entity indicated by the reading as requiring propitiation, attention, or ceremony. Range: iroko:SpiritualEntity."@en ;
+    rdfs:domain iroko:DivinationReading ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range iroko:SpiritualEntity ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
 
-marca:signAlternateName
-    a owl:DatatypeProperty ;
-    rdfs:label "alternate sign name"@en ;
-    rdfs:comment "Alternative name for the sign in another tradition or regional variant. Ifá odù Ogbe Meji = Fá du Gbèmèzọ. Language-tagged."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+iroko:prescribedWork a owl:ObjectProperty ;
+    rdfs:label "prescribed work"@en ;
+    rdfs:comment "The ebó, rogation, ceremony, or spiritual work prescribed as a result of this reading. Range: iroko:EboTypeScheme. Among the most sensitive data: links divination outcome to specific prescribed action."@en ;
+    rdfs:domain iroko:DivinationReading ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
 
-marca:signNumber
-    a owl:DatatypeProperty ;
-    rdfs:label "sign number"@en ;
-    rdfs:comment "The numeric identifier for this sign within its system. For Dilogún: 1–16. For Ifá: the composite index of primary (1–16) and secondary (1–16) throw."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range xsd:string ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:primarySign
-    a owl:ObjectProperty ;
+iroko:primarySign a owl:ObjectProperty ;
     rdfs:label "primary sign"@en ;
     rdfs:comment "In composite systems (Ifá), the sign generated by the first cast. The primary odù of a compound figure."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range marca:DivinationSign ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+    rdfs:domain iroko:DivinationSign ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range iroko:DivinationSign ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
-marca:secondarySign
-    a owl:ObjectProperty ;
-    rdfs:label "secondary sign"@en ;
-    rdfs:comment "In composite systems (Ifá), the sign generated by the second cast. Together with primarySign, identifies the full odù compound."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range marca:DivinationSign ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:signSystem
-    a owl:ObjectProperty ;
-    rdfs:label "sign system"@en ;
-    rdfs:comment "The divination system to which this sign belongs."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range marca:DivinationSystem ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:governingEntity
-    a owl:ObjectProperty ;
-    rdfs:label "governing entity"@en ;
-    rdfs:comment "The spirit or deity principally associated with this sign across the tradition. In Ifá: Ogbe Meji is governed by Obatala; Oshé Meji by Oshun. This is a tradition-level association, not reading-specific. Range: nkisi:SpiritualEntity."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range nkisi:SpiritualEntity ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:signProverb
-    a owl:DatatypeProperty ;
-    rdfs:label "sign proverb"@en ;
-    rdfs:comment "The principal proverb (owe) associated with this sign. Proverbs are often publicly known and shared in scholarly literature. Language-tagged."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:signTaboo
-    a owl:DatatypeProperty ;
-    rdfs:label "sign taboo"@en ;
-    rdfs:comment "A prohibition (eewo) traditionally associated with this sign. Taboos relate to foods, behaviors, materials, or associations that persons born under this sign or receiving this sign in reading should avoid."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:signVerseCorpus
-    a owl:ObjectProperty ;
-    rdfs:label "verse corpus"@en ;
-    rdfs:comment "The set of DivinationVerse instances in a specific lineage's corpus for this sign. The existence of a corpus is public; the verse content is initiated-elder only."@en ;
-    rdfs:domain marca:DivinationSign ;
-    rdfs:range marca:DivinationCorpus ;
-    iroko:minimumAccessLevel iroko:access-initiated-elder ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-# ===================================================================
-# PROPERTIES — DivinationReading
-# ===================================================================
-
-marca:readingDate
-    a owl:DatatypeProperty ;
+iroko:readingDate a owl:DatatypeProperty ;
     rdfs:label "reading date"@en ;
-    rdfs:domain marca:DivinationReading ;
+    rdfs:domain iroko:DivinationReading ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
     rdfs:range xsd:date ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-marca:readingOfficiant
-    a owl:ObjectProperty ;
-    rdfs:label "reading officiant"@en ;
-    rdfs:comment "The diviner who performed the reading. Range: foaf:Person. Community-restricted to protect practitioner privacy unless the officiant has consented to public attribution."@en ;
-    rdfs:domain marca:DivinationReading ;
-    rdfs:range foaf:Person ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:readingRecipient
-    a owl:ObjectProperty ;
-    rdfs:label "reading recipient"@en ;
-    rdfs:comment "The person for whom the reading was performed. No-access: reading recipients have a reasonable expectation of confidentiality. Stored internally for provenance tracking only."@en ;
-    rdfs:domain marca:DivinationReading ;
-    rdfs:range foaf:Person ;
-    iroko:minimumAccessLevel iroko:access-no-access ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:signReceived
-    a owl:ObjectProperty ;
-    rdfs:label "sign received"@en ;
-    rdfs:comment "The divination sign(s) that appeared in this reading."@en ;
-    rdfs:domain marca:DivinationReading ;
-    rdfs:range marca:DivinationSign ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:readingOutcome
-    a owl:ObjectProperty ;
-    rdfs:label "reading outcome"@en ;
-    rdfs:comment "Whether the sign came iré (positive polarity) or osogbo (negative polarity) in this reading. Range: marca:OutcomeTypeScheme."@en ;
-    rdfs:domain marca:DivinationReading ;
-    rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:prescribedWork
-    a owl:ObjectProperty ;
-    rdfs:label "prescribed work"@en ;
-    rdfs:comment "The ebó, rogation, ceremony, or spiritual work prescribed as a result of this reading. Range: marca:EboTypeScheme. Among the most sensitive data: links divination outcome to specific prescribed action."@en ;
-    rdfs:domain marca:DivinationReading ;
-    rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:prescribedEntity
-    a owl:ObjectProperty ;
-    rdfs:label "prescribed entity"@en ;
-    rdfs:comment "The spiritual entity indicated by the reading as requiring propitiation, attention, or ceremony. Range: nkisi:SpiritualEntity."@en ;
-    rdfs:domain marca:DivinationReading ;
-    rdfs:range nkisi:SpiritualEntity ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
-
-marca:readingNotes
-    a owl:DatatypeProperty ;
+iroko:readingNotes a owl:DatatypeProperty ;
     rdfs:label "reading notes"@en ;
     rdfs:comment "Free-text notes from the diviner. Elder-only: may contain specific operational detail."@en ;
-    rdfs:domain marca:DivinationReading ;
+    rdfs:domain iroko:DivinationReading ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-initiated-elder ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+    iroko:minimumAccessLevel iroko:access-initiated-elder .
 
-# ===================================================================
-# PROPERTIES — DivinationVerse
-# ===================================================================
+iroko:readingOfficiant a owl:ObjectProperty ;
+    rdfs:label "reading officiant"@en ;
+    rdfs:comment "The diviner who performed the reading. Range: foaf:Person. Community-restricted to protect practitioner privacy unless the officiant has consented to public attribution."@en ;
+    rdfs:domain iroko:DivinationReading ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-marca:verseSign
-    a owl:ObjectProperty ;
-    rdfs:label "verse sign"@en ;
-    rdfs:comment "The divination sign to which this verse belongs."@en ;
-    rdfs:domain marca:DivinationVerse ;
-    rdfs:range marca:DivinationSign ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+iroko:readingOutcome a owl:ObjectProperty ;
+    rdfs:label "reading outcome"@en ;
+    rdfs:comment "Whether the sign came iré (positive polarity) or osogbo (negative polarity) in this reading. Range: iroko:OutcomeTypeScheme."@en ;
+    rdfs:domain iroko:DivinationReading ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
 
-marca:verseTitle
-    a owl:DatatypeProperty ;
-    rdfs:label "verse title"@en ;
-    rdfs:comment "The title or opening line of the verse as used within the lineage. Community-restricted: verse titles alone can partially disclose operational content."@en ;
-    rdfs:domain marca:DivinationVerse ;
+iroko:readingRecipient a owl:ObjectProperty ;
+    rdfs:label "reading recipient"@en ;
+    rdfs:comment "The person for whom the reading was performed. No-access: reading recipients have a reasonable expectation of confidentiality. Stored internally for provenance tracking only."@en ;
+    rdfs:domain iroko:DivinationReading ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-no-access .
+
+iroko:secondarySign a owl:ObjectProperty ;
+    rdfs:label "secondary sign"@en ;
+    rdfs:comment "In composite systems (Ifá), the sign generated by the second cast. Together with primarySign, identifies the full odù compound."@en ;
+    rdfs:domain iroko:DivinationSign ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range iroko:DivinationSign ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:signNumber a owl:DatatypeProperty ;
+    rdfs:label "sign number"@en ;
+    rdfs:comment "The numeric identifier for this sign within its system. For Dilogún: 1–16. For Ifá: the composite index of primary (1–16) and secondary (1–16) throw."@en ;
+    rdfs:domain iroko:DivinationSign ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:signProverb a owl:DatatypeProperty ;
+    rdfs:label "sign proverb"@en ;
+    rdfs:comment "The principal proverb (owe) associated with this sign. Proverbs are often publicly known and shared in scholarly literature. Language-tagged."@en ;
+    rdfs:domain iroko:DivinationSign ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-marca:verseText
-    a owl:DatatypeProperty ;
-    rdfs:label "verse text"@en ;
-    rdfs:comment "The full text of the verse. Elder-only: ese Ifá and analogous verses are among the most sacred and operationally powerful materials in the tradition. Their disclosure outside authorized transmission is a serious breach."@en ;
-    rdfs:domain marca:DivinationVerse ;
+iroko:signReceived a owl:ObjectProperty ;
+    rdfs:label "sign received"@en ;
+    rdfs:comment "The divination sign(s) that appeared in this reading."@en ;
+    rdfs:domain iroko:DivinationReading ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range iroko:DivinationSign ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+iroko:signTaboo a owl:DatatypeProperty ;
+    rdfs:label "sign taboo"@en ;
+    rdfs:comment "A prohibition (eewo) traditionally associated with this sign. Taboos relate to foods, behaviors, materials, or associations that persons born under this sign or receiving this sign in reading should avoid."@en ;
+    rdfs:domain iroko:DivinationSign ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-initiated-elder ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+    iroko:minimumAccessLevel iroko:access-initiated-only .
 
-marca:verseTheme
-    a owl:DatatypeProperty ;
-    rdfs:label "verse theme"@en ;
-    rdfs:comment "Thematic summary of the verse's principal narrative or prescription, without reproducing the text. Initiated-only."@en ;
-    rdfs:domain marca:DivinationVerse ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+iroko:signVerseCorpus a owl:ObjectProperty ;
+    rdfs:label "verse corpus"@en ;
+    rdfs:comment "The set of DivinationVerse instances in a specific lineage's corpus for this sign. The existence of a corpus is public; the verse content is initiated-elder only."@en ;
+    rdfs:domain iroko:DivinationSign ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range iroko:DivinationCorpus ;
+    iroko:minimumAccessLevel iroko:access-initiated-elder .
 
-marca:verseLineage
-    a owl:ObjectProperty ;
+iroko:verseLineage a owl:ObjectProperty ;
     rdfs:label "verse lineage"@en ;
     rdfs:comment "The ile or lineage corpus from which this verse version derives. Different lineages may hold different versions of verses for the same sign."@en ;
-    rdfs:domain marca:DivinationVerse ;
-    rdfs:range ile:House ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+    rdfs:domain iroko:DivinationVerse ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range iroko:House ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-marca:verseSource
-    a owl:ObjectProperty ;
+iroko:verseSign a owl:ObjectProperty ;
+    rdfs:label "verse sign"@en ;
+    rdfs:comment "The divination sign to which this verse belongs."@en ;
+    rdfs:domain iroko:DivinationVerse ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range iroko:DivinationSign ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:verseSource a owl:ObjectProperty ;
     rdfs:label "verse source"@en ;
     rdfs:comment "Provenance of this verse record: oral transmission, field recording, published collection. Range: iroko:DocumentaryEvidence."@en ;
-    rdfs:domain marca:DivinationVerse ;
+    rdfs:domain iroko:DivinationVerse ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
     rdfs:range iroko:DocumentaryEvidence ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/marca> .
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-# ===================================================================
-# CONCEPT SCHEMES
-# ===================================================================
+iroko:verseText a owl:DatatypeProperty ;
+    rdfs:label "verse text"@en ;
+    rdfs:comment "The full text of the verse. Elder-only: ese Ifá and analogous verses are among the most sacred and operationally powerful materials in the tradition. Their disclosure outside authorized transmission is a serious breach."@en ;
+    rdfs:domain iroko:DivinationVerse ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-elder .
 
-# --- Divination System Types ---
+iroko:verseTheme a owl:DatatypeProperty ;
+    rdfs:label "verse theme"@en ;
+    rdfs:comment "Thematic summary of the verse's principal narrative or prescription, without reproducing the text. Initiated-only."@en ;
+    rdfs:domain iroko:DivinationVerse ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
 
-marca:DivinationSystemScheme
-    a skos:ConceptScheme ;
-    rdfs:label "Divination System Types"@en ;
-    skos:prefLabel "Divination System Types"@en ;
-    skos:prefLabel "Tipos de sistema de adivinación"@es ;
-    skos:prefLabel "Types de système divinatoire"@fr ;
-    skos:prefLabel "Tipos de sistema divinatório"@pt ;
-    skos:prefLabel "Àwọn ìrú ọ̀nà aṣọtẹ́lẹ̀"@yo ;
-    skos:hasTopConcept marca:system-ifa,
-                       marca:system-dilogún,
-                       marca:system-fa,
-                       marca:system-obi,
-                       marca:system-ita,
-                       marca:system-chamalongo,
-                       marca:system-vititi-nfinda,
-                       marca:system-derle,
-                       marca:system-other .
+iroko:verseTitle a owl:DatatypeProperty ;
+    rdfs:label "verse title"@en ;
+    rdfs:comment "The title or opening line of the verse as used within the lineage. Community-restricted: verse titles alone can partially disclose operational content."@en ;
+    rdfs:domain iroko:DivinationVerse ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-marca:system-ifa
-    a skos:Concept ; skos:inScheme marca:DivinationSystemScheme ;
-    skos:prefLabel "Ifá"@en ;
-    skos:prefLabel "Ifá"@es ;
-    skos:prefLabel "Ifá"@yo ;
-    skos:definition "The Yorùbá-derived divination system using ikin (palm nuts) or okuele (divining chain) to generate 256 binary odù configurations. Practiced by authorized Babalawos. Versions found in Lucumí (Cuba), Candomblé de Ifá (Brazil), Trinidadian Orisha, and continental Yorùbá communities."@en .
+iroko:DivinationCorpus a owl:Class ;
+    rdfs:label "Divination Corpus"@en ;
+    rdfs:comment "The complete body of verses, prescriptions, proverbs, and interpretive commentary associated with a divination system as transmitted through a specific lineage. Distinct from the system itself (which is the abstract framework) and from individual verses (which are its units). A corpus is lineage-specific: Ifá lineages in Havana may hold different verse inventories than those in Lagos or Trinidad, each representing a distinct corpus."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:subClassOf iroko:LineageKnowledgeGraph .
 
-marca:system-dilogún
-    a skos:Concept ; skos:inScheme marca:DivinationSystemScheme ;
-    skos:prefLabel "Dilogún"@en ;
-    skos:prefLabel "Dilogún"@es ;
+iroko:ebo-abstention a skos:Concept ;
+    skos:definition "A behavioral abstention or avoidance prescribed by the reading: specific foods, colors, locations, or activities to avoid for a defined period."@en ;
+    skos:inScheme iroko:EboTypeScheme ;
+    skos:prefLabel "Abstention / Prohibition"@en,
+        "Abstención / Prohibición"@es .
+
+iroko:ebo-adimú a skos:Concept ;
+    skos:definition "A food or vegetable offering (without blood) to an Orisha. Accessible outside of full ebó; considered the first step in propitiation."@en ;
+    skos:inScheme iroko:EboTypeScheme ;
+    skos:prefLabel "Adimu"@en,
+        "Adimú"@es .
+
+iroko:ebo-ceremony a skos:Concept ;
+    skos:definition "A prescribed ceremony (initiation, reception of Orisha, specific feast) indicated by the reading as necessary."@en ;
+    skos:inScheme iroko:EboTypeScheme ;
+    skos:prefLabel "Full ceremony"@en,
+        "Ceremonia completa"@es .
+
+iroko:ebo-cleansing a skos:Concept ;
+    skos:definition "A full-body or environmental cleansing (despojo, limpieza) using herbs, waters, or other materials prescribed by the reading."@en ;
+    skos:inScheme iroko:EboTypeScheme ;
+    skos:prefLabel "Spiritual cleansing"@en,
+        "Limpieza espiritual"@es .
+
+iroko:ebo-ebo a skos:Concept ;
+    skos:definition "A prescribed offering to the Orisha or Ifá indicated by the reading. Includes specific materials, animals, foods, or objects. Operational details are initiated-only."@en ;
+    skos:inScheme iroko:EboTypeScheme ;
+    skos:prefLabel "Ebó"@en,
+        "Ebó"@es,
+        "Ebó"@yo .
+
+iroko:ebo-etutu a skos:Concept ;
+    skos:definition "A cooling or pacifying ceremony, often performed after death, severe osogbo, or to address Egun. Requires specific authority and materials."@en ;
+    skos:inScheme iroko:EboTypeScheme ;
+    skos:prefLabel "Itutu / Etutu"@en,
+        "Itutu / Etutu"@es .
+
+iroko:ebo-rogacion a skos:Concept ;
+    skos:definition "A cleansing and feeding of the head (ori/eleda) using specific cool and white materials. One of the most commonly prescribed works across Lucumí and related traditions."@en ;
+    skos:inScheme iroko:EboTypeScheme ;
+    skos:prefLabel "Head Rogation"@en,
+        "Rogación de cabeza"@es .
+
+iroko:ebo-sacrifice a skos:Concept ;
+    skos:definition "Ritual sacrifice of an animal specified by the reading. Species, preparation, and allocation are operational details held at initiated-only access."@en ;
+    skos:inScheme iroko:EboTypeScheme ;
+    skos:prefLabel "Animal sacrifice"@en,
+        "Sacrificio animal"@es .
+
+iroko:medium-chamalongo-bone a skos:Concept ;
+    skos:definition "Prepared bones or discs used as an alternative casting medium for Chamalongo. The specific preparation is lineage-specific and restricted."@en ;
+    skos:inScheme iroko:CastingMediumScheme ;
+    skos:prefLabel "Chamalongo (prepared bones/discs)"@en .
+
+iroko:medium-chamalongo-coconut a skos:Concept ;
+    skos:definition "Four coconut shell halves prepared and consecrated for Chamalongo divination in Palo traditions."@en ;
+    skos:inScheme iroko:CastingMediumScheme ;
+    skos:prefLabel "Chamalongo (coconut shells)"@en .
+
+iroko:medium-cowrie a skos:Concept ;
+    skos:definition "Sixteen cowrie shells used in Dilogún divination by authorized Olorisha."@en ;
+    skos:inScheme iroko:CastingMediumScheme ;
+    skos:prefLabel "Owó Dilogún (cowrie shells)"@en,
+        "Caracoles / Dilogún"@es .
+
+iroko:medium-ikin a skos:Concept ;
+    skos:definition "Sacred palm nuts (ikin Ifá, obi Ifá) used by Babalawos for Ifá divination. Considered the highest-authority casting medium in Lucumí/Yorùbá tradition."@en ;
+    skos:inScheme iroko:CastingMediumScheme ;
+    skos:prefLabel "Ikin (palm nuts)"@en,
+        "Ikin (nueces de palma)"@es .
+
+iroko:medium-obi-coconut a skos:Concept ;
+    skos:definition "Coconut divided into four pieces for Obi divination."@en ;
+    skos:inScheme iroko:CastingMediumScheme ;
+    skos:prefLabel "Obi Abata (coconut)"@en .
+
+iroko:medium-obi-kola a skos:Concept ;
+    skos:definition "Kola nut divided into lobes for Obi divination. More traditional form in continental Yorùbá practice."@en ;
+    skos:inScheme iroko:CastingMediumScheme ;
+    skos:prefLabel "Obi Kola (kola nut)"@en .
+
+iroko:medium-okuele a skos:Concept ;
+    skos:definition "Eight-piece divining chain of alternating concave and convex seed halves used by Babalawos as a faster alternative to palm nut casting in Ifá."@en ;
+    skos:inScheme iroko:CastingMediumScheme ;
+    skos:prefLabel "Okuele / Ekuele (divining chain)"@en,
+        "Okuele / Ekuele"@es .
+
+iroko:outcome-ire a skos:Concept ;
+    skos:definition "A sign comes with positive polarity. The indicated blessings are accessible. Prescribed works (ebó) confirm and open the path."@en ;
+    skos:inScheme iroko:OutcomeTypeScheme ;
+    skos:prefLabel "Iré (positive)"@en,
+        "Iré (positivo)"@es,
+        "Iré"@yo .
+
+iroko:outcome-ire-aiku a skos:Concept ;
+    skos:definition "Iré of long life. The sign comes with the blessing of longevity."@en ;
+    skos:inScheme iroko:OutcomeTypeScheme ;
+    skos:prefLabel "Iré Aiku (long life)"@en,
+        "Iré Aiku"@es .
+
+iroko:outcome-ire-are a skos:Concept ;
+    skos:definition "Iré of victory or achievement. The sign comes with the blessing of success in endeavor."@en ;
+    skos:inScheme iroko:OutcomeTypeScheme ;
+    skos:prefLabel "Iré Aré (victory)"@en,
+        "Iré Aré"@es .
+
+iroko:outcome-ire-omo a skos:Concept ;
+    skos:definition "Iré of children or generativity. The sign comes with the blessing of progeny or creative fruitfulness."@en ;
+    skos:inScheme iroko:OutcomeTypeScheme ;
+    skos:prefLabel "Iré Omo (children)"@en,
+        "Iré Omo"@es .
+
+iroko:outcome-ire-owo a skos:Concept ;
+    skos:definition "Iré of prosperity. The sign comes with the blessing of material abundance."@en ;
+    skos:inScheme iroko:OutcomeTypeScheme ;
+    skos:prefLabel "Iré Owó (wealth)"@en,
+        "Iré Owó"@es .
+
+iroko:outcome-osogbo a skos:Concept ;
+    skos:definition "A sign comes with negative polarity. The indicated difficulties or blockages are present. Prescribed works (ebó) are required to avert or mitigate."@en ;
+    skos:inScheme iroko:OutcomeTypeScheme ;
+    skos:prefLabel "Osogbo (negative)"@en,
+        "Osogbo (negativo)"@es,
+        "Àṣọtẹ́lẹ̀ burúkú"@yo .
+
+iroko:outcome-osogbo-arun a skos:Concept ;
+    skos:definition "Osogbo of illness or physical affliction."@en ;
+    skos:inScheme iroko:OutcomeTypeScheme ;
+    skos:prefLabel "Osogbo Arun (illness)"@en,
+        "Osogbo Arun"@es .
+
+iroko:outcome-osogbo-iku a skos:Concept ;
+    skos:definition "Osogbo of death or severe loss. The most serious category; requires immediate and specific ebó."@en ;
+    skos:inScheme iroko:OutcomeTypeScheme ;
+    skos:prefLabel "Osogbo Ikú (death)"@en,
+        "Osogbo Ikú"@es .
+
+iroko:outcome-osogbo-ojú a skos:Concept ;
+    skos:definition "Osogbo of enemies or opposition. The negative force indicated involves interpersonal conflict or hostility."@en ;
+    skos:inScheme iroko:OutcomeTypeScheme ;
+    skos:prefLabel "Osogbo Ojú (enmity)"@en,
+        "Osogbo Ojú"@es .
+
+iroko:system-chamalongo a skos:Concept ;
+    skos:definition "Kongo-derived divination using four coconut shell halves or prepared bones/discs. Generates 5 configurations. Used in Palo Monte and related Bantu-Atlantic traditions. Practiced by authorized Paleros (Tatas and Yayas)."@en ;
+    skos:inScheme iroko:DivinationSystemScheme ;
+    skos:prefLabel "Chamalongo"@en,
+        "Chamalongo"@es .
+
+iroko:system-derle a skos:Concept ;
+    skos:definition "Card-based or object-based divination associated with Espiritismo and Haitian Vodou mesa blanca practice. Distinct from African-derived binary casting systems."@en ;
+    skos:inScheme iroko:DivinationSystemScheme ;
+    skos:prefLabel "Derlé"@en,
+        "Derlé"@fr .
+
+iroko:system-dilogún a skos:Concept ;
     skos:definition "Cowrie shell divination using 16 shells (owó dilogún) to generate 16 principal signs. Practiced by authorized Olorisha. Used in Lucumí/Ocha, Candomblé, and related traditions. Shares sign names with Ifá odù but distinct system, corpus, and authority structure."@en ;
+    skos:inScheme iroko:DivinationSystemScheme ;
+    skos:prefLabel "Dilogún"@en,
+        "Dilogún"@es ;
     skos:scopeNote "Lineage-specific variations exist in casting protocol, sign count, and authority requirements."@en .
 
-marca:system-fa
-    a skos:Concept ; skos:inScheme marca:DivinationSystemScheme ;
-    skos:prefLabel "Fá"@en ;
-    skos:prefLabel "Fâ"@fr ;
-    skos:definition "The Fon and Ewe divination system cognate to Ifá, using palm nuts or a divining chain to generate du figures. Practiced by Bokonon (male diviners). The du corpus is distinct from but related to Yorùbá odù. Primary in Benin, Togo, and Haitian Vodou communities with Rada/Fon lineages."@en .
+iroko:system-fa a skos:Concept ;
+    skos:definition "The Fon and Ewe divination system cognate to Ifá, using palm nuts or a divining chain to generate du figures. Practiced by Bokonon (male diviners). The du corpus is distinct from but related to Yorùbá odù. Primary in Benin, Togo, and Haitian Vodou communities with Rada/Fon lineages."@en ;
+    skos:inScheme iroko:DivinationSystemScheme ;
+    skos:prefLabel "Fá"@en,
+        "Fâ"@fr .
 
-marca:system-obi
-    a skos:Concept ; skos:inScheme marca:DivinationSystemScheme ;
-    skos:prefLabel "Obi"@en ;
-    skos:prefLabel "Obi"@es ;
-    skos:prefLabel "Obi"@yo ;
-    skos:definition "Four-piece binary divination using coconut (obi abata) or kola nut (obi kola). Generates 5 configurations from the binary state of four pieces. Used across Lucumí, Candomblé, and Yorùbá traditions for confirmation and yes/no queries. Less elaborate than Ifá or Dilogún but widely practiced."@en .
+iroko:system-ifa a skos:Concept ;
+    skos:definition "The Yorùbá-derived divination system using ikin (palm nuts) or okuele (divining chain) to generate 256 binary odù configurations. Practiced by authorized Babalawos. Versions found in Lucumí (Cuba), Candomblé de Ifá (Brazil), Trinidadian Orisha, and continental Yorùbá communities."@en ;
+    skos:inScheme iroko:DivinationSystemScheme ;
+    skos:prefLabel "Ifá"@en,
+        "Ifá"@es,
+        "Ifá"@yo .
 
-marca:system-ita
-    a skos:Concept ; skos:inScheme marca:DivinationSystemScheme ;
-    skos:prefLabel "Itá"@en ;
-    skos:prefLabel "Itá / Ifá de Cabeza"@es ;
-    skos:definition "The extended Ifá reading performed for an individual at initiation (kariosha, itá de kariosha) or as a life-path consultation. Typically multi-sign, conducted by a Babalawo, and interpreted by Olorisha elders. The itá record is among the most sensitive personal documents in the tradition."@en .
+iroko:system-ita a skos:Concept ;
+    skos:definition "The extended Ifá reading performed for an individual at initiation (kariosha, itá de kariosha) or as a life-path consultation. Typically multi-sign, conducted by a Babalawo, and interpreted by Olorisha elders. The itá record is among the most sensitive personal documents in the tradition."@en ;
+    skos:inScheme iroko:DivinationSystemScheme ;
+    skos:prefLabel "Itá"@en,
+        "Itá / Ifá de Cabeza"@es .
 
-marca:system-chamalongo
-    a skos:Concept ; skos:inScheme marca:DivinationSystemScheme ;
-    skos:prefLabel "Chamalongo"@en ;
-    skos:prefLabel "Chamalongo"@es ;
-    skos:definition "Kongo-derived divination using four coconut shell halves or prepared bones/discs. Generates 5 configurations. Used in Palo Monte and related Bantu-Atlantic traditions. Practiced by authorized Paleros (Tatas and Yayas)."@en .
+iroko:system-obi a skos:Concept ;
+    skos:definition "Four-piece binary divination using coconut (obi abata) or kola nut (obi kola). Generates 5 configurations from the binary state of four pieces. Used across Lucumí, Candomblé, and Yorùbá traditions for confirmation and yes/no queries. Less elaborate than Ifá or Dilogún but widely practiced."@en ;
+    skos:inScheme iroko:DivinationSystemScheme ;
+    skos:prefLabel "Obi"@en,
+        "Obi"@es,
+        "Obi"@yo .
 
-marca:system-vititi-nfinda
-    a skos:Concept ; skos:inScheme marca:DivinationSystemScheme ;
-    skos:prefLabel "Vititi Nfinda"@en ;
-    skos:prefLabel "Vititi Nfinda"@es ;
-    skos:definition "Mirror or reflective-surface divination used in Palo Monte for spiritual vision and consultation. Complementary to but distinct from Chamalongo; requires specific nganga authorization."@en .
+iroko:system-vititi-nfinda a skos:Concept ;
+    skos:definition "Mirror or reflective-surface divination used in Palo Monte for spiritual vision and consultation. Complementary to but distinct from Chamalongo; requires specific nganga authorization."@en ;
+    skos:inScheme iroko:DivinationSystemScheme ;
+    skos:prefLabel "Vititi Nfinda"@en,
+        "Vititi Nfinda"@es .
 
-marca:system-derle
-    a skos:Concept ; skos:inScheme marca:DivinationSystemScheme ;
-    skos:prefLabel "Derlé"@en ;
-    skos:prefLabel "Derlé"@fr ;
-    skos:definition "Card-based or object-based divination associated with Espiritismo and Haitian Vodou mesa blanca practice. Distinct from African-derived binary casting systems."@en .
+iroko:DivinationSystem a owl:Class ;
+    rdfs:label "Divination System"@en ;
+    rdfs:comment "A tradition-specific divination system consisting of a defined corpus of signs, casting methods, and interpretive frameworks. Examples: Ifá (256 odù, palm nut or chain casting), Dilogún (16 principal signs, cowrie casting), Fá (Fon parallel to Ifá), Obi (4-part binary coconut or kola reading), Chamalongo (Palo Kongo coconut/bone divination). A DivinationSystem belongs to one or more traditions and may have regional variants."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
-marca:system-other
-    a skos:Concept ; skos:inScheme marca:DivinationSystemScheme ;
-    skos:prefLabel "Other"@en ;
-    skos:definition "Divination system not covered by existing concepts. Use skos:scopeNote to describe."@en .
+iroko:DivinationVerse a owl:Class ;
+    rdfs:label "Divination Verse"@en ;
+    rdfs:comment "A single verse, story, or pataki within a sign's corpus. In Ifá: an ese Ifá. In Dilogún: a rezo or pataki. In Fá: a hwenoho. Verses carry narrative, ethical, prescriptive, and esoteric content. They are the primary means by which divination knowledge is transmitted and applied. Verse text is initiated-elder access; the existence of a verse corpus for a sign is public."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
-# --- Casting Medium ---
-
-marca:CastingMediumScheme
-    a skos:ConceptScheme ;
+iroko:CastingMediumScheme a skos:ConceptScheme ;
     rdfs:label "Casting Media"@en ;
-    skos:prefLabel "Casting Media"@en ;
-    skos:prefLabel "Medios de lanzamiento"@es ;
-    skos:prefLabel "Médiums de tirage"@fr ;
-    skos:prefLabel "Meios de lançamento"@pt ;
-    skos:prefLabel "Àwọn ohun ìdán"@yo ;
-    skos:hasTopConcept marca:medium-ikin,
-                       marca:medium-okuele,
-                       marca:medium-cowrie,
-                       marca:medium-obi-coconut,
-                       marca:medium-obi-kola,
-                       marca:medium-chamalongo-coconut,
-                       marca:medium-chamalongo-bone,
-                       marca:medium-other .
+    skos:hasTopConcept iroko:medium-chamalongo-bone,
+        iroko:medium-chamalongo-coconut,
+        iroko:medium-cowrie,
+        iroko:medium-ikin,
+        iroko:medium-obi-coconut,
+        iroko:medium-obi-kola,
+        iroko:medium-okuele ;
+    skos:prefLabel "Casting Media"@en,
+        "Medios de lanzamiento"@es,
+        "Médiums de tirage"@fr,
+        "Meios de lançamento"@pt,
+        "Àwọn ohun ìdán"@yo .
 
-marca:medium-ikin
-    a skos:Concept ; skos:inScheme marca:CastingMediumScheme ;
-    skos:prefLabel "Ikin (palm nuts)"@en ;
-    skos:prefLabel "Ikin (nueces de palma)"@es ;
-    skos:definition "Sacred palm nuts (ikin Ifá, obi Ifá) used by Babalawos for Ifá divination. Considered the highest-authority casting medium in Lucumí/Yorùbá tradition."@en .
+iroko:DivinationReading a owl:Class ;
+    rdfs:label "Divination Reading"@en ;
+    rdfs:comment "A specific divination event performed for a recipient by an authorized diviner. Records the sign(s) that appeared, the outcome polarity (iré/osogbo), prescribed works, and the entities indicated. Reading records are among the most sensitive data in the framework: recipient identity is no-access; the date and officiant are community-restricted; the prescribed work and entity are initiated-only."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
-marca:medium-okuele
-    a skos:Concept ; skos:inScheme marca:CastingMediumScheme ;
-    skos:prefLabel "Okuele / Ekuele (divining chain)"@en ;
-    skos:prefLabel "Okuele / Ekuele"@es ;
-    skos:definition "Eight-piece divining chain of alternating concave and convex seed halves used by Babalawos as a faster alternative to palm nut casting in Ifá."@en .
+iroko:DivinationSystemScheme a skos:ConceptScheme ;
+    rdfs:label "Divination System Types"@en ;
+    skos:hasTopConcept iroko:system-chamalongo,
+        iroko:system-derle,
+        iroko:system-dilogún,
+        iroko:system-fa,
+        iroko:system-ifa,
+        iroko:system-ita,
+        iroko:system-obi,
+        iroko:system-vititi-nfinda ;
+    skos:prefLabel "Divination System Types"@en,
+        "Tipos de sistema de adivinación"@es,
+        "Types de système divinatoire"@fr,
+        "Tipos de sistema divinatório"@pt,
+        "Àwọn ìrú ọ̀nà aṣọtẹ́lẹ̀"@yo .
 
-marca:medium-cowrie
-    a skos:Concept ; skos:inScheme marca:CastingMediumScheme ;
-    skos:prefLabel "Owó Dilogún (cowrie shells)"@en ;
-    skos:prefLabel "Caracoles / Dilogún"@es ;
-    skos:definition "Sixteen cowrie shells used in Dilogún divination by authorized Olorisha."@en .
-
-marca:medium-obi-coconut
-    a skos:Concept ; skos:inScheme marca:CastingMediumScheme ;
-    skos:prefLabel "Obi Abata (coconut)"@en ;
-    skos:definition "Coconut divided into four pieces for Obi divination."@en .
-
-marca:medium-obi-kola
-    a skos:Concept ; skos:inScheme marca:CastingMediumScheme ;
-    skos:prefLabel "Obi Kola (kola nut)"@en ;
-    skos:definition "Kola nut divided into lobes for Obi divination. More traditional form in continental Yorùbá practice."@en .
-
-marca:medium-chamalongo-coconut
-    a skos:Concept ; skos:inScheme marca:CastingMediumScheme ;
-    skos:prefLabel "Chamalongo (coconut shells)"@en ;
-    skos:definition "Four coconut shell halves prepared and consecrated for Chamalongo divination in Palo traditions."@en .
-
-marca:medium-chamalongo-bone
-    a skos:Concept ; skos:inScheme marca:CastingMediumScheme ;
-    skos:prefLabel "Chamalongo (prepared bones/discs)"@en ;
-    skos:definition "Prepared bones or discs used as an alternative casting medium for Chamalongo. The specific preparation is lineage-specific and restricted."@en .
-
-marca:medium-other
-    a skos:Concept ; skos:inScheme marca:CastingMediumScheme ;
-    skos:prefLabel "Other"@en ;
-    skos:definition "Casting medium not covered by existing concepts."@en .
-
-# --- Outcome Types ---
-
-marca:OutcomeTypeScheme
-    a skos:ConceptScheme ;
-    rdfs:label "Divination Outcome Types"@en ;
-    skos:prefLabel "Divination Outcome Types"@en ;
-    skos:prefLabel "Tipos de resultado divinatorio"@es ;
-    skos:prefLabel "Types de résultat divinatoire"@fr ;
-    skos:prefLabel "Tipos de resultado divinatório"@pt ;
-    skos:prefLabel "Àwọn ìrú àbájáde aṣọtẹ́lẹ̀"@yo ;
-    skos:hasTopConcept marca:outcome-ire,
-                       marca:outcome-osogbo,
-                       marca:outcome-ire-aiku,
-                       marca:outcome-ire-owo,
-                       marca:outcome-ire-omo,
-                       marca:outcome-ire-are,
-                       marca:outcome-osogbo-ojú,
-                       marca:outcome-osogbo-iku,
-                       marca:outcome-osogbo-arun .
-
-marca:outcome-ire
-    a skos:Concept ; skos:inScheme marca:OutcomeTypeScheme ;
-    skos:prefLabel "Iré (positive)"@en ;
-    skos:prefLabel "Iré (positivo)"@es ;
-    skos:prefLabel "Iré"@yo ;
-    skos:definition "A sign comes with positive polarity. The indicated blessings are accessible. Prescribed works (ebó) confirm and open the path."@en .
-
-marca:outcome-osogbo
-    a skos:Concept ; skos:inScheme marca:OutcomeTypeScheme ;
-    skos:prefLabel "Osogbo (negative)"@en ;
-    skos:prefLabel "Osogbo (negativo)"@es ;
-    skos:prefLabel "Àṣọtẹ́lẹ̀ burúkú"@yo ;
-    skos:definition "A sign comes with negative polarity. The indicated difficulties or blockages are present. Prescribed works (ebó) are required to avert or mitigate."@en .
-
-marca:outcome-ire-aiku
-    a skos:Concept ; skos:inScheme marca:OutcomeTypeScheme ;
-    skos:prefLabel "Iré Aiku (long life)"@en ;
-    skos:prefLabel "Iré Aiku"@es ;
-    skos:definition "Iré of long life. The sign comes with the blessing of longevity."@en .
-
-marca:outcome-ire-owo
-    a skos:Concept ; skos:inScheme marca:OutcomeTypeScheme ;
-    skos:prefLabel "Iré Owó (wealth)"@en ;
-    skos:prefLabel "Iré Owó"@es ;
-    skos:definition "Iré of prosperity. The sign comes with the blessing of material abundance."@en .
-
-marca:outcome-ire-omo
-    a skos:Concept ; skos:inScheme marca:OutcomeTypeScheme ;
-    skos:prefLabel "Iré Omo (children)"@en ;
-    skos:prefLabel "Iré Omo"@es ;
-    skos:definition "Iré of children or generativity. The sign comes with the blessing of progeny or creative fruitfulness."@en .
-
-marca:outcome-ire-are
-    a skos:Concept ; skos:inScheme marca:OutcomeTypeScheme ;
-    skos:prefLabel "Iré Aré (victory)"@en ;
-    skos:prefLabel "Iré Aré"@es ;
-    skos:definition "Iré of victory or achievement. The sign comes with the blessing of success in endeavor."@en .
-
-marca:outcome-osogbo-ojú
-    a skos:Concept ; skos:inScheme marca:OutcomeTypeScheme ;
-    skos:prefLabel "Osogbo Ojú (enmity)"@en ;
-    skos:prefLabel "Osogbo Ojú"@es ;
-    skos:definition "Osogbo of enemies or opposition. The negative force indicated involves interpersonal conflict or hostility."@en .
-
-marca:outcome-osogbo-iku
-    a skos:Concept ; skos:inScheme marca:OutcomeTypeScheme ;
-    skos:prefLabel "Osogbo Ikú (death)"@en ;
-    skos:prefLabel "Osogbo Ikú"@es ;
-    skos:definition "Osogbo of death or severe loss. The most serious category; requires immediate and specific ebó."@en .
-
-marca:outcome-osogbo-arun
-    a skos:Concept ; skos:inScheme marca:OutcomeTypeScheme ;
-    skos:prefLabel "Osogbo Arun (illness)"@en ;
-    skos:prefLabel "Osogbo Arun"@es ;
-    skos:definition "Osogbo of illness or physical affliction."@en .
-
-# --- Ebó / Prescribed Work Types ---
-
-marca:EboTypeScheme
-    a skos:ConceptScheme ;
+iroko:EboTypeScheme a skos:ConceptScheme ;
     rdfs:label "Prescribed Work Types"@en ;
-    skos:prefLabel "Prescribed Work Types"@en ;
-    skos:prefLabel "Tipos de trabajo prescrito"@es ;
-    skos:prefLabel "Types de travaux prescrits"@fr ;
-    skos:prefLabel "Tipos de trabalho prescrito"@pt ;
-    skos:prefLabel "Àwọn ìrú iṣẹ́ àṣẹ"@yo ;
-    skos:hasTopConcept marca:ebo-ebo,
-                       marca:ebo-adimú,
-                       marca:ebo-etutu,
-                       marca:ebo-rogacion,
-                       marca:ebo-sacrifice,
-                       marca:ebo-cleansing,
-                       marca:ebo-ceremony,
-                       marca:ebo-abstention .
+    skos:hasTopConcept iroko:ebo-abstention,
+        iroko:ebo-adimú,
+        iroko:ebo-ceremony,
+        iroko:ebo-cleansing,
+        iroko:ebo-ebo,
+        iroko:ebo-etutu,
+        iroko:ebo-rogacion,
+        iroko:ebo-sacrifice ;
+    skos:prefLabel "Prescribed Work Types"@en,
+        "Tipos de trabajo prescrito"@es,
+        "Types de travaux prescrits"@fr,
+        "Tipos de trabalho prescrito"@pt,
+        "Àwọn ìrú iṣẹ́ àṣẹ"@yo .
 
-marca:ebo-ebo
-    a skos:Concept ; skos:inScheme marca:EboTypeScheme ;
-    skos:prefLabel "Ebó"@en ;
-    skos:prefLabel "Ebó"@es ;
-    skos:prefLabel "Ebó"@yo ;
-    skos:definition "A prescribed offering to the Orisha or Ifá indicated by the reading. Includes specific materials, animals, foods, or objects. Operational details are initiated-only."@en .
+iroko:OutcomeTypeScheme a skos:ConceptScheme ;
+    rdfs:label "Divination Outcome Types"@en ;
+    skos:hasTopConcept iroko:outcome-ire,
+        iroko:outcome-ire-aiku,
+        iroko:outcome-ire-are,
+        iroko:outcome-ire-omo,
+        iroko:outcome-ire-owo,
+        iroko:outcome-osogbo,
+        iroko:outcome-osogbo-arun,
+        iroko:outcome-osogbo-iku,
+        iroko:outcome-osogbo-ojú ;
+    skos:prefLabel "Divination Outcome Types"@en,
+        "Tipos de resultado divinatorio"@es,
+        "Types de résultat divinatoire"@fr,
+        "Tipos de resultado divinatório"@pt,
+        "Àwọn ìrú àbájáde aṣọtẹ́lẹ̀"@yo .
 
-marca:ebo-adimú
-    a skos:Concept ; skos:inScheme marca:EboTypeScheme ;
-    skos:prefLabel "Adimu"@en ;
-    skos:prefLabel "Adimú"@es ;
-    skos:definition "A food or vegetable offering (without blood) to an Orisha. Accessible outside of full ebó; considered the first step in propitiation."@en .
+iroko:DivinationSign a owl:Class ;
+    rdfs:label "Divination Sign"@en ;
+    rdfs:comment "A discrete sign, figure, or configuration within a divination system. In Ifá: one of 256 odù (each identified by primary + secondary throw). In Dilogún: one of 16 principal signs (odù Dilogún, omieros, and their paths). In Fá: du figures. In Chamalongo: one of 5 configurations. Each sign has an associated corpus of verses, prescriptions, and spirit-entity relationships. The sign's name and number are public; verses and prescribed works are restricted."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
-marca:ebo-etutu
-    a skos:Concept ; skos:inScheme marca:EboTypeScheme ;
-    skos:prefLabel "Itutu / Etutu"@en ;
-    skos:prefLabel "Itutu / Etutu"@es ;
-    skos:definition "A cooling or pacifying ceremony, often performed after death, severe osogbo, or to address Egun. Requires specific authority and materials."@en .
+<https://ontology.irokosociety.org/iroko-marca> a owl:Ontology ;
+    dcterms:created "2026-02-21"^^xsd:date ;
+    dcterms:creator "Iroko Historical Society" ;
+    dcterms:description "Domain module. Vocabulary for documenting divination systems, sacred signs, reading records, and verse corpora across Afro-Atlantic traditions. Covers Ifá (256 odù), Dilogún, Fá, Obi, Chamalongo, and analogous systems. Sign names and system typologies are public; verse texts, reading details, and prescribed works are restricted at the property level. Use with iroko-authority to document who may perform or transmit readings; iroko-narrative for verse corpus transmission chains and patakí variant relationships."@en ;
+    dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:modified "2026-02-25"^^xsd:date ;
+    dcterms:references <https://ontology.irokosociety.org/iroko-authority>,
+        <https://ontology.irokosociety.org/iroko-narrative> ;
+    dcterms:title "Iroko Framework: Marca Module (Divination Systems and Sacred Sign Corpora)"@en ;
+    rdfs:seeAlso <https://ontology.irokosociety.org/iroko-framework/> ;
+    owl:imports <https://ontology.irokosociety.org/iroko-core> ;
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-marca/2.0.0> ;
+    owl:versionInfo "2.0.0" .
 
-marca:ebo-rogacion
-    a skos:Concept ; skos:inScheme marca:EboTypeScheme ;
-    skos:prefLabel "Rogación de cabeza"@es ;
-    skos:prefLabel "Head Rogation"@en ;
-    skos:definition "A cleansing and feeding of the head (ori/eleda) using specific cool and white materials. One of the most commonly prescribed works across Lucumí and related traditions."@en .
-
-marca:ebo-sacrifice
-    a skos:Concept ; skos:inScheme marca:EboTypeScheme ;
-    skos:prefLabel "Animal sacrifice"@en ;
-    skos:prefLabel "Sacrificio animal"@es ;
-    skos:definition "Ritual sacrifice of an animal specified by the reading. Species, preparation, and allocation are operational details held at initiated-only access."@en .
-
-marca:ebo-cleansing
-    a skos:Concept ; skos:inScheme marca:EboTypeScheme ;
-    skos:prefLabel "Spiritual cleansing"@en ;
-    skos:prefLabel "Limpieza espiritual"@es ;
-    skos:definition "A full-body or environmental cleansing (despojo, limpieza) using herbs, waters, or other materials prescribed by the reading."@en .
-
-marca:ebo-ceremony
-    a skos:Concept ; skos:inScheme marca:EboTypeScheme ;
-    skos:prefLabel "Full ceremony"@en ;
-    skos:prefLabel "Ceremonia completa"@es ;
-    skos:definition "A prescribed ceremony (initiation, reception of Orisha, specific feast) indicated by the reading as necessary."@en .
-
-marca:ebo-abstention
-    a skos:Concept ; skos:inScheme marca:EboTypeScheme ;
-    skos:prefLabel "Abstention / Prohibition"@en ;
-    skos:prefLabel "Abstención / Prohibición"@es ;
-    skos:definition "A behavioral abstention or avoidance prescribed by the reading: specific foods, colors, locations, or activities to avoid for a defined period."@en .

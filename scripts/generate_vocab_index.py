@@ -30,26 +30,26 @@ except ImportError:
 # Module registry
 # ---------------------------------------------------------------------------
 
-IROKO = Namespace("https://www.irokosociety.org/iroko-framework/core#")
+IROKO = Namespace("https://ontology.irokosociety.org/iroko#")
 
 MODULES = [
     # (display_name, tier, tag_label, ns, ttl_stem)
-    ("Core",          "Foundation",     "Core",          "https://www.irokosociety.org/iroko-framework/core#",          "iroko-core"),
-    ("Agency",        "Governance",     "Agency",        "https://www.irokosociety.org/iroko-framework/agency#",        "iroko-agency"),
-    ("Authority",     "Governance",     "Authority",     "https://www.irokosociety.org/iroko-framework/authority#",     "iroko-authority"),
-    ("Epistemic",     "Governance",     "Epistemic",     "https://www.irokosociety.org/iroko-framework/epistemic#",     "iroko-epistemic"),
-    ("Narrative",     "Governance",     "Narrative",     "https://www.irokosociety.org/iroko-framework/narrative#",     "iroko-narrative"),
-    ("Manifestation", "Governance",     "Manifestation", "https://www.irokosociety.org/iroko-framework/manifestation#", "iroko-manifestation"),
-    ("Ewé",           "Domain",         "Botanical",     "https://www.irokosociety.org/iroko-framework/ewe#",           "iroko-ewe"),
-    ("Nkisi",         "Domain",         "Entities",      "https://www.irokosociety.org/iroko-framework/nkisi#",         "iroko-nkisi"),
-    ("Travay",        "Domain",         "Ritual",        "https://www.irokosociety.org/iroko-framework/travay#",        "iroko-travay"),
-    ("Ilé",           "Domain",         "Lineage",       "https://www.irokosociety.org/iroko-framework/ile#",           "iroko-ile"),
-    ("Marca",         "Domain",         "Divination",    "https://www.irokosociety.org/iroko-framework/marca#",         "iroko-marca"),
-    ("Ékpè",          "Domain",         "Societies",     "https://www.irokosociety.org/iroko-framework/ekpe#",          "iroko-ekpe"),
-    ("Vèvè",          "Domain",         "Graphic",       "https://www.irokosociety.org/iroko-framework/veve#",          "iroko-veve"),
-    ("Ngoma",         "Domain",         "Music",         "https://www.irokosociety.org/iroko-framework/ngoma#",         "iroko-ngoma"),
-    ("Sankofa",       "Domain",         "Movements",     "https://www.irokosociety.org/iroko-framework/sankofa#",       "iroko-sankofa"),
-    ("Qal",           "Domain",         "Language",      "https://www.irokosociety.org/iroko-framework/qal#",           "iroko-qal"),
+    ("Core",          "Foundation",     "Core",          "https://ontology.irokosociety.org/iroko#",          "iroko-core"),
+    ("Agency",        "Governance",     "Agency",        "https://ontology.irokosociety.org/iroko#",        "iroko-agency"),
+    ("Authority",     "Governance",     "Authority",     "https://ontology.irokosociety.org/iroko#",     "iroko-authority"),
+    ("Epistemic",     "Governance",     "Epistemic",     "https://ontology.irokosociety.org/iroko#",     "iroko-epistemic"),
+    ("Narrative",     "Governance",     "Narrative",     "https://ontology.irokosociety.org/iroko#",     "iroko-narrative"),
+    ("Manifestation", "Governance",     "Manifestation", "https://ontology.irokosociety.org/iroko#", "iroko-manifestation"),
+    ("Ewé",           "Domain",         "Botanical",     "https://ontology.irokosociety.org/iroko#",           "iroko-ewe"),
+    ("Nkisi",         "Domain",         "Entities",      "https://ontology.irokosociety.org/iroko#",         "iroko-nkisi"),
+    ("Travay",        "Domain",         "Ritual",        "https://ontology.irokosociety.org/iroko#",        "iroko-travay"),
+    ("Ilé",           "Domain",         "Lineage",       "https://ontology.irokosociety.org/iroko#",           "iroko-ile"),
+    ("Marca",         "Domain",         "Divination",    "https://ontology.irokosociety.org/iroko#",         "iroko-marca"),
+    ("Ékpè",          "Domain",         "Societies",     "https://ontology.irokosociety.org/iroko#",          "iroko-ekpe"),
+    ("Vèvè",          "Domain",         "Graphic",       "https://ontology.irokosociety.org/iroko#",          "iroko-veve"),
+    ("Ngoma",         "Domain",         "Music",         "https://ontology.irokosociety.org/iroko#",         "iroko-ngoma"),
+    ("Sankofa",       "Domain",         "Movements",     "https://ontology.irokosociety.org/iroko#",       "iroko-sankofa"),
+    ("Qal",           "Domain",         "Language",      "https://ontology.irokosociety.org/iroko#",           "iroko-qal"),
 ]
 
 # ---------------------------------------------------------------------------

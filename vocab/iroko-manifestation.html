@@ -24,7 +24,7 @@
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
-    <a href="https://www.irokosociety.org/iroko-framework">irokosociety.org ↗</a>
+    <a href="https://ontology.irokosociety.org">ontology.irokosociety.org ↗</a>
     <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
   </nav>
 </div>
@@ -48,7 +48,7 @@
       <h1>Manifestation Module — Sacred Agent Modes</h1>
       <p class="subtitle">Manifestation modes and media: possession, dream, divination, symbolic presence</p>
       <div class="header-meta">
-        <span class="meta-pill">mani:&nbsp;&nbsp;https://www.irokosociety.org/iroko-framework/manifestation#</span>
+        <span class="meta-pill">mani:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-manifestation#</span>
         <span class="meta-pill">v2.0.0</span>
         <span class="meta-pill"><a href="iroko-manifestation.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
@@ -57,10 +57,10 @@
   </header>
 
   <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Governance Layer module. Optional module for modeling how sacred agents are asserted to manifest — through embodied presence, possession, dream, divination, symbolic representation, territorial claim, auditory sign, or unknown mode. Designed to plug into ag:ManifestationEvent. Supports iroko:TemporalVariation where manifestation modes shift by ritual calendar or initiation cycle. Use with iroko-narrative to link manifestation events to the narrative records in which they are described, and iroko-authority to document which lineage context authorizes the assertion.</p>
+    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Governance Layer module. Vocabulary for modeling how sacred agents are asserted to manifest — through embodied presence, possession, dream, divination, symbolic representation, territorial claim, or auditory sign. Plugs into iroko:ManifestationEvent and supports iroko:TemporalVariation where manifestation modes shift by ritual calendar or initiation cycle. These are descriptive, not metaphysical — they record what a tradition asserts in its own terms. Composes with iroko-narrative for temporal regime documentation and iroko-authority for assertion authorization.</p>
     <div class="module-stats" style="margin-top:1rem;">
       <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Properties</span></div>
+      <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Properties</span></div>
       <div class="stat-cell"><span class="stat-n">2</span><span class="stat-label">Schemes</span></div>
       <div class="stat-cell"><span class="stat-n">14</span><span class="stat-label">Concepts</span></div>
     </div>
@@ -75,26 +75,26 @@
       <div class="class-name">ManifestationMode</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Manifestation Mode</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Concept</span></div>
-      <p class="class-def">A SKOS concept describing how a sacred agent is asserted to manifest. Values from mani:ManifestationModeScheme. These are descriptive, not metaphysical — they record what is asserted within a tradition&#x27;s own terms.</p>
+      <p class="class-def">A SKOS concept describing how a sacred agent is asserted to manifest. Modes include embodied, possession, dream, divination, symbolic, territorial, auditory, and unknown. These categories are descriptive and tradition-reported; they record what a community asserts, not what an archive adjudicates. A single ManifestationEvent may reference multiple modes. Modes may vary by temporal regime — use iroko:TemporalVariation to document seasonal or initiatory shifts.</p>
     </div>
     <div class="class-card" id="cls-Medium">
       <div class="class-name">Medium</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Medium</div>
       
-      <p class="class-def">A person, object, place, text, or instrument through which manifestation is asserted to occur.</p>
+      <p class="class-def">A medium through which manifestation is asserted to occur — a person, object, place, text, or instrument. A Medium is the vehicle, not the agent; the sacred agent is modeled in iroko-nkisi or iroko-agency. One ManifestationEvent may involve multiple media.</p>
     </div>
     <div class="class-card" id="cls-MediumType">
       <div class="class-name">MediumType</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Medium Type</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Concept</span></div>
-      <p class="class-def">A SKOS concept categorizing types of media used in manifestation assertions. Values from mani:MediumTypeScheme.</p>
+      <p class="class-def">A SKOS concept categorizing the kind of medium involved in a manifestation assertion: person, object, place, text, instrument, or unknown.</p>
     </div>
   </div>
 
   <div class="term-section">
     <div class="term-section-header">
       <span class="term-section-title">Properties</span>
-      <span class="term-section-count">4 properties</span>
+      <span class="term-section-count">3 properties</span>
     </div>
     <table class="prop-table">
       <thead>
@@ -112,28 +112,21 @@
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">ManifestationEvent → Manifestation Mode</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Associates a ag:ManifestationEvent or iroko:Assertion node with a mani:ManifestationMode concept describing the asserted mode of appearance.</td>
+          <td class="prop-desc">Associates a ManifestationEvent or assertion node with a ManifestationMode concept from iroko:ManifestationModeScheme. Multiple modes may be asserted for a single event.</td>
         </tr>
         <tr id="prop-hasMediumType">
           <td><span class="prop-name">hasMediumType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has medium type</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Medium → Medium Type</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Associates a mani:Medium with a mani:MediumType concept.</td>
-        </tr>
-        <tr id="prop-hasTemporalVariation">
-          <td><span class="prop-name">hasTemporalVariation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has temporal variation</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → TemporalVariation</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Qualifies a manifestation mode, medium, or event with an iroko:TemporalVariation node, for cases where the mode of manifestation shifts by ritual calendar, initiation cycle, or seasonal regime.</td>
+          <td class="prop-desc">Associates a Medium with a MediumType concept from iroko:MediumTypeScheme.</td>
         </tr>
         <tr id="prop-manifestsThroughMedium">
           <td><span class="prop-name">manifestsThroughMedium</span><br><span style="font-size:.75rem;color:var(--ink-soft);">manifests through medium</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">ManifestationEvent → Medium</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Associates a ag:ManifestationEvent with the mani:Medium through which manifestation is asserted to occur.</td>
+          <td class="prop-desc">Associates a ManifestationEvent with a Medium through which manifestation is asserted to occur. The identity of the medium (e.g., a specific person) may carry its own access level if the medium is a community member.</td>
         </tr>
       </tbody>
     </table>
@@ -149,47 +142,48 @@
         <span class="scheme-name">Manifestation Modes</span>
         <span class="scheme-count">8 concepts</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms for modes in which sacred agents are asserted to manifest. These are descriptive categories that may vary by tradition, lineage, or temporal regime.</p>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms for how sacred agents are asserted to manifest. Tradition-reported descriptive categories. Multiple modes may apply to a single event.</p>
       <div class="concept-list">
         <div class="concept-item" id="concept-mode-auditory">
           <div class="concept-label">Auditory</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-auditory</div>
-          <p class="concept-def">Manifestation asserted to occur through sound, voice, or auditory sign.</p>
+          <p class="concept-def">Manifestation asserted to occur through sound, voice, drumming, or hearing — including traditions where specific rhythms summon or identify a spirit.</p>
         </div>
         <div class="concept-item" id="concept-mode-divination">
           <div class="concept-label">Divination</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-divination</div>
-          <p class="concept-def">Manifestation asserted to occur through divination, oracle, or interpretive instrument.</p>
+          <p class="concept-def">Manifestation asserted to occur through divination, oracle, or the interpretive reading of divinatory instruments.</p>
         </div>
         <div class="concept-item" id="concept-mode-dream">
           <div class="concept-label">Dream</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-dream</div>
-          <p class="concept-def">Manifestation asserted to occur through dream or dream visitation.</p>
+          <p class="concept-def">Manifestation asserted to occur through dreams, dream visitation, or hypnagogic contact.</p>
         </div>
         <div class="concept-item" id="concept-mode-embodied">
           <div class="concept-label">Embodied</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-embodied</div>
-          <p class="concept-def">Manifestation asserted to occur in embodied, physical form.</p>
+          <p class="concept-def">Manifestation asserted to occur in a physically embodied form distinct from possession — the agent is present as a body, not occupying another&#x27;s.</p>
         </div>
         <div class="concept-item" id="concept-mode-possession">
           <div class="concept-label">Possession</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-possession</div>
-          <p class="concept-def">Manifestation asserted to occur through possession or mounting of a human medium.</p>
+          <p class="concept-def">Manifestation asserted to occur through mounting or possession of a medium person. The agent speaks and acts through the medium during the event.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Distinguish from embodied: possession involves a medium person who is temporarily occupied; embodied involves a distinct physical presence.</p>
         </div>
         <div class="concept-item" id="concept-mode-symbolic">
           <div class="concept-label">Symbolic</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-symbolic</div>
-          <p class="concept-def">Manifestation asserted to occur through symbols, signs, or indirect representation.</p>
+          <p class="concept-def">Manifestation asserted to occur through symbols, signs, graphic marks, or indirect representation. Vèvè, firmas, and anaforuana are common vehicles.</p>
         </div>
         <div class="concept-item" id="concept-mode-territorial">
           <div class="concept-label">Territorial</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-territorial</div>
-          <p class="concept-def">Manifestation asserted to be bound to or expressed through a specific place, site, or territory.</p>
+          <p class="concept-def">Manifestation asserted to be bound to or expressed through a place, crossroads, body of water, forest, or territory.</p>
         </div>
         <div class="concept-item" id="concept-mode-unknown">
           <div class="concept-label">Unknown</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mode-unknown</div>
-          <p class="concept-def">Manifestation mode not known or not recorded in available sources.</p>
+          <p class="concept-def">Manifestation mode not recorded or not known.</p>
         </div>
       </div>
     </div>
@@ -198,37 +192,37 @@
         <span class="scheme-name">Medium Types</span>
         <span class="scheme-count">6 concepts</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms for types of media through which sacred agent manifestation is asserted to occur.</p>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms for the kind of medium through which manifestation is asserted to occur.</p>
       <div class="concept-list">
         <div class="concept-item" id="concept-medium-instrument">
           <div class="concept-label">Instrument</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-instrument</div>
-          <p class="concept-def">A musical, divinatory, or ritual instrument serves as the medium.</p>
+          <p class="concept-def">A musical, divinatory, or ritual instrument serves as the medium — a consecrated bàtá drum, divining chain, or bell.</p>
         </div>
         <div class="concept-item" id="concept-medium-object">
           <div class="concept-label">Object</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-object</div>
-          <p class="concept-def">A material object (vessel, tool, consecrated item) serves as the medium.</p>
+          <p class="concept-def">A material object serves as the medium — a consecrated vessel, nganga, otán, or ritual artifact.</p>
         </div>
         <div class="concept-item" id="concept-medium-person">
           <div class="concept-label">Person</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-person</div>
-          <p class="concept-def">A human person serves as the medium of manifestation.</p>
+          <p class="concept-def">A human person serves as the medium, as in possession or mounted manifestation.</p>
         </div>
         <div class="concept-item" id="concept-medium-place">
           <div class="concept-label">Place</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-place</div>
-          <p class="concept-def">A place, site, natural feature, or territory serves as the medium.</p>
+          <p class="concept-def">A place, site, crossroads, or territory serves as the medium.</p>
         </div>
         <div class="concept-item" id="concept-medium-text">
           <div class="concept-label">Text</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-text</div>
-          <p class="concept-def">A text, inscription, verse, or document serves as the medium.</p>
+          <p class="concept-def">A text, inscription, vèvè, firma, or graphic document serves as the medium.</p>
         </div>
         <div class="concept-item" id="concept-medium-unknown">
           <div class="concept-label">Unknown</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-unknown</div>
-          <p class="concept-def">Medium type not known or not recorded in available sources.</p>
+          <p class="concept-def">Medium type not recorded or not known.</p>
         </div>
       </div>
     </div>
@@ -238,7 +232,6 @@
     <div class="footer-left">
       Iroko Historical Society<br>
       Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      Issued 2026-02-22 · Revised 2026-02-25<br>
       License: CC0 1.0 Universal (Public Domain)
     </div>
     <div class="footer-links">

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # ==========================================================================
-# Iroko Framework — Epistemic Module  v2.0.0
+# Iroko Framework — Epistemic Module  v1.0.0
 # ==========================================================================
-# Namespace: https://www.irokosociety.org/iroko-framework/epistemic#
+# Namespace: https://ontology.irokosociety.org/iroko#
 # Prefix:    ep:
 # Requires:  iroko-core v2.0.0
 #
@@ -15,7 +15,7 @@
 # claims about who may access what knowledge under what conditions.
 #
 # NOTE: iroko:hasTemporalVariation is defined in Core and applies
-# to ep:EpistemicConstraint instances without redefinition here.
+# to iroko:EpistemicConstraint instances without redefinition here.
 # ==========================================================================
 
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -24,11 +24,9 @@
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
-@prefix auth:    <https://www.irokosociety.org/iroko-framework/authority#> .
-@prefix ep:      <https://www.irokosociety.org/iroko-framework/epistemic#> .
+@prefix iroko: <https://ontology.irokosociety.org/iroko#> .
 
-<https://www.irokosociety.org/iroko-framework/epistemic>
+<https://ontology.irokosociety.org/iroko-epistemic>
     a owl:Ontology ;
     dcterms:title "Iroko Framework: Epistemic Module"@en ;
     dcterms:description "Governance Layer module. Optional module for modeling epistemic constraints and disclosure permissions — knowledge gating in sovereignty-aware archives. Enables archives to express conditions under which knowledge may be disclosed, withheld, transformed, or restricted without encoding the restricted knowledge itself. Distinct from iroko:accessLevel (who may access) — epistemic constraints govern the conditions and basis of disclosure. Commonly paired with iroko-authority."@en ;
@@ -36,168 +34,168 @@
     dcterms:issued "2026-02-23"^^xsd:date ;
     dcterms:modified "2026-02-25"^^xsd:date ;
     owl:versionInfo "2.0.0" ;
-    owl:versionIRI <https://www.irokosociety.org/iroko-framework/epistemic/2.0.0> ;
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-epistemic/2.0.0> ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
-    dcterms:requires <https://www.irokosociety.org/iroko-framework/core> ;
-    dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
-    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
+    dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
+    dcterms:requires <https://ontology.irokosociety.org/iroko-core> ;
+    dcterms:references <https://ontology.irokosociety.org/iroko-authority> ;
+    rdfs:seeAlso <https://ontology.irokosociety.org/iroko-framework/> .
 
 
 # ===========================================================================
 # CLASSES
 # ===========================================================================
 
-ep:EpistemicConstraint
+iroko:EpistemicConstraint
     a owl:Class ;
     rdfs:label "Epistemic Constraint"@en ;
     rdfs:comment "A constraint describing conditions under which knowledge may be disclosed, withheld, transformed, or restricted. The abstract superclass — use DisclosurePermission, DisclosureRestriction, or SanctionedDisclosure for typed instances. iroko:hasTemporalVariation (Core) may be applied to qualify constraints that vary by season, cycle, or ritual state."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
-ep:DisclosurePermission
+iroko:DisclosurePermission
     a owl:Class ;
-    rdfs:subClassOf ep:EpistemicConstraint ;
+    rdfs:subClassOf iroko:EpistemicConstraint ;
     rdfs:label "Disclosure Permission"@en ;
     rdfs:comment "An epistemic constraint asserting that disclosure is permitted under specified conditions. The conditions may be temporal, initiatory, lineage-bound, or community-mandated."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
-ep:DisclosureRestriction
+iroko:DisclosureRestriction
     a owl:Class ;
-    rdfs:subClassOf ep:EpistemicConstraint ;
+    rdfs:subClassOf iroko:EpistemicConstraint ;
     rdfs:label "Disclosure Restriction"@en ;
     rdfs:comment "An epistemic constraint asserting that disclosure is restricted, limited, or prohibited under specified conditions."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
-ep:SanctionedDisclosure
+iroko:SanctionedDisclosure
     a owl:Class ;
-    rdfs:subClassOf ep:EpistemicConstraint ;
+    rdfs:subClassOf iroko:EpistemicConstraint ;
     rdfs:label "Sanctioned Disclosure"@en ;
     rdfs:comment "An epistemic constraint asserting that disclosure is permitted only when explicitly sanctioned by a recognized authority or mandate. Combines permission with a required authorization step."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
-ep:ConstraintBasis
+iroko:ConstraintBasis
     a owl:Class ;
     rdfs:subClassOf skos:Concept ;
     rdfs:label "Constraint Basis"@en ;
     rdfs:comment "A SKOS concept describing the basis for an epistemic constraint: initiation, lineage, community mandate, ritual condition, safety, or unknown."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
 
 # ===========================================================================
 # PROPERTIES
 # ===========================================================================
 
-ep:hasEpistemicConstraint
+iroko:hasEpistemicConstraint
     a owl:ObjectProperty ;
     rdfs:label "has epistemic constraint"@en ;
     rdfs:comment "Associates a record, assertion, access policy, or any resource with an EpistemicConstraint. The constraint governs what may be known about the resource, not merely who may access it — these are related but distinct."@en ;
-    rdfs:range ep:EpistemicConstraint ;
+    rdfs:range iroko:EpistemicConstraint ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
-ep:hasConstraintBasis
+iroko:hasConstraintBasis
     a owl:ObjectProperty ;
     rdfs:label "has constraint basis"@en ;
     rdfs:comment "Associates an EpistemicConstraint with a ConstraintBasis concept classifying its foundation."@en ;
-    rdfs:domain ep:EpistemicConstraint ;
-    rdfs:range ep:ConstraintBasis ;
+    rdfs:domain iroko:EpistemicConstraint ;
+    rdfs:range iroko:ConstraintBasis ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
-ep:constraintSanctionedBy
+iroko:constraintSanctionedBy
     a owl:ObjectProperty ;
     rdfs:label "constraint sanctioned by"@en ;
-    rdfs:comment "Links a SanctionedDisclosure to the auth:Authority that must sanction the disclosure."@en ;
-    rdfs:domain ep:SanctionedDisclosure ;
+    rdfs:comment "Links a SanctionedDisclosure to the iroko:Authority that must sanction the disclosure."@en ;
+    rdfs:domain iroko:SanctionedDisclosure ;
     rdfs:range iroko:RitualAuthority ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
-ep:constraintNote
+iroko:constraintNote
     a owl:DatatypeProperty ;
     rdfs:label "constraint note"@en ;
     rdfs:comment "Free-text description of the epistemic constraint — what it restricts or permits and why."@en ;
-    rdfs:domain ep:EpistemicConstraint ;
+    rdfs:domain iroko:EpistemicConstraint ;
     rdfs:range rdf:langString ;
     iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
-ep:constraintCondition
+iroko:constraintCondition
     a owl:DatatypeProperty ;
     rdfs:label "constraint condition"@en ;
     rdfs:comment "Explicit condition statement for this constraint. May reference initiation levels, temporal variation, community mandate, or ritual state. Complements iroko:hasTemporalVariation for non-temporal conditions."@en ;
-    rdfs:domain ep:EpistemicConstraint ;
+    rdfs:domain iroko:EpistemicConstraint ;
     rdfs:range rdf:langString ;
     iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/epistemic> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-epistemic> .
 
 # NOTE: Use iroko:hasTemporalVariation (Core) on EpistemicConstraint
 # instances to qualify seasonal or cycle-bound variations:
-#   <ep:someConstraint> iroko:hasTemporalVariation <iroko:TemporalVariation/...> .
+#   <iroko:someConstraint> iroko:hasTemporalVariation <iroko:TemporalVariation/...> .
 
 
 # ===========================================================================
 # CONCEPT SCHEME: Constraint Basis
 # ===========================================================================
 
-ep:ConstraintBasisScheme
+iroko:ConstraintBasisScheme
     a skos:ConceptScheme ;
     rdfs:label "Constraint Bases"@en ;
     dcterms:description "Controlled terms describing the foundation for epistemic constraints on sacred knowledge."@en ;
-    skos:hasTopConcept ep:basis-initiation,
-                       ep:basis-lineage,
-                       ep:basis-gender-regime,
-                       ep:basis-community-mandate,
-                       ep:basis-ritual-condition,
-                       ep:basis-safety,
-                       ep:basis-temporal,
-                       ep:basis-unknown .
+    skos:hasTopConcept iroko:basis-initiation,
+                       iroko:basis-lineage,
+                       iroko:basis-gender-regime,
+                       iroko:basis-community-mandate,
+                       iroko:basis-ritual-condition,
+                       iroko:basis-safety,
+                       iroko:basis-temporal,
+                       iroko:basis-unknown .
 
-ep:basis-initiation
-    a ep:ConstraintBasis ;
-    skos:inScheme ep:ConstraintBasisScheme ;
+iroko:basis-initiation
+    a iroko:ConstraintBasis ;
+    skos:inScheme iroko:ConstraintBasisScheme ;
     skos:prefLabel "Initiation"@en ;
     skos:definition "Constraint basis asserted as initiation level or initiatory boundary. Knowledge may not cross to the uninitiated."@en .
 
-ep:basis-lineage
-    a ep:ConstraintBasis ;
-    skos:inScheme ep:ConstraintBasisScheme ;
+iroko:basis-lineage
+    a iroko:ConstraintBasis ;
+    skos:inScheme iroko:ConstraintBasisScheme ;
     skos:prefLabel "Lineage"@en ;
     skos:definition "Constraint basis asserted as lineage affiliation. Knowledge belongs to a specific transmission line."@en .
 
-ep:basis-gender-regime
-    a ep:ConstraintBasis ;
-    skos:inScheme ep:ConstraintBasisScheme ;
+iroko:basis-gender-regime
+    a iroko:ConstraintBasis ;
+    skos:inScheme iroko:ConstraintBasisScheme ;
     skos:prefLabel "Gender Regime"@en ;
     skos:definition "Constraint basis asserted as a tradition-specific gender regime governing access. These are culturally defined and may be contested — model with iroko:contestedStatus where appropriate."@en ;
     skos:scopeNote "Gender-based constraints vary significantly across lineages and are often the subject of active debate. Record the constraint as asserted; use iroko:contestedStatus and iroko:assertionStatus to represent disputed cases."@en .
 
-ep:basis-community-mandate
-    a ep:ConstraintBasis ;
-    skos:inScheme ep:ConstraintBasisScheme ;
+iroko:basis-community-mandate
+    a iroko:ConstraintBasis ;
+    skos:inScheme iroko:ConstraintBasisScheme ;
     skos:prefLabel "Community Mandate"@en ;
     skos:definition "Constraint basis asserted as a community mandate or collective governance decision."@en .
 
-ep:basis-ritual-condition
-    a ep:ConstraintBasis ;
-    skos:inScheme ep:ConstraintBasisScheme ;
+iroko:basis-ritual-condition
+    a iroko:ConstraintBasis ;
+    skos:inScheme iroko:ConstraintBasisScheme ;
     skos:prefLabel "Ritual Condition"@en ;
     skos:definition "Constraint basis asserted as a ritual state or condition — mourning period, ritual preparation, post-initiation obligation, etc."@en .
 
-ep:basis-safety
-    a ep:ConstraintBasis ;
-    skos:inScheme ep:ConstraintBasisScheme ;
+iroko:basis-safety
+    a iroko:ConstraintBasis ;
+    skos:inScheme iroko:ConstraintBasisScheme ;
     skos:prefLabel "Safety"@en ;
     skos:definition "Constraint basis asserted as safety or harm prevention — knowledge that could cause spiritual, physical, or social harm if disclosed."@en .
 
-ep:basis-temporal
-    a ep:ConstraintBasis ;
-    skos:inScheme ep:ConstraintBasisScheme ;
+iroko:basis-temporal
+    a iroko:ConstraintBasis ;
+    skos:inScheme iroko:ConstraintBasisScheme ;
     skos:prefLabel "Temporal"@en ;
     skos:definition "Constraint basis asserted as time-bound — a festival period, mourning cycle, ritual season, or other temporal regime. Use with iroko:hasTemporalVariation for structured modeling."@en .
 
-ep:basis-unknown
-    a ep:ConstraintBasis ;
-    skos:inScheme ep:ConstraintBasisScheme ;
+iroko:basis-unknown
+    a iroko:ConstraintBasis ;
+    skos:inScheme iroko:ConstraintBasisScheme ;
     skos:prefLabel "Unknown"@en ;
     skos:definition "Constraint basis not known or not recorded."@en .

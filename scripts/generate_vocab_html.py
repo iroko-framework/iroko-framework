@@ -21,7 +21,7 @@ from pathlib import Path
 import sys
 import html
 
-IROKO = Namespace("https://www.irokosociety.org/iroko-framework/core#")
+IROKO = Namespace("https://ontology.irokosociety.org/iroko#")
 
 # ---------------------------------------------------------------------------
 # MODULE_CONFIG
@@ -367,7 +367,7 @@ def generate_html(ttl_path, output_path, cfg):
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
-    <a href="https://www.irokosociety.org/iroko-framework">irokosociety.org ↗</a>
+    <a href="https://ontology.irokosociety.org">ontology.irokosociety.org ↗</a>
     <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
   </nav>
 </div>

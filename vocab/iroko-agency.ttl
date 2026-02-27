@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # ==========================================================================
-# Iroko Framework — Agency Module  v2.0.0
+# Iroko Framework — Agency Module  v1.0.0
 # ==========================================================================
-# Namespace: https://www.irokosociety.org/iroko-framework/agency#
+# Namespace: https://ontology.irokosociety.org/iroko#
 # Prefix:    ag:
 # Requires:  iroko-core v2.0.0
 #
@@ -12,8 +12,8 @@
 #
 # DESIGN PRINCIPLES
 # -----------------
-# • Graceful degradation: minimal use requires only ag:SacredAgent,
-#   ag:Spirit, and ag:RitualEvent.
+# • Graceful degradation: minimal use requires only iroko:SacredAgent,
+#   iroko:Spirit, and iroko:RitualEvent.
 # • Elaborate profile: event subtypes, AuthorizationChain,
 #   StewardshipMandate, RitualConsequence are additive — never required.
 # • iroko:hasTemporalVariation is defined in Core and used here
@@ -28,178 +28,177 @@
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix prov:    <http://www.w3.org/ns/prov#> .
-@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
-@prefix ag:      <https://www.irokosociety.org/iroko-framework/agency#> .
+@prefix iroko: <https://ontology.irokosociety.org/iroko#> .
 
-<https://www.irokosociety.org/iroko-framework/agency>
+<https://ontology.irokosociety.org/iroko-agency>
     a owl:Ontology ;
     dcterms:title "Iroko Framework: Agency Module"@en ;
-    dcterms:description "Governance Layer module. Sovereignty-aligned agency model for sacred systems. Defines sacred agents, spirits, ritual events, authorization and refusal events, stewardship mandates, and authorization chains. Designed to degrade gracefully: minimal use requires only ag:SacredAgent, ag:Spirit, and ag:RitualEvent. Use with iroko-authority for full authorization governance."@en ;
+    dcterms:description "Governance Layer module. Sovereignty-aligned agency model for sacred systems. Defines sacred agents, spirits, ritual events, authorization and refusal events, stewardship mandates, and authorization chains. Designed to degrade gracefully: minimal use requires only iroko:SacredAgent, iroko:Spirit, and iroko:RitualEvent. Use with iroko-authority for full authorization governance."@en ;
     dcterms:creator "Iroko Historical Society" ;
     dcterms:issued "2026-02-23"^^xsd:date ;
     dcterms:modified "2026-02-25"^^xsd:date ;
     owl:versionInfo "2.0.0" ;
-    owl:versionIRI <https://www.irokosociety.org/iroko-framework/agency/2.0.0> ;
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-agency/2.0.0> ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
-    dcterms:requires <https://www.irokosociety.org/iroko-framework/core> ;
-    dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
-    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
+    dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
+    dcterms:requires <https://ontology.irokosociety.org/iroko-core> ;
+    dcterms:references <https://ontology.irokosociety.org/iroko-authority> ;
+    rdfs:seeAlso <https://ontology.irokosociety.org/iroko-framework/> .
 
 
 # ===========================================================================
 # CORE CLASSES — minimal profile
 # ===========================================================================
 
-ag:SacredAgent
+iroko:SacredAgent
     a owl:Class ;
     rdfs:label "Sacred Agent"@en ;
     rdfs:comment "An entity recognized within a ritual system as capable of intentional action — authorization, refusal, protection, sanctioning, or manifestation. Defined without metaphysical claims. Enables structured modeling of agency in sovereignty-aware archives. Subclass of prov:Agent via iroko-align-prov.ttl."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:Spirit
+iroko:Spirit
     a owl:Class ;
-    rdfs:subClassOf ag:SacredAgent ;
+    rdfs:subClassOf iroko:SacredAgent ;
     rdfs:label "Spirit"@en ;
     rdfs:comment "A sacred agent recognized as a spirit within a cultural and ritual framework. Specific typologies (orisha, lwa, nkisi, egun, etc.) modeled via subclasses or concept schemes in domain modules."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:RitualEvent
+iroko:RitualEvent
     a owl:Class ;
     rdfs:label "Ritual Event"@en ;
     rdfs:comment "A time-bounded ritual activity in which agents participate. A ritual event may generate assertions, permissions, constraints, or records. For temporal calendar time on instances, use PROV-O time properties (prov:startedAtTime, prov:endedAtTime). Subclass of prov:Activity via iroko-align-prov.ttl."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
 
 # ===========================================================================
 # OPTIONAL EVENT SUBCLASSES — elaborate profile
 # ===========================================================================
 
-ag:ManifestationEvent
+iroko:ManifestationEvent
     a owl:Class ;
-    rdfs:subClassOf ag:RitualEvent ;
+    rdfs:subClassOf iroko:RitualEvent ;
     rdfs:label "Manifestation Event"@en ;
     rdfs:comment "A ritual event in which a sacred agent is asserted to manifest through a medium, place, dream, divination, or other mode. Connects to iroko-manifestation.ttl for mode and medium typing."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:AuthorizationEvent
+iroko:AuthorizationEvent
     a owl:Class ;
-    rdfs:subClassOf ag:RitualEvent ;
+    rdfs:subClassOf iroko:RitualEvent ;
     rdfs:label "Authorization Event"@en ;
     rdfs:comment "A ritual event in which authorization is asserted, delegated, conditioned, or revoked. Supports sovereignty modeling for access, disclosure, and stewardship mandates."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:RefusalEvent
+iroko:RefusalEvent
     a owl:Class ;
-    rdfs:subClassOf ag:RitualEvent ;
+    rdfs:subClassOf iroko:RitualEvent ;
     rdfs:label "Refusal Event"@en ;
     rdfs:comment "A ritual event in which a sacred agent is asserted to refuse participation, disclosure, access, or a requested action. Enables modeling of sacred refusal as a positive, governance-significant act rather than merely an absence."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
 
 # ===========================================================================
 # OPTIONAL SUPPORT CLASSES — elaborate profile
 # ===========================================================================
 
-ag:RitualAction
+iroko:RitualAction
     a owl:Class ;
     rdfs:label "Ritual Action"@en ;
     rdfs:comment "A typed action asserted to be performed or effected within ritual practice. Use when finer granularity than RitualEvent is needed — for example, a sequence of actions within a ceremony."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:AuthorizationChain
+iroko:AuthorizationChain
     a owl:Class ;
     rdfs:label "Authorization Chain"@en ;
     rdfs:comment "A structured representation of delegated or layered authority across agents, mandates, and conditions. Models succession of authorization from one agent or office to another within a ritual governance system."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:StewardshipMandate
+iroko:StewardshipMandate
     a owl:Class ;
     rdfs:label "Stewardship Mandate"@en ;
     rdfs:comment "A mandate asserted to govern stewardship, custody, disclosure, or use of materials. May be associated with agents, events, and access policies. Can condition iroko:AccessPolicy instances."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:RitualConsequence
+iroko:RitualConsequence
     a owl:Class ;
     rdfs:label "Ritual Consequence"@en ;
     rdfs:comment "An outcome category describing asserted consequences of ritual actions or events. Descriptive and claim-bearing — does not assert causal certainty. Access governance applies."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
 
 # ===========================================================================
 # CORE PROPERTIES — minimal profile
 # ===========================================================================
 
-ag:involvesAgent
+iroko:involvesAgent
     a owl:ObjectProperty ;
     rdfs:label "involves agent"@en ;
     rdfs:comment "Links an event, action, or assertion node to an agent involved. Complements prov:wasAssociatedWith in instance data without requiring PROV import."@en ;
-    rdfs:range ag:SacredAgent ;
+    rdfs:range iroko:SacredAgent ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:hasOutcome
+iroko:hasOutcome
     a owl:ObjectProperty ;
     rdfs:label "has outcome"@en ;
     rdfs:comment "Links an event or action to an outcome entity — a RelationshipAssertion, AccessPolicy, EpistemicConstraint, StewardshipMandate, or other record."@en ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
 
 # ===========================================================================
 # OPTIONAL PROPERTIES — elaborate profile
 # ===========================================================================
 
-ag:hasAuthorizationChain
+iroko:hasAuthorizationChain
     a owl:ObjectProperty ;
     rdfs:label "has authorization chain"@en ;
     rdfs:comment "Associates a RitualEvent, policy, or mandate with an AuthorizationChain."@en ;
-    rdfs:range ag:AuthorizationChain ;
+    rdfs:range iroko:AuthorizationChain ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:hasMandate
+iroko:hasMandate
     a owl:ObjectProperty ;
     rdfs:label "has mandate"@en ;
     rdfs:comment "Associates an agent, event, or policy with a StewardshipMandate."@en ;
-    rdfs:range ag:StewardshipMandate ;
+    rdfs:range iroko:StewardshipMandate ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:hasRitualConsequence
+iroko:hasRitualConsequence
     a owl:ObjectProperty ;
     rdfs:label "has ritual consequence"@en ;
     rdfs:comment "Associates a ritual event or action with a RitualConsequence category."@en ;
-    rdfs:range ag:RitualConsequence ;
+    rdfs:range iroko:RitualConsequence ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:mandateScope
+iroko:mandateScope
     a owl:DatatypeProperty ;
     rdfs:label "mandate scope"@en ;
     rdfs:comment "Free-text description of the scope of a StewardshipMandate — what materials, processes, or knowledge types it covers."@en ;
-    rdfs:domain ag:StewardshipMandate ;
+    rdfs:domain iroko:StewardshipMandate ;
     rdfs:range rdf:langString ;
     iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:mandateCondition
+iroko:mandateCondition
     a owl:DatatypeProperty ;
     rdfs:label "mandate condition"@en ;
     rdfs:comment "Text description of conditions activating or limiting this stewardship mandate."@en ;
-    rdfs:domain ag:StewardshipMandate ;
+    rdfs:domain iroko:StewardshipMandate ;
     rdfs:range rdf:langString ;
     iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-ag:chainLink
+iroko:chainLink
     a owl:ObjectProperty ;
     rdfs:label "chain link"@en ;
     rdfs:comment "Links one node in an AuthorizationChain to the next — the agent, event, or mandate that follows in the delegation sequence."@en ;
-    rdfs:domain ag:AuthorizationChain ;
+    rdfs:domain iroko:AuthorizationChain ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/agency> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
 # NOTE: iroko:hasTemporalVariation is defined in Core (iroko-core v2.0.0)
 # and applies to agency resources without redefinition here.
-# Use:  <ag:SomeEvent> iroko:hasTemporalVariation <some:TemporalVariation> .
+# Use:  <iroko:SomeEvent> iroko:hasTemporalVariation <some:TemporalVariation> .

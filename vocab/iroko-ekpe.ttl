@@ -1,670 +1,552 @@
-# -*- coding: utf-8 -*-
-# ===================================================================
-# IROKO FRAMEWORK — ÉKPÈ MODULE
-# Initiatory Societies, Grades, Esoteric Governance, and Sodalities
-# Namespace: https://www.irokosociety.org/iroko-framework/ekpe#
-# Version: 2.0.0 | February 2026
-# Dependencies: iroko-core, iroko-ile, iroko-nkisi, iroko-travay
-# ===================================================================
-#
-# Coverage: Ékpè/Ngbe (Ejagham/Cross River), Abakuá (Cuba, Ékpè diaspora),
-#   Ogboni/Oshugbo (Yorùbá), Oro (Yorùbá), Gelede (Yorùbá/Fon),
-#   Egungun masquerade societies, Agemo, and analogous initiatory
-#   sodalities across Afro-Atlantic traditions.
-#
-# Scope distinction: This module covers the institutional structure,
-#   grade systems, governance, and ceremonial roles of initiatory
-#   societies. Ritual processes performed by societies are documented
-#   in iroko-travay. Graphic/sign systems used by societies (Nsibidi,
-#   Anaforuana) are documented in the Vèvè module (forthcoming).
-#
-# Access philosophy: Society existence, name, and geographic presence
-#   are public. Grade names and their sequence are community-restricted.
-#   Grade content, secret names, signs, and inter-grade relationships
-#   are initiated-only to initiated-elder depending on grade level.
-#   Internal governance and succession records are typically no-access.
-# ===================================================================
-
-@prefix ekpe:    <https://www.irokosociety.org/iroko-framework/ekpe#> .
-@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
-@prefix ile:     <https://www.irokosociety.org/iroko-framework/ile#> .
-@prefix nkisi:   <https://www.irokosociety.org/iroko-framework/nkisi#> .
-@prefix travay:  <https://www.irokosociety.org/iroko-framework/travay#> .
-@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
-@prefix owl:     <http://www.w3.org/2002/07/owl#> .
-@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix prov:    <http://www.w3.org/ns/prov#> .
-@prefix schema:  <https://schema.org/> .
-@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix iroko: <https://ontology.irokosociety.org/iroko#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <https://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<https://www.irokosociety.org/iroko-framework/ekpe>
-    a owl:Ontology ;
-    dcterms:title "Iroko Framework: Ékpè Module (Initiatory Societies, Grades, and Esoteric Governance)"@en ;
-    dcterms:description "Domain module. Vocabulary for documenting initiatory societies, grade structures, esoteric governance, and sodality membership across Afro-Atlantic traditions. Covers Ékpè/Ngbe, Abakuá, Ogboni/Oshugbo, Oro, Gelede, Egungun, and analogous institutions. Distinct from iroko-ile (religious houses and lineages) and iroko-travay (ritual processes): this module focuses on the institutional architecture of sodalities as systems of graded authority, esoteric knowledge, and community governance. Use with iroko-authority to model grade conferral authority and recognition networks; iroko-epistemic to constrain disclosure of restricted grade content and member identities."@en ;
-    dcterms:creator "Iroko Historical Society" ;
-    dcterms:created "2026-02-21"^^xsd:date ;
-    dcterms:modified "2026-02-25"^^xsd:date ;
-    owl:versionInfo "2.0.0" ;
-    owl:versionIRI <https://www.irokosociety.org/iroko-framework/ekpe/2.0.0> ;
-    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    dcterms:isPartOf <https://www.irokosociety.org/iroko-framework/> ;
-    owl:imports <https://www.irokosociety.org/iroko-framework/core> ;
-    dcterms:references <https://www.irokosociety.org/iroko-framework/authority> ;
-    dcterms:references <https://www.irokosociety.org/iroko-framework/epistemic> ;
-    rdfs:seeAlso <https://www.irokosociety.org/iroko-framework/> .
+iroko:associatedHouse a owl:ObjectProperty ;
+    rdfs:label "associated house"@en ;
+    rdfs:comment "A religious house (iroko:House) with which this society maintains an ongoing ceremonial relationship. In many traditions, society and house membership overlap for senior practitioners."@en ;
+    rdfs:domain iroko:InitiatorySociety ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:House ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-# ===================================================================
-# CLASSES
-# ===================================================================
-
-ekpe:InitiatorySociety
-    a owl:Class ;
-    rdfs:subClassOf iroko:SacredEntity, schema:Organization ;
-    rdfs:label "Initiatory Society"@en ;
-    rdfs:comment "A sodality or secret society organized around graded initiation, with esoteric knowledge and authority distributed across hierarchical grades. Membership is earned through initiation rather than birth or lineage alone. Examples: Ékpè/Ngbe lodges (Ejagham, Cross River Nigeria/Cameroon), Abakuá potencias (Cuba), Ogboni chapters (Yorùbáland), Gelede societies (Yorùbá/Fon/Ewe), Egungun lineage associations. Subclasses schema:Organization for interoperability with external directories, and iroko:SacredEntity for access control. Distinguished from ile:House (which organizes around founding-elder lineage) in that membership cross-cuts lineage boundaries."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:SocietyLodge
-    a owl:Class ;
-    rdfs:subClassOf ekpe:InitiatorySociety ;
-    rdfs:label "Society Lodge"@en ;
-    rdfs:comment "A local chapter or lodge of an initiatory society. Ékpè lodges in Cross River; Abakuá potencias in Havana and Matanzas; Ogboni chapters in Yorùbá towns. Each lodge may have its own territory, titleholders, and charter, while being part of a broader society network. Uses ekpe:parentSociety to link to the overarching tradition-level society."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:SocietyGrade
-    a owl:Class ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:label "Society Grade"@en ;
-    rdfs:comment "A defined rank or level within an initiatory society's graded hierarchy. Each grade confers specific knowledge, privileges, obligations, and esoteric rights. Grade names, their sequence, and their content are among the most carefully protected knowledge in these traditions. The existence of a grade structure is public; grade names are community-restricted; grade content and sequence are initiated-only or initiated-elder."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:SocietyTitle
-    a owl:Class ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:label "Society Title"@en ;
-    rdfs:comment "A named office or titled position within an initiatory society, distinct from grade level. Titles may be elected, inherited, purchased, or conferred. Examples: Iyamba (Abakuá), Isue (Abakuá), Ekueñón (Abakuá), Apetebi Ogboni, Olori Egungun. Each title carries specific ritual functions, insignia, and governance authority. Title names are community-restricted; the ritual functions attached to them are initiated-only."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:MembershipRecord
-    a owl:Class ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:label "Membership Record"@en ;
-    rdfs:comment "A record documenting an individual's initiation into and progression through a society. Membership records are among the most sensitive data in this framework: the identity of initiates is strictly guarded by all documented traditions, and their disclosure to outsiders is a serious breach. Default access is no-access; date and grade level may be community-restricted in contexts where historical record-keeping is an accepted practice (e.g., Cuban Abakuá records kept since the 19th century)."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:SocietyMasquerade
-    a owl:Class ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:label "Society Masquerade"@en ;
-    rdfs:comment "A masked or costumed ritual embodiment associated with an initiatory society, representing an ancestor, force, or principle. Examples: Abakuá íremes (diablitos) representing the voice of the fish Tanze; Egungun masquerades embodying ancestral spirits; Gelede masquerades honoring the mothers. The masquerade as a cultural form (name, tradition, function) is community-restricted; the identities of performers and operational sequences are initiated-only. Distinct from nkisi:SpiritualEntity (which covers the spiritual force) and travay:CeremonialSequence (which covers the ritual sequence)."@en ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-# ===================================================================
-# PROPERTIES — InitiatorySociety / SocietyLodge
-# ===================================================================
-
-ekpe:societyType
-    a owl:ObjectProperty ;
-    rdfs:label "society type"@en ;
-    rdfs:comment "Typological classification of the society. Range: ekpe:InitiatorySocietyTypeScheme."@en ;
-    rdfs:domain ekpe:InitiatorySociety ;
-    rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:societyTradition
-    a owl:ObjectProperty ;
-    rdfs:label "society tradition"@en ;
-    rdfs:comment "The Afro-Atlantic tradition within which this society operates. Range: iroko:TraditionScheme."@en ;
-    rdfs:domain ekpe:InitiatorySociety ;
-    rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:parentSociety
-    a owl:ObjectProperty ;
-    rdfs:label "parent society"@en ;
-    rdfs:comment "The broader society network or tradition of which this lodge is a chapter. A Havana Abakuá potencia links to the Abakuá tradition; a Calabar Ékpè lodge links to the Ékpè tradition. Subproperty of prov:wasDerivedFrom."@en ;
-    rdfs:subPropertyOf prov:wasDerivedFrom ;
-    rdfs:domain ekpe:SocietyLodge ;
-    rdfs:range ekpe:InitiatorySociety ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:lodgeTerritory
-    a owl:DatatypeProperty ;
-    rdfs:label "lodge territory"@en ;
-    rdfs:comment "The geographic or community territory over which a lodge exercises spiritual and social jurisdiction. Free-text description."@en ;
-    rdfs:domain ekpe:SocietyLodge ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:lodgeName
-    a owl:DatatypeProperty ;
-    rdfs:label "lodge name"@en ;
-    rdfs:comment "The public name of the lodge or potencia. In Abakuá: the potencia name (e.g., Efik Butón, Efik Efor). Community-restricted for active lodges; public for historical lodges documented in scholarly sources."@en ;
-    rdfs:domain ekpe:SocietyLodge ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:foundingDate
-    a owl:DatatypeProperty ;
-    rdfs:label "founding date"@en ;
-    rdfs:subPropertyOf schema:foundingDate ;
-    rdfs:domain ekpe:InitiatorySociety ;
-    rdfs:range xsd:date ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:foundingLocation
-    a owl:DatatypeProperty ;
+iroko:foundingLocation a owl:DatatypeProperty ;
     rdfs:label "founding location"@en ;
     rdfs:comment "Place of origin or founding of the society. City/country level is public; specific address is community-restricted."@en ;
-    rdfs:domain ekpe:InitiatorySociety ;
+    rdfs:domain iroko:InitiatorySociety ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
-ekpe:associatedHouse
-    a owl:ObjectProperty ;
-    rdfs:label "associated house"@en ;
-    rdfs:comment "A religious house (ile:House) with which this society maintains an ongoing ceremonial relationship. In many traditions, society and house membership overlap for senior practitioners."@en ;
-    rdfs:domain ekpe:InitiatorySociety ;
-    rdfs:range ile:House ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:genderPolicy
-    a owl:DatatypeProperty ;
+iroko:genderPolicy a owl:DatatypeProperty ;
     rdfs:label "gender policy"@en ;
     rdfs:comment "Documents tradition-specific rules regarding gender and membership. For Abakuá: historically male-only (juramento); for Ogboni: both male and female members, with distinct female titleholder roles (Iyalode); for Gelede: primarily concerns gender complementarity (mothers/fathers). Free-text, records documented practice without normative judgment."@en ;
-    rdfs:domain ekpe:InitiatorySociety ;
+    rdfs:domain iroko:InitiatorySociety ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-ekpe:gradeCount
-    a owl:DatatypeProperty ;
+iroko:gradeCount a owl:DatatypeProperty ;
     rdfs:label "grade count"@en ;
     rdfs:comment "Number of grades in this society's hierarchy. The count is community-restricted in active societies; public for historical documentation."@en ;
-    rdfs:domain ekpe:InitiatorySociety ;
+    rdfs:domain iroko:InitiatorySociety ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range xsd:integer ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-ekpe:governanceStructure
-    a owl:ObjectProperty ;
-    rdfs:label "governance structure"@en ;
-    rdfs:comment "The governance model of this society. Range: ekpe:GovernanceStructureScheme."@en ;
-    rdfs:domain ekpe:InitiatorySociety ;
-    rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-# ===================================================================
-# PROPERTIES — SocietyGrade
-# ===================================================================
-
-ekpe:gradeName
-    a owl:DatatypeProperty ;
-    rdfs:label "grade name"@en ;
-    rdfs:comment "The name of the grade in the tradition's language. Community-restricted for active societies."@en ;
-    rdfs:domain ekpe:SocietyGrade ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:gradeLevel
-    a owl:DatatypeProperty ;
+iroko:gradeLevel a owl:DatatypeProperty ;
     rdfs:label "grade level"@en ;
     rdfs:comment "Numeric position in the grade sequence. 1 = lowest/entry. Community-restricted."@en ;
-    rdfs:domain ekpe:SocietyGrade ;
+    rdfs:domain iroko:SocietyGrade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range xsd:integer ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-ekpe:gradePrerequisite
-    a owl:ObjectProperty ;
+iroko:gradeName a owl:DatatypeProperty ;
+    rdfs:label "grade name"@en ;
+    rdfs:comment "The name of the grade in the tradition's language. Community-restricted for active societies."@en ;
+    rdfs:domain iroko:SocietyGrade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:gradePrerequisite a owl:ObjectProperty ;
     rdfs:label "grade prerequisite"@en ;
     rdfs:comment "The grade that must be held before this grade may be received. Initiated-only: the sequencing of grades is esoteric knowledge."@en ;
-    rdfs:domain ekpe:SocietyGrade ;
-    rdfs:range ekpe:SocietyGrade ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    rdfs:domain iroko:SocietyGrade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:SocietyGrade ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
 
-ekpe:gradePrivileges
-    a owl:DatatypeProperty ;
+iroko:gradePrivileges a owl:DatatypeProperty ;
     rdfs:label "grade privileges"@en ;
     rdfs:comment "The ritual, governance, or social privileges conferred by this grade. Initiated-elder only."@en ;
-    rdfs:domain ekpe:SocietyGrade ;
+    rdfs:domain iroko:SocietyGrade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-initiated-elder ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-initiated-elder .
 
-ekpe:gradeSign
-    a owl:DatatypeProperty ;
+iroko:gradeSign a owl:DatatypeProperty ;
     rdfs:label "grade sign"@en ;
     rdfs:comment "The esoteric sign, mark, or identifying symbol associated with this grade. Initiated-elder only."@en ;
-    rdfs:domain ekpe:SocietyGrade ;
+    rdfs:domain iroko:SocietyGrade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-initiated-elder ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-initiated-elder .
 
-ekpe:gradeSociety
-    a owl:ObjectProperty ;
+iroko:gradeSociety a owl:ObjectProperty ;
     rdfs:label "grade society"@en ;
     rdfs:comment "The initiatory society to which this grade belongs."@en ;
-    rdfs:domain ekpe:SocietyGrade ;
-    rdfs:range ekpe:InitiatorySociety ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    rdfs:domain iroko:SocietyGrade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:InitiatorySociety ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-# ===================================================================
-# PROPERTIES — SocietyTitle
-# ===================================================================
-
-ekpe:titleName
-    a owl:DatatypeProperty ;
-    rdfs:label "title name"@en ;
-    rdfs:comment "The name of the office or title in the tradition's language. Community-restricted."@en ;
-    rdfs:domain ekpe:SocietyTitle ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:titleFunction
-    a owl:DatatypeProperty ;
-    rdfs:label "title function"@en ;
-    rdfs:comment "The ritual, ceremonial, or governance function of this title holder. Initiated-only."@en ;
-    rdfs:domain ekpe:SocietyTitle ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:titleRequiredGrade
-    a owl:ObjectProperty ;
-    rdfs:label "required grade"@en ;
-    rdfs:comment "The minimum grade required to hold this title. Initiated-only."@en ;
-    rdfs:domain ekpe:SocietyTitle ;
-    rdfs:range ekpe:SocietyGrade ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:titleConferralMethod
-    a owl:ObjectProperty ;
-    rdfs:label "title conferral method"@en ;
-    rdfs:comment "How this title is conferred: election, hereditary succession, purchase, senior nomination. Range: ekpe:TitleConferralScheme."@en ;
-    rdfs:domain ekpe:SocietyTitle ;
-    rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:titleInsignia
-    a owl:DatatypeProperty ;
-    rdfs:label "title insignia"@en ;
-    rdfs:comment "Material objects, dress, or identifying marks associated with this title. Initiated-elder only: insignia descriptions can enable unauthorized imitation."@en ;
-    rdfs:domain ekpe:SocietyTitle ;
-    rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-initiated-elder ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-# ===================================================================
-# PROPERTIES — MembershipRecord
-# ===================================================================
-
-ekpe:membershipSociety
-    a owl:ObjectProperty ;
-    rdfs:label "membership society"@en ;
-    rdfs:comment "The society into which the individual was initiated."@en ;
-    rdfs:domain ekpe:MembershipRecord ;
-    rdfs:range ekpe:InitiatorySociety ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:membershipGrade
-    a owl:ObjectProperty ;
-    rdfs:label "membership grade"@en ;
-    rdfs:comment "The grade held by this member."@en ;
-    rdfs:domain ekpe:MembershipRecord ;
-    rdfs:range ekpe:SocietyGrade ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:membershipTitle
-    a owl:ObjectProperty ;
-    rdfs:label "membership title"@en ;
-    rdfs:comment "A title held by this member within the society."@en ;
-    rdfs:domain ekpe:MembershipRecord ;
-    rdfs:range ekpe:SocietyTitle ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:membershipDate
-    a owl:DatatypeProperty ;
-    rdfs:label "membership date"@en ;
-    rdfs:comment "Date of initiation into this grade. Community-restricted for historical records."@en ;
-    rdfs:domain ekpe:MembershipRecord ;
-    rdfs:range xsd:date ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:memberPerson
-    a owl:ObjectProperty ;
-    rdfs:label "member person"@en ;
-    rdfs:comment "The person to whom this membership record belongs. No-access: member identity is the most protected information in society records."@en ;
-    rdfs:domain ekpe:MembershipRecord ;
-    rdfs:range foaf:Person ;
-    iroko:minimumAccessLevel iroko:access-no-access ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:initiatingOfficiant
-    a owl:ObjectProperty ;
+iroko:initiatingOfficiant a owl:ObjectProperty ;
     rdfs:label "initiating officiant"@en ;
     rdfs:comment "The titleholder who performed the initiation. No-access."@en ;
-    rdfs:domain ekpe:MembershipRecord ;
+    rdfs:domain iroko:MembershipRecord ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range foaf:Person ;
-    iroko:minimumAccessLevel iroko:access-no-access ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-no-access .
 
-# ===================================================================
-# PROPERTIES — SocietyMasquerade
-# ===================================================================
-
-ekpe:masqueradeName
-    a owl:DatatypeProperty ;
-    rdfs:label "masquerade name"@en ;
-    rdfs:comment "The name of the masquerade or masked figure. Community-restricted."@en ;
-    rdfs:domain ekpe:SocietyMasquerade ;
+iroko:lodgeName a owl:DatatypeProperty ;
+    rdfs:label "lodge name"@en ;
+    rdfs:comment "The public name of the lodge or potencia. In Abakuá: the potencia name (e.g., Efik Butón, Efik Efor). Community-restricted for active lodges; public for historical lodges documented in scholarly sources."@en ;
+    rdfs:domain iroko:SocietyLodge ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-ekpe:masqueradeFunction
-    a owl:ObjectProperty ;
+iroko:lodgeTerritory a owl:DatatypeProperty ;
+    rdfs:label "lodge territory"@en ;
+    rdfs:comment "The geographic or community territory over which a lodge exercises spiritual and social jurisdiction. Free-text description."@en ;
+    rdfs:domain iroko:SocietyLodge ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:masqueradeFunction a owl:ObjectProperty ;
     rdfs:label "masquerade function"@en ;
-    rdfs:comment "The ceremonial function of this masquerade. Range: ekpe:MasqueradeFunctionScheme."@en ;
-    rdfs:domain ekpe:SocietyMasquerade ;
+    rdfs:comment "The ceremonial function of this masquerade. Range: iroko:MasqueradeFunctionScheme."@en ;
+    rdfs:domain iroko:SocietyMasquerade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-ekpe:masqueradeSociety
-    a owl:ObjectProperty ;
-    rdfs:label "masquerade society"@en ;
-    rdfs:comment "The initiatory society to which this masquerade belongs."@en ;
-    rdfs:domain ekpe:SocietyMasquerade ;
-    rdfs:range ekpe:InitiatorySociety ;
-    iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:representedEntity
-    a owl:ObjectProperty ;
-    rdfs:label "represented entity"@en ;
-    rdfs:comment "The ancestral spirit, principle, or force embodied by this masquerade. Range: nkisi:SpiritualEntity. Initiated-only: the identity of what a masquerade embodies is esoteric in many traditions."@en ;
-    rdfs:domain ekpe:SocietyMasquerade ;
-    rdfs:range nkisi:SpiritualEntity ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:masqueradeRequiredGrade
-    a owl:ObjectProperty ;
-    rdfs:label "required grade for performance"@en ;
-    rdfs:comment "The minimum grade required to perform or wear this masquerade. Initiated-only."@en ;
-    rdfs:domain ekpe:SocietyMasquerade ;
-    rdfs:range ekpe:SocietyGrade ;
-    iroko:minimumAccessLevel iroko:access-initiated-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
-
-ekpe:masqueradeInsignia
-    a owl:DatatypeProperty ;
+iroko:masqueradeInsignia a owl:DatatypeProperty ;
     rdfs:label "masquerade insignia"@en ;
     rdfs:comment "Description of costume elements, materials, and identifying features. Initiated-elder only."@en ;
-    rdfs:domain ekpe:SocietyMasquerade ;
+    rdfs:domain iroko:SocietyMasquerade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
     rdfs:range rdf:langString ;
-    iroko:minimumAccessLevel iroko:access-initiated-elder ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/ekpe> .
+    iroko:minimumAccessLevel iroko:access-initiated-elder .
 
-# ===================================================================
-# CONCEPT SCHEMES
-# ===================================================================
+iroko:masqueradeName a owl:DatatypeProperty ;
+    rdfs:label "masquerade name"@en ;
+    rdfs:comment "The name of the masquerade or masked figure. Community-restricted."@en ;
+    rdfs:domain iroko:SocietyMasquerade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-# --- Initiatory Society Types ---
+iroko:masqueradeRequiredGrade a owl:ObjectProperty ;
+    rdfs:label "required grade for performance"@en ;
+    rdfs:comment "The minimum grade required to perform or wear this masquerade. Initiated-only."@en ;
+    rdfs:domain iroko:SocietyMasquerade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:SocietyGrade ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
 
-ekpe:InitiatorySocietyTypeScheme
-    a skos:ConceptScheme ;
-    rdfs:label "Initiatory Society Types"@en ;
-    skos:prefLabel "Initiatory Society Types"@en ;
-    skos:prefLabel "Tipos de sociedad iniciática"@es ;
-    skos:prefLabel "Types de société initiatique"@fr ;
-    skos:prefLabel "Tipos de sociedade iniciática"@pt ;
-    skos:prefLabel "Àwọn ìrú ẹgbẹ́ àṣírí"@yo ;
-    skos:hasTopConcept ekpe:society-ekpe,
-                       ekpe:society-abakua,
-                       ekpe:society-ogboni,
-                       ekpe:society-oro,
-                       ekpe:society-gelede,
-                       ekpe:society-egungun,
-                       ekpe:society-agemo,
-                       ekpe:society-poro,
-                       ekpe:society-sande,
-                       ekpe:society-other .
+iroko:masqueradeSociety a owl:ObjectProperty ;
+    rdfs:label "masquerade society"@en ;
+    rdfs:comment "The initiatory society to which this masquerade belongs."@en ;
+    rdfs:domain iroko:SocietyMasquerade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:InitiatorySociety ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
-ekpe:society-ekpe
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Ékpè / Ngbe"@en ;
-    skos:prefLabel "Ékpè / Ngbe"@fr ;
-    skos:altLabel "Leopard Society"@en ;
-    skos:definition "The Ékpè (also Ngbe) leopard society originating among Ejagham and neighboring Cross River peoples of Nigeria and Cameroon. One of the most widespread and influential initiatory societies in West Africa, with documented diaspora presence through enslaved Africans in Cuba (Abakuá) and elsewhere. Organized around graded leopard-force initiation; Nsibidi script is associated with Ékpè esoteric communication."@en ;
-    skos:scopeNote "Ékpè and Abakuá are historically related but institutionally distinct. Use ekpe:parentSociety to express the derived relationship."@en .
+iroko:memberPerson a owl:ObjectProperty ;
+    rdfs:label "member person"@en ;
+    rdfs:comment "The person to whom this membership record belongs. No-access: member identity is the most protected information in society records."@en ;
+    rdfs:domain iroko:MembershipRecord ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-no-access .
 
-ekpe:society-abakua
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Abakuá"@en ;
-    skos:prefLabel "Abakuá"@es ;
+iroko:membershipDate a owl:DatatypeProperty ;
+    rdfs:label "membership date"@en ;
+    rdfs:comment "Date of initiation into this grade. Community-restricted for historical records."@en ;
+    rdfs:domain iroko:MembershipRecord ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range xsd:date ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:membershipGrade a owl:ObjectProperty ;
+    rdfs:label "membership grade"@en ;
+    rdfs:comment "The grade held by this member."@en ;
+    rdfs:domain iroko:MembershipRecord ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:SocietyGrade ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+iroko:membershipSociety a owl:ObjectProperty ;
+    rdfs:label "membership society"@en ;
+    rdfs:comment "The society into which the individual was initiated."@en ;
+    rdfs:domain iroko:MembershipRecord ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:InitiatorySociety ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:membershipTitle a owl:ObjectProperty ;
+    rdfs:label "membership title"@en ;
+    rdfs:comment "A title held by this member within the society."@en ;
+    rdfs:domain iroko:MembershipRecord ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:SocietyTitle ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+iroko:parentSociety a owl:ObjectProperty ;
+    rdfs:label "parent society"@en ;
+    rdfs:comment "The broader society network or tradition of which this lodge is a chapter. A Havana Abakuá potencia links to the Abakuá tradition; a Calabar Ékpè lodge links to the Ékpè tradition. Subproperty of prov:wasDerivedFrom."@en ;
+    rdfs:domain iroko:SocietyLodge ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:InitiatorySociety ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:representedEntity a owl:ObjectProperty ;
+    rdfs:label "represented entity"@en ;
+    rdfs:comment "The ancestral spirit, principle, or force embodied by this masquerade. Range: iroko:SpiritualEntity. Initiated-only: the identity of what a masquerade embodies is esoteric in many traditions."@en ;
+    rdfs:domain iroko:SocietyMasquerade ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:SpiritualEntity ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+iroko:societyGovernanceStructure a owl:ObjectProperty ;
+    rdfs:label "society governance structure"@en ;
+    rdfs:comment "The governance model of this society. Range: iroko:GovernanceStructureScheme."@en ;
+    rdfs:domain iroko:InitiatorySociety ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:societyTradition a owl:ObjectProperty ;
+    rdfs:label "society tradition"@en ;
+    rdfs:comment "The Afro-Atlantic tradition within which this society operates. Range: iroko:TraditionScheme."@en ;
+    rdfs:domain iroko:InitiatorySociety ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:societyType a owl:ObjectProperty ;
+    rdfs:label "society type"@en ;
+    rdfs:comment "Typological classification of the society. Range: iroko:InitiatorySocietyTypeScheme."@en ;
+    rdfs:domain iroko:InitiatorySociety ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:titleConferralMethod a owl:ObjectProperty ;
+    rdfs:label "title conferral method"@en ;
+    rdfs:comment "How this title is conferred: election, hereditary succession, purchase, senior nomination. Range: iroko:TitleConferralScheme."@en ;
+    rdfs:domain iroko:SocietyTitle ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:titleFunction a owl:DatatypeProperty ;
+    rdfs:label "title function"@en ;
+    rdfs:comment "The ritual, ceremonial, or governance function of this title holder. Initiated-only."@en ;
+    rdfs:domain iroko:SocietyTitle ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+iroko:titleInsignia a owl:DatatypeProperty ;
+    rdfs:label "title insignia"@en ;
+    rdfs:comment "Material objects, dress, or identifying marks associated with this title. Initiated-elder only: insignia descriptions can enable unauthorized imitation."@en ;
+    rdfs:domain iroko:SocietyTitle ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-initiated-elder .
+
+iroko:titleName a owl:DatatypeProperty ;
+    rdfs:label "title name"@en ;
+    rdfs:comment "The name of the office or title in the tradition's language. Community-restricted."@en ;
+    rdfs:domain iroko:SocietyTitle ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:titleRequiredGrade a owl:ObjectProperty ;
+    rdfs:label "required grade"@en ;
+    rdfs:comment "The minimum grade required to hold this title. Initiated-only."@en ;
+    rdfs:domain iroko:SocietyTitle ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:range iroko:SocietyGrade ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+iroko:conferral-election a skos:Concept ;
+    skos:definition "Title conferred by vote of eligible members."@en ;
+    skos:inScheme iroko:TitleConferralScheme ;
+    skos:prefLabel "Election by membership"@en .
+
+iroko:conferral-hereditary a skos:Concept ;
+    skos:definition "Title passes within a family or lineage by birthright or elder designation."@en ;
+    skos:inScheme iroko:TitleConferralScheme ;
+    skos:prefLabel "Hereditary succession"@en .
+
+iroko:conferral-other a skos:Concept ;
+    skos:definition "Title conferral method not covered by existing concepts."@en ;
+    skos:inScheme iroko:TitleConferralScheme ;
+    skos:prefLabel "Other"@en .
+
+iroko:conferral-purchase a skos:Concept ;
+    skos:definition "Title conferred in exchange for a defined payment or contribution to the society. Common in some Ékpè and Abakuá grade structures."@en ;
+    skos:inScheme iroko:TitleConferralScheme ;
+    skos:prefLabel "Purchase / fee-based conferral"@en .
+
+iroko:conferral-senior-nomination a skos:Concept ;
+    skos:definition "Title conferred by nomination from existing titleholders or elders."@en ;
+    skos:inScheme iroko:TitleConferralScheme ;
+    skos:prefLabel "Senior nomination"@en .
+
+iroko:conferral-spiritual-designation a skos:Concept ;
+    skos:definition "Title conferred through divination or spiritual indication rather than human election."@en ;
+    skos:inScheme iroko:TitleConferralScheme ;
+    skos:prefLabel "Spiritual designation"@en .
+
+iroko:gov-consensus a skos:Concept ;
+    skos:definition "Decisions made through deliberation among all members or all senior members without fixed hierarchical authority."@en ;
+    skos:inScheme iroko:GovernanceStructureScheme ;
+    skos:prefLabel "Consensus / deliberative"@en .
+
+iroko:gov-council-of-elders a skos:Concept ;
+    skos:definition "Governance by a council of senior members without strict linear grade hierarchy. Characteristic of Ogboni and some Egungun lineages."@en ;
+    skos:inScheme iroko:GovernanceStructureScheme ;
+    skos:prefLabel "Council of elders"@en .
+
+iroko:gov-elected-officers a skos:Concept ;
+    skos:definition "Governance officers are elected by the membership for defined terms. More common in diaspora adaptations (Reformed Ogboni Fraternity, some Abakuá mutual aid structures)."@en ;
+    skos:inScheme iroko:GovernanceStructureScheme ;
+    skos:prefLabel "Elected officers"@en .
+
+iroko:gov-hereditary-title a skos:Concept ;
+    skos:definition "Key titles pass within specific families or lineages. Characteristic of some Egungun and Agemo societies."@en ;
+    skos:inScheme iroko:GovernanceStructureScheme ;
+    skos:prefLabel "Hereditary title succession"@en .
+
+iroko:gov-hierarchical-grade a skos:Concept ;
+    skos:definition "Authority flows through a defined sequence of grades; higher grades govern lower. Characteristic of Ékpè, Abakuá, and similar tiered societies."@en ;
+    skos:inScheme iroko:GovernanceStructureScheme ;
+    skos:prefLabel "Hierarchical grade system"@en .
+
+iroko:gov-other a skos:Concept ;
+    skos:definition "Governance structure not covered by existing concepts."@en ;
+    skos:inScheme iroko:GovernanceStructureScheme ;
+    skos:prefLabel "Other"@en .
+
+iroko:mask-function-ancestral-embodiment a skos:Concept ;
+    skos:definition "The masquerade manifests an ancestral spirit or collective ancestral force. Primary function of Egungun."@en ;
+    skos:inScheme iroko:MasqueradeFunctionScheme ;
+    skos:prefLabel "Ancestral embodiment"@en .
+
+iroko:mask-function-communal-sanction a skos:Concept ;
+    skos:definition "The masquerade enforces community rules or social norms through symbolic or direct intervention. Function of Oro."@en ;
+    skos:inScheme iroko:MasqueradeFunctionScheme ;
+    skos:prefLabel "Communal sanction / enforcement"@en .
+
+iroko:mask-function-entertainment a skos:Concept ;
+    skos:definition "The masquerade performs entertainment, social commentary, or satire as a secondary function. Often combined with sacred primary functions."@en ;
+    skos:inScheme iroko:MasqueradeFunctionScheme ;
+    skos:prefLabel "Entertainment / social satire"@en .
+
+iroko:mask-function-funerary a skos:Concept ;
+    skos:definition "The masquerade participates in funerary ceremonies, guiding the deceased or honoring the passing. Abakuá íremes appear at members' funerals."@en ;
+    skos:inScheme iroko:MasqueradeFunctionScheme ;
+    skos:prefLabel "Funerary / transition rites"@en .
+
+iroko:mask-function-healing a skos:Concept ;
+    skos:definition "The masquerade carries healing or protective power for the community or individual supplicants."@en ;
+    skos:inScheme iroko:MasqueradeFunctionScheme ;
+    skos:prefLabel "Healing / protective"@en .
+
+iroko:mask-function-honor-mothers a skos:Concept ;
+    skos:definition "The masquerade pays tribute to the power of elder women, ancestresses, and female spiritual authority. Primary function of Gelede."@en ;
+    skos:inScheme iroko:MasqueradeFunctionScheme ;
+    skos:prefLabel "Honoring the mothers"@en .
+
+iroko:mask-function-other a skos:Concept ;
+    skos:definition "Masquerade function not covered by existing concepts."@en ;
+    skos:inScheme iroko:MasqueradeFunctionScheme ;
+    skos:prefLabel "Other"@en .
+
+iroko:mask-function-society-voice a skos:Concept ;
+    skos:definition "The masquerade carries and communicates the voice or authority of the society. Function of Abakuá íremes and Ékpè masquerades."@en ;
+    skos:inScheme iroko:MasqueradeFunctionScheme ;
+    skos:prefLabel "Society voice / announcement"@en .
+
+iroko:society-abakua a skos:Concept ;
     skos:altLabel "Ñáñigos"@es ;
     skos:definition "The Abakuá mutual aid and initiatory society founded in Cuba in 1836, derived from Ékpè/Ngbe through enslaved Efik and Efut practitioners in Havana and Matanzas. Organized into potencias (lodges), each with a specific founding charter and ranked titleholders. Known in Cuban public life through the íremes (diablito masquerades) which appear at funerals and public ceremonies. Male-only by tradition (juramento)."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Abakuá"@en,
+        "Abakuá"@es ;
     skos:scopeNote "One of the most extensively documented Afro-Atlantic initiatory societies due to 19th-century Cuban court records and 20th-century ethnographic work (Cabrera, Sosa). Historical lodge names and early records are in the public domain; contemporary lodge governance and membership remain restricted."@en .
 
-ekpe:society-ogboni
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Ogboni / Oshugbo"@en ;
-    skos:prefLabel "Ogboni / Oshugbo"@yo ;
+iroko:society-agemo a skos:Concept ;
+    skos:definition "An Ijebu Yorùbá priestly and masquerade society associated with Agemo, a deity of transformation and mediation between worlds. The Agemo festival cycle involves multiple masquerades representing aspects of Agemo's power. Restricted primarily to Ijebu initiates."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Agemo"@en,
+        "Àgẹmọ"@yo .
+
+iroko:society-egungun a skos:Concept ;
+    skos:definition "The Yorùbá ancestral masquerade society responsible for summoning and embodying ancestral spirits (egungun). Membership and performance rights are typically hereditary through specific lineages. The masked figure is understood as a manifestation of the collective ancestral force, not a theatrical performance. Widespread across Yorùbáland and diaspora."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Egungun"@en,
+        "Egúngún"@yo .
+
+iroko:society-ekpe a skos:Concept ;
+    skos:altLabel "Leopard Society"@en ;
+    skos:definition "The Ékpè (also Ngbe) leopard society originating among Ejagham and neighboring Cross River peoples of Nigeria and Cameroon. One of the most widespread and influential initiatory societies in West Africa, with documented diaspora presence through enslaved Africans in Cuba (Abakuá) and elsewhere. Organized around graded leopard-force initiation; Nsibidi script is associated with Ékpè esoteric communication."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Ékpè / Ngbe"@en,
+        "Ékpè / Ngbe"@fr ;
+    skos:scopeNote "Ékpè and Abakuá are historically related but institutionally distinct. Use iroko:parentSociety to express the derived relationship."@en .
+
+iroko:society-gelede a skos:Concept ;
+    skos:definition "A masquerade society of the Yorùbá, Nago, and Fon peoples honoring the power of women, especially elder women, ancestresses, and the mothers (àwọn ìyá wa). Gelede festivals feature carved wooden masks worn by male dancers who embody female spiritual authority. UNESCO Intangible Cultural Heritage. Active in Nigeria, Benin, and diaspora communities."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Gelede"@en,
+        "Gẹlẹdẹ"@yo .
+
+iroko:society-ogboni a skos:Concept ;
     skos:altLabel "Reformed Ogboni Fraternity"@en ;
-    skos:definition "The Yorùbá earth-deity society organized around Onilé (the earth) and its representations. Historically a governance institution with judicial, political, and ritual authority in Yorùbá towns. Members include both men and women. The Reformed Ogboni Fraternity (ROF) is a Christianized offshoot. Distinct from the traditional Oshugbo lineages in Ijebu and other areas."@en .
+    skos:definition "The Yorùbá earth-deity society organized around Onilé (the earth) and its representations. Historically a governance institution with judicial, political, and ritual authority in Yorùbá towns. Members include both men and women. The Reformed Ogboni Fraternity (ROF) is a Christianized offshoot. Distinct from the traditional Oshugbo lineages in Ijebu and other areas."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Ogboni / Oshugbo"@en,
+        "Ogboni / Oshugbo"@yo .
 
-ekpe:society-oro
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Oro"@en ;
-    skos:prefLabel "Oro"@yo ;
-    skos:definition "A Yorùbá male initiatory society associated with the voice of Oro (heard as a bullroarer), ancestral authority, and community sanction. Oro festivals enforce communal prohibitions and conduct ancestral rites. Strict gender separation is central to Oro practice: women must remain indoors when Oro goes out."@en .
+iroko:society-oro a skos:Concept ;
+    skos:definition "A Yorùbá male initiatory society associated with the voice of Oro (heard as a bullroarer), ancestral authority, and community sanction. Oro festivals enforce communal prohibitions and conduct ancestral rites. Strict gender separation is central to Oro practice: women must remain indoors when Oro goes out."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Oro"@en,
+        "Oro"@yo .
 
-ekpe:society-gelede
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Gelede"@en ;
-    skos:prefLabel "Gẹlẹdẹ"@yo ;
-    skos:definition "A masquerade society of the Yorùbá, Nago, and Fon peoples honoring the power of women, especially elder women, ancestresses, and the mothers (àwọn ìyá wa). Gelede festivals feature carved wooden masks worn by male dancers who embody female spiritual authority. UNESCO Intangible Cultural Heritage. Active in Nigeria, Benin, and diaspora communities."@en .
+iroko:society-other a skos:Concept ;
+    skos:definition "Initiatory society type not covered by existing concepts. Use skos:scopeNote to describe."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Other"@en .
 
-ekpe:society-egungun
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Egungun"@en ;
-    skos:prefLabel "Egúngún"@yo ;
-    skos:definition "The Yorùbá ancestral masquerade society responsible for summoning and embodying ancestral spirits (egungun). Membership and performance rights are typically hereditary through specific lineages. The masked figure is understood as a manifestation of the collective ancestral force, not a theatrical performance. Widespread across Yorùbáland and diaspora."@en .
+iroko:society-poro a skos:Concept ;
+    skos:definition "The male initiatory bush school society widespread among Mande, Kpelle, Temne, and neighboring peoples of Sierra Leone, Liberia, and Guinea. Poro manages male initiation, education, and community governance through a graded forest-based curriculum."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Poro"@en .
 
-ekpe:society-agemo
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Agemo"@en ;
-    skos:prefLabel "Àgẹmọ"@yo ;
-    skos:definition "An Ijebu Yorùbá priestly and masquerade society associated with Agemo, a deity of transformation and mediation between worlds. The Agemo festival cycle involves multiple masquerades representing aspects of Agemo's power. Restricted primarily to Ijebu initiates."@en .
+iroko:society-sande a skos:Concept ;
+    skos:definition "The female counterpart to Poro, managing female initiation among Mende, Temne, and neighboring peoples. Sande is distinctive in African contexts as a society where women wear and operate the sacred Sowei helmet mask."@en ;
+    skos:inScheme iroko:InitiatorySocietyTypeScheme ;
+    skos:prefLabel "Sande / Bundo"@en .
 
-ekpe:society-poro
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Poro"@en ;
-    skos:definition "The male initiatory bush school society widespread among Mande, Kpelle, Temne, and neighboring peoples of Sierra Leone, Liberia, and Guinea. Poro manages male initiation, education, and community governance through a graded forest-based curriculum."@en .
+iroko:SocietyLodge a owl:Class ;
+    rdfs:label "Society Lodge"@en ;
+    rdfs:comment "A local chapter or lodge of an initiatory society. Ékpè lodges in Cross River; Abakuá potencias in Havana and Matanzas; Ogboni chapters in Yorùbá towns. Each lodge may have its own territory, titleholders, and charter, while being part of a broader society network. Uses iroko:parentSociety to link to the overarching tradition-level society."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:subClassOf iroko:InitiatorySociety .
 
-ekpe:society-sande
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Sande / Bundo"@en ;
-    skos:definition "The female counterpart to Poro, managing female initiation among Mende, Temne, and neighboring peoples. Sande is distinctive in African contexts as a society where women wear and operate the sacred Sowei helmet mask."@en .
-
-ekpe:society-other
-    a skos:Concept ; skos:inScheme ekpe:InitiatorySocietyTypeScheme ;
-    skos:prefLabel "Other"@en ;
-    skos:definition "Initiatory society type not covered by existing concepts. Use skos:scopeNote to describe."@en .
-
-# --- Governance Structure ---
-
-ekpe:GovernanceStructureScheme
-    a skos:ConceptScheme ;
+iroko:GovernanceStructureScheme a skos:ConceptScheme ;
     rdfs:label "Society Governance Structures"@en ;
-    skos:prefLabel "Society Governance Structures"@en ;
-    skos:prefLabel "Estructuras de gobernanza de sociedades"@es ;
-    skos:prefLabel "Structures de gouvernance des sociétés"@fr ;
-    skos:prefLabel "Estruturas de governança de sociedades"@pt ;
-    skos:prefLabel "Àwọn ìlànà ìṣàkóso ẹgbẹ́"@yo ;
-    skos:hasTopConcept ekpe:gov-hierarchical-grade,
-                       ekpe:gov-council-of-elders,
-                       ekpe:gov-hereditary-title,
-                       ekpe:gov-elected-officers,
-                       ekpe:gov-consensus,
-                       ekpe:gov-other .
+    skos:hasTopConcept iroko:gov-consensus,
+        iroko:gov-council-of-elders,
+        iroko:gov-elected-officers,
+        iroko:gov-hereditary-title,
+        iroko:gov-hierarchical-grade,
+        iroko:gov-other ;
+    skos:prefLabel "Society Governance Structures"@en,
+        "Estructuras de gobernanza de sociedades"@es,
+        "Structures de gouvernance des sociétés"@fr,
+        "Estruturas de governança de sociedades"@pt,
+        "Àwọn ìlànà ìṣàkóso ẹgbẹ́"@yo .
 
-ekpe:gov-hierarchical-grade
-    a skos:Concept ; skos:inScheme ekpe:GovernanceStructureScheme ;
-    skos:prefLabel "Hierarchical grade system"@en ;
-    skos:definition "Authority flows through a defined sequence of grades; higher grades govern lower. Characteristic of Ékpè, Abakuá, and similar tiered societies."@en .
+iroko:MembershipRecord a owl:Class ;
+    rdfs:label "Membership Record"@en ;
+    rdfs:comment "A record documenting an individual's initiation into and progression through a society. Membership records are among the most sensitive data in this framework: the identity of initiates is strictly guarded by all documented traditions, and their disclosure to outsiders is a serious breach. Default access is no-access; date and grade level may be community-restricted in contexts where historical record-keeping is an accepted practice (e.g., Cuban Abakuá records kept since the 19th century)."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
-ekpe:gov-council-of-elders
-    a skos:Concept ; skos:inScheme ekpe:GovernanceStructureScheme ;
-    skos:prefLabel "Council of elders"@en ;
-    skos:definition "Governance by a council of senior members without strict linear grade hierarchy. Characteristic of Ogboni and some Egungun lineages."@en .
+iroko:SocietyMasquerade a owl:Class ;
+    rdfs:label "Society Masquerade"@en ;
+    rdfs:comment "A masked or costumed ritual embodiment associated with an initiatory society, representing an ancestor, force, or principle. Examples: Abakuá íremes (diablitos) representing the voice of the fish Tanze; Egungun masquerades embodying ancestral spirits; Gelede masquerades honoring the mothers. The masquerade as a cultural form (name, tradition, function) is community-restricted; the identities of performers and operational sequences are initiated-only. Distinct from iroko:SpiritualEntity (which covers the spiritual force) and travay:CeremonialSequence (which covers the ritual sequence)."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
-ekpe:gov-hereditary-title
-    a skos:Concept ; skos:inScheme ekpe:GovernanceStructureScheme ;
-    skos:prefLabel "Hereditary title succession"@en ;
-    skos:definition "Key titles pass within specific families or lineages. Characteristic of some Egungun and Agemo societies."@en .
+iroko:SocietyTitle a owl:Class ;
+    rdfs:label "Society Title"@en ;
+    rdfs:comment "A named office or titled position within an initiatory society, distinct from grade level. Titles may be elected, inherited, purchased, or conferred. Examples: Iyamba (Abakuá), Isue (Abakuá), Ekueñón (Abakuá), Apetebi Ogboni, Olori Egungun. Each title carries specific ritual functions, insignia, and governance authority. Title names are community-restricted; the ritual functions attached to them are initiated-only."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
-ekpe:gov-elected-officers
-    a skos:Concept ; skos:inScheme ekpe:GovernanceStructureScheme ;
-    skos:prefLabel "Elected officers"@en ;
-    skos:definition "Governance officers are elected by the membership for defined terms. More common in diaspora adaptations (Reformed Ogboni Fraternity, some Abakuá mutual aid structures)."@en .
-
-ekpe:gov-consensus
-    a skos:Concept ; skos:inScheme ekpe:GovernanceStructureScheme ;
-    skos:prefLabel "Consensus / deliberative"@en ;
-    skos:definition "Decisions made through deliberation among all members or all senior members without fixed hierarchical authority."@en .
-
-ekpe:gov-other
-    a skos:Concept ; skos:inScheme ekpe:GovernanceStructureScheme ;
-    skos:prefLabel "Other"@en ;
-    skos:definition "Governance structure not covered by existing concepts."@en .
-
-# --- Title Conferral Methods ---
-
-ekpe:TitleConferralScheme
-    a skos:ConceptScheme ;
+iroko:TitleConferralScheme a skos:ConceptScheme ;
     rdfs:label "Title Conferral Methods"@en ;
-    skos:prefLabel "Title Conferral Methods"@en ;
-    skos:prefLabel "Métodos de conferimiento de títulos"@es ;
-    skos:prefLabel "Méthodes de conférence des titres"@fr ;
-    skos:prefLabel "Métodos de concessão de títulos"@pt ;
-    skos:prefLabel "Àwọn ọ̀nà ìfúnni orúkọ ọlá"@yo ;
-    skos:hasTopConcept ekpe:conferral-election,
-                       ekpe:conferral-hereditary,
-                       ekpe:conferral-purchase,
-                       ekpe:conferral-senior-nomination,
-                       ekpe:conferral-spiritual-designation,
-                       ekpe:conferral-other .
+    skos:hasTopConcept iroko:conferral-election,
+        iroko:conferral-hereditary,
+        iroko:conferral-other,
+        iroko:conferral-purchase,
+        iroko:conferral-senior-nomination,
+        iroko:conferral-spiritual-designation ;
+    skos:prefLabel "Title Conferral Methods"@en,
+        "Métodos de conferimiento de títulos"@es,
+        "Méthodes de conférence des titres"@fr,
+        "Métodos de concessão de títulos"@pt,
+        "Àwọn ọ̀nà ìfúnni orúkọ ọlá"@yo .
 
-ekpe:conferral-election
-    a skos:Concept ; skos:inScheme ekpe:TitleConferralScheme ;
-    skos:prefLabel "Election by membership"@en ;
-    skos:definition "Title conferred by vote of eligible members."@en .
-
-ekpe:conferral-hereditary
-    a skos:Concept ; skos:inScheme ekpe:TitleConferralScheme ;
-    skos:prefLabel "Hereditary succession"@en ;
-    skos:definition "Title passes within a family or lineage by birthright or elder designation."@en .
-
-ekpe:conferral-purchase
-    a skos:Concept ; skos:inScheme ekpe:TitleConferralScheme ;
-    skos:prefLabel "Purchase / fee-based conferral"@en ;
-    skos:definition "Title conferred in exchange for a defined payment or contribution to the society. Common in some Ékpè and Abakuá grade structures."@en .
-
-ekpe:conferral-senior-nomination
-    a skos:Concept ; skos:inScheme ekpe:TitleConferralScheme ;
-    skos:prefLabel "Senior nomination"@en ;
-    skos:definition "Title conferred by nomination from existing titleholders or elders."@en .
-
-ekpe:conferral-spiritual-designation
-    a skos:Concept ; skos:inScheme ekpe:TitleConferralScheme ;
-    skos:prefLabel "Spiritual designation"@en ;
-    skos:definition "Title conferred through divination or spiritual indication rather than human election."@en .
-
-ekpe:conferral-other
-    a skos:Concept ; skos:inScheme ekpe:TitleConferralScheme ;
-    skos:prefLabel "Other"@en ;
-    skos:definition "Title conferral method not covered by existing concepts."@en .
-
-# --- Masquerade Functions ---
-
-ekpe:MasqueradeFunctionScheme
-    a skos:ConceptScheme ;
+iroko:MasqueradeFunctionScheme a skos:ConceptScheme ;
     rdfs:label "Masquerade Functions"@en ;
-    skos:prefLabel "Masquerade Functions"@en ;
-    skos:prefLabel "Funciones del enmascarado"@es ;
-    skos:prefLabel "Fonctions du masque"@fr ;
-    skos:prefLabel "Funções da mascarada"@pt ;
-    skos:prefLabel "Àwọn iṣẹ́ ìbòjú"@yo ;
-    skos:hasTopConcept ekpe:mask-function-ancestral-embodiment,
-                       ekpe:mask-function-society-voice,
-                       ekpe:mask-function-funerary,
-                       ekpe:mask-function-communal-sanction,
-                       ekpe:mask-function-honor-mothers,
-                       ekpe:mask-function-healing,
-                       ekpe:mask-function-entertainment,
-                       ekpe:mask-function-other .
+    skos:hasTopConcept iroko:mask-function-ancestral-embodiment,
+        iroko:mask-function-communal-sanction,
+        iroko:mask-function-entertainment,
+        iroko:mask-function-funerary,
+        iroko:mask-function-healing,
+        iroko:mask-function-honor-mothers,
+        iroko:mask-function-other,
+        iroko:mask-function-society-voice ;
+    skos:prefLabel "Masquerade Functions"@en,
+        "Funciones del enmascarado"@es,
+        "Fonctions du masque"@fr,
+        "Funções da mascarada"@pt,
+        "Àwọn iṣẹ́ ìbòjú"@yo .
 
-ekpe:mask-function-ancestral-embodiment
-    a skos:Concept ; skos:inScheme ekpe:MasqueradeFunctionScheme ;
-    skos:prefLabel "Ancestral embodiment"@en ;
-    skos:definition "The masquerade manifests an ancestral spirit or collective ancestral force. Primary function of Egungun."@en .
+iroko:InitiatorySocietyTypeScheme a skos:ConceptScheme ;
+    rdfs:label "Initiatory Society Types"@en ;
+    skos:hasTopConcept iroko:society-abakua,
+        iroko:society-agemo,
+        iroko:society-egungun,
+        iroko:society-ekpe,
+        iroko:society-gelede,
+        iroko:society-ogboni,
+        iroko:society-oro,
+        iroko:society-other,
+        iroko:society-poro,
+        iroko:society-sande ;
+    skos:prefLabel "Initiatory Society Types"@en,
+        "Tipos de sociedad iniciática"@es,
+        "Types de société initiatique"@fr,
+        "Tipos de sociedade iniciática"@pt,
+        "Àwọn ìrú ẹgbẹ́ àṣírí"@yo .
 
-ekpe:mask-function-society-voice
-    a skos:Concept ; skos:inScheme ekpe:MasqueradeFunctionScheme ;
-    skos:prefLabel "Society voice / announcement"@en ;
-    skos:definition "The masquerade carries and communicates the voice or authority of the society. Function of Abakuá íremes and Ékpè masquerades."@en .
+iroko:SocietyGrade a owl:Class ;
+    rdfs:label "Society Grade"@en ;
+    rdfs:comment "A defined rank or level within an initiatory society's graded hierarchy. Each grade confers specific knowledge, privileges, obligations, and esoteric rights. Grade names, their sequence, and their content are among the most carefully protected knowledge in these traditions. The existence of a grade structure is public; grade names are community-restricted; grade content and sequence are initiated-only or initiated-elder."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
-ekpe:mask-function-funerary
-    a skos:Concept ; skos:inScheme ekpe:MasqueradeFunctionScheme ;
-    skos:prefLabel "Funerary / transition rites"@en ;
-    skos:definition "The masquerade participates in funerary ceremonies, guiding the deceased or honoring the passing. Abakuá íremes appear at members' funerals."@en .
+iroko:InitiatorySociety a owl:Class ;
+    rdfs:label "Initiatory Society"@en ;
+    rdfs:comment "A sodality or secret society organized around graded initiation, with esoteric knowledge and authority distributed across hierarchical grades. Membership is earned through initiation rather than birth or lineage alone. Examples: Ékpè/Ngbe lodges (Ejagham, Cross River Nigeria/Cameroon), Abakuá potencias (Cuba), Ogboni chapters (Yorùbáland), Gelede societies (Yorùbá/Fon/Ewe), Egungun lineage associations. Subclasses schema:Organization for interoperability with external directories, and iroko:SacredEntity for access control. Distinguished from iroko:House (which organizes around founding-elder lineage) in that membership cross-cuts lineage boundaries."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ekpe> ;
+    rdfs:subClassOf schema:Organization,
+        iroko:SacredEntity .
 
-ekpe:mask-function-communal-sanction
-    a skos:Concept ; skos:inScheme ekpe:MasqueradeFunctionScheme ;
-    skos:prefLabel "Communal sanction / enforcement"@en ;
-    skos:definition "The masquerade enforces community rules or social norms through symbolic or direct intervention. Function of Oro."@en .
+<https://ontology.irokosociety.org/iroko-ekpe> a owl:Ontology ;
+    dcterms:created "2026-02-21"^^xsd:date ;
+    dcterms:creator "Iroko Historical Society" ;
+    dcterms:description "Domain module. Vocabulary for documenting initiatory societies, grade structures, esoteric governance, and sodality membership across Afro-Atlantic traditions. Covers Ékpè/Ngbe, Abakuá, Ogboni/Oshugbo, Oro, Gelede, Egungun, and analogous institutions. Distinct from iroko-ile (religious houses and lineages) and iroko-travay (ritual processes): this module focuses on the institutional architecture of sodalities as systems of graded authority, esoteric knowledge, and community governance. Use with iroko-authority to model grade conferral authority and recognition networks; iroko-epistemic to constrain disclosure of restricted grade content and member identities."@en ;
+    dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:modified "2026-02-25"^^xsd:date ;
+    dcterms:references <https://ontology.irokosociety.org/iroko-authority>,
+        <https://ontology.irokosociety.org/iroko-epistemic> ;
+    dcterms:title "Iroko Framework: Ékpè Module (Initiatory Societies, Grades, and Esoteric Governance)"@en ;
+    rdfs:seeAlso <https://ontology.irokosociety.org/iroko-framework/> ;
+    owl:imports <https://ontology.irokosociety.org/iroko-core> ;
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-ekpe/2.0.0> ;
+    owl:versionInfo "2.0.0" .
 
-ekpe:mask-function-honor-mothers
-    a skos:Concept ; skos:inScheme ekpe:MasqueradeFunctionScheme ;
-    skos:prefLabel "Honoring the mothers"@en ;
-    skos:definition "The masquerade pays tribute to the power of elder women, ancestresses, and female spiritual authority. Primary function of Gelede."@en .
-
-ekpe:mask-function-healing
-    a skos:Concept ; skos:inScheme ekpe:MasqueradeFunctionScheme ;
-    skos:prefLabel "Healing / protective"@en ;
-    skos:definition "The masquerade carries healing or protective power for the community or individual supplicants."@en .
-
-ekpe:mask-function-entertainment
-    a skos:Concept ; skos:inScheme ekpe:MasqueradeFunctionScheme ;
-    skos:prefLabel "Entertainment / social satire"@en ;
-    skos:definition "The masquerade performs entertainment, social commentary, or satire as a secondary function. Often combined with sacred primary functions."@en .
-
-ekpe:mask-function-other
-    a skos:Concept ; skos:inScheme ekpe:MasqueradeFunctionScheme ;
-    skos:prefLabel "Other"@en ;
-    skos:definition "Masquerade function not covered by existing concepts."@en .
