@@ -9,7 +9,7 @@ Usage:
     python generate_vocab_html.py iroko-agency iroko-authority  # multiple stems
 
 TTLs intentionally excluded (no MODULE_CONFIG entry):
-  iroko-align-prov   — reference-only PROV-O alignment; 0 user-facing terms
+  iroko-align-prov   — included; generates iroko-align-prov.html
   iroko-nkisi-patch  — broken syntax, superseded
   ewe-plants-v0_2_1  — legacy instance data file, not a vocabulary
   iroko-vocab-v0_2_1 — superseded version
@@ -159,6 +159,14 @@ MODULE_CONFIG = {
         "tag_cls":  "tag-language",
         "tag_text": "Language",
         "prefix":   "qal:",
+    },
+
+    "iroko-align-prov": {
+        "title":    "PROV-O Alignment",
+        "subtitle": "Alignment of Iroko Framework classes and properties to W3C PROV-O",
+        "tag_cls":  "tag-core",
+        "tag_text": "Alignment",
+        "prefix":   "iroko:",
     },
 }
 
@@ -557,7 +565,14 @@ def main():
         stem = ttl_path.stem
         cfg  = MODULE_CONFIG.get(stem)
         if cfg is None:
-            print(f"  SKIPPED {ttl_path.name} — not in MODULE_CONFIG")
+            # Silently skip files that are intentionally excluded
+            KNOWN_SKIPS = {
+                "iroko-nkisi-patch",
+                "ewe-plants-v0_2_1",
+                "iroko-vocab-v0_2_1",
+            }
+            if stem not in KNOWN_SKIPS:
+                print(f"  SKIPPED {ttl_path.name} — not in MODULE_CONFIG")
             skipped += 1
             continue
         if generate_html(ttl_path, ttl_path.with_suffix(".html"), cfg):

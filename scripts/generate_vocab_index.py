@@ -50,6 +50,9 @@ MODULES = [
     ("Ngoma",         "Domain",         "Music",         "https://ontology.irokosociety.org/iroko#",         "iroko-ngoma"),
     ("Sankofa",       "Domain",         "Movements",     "https://ontology.irokosociety.org/iroko#",       "iroko-sankofa"),
     ("Qal",           "Domain",         "Language",      "https://ontology.irokosociety.org/iroko#",           "iroko-qal"),
+
+    # Uncomment to include PROV-O alignment terms in the index
+    # ("PROV-O Alignment", "Foundation", "Alignment", "https://ontology.irokosociety.org/iroko#", "iroko-align-prov"),
 ]
 
 # ---------------------------------------------------------------------------

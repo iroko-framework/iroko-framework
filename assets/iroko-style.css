@@ -906,16 +906,97 @@ a:hover { color: var(--terracotta); }
 .footer-links a:hover { color: var(--green); }
 
 /* ── Responsive ───────────────────────────────────────────────── */
+
+/* ── Tablet / large mobile (≤ 800px) ─────────────────────────── */
 @media (max-width: 800px) {
-  .hero-inner        { grid-template-columns: 1fr; gap: 1rem; }
-  .hero-logo img     { width: 56px; height: 56px; }
-  .module-row        { grid-template-columns: 1fr; }
-  .module-identity   { border-right: none; border-bottom: 1px solid var(--rule); padding-bottom: 1rem; }
-  .module-detail     { padding-left: 0; }
-  .lower-grid        { grid-template-columns: 1fr; gap: 2rem; }
-  .access-grid       { grid-template-columns: 1fr; }
-  .vocab-header      { grid-template-columns: 1fr; }
+
+  /* Layout */
+  .page-wrap { padding: 0 1.25rem; }
+
+  /* Top bar — allow links to wrap and tighten gap */
+  .top-bar { padding: .6rem 1.25rem; gap: .5rem; }
+  .top-bar-links { gap: .85rem; flex-wrap: wrap; }
+
+  /* Hero */
+  .hero { padding: 2.5rem 0 2rem; }
+  .hero-inner { grid-template-columns: 1fr; gap: 1rem; }
+  .hero-logo img { width: 56px; height: 56px; }
+
+  /* Hero stats bar — allow horizontal scroll rather than overflow */
+  .hero-stats {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Module grid */
+  .module-row { grid-template-columns: 1fr; }
+  .module-identity {
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+    padding: 1.25rem 0 1rem;
+  }
+  .module-detail { padding: 1rem 0; }
+
+  /* Module stats bar — scrollable */
+  .module-stats {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Vocab browse header (browse pages) */
+  .vocab-header { grid-template-columns: 1fr; gap: 1rem; }
   .vocab-header-logo img { width: 52px; height: 52px; }
-  .concept-list      { grid-template-columns: 1fr; }
-  .prop-table        { font-size: .76rem; }
+
+  /* Site header (vocab/index.html) */
+  .site-header { grid-template-columns: 1fr; gap: 1rem; padding: 2rem 0 1.5rem; }
+  .header-logo img { width: 52px; height: 52px; }
+
+  /* Property table — horizontal scroll container */
+  .term-section .prop-table-wrap,
+  .prop-table { font-size: .76rem; }
+  .term-section { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Concept grid */
+  .concept-list { grid-template-columns: 1fr; }
+
+  /* Lower content grid */
+  .lower-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .access-grid { grid-template-columns: 1fr; }
+
+  /* Footer */
+  .site-footer { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .footer-links { gap: 1rem; flex-wrap: wrap; }
+}
+
+/* ── Small mobile (≤ 480px) ───────────────────────────────────── */
+@media (max-width: 480px) {
+
+  /* Even tighter padding */
+  .page-wrap { padding: 0 1rem; }
+  .top-bar { padding: .5rem 1rem; }
+
+  /* Stack top-bar identity and links vertically */
+  .top-bar { flex-direction: column; align-items: flex-start; }
+  .top-bar-links { gap: .65rem; }
+
+  /* Hero */
+  .hero-title { font-size: 2rem; }
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+  .btn-primary, .btn-outline { width: 100%; text-align: center; }
+
+  /* Meta pills — allow wrap */
+  .header-meta, .vocab-header .header-meta { gap: .4rem; }
+  .meta-pill { font-size: .6rem; }
+
+  /* Stat cells — smaller on phones */
+  .stat-cell { min-width: 60px; padding: .35rem .6rem; }
+  .stat-n { font-size: 1.1rem; }
+  .hstat { padding: .4rem .8rem; }
+  .hstat-n { font-size: 1.25rem; }
+
+  /* Property table col hiding — hide Access col on tiny screens */
+  .prop-table th:nth-child(4),
+  .prop-table td:nth-child(4) { display: none; }
 }
