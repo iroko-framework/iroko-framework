@@ -202,12 +202,24 @@ def find_root_dir(vocab_dir: Path, script_dir: Path, arg: str | None) -> Path:
 # Main
 # ---------------------------------------------------------------------------
 
+def set_ihs_metric(html: str, label: str, value: int) -> str:
+    """IHS site metric: <span class='num'>N</span><span class='label'>LABEL</span>"""
+    pattern = (r'(<span class="num">)\d+(</span>' +
+               r'<span class="label">' + re.escape(label) + r'</span>)')
+    new_html, n = re.subn(pattern, rf'\g<1>{value}\g<2>', html)
+    if n == 0:
+        print(f"  WARNING: IHS metric '{label}' not found")
+    return new_html
+
+
 def build_parser():
     p = argparse.ArgumentParser(
         description="Sync term counts in index.html, vocab/index.html, and iroko-termlist.html."
     )
     p.add_argument("--vocab", metavar="DIR", help="Directory containing .ttl files")
     p.add_argument("--root",  metavar="DIR", help="Repo root (where main index.html lives)")
+    p.add_argument("--ihs", metavar="PATH",
+                   help="Path to IHS site index.html (irokosociety.org)")
     p.add_argument("--dry-run", action="store_true",
                    help="Print what would change without writing files")
     return p
@@ -261,6 +273,19 @@ def main():
     if args.dry_run:
         print("Dry run — no files written.")
         return
+
+    # ── 0. IHS site index.html (irokosociety.org) ────────────────────────
+    if args.ihs:
+        ihs_path = Path(args.ihs)
+        if not ihs_path.exists():
+            print(f"WARNING: IHS index not found at {ihs_path} — skipping")
+        else:
+            html = ihs_path.read_text(encoding="utf-8")
+            html = set_ihs_metric(html, "Ontology Classes", totals["classes"])
+            html = set_ihs_metric(html, "Properties",       totals["props"])
+            html = set_ihs_metric(html, "Concepts",         totals["concepts"])
+            ihs_path.write_text(html, encoding="utf-8")
+            print(f"  ✓ Updated {ihs_path.name} (IHS site)")
 
     # ── 1. Main index.html ───────────────────────────────────────────────
     if not main_index_path.exists():
