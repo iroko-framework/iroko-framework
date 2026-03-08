@@ -1,0 +1,378 @@
+# ==========================================================================
+# Iroko Framework — Dynamic Test Records v1.0
+# ==========================================================================
+# Four synthetic researcher records exercising cross-module joins.
+# These are INSTANCE DATA, not vocabulary. Use the iroko: namespace for
+# class/property references; use local IRIs for instance identifiers.
+#
+# Base IRI for instances: https://data.irokosociety.org/test#
+#
+# Record 1: EwePlantRecord — Albahaca Blanca (Ocimum basilicum)
+# Record 2: InitiationEvent — Kariosha of Omi Tolá
+# Record 3: NarrativeVariant — Testimony on Yemoja's road to the sea
+# Record 4: ManifestationEvent — Añá speaks at Tambor de Fundamento
+# ==========================================================================
+
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix iroko:   <https://ontology.irokosociety.org/iroko#> .
+@prefix test:    <https://data.irokosociety.org/test#> .
+
+
+# ==========================================================================
+# RECORD 1 — EwePlantRecord: Albahaca Blanca
+# Modules: ewe → nkisi (entityAssociation) → marca (signReference)
+#                      → travay (processReference)
+#          epistemic (DisclosureRestriction on preparation details)
+# ==========================================================================
+
+test:plant-albahaca-blanca
+    a iroko:EwePlantRecord ;
+    rdfs:label "Albahaca Blanca"@es, "White Basil"@en ;
+    dcterms:identifier "IHS-EWE-0001" ;
+
+    # Botanical identification
+    iroko:ritualNotes "Known in Lucumí as Efinrin. Widely used in omiero preparations. Regional name collision: Albahaca blanca may refer to Ocimum basilicum or O. gratissimum depending on practitioner location."@en ;
+    iroko:nameCollision true ;
+    iroko:collisionNotes "In eastern Cuba (Oriente) Albahaca blanca is commonly O. gratissimum; in Havana and Matanzas practice O. basilicum is standard. Distinguish by leaf size and scent."@en ;
+    iroko:contraindication "Avoid concentrated internal use during pregnancy. No known topical contraindications."@en ;
+
+    # Plant use dimensions
+    iroko:plantPart iroko:part-leaf ;
+    iroko:ritualUse iroko:ritual-purification-cleansing, iroko:ritual-consecration ;
+    iroko:medicinalUse iroko:medicinal-respiratory-support ;
+    iroko:preparationMethod iroko:prep-wash, iroko:prep-bath ;
+    iroko:harvestProtocol iroko:harvest-ritual-offering-required ;
+
+    # Cross-module joins — the three range properties patched in P3
+    iroko:entityAssociation test:entity-obatala ;         # → iroko:SpiritualEntity (nkisi)
+    iroko:signReference test:sign-ofun-meji ;             # → iroko:DivinationSign  (marca)
+    iroko:processReference test:process-rogacion ;        # → iroko:RitualProcess   (travay)
+
+    # Access governance
+    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
+    iroko:hasEpistemicConstraint test:constraint-albahaca-prep .
+
+# Preparation constraint — initiated-only detail
+test:constraint-albahaca-prep
+    a iroko:DisclosureRestriction ;
+    rdfs:label "Albahaca omiero preparation restriction"@en ;
+    iroko:hasConstraintBasis iroko:basis-initiation ;
+    iroko:constraintNote "Specific quantities, sequence, and invocations for omiero preparation are not disclosed to uninitiated. General use for baths is publicly documented."@en ;
+    iroko:constraintCondition "Accessible only to practitioners who have received kariosha or mano de Orula."@en .
+
+# Stub for the linked SpiritualEntity (would be a full nkisi record in production)
+test:entity-obatala
+    a iroko:SpiritualEntity ;
+    rdfs:label "Obatala"@en, "Obatalá"@es ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+# Stub for linked DivinationSign
+test:sign-ofun-meji
+    a iroko:DivinationSign ;
+    rdfs:label "Ofun Meji"@en ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+# Stub for linked RitualProcess
+test:process-rogacion
+    a iroko:RitualProcess ;
+    rdfs:label "Rogación de Cabeza"@es, "Head Cooling Ceremony"@en ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+
+# ==========================================================================
+# RECORD 2 — InitiationEvent: Kariosha of Omi Tolá
+# Modules: ile (InitiationEvent, House, ReligiousOffice)
+#                → agency (AuthorizationEvent)
+#                → epistemic (SanctionedDisclosure on itá content)
+#                → nkisi (entityCrowned → SpiritualEntity)
+# ==========================================================================
+
+test:initiation-omi-tola-2019
+    a iroko:InitiationEvent ;
+    rdfs:label "Kariosha of Omi Tolá, Matanzas 2019"@en ;
+    dcterms:identifier "IHS-ILE-0001" ;
+
+    iroko:initiationType iroko:initiation-kariosha ;
+    iroko:transmissionMethod iroko:transmission-embodied ;
+    iroko:itaPerformed true ;
+
+    # Persons — no-access as per ile module design
+    iroko:initiatedPerson test:person-omi-tola ;
+    iroko:initiator test:office-iyalosha-matanzas ;
+    iroko:initiationWitness test:person-witness-1, test:person-witness-2 ;
+
+    # House and entity — cross-module joins
+    iroko:eventHouse test:house-ile-ocha-matanzas ;
+    iroko:entityCrowned test:entity-yemoja ;             # → iroko:SacredEntity (SpiritualEntity)
+
+    # Epistemic governance on the itá content
+    iroko:hasEpistemicConstraint test:constraint-ita-content ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+# The itá content is sanctioned disclosure — requires explicit authorization
+test:constraint-ita-content
+    a iroko:SanctionedDisclosure ;
+    rdfs:label "Itá content — sanctioned disclosure"@en ;
+    iroko:hasConstraintBasis iroko:basis-initiation ;
+    iroko:constraintSanctionedBy test:authority-ile-ocha-matanzas ;
+    iroko:constraintNote "The content of the life reading (itá) is the exclusive property of the initiate and their elders. Disclosure requires explicit sanction from the presiding house authority."@en .
+
+# Authorization event generated by the initiation
+test:auth-event-kariosha-2019
+    a iroko:AuthorizationEvent ;
+    rdfs:label "Authorization conferred at Kariosha 2019"@en ;
+    iroko:involvesAgent test:entity-yemoja ;
+    iroko:hasOutcome test:initiation-omi-tola-2019 .
+
+# House
+test:house-ile-ocha-matanzas
+    a iroko:House ;
+    rdfs:label "Ilé Ocha, Matanzas"@es ;
+    iroko:houseType iroko:houseType-ile-orisha ;
+    iroko:traditionPracticed iroko:tradition-lucumi ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+# Religious office of the initiator
+test:office-iyalosha-matanzas
+    a iroko:ReligiousOffice ;
+    rdfs:label "Iyalosha, Ilé Ocha Matanzas"@en ;
+    iroko:authorityTitle iroko:title-iyalosha ;
+    iroko:authorityHouse test:house-ile-ocha-matanzas ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+# Authority node for sanctioned disclosure
+test:authority-ile-ocha-matanzas
+    a iroko:RitualAuthority ;
+    rdfs:label "Ilé Ocha Matanzas — House Authority"@en .
+
+# Person stubs — no-access
+test:person-omi-tola
+    a foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-no-access .
+
+test:person-witness-1
+    a foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-no-access .
+
+test:person-witness-2
+    a foaf:Person ;
+    iroko:minimumAccessLevel iroko:access-no-access .
+
+# SpiritualEntity stub
+test:entity-yemoja
+    a iroko:SpiritualEntity ;
+    rdfs:label "Yemoja"@yo, "Yemayá"@es, "Yemoja"@en ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+
+# ==========================================================================
+# RECORD 3 — NarrativeVariant: Testimony on Yemoja's road to the sea
+# Modules: narrative (Testimony, StoryLineage, KinshipClaim)
+#                  → agency (featuresSacredAgent → SacredAgent)
+#                  → authority (variantAuthority → RitualAuthority)
+#                  → epistemic (DisclosureRestriction on esoteric text)
+# ==========================================================================
+
+test:narrative-yemoja-sea-road
+    a iroko:Testimony ;
+    rdfs:label "Testimony: Yemoja's road to the sea (Matanzas variant)"@en ;
+    dcterms:identifier "IHS-NARR-0001" ;
+
+    # Narrator — community-restricted per narrative module
+    iroko:narratedBy test:elder-irete-obara ;
+    iroko:variantCreatedOn "2022-09-14"^^xsd:date ;
+    iroko:narrativeLanguage "es" ;
+
+    # Cross-module joins
+    iroko:featuresSacredAgent test:entity-yemoja ;       # → iroko:SacredAgent (agency)
+    iroko:variantAuthority test:authority-ile-ocha-matanzas ;  # → iroko:RitualAuthority
+
+    # Interpretive stance and lineage
+    iroko:interpretiveStance iroko:stance-literal ;
+    iroko:hasStoryLineage test:lineage-yemoja-sea-road ;
+
+    # This variant supports an assertion about Yemoja's kinship with Olokun
+    iroko:supportsAssertion test:claim-yemoja-olokun ;
+
+    # The narrative text itself is community-restricted
+    iroko:narrativeText "Yemayá vino del monte y se fue al mar cuando Orunmila le abrió el camino..."@es ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    iroko:hasEpistemicConstraint test:constraint-narrative-esoteric .
+
+# Esoteric layer of the same narrative is initiated-only
+test:constraint-narrative-esoteric
+    a iroko:DisclosureRestriction ;
+    rdfs:label "Narrative esoteric layer — initiated only"@en ;
+    iroko:hasConstraintBasis iroko:basis-initiation ;
+    iroko:constraintNote "The odu references embedded in this narrative are not disclosed in the community-accessible version. Initiated practitioners may access the full text with odu citations."@en .
+
+# Story transmission chain
+test:lineage-yemoja-sea-road
+    a iroko:StoryLineage ;
+    rdfs:label "Transmission: Yemoja sea road narrative"@en ;
+    iroko:transmissionFrom test:elder-irete-obara ;
+    iroko:transmissionTo test:researcher-ihs ;
+    iroko:transmissionDate "2022-09-14"^^xsd:date ;
+    iroko:transmissionNote "Recorded during fieldwork session, Matanzas. Narrator identified this as the Matanzas house variant, distinct from the Havana telling."@en .
+
+# KinshipClaim — Yemoja and Olokun as siblings (contested across lineages)
+test:claim-yemoja-olokun
+    a iroko:KinshipClaim ;
+    rdfs:label "Kinship claim: Yemoja and Olokun as siblings"@en ;
+    iroko:claimSubject test:entity-yemoja ;
+    iroko:claimObject test:entity-olokun ;
+    iroko:relatedAs iroko:kinship-sister ;
+    iroko:contestedStatus true ;
+    iroko:contestedNotes "Matanzas lineages assert sibling relationship. Some Havana practitioners assert Olokun is an independent deity with no kinship relation to Yemoja. Neither claim is adjudicated here."@en ;
+    iroko:assertionStatus iroko:assertion-active ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+# Prov agents
+test:elder-irete-obara
+    a prov:Agent, foaf:Person ;
+    rdfs:label "Babaláwo Irete Obara, Matanzas"@en ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+test:researcher-ihs
+    a prov:Agent ;
+    rdfs:label "IHS Field Researcher"@en ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+# Entity stubs
+test:entity-olokun
+    a iroko:SpiritualEntity ;
+    rdfs:label "Olokun"@yo, "Olokun"@en ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+
+# ==========================================================================
+# RECORD 4 — ManifestationEvent: Añá speaks at Tambor de Fundamento
+# Modules: ngoma (SacredDrumSet, SacredRhythm, MusicianLineage)
+#                → manifestation (ManifestationEvent, medium-instrument,
+#                                 mode-auditory, mode-possession)
+#                → agency (RitualEvent, involvesAgent, RefusalEvent)
+#                → narrative (Testimony from musician elder)
+#                → epistemic (DisclosureRestriction on drum consecration)
+#                → ile (MusicianLineage → House)
+# ==========================================================================
+
+test:event-tambor-fundamento-2024
+    a iroko:ManifestationEvent ;
+    rdfs:label "Tambor de Fundamento — Manifestation of Añá, Havana 2024"@en ;
+    dcterms:identifier "IHS-MANI-0001" ;
+    dcterms:date "2024-02-03"^^xsd:date ;
+
+    # Agent manifesting — Añá as SacredAgent
+    iroko:involvesAgent test:entity-ana ;
+
+    # Medium — the consecrated drum set, not a person
+    iroko:manifestsThroughMedium test:medium-la-redentora ;
+
+    # Manifestation modes — auditory primary, possession secondary (drummer as vessel)
+    iroko:hasManifestationMode iroko:mode-auditory, iroko:mode-possession ;
+
+    # Ceremony context — cross-module join to travay
+    iroko:ceremonyContext test:process-tambor-fundamento ;
+
+    # Outcomes: the event authorized disclosure of the drum's lineage
+    iroko:hasOutcome test:auth-event-ana-disclosure ;
+
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+# The consecrated Añá drum set — the medium
+test:medium-la-redentora
+    a iroko:Medium ;
+    rdfs:label "La Redentora de Dos Anillos"@es ;
+    iroko:hasMediumType iroko:medium-instrument ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+# The physical drum set as SacredDrumSet (ngoma)
+test:drumset-la-redentora
+    a iroko:SacredDrumSet ;
+    rdfs:label "La Redentora de Dos Anillos"@es ;
+    dcterms:identifier "IHS-NGOMA-0001" ;
+    iroko:setLineage test:lineage-ilu-ana-havana ;
+    iroko:hasEpistemicConstraint test:constraint-ana-consecration ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+# Epistemic constraint on consecration details
+test:constraint-ana-consecration
+    a iroko:DisclosureRestriction ;
+    rdfs:label "Añá consecration — initiated only"@en ;
+    iroko:hasConstraintBasis iroko:basis-initiation ;
+    iroko:constraintNote "The consecration ceremony, specific rhythmic formulas activating Añá, and the identities of the Olubata present are restricted to initiated members of the Añá lineage."@en .
+
+# Sacred rhythm associated with this event
+test:rhythm-oru-seco-agogo
+    a iroko:SacredRhythm ;
+    rdfs:label "Orú Seco — Agogo opening sequence"@en ;
+    iroko:ceremonyContext test:process-tambor-fundamento ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+# Musician lineage
+test:lineage-ilu-ana-havana
+    a iroko:MusicianLineage ;
+    rdfs:label "Ilú Añá — Havana batá lineage"@en ;
+    iroko:foundingHouse test:house-ile-ana-havana ;
+    iroko:lineageTradition iroko:tradition-lucumi ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+# House of the drum lineage
+test:house-ile-ana-havana
+    a iroko:House ;
+    rdfs:label "Ilé Aña, Havana"@en ;
+    iroko:houseType iroko:houseType-ile-orisha ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+# Authorization event — Añá authorizing the lineage disclosure
+test:auth-event-ana-disclosure
+    a iroko:AuthorizationEvent ;
+    rdfs:label "Añá authorizes disclosure of drum lineage"@en ;
+    iroko:involvesAgent test:entity-ana ;
+    iroko:hasOutcome test:lineage-ilu-ana-havana .
+
+# A RefusalEvent — Añá refused to speak for one toque during this session
+# Models sacred refusal as a positive governance act
+test:refusal-event-2024
+    a iroko:RefusalEvent ;
+    rdfs:label "Añá refuses: second toque withheld"@en ;
+    iroko:involvesAgent test:entity-ana ;
+    iroko:hasEpistemicConstraint test:constraint-ana-consecration ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+# Testimony from the lead Olubata
+test:testimony-olubata-2024
+    a iroko:Testimony ;
+    rdfs:label "Testimony: Olubata on the refusal event, Havana 2024"@en ;
+    iroko:narratedBy test:olubata-lead ;
+    iroko:variantCreatedOn "2024-02-03"^^xsd:date ;
+    iroko:narrativeLanguage "es" ;
+    iroko:featuresSacredAgent test:entity-ana ;
+    iroko:supportsAssertion test:refusal-event-2024 ;
+    iroko:interpretiveStance iroko:stance-literal ;
+    iroko:narrativeText "El segundo toque no llegó. Añá no quiso hablar esa noche."@es ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+# Prov agents
+test:olubata-lead
+    a prov:Agent, foaf:Person ;
+    rdfs:label "Lead Olubata, Ilé Aña Havana"@en ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+# Entity stubs
+test:entity-ana
+    a iroko:SacredAgent ;
+    rdfs:label "Añá"@yo, "Añá"@es ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+test:process-tambor-fundamento
+    a iroko:RitualProcess ;
+    rdfs:label "Tambor de Fundamento"@es ;
+    iroko:minimumAccessLevel iroko:access-community-only .
