@@ -146,7 +146,7 @@ def set_module_stat(html: str, stem: str, label: str, value, href_prefix: str = 
         return html
 
     start = anchor_match.start()
-    window_end = min(start + 1200, len(html))
+    window_end = min(start + 2500, len(html))
     window = html[start:window_end]
 
     # Try exact label first, then singular/plural variant
