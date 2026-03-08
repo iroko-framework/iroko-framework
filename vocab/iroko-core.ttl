@@ -10,6 +10,7 @@
 
 iroko:ContestedAuthority a owl:Class ;
     rdfs:label "Contested Authority"@en ;
+    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "An authority (religious title, position, or role) whose legitimacy or historical continuity is disputed across lineages. Example: Iyanifa (women Ifa priests) — some lineages affirm historical continuity, others claim modern innovation."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
@@ -96,6 +97,7 @@ iroko:authorizedBy a owl:ObjectProperty ;
 iroko:ceremonyContext a owl:ObjectProperty ;
     rdfs:label "ceremony context"@en ;
     rdfs:comment "The ritual process in which this entity — sign, rhythm, plant use, or artifact — is employed. Range: travay:RitualProcess."@en ;
+    rdfs:range iroko:RitualProcess ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     iroko:minimumAccessLevel iroko:access-initiated-only .
 
@@ -154,6 +156,7 @@ iroko:custodialRelationship a owl:ObjectProperty ;
 iroko:depictedCeremony a owl:ObjectProperty ;
     rdfs:label "depicted ceremony"@en ;
     rdfs:domain iroko:SacredMedia ;
+    rdfs:range iroko:RitualProcess ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
@@ -719,16 +722,19 @@ iroko:variationLabel a owl:DatatypeProperty ;
 
 iroko:Commentary a owl:Class ;
     rdfs:label "Commentary"@en ;
+    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "A commentary, gloss, or interpretive note attached to any resource in the framework — a narrative, an assertion, a sacred entity, a text segment. Keeps interpretive voice distinct from primary narrative content."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
 iroko:Narrative a owl:Class ;
     rdfs:label "Narrative"@en ;
+    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "A narrative cluster that may have multiple variants across place, time, authority, and lineage. First-class in Core so any domain module (Marca for odu essays, Ngoma for lyric traditions, Ékpè for origin stories) can attach narratives without importing the full narrative module."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
 iroko:NarrativeVariant a owl:Class ;
     rdfs:label "Narrative Variant"@en ;
+    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "A specific telling, transcript, or rendering of a narrative within a particular context, lineage, or temporal frame. The unit that carries text, language tag, authority scope, and access control."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
@@ -1007,6 +1013,7 @@ iroko:tradition-obeah a skos:Concept ;
 
 iroko:SacredSpecimen a owl:Class ;
     rdfs:label "Sacred Specimen"@en ;
+    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "Distinguishes objects that maintain active sacred status (consecrated, in ritual use) from decommissioned objects or museum specimens. Used to track the ritual life cycle of material culture."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
@@ -1040,11 +1047,13 @@ iroko:AssertionStatusScheme a skos:ConceptScheme ;
 
 iroko:DocumentaryEvidence a owl:Class ;
     rdfs:label "Documentary Evidence"@en ;
+    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "Umbrella class for archival materials (photographs, manuscripts, audio recordings, herbarium specimens) that document sacred knowledge practices. Maps to schema:CreativeWork in RDF serialization."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
 iroko:TextSegment a owl:Class ;
     rdfs:label "Text Segment"@en ;
+    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "An addressable, orderable segment within a narrative or narrative variant. Used for verse-level segmentation of odu essays, chant lines, prayers, and other structured oral or textual corpora."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
