@@ -168,6 +168,14 @@ MODULE_CONFIG = {
         "tag_text": "Alignment",
         "prefix":   "iroko:",
     },
+
+     "iroko-align-dwc": {
+        "title":    "dwc Alignment",
+        "subtitle": "Alignment of Iroko Framework classes and properties to dwc",
+        "tag_cls":  "tag-core",
+        "tag_text": "Alignment",
+        "prefix":   "iroko:",
+    },
 }
 
 ACCESS_MAP = {
