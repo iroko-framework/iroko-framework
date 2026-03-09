@@ -1269,3 +1269,38 @@ iroko:access-public-unrestricted a skos:Concept ;
     owl:versionIRI <https://ontology.irokosociety.org/iroko-core/2.0.0> ;
     owl:versionInfo "2.0.0" .
 
+
+# ── Patch: SacredSpecimen and ContestedAuthority inbound arcs (v1.2.0) ───────
+
+iroko:documentsSpecimen a owl:ObjectProperty ;
+    rdfs:label "documents specimen"@en ;
+    rdfs:comment "Links a DocumentaryEvidence record to a SacredSpecimen it documents. A photograph, manuscript, or archival record may document one or more sacred objects. The existence of documentation is public-unrestricted; the ritual details of the object are governed by iroko:sacredStatus on the SacredSpecimen instance."@en ;
+    rdfs:domain iroko:DocumentaryEvidence ;
+    rdfs:range iroko:SacredSpecimen ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:specimenEncounteredIn a owl:ObjectProperty ;
+    rdfs:label "specimen encountered in"@en ;
+    rdfs:comment "Links a FieldworkEvent to a SacredSpecimen encountered or documented during that session. Access: initiated-only — the association between a fieldwork event and a specific sacred object record discloses custody, location, and lineage information appropriate only for initiated practitioners."@en ;
+    rdfs:domain iroko:FieldworkEvent ;
+    rdfs:range iroko:SacredSpecimen ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+iroko:contestsAuthority a owl:ObjectProperty ;
+    rdfs:label "contests authority"@en ;
+    rdfs:comment "Links a RitualAuthority, SacredEntity, or Assertion to a ContestedAuthority instance it generates or references. A RitualAuthority contests another when it challenges the legitimacy or historical continuity of that authority's claims. A SacredEntity may have its governing authority contested across lineages. An Assertion may formally contest an authority's basis."@en ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( iroko:RitualAuthority iroko:SacredEntity iroko:Assertion ) ] ;
+    rdfs:range iroko:ContestedAuthority ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:contestedAuthorityOf a owl:ObjectProperty ;
+    rdfs:label "contested authority of"@en ;
+    rdfs:comment "Links a ContestedAuthority back to the RitualAuthority whose legitimacy is in question. Inverse of iroko:contestsAuthority. Enables bidirectional traversal: from the contesting party to the ContestedAuthority record, and from the ContestedAuthority record back to the authority being contested."@en ;
+    rdfs:domain iroko:ContestedAuthority ;
+    rdfs:range iroko:RitualAuthority ;
+    owl:inverseOf iroko:contestsAuthority ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    iroko:minimumAccessLevel iroko:access-community-only .

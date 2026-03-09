@@ -276,7 +276,7 @@ The PROV-O alignment file (`iroko-align-prov.ttl`) is provided as a reference-on
 
 ---
 
-## Vocabulary Statistics (v2.0.0)
+## Vocabulary Statistics (v1.2.0)
 
 | Module | Classes | Properties | Schemes | Concepts |
 |---|---:|---:|---:|---:|
@@ -323,4 +323,4 @@ Postcustodial Digital Archives for Afro-Atlantic Cultural Materials
 [www.irokosociety.org](https://www.irokosociety.org)
 
 **Citation:**  
-Iroko Historical Society. (2026). *Iroko Framework: Semantic Vocabularies for Afro-Atlantic Sacred Knowledge Systems* (v2.0.0). https://www.irokosociety.org/iroko-framework. CC0 1.0 Universal.
+Iroko Historical Society. (2026). *Iroko Framework: Semantic Vocabularies for Afro-Atlantic Sacred Knowledge Systems* (v1.2.0). https://www.irokosociety.org/iroko-framework. CC0 1.0 Universal.

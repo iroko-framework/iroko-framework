@@ -332,7 +332,7 @@ PAGE_HTML = """\
          {total_terms:,} terms total. Links go directly to the term's definition
          on its module browse page.</p>
       <div class="header-meta" style="margin-top:.75rem;">
-        <span class="meta-pill">v2.0.0</span>
+        <span class="meta-pill">v1.2.0</span>
         <span class="meta-pill">{n_classes} Classes</span>
         <span class="meta-pill">{n_props} Properties</span>
         <span class="meta-pill">{n_concepts} Concepts</span>

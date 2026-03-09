@@ -756,3 +756,31 @@ iroko:House a owl:Class ;
     owl:versionIRI <https://ontology.irokosociety.org/iroko-ile/2.0.0> ;
     owl:versionInfo "2.0.0" .
 
+
+# ── Patch: ReligiousOffice inbound properties (v1.2.0) ──────────────────────
+# iroko:House and foaf:Person lacked inbound arcs to ReligiousOffice.
+# These are the natural inverses of authorityHouse and authorityHolder.
+# Scope note: this module models institutionalized houses with documented
+# lineage transmission and formally conferred titles. Informal practitioners
+# operating without a recognized house structure do not instantiate House,
+# ReligiousOffice, or the properties below. Conferral date and historical
+# vs. current status are tracked via iroko:conferralDate on the
+# ReligiousOffice instance, not via separate properties here.
+
+iroko:recognizedOffice a owl:ObjectProperty ;
+    rdfs:label "recognized office"@en ;
+    rdfs:comment "A religious office recognized and active within this house. Inverse of iroko:authorityHouse. A house may recognize multiple offices; each office is a separate ReligiousOffice instance. Active vs. historical status determined by iroko:conferralDate on the office record. Access: community-only — office structure of a house is internal governance information."@en ;
+    rdfs:domain iroko:House ;
+    rdfs:range iroko:ReligiousOffice ;
+    owl:inverseOf iroko:authorityHouse ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ile> ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:holdsOffice a owl:ObjectProperty ;
+    rdfs:label "holds office"@en ;
+    rdfs:comment "A religious office currently or historically held by this person. Inverse of iroko:authorityHolder. Multiple offices may be held simultaneously or sequentially; each is a separate ReligiousOffice instance with its own iroko:conferralDate. This property does not distinguish current from historical — that distinction is carried by the office record. Access: community-only — office holding within a house is internal governance information not appropriate for public disclosure."@en ;
+    rdfs:domain <http://xmlns.com/foaf/0.1/Person> ;
+    rdfs:range iroko:ReligiousOffice ;
+    owl:inverseOf iroko:authorityHolder ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ile> ;
+    iroko:minimumAccessLevel iroko:access-community-only .

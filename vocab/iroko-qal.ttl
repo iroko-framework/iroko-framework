@@ -240,14 +240,14 @@ iroko:act-salutation a skos:Concept ;
     skos:prefLabel "Salutation / greeting"@en .
 
 iroko:lang-african-christian a skos:Concept ;
-    skos:definition "Languages of African origin used in pre-colonial or early-colonial African Christian traditions. Ge'ez (Ethiopian Orthodox, Eritrean Orthodox), Coptic (Egyptian Coptic Church). Included here because of their continuity with African sacred language traditions and their presence in diaspora communities."@en ;
+    skos:definition "Languages of African origin used in pre-colonial or early-colonial African Christian traditions. Ge'ez (Ethiopian Orthodox, Eritrean Orthodox), Coptic (Egyptian Coptic Church). Included here because of their continuity with African sacred language traditions and their presence in Afro-Atlantic communities."@en ;
     skos:inScheme iroko:SacredLanguageTypeScheme ;
     skos:prefLabel "African Christian liturgical language"@en .
 
-iroko:lang-diaspora-adapted a skos:Concept ;
-    skos:definition "A source language preserved in diaspora in a fossilized or adapted form, used for liturgical purposes but no longer a community vernacular. Examples: Lucumí (diaspora Yorùbá in Cuba); Kikongo as used in Cuban Palo Monte; liturgical Fon in Haitian Vodou."@en ;
+iroko:lang-afro-atlantic a skos:Concept ;
+    skos:definition "A source language preserved in Afro-Atlantic in a fossilized or adapted form, used for liturgical purposes but no longer a community vernacular. Examples: Lucumí (Afro-Atlantic Yorùbá in Cuba); Kikongo as used in Cuban Palo Monte; liturgical Fon in Haitian Vodou."@en ;
     skos:inScheme iroko:SacredLanguageTypeScheme ;
-    skos:prefLabel "Diaspora-adapted liturgical language"@en .
+    skos:prefLabel "Afro-Atlantic liturgical language"@en .
 
 iroko:lang-full-liturgical a skos:Concept ;
     skos:definition "A language used in its complete grammatical form as the primary medium of sacred communication. Examples: Yorùbá in continental Yorùbá religion; Fon in Beninese Vodun; Ge'ez in Ethiopian Orthodox liturgy."@en ;
@@ -409,7 +409,7 @@ iroko:LexicalEntry a owl:Class ;
 iroko:SacredLanguageTypeScheme a skos:ConceptScheme ;
     rdfs:label "Sacred Language Types"@en ;
     skos:hasTopConcept iroko:lang-african-christian,
-        iroko:lang-diaspora-adapted,
+        iroko:lang-afro-atlantic,
         iroko:lang-full-liturgical,
         iroko:lang-graphic-lexical,
         iroko:lang-other,
@@ -451,7 +451,7 @@ iroko:PartOfSpeechScheme a skos:ConceptScheme ;
 
 iroko:SacredLanguage a owl:Class ;
     rdfs:label "Sacred Language"@en ;
-    rdfs:comment "A language, language register, or language variety used as a liturgical or ritual medium in Afro-Atlantic or related African sacred practice. Includes fully distinct languages (Yorùbá in Lucumí/Candomblé; Kikongo in Palo Monte; Fon in Haitian Vodou), sacred registers of creole languages (Haitian Kreyòl ceremonial register), specialized vocabularies (Lucumí as diaspora-adapted liturgical Yorùbá), and graphic-lexical systems (Nsibidi as both script and vocabulary system). Also includes African Christian liturgical languages: Ge'ez (Ethiopian/Eritrean Orthodox), Coptic (Egyptian Coptic Church)."@en ;
+    rdfs:comment "A language, language register, or language variety used as a liturgical or ritual medium in Afro-Atlantic or related African sacred practice. Includes fully distinct languages (Yorùbá in Lucumí/Candomblé; Kikongo in Palo Monte; Fon in Haitian Vodou), sacred registers of creole languages (Haitian Kreyòl ceremonial register), specialized vocabularies (Lucumí as Afro-Atlantic-adapted liturgical Yorùbá), and graphic-lexical systems (Nsibidi as both script and vocabulary system). Also includes African Christian liturgical languages: Ge'ez (Ethiopian/Eritrean Orthodox), Coptic (Egyptian Coptic Church)."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-qal> ;
     rdfs:subClassOf iroko:SacredEntity .
 
@@ -504,3 +504,49 @@ iroko:SpeechActTypeScheme a skos:ConceptScheme ;
     owl:versionIRI <https://ontology.irokosociety.org/iroko-qal/2.0.0> ;
     owl:versionInfo "2.0.0" .
 
+
+# ── Patch: Qal orphan inbound arcs (v1.2.0) ─────────────────────────────────
+
+iroko:hasEntry a owl:ObjectProperty ;
+    rdfs:label "has entry"@en ;
+    rdfs:comment "Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing."@en ;
+    rdfs:domain iroko:SacredLanguage ;
+    rdfs:range iroko:LexicalEntry ;
+    owl:inverseOf iroko:inLanguage ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-qal> ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:hasSense a owl:ObjectProperty ;
+    rdfs:label "has sense"@en ;
+    rdfs:comment "Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance."@en ;
+    rdfs:domain iroko:LexicalEntry ;
+    rdfs:range iroko:LexicalSense ;
+    rdfs:subPropertyOf <http://www.w3.org/ns/lemon/ontolex#sense> ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-qal> ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:hasPhrase a owl:ObjectProperty ;
+    rdfs:label "has phrase"@en ;
+    rdfs:comment "Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves."@en ;
+    rdfs:domain iroko:SacredLanguage ;
+    rdfs:range iroko:LiturgicalPhrase ;
+    owl:inverseOf iroko:phraseLanguage ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-qal> ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:speechActType a owl:ObjectProperty ;
+    rdfs:label "speech act type"@en ;
+    rdfs:comment "Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only."@en ;
+    rdfs:domain iroko:LiturgicalPhrase ;
+    rdfs:range iroko:SacredSpeechAct ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-qal> ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:hasSecretName a owl:ObjectProperty ;
+    rdfs:label "has secret name"@en ;
+    rdfs:comment "Links a SacredEntity to a SecretName it holds. Inverse of iroko:secretNameHolder. Scoped to SacredEntity rather than SpiritualEntity alone because initiated practitioners also hold secret names (oruko awo and analogous esoteric designations). The existence of a secret name relationship is itself restricted; the name text is governed at no-access on iroko:secretNameText and is never exported to RDF — it is stored internally only. Access: initiated-only."@en ;
+    rdfs:domain iroko:SacredEntity ;
+    rdfs:range iroko:SecretName ;
+    owl:inverseOf iroko:secretNameHolder ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-qal> ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
