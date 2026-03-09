@@ -20,7 +20,7 @@
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.2.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -49,7 +49,7 @@
       <p class="subtitle">Liturgical language and esoteric terminology</p>
       <div class="header-meta">
         <span class="meta-pill">qal:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-qal#</span>
-        <span class="meta-pill">v1.2.0</span>
+        <span class="meta-pill">v2.0.0</span>
         <span class="meta-pill"><a href="iroko-qal.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
       </div>
@@ -60,7 +60,7 @@
     <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting sacred lexicons, liturgical languages, and esoteric terminology across Afro-Atlantic and related African sacred traditions. Qal (ቃል) — Ge&#x27;ez for &#x27;word.&#x27; Covers liturgical Yorùbá (Lucumí), Kikongo (Palo), Haitian Kreyòl sacred register, Fon/Ewe, and Ge&#x27;ez. Integrates with the OntoLex-Lemon Ontology for Lexicography for multilingual lexical data. Access control distinguishes public knowledge (language names, general vocabulary) from restricted esoteric terminology and secret names. Use with iroko-epistemic to model secret name and esoteric term disclosure constraints; iroko-narrative for liturgical phrase transmission chains and praise poetry provenance.</p>
     <div class="module-stats" style="margin-top:1rem;">
       <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">22</span><span class="stat-label">Properties</span></div>
+      <div class="stat-cell"><span class="stat-n">27</span><span class="stat-label">Properties</span></div>
       <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
       <div class="stat-cell"><span class="stat-n">37</span><span class="stat-label">Concepts</span></div>
     </div>
@@ -93,7 +93,7 @@
       <div class="class-name">SacredLanguage</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Language</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A language, language register, or language variety used as a liturgical or ritual medium in Afro-Atlantic or related African sacred practice. Includes fully distinct languages (Yorùbá in Lucumí/Candomblé; Kikongo in Palo Monte; Fon in Haitian Vodou), sacred registers of creole languages (Haitian Kreyòl ceremonial register), specialized vocabularies (Lucumí as diaspora-adapted liturgical Yorùbá), and graphic-lexical systems (Nsibidi as both script and vocabulary system). Also includes African Christian liturgical languages: Ge&#x27;ez (Ethiopian/Eritrean Orthodox), Coptic (Egyptian Coptic Church).</p>
+      <p class="class-def">A language, language register, or language variety used as a liturgical or ritual medium in Afro-Atlantic or related African sacred practice. Includes fully distinct languages (Yorùbá in Lucumí/Candomblé; Kikongo in Palo Monte; Fon in Haitian Vodou), sacred registers of creole languages (Haitian Kreyòl ceremonial register), specialized vocabularies (Lucumí as Afro-Atlantic-adapted liturgical Yorùbá), and graphic-lexical systems (Nsibidi as both script and vocabulary system). Also includes African Christian liturgical languages: Ge&#x27;ez (Ethiopian/Eritrean Orthodox), Coptic (Egyptian Coptic Church).</p>
     </div>
     <div class="class-card" id="cls-SacredSpeechAct">
       <div class="class-name">SacredSpeechAct</div>
@@ -112,7 +112,7 @@
   <div class="term-section">
     <div class="term-section-header">
       <span class="term-section-title">Properties</span>
-      <span class="term-section-count">22 properties</span>
+      <span class="term-section-count">27 properties</span>
     </div>
     <table class="prop-table">
       <thead>
@@ -173,6 +173,34 @@
           <td class="prop-domain-range">Sacred Language → langString</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">The geographic region(s) where this language is primarily used. Free-text.</td>
+        </tr>
+        <tr id="prop-hasEntry">
+          <td><span class="prop-name">hasEntry</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has entry</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Sacred Language → Lexical Entry</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing.</td>
+        </tr>
+        <tr id="prop-hasPhrase">
+          <td><span class="prop-name">hasPhrase</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has phrase</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Sacred Language → Liturgical Phrase</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves.</td>
+        </tr>
+        <tr id="prop-hasSecretName">
+          <td><span class="prop-name">hasSecretName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has secret name</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">SacredEntity → Secret Name</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">Links a SacredEntity to a SecretName it holds. Inverse of iroko:secretNameHolder. Scoped to SacredEntity rather than SpiritualEntity alone because initiated practitioners also hold secret names (oruko awo and analogous esoteric designations). The existence of a secret name relationship is itself restricted; the name text is governed at no-access on iroko:secretNameText and is never exported to RDF — it is stored internally only. Access: initiated-only.</td>
+        </tr>
+        <tr id="prop-hasSense">
+          <td><span class="prop-name">hasSense</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has sense</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Lexical Entry → Lexical Sense</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance.</td>
         </tr>
         <tr id="prop-inLanguage">
           <td><span class="prop-name">inLanguage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">in language</span></td>
@@ -272,6 +300,13 @@
           <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
           <td class="prop-desc">The secret name itself. No-access: never exported to RDF, stored internally for provenance only.</td>
         </tr>
+        <tr id="prop-speechActType">
+          <td><span class="prop-name">speechActType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">speech act type</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Liturgical Phrase → Sacred Speech Act</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only.</td>
+        </tr>
         <tr id="prop-writtenForm">
           <td><span class="prop-name">writtenForm</span><br><span style="font-size:.75rem;color:var(--ink-soft);">written form</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
@@ -342,12 +377,12 @@
         <div class="concept-item" id="concept-lang-african-christian">
           <div class="concept-label">African Christian liturgical language</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">lang-african-christian</div>
-          <p class="concept-def">Languages of African origin used in pre-colonial or early-colonial African Christian traditions. Ge&#x27;ez (Ethiopian Orthodox, Eritrean Orthodox), Coptic (Egyptian Coptic Church). Included here because of their continuity with African sacred language traditions and their presence in diaspora communities.</p>
+          <p class="concept-def">Languages of African origin used in pre-colonial or early-colonial African Christian traditions. Ge&#x27;ez (Ethiopian Orthodox, Eritrean Orthodox), Coptic (Egyptian Coptic Church). Included here because of their continuity with African sacred language traditions and their presence in Afro-Atlantic communities.</p>
         </div>
-        <div class="concept-item" id="concept-lang-diaspora-adapted">
-          <div class="concept-label">Diaspora-adapted liturgical language</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">lang-diaspora-adapted</div>
-          <p class="concept-def">A source language preserved in diaspora in a fossilized or adapted form, used for liturgical purposes but no longer a community vernacular. Examples: Lucumí (diaspora Yorùbá in Cuba); Kikongo as used in Cuban Palo Monte; liturgical Fon in Haitian Vodou.</p>
+        <div class="concept-item" id="concept-lang-afro-atlantic">
+          <div class="concept-label">Afro-Atlantic liturgical language</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">lang-afro-atlantic</div>
+          <p class="concept-def">A source language preserved in Afro-Atlantic in a fossilized or adapted form, used for liturgical purposes but no longer a community vernacular. Examples: Lucumí (Afro-Atlantic Yorùbá in Cuba); Kikongo as used in Cuban Palo Monte; liturgical Fon in Haitian Vodou.</p>
         </div>
         <div class="concept-item" id="concept-lang-full-liturgical">
           <div class="concept-label">Full liturgical language</div>

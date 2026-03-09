@@ -20,7 +20,7 @@
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.2.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -49,7 +49,7 @@
       <p class="subtitle">Religious institutions, initiation genealogy, and office transmission</p>
       <div class="header-meta">
         <span class="meta-pill">ile:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-ile#</span>
-        <span class="meta-pill">v1.2.0</span>
+        <span class="meta-pill">v2.0.0</span>
         <span class="meta-pill"><a href="iroko-ile.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
       </div>
@@ -60,7 +60,7 @@
     <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting Afro-Atlantic religious houses, lineage structures, initiation genealogy, authority transmission, and schism events. Extends schema:Organization and FOAF with tradition-specific governance and lineage modeling. Covers ilé, terreiro, hounfò, cabildo, and analogous institutions. Use with iroko-authority to model the authority titles and governance structures held by specific individuals; iroko-epistemic to constrain disclosure of initiation details and membership records.</p>
     <div class="module-stats" style="margin-top:1rem;">
       <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">36</span><span class="stat-label">Properties</span></div>
+      <div class="stat-cell"><span class="stat-n">38</span><span class="stat-label">Properties</span></div>
       <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
       <div class="stat-cell"><span class="stat-n">58</span><span class="stat-label">Concepts</span></div>
     </div>
@@ -112,7 +112,7 @@
   <div class="term-section">
     <div class="term-section-header">
       <span class="term-section-title">Properties</span>
-      <span class="term-section-count">36 properties</span>
+      <span class="term-section-count">38 properties</span>
     </div>
     <table class="prop-table">
       <thead>
@@ -215,6 +215,13 @@
           <td class="prop-domain-range">House → Lineage</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">Links a house to a formal Lineage record documenting its rama characteristics.</td>
+        </tr>
+        <tr id="prop-holdsOffice">
+          <td><span class="prop-name">holdsOffice</span><br><span style="font-size:.75rem;color:var(--ink-soft);">holds office</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Person → Religious Office</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">A religious office currently or historically held by this person. Inverse of iroko:authorityHolder. Multiple offices may be held simultaneously or sequentially; each is a separate ReligiousOffice instance with its own iroko:conferralDate. This property does not distinguish current from historical — that distinction is carried by the office record. Access: community-only — office holding within a house is internal governance information not appropriate for public disclosure.</td>
         </tr>
         <tr id="prop-houseGovernanceModel">
           <td><span class="prop-name">houseGovernanceModel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">house governance model</span></td>
@@ -320,6 +327,13 @@
           <td class="prop-domain-range">House → boolean</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
           <td class="prop-desc">True if the house maintains a publicly known identity (website, social media, public events). False does not imply the house is secret — many houses simply operate privately.</td>
+        </tr>
+        <tr id="prop-recognizedOffice">
+          <td><span class="prop-name">recognizedOffice</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recognized office</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">House → Religious Office</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">A religious office recognized and active within this house. Inverse of iroko:authorityHouse. A house may recognize multiple offices; each office is a separate ReligiousOffice instance. Active vs. historical status determined by iroko:conferralDate on the office record. Access: community-only — office structure of a house is internal governance information.</td>
         </tr>
         <tr id="prop-schismCause">
           <td><span class="prop-name">schismCause</span><br><span style="font-size:.75rem;color:var(--ink-soft);">schism cause</span></td>
