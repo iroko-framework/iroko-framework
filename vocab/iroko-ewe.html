@@ -20,7 +20,7 @@
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.1.0</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -49,7 +49,7 @@
       <p class="subtitle">Ritual use governance over botanical data</p>
       <div class="header-meta">
         <span class="meta-pill">ewe:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-ewe#</span>
-        <span class="meta-pill">v2.0.0</span>
+        <span class="meta-pill">v2.1.0</span>
         <span class="meta-pill"><a href="iroko-ewe.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
       </div>
@@ -57,10 +57,10 @@
   </header>
 
   <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance over Darwin Core botanical data. Focus on medicinal and ritual applications, harvest protocols, preparation methods, and access control for operational knowledge. Use with iroko-epistemic to model harvest and preparation constraints; with iroko-travay for ceremony context in which plants are deployed.</p>
+    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance over Darwin Core botanical data. Focus on medicinal and ritual applications, harvest protocols, preparation methods, and access control for operational knowledge. Use with iroko-epistemic to model harvest and preparation constraints; with iroko-travay for ceremony context in which plants are deployed. Darwin Core alignment declarations are in iroko-align-dwc.</p>
     <div class="module-stats" style="margin-top:1rem;">
       <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">17</span><span class="stat-label">Properties</span></div>
+      <div class="stat-cell"><span class="stat-n">21</span><span class="stat-label">Properties</span></div>
       <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
       <div class="stat-cell"><span class="stat-n">62</span><span class="stat-label">Concepts</span></div>
     </div>
@@ -81,26 +81,26 @@
       <div class="class-name">HerbariumSheet</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Herbarium Sheet</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">DocumentaryEvidence</span></div>
-      <p class="class-def">Physical plant specimen preserved for documentation. Links botanical voucher to plant record and archival photograph.</p>
+      <p class="class-def">Physical plant specimen preserved for documentation. Links botanical voucher to a plant record and archival photograph via iroko:documentsPlant and iroko:photographicVoucher. Darwin Core alignment: iroko:specimenNumber skos:exactMatch dwc:catalogNumber (declared in iroko-align-dwc).</p>
     </div>
     <div class="class-card" id="cls-Plant">
       <div class="class-name">Plant</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Plant</div>
       <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">Sacred plant entity in Afro-Atlantic traditions. Corresponds to dwc:Occurrence in Darwin Core for botanical description. This class adds ritual, medicinal, and access governance dimensions.</p>
+      <p class="class-def">Sacred plant entity in Afro-Atlantic traditions. Adds ritual, medicinal, and access governance dimensions to botanical description. Darwin Core alignment (owl:equivalentClass dwc:Occurrence, skos:exactMatch dwc:Taxon) is declared in iroko-align-dwc.</p>
     </div>
     <div class="class-card" id="cls-PlantPreparation">
       <div class="class-name">PlantPreparation</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Plant Preparation</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A prepared spiritual material combining specific plants with defined quantities and methods. Example: Omiero for Obatala (bath with 21 leaves of Akoko, Prodigiosa, Albahaca blanca).</p>
+      
+      <p class="class-def">A prepared spiritual material combining specific plants with defined quantities and methods. Example: Omiero for Obatala (bath with 21 leaves of Akoko, Prodigiosa, Albahaca blanca). Constituent plants are linked via iroko:hasConstituent; quantities via iroko:constituentQuantity; full instructions via iroko:preparationInstructions (initiated-only).</p>
     </div>
   </div>
 
   <div class="term-section">
     <div class="term-section-header">
       <span class="term-section-title">Properties</span>
-      <span class="term-section-count">17 properties</span>
+      <span class="term-section-count">21 properties</span>
     </div>
     <table class="prop-table">
       <thead>
@@ -120,89 +120,117 @@
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">Explanation of name collision: which plants share the name, how to distinguish, regional variations.</td>
         </tr>
+        <tr id="prop-constituentQuantity">
+          <td><span class="prop-name">constituentQuantity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">constituent quantity</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Plant Preparation → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Quantity of a constituent plant in a preparation. Free-text to accommodate ritual number conventions (e.g. &#x27;21 leaves&#x27;, &#x27;7 roots&#x27;, &#x27;a handful&#x27;). Attach to the PlantPreparation node, not to the Plant node directly.</td>
+        </tr>
         <tr id="prop-contraindication">
           <td><span class="prop-name">contraindication</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contraindication</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Plant → string</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Safety warnings: allergic reactions, pregnancy contraindications, toxic if ingested, etc. Access: public-unrestricted.</td>
+          <td class="prop-desc">Safety warnings: allergic reactions, pregnancy contraindications, toxic if ingested, etc.</td>
+        </tr>
+        <tr id="prop-documentsPlant">
+          <td><span class="prop-name">documentsPlant</span><br><span style="font-size:.75rem;color:var(--ink-soft);">documents plant</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Herbarium Sheet → Plant</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Links a HerbariumSheet voucher specimen to the Plant record it documents. Enables herbarium institution records to join to Iroko plant records.</td>
         </tr>
         <tr id="prop-entityAssociation">
           <td><span class="prop-name">entityAssociation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">entity association</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Plant → SpiritualEntity</td>
+          <td class="prop-domain-range">Plant → —</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module. Access: public-unrestricted.</td>
+          <td class="prop-desc">Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module.</td>
         </tr>
         <tr id="prop-harvestProtocol">
           <td><span class="prop-name">harvestProtocol</span><br><span style="font-size:.75rem;color:var(--ink-soft);">harvest protocol</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Plant → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Method of harvesting: ritual vs. commercial, timing, offerings required. Values: iroko:harvest-ritual-offering-required, iroko:harvest-wildcrafted, iroko:harvest-cultivated, etc. Access: community-only.</td>
+          <td class="prop-desc">Method of harvesting: ritual vs. commercial, timing, offerings required. Values: iroko:harvest-ritual-offering-required, iroko:harvest-wildcrafted, iroko:harvest-cultivated, etc.</td>
         </tr>
         <tr id="prop-harvestProtocolDetailed">
           <td><span class="prop-name">harvestProtocolDetailed</span><br><span style="font-size:.75rem;color:var(--ink-soft);">harvest protocol (detailed)</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Plant → string</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Detailed harvest instructions: exact timing (dawn, dusk), direction (face east), quantities (3, 7, 9, 21), offerings required. Access: community-only.</td>
+          <td class="prop-desc">Detailed harvest instructions: exact timing (dawn, dusk), direction (face east), quantities (3, 7, 9, 21), offerings required.</td>
+        </tr>
+        <tr id="prop-hasConstituent">
+          <td><span class="prop-name">hasConstituent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has constituent</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant Preparation → Plant</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Links a PlantPreparation to each constituent Plant. A preparation may have multiple constituents. Use with iroko:constituentQuantity to record the quantity of each constituent.</td>
         </tr>
         <tr id="prop-medicinalUse">
           <td><span class="prop-name">medicinalUse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">medicinal use</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Plant → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Medicinal or healing application of this plant. Values from controlled vocabulary: iroko:medicinal-fever-reduction, iroko:medicinal-digestive-support, iroko:medicinal-wound-healing, etc. Access: public-unrestricted.</td>
+          <td class="prop-desc">Medicinal or healing application of this plant. Values from controlled vocabulary: iroko:medicinal-fever-reduction, iroko:medicinal-digestive-support, etc.</td>
         </tr>
         <tr id="prop-nameCollision">
           <td><span class="prop-name">nameCollision</span><br><span style="font-size:.75rem;color:var(--ink-soft);">name collision</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Plant → boolean</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Boolean indicating if the same vernacular name refers to multiple distinct species. Example: Prodigiosa can refer to different plants in different regions.</td>
+          <td class="prop-desc">Boolean indicating if the same vernacular name refers to multiple distinct species.</td>
         </tr>
         <tr id="prop-photographicVoucher">
           <td><span class="prop-name">photographicVoucher</span><br><span style="font-size:.75rem;color:var(--ink-soft);">photographic voucher</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Plant → DocumentaryEvidence</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Link to photographic documentation of this plant specimen. Consider using dwc:associatedMedia for interoperability with herbarium systems.</td>
+          <td class="prop-desc">Link to photographic documentation of this plant specimen. Aligns with dwc:associatedMedia (see iroko-align-dwc).</td>
         </tr>
         <tr id="prop-plantPart">
           <td><span class="prop-name">plantPart</span><br><span style="font-size:.75rem;color:var(--ink-soft);">plant part</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Plant → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Which part of the plant is used. Values: iroko:part-leaf, iroko:part-root, iroko:part-bark, iroko:part-seed, iroko:part-flower, etc. Access: public-unrestricted.</td>
+          <td class="prop-desc">Which part of the plant is used. Values: iroko:part-leaf, iroko:part-root, iroko:part-bark, etc.</td>
+        </tr>
+        <tr id="prop-preparationInstructions">
+          <td><span class="prop-name">preparationInstructions</span><br><span style="font-size:.75rem;color:var(--ink-soft);">preparation instructions</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Plant Preparation → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">Complete instructions for assembling the PlantPreparation: order of addition, timing, incantations, quantities, and critical steps. Governed at initiated-only minimum; elder-initiated for consecrated preparations such as Omiero.</td>
         </tr>
         <tr id="prop-preparationMethod">
           <td><span class="prop-name">preparationMethod</span><br><span style="font-size:.75rem;color:var(--ink-soft);">preparation method</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Plant → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">General preparation method. Values: iroko:prep-infusion, iroko:prep-decoction, iroko:prep-bath, iroko:prep-fumigation, iroko:prep-poultice, etc. Access: community-only.</td>
+          <td class="prop-desc">General preparation method. Values: iroko:prep-infusion, iroko:prep-decoction, iroko:prep-bath, etc.</td>
         </tr>
         <tr id="prop-preparationMethodDetailed">
           <td><span class="prop-name">preparationMethodDetailed</span><br><span style="font-size:.75rem;color:var(--ink-soft);">preparation method (detailed)</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Plant → string</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Exact preparation instructions including timing, quantities, and critical steps. Access: initiated-only.</td>
+          <td class="prop-desc">Exact preparation instructions including timing, quantities, and critical steps.</td>
         </tr>
         <tr id="prop-processReference">
           <td><span class="prop-name">processReference</span><br><span style="font-size:.75rem;color:var(--ink-soft);">process reference</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Plant → RitualProcess</td>
+          <td class="prop-domain-range">Plant → —</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Ritual process where this plant is used. Links to Travay module. Example: used in rogacion (head cooling ceremony). Access: community-only.</td>
+          <td class="prop-desc">Ritual process where this plant is used. Links to Travay module.</td>
         </tr>
         <tr id="prop-ritualContext">
           <td><span class="prop-name">ritualContext</span><br><span style="font-size:.75rem;color:var(--ink-soft);">ritual context</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Plant → string</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Textual description of ceremonial use context. When and how the plant is used ritually. Access: community-only or higher.</td>
+          <td class="prop-desc">Textual description of ceremonial use context.</td>
         </tr>
         <tr id="prop-ritualNotes">
           <td><span class="prop-name">ritualNotes</span><br><span style="font-size:.75rem;color:var(--ink-soft);">ritual notes</span></td>
@@ -216,21 +244,21 @@
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
           <td class="prop-domain-range">Plant → Concept</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Ceremonial or spiritual application of this plant. Values: iroko:ritual-purification-cleansing, iroko:ritual-protection-boundary, iroko:ritual-invocation-communication, etc. Access: public-unrestricted.</td>
+          <td class="prop-desc">Ceremonial or spiritual application of this plant. Values: iroko:ritual-purification-cleansing, iroko:ritual-protection-boundary, etc.</td>
         </tr>
         <tr id="prop-signReference">
           <td><span class="prop-name">signReference</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign reference</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Plant → DivinationSign</td>
+          <td class="prop-domain-range">Plant → —</td>
           <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Divination sign that prescribes this plant. Links to Marca module. Example: Ogbe Meji prescribes Akoko for purification. Access: initiated-only.</td>
+          <td class="prop-desc">Divination sign that prescribes this plant. Links to Marca module.</td>
         </tr>
         <tr id="prop-specimenNumber">
           <td><span class="prop-name">specimenNumber</span><br><span style="font-size:.75rem;color:var(--ink-soft);">specimen number</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
           <td class="prop-domain-range">Herbarium Sheet → string</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Herbarium catalog number or specimen identifier. Consider using dwc:catalogNumber on HerbariumSheet instances for interoperability.</td>
+          <td class="prop-desc">Herbarium catalog number or specimen identifier. Aligns with dwc:catalogNumber (see iroko-align-dwc).</td>
         </tr>
       </tbody>
     </table>

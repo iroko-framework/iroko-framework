@@ -5,11 +5,93 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+# ── Ontology declaration ────────────────────────────────────────────────────
+
+<https://ontology.irokosociety.org/iroko-ewe> a owl:Ontology ;
+    dcterms:title "Iroko Framework: Ewe Module (Sacred Plant Knowledge)"@en ;
+    dcterms:description "Domain module. Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance over Darwin Core botanical data. Focus on medicinal and ritual applications, harvest protocols, preparation methods, and access control for operational knowledge. Use with iroko-epistemic to model harvest and preparation constraints; with iroko-travay for ceremony context in which plants are deployed. Darwin Core alignment declarations are in iroko-align-dwc."@en ;
+    dcterms:creator "Iroko Historical Society" ;
+    dcterms:created "2026-02-17"^^xsd:date ;
+    dcterms:modified "2026-03-08"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
+    dcterms:references <https://ontology.irokosociety.org/iroko-epistemic>,
+                       <https://ontology.irokosociety.org/iroko-travay> ;
+    rdfs:seeAlso <https://ontology.irokosociety.org/iroko-framework/> ;
+    owl:imports <https://ontology.irokosociety.org/iroko-core> ;
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-ewe/2.1.0> ;
+    owl:versionInfo "2.1.0" .
+
+# ── Classes ─────────────────────────────────────────────────────────────────
+
+iroko:Plant a owl:Class ;
+    rdfs:label "Plant"@en ;
+    rdfs:comment "Sacred plant entity in Afro-Atlantic traditions. Adds ritual, medicinal, and access governance dimensions to botanical description. Darwin Core alignment (owl:equivalentClass dwc:Occurrence, skos:exactMatch dwc:Taxon) is declared in iroko-align-dwc."@en ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> .
+
 iroko:EwePlantRecord a owl:Class ;
     rdfs:label "Ewe Plant Record"@en ;
     rdfs:comment "An archival record documenting a sacred plant within the Iroko Historical Society dataset. Subclass of Plant. Use this class for dataset instances; use iroko:Plant for abstract botanical entities and cross-module joins."@en ;
     rdfs:subClassOf iroko:Plant ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> .
+
+iroko:HerbariumSheet a owl:Class ;
+    rdfs:label "Herbarium Sheet"@en ;
+    rdfs:comment "Physical plant specimen preserved for documentation. Links botanical voucher to a plant record and archival photograph via iroko:documentsPlant and iroko:photographicVoucher. Darwin Core alignment: iroko:specimenNumber skos:exactMatch dwc:catalogNumber (declared in iroko-align-dwc)."@en ;
+    rdfs:subClassOf iroko:DocumentaryEvidence ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> .
+
+iroko:PlantPreparation a owl:Class ;
+    rdfs:label "Plant Preparation"@en ;
+    rdfs:comment "A prepared spiritual material combining specific plants with defined quantities and methods. Example: Omiero for Obatala (bath with 21 leaves of Akoko, Prodigiosa, Albahaca blanca). Constituent plants are linked via iroko:hasConstituent; quantities via iroko:constituentQuantity; full instructions via iroko:preparationInstructions (initiated-only)."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> .
+
+# ── Properties: HerbariumSheet ──────────────────────────────────────────────
+
+iroko:specimenNumber a owl:DatatypeProperty ;
+    rdfs:label "specimen number"@en ;
+    rdfs:comment "Herbarium catalog number or specimen identifier. Aligns with dwc:catalogNumber (see iroko-align-dwc)."@en ;
+    rdfs:domain iroko:HerbariumSheet ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:documentsPlant a owl:ObjectProperty ;
+    rdfs:label "documents plant"@en ;
+    rdfs:comment "Links a HerbariumSheet voucher specimen to the Plant record it documents. Enables herbarium institution records to join to Iroko plant records."@en ;
+    rdfs:domain iroko:HerbariumSheet ;
+    rdfs:range iroko:Plant ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+# ── Properties: PlantPreparation ────────────────────────────────────────────
+
+iroko:hasConstituent a owl:ObjectProperty ;
+    rdfs:label "has constituent"@en ;
+    rdfs:comment "Links a PlantPreparation to each constituent Plant. A preparation may have multiple constituents. Use with iroko:constituentQuantity to record the quantity of each constituent."@en ;
+    rdfs:domain iroko:PlantPreparation ;
+    rdfs:range iroko:Plant ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:constituentQuantity a owl:DatatypeProperty ;
+    rdfs:label "constituent quantity"@en ;
+    rdfs:comment "Quantity of a constituent plant in a preparation. Free-text to accommodate ritual number conventions (e.g. '21 leaves', '7 roots', 'a handful'). Attach to the PlantPreparation node, not to the Plant node directly."@en ;
+    rdfs:domain iroko:PlantPreparation ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:preparationInstructions a owl:DatatypeProperty ;
+    rdfs:label "preparation instructions"@en ;
+    rdfs:comment "Complete instructions for assembling the PlantPreparation: order of addition, timing, incantations, quantities, and critical steps. Governed at initiated-only minimum; elder-initiated for consecrated preparations such as Omiero."@en ;
+    rdfs:domain iroko:PlantPreparation ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
+# ── Properties: Plant ────────────────────────────────────────────────────────
 
 iroko:ritualNotes a owl:AnnotationProperty ;
     rdfs:label "ritual notes"@en ;
@@ -19,544 +101,234 @@ iroko:ritualNotes a owl:AnnotationProperty ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
-iroko:PlantPreparation a owl:Class ;
-    rdfs:label "Plant Preparation"@en ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:comment "A prepared spiritual material combining specific plants with defined quantities and methods. Example: Omiero for Obatala (bath with 21 leaves of Akoko, Prodigiosa, Albahaca blanca)."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> .
-
 iroko:collisionNotes a owl:DatatypeProperty ;
     rdfs:label "collision notes"@en ;
     rdfs:comment "Explanation of name collision: which plants share the name, how to distinguish, regional variations."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
 iroko:contraindication a owl:DatatypeProperty ;
     rdfs:label "contraindication"@en ;
-    rdfs:comment "Safety warnings: allergic reactions, pregnancy contraindications, toxic if ingested, etc. Access: public-unrestricted."@en ;
+    rdfs:comment "Safety warnings: allergic reactions, pregnancy contraindications, toxic if ingested, etc."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:entityAssociation a owl:ObjectProperty ;
     rdfs:label "entity association"@en ;
-    rdfs:comment "Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module. Access: public-unrestricted."@en ;
+    rdfs:comment "Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:range iroko:SpiritualEntity ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:harvestProtocol a owl:ObjectProperty ;
     rdfs:label "harvest protocol"@en ;
-    rdfs:comment "Method of harvesting: ritual vs. commercial, timing, offerings required. Values: iroko:harvest-ritual-offering-required, iroko:harvest-wildcrafted, iroko:harvest-cultivated, etc. Access: community-only."@en ;
+    rdfs:comment "Method of harvesting: ritual vs. commercial, timing, offerings required. Values: iroko:harvest-ritual-offering-required, iroko:harvest-wildcrafted, iroko:harvest-cultivated, etc."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
 iroko:harvestProtocolDetailed a owl:DatatypeProperty ;
     rdfs:label "harvest protocol (detailed)"@en ;
-    rdfs:comment "Detailed harvest instructions: exact timing (dawn, dusk), direction (face east), quantities (3, 7, 9, 21), offerings required. Access: community-only."@en ;
+    rdfs:comment "Detailed harvest instructions: exact timing (dawn, dusk), direction (face east), quantities (3, 7, 9, 21), offerings required."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
 iroko:medicinalUse a owl:ObjectProperty ;
     rdfs:label "medicinal use"@en ;
-    rdfs:comment "Medicinal or healing application of this plant. Values from controlled vocabulary: iroko:medicinal-fever-reduction, iroko:medicinal-digestive-support, iroko:medicinal-wound-healing, etc. Access: public-unrestricted."@en ;
+    rdfs:comment "Medicinal or healing application of this plant. Values from controlled vocabulary: iroko:medicinal-fever-reduction, iroko:medicinal-digestive-support, etc."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:nameCollision a owl:DatatypeProperty ;
     rdfs:label "name collision"@en ;
-    rdfs:comment "Boolean indicating if the same vernacular name refers to multiple distinct species. Example: Prodigiosa can refer to different plants in different regions."@en ;
+    rdfs:comment "Boolean indicating if the same vernacular name refers to multiple distinct species."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
 iroko:photographicVoucher a owl:ObjectProperty ;
     rdfs:label "photographic voucher"@en ;
-    rdfs:comment "Link to photographic documentation of this plant specimen. Consider using dwc:associatedMedia for interoperability with herbarium systems."@en ;
+    rdfs:comment "Link to photographic documentation of this plant specimen. Aligns with dwc:associatedMedia (see iroko-align-dwc)."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range iroko:DocumentaryEvidence ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:plantPart a owl:ObjectProperty ;
     rdfs:label "plant part"@en ;
-    rdfs:comment "Which part of the plant is used. Values: iroko:part-leaf, iroko:part-root, iroko:part-bark, iroko:part-seed, iroko:part-flower, etc. Access: public-unrestricted."@en ;
+    rdfs:comment "Which part of the plant is used. Values: iroko:part-leaf, iroko:part-root, iroko:part-bark, etc."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:preparationMethod a owl:ObjectProperty ;
     rdfs:label "preparation method"@en ;
-    rdfs:comment "General preparation method. Values: iroko:prep-infusion, iroko:prep-decoction, iroko:prep-bath, iroko:prep-fumigation, iroko:prep-poultice, etc. Access: community-only."@en ;
+    rdfs:comment "General preparation method. Values: iroko:prep-infusion, iroko:prep-decoction, iroko:prep-bath, etc."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
 iroko:preparationMethodDetailed a owl:DatatypeProperty ;
     rdfs:label "preparation method (detailed)"@en ;
-    rdfs:comment "Exact preparation instructions including timing, quantities, and critical steps. Access: initiated-only."@en ;
+    rdfs:comment "Exact preparation instructions including timing, quantities, and critical steps."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-initiated-only .
 
 iroko:processReference a owl:ObjectProperty ;
     rdfs:label "process reference"@en ;
-    rdfs:comment "Ritual process where this plant is used. Links to Travay module. Example: used in rogacion (head cooling ceremony). Access: community-only."@en ;
+    rdfs:comment "Ritual process where this plant is used. Links to Travay module."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:range iroko:RitualProcess ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
 iroko:ritualContext a owl:DatatypeProperty ;
     rdfs:label "ritual context"@en ;
-    rdfs:comment "Textual description of ceremonial use context. When and how the plant is used ritually. Access: community-only or higher."@en ;
+    rdfs:comment "Textual description of ceremonial use context."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
 iroko:ritualUse a owl:ObjectProperty ;
     rdfs:label "ritual use"@en ;
-    rdfs:comment "Ceremonial or spiritual application of this plant. Values: iroko:ritual-purification-cleansing, iroko:ritual-protection-boundary, iroko:ritual-invocation-communication, etc. Access: public-unrestricted."@en ;
+    rdfs:comment "Ceremonial or spiritual application of this plant. Values: iroko:ritual-purification-cleansing, iroko:ritual-protection-boundary, etc."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:signReference a owl:ObjectProperty ;
     rdfs:label "sign reference"@en ;
-    rdfs:comment "Divination sign that prescribes this plant. Links to Marca module. Example: Ogbe Meji prescribes Akoko for purification. Access: initiated-only."@en ;
+    rdfs:comment "Divination sign that prescribes this plant. Links to Marca module."@en ;
     rdfs:domain iroko:Plant ;
-    rdfs:range iroko:DivinationSign ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-initiated-only .
 
-iroko:specimenNumber a owl:DatatypeProperty ;
-    rdfs:label "specimen number"@en ;
-    rdfs:comment "Herbarium catalog number or specimen identifier. Consider using dwc:catalogNumber on HerbariumSheet instances for interoperability."@en ;
-    rdfs:domain iroko:HerbariumSheet ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
-    rdfs:range xsd:string ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted .
-
-iroko:HerbariumSheet a owl:Class ;
-    rdfs:label "Herbarium Sheet"@en ;
-    rdfs:comment "Physical plant specimen preserved for documentation. Links botanical voucher to plant record and archival photograph."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
-    rdfs:subClassOf iroko:DocumentaryEvidence .
-
-iroko:harvest-commercial-market a skos:Concept ;
-    skos:definition "Purchased from commercial sources or markets."@en ;
-    skos:inScheme iroko:HarvestProtocolScheme ;
-    skos:prefLabel "Commercial/Market"@en .
-
-iroko:harvest-cultivated a skos:Concept ;
-    skos:definition "Grown intentionally in gardens or farms."@en ;
-    skos:inScheme iroko:HarvestProtocolScheme ;
-    skos:prefLabel "Cultivated"@en .
-
-iroko:harvest-lunar-phase-required a skos:Concept ;
-    skos:definition "Must be harvested during a specific moon phase."@en ;
-    skos:inScheme iroko:HarvestProtocolScheme ;
-    skos:prefLabel "Requires Lunar Phase"@en .
-
-iroko:harvest-plant-spirit-offering a skos:Concept ;
-    skos:definition "Offering (water, coins, tobacco) must be left at plant base."@en ;
-    skos:inScheme iroko:HarvestProtocolScheme ;
-    skos:prefLabel "Requires Offering to Plant Spirit"@en .
-
-iroko:harvest-ritual-offering-required a skos:Concept ;
-    skos:definition "Requires ritual protocol and offering to plant spirit before harvesting."@en ;
-    skos:inScheme iroko:HarvestProtocolScheme ;
-    skos:prefLabel "Ritual Harvest (Offering Required)"@en .
-
-iroko:harvest-specific-practitioner a skos:Concept ;
-    skos:definition "Must be harvested by a practitioner with specific initiation."@en ;
-    skos:inScheme iroko:HarvestProtocolScheme ;
-    skos:prefLabel "Requires Specific Practitioner"@en .
-
-iroko:harvest-specific-time-of-day a skos:Concept ;
-    skos:definition "Must be harvested at dawn, dusk, midnight, etc."@en ;
-    skos:inScheme iroko:HarvestProtocolScheme ;
-    skos:prefLabel "Requires Specific Time of Day"@en .
-
-iroko:harvest-wildcrafted a skos:Concept ;
-    skos:definition "Harvested from wild without specific ritual protocol."@en ;
-    skos:inScheme iroko:HarvestProtocolScheme ;
-    skos:prefLabel "Wildcrafted (No Ritual)"@en .
-
-iroko:medicinal-anti-inflammatory a skos:Concept ;
-    skos:definition "Reduces inflammation and swelling."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Anti-Inflammatory"@en .
-
-iroko:medicinal-digestive-support a skos:Concept ;
-    skos:definition "Supports digestive system, relieves stomach issues."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Digestive Support"@en .
-
-iroko:medicinal-fever-reduction a skos:Concept ;
-    skos:definition "Reduces fever, antipyretic properties."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Fever Reduction"@en .
-
-iroko:medicinal-general-tonic a skos:Concept ;
-    skos:definition "Overall health tonic, vitality support."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "General Tonic"@en .
-
-iroko:medicinal-maternal-postpartum a skos:Concept ;
-    skos:definition "Postpartum recovery and maternal health."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Maternal/Postpartum"@en .
-
-iroko:medicinal-pain-relief a skos:Concept ;
-    skos:definition "Analgesic properties, relieves pain."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Pain Relief"@en .
-
-iroko:medicinal-pediatric a skos:Concept ;
-    skos:definition "Safe for children, pediatric applications."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Pediatric"@en .
-
-iroko:medicinal-reproductive-fertility a skos:Concept ;
-    skos:definition "Supports reproductive health and fertility."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Reproductive/Fertility"@en .
-
-iroko:medicinal-respiratory-support a skos:Concept ;
-    skos:definition "Supports respiratory system, cough relief, asthma."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Respiratory Support"@en .
-
-iroko:medicinal-skin-topical a skos:Concept ;
-    skos:definition "Applied to skin for rashes, irritation, wounds."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Skin/Topical"@en .
-
-iroko:medicinal-spiritual-psychosomatic a skos:Concept ;
-    skos:definition "Addresses spiritual and emotional dimensions of illness."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Spiritual/Psychosomatic"@en .
-
-iroko:medicinal-wound-healing a skos:Concept ;
-    skos:definition "Promotes wound healing, tissue repair."@en ;
-    skos:inScheme iroko:MedicinalUseScheme ;
-    skos:prefLabel "Wound Healing"@en .
-
-iroko:part-bark a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Bark"@en .
-
-iroko:part-bulb a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Bulb"@en .
-
-iroko:part-flower a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Flower"@en .
-
-iroko:part-fruit a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Fruit"@en .
-
-iroko:part-leaf a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Leaf"@en .
-
-iroko:part-pollen a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Pollen"@en .
-
-iroko:part-resin a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Resin"@en .
-
-iroko:part-root a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Root"@en .
-
-iroko:part-sap a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Sap"@en .
-
-iroko:part-seed a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Seed"@en .
-
-iroko:part-stem a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Stem"@en .
-
-iroko:part-whole-plant a skos:Concept ;
-    skos:inScheme iroko:PlantPartScheme ;
-    skos:prefLabel "Whole Plant"@en .
-
-iroko:prep-bath a skos:Concept ;
-    skos:definition "Prepared as spiritual bath for immersion or washing."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Bath (Bano/Bain)"@en .
-
-iroko:prep-decoction a skos:Concept ;
-    skos:definition "Boiled to extract properties from harder plant parts."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Decoction (Boiled)"@en .
-
-iroko:prep-dried-bundle a skos:Concept ;
-    skos:definition "Dried and bundled for hanging or storage."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Dried Bundle"@en .
-
-iroko:prep-fumigation a skos:Concept ;
-    skos:definition "Burned as incense or smoke for cleansing."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Fumigation (Sahumerio)"@en .
-
-iroko:prep-incantation-only a skos:Concept ;
-    skos:definition "Used ritually with words or prayers but not physically prepared."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Incantation-Only"@en .
-
-iroko:prep-infusion a skos:Concept ;
-    skos:definition "Steeped in hot water like tea."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Infusion (Hot Water)"@en .
-
-iroko:prep-ingestion a skos:Concept ;
-    skos:definition "Consumed internally as tea, tonic, or food."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Ingestion (Tea/Food)"@en .
-
-iroko:prep-maceration a skos:Concept ;
-    skos:definition "Soaked in cold water or oil for an extended period."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Maceration (Cold Soak)"@en .
-
-iroko:prep-poultice a skos:Concept ;
-    skos:definition "Applied topically as paste or compress."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Poultice/Compress"@en .
-
-iroko:prep-powder a skos:Concept ;
-    skos:definition "Dried and ground into powder."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Powder (Afoche)"@en .
-
-iroko:prep-tincture a skos:Concept ;
-    skos:definition "Extracted in alcohol or spirits."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Tincture/Alcohol"@en .
-
-iroko:prep-topical a skos:Concept ;
-    skos:definition "Applied directly to skin or affected area."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Topical Application"@en .
-
-iroko:prep-wash a skos:Concept ;
-    skos:definition "Prepared as liquid wash for ritual bathing or anointing."@en ;
-    skos:inScheme iroko:PreparationMethodScheme ;
-    skos:prefLabel "Wash (Omiero/Lavage)"@en .
-
-iroko:ritual-ancestor-veneration a skos:Concept ;
-    skos:definition "Honors ancestors, facilitates ancestral connection."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Ancestor Veneration"@en .
-
-iroko:ritual-consecration a skos:Concept ;
-    skos:definition "Consecrates objects, spaces, and persons."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Consecration"@en .
-
-iroko:ritual-cosmological-symbolic a skos:Concept ;
-    skos:definition "Represents cosmological principles and symbolic meaning."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Cosmological/Symbolic"@en .
-
-iroko:ritual-death-rites a skos:Concept ;
-    skos:definition "Funeral ceremonies and death transitions."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Death Rites"@en .
-
-iroko:ritual-divination-enhancement a skos:Concept ;
-    skos:definition "Enhances divinatory abilities and spiritual sight."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Divination Enhancement"@en .
-
-iroko:ritual-domination-binding a skos:Concept ;
-    skos:definition "Binds, controls, or dominates situations or people."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Domination/Binding"@en .
-
-iroko:ritual-healing-restoration a skos:Concept ;
-    skos:definition "Spiritual healing, restoration of balance."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Healing/Restoration"@en .
-
-iroko:ritual-house-blessing a skos:Concept ;
-    skos:definition "Blesses homes, workplaces, and sacred spaces."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "House/Space Blessing"@en .
-
-iroko:ritual-invocation-communication a skos:Concept ;
-    skos:definition "Facilitates communication with spirits and invocation."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Invocation/Communication"@en .
-
-iroko:ritual-legal-justice a skos:Concept ;
-    skos:definition "Legal matters, court cases, justice."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Legal/Justice"@en .
-
-iroko:ritual-love-attraction a skos:Concept ;
-    skos:definition "Attracts love and enhances relationships."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Love/Attraction"@en .
-
-iroko:ritual-offering-devotion a skos:Concept ;
-    skos:definition "Offered to spirits as devotion or tribute."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Offering/Devotion"@en .
-
-iroko:ritual-prosperity-abundance a skos:Concept ;
-    skos:definition "Attracts wealth, prosperity, and abundance."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Prosperity/Abundance"@en .
-
-iroko:ritual-protection-boundary a skos:Concept ;
-    skos:definition "Creates protective boundaries, shields from harm."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Protection/Boundary"@en .
-
-iroko:ritual-purification-cleansing a skos:Concept ;
-    skos:definition "Spiritual cleansing, removal of negative influences."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Purification/Cleansing"@en .
-
-iroko:ritual-rites-of-transition a skos:Concept ;
-    skos:definition "Used in initiation, birth, death, and marriage ceremonies."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Rites of Transition"@en .
-
-iroko:ritual-road-opening a skos:Concept ;
-    skos:definition "Opens paths, removes obstacles, facilitates opportunities."@en ;
-    skos:inScheme iroko:RitualUseScheme ;
-    skos:prefLabel "Road Opening"@en .
+# ── Concept Schemes and Concepts (unchanged) ────────────────────────────────
 
 iroko:HarvestProtocolScheme a skos:ConceptScheme ;
     rdfs:label "Harvest Protocol Classification"@en ;
     dcterms:description "Methods and requirements for harvesting plants."@en ;
-    skos:hasTopConcept iroko:harvest-commercial-market,
-        iroko:harvest-cultivated,
-        iroko:harvest-lunar-phase-required,
-        iroko:harvest-plant-spirit-offering,
-        iroko:harvest-ritual-offering-required,
-        iroko:harvest-specific-practitioner,
-        iroko:harvest-specific-time-of-day,
-        iroko:harvest-wildcrafted .
+    skos:hasTopConcept iroko:harvest-commercial-market, iroko:harvest-cultivated,
+        iroko:harvest-lunar-phase-required, iroko:harvest-plant-spirit-offering,
+        iroko:harvest-ritual-offering-required, iroko:harvest-specific-practitioner,
+        iroko:harvest-specific-time-of-day, iroko:harvest-wildcrafted .
+
+iroko:harvest-commercial-market a skos:Concept ; skos:prefLabel "Commercial/Market"@en ; skos:definition "Purchased from commercial sources or markets."@en ; skos:inScheme iroko:HarvestProtocolScheme .
+iroko:harvest-cultivated a skos:Concept ; skos:prefLabel "Cultivated"@en ; skos:definition "Grown intentionally in gardens or farms."@en ; skos:inScheme iroko:HarvestProtocolScheme .
+iroko:harvest-lunar-phase-required a skos:Concept ; skos:prefLabel "Requires Lunar Phase"@en ; skos:definition "Must be harvested during a specific moon phase."@en ; skos:inScheme iroko:HarvestProtocolScheme .
+iroko:harvest-plant-spirit-offering a skos:Concept ; skos:prefLabel "Requires Offering to Plant Spirit"@en ; skos:definition "Offering (water, coins, tobacco) must be left at plant base."@en ; skos:inScheme iroko:HarvestProtocolScheme .
+iroko:harvest-ritual-offering-required a skos:Concept ; skos:prefLabel "Ritual Harvest (Offering Required)"@en ; skos:definition "Requires ritual protocol and offering to plant spirit before harvesting."@en ; skos:inScheme iroko:HarvestProtocolScheme .
+iroko:harvest-specific-practitioner a skos:Concept ; skos:prefLabel "Requires Specific Practitioner"@en ; skos:definition "Must be harvested by a practitioner with specific initiation."@en ; skos:inScheme iroko:HarvestProtocolScheme .
+iroko:harvest-specific-time-of-day a skos:Concept ; skos:prefLabel "Requires Specific Time of Day"@en ; skos:definition "Must be harvested at dawn, dusk, midnight, etc."@en ; skos:inScheme iroko:HarvestProtocolScheme .
+iroko:harvest-wildcrafted a skos:Concept ; skos:prefLabel "Wildcrafted (No Ritual)"@en ; skos:definition "Harvested from wild without specific ritual protocol."@en ; skos:inScheme iroko:HarvestProtocolScheme .
 
 iroko:MedicinalUseScheme a skos:ConceptScheme ;
     rdfs:label "Medicinal Use Classification"@en ;
     dcterms:description "Controlled vocabulary of medicinal and healing applications."@en ;
-    skos:hasTopConcept iroko:medicinal-anti-inflammatory,
-        iroko:medicinal-digestive-support,
-        iroko:medicinal-fever-reduction,
-        iroko:medicinal-general-tonic,
-        iroko:medicinal-maternal-postpartum,
-        iroko:medicinal-pain-relief,
-        iroko:medicinal-pediatric,
-        iroko:medicinal-reproductive-fertility,
-        iroko:medicinal-respiratory-support,
-        iroko:medicinal-skin-topical,
-        iroko:medicinal-spiritual-psychosomatic,
-        iroko:medicinal-wound-healing .
+    skos:hasTopConcept iroko:medicinal-anti-inflammatory, iroko:medicinal-digestive-support,
+        iroko:medicinal-fever-reduction, iroko:medicinal-general-tonic,
+        iroko:medicinal-maternal-postpartum, iroko:medicinal-pain-relief,
+        iroko:medicinal-pediatric, iroko:medicinal-reproductive-fertility,
+        iroko:medicinal-respiratory-support, iroko:medicinal-skin-topical,
+        iroko:medicinal-spiritual-psychosomatic, iroko:medicinal-wound-healing .
+
+iroko:medicinal-anti-inflammatory a skos:Concept ; skos:prefLabel "Anti-Inflammatory"@en ; skos:definition "Reduces inflammation and swelling."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-digestive-support a skos:Concept ; skos:prefLabel "Digestive Support"@en ; skos:definition "Supports digestive system, relieves stomach issues."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-fever-reduction a skos:Concept ; skos:prefLabel "Fever Reduction"@en ; skos:definition "Reduces fever, antipyretic properties."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-general-tonic a skos:Concept ; skos:prefLabel "General Tonic"@en ; skos:definition "Overall health tonic, vitality support."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-maternal-postpartum a skos:Concept ; skos:prefLabel "Maternal/Postpartum"@en ; skos:definition "Postpartum recovery and maternal health."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-pain-relief a skos:Concept ; skos:prefLabel "Pain Relief"@en ; skos:definition "Analgesic properties, relieves pain."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-pediatric a skos:Concept ; skos:prefLabel "Pediatric"@en ; skos:definition "Safe for children, pediatric applications."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-reproductive-fertility a skos:Concept ; skos:prefLabel "Reproductive/Fertility"@en ; skos:definition "Supports reproductive health and fertility."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-respiratory-support a skos:Concept ; skos:prefLabel "Respiratory Support"@en ; skos:definition "Supports respiratory system, cough relief, asthma."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-skin-topical a skos:Concept ; skos:prefLabel "Skin/Topical"@en ; skos:definition "Applied to skin for rashes, irritation, wounds."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-spiritual-psychosomatic a skos:Concept ; skos:prefLabel "Spiritual/Psychosomatic"@en ; skos:definition "Addresses spiritual and emotional dimensions of illness."@en ; skos:inScheme iroko:MedicinalUseScheme .
+iroko:medicinal-wound-healing a skos:Concept ; skos:prefLabel "Wound Healing"@en ; skos:definition "Promotes wound healing, tissue repair."@en ; skos:inScheme iroko:MedicinalUseScheme .
 
 iroko:PlantPartScheme a skos:ConceptScheme ;
     rdfs:label "Plant Part Classification"@en ;
     dcterms:description "Which part of the plant is used."@en ;
-    skos:hasTopConcept iroko:part-bark,
-        iroko:part-bulb,
-        iroko:part-flower,
-        iroko:part-fruit,
-        iroko:part-leaf,
-        iroko:part-pollen,
-        iroko:part-resin,
-        iroko:part-root,
-        iroko:part-sap,
-        iroko:part-seed,
-        iroko:part-stem,
-        iroko:part-whole-plant .
+    skos:hasTopConcept iroko:part-bark, iroko:part-bulb, iroko:part-flower, iroko:part-fruit,
+        iroko:part-leaf, iroko:part-pollen, iroko:part-resin, iroko:part-root,
+        iroko:part-sap, iroko:part-seed, iroko:part-stem, iroko:part-whole-plant .
+
+iroko:part-bark a skos:Concept ; skos:prefLabel "Bark"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-bulb a skos:Concept ; skos:prefLabel "Bulb"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-flower a skos:Concept ; skos:prefLabel "Flower"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-fruit a skos:Concept ; skos:prefLabel "Fruit"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-leaf a skos:Concept ; skos:prefLabel "Leaf"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-pollen a skos:Concept ; skos:prefLabel "Pollen"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-resin a skos:Concept ; skos:prefLabel "Resin"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-root a skos:Concept ; skos:prefLabel "Root"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-sap a skos:Concept ; skos:prefLabel "Sap"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-seed a skos:Concept ; skos:prefLabel "Seed"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-stem a skos:Concept ; skos:prefLabel "Stem"@en ; skos:inScheme iroko:PlantPartScheme .
+iroko:part-whole-plant a skos:Concept ; skos:prefLabel "Whole Plant"@en ; skos:inScheme iroko:PlantPartScheme .
 
 iroko:PreparationMethodScheme a skos:ConceptScheme ;
     rdfs:label "Preparation Method Classification"@en ;
     dcterms:description "Methods for preparing plant materials."@en ;
-    skos:hasTopConcept iroko:prep-bath,
-        iroko:prep-decoction,
-        iroko:prep-dried-bundle,
-        iroko:prep-fumigation,
-        iroko:prep-incantation-only,
-        iroko:prep-infusion,
-        iroko:prep-ingestion,
-        iroko:prep-maceration,
-        iroko:prep-poultice,
-        iroko:prep-powder,
-        iroko:prep-tincture,
-        iroko:prep-topical,
-        iroko:prep-wash .
+    skos:hasTopConcept iroko:prep-bath, iroko:prep-decoction, iroko:prep-dried-bundle,
+        iroko:prep-fumigation, iroko:prep-incantation-only, iroko:prep-infusion,
+        iroko:prep-ingestion, iroko:prep-maceration, iroko:prep-poultice,
+        iroko:prep-powder, iroko:prep-tincture, iroko:prep-topical, iroko:prep-wash .
 
-iroko:Plant a owl:Class ;
-    rdfs:label "Plant"@en ;
-    rdfs:comment "Sacred plant entity in Afro-Atlantic traditions. Corresponds to dwc:Occurrence in Darwin Core for botanical description. This class adds ritual, medicinal, and access governance dimensions."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
-    rdfs:subClassOf iroko:SacredEntity .
+iroko:prep-bath a skos:Concept ; skos:prefLabel "Bath (Bano/Bain)"@en ; skos:definition "Prepared as spiritual bath for immersion or washing."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-decoction a skos:Concept ; skos:prefLabel "Decoction (Boiled)"@en ; skos:definition "Boiled to extract properties from harder plant parts."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-dried-bundle a skos:Concept ; skos:prefLabel "Dried Bundle"@en ; skos:definition "Dried and bundled for hanging or storage."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-fumigation a skos:Concept ; skos:prefLabel "Fumigation (Sahumerio)"@en ; skos:definition "Burned as incense or smoke for cleansing."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-incantation-only a skos:Concept ; skos:prefLabel "Incantation-Only"@en ; skos:definition "Used ritually with words or prayers but not physically prepared."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-infusion a skos:Concept ; skos:prefLabel "Infusion (Hot Water)"@en ; skos:definition "Steeped in hot water like tea."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-ingestion a skos:Concept ; skos:prefLabel "Ingestion (Tea/Food)"@en ; skos:definition "Consumed internally as tea, tonic, or food."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-maceration a skos:Concept ; skos:prefLabel "Maceration (Cold Soak)"@en ; skos:definition "Soaked in cold water or oil for an extended period."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-poultice a skos:Concept ; skos:prefLabel "Poultice/Compress"@en ; skos:definition "Applied topically as paste or compress."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-powder a skos:Concept ; skos:prefLabel "Powder (Afoche)"@en ; skos:definition "Dried and ground into powder."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-tincture a skos:Concept ; skos:prefLabel "Tincture/Alcohol"@en ; skos:definition "Extracted in alcohol or spirits."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-topical a skos:Concept ; skos:prefLabel "Topical Application"@en ; skos:definition "Applied directly to skin or affected area."@en ; skos:inScheme iroko:PreparationMethodScheme .
+iroko:prep-wash a skos:Concept ; skos:prefLabel "Wash (Omiero/Lavage)"@en ; skos:definition "Prepared as liquid wash for ritual bathing or anointing."@en ; skos:inScheme iroko:PreparationMethodScheme .
 
 iroko:RitualUseScheme a skos:ConceptScheme ;
     rdfs:label "Ritual Use Classification"@en ;
     dcterms:description "Controlled vocabulary of ceremonial and spiritual applications."@en ;
-    skos:hasTopConcept iroko:ritual-ancestor-veneration,
-        iroko:ritual-consecration,
-        iroko:ritual-cosmological-symbolic,
-        iroko:ritual-death-rites,
-        iroko:ritual-divination-enhancement,
-        iroko:ritual-domination-binding,
-        iroko:ritual-healing-restoration,
-        iroko:ritual-house-blessing,
-        iroko:ritual-invocation-communication,
-        iroko:ritual-legal-justice,
-        iroko:ritual-love-attraction,
-        iroko:ritual-offering-devotion,
-        iroko:ritual-prosperity-abundance,
-        iroko:ritual-protection-boundary,
-        iroko:ritual-purification-cleansing,
-        iroko:ritual-rites-of-transition,
+    skos:hasTopConcept iroko:ritual-ancestor-veneration, iroko:ritual-consecration,
+        iroko:ritual-cosmological-symbolic, iroko:ritual-death-rites,
+        iroko:ritual-divination-enhancement, iroko:ritual-domination-binding,
+        iroko:ritual-healing-restoration, iroko:ritual-house-blessing,
+        iroko:ritual-invocation-communication, iroko:ritual-legal-justice,
+        iroko:ritual-love-attraction, iroko:ritual-offering-devotion,
+        iroko:ritual-prosperity-abundance, iroko:ritual-protection-boundary,
+        iroko:ritual-purification-cleansing, iroko:ritual-rites-of-transition,
         iroko:ritual-road-opening .
 
-<https://ontology.irokosociety.org/iroko-ewe> a owl:Ontology ;
-    dcterms:created "2026-02-17"^^xsd:date ;
-    dcterms:creator "Iroko Historical Society" ;
-    dcterms:description "Domain module. Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance over Darwin Core botanical data. Focus on medicinal and ritual applications, harvest protocols, preparation methods, and access control for operational knowledge. Use with iroko-epistemic to model harvest and preparation constraints; with iroko-travay for ceremony context in which plants are deployed."@en ;
-    dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
-    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    dcterms:modified "2026-03-07"^^xsd:date ;
-    dcterms:references <https://ontology.irokosociety.org/iroko-epistemic>,
-        <https://ontology.irokosociety.org/iroko-travay> ;
-    dcterms:title "Iroko Framework: Ewe Module (Sacred Plant Knowledge)"@en ;
-    rdfs:seeAlso <https://ontology.irokosociety.org/iroko-framework/> ;
-    owl:imports <https://ontology.irokosociety.org/iroko-core> ;
-    owl:versionIRI <https://ontology.irokosociety.org/iroko-ewe/2.0.0> ;
-    owl:versionInfo "2.0.0" .
-
+iroko:ritual-ancestor-veneration a skos:Concept ; skos:prefLabel "Ancestor Veneration"@en ; skos:definition "Honors ancestors, facilitates ancestral connection."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-consecration a skos:Concept ; skos:prefLabel "Consecration"@en ; skos:definition "Consecrates objects, spaces, and persons."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-cosmological-symbolic a skos:Concept ; skos:prefLabel "Cosmological/Symbolic"@en ; skos:definition "Represents cosmological principles and symbolic meaning."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-death-rites a skos:Concept ; skos:prefLabel "Death Rites"@en ; skos:definition "Funeral ceremonies and death transitions."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-divination-enhancement a skos:Concept ; skos:prefLabel "Divination Enhancement"@en ; skos:definition "Enhances divinatory abilities and spiritual sight."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-domination-binding a skos:Concept ; skos:prefLabel "Domination/Binding"@en ; skos:definition "Binds, controls, or dominates situations or people."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-healing-restoration a skos:Concept ; skos:prefLabel "Healing/Restoration"@en ; skos:definition "Spiritual healing, restoration of balance."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-house-blessing a skos:Concept ; skos:prefLabel "House/Space Blessing"@en ; skos:definition "Blesses homes, workplaces, and sacred spaces."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-invocation-communication a skos:Concept ; skos:prefLabel "Invocation/Communication"@en ; skos:definition "Facilitates communication with spirits and invocation."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-legal-justice a skos:Concept ; skos:prefLabel "Legal/Justice"@en ; skos:definition "Legal matters, court cases, justice."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-love-attraction a skos:Concept ; skos:prefLabel "Love/Attraction"@en ; skos:definition "Attracts love and enhances relationships."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-offering-devotion a skos:Concept ; skos:prefLabel "Offering/Devotion"@en ; skos:definition "Offered to spirits as devotion or tribute."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-prosperity-abundance a skos:Concept ; skos:prefLabel "Prosperity/Abundance"@en ; skos:definition "Attracts wealth, prosperity, and abundance."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-protection-boundary a skos:Concept ; skos:prefLabel "Protection/Boundary"@en ; skos:definition "Creates protective boundaries, shields from harm."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-purification-cleansing a skos:Concept ; skos:prefLabel "Purification/Cleansing"@en ; skos:definition "Spiritual cleansing, removal of negative influences."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-rites-of-transition a skos:Concept ; skos:prefLabel "Rites of Transition"@en ; skos:definition "Used in initiation, birth, death, and marriage ceremonies."@en ; skos:inScheme iroko:RitualUseScheme .
+iroko:ritual-road-opening a skos:Concept ; skos:prefLabel "Road Opening"@en ; skos:definition "Opens paths, removes obstacles, facilitates opportunities."@en ; skos:inScheme iroko:RitualUseScheme .

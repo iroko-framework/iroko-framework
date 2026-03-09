@@ -1,0 +1,71 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dwc:     <http://rs.tdwg.org/dwc/terms/> .
+@prefix iroko:   <https://ontology.irokosociety.org/iroko#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+# ================================================================
+#  Iroko Framework — Darwin Core Alignment Module
+#  iroko-align-dwc
+#  Declares formal OWL/SKOS equivalences between Iroko Ewe Module
+#  terms and Darwin Core terms (TDWG). Analogous in structure to
+#  iroko-align-prov.ttl (PROV-O alignment).
+# ================================================================
+
+<https://ontology.irokosociety.org/iroko-align-dwc> a owl:Ontology ;
+    dcterms:title "Iroko Framework: Darwin Core Alignment"@en ;
+    dcterms:description "Formal OWL and SKOS alignment declarations between Iroko Ewe Module terms and Darwin Core (dwc:) terms published by TDWG. This file is reference-only infrastructure: it contains no user-facing vocabulary terms. Import or cite alongside iroko-ewe when interoperating with herbarium, occurrence, and biodiversity informatics systems."@en ;
+    dcterms:creator "Iroko Historical Society" ;
+    dcterms:created "2026-03-08"^^xsd:date ;
+    dcterms:modified "2026-03-08"^^xsd:date ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
+    rdfs:seeAlso <https://dwc.tdwg.org/terms/> ;
+    owl:imports <https://ontology.irokosociety.org/iroko-ewe> ;
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-align-dwc/1.0.0> ;
+    owl:versionInfo "1.0.0" .
+
+# ── Class alignments ─────────────────────────────────────────────────────────
+
+# iroko:Plant / dwc:Occurrence
+# iroko:Plant models a sacred plant entity with ritual, medicinal, and
+# linguistic dimensions. dwc:Occurrence models a recorded observation of an
+# organism at a place and time. The equivalence holds at the level of botanical
+# record-keeping: each iroko:Plant instance corresponds to an occurrence record
+# in Darwin Core terms, augmented with sacred knowledge governance.
+# Note: dwc:Taxon is NOT used here — iroko:Plant is not a purely taxonomic
+# concept; it is a governed cultural entity that corresponds to an Occurrence.
+
+iroko:Plant owl:equivalentClass dwc:Occurrence .
+
+# ── Property alignments ──────────────────────────────────────────────────────
+
+# iroko:specimenNumber / dwc:catalogNumber
+# Both record the institutional catalog identifier for a physical specimen.
+# iroko:specimenNumber is scoped to iroko:HerbariumSheet; dwc:catalogNumber
+# applies to the occurrence record. Use skos:exactMatch to signal
+# interoperability without asserting full OWL equivalence across all contexts.
+
+iroko:specimenNumber skos:exactMatch dwc:catalogNumber .
+
+# iroko:photographicVoucher / dwc:associatedMedia
+# Both link a plant record to associated photographic or media documentation.
+# iroko:photographicVoucher has range iroko:DocumentaryEvidence (a governed
+# archival object); dwc:associatedMedia is a free-text list of media URIs.
+# skos:closeMatch rather than exactMatch reflects the range difference.
+
+iroko:photographicVoucher skos:closeMatch dwc:associatedMedia .
+
+# iroko:documentsPlant / dwc:occurrenceID
+# iroko:documentsPlant links a HerbariumSheet to its Plant record (object
+# property, typed join). dwc:occurrenceID is a string identifier on the
+# occurrence record itself. The relationship is analogous — both identify
+# which organism record a specimen documents — but structurally different.
+# Noted here for implementers; no formal equivalence declared.
+
+# rdfs:comment on dwc terms (informational, non-normative)
+dwc:Occurrence rdfs:comment "In Iroko Framework context: equivalent to iroko:Plant. See iroko-align-dwc."@en .
+dwc:catalogNumber rdfs:comment "In Iroko Framework context: exactMatch to iroko:specimenNumber on iroko:HerbariumSheet instances."@en .
+dwc:associatedMedia rdfs:comment "In Iroko Framework context: closeMatch to iroko:photographicVoucher. Range difference: iroko:DocumentaryEvidence vs. free-text URI list."@en .
