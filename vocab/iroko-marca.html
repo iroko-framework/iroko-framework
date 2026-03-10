@@ -60,7 +60,7 @@
     <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting divination systems, sacred signs, reading records, and verse corpora across Afro-Atlantic traditions. Covers Ifá (256 odù), Dilogún, Fá, Obi, Chamalongo, and analogous systems. Sign names and system typologies are public; verse texts, reading details, and prescribed works are restricted at the property level. Use with iroko-authority to document who may perform or transmit readings; iroko-narrative for verse corpus transmission chains and patakí variant relationships.</p>
     <div class="module-stats" style="margin-top:1rem;">
       <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">24</span><span class="stat-label">Properties</span></div>
+      <div class="stat-cell"><span class="stat-n">25</span><span class="stat-label">Properties</span></div>
       <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Schemes</span></div>
       <div class="stat-cell"><span class="stat-n">32</span><span class="stat-label">Concepts</span></div>
     </div>
@@ -86,7 +86,7 @@
     <div class="class-card" id="cls-DivinationSign">
       <div class="class-name">DivinationSign</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination Sign</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
+      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sign</span></div>
       <p class="class-def">A discrete sign, figure, or configuration within a divination system. In Ifá: one of 256 odù (each identified by primary + secondary throw). In Dilogún: one of 16 principal signs (odù Dilogún, omieros, and their paths). In Fá: du figures. In Chamalongo: one of 5 configurations. Each sign has an associated corpus of verses, prescriptions, and spirit-entity relationships. The sign&#x27;s name and number are public; verses and prescribed works are restricted.</p>
     </div>
     <div class="class-card" id="cls-DivinationSystem">
@@ -106,7 +106,7 @@
   <div class="term-section">
     <div class="term-section-header">
       <span class="term-section-title">Properties</span>
-      <span class="term-section-count">24 properties</span>
+      <span class="term-section-count">25 properties</span>
     </div>
     <table class="prop-table">
       <thead>
@@ -146,6 +146,13 @@
           <td class="prop-domain-range">Divination Sign → SpiritualEntity</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">The spirit or deity principally associated with this sign across the tradition. In Ifá: Ogbe Meji is governed by Obatala; Oshé Meji by Oshun. This is a tradition-level association, not reading-specific. Range: iroko:SpiritualEntity.</td>
+        </tr>
+        <tr id="prop-hasCorpus">
+          <td><span class="prop-name">hasCorpus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has corpus</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Divination System → Divination Corpus</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Links a DivinationSystem to its DivinationCorpus. The corpus is the complete body of verses, prescriptions, and commentary associated with this system within a specific lineage. A system may have multiple corpora across lineages — each lineage&#x27;s corpus is a separate DivinationCorpus instance (subclass of LineageKnowledgeGraph). Access: public-unrestricted — the existence of a corpus associated with a system is public knowledge; the verse content within the corpus is governed at elder-initiated level on the DivinationVerse instances themselves.</td>
         </tr>
         <tr id="prop-prescribedEntity">
           <td><span class="prop-name">prescribedEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">prescribed entity</span></td>

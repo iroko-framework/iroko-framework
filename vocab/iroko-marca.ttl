@@ -484,7 +484,7 @@ iroko:DivinationSign a owl:Class ;
     rdfs:label "Divination Sign"@en ;
     rdfs:comment "A discrete sign, figure, or configuration within a divination system. In Ifá: one of 256 odù (each identified by primary + secondary throw). In Dilogún: one of 16 principal signs (odù Dilogún, omieros, and their paths). In Fá: du figures. In Chamalongo: one of 5 configurations. Each sign has an associated corpus of verses, prescriptions, and spirit-entity relationships. The sign's name and number are public; verses and prescribed works are restricted."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
-    rdfs:subClassOf iroko:SacredEntity .
+    rdfs:subClassOf iroko:Sign .
 
 <https://ontology.irokosociety.org/iroko-marca> a owl:Ontology ;
     dcterms:created "2026-02-21"^^xsd:date ;
@@ -501,3 +501,13 @@ iroko:DivinationSign a owl:Class ;
     owl:versionIRI <https://ontology.irokosociety.org/iroko-marca/2.0.0> ;
     owl:versionInfo "2.0.0" .
 
+
+# ── Patch: DivinationCorpus inbound arc from DivinationSystem (v1.2.0) ───────
+
+iroko:hasCorpus a owl:ObjectProperty ;
+    rdfs:label "has corpus"@en ;
+    rdfs:comment "Links a DivinationSystem to its DivinationCorpus. The corpus is the complete body of verses, prescriptions, and commentary associated with this system within a specific lineage. A system may have multiple corpora across lineages — each lineage's corpus is a separate DivinationCorpus instance (subclass of LineageKnowledgeGraph). Access: public-unrestricted — the existence of a corpus associated with a system is public knowledge; the verse content within the corpus is governed at elder-initiated level on the DivinationVerse instances themselves."@en ;
+    rdfs:domain iroko:DivinationSystem ;
+    rdfs:range iroko:DivinationCorpus ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-marca> ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .

@@ -93,21 +93,35 @@ iroko:preparationInstructions a owl:DatatypeProperty ;
 
 # ── Properties: Plant ────────────────────────────────────────────────────────
 
-iroko:ritualNotes a owl:AnnotationProperty ;
-    rdfs:label "ritual notes"@en ;
-    rdfs:comment "Free-text annotation on ritual or linguistic context not captured by controlled vocabulary. Includes etymology, geographic distribution notes, and cross-tradition observations."@en ;
-    rdfs:domain iroko:Plant ;
+iroko:ritualNote a owl:AnnotationProperty ;
+    rdfs:label "ritual note"@en ;
+    rdfs:comment "Free-text annotation on ritual or linguistic context not captured by controlled vocabulary. Includes etymology, geographic distribution notes, and cross-tradition observations. Canonical singular form — use iroko:ritualNote, not iroko:ritualNotes."@en ;
+    rdfs:domain iroko:EwePlantRecord ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
-iroko:collisionNotes a owl:DatatypeProperty ;
-    rdfs:label "collision notes"@en ;
-    rdfs:comment "Explanation of name collision: which plants share the name, how to distinguish, regional variations."@en ;
-    rdfs:domain iroko:Plant ;
+iroko:ritualNotes a owl:AnnotationProperty ;
+    rdfs:label "ritual notes (deprecated)"@en ;
+    owl:deprecated true ;
+    rdfs:seeAlso iroko:ritualNote ;
+    rdfs:comment "Deprecated plural form. Use iroko:ritualNote instead."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> .
+
+iroko:collisionNote a owl:DatatypeProperty ;
+    rdfs:label "collision note"@en ;
+    rdfs:comment "Explanation of name collision: which plants share the name, how to distinguish, regional variations. Canonical singular form — use iroko:collisionNote, not iroko:collisionNotes."@en ;
+    rdfs:domain iroko:EwePlantRecord ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-community-only .
+
+iroko:collisionNotes a owl:DatatypeProperty ;
+    rdfs:label "collision notes (deprecated)"@en ;
+    owl:deprecated true ;
+    rdfs:seeAlso iroko:collisionNote ;
+    rdfs:comment "Deprecated plural form. Use iroko:collisionNote instead."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> .
 
 iroko:contraindication a owl:DatatypeProperty ;
     rdfs:label "contraindication"@en ;
@@ -121,6 +135,7 @@ iroko:entityAssociation a owl:ObjectProperty ;
     rdfs:label "entity association"@en ;
     rdfs:comment "Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module."@en ;
     rdfs:domain iroko:Plant ;
+    rdfs:range iroko:SpiritualEntity ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
@@ -192,6 +207,7 @@ iroko:processReference a owl:ObjectProperty ;
     rdfs:label "process reference"@en ;
     rdfs:comment "Ritual process where this plant is used. Links to Travay module."@en ;
     rdfs:domain iroko:Plant ;
+    rdfs:range iroko:RitualProcess ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
@@ -215,6 +231,7 @@ iroko:signReference a owl:ObjectProperty ;
     rdfs:label "sign reference"@en ;
     rdfs:comment "Divination sign that prescribes this plant. Links to Marca module."@en ;
     rdfs:domain iroko:Plant ;
+    rdfs:range iroko:DivinationSign ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> ;
     iroko:minimumAccessLevel iroko:access-initiated-only .
 

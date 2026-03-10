@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # ==========================================================================
-# Iroko Framework — Agency Module  v1.2.0
+# Iroko Framework — Agency Module  v2.0.0
 # ==========================================================================
 # Namespace: https://ontology.irokosociety.org/iroko#
 # Prefix:    ag:
-# Requires:  iroko-core v1.2.0
+# Requires:  iroko-core v2.0.0
 #
 # Models sovereignty-aligned agency for sacred systems:
 # sacred agents, spirits, ritual events, event subtypes,
@@ -141,7 +141,8 @@ iroko:involvesAgent
 iroko:hasOutcome
     a owl:ObjectProperty ;
     rdfs:label "has outcome"@en ;
-    rdfs:comment "Links an event or action to an outcome entity — a RelationshipAssertion, AccessPolicy, EpistemicConstraint, StewardshipMandate, or other record."@en ;
+    rdfs:comment "Links an event or action to an outcome entity — a RelationshipAssertion, RitualConsequence, RefusalEvent, AccessPolicy, or other outcome record. Range: iroko:SacredEntity — all current and anticipated outcome types (Assertion, RitualConsequence, RefusalEvent) are subclasses of SacredEntity, enabling traversal without locking in a union declaration."@en ;
+    rdfs:range iroko:SacredEntity ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
@@ -200,7 +201,7 @@ iroko:chainLink
     iroko:minimumAccessLevel iroko:access-public-unrestricted ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> .
 
-# NOTE: iroko:hasTemporalVariation is defined in Core (iroko-core v1.2.0)
+# NOTE: iroko:hasTemporalVariation is defined in Core (iroko-core v2.0.0)
 # and applies to agency resources without redefinition here.
 # Use:  <iroko:SomeEvent> iroko:hasTemporalVariation <some:TemporalVariation> .
 
@@ -227,5 +228,21 @@ iroko:generatesRefusal a owl:ObjectProperty ;
     rdfs:comment "Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding."@en ;
     rdfs:domain [ a owl:Class ; owl:unionOf ( iroko:RitualEvent iroko:SacredAgent iroko:StewardshipMandate ) ] ;
     rdfs:range iroko:RefusalEvent ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
+# ── Patch: RitualPractitioner class (v1.2.0) ─────────────────────────────────
+# A human agent exercising sacred capacity. Subclass of SacredAgent.
+# Distinct from iroko:Authority (which requires social recognition and
+# jurisdiction). A RitualPractitioner acts within ritual context regardless
+# of whether they hold a formally recognized title. Covers both sanctioned
+# practitioners (Babalawo, Manbo, Tata Nganga) and unsanctioned ones (Bokor,
+# independent operators) without adjudicating legitimacy. Legitimacy is
+# modeled separately via iroko:Authority in iroko-authority if applicable.
+
+iroko:RitualPractitioner a owl:Class ;
+    rdfs:label "Ritual Practitioner"@en ;
+    rdfs:comment "A human agent recognized as exercising sacred capacity within a ritual system — performing ceremonies, transmitting knowledge, authorizing or refusing actions, or operating with sacred materials. Subclass of iroko:SacredAgent. Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures (Bokor, independent operators). Legitimacy and jurisdiction, where applicable, are modeled separately via iroko:Authority in iroko-authority. A practitioner may be linked to an Authority record but the two are independent assertions."@en ;
+    rdfs:subClassOf iroko:SacredAgent ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-agency> ;
     iroko:minimumAccessLevel iroko:access-community-only .

@@ -51,7 +51,7 @@ iroko:assertionNote a owl:DatatypeProperty ;
 
 iroko:assertionObject a owl:ObjectProperty ;
     rdfs:label "assertion object"@en ;
-    rdfs:comment "The entity that is the object of the claim. Named assertionObject (not object) to avoid shadowing rdf:object."@en ;
+    rdfs:comment "The entity that is the object of the claim. Named assertionObject (not object) to avoid shadowing rdf:object. Range is intentionally untyped — the object of an assertion may be any resource inside or outside the framework, including external URIs, foaf:Person instances, geographic locations, or framework entities. Constraining the range would break the generality of the reification model."@en ;
     rdfs:domain iroko:Assertion ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
@@ -168,15 +168,17 @@ iroko:depictedEntity a owl:ObjectProperty ;
 
 iroko:depicts a owl:ObjectProperty ;
     rdfs:label "depicts"@en ;
-    rdfs:comment "Links archival materials to the entities they depict."@en ;
+    rdfs:comment "Links archival materials to the entities they depict. Range: iroko:SacredEntity — covers plants, spirits, ceremonies, practitioners, instruments, and all other framework entities. Geographic locations not yet modeled as SacredEntity subclasses may be referenced via rdfs:label or external URI."@en ;
     rdfs:domain iroko:DocumentaryEvidence ;
+    rdfs:range iroko:SacredEntity ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:documents a owl:ObjectProperty ;
     rdfs:label "documents"@en ;
-    rdfs:comment "Links archival materials to practices or events they document."@en ;
+    rdfs:comment "Links archival materials to practices or events they document. Range: iroko:SacredEntity — covers ceremonies, ritual events, plants, spirits, lineages, and all other framework entities. Parallel treatment with iroko:depicts: both are documentary links from archival materials to framework entities."@en ;
     rdfs:domain iroko:DocumentaryEvidence ;
+    rdfs:range iroko:SacredEntity ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
@@ -707,7 +709,7 @@ iroko:variationCondition a owl:DatatypeProperty ;
 
 iroko:variationContext a owl:ObjectProperty ;
     rdfs:label "variation context"@en ;
-    rdfs:comment "Links a TemporalVariation to a tradition concept, ceremony, or event that defines the relevant context."@en ;
+    rdfs:comment "Links a TemporalVariation to the context that activates it — a ceremony, liturgical calendar event, fieldwork session, or other conditioning context. Range is intentionally untyped: activating contexts are heterogeneous (RitualProcess, FieldworkEvent, calendar concept, geographic context) and constraining the range now would create fragility. Revisit when TemporalVariation has sufficient data to determine the realistic range."@en ;
     rdfs:domain iroko:TemporalVariation ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .

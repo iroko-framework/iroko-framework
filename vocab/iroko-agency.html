@@ -59,7 +59,7 @@
   <div style="margin-top:1.5rem;">
     <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Governance Layer module. Sovereignty-aligned agency model for sacred systems. Defines sacred agents, spirits, ritual events, authorization and refusal events, stewardship mandates, and authorization chains. Designed to degrade gracefully: minimal use requires only iroko:SacredAgent, iroko:Spirit, and iroko:RitualEvent. Use with iroko-authority for full authorization governance.</p>
     <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">11</span><span class="stat-label">Classes</span></div>
+      <div class="stat-cell"><span class="stat-n">12</span><span class="stat-label">Classes</span></div>
       <div class="stat-cell"><span class="stat-n">11</span><span class="stat-label">Properties</span></div>
       <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Schemes</span></div>
       <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Concepts</span></div>
@@ -69,7 +69,7 @@
   <div class="term-section">
     <div class="term-section-header">
       <span class="term-section-title">Classes</span>
-      <span class="term-section-count">11 classes</span>
+      <span class="term-section-count">12 classes</span>
     </div>
     <div class="class-card" id="cls-AuthorizationChain">
       <div class="class-name">AuthorizationChain</div>
@@ -113,6 +113,12 @@
       
       <p class="class-def">A time-bounded ritual activity in which agents participate. A ritual event may generate assertions, permissions, constraints, or records. For temporal calendar time on instances, use PROV-O time properties (prov:startedAtTime, prov:endedAtTime). Subclass of prov:Activity via iroko-align-prov.ttl.</p>
     </div>
+    <div class="class-card" id="cls-RitualPractitioner">
+      <div class="class-name">RitualPractitioner</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ritual Practitioner</div>
+      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Agent</span></div>
+      <p class="class-def">A human agent recognized as exercising sacred capacity within a ritual system — performing ceremonies, transmitting knowledge, authorizing or refusing actions, or operating with sacred materials. Subclass of iroko:SacredAgent. Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures (Bokor, independent operators). Legitimacy and jurisdiction, where applicable, are modeled separately via iroko:Authority in iroko-authority. A practitioner may be linked to an Authority record but the two are independent assertions.</p>
+    </div>
     <div class="class-card" id="cls-SacredAgent">
       <div class="class-name">SacredAgent</div>
       <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Agent</div>
@@ -131,11 +137,11 @@
       
       <p class="class-def">A mandate asserted to govern stewardship, custody, disclosure, or use of materials. May be associated with agents, events, and access policies. Can condition iroko:AccessPolicy instances.</p>
     </div>
-    <div class="class-card" id="cls-na865d5414a2342e789628e265a1d5ec7b1">
-      <div class="class-name">na865d5414a2342e789628e265a1d5ec7b1</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">na865d5414a2342e789628e265a1d5ec7b1</div>
+    <div class="class-card" id="cls-n5d067bcfffd443cf867382970ce01b15b1">
+      <div class="class-name">n5d067bcfffd443cf867382970ce01b15b1</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">n5d067bcfffd443cf867382970ce01b15b1</div>
       
-      <p class="class-def">na865d5414a2342e789628e265a1d5ec7b1</p>
+      <p class="class-def">n5d067bcfffd443cf867382970ce01b15b1</p>
     </div>
   </div>
 
@@ -165,7 +171,7 @@
         <tr id="prop-generatesRefusal">
           <td><span class="prop-name">generatesRefusal</span><br><span style="font-size:.75rem;color:var(--ink-soft);">generates refusal</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">na865d5414a2342e789628e265a1d5ec7b1 → Refusal Event</td>
+          <td class="prop-domain-range">n5d067bcfffd443cf867382970ce01b15b1 → Refusal Event</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding.</td>
         </tr>
@@ -186,9 +192,9 @@
         <tr id="prop-hasOutcome">
           <td><span class="prop-name">hasOutcome</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has outcome</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → —</td>
+          <td class="prop-domain-range">— → SacredEntity</td>
           <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links an event or action to an outcome entity — a RelationshipAssertion, AccessPolicy, EpistemicConstraint, StewardshipMandate, or other record.</td>
+          <td class="prop-desc">Links an event or action to an outcome entity — a RelationshipAssertion, RitualConsequence, RefusalEvent, AccessPolicy, or other outcome record. Range: iroko:SacredEntity — all current and anticipated outcome types (Assertion, RitualConsequence, RefusalEvent) are subclasses of SacredEntity, enabling traversal without locking in a union declaration.</td>
         </tr>
         <tr id="prop-hasRitualConsequence">
           <td><span class="prop-name">hasRitualConsequence</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has ritual consequence</span></td>
