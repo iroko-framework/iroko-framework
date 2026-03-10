@@ -1,543 +1,552 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Travay Module — Iroko Framework Ontology</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --ink:#1a1714; --ink-mid:#2e2a26; --ink-light:#4a4540;
-      --paper:#f7f4ef; --paper-warm:#efe9df;
-      --border:#d5cdc0; --border-mid:#c0b8ac;
-      --gold:#8b6914; --gold-light:#c49a2a; --gold-pale:#f0e6c8; --gold-mid:#a07820;
-      --sienna:#7a3b1e; --teal:#1f5c52; --teal-pale:#e4f0ee; --teal-mid:#2a7a6e;
-      --radius-sm:3px; --radius:6px; --radius-lg:10px;
-      --shadow-sm:0 1px 4px rgba(26,23,20,0.10); --shadow:0 3px 14px rgba(26,23,20,0.13);
-      --transition:180ms ease;
-    }
-    /* Module dot colors */
-    .dot-agency{background:#5a6e8a} .dot-authority{background:#6b4a8a}
-    .dot-core{background:#444} .dot-ekpe{background:#2a6b4a}
-    .dot-epistemic{background:#7a5a1e} .dot-ewe{background:#8b6914}
-    .dot-ile{background:#1f5c52} .dot-manifestation{background:#6b2a2a}
-    .dot-marca{background:#1e4a6b} .dot-narrative{background:#6b3a1e}
-    .dot-ngoma{background:#4a1e6b} .dot-nkisi{background:#7a3b1e}
-    .dot-qal{background:#2a4a6b} .dot-sankofa{background:#6b5a1e}
-    .dot-travay{background:#4a6b8a} .dot-veve{background:#3a1e6b}
-
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px;scroll-behavior:smooth}
-    body{font-family:'EB Garamond',Georgia,serif;font-size:1.0625rem;line-height:1.65;
-      background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
-
-    .site-nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;gap:2rem;
-      height:52px;position:sticky;top:0;z-index:200;border-bottom:2px solid var(--gold)}
-    .wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:600;
-      letter-spacing:0.04em;color:#f7f4ef;text-decoration:none;white-space:nowrap}
-    .wordmark span{color:var(--gold-light)}
-    .nav-links{display:flex;gap:1.5rem;list-style:none;margin-left:auto}
-    .nav-links a{font-family:'EB Garamond',Georgia,serif;font-size:0.875rem;letter-spacing:0.05em;
-      text-transform:uppercase;color:var(--border);text-decoration:none;transition:color var(--transition)}
-    .nav-links a:hover{color:var(--gold-light)}
-
-    .page-header{background:var(--ink-mid);color:var(--paper);padding:2.5rem 2rem 2rem;border-bottom:1px solid var(--gold)}
-    .breadcrumb{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
-    .breadcrumb a{color:var(--border-mid);text-decoration:none}
-    .breadcrumb a:hover{color:var(--gold-light)}
-    .page-header h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.25rem;font-weight:300;
-      letter-spacing:0.02em;line-height:1.2;margin-bottom:0.4rem}
-    .module-tag{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
-      background:var(--gold);color:var(--ink);padding:0.2em 0.6em;border-radius:var(--radius-sm);
-      vertical-align:middle;margin-left:0.75rem;font-family:'EB Garamond',serif}
-    .module-desc{font-size:0.88rem;color:var(--border-mid);margin-top:0.6rem;max-width:700px;line-height:1.5}
-    .module-stats{display:flex;gap:2rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)}
-    .stat .number{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.75rem;font-weight:300;
-      color:var(--gold-light);line-height:1;display:block}
-    .stat .label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--border-mid)}
-
-    .layout{display:grid;grid-template-columns:1fr 290px;flex:1;max-width:1280px;width:100%;margin:0 auto;align-items:start}
-    .main-content{padding:2rem;border-right:1px solid var(--border);min-width:0}
-
-    .zone-label{font-size:0.68rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-light);
-      margin-bottom:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);
-      display:flex;align-items:center;justify-content:space-between}
-    .zone-hint{font-size:0.7rem;letter-spacing:0.02em;text-transform:none;color:var(--border-mid);font-style:italic}
-
-    .class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.6rem;margin-bottom:2.25rem}
-    .class-card{padding:0.8rem 0.9rem;border:1px solid var(--border);border-radius:var(--radius);
-      background:white;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);
-      user-select:none;position:relative}
-    .class-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
-    .class-card.is-active{border-color:var(--gold);background:var(--gold-pale);box-shadow:var(--shadow)}
-    .class-card.is-active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
-      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--paper-warm)}
-    .card-uri{font-family:'JetBrains Mono',monospace;font-size:0.73rem;color:var(--gold);display:block;
-      margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .card-label{font-size:0.88rem;color:var(--ink);display:block;line-height:1.3}
-
-    .zone2-empty{display:flex;align-items:center;gap:0.75rem;padding:1.25rem 1.5rem;
-      background:var(--paper-warm);border:1px dashed var(--border-mid);border-radius:var(--radius);
-      color:var(--border-mid);font-size:0.85rem;font-style:italic;margin-bottom:2.25rem}
-    .zone2-empty svg{width:20px;height:20px;flex-shrink:0;opacity:0.5}
-    .zone2-empty.hidden{display:none}
-
-    .property-panel{display:none;background:var(--paper-warm);border:1px solid var(--border-mid);
-      border-radius:var(--radius-lg);margin-bottom:2.25rem;overflow:hidden;animation:panelIn 180ms ease forwards}
-    .property-panel.visible{display:block}
-    @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-    .panel-header{background:var(--ink-mid);color:var(--paper);padding:1rem 1.5rem;
-      display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
-    .ph-uri{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--gold-light)}
-    .ph-label{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:300;color:var(--paper)}
-    .panel-close{background:none;border:none;color:var(--border-mid);cursor:pointer;padding:0.2rem;
-      font-size:1.1rem;line-height:1;transition:color var(--transition);margin-left:auto;flex-shrink:0}
-    .panel-close:hover{color:var(--paper)}
-    .panel-definition{padding:1rem 1.5rem;font-size:0.92rem;color:var(--ink-mid);line-height:1.6;border-bottom:1px solid var(--border)}
-    .panel-body{display:grid;grid-template-columns:1fr 1fr}
-    .prop-col{padding:1.25rem 1.5rem}
-    .prop-col:first-child{border-right:1px solid var(--border)}
-    .prop-col-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
-      margin-bottom:0.85rem;display:flex;align-items:center;gap:0.4rem}
-    .direction-arrow{font-size:0.9rem;color:var(--gold)}
-    .col-sublabel{font-style:italic;text-transform:none;letter-spacing:0;font-size:0.67rem;color:var(--border-mid)}
-    .prop-item{padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius-sm);
-      background:white;margin-bottom:0.5rem;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition)}
-    .prop-item:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
-    .prop-item.is-expanded{border-color:var(--gold);background:#fffdf7}
-    .prop-item-top{display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
-    .prop-item-uri{font-family:'JetBrains Mono',monospace;font-size:0.74rem;color:var(--gold)}
-    .prop-item-chevron{width:13px;height:13px;color:var(--border-mid);flex-shrink:0;transition:transform var(--transition)}
-    .prop-item.is-expanded .prop-item-chevron{transform:rotate(90deg);color:var(--gold)}
-    .prop-item-label{font-size:0.82rem;color:var(--ink-light);display:block;margin-top:0.12rem}
-    .prop-detail{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border)}
-    .prop-detail.visible{display:block}
-    .prop-detail-row{display:flex;gap:0.75rem;margin-bottom:0.45rem;align-items:baseline}
-    .pd-label{font-size:0.65rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-light);min-width:60px;flex-shrink:0}
-    .pd-value{font-size:0.82rem;color:var(--ink-mid);line-height:1.4}
-    .cross-tag{font-size:0.65rem;color:var(--border-mid);font-style:italic;margin-left:0.3rem}
-    .no-props{font-size:0.82rem;color:var(--border-mid);font-style:italic;padding:0.5rem 0}
-    .panel-citation{padding:1rem 1.5rem;border-top:1px solid var(--border);
-      display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-    .panel-citation .cite-text{font-size:0.8rem;color:var(--ink-light);font-style:italic;flex:1;min-width:200px}
-    .btn-copy{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--gold);
-      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;
-      font-size:0.85rem;cursor:pointer;transition:background var(--transition),transform 80ms;white-space:nowrap;flex-shrink:0}
-    .btn-copy:hover{background:var(--ink)} .btn-copy:active{transform:scale(0.97)} .btn-copy.copied{background:var(--teal)}
-    .btn-copy svg{width:13px;height:13px;flex-shrink:0}
-
-    .concept-scheme-block{margin-bottom:2rem}
-    .concept-scheme-block:last-child{margin-bottom:0}
-    .csb-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.15rem}
-    .csb-uri{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--teal)}
-    .csb-count{font-size:0.7rem;color:var(--ink-light);letter-spacing:0.04em}
-    .csb-scheme-label{font-size:0.92rem;color:var(--ink-mid);font-style:italic;margin-bottom:0.2rem}
-    .csb-description{font-size:0.82rem;color:var(--ink-light);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--teal-pale)}
-    .concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.45rem}
-    .concept-card{padding:0.55rem 0.75rem;background:var(--teal-pale);border:1px solid rgba(31,92,82,0.18);
-      border-radius:var(--radius-sm);transition:background var(--transition),border-color var(--transition);cursor:default}
-    .concept-card:hover{background:rgba(31,92,82,0.14);border-color:var(--teal)}
-    .cc-label{font-size:0.85rem;color:var(--ink);display:block;line-height:1.3;margin-bottom:0.2rem}
-    .cc-id{font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--teal-mid);display:block}
-
-    .sidebar{padding:1.5rem 1.25rem;position:sticky;top:52px;max-height:calc(100vh - 52px);overflow-y:auto}
-    .sidebar-panel{margin-bottom:1.75rem}
-    .sidebar-panel-title{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
-      padding-bottom:0.5rem;border-bottom:1px solid var(--border);margin-bottom:0.85rem}
-    .active-class-card{padding:0.75rem 0.85rem;background:var(--gold-pale);border:1px solid var(--gold);
-      border-radius:var(--radius-sm);margin-bottom:0.85rem}
-    .acc-uri{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold-mid);display:block;margin-bottom:0.15rem}
-    .acc-label{font-size:0.9rem;color:var(--ink);font-weight:500}
-    .connection-card{padding:0.6rem 0.75rem;border:1px solid var(--border);border-radius:var(--radius-sm);
-      margin-bottom:0.45rem;background:white;text-decoration:none;display:block;
-      transition:border-color var(--transition),box-shadow var(--transition)}
-    .connection-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
-    .cc-top{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem}
-    .cc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-    .cc-module-name{font-size:0.85rem;color:var(--ink);font-weight:500}
-    .cc-props{font-size:0.72rem;color:var(--ink-light);display:block;margin-top:0.1rem}
-    .cc-via{font-size:0.67rem;color:var(--ink-light);font-style:italic;margin-top:0.1rem;display:block}
-    .sidebar-dynamic{transition:opacity 140ms ease}
-    .sidebar-dynamic.fading{opacity:0}
-    .no-connections{font-size:0.78rem;color:var(--border-mid);font-style:italic}
-    .share-buttons{display:flex;gap:0.5rem}
-    .share-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.55rem 0.25rem;
-      background:var(--paper-warm);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
-      font-family:'EB Garamond',serif;font-size:0.68rem;color:var(--ink-light);text-decoration:none;
-      letter-spacing:0.04em;text-transform:uppercase;transition:background var(--transition),border-color var(--transition),color var(--transition)}
-    .share-btn:hover{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
-    .share-btn svg{width:17px;height:17px}
-    .share-btn.copied-state{background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
-    .sidebar-citation{background:var(--paper-warm);border:1px solid var(--border-mid);border-radius:var(--radius-sm);padding:0.85rem}
-    .sidebar-citation .cite-text{font-size:0.77rem;line-height:1.5;color:var(--ink-mid);font-style:italic;margin-bottom:0.6rem}
-    .btn-copy-sm{display:inline-flex;align-items:center;gap:0.35rem;padding:0.42rem 0.85rem;background:var(--gold);
-      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;font-size:0.8rem;
-      cursor:pointer;transition:background var(--transition);width:100%;justify-content:center}
-    .btn-copy-sm:hover{background:var(--ink)} .btn-copy-sm.copied{background:var(--teal)}
-    .format-links{display:flex;flex-direction:column;gap:0.3rem}
-    .format-link{display:flex;align-items:center;justify-content:space-between;padding:0.38rem 0.6rem;
-      border-radius:var(--radius-sm);border:1px solid var(--border);background:white;font-family:'JetBrains Mono',monospace;
-      font-size:0.73rem;color:var(--gold);text-decoration:none;transition:background var(--transition),border-color var(--transition)}
-    .format-link:hover{background:var(--gold-pale);border-color:var(--gold)}
-    .format-arrow{color:var(--border-mid)}
-
-    footer{background:var(--ink);color:var(--paper);margin-top:auto}
-    .footer-inner{max-width:1280px;margin:0 auto;padding:2.5rem 2rem;
-      display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:2rem;align-items:start}
-    .footer-brand .fw{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-weight:300;
-      letter-spacing:0.04em;color:var(--paper);display:block;margin-bottom:0.5rem}
-    .footer-brand .fw span{color:var(--gold-light)}
-    .footer-brand p{font-size:0.8rem;color:var(--border-mid);line-height:1.5;max-width:220px}
-    .footer-col h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
-    .footer-col ul{list-style:none}
-    .footer-col li{margin-bottom:0.3rem}
-    .footer-col a{font-size:0.82rem;color:var(--border);text-decoration:none;transition:color var(--transition)}
-    .footer-col a:hover{color:var(--gold-light)}
-    .footer-funders{display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end}
-    .footer-funders h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);text-align:right;width:100%}
-    .funder-slot{width:140px;height:44px;border:1px dashed rgba(255,255,255,0.15);border-radius:var(--radius-sm);
-      display:flex;align-items:center;justify-content:center;font-size:0.67rem;letter-spacing:0.06em;
-      text-transform:uppercase;color:rgba(255,255,255,0.2)}
-    .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);max-width:1280px;margin:0 auto;padding:1rem 2rem;
-      display:flex;justify-content:space-between;align-items:center}
-    .footer-bottom p{font-size:0.75rem;color:rgba(255,255,255,0.3)}
-    .footer-bottom a{color:rgba(255,255,255,0.3);text-decoration:none}
-    .footer-bottom a:hover{color:var(--gold-light)}
-    .version-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:0.2em 0.5em;
-      border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);color:rgba(255,255,255,0.3)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travay Module — Ritual Processes — Iroko Framework Ontology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/iroko-style.css">
 </head>
 <body>
-  <nav class="site-nav">
-    <a class="wordmark" href="/">Iroko Framework <span>Ontology</span></a>
-    <ul class="nav-links">
-      <li><a href="/modules">Modules</a></li>
-      <li><a href="/classes">Classes</a></li>
-      <li><a href="/properties">Properties</a></li>
-      <li><a href="/concepts">Concepts</a></li>
-      <li><a href="/whitepaper">Whitepaper</a></li>
-    </ul>
-  </nav>
 
-  <header class="page-header">
-    <div class="breadcrumb"><a href="/">Iroko Framework</a> › <a href="/modules">Modules</a> › Travay Module</div>
-    <h1>Travay Module <span class="module-tag">Domain Layer</span></h1>
-    <div class="module-desc">Domain module.</div>
-    <div class="module-stats">
-      <div class="stat"><span class="number">4</span><span class="label">Classes</span></div>
-      <div class="stat"><span class="number">22</span><span class="label">Properties</span></div>
-      <div class="stat"><span class="number">5</span><span class="label">Concept Schemes</span></div>
-      <div class="stat"><span class="number">41</span><span class="label">Concepts</span></div>
+<nav class="site-nav">
+  <a href="../index.html"><img class="nav-logo" src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society"></a>
+  <a class="nav-wordmark" href="../index.html">Iroko Historical Society</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Modules</a></li>
+    <li><a href="iroko-termlist.html">Term Index</a></li>
+    <li><a href="../index.html#whitepaper">Whitepaper</a></li>
+    <li><a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="header-inner page-wrap">
+    <div class="breadcrumb">
+      <a href="../index.html">Iroko Framework</a>
+      <span>/</span>
+      <a href="index.html">Modules</a>
+      <span>/</span>
+      Travay Module — Ritual Processes
     </div>
-  </header>
+    <h1>Travay Module — Ritual Processes <span class="module-tag tag-ritual">Ritual</span></h1>
+    <p class="subtitle">Ritual processes, ceremonies, and initiatory rites</p>
+    <div class="module-stats">
+      <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+      <div class="stat-cell"><span class="stat-n">22</span><span class="stat-label">Properties</span></div>
+      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+      <div class="stat-cell"><span class="stat-n">41</span><span class="stat-label">Concepts</span></div>
+    </div>
+  </div>
+</div>
 
-  <div class="layout">
-    <main class="main-content">
+<div class="page-wrap">
 
-      <div class="zone-label">
-        Classes
-        <span class="zone-hint">Select a class to explore its properties</span>
-      </div>
-      <div class="class-grid">
-        <div class="class-card" id="card-CeremonialSequence" onclick="activateClass('CeremonialSequence')"><span class="card-uri">iroko:CeremonialSequence</span><span class="card-label">Ceremonial Sequence</span></div>
-<div class="class-card" id="card-Ceremony" onclick="activateClass('Ceremony')"><span class="card-uri">iroko:Ceremony</span><span class="card-label">Ceremony</span></div>
-<div class="class-card" id="card-InitiatoryRite" onclick="activateClass('InitiatoryRite')"><span class="card-uri">iroko:InitiatoryRite</span><span class="card-label">Initiatory Rite</span></div>
-<div class="class-card" id="card-RitualProcess" onclick="activateClass('RitualProcess')"><span class="card-uri">iroko:RitualProcess</span><span class="card-label">Ritual Process</span></div>
-      </div>
-
-      <div class="zone-label" id="zone2-label">
-        Properties
-        <span class="zone-hint" id="zone2-hint">Select a class above to explore its properties</span>
-      </div>
-      <div class="zone2-empty" id="zone2-empty">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
-        No class selected. Click any class card above to see its incoming and outgoing properties.
-      </div>
-
-      <div class="property-panel" id="property-panel">
-        <div class="panel-header">
-          <div><div class="ph-uri" id="panel-uri"></div><div class="ph-label" id="panel-label"></div></div>
-          <button class="panel-close" onclick="deactivateClass()">✕</button>
-        </div>
-        <div class="panel-definition" id="panel-definition"></div>
-        <div class="panel-body">
-          <div class="prop-col">
-            <div class="prop-col-label"><span class="direction-arrow">←</span> Incoming <span class="col-sublabel">(this class as range)</span></div>
-            <div id="incoming-props"></div>
-          </div>
-          <div class="prop-col">
-            <div class="prop-col-label"><span class="direction-arrow">→</span> Outgoing <span class="col-sublabel">(this class as domain)</span></div>
-            <div id="outgoing-props"></div>
-          </div>
-        </div>
-        <div class="panel-citation">
-          <div class="cite-text" id="panel-cite-text"></div>
-          <button class="btn-copy" id="panel-cite-btn" onclick="copyPanelCitation(this)">
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
-            Copy citation
-          </button>
-        </div>
-      </div>
-
-      
-      <div class="zone-label">Controlled Vocabulary</div>
-      <div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:AuthorityLevelScheme</span><span class="csb-count">6 concepts</span></div><div class="csb-scheme-label">Authority Level Classification</div><div class="concept-grid"><div class="concept-card" title="Can be performed by any person regardless of initiation status. Example: basic ancestor veneration at boveda, spiritual baths using common herbs."><span class="cc-label">Any Practitioner</span><span class="cc-id">iroko:authority-any-practitioner</span></div><div class="concept-card" title="Requires Ifa initiation specifically. Certain ceremonies and all Ifa-based divination require Babalawo authority."><span class="cc-label">Babalawo / Ifa Priest</span><span class="cc-id">iroko:authority-babalawo</span></div><div class="concept-card" title="Requires recognition as an elder or authority holder within the tradition, beyond basic initiation. Community recognition is required in addition to initiation level."><span class="cc-label">Elder Designation</span><span class="cc-id">iroko:authority-elder-designation</span></div><div class="concept-card" title="Requires initiation but not a specific level or title. General initiation into the tradition is sufficient."><span class="cc-label">Initiated Practitioner</span><span class="cc-id">iroko:authority-initiated</span></div><div class="concept-card" title="Requires full head initiation: kariocha in Lucumi, kanzo in Vodou, feitura in Candomble, or equivalent in other traditions."><span class="cc-label">Olorisha / Equivalent</span><span class="cc-id">iroko:authority-olorisha</span></div><div class="concept-card" title="Authority requirements are tradition-specific and cannot be generalized. Document via iroko:operationalNotes with tradition context."><span class="cc-label">Tradition-Specific Authority</span><span class="cc-id">iroko:authority-tradition-specific</span></div></div></div>
-<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:InitiationLevelScheme</span><span class="csb-count">6 concepts</span></div><div class="csb-scheme-label">Initiation Level Classification</div><div class="concept-grid"><div class="concept-card" title="Full head initiation permanently establishing the initiant as a priest or priestess. Specific name varies by tradition."><span class="cc-label">Head Initiation</span><span class="cc-id">iroko:initiationLevel-head-initiation</span></div><div class="concept-card" title="Initiation into the Ifa priesthood. Mano de Orula (hand of Orula) is a preliminary in Lucumi; full Babalawo initiation is the complete level."><span class="cc-label">Ifa Initiation</span><span class="cc-id">iroko:initiationLevel-ifa</span></div><div class="concept-card" title="Reception of consecrated beaded necklaces in Lucumi tradition. First formal step. Confers relationship with specific orisa represented."><span class="cc-label">Necklaces/Elekes</span><span class="cc-id">iroko:initiationLevel-necklaces</span></div><div class="concept-card" title="General category for receiving sacred objects or marks without full head initiation. The entry level of formal initiation in most traditions."><span class="cc-label">Reception Level</span><span class="cc-id">iroko:initiationLevel-reception</span></div><div class="concept-card" title="Initiation levels that do not map to general categories. Document with tradition context via iroko:tradition and iroko:operationalNotes."><span class="cc-label">Tradition-Specific Level</span><span class="cc-id">iroko:initiationLevel-tradition-specific</span></div><div class="concept-card" title="Reception of Eleggua, Ogun, Ochosi, and Osun in Lucumi tradition. Protects the initiant and opens roads. Prerequisite for kariocha."><span class="cc-label">Warriors</span><span class="cc-id">iroko:initiationLevel-warriors</span></div></div></div>
-<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:ParticipantRoleScheme</span><span class="csb-count">8 concepts</span></div><div class="csb-scheme-label">Participant Role Classification</div><div class="concept-grid"><div class="concept-card" title="A supporting officiant with authority to perform portions of the ceremony."><span class="cc-label">Co-Officiant</span><span class="cc-id">iroko:role-co-officiant</span></div><div class="concept-card" title="General attendee, potentially uninitiated, present for community portions of the ceremony."><span class="cc-label">Community Member</span><span class="cc-id">iroko:role-community-member</span></div><div class="concept-card" title="The initiated sponsor responsible for the initiant's spiritual formation and ceremonial participation."><span class="cc-label">Godparent/Sponsor</span><span class="cc-id">iroko:role-godparent</span></div><div class="concept-card" title="Initiated helper assisting with logistical or supporting ceremonial tasks."><span class="cc-label">Helper/Aide</span><span class="cc-id">iroko:role-helper</span></div><div class="concept-card" title="The person receiving initiation or the primary recipient of the ceremony."><span class="cc-label">Initiant</span><span class="cc-id">iroko:role-initiant</span></div><div class="concept-card" title="The principal authority leading the ceremony. Title varies by tradition."><span class="cc-label">Lead Officiant</span><span class="cc-id">iroko:role-lead-officiant</span></div><div class="concept-card" title="Practitioner who may receive spiritual possession during the ceremony. In Espiritismo context, medium for spirit communication."><span class="cc-label">Medium</span><span class="cc-id">iroko:role-medium</span></div><div class="concept-card" title="Drummer, singer, or musician providing ceremonial music. May have specific initiation requirements depending on tradition and ceremony type."><span class="cc-label">Musician/Drummer</span><span class="cc-id">iroko:role-musician</span></div></div></div>
-<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:ProcessTypeScheme</span><span class="csb-count">14 concepts</span></div><div class="csb-scheme-label">Process Type Classification</div><div class="concept-grid"><div class="concept-card" title="Ceremonies specifically directed to the ancestral dead. Includes misa espiritual (Espiritismo), egungún masquerade, boveda work, and ituto (funeral rites for initiates)."><span class="cc-label">Ancestor Veneration</span><span class="cc-id">iroko:processType-ancestor-veneration</span></div><div class="concept-card" title="Ritual cleansing of a person, object, or space. Removes negative energies, spiritual impurities, or adversarial influences. Includes despojos, limpiezas, spiritual baths, and space cleansings."><span class="cc-label">Cleansing/Purification</span><span class="cc-id">iroko:processType-cleansing</span></div><div class="concept-card" title="Collective ceremonial work on behalf of a house, lineage, or community rather than an individual. Includes cabildo ceremonies, community ebbos, and house-level divination."><span class="cc-label">Community Working</span><span class="cc-id">iroko:processType-community-working</span></div><div class="concept-card" title="Ritual consultation for guidance. Includes Ifa consultation, dilogun reading, chamalongos in Palo, and card reading in Espiritismo context. Public category; specific methods and interpretations are access-restricted."><span class="cc-label">Divination</span><span class="cc-id">iroko:processType-divination</span></div><div class="concept-card" title="Ceremony to elevate the spirit of a deceased person or clear unresolved spiritual burdens. Common in Espiritismo and Lucumi death rites."><span class="cc-label">Elevation/Levantamiento</span><span class="cc-id">iroko:processType-elevation</span></div><div class="concept-card" title="Celebration ceremonies: anniversary of initiation, feast days of entities, communal celebrations."><span class="cc-label">Feast/Celebration</span><span class="cc-id">iroko:processType-feast-celebration</span></div><div class="concept-card" title="Death and funeral ceremonies specific to initiated practitioners. Includes ituto (Lucumi), axexe (Candomble), and rites handling spiritual obligations of deceased initiates."><span class="cc-label">Funerary</span><span class="cc-id">iroko:processType-funerary</span></div><div class="concept-card" title="Ritual feeding and cooling of the head (Ori) with white foods and prayers. Strengthens personal destiny and calms spiritual disturbances. One of the most fundamental ceremonies across Yoruba-derived traditions."><span class="cc-label">Head Feeding/Rogation</span><span class="cc-id">iroko:processType-head-feeding</span></div><div class="concept-card" title="Ceremonial processes directed toward physical, spiritual, or psychological healing. May combine plant use, prayer, divination, and direct spiritual intervention."><span class="cc-label">Healing</span><span class="cc-id">iroko:processType-healing</span></div><div class="concept-card" title="Full head initiation permanently transforming the initiant's spiritual status. Examples: kariocha (Lucumi), kanzo (Vodou), rayamiento (Palo), feitura (Candomble). The most restricted process type."><span class="cc-label">Initiation - Full</span><span class="cc-id">iroko:processType-initiation-full</span></div><div class="concept-card" title="Reception of sacred objects conferring a level of initiation without full head initiation. Examples: receiving Warriors, receiving Olokun, receiving necklaces. Creates formal relationship with specific entities."><span class="cc-label">Initiation - Reception</span><span class="cc-id">iroko:processType-initiation-reception</span></div><div class="concept-card" title="Ceremony in which spirits may manifest through initiated practitioners. Includes tambor, bembe, wemilere (Lucumi), Vodou fet, Candomble xire. Drumming, singing, and dance are central."><span class="cc-label">Possession Ceremony</span><span class="cc-id">iroko:processType-possession-ceremony</span></div><div class="concept-card" title="Ceremonial processes establishing or strengthening spiritual protection for a person, household, or space."><span class="cc-label">Protection</span><span class="cc-id">iroko:processType-protection</span></div><div class="concept-card" title="Ceremonies involving animal sacrifice or major offerings to spiritual entities. General category is public; specific animals, quantities, and procedures are initiated-only or initiated-elder."><span class="cc-label">Sacrifice/Major Offering</span><span class="cc-id">iroko:processType-sacrifice-offering</span></div></div></div>
-<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:TimingRequirementScheme</span><span class="csb-count">7 concepts</span></div><div class="csb-scheme-label">Timing Requirement Classification</div><div class="concept-grid"><div class="concept-card" title="Performed on an annual cycle, such as anniversary of initiation."><span class="cc-label">Annual Cycle</span><span class="cc-id">iroko:timing-annual-cycle</span></div><div class="concept-card" title="No specific timing requirement; may be performed as needed."><span class="cc-label">Any Time</span><span class="cc-id">iroko:timing-any-time</span></div><div class="concept-card" title="Associated with a specific calendar date or feast day of the presiding entity."><span class="cc-label">Calendar/Feast Day</span><span class="cc-id">iroko:timing-calendar-feast</span></div><div class="concept-card" title="Timing determined through divination consultation. The appropriate time is revealed rather than predetermined."><span class="cc-label">Divination-Prescribed</span><span class="cc-id">iroko:timing-divination-prescribed</span></div><div class="concept-card" title="Performed in response to urgent spiritual or physical crisis without time constraint."><span class="cc-label">Emergency/As Needed</span><span class="cc-id">iroko:timing-emergency</span></div><div class="concept-card" title="Triggered by a specific life event: birth, death, marriage, illness, major transition."><span class="cc-label">Life Event</span><span class="cc-id">iroko:timing-life-event</span></div><div class="concept-card" title="Must be performed during a specific phase of the moon."><span class="cc-label">Lunar Phase</span><span class="cc-id">iroko:timing-lunar-phase</span></div></div></div>
-
-    </main>
-
-    <aside class="sidebar">
-      <div class="sidebar-panel">
-        <div class="sidebar-panel-title" id="sb-title">Connected modules</div>
-        <div class="sidebar-dynamic" id="sb-connections"></div>
-      </div>
-      <div class="sidebar-panel">
-        <div class="sidebar-panel-title">Share</div>
-        <div class="share-buttons">
-          <a class="share-btn" href="#" onclick="shareEmail(event)">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1.5"/><polyline points="2,4 10,12 18,4"/></svg>
-            Email
-          </a>
-          <a class="share-btn" href="#" onclick="window.print();return false;">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="6"/><rect x="2" y="8" width="16" height="8" rx="1"/><rect x="5" y="12" width="10" height="5"/><circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
-            Print
-          </a>
-          <button class="share-btn" id="share-link-btn" onclick="copyPageLink(this)">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12a4 4 0 005.66 0l2-2A4 4 0 009.9 4.24l-1 1"/><path d="M12 8a4 4 0 00-5.66 0l-2 2A4 4 0 006.1 15.76l1-1"/></svg>
-            Link
-          </button>
-        </div>
-      </div>
-      <div class="sidebar-panel">
-        <div class="sidebar-panel-title">Cite the Travay Module</div>
-        <div class="sidebar-citation">
-          <div class="cite-text">"Travay Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. <em>ontology.irokosociety.org/travay</em></div>
-          <button class="btn-copy-sm" onclick="copyModuleCitation(this)">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
-            Copy citation
-          </button>
-        </div>
-      </div>
-      <div class="sidebar-panel">
-        <div class="sidebar-panel-title">Other formats</div>
-        <div class="format-links">
-          <a class="format-link" href="#">RDF/Turtle <span class="format-arrow">↗</span></a>
-          <a class="format-link" href="#">JSON-LD <span class="format-arrow">↗</span></a>
-          <a class="format-link" href="#">RDF/XML <span class="format-arrow">↗</span></a>
-          <a class="format-link" href="#">N-Triples <span class="format-arrow">↗</span></a>
-        </div>
-      </div>
-    </aside>
+  <div style="margin-top:1.75rem;">
+    <div class="header-meta">
+      <span class="meta-pill">travay:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-travay#</span>
+      <span class="meta-pill">v2.0.0</span>
+      <span class="meta-pill"><a href="iroko-travay.ttl">Download TTL ↓</a></span>
+      <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a></span>
+    </div>
+    <p class="module-desc" style="max-width:80ch;margin-top:1.25rem;">Domain module. Vocabulary for documenting ritual processes in Afro-Atlantic traditions. Covers ceremonies, initiatory rites, and ceremonial sequences. Distinguishes ongoing ceremonial practice from threshold initiation events. Access control is at the property level — existence and general nature of ceremonies is public; operational sequences and details are restricted. Use with iroko-authority to document who may perform or authorize a ceremony; iroko-epistemic to model disclosure constraints on operational sequences; iroko-nkisi for the spiritual entities invoked.</p>
   </div>
 
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="fw">Iroko <span>Historical Society</span></span>
-        <p>Postcustodial cultural heritage complex for Afro-Atlantic sacred knowledge systems.</p>
+  <div class="term-section">
+    <div class="term-section-header">
+      <span class="term-section-title">Classes</span>
+      <span class="term-section-count">4 classes</span>
+    </div>
+    <div class="class-card" id="cls-CeremonialSequence">
+      <div class="class-name">CeremonialSequence</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ceremonial Sequence</div>
+      
+      <p class="class-def">An ordered set of steps within a RitualProcess. The existence of a sequence and its general structure are documented. Access control is at the property level: sequence step labels are initiated-only; operational content within each step is no-access.</p>
+    </div>
+    <div class="class-card" id="cls-Ceremony">
+      <div class="class-name">Ceremony</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ceremony</div>
+      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Ritual Process</span></div>
+      <p class="class-def">A recurring ritual event that can be performed multiple times for one or many participants. Examples: bembe, tambor, wemilere, misa espiritual, rogacion de cabeza, ebbo, despojos, velacion. Ceremonies are ongoing practice rather than threshold events.</p>
+    </div>
+    <div class="class-card" id="cls-InitiatoryRite">
+      <div class="class-name">InitiatoryRite</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Initiatory Rite</div>
+      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Ritual Process</span></div>
+      <p class="class-def">A threshold ceremony that permanently changes the initiant&#x27;s spiritual status. Examples: kariocha (making Ocha), mano de Orula, abo faca, pinaldo, rayamiento (Palo), kanzo (Vodou), feitura (Candomble). Initiatory rites are non-repeatable transformations. Operational details are initiated-elder access.</p>
+    </div>
+    <div class="class-card" id="cls-RitualProcess">
+      <div class="class-name">RitualProcess</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ritual Process</div>
+      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
+      <p class="class-def">Base class for any structured ceremonial activity in an Afro-Atlantic tradition. Subclassed into Ceremony (recurring practice) and InitiatoryRite (threshold event). General process type, presiding entity, and tradition are public; operational sequences and instructions are restricted.</p>
+    </div>
+  </div>
+
+  <div class="term-section">
+    <div class="term-section-header">
+      <span class="term-section-title">Properties</span>
+      <span class="term-section-count">22 properties</span>
+    </div>
+    <table class="prop-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Type</th>
+          <th>Domain → Range</th>
+          <th>Access</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="prop-conferredTitle">
+          <td><span class="prop-name">conferredTitle</span><br><span style="font-size:.75rem;color:var(--ink-soft);">conferred title</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Initiatory Rite → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Title or designation conferred upon completion of this initiatory rite. Example: Olorisha, Babalawo, Mambo, Houngan, Tata Nkisi. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-initiationLevel">
+          <td><span class="prop-name">initiationLevel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">initiation level</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Initiatory Rite → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">The level of initiation conferred by this InitiatoryRite. Values from InitiationLevelScheme. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-lineageVariations">
+          <td><span class="prop-name">lineageVariations</span><br><span style="font-size:.75rem;color:var(--ink-soft);">lineage variations</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ritual Process → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">Documented variations in how different lineages or houses conduct this process. Access: initiated-only.</td>
+        </tr>
+        <tr id="prop-materialRequirements">
+          <td><span class="prop-name">materialRequirements</span><br><span style="font-size:.75rem;color:var(--ink-soft);">material requirements</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ritual Process → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">Detailed list of materials, implements, and quantities required. Access: initiated-only.</td>
+        </tr>
+        <tr id="prop-operationalNotes">
+          <td><span class="prop-name">operationalNotes</span><br><span style="font-size:.75rem;color:var(--ink-soft);">operational notes</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ritual Process → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Contextual notes about how this process is conducted in practice. Not a step-by-step sequence; general practitioner guidance. Access: community-only.</td>
+        </tr>
+        <tr id="prop-participantRole">
+          <td><span class="prop-name">participantRole</span><br><span style="font-size:.75rem;color:var(--ink-soft);">participant role</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Ritual Process → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Roles that participants may hold in this process. Values from ParticipantRoleScheme. Multiple values allowed. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-plantUse">
+          <td><span class="prop-name">plantUse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">plant use</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Ritual Process → Plant</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Plants used in this ritual process. Links to ewe:Plant instances. General association is public; specific quantities and combinations are initiated-only. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-prerequisiteProcess">
+          <td><span class="prop-name">prerequisiteProcess</span><br><span style="font-size:.75rem;color:var(--ink-soft);">prerequisite process</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Ritual Process → Ritual Process</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">A RitualProcess that must be completed before this one. Example: receiving Warriors before kariocha. Links to iroko:RitualProcess instances. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-presidingEntity">
+          <td><span class="prop-name">presidingEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">presiding entity</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Ritual Process → SpiritualEntity</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">The spiritual entity (orisa, lwa, etc.) for whom or by whose authority this ceremony is performed. Links to iroko:SpiritualEntity. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-processName">
+          <td><span class="prop-name">processName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">process name</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ritual Process → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">The name of this ritual process in its tradition. Example: Rogacion de Cabeza, Kariocha, Kanzo, Tambor de Fundamento. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-processType">
+          <td><span class="prop-name">processType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">process type</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Ritual Process → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Classification of this ritual process. Values from ProcessTypeScheme. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-purposeDescription">
+          <td><span class="prop-name">purposeDescription</span><br><span style="font-size:.75rem;color:var(--ink-soft);">purpose description</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ritual Process → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">General description of the purpose and outcome of this ritual process. Non-operational. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-requiredAuthority">
+          <td><span class="prop-name">requiredAuthority</span><br><span style="font-size:.75rem;color:var(--ink-soft);">required authority</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Ritual Process → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">The level of initiation or authority required to lead this process. Values from AuthorityLevelScheme. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-secretComponents">
+          <td><span class="prop-name">secretComponents</span><br><span style="font-size:.75rem;color:var(--ink-soft);">secret components</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ritual Process → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
+          <td class="prop-desc">Components of this process restricted to initiated elders. OPERATIONAL ONLY - never exported to RDF. Access: no-access.</td>
+        </tr>
+        <tr id="prop-sequence">
+          <td><span class="prop-name">sequence</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sequence</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Ritual Process → Ceremonial Sequence</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">Links a RitualProcess to its CeremonialSequence. Access: initiated-only.</td>
+        </tr>
+        <tr id="prop-sequenceOrder">
+          <td><span class="prop-name">sequenceOrder</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sequence order</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ceremonial Sequence → integer</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">Integer indicating the position of this step within the full sequence. Access: initiated-only.</td>
+        </tr>
+        <tr id="prop-sequenceStep">
+          <td><span class="prop-name">sequenceStep</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sequence step</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ceremonial Sequence → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">A numbered step label within the ceremonial sequence. The label is visible; operational content is governed separately. Access: initiated-only.</td>
+        </tr>
+        <tr id="prop-sequenceStepOperational">
+          <td><span class="prop-name">sequenceStepOperational</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sequence step (operational)</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ceremonial Sequence → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
+          <td class="prop-desc">Exact operational instructions for this step. OPERATIONAL ONLY - never exported to RDF. Access: no-access.</td>
+        </tr>
+        <tr id="prop-sequenceStepDescription">
+          <td><span class="prop-name">sequenceStepDescription</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sequence step description</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ceremonial Sequence → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">General description of what occurs at this step, without operational specifics. Access: initiated-only.</td>
+        </tr>
+        <tr id="prop-sponsorRequirement">
+          <td><span class="prop-name">sponsorRequirement</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sponsor requirement</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Initiatory Rite → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Whether a godparent or existing initiate must sponsor this initiation. General requirement is public. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-timingRequirement">
+          <td><span class="prop-name">timingRequirement</span><br><span style="font-size:.75rem;color:var(--ink-soft);">timing requirement</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Ritual Process → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Whether this process has specific timing requirements. Values from TimingRequirementScheme. Access: public-unrestricted.</td>
+        </tr>
+        <tr id="prop-typicalDuration">
+          <td><span class="prop-name">typicalDuration</span><br><span style="font-size:.75rem;color:var(--ink-soft);">typical duration</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ritual Process → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">General duration of this process. Example: one day, three days, seven days, one year and seven days. Access: public-unrestricted.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term-section">
+    <div class="term-section-header">
+      <span class="term-section-title">Concept Schemes</span>
+      <span class="term-section-count">5 schemes</span>
+    </div>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Authority Level Classification</span>
+        <span class="scheme-count">6 concepts</span>
       </div>
-      <div class="footer-col">
-        <h4>Ontology</h4>
-        <ul>
-          <li><a href="#">Modules</a></li>
-          <li><a href="#">Classes</a></li>
-          <li><a href="#">Properties</a></li>
-          <li><a href="#">Concept Schemes</a></li>
-          <li><a href="#">Whitepaper</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Institution</h4>
-        <ul>
-          <li><a href="#">About IHS</a></li>
-          <li><a href="#">Governance</a></li>
-          <li><a href="#">Access Policy</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-funders">
-        <h4>Supported by</h4>
-        <div class="funder-slot">Funder logo</div>
-        <div class="funder-slot">Funder logo</div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Level of initiation or authority required to lead or perform a ritual process.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-authority-any-practitioner">
+          <div class="concept-label">Any Practitioner</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authority-any-practitioner</div>
+          <p class="concept-def">Can be performed by any person regardless of initiation status. Example: basic ancestor veneration at boveda, spiritual baths using common herbs.</p>
+        </div>
+        <div class="concept-item" id="concept-authority-babalawo">
+          <div class="concept-label">Babalawo / Ifa Priest</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authority-babalawo</div>
+          <p class="concept-def">Requires Ifa initiation specifically. Certain ceremonies and all Ifa-based divination require Babalawo authority.</p>
+        </div>
+        <div class="concept-item" id="concept-authority-elder-designation">
+          <div class="concept-label">Elder Designation</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authority-elder-designation</div>
+          <p class="concept-def">Requires recognition as an elder or authority holder within the tradition, beyond basic initiation. Community recognition is required in addition to initiation level.</p>
+        </div>
+        <div class="concept-item" id="concept-authority-initiated">
+          <div class="concept-label">Initiated Practitioner</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authority-initiated</div>
+          <p class="concept-def">Requires initiation but not a specific level or title. General initiation into the tradition is sufficient.</p>
+        </div>
+        <div class="concept-item" id="concept-authority-olorisha">
+          <div class="concept-label">Olorisha / Equivalent</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authority-olorisha</div>
+          <p class="concept-def">Requires full head initiation: kariocha in Lucumi, kanzo in Vodou, feitura in Candomble, or equivalent in other traditions.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Head-initiated</p>
+        </div>
+        <div class="concept-item" id="concept-authority-tradition-specific">
+          <div class="concept-label">Tradition-Specific Authority</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authority-tradition-specific</div>
+          <p class="concept-def">Authority requirements are tradition-specific and cannot be generalized. Document via iroko:operationalNotes with tradition context.</p>
+        </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2025 Iroko Historical Society / Ilé Aña Olofí, Inc. · <a href="#">Terms of Use</a> · <a href="#">Licensing</a></p>
-      <span class="version-badge">v1.2.0</span>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Initiation Level Classification</span>
+        <span class="scheme-count">6 concepts</span>
+      </div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Levels of initiation conferred by initiatory rites. General structure is cross-traditional; specific levels are tradition-dependent.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-initiationLevel-head-initiation">
+          <div class="concept-label">Head Initiation</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiationLevel-head-initiation</div>
+          <p class="concept-def">Full head initiation permanently establishing the initiant as a priest or priestess. Specific name varies by tradition.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Feitura, Kanzo, Kariocha, Rayamiento</p>
+        </div>
+        <div class="concept-item" id="concept-initiationLevel-ifa">
+          <div class="concept-label">Ifa Initiation</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiationLevel-ifa</div>
+          <p class="concept-def">Initiation into the Ifa priesthood. Mano de Orula (hand of Orula) is a preliminary in Lucumi; full Babalawo initiation is the complete level.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Babalawo initiation, Mano de Orula</p>
+        </div>
+        <div class="concept-item" id="concept-initiationLevel-necklaces">
+          <div class="concept-label">Necklaces/Elekes</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiationLevel-necklaces</div>
+          <p class="concept-def">Reception of consecrated beaded necklaces in Lucumi tradition. First formal step. Confers relationship with specific orisa represented.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Collares</p>
+        </div>
+        <div class="concept-item" id="concept-initiationLevel-reception">
+          <div class="concept-label">Reception Level</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiationLevel-reception</div>
+          <p class="concept-def">General category for receiving sacred objects or marks without full head initiation. The entry level of formal initiation in most traditions.</p>
+        </div>
+        <div class="concept-item" id="concept-initiationLevel-tradition-specific">
+          <div class="concept-label">Tradition-Specific Level</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiationLevel-tradition-specific</div>
+          <p class="concept-def">Initiation levels that do not map to general categories. Document with tradition context via iroko:tradition and iroko:operationalNotes.</p>
+        </div>
+        <div class="concept-item" id="concept-initiationLevel-warriors">
+          <div class="concept-label">Warriors</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiationLevel-warriors</div>
+          <p class="concept-def">Reception of Eleggua, Ogun, Ochosi, and Osun in Lucumi tradition. Protects the initiant and opens roads. Prerequisite for kariocha.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Los Guerreros</p>
+        </div>
+      </div>
     </div>
-  </footer>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Participant Role Classification</span>
+        <span class="scheme-count">8 concepts</span>
+      </div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Roles that participants may hold within a ritual process.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-role-co-officiant">
+          <div class="concept-label">Co-Officiant</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-co-officiant</div>
+          <p class="concept-def">A supporting officiant with authority to perform portions of the ceremony.</p>
+        </div>
+        <div class="concept-item" id="concept-role-community-member">
+          <div class="concept-label">Community Member</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-community-member</div>
+          <p class="concept-def">General attendee, potentially uninitiated, present for community portions of the ceremony.</p>
+        </div>
+        <div class="concept-item" id="concept-role-godparent">
+          <div class="concept-label">Godparent/Sponsor</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-godparent</div>
+          <p class="concept-def">The initiated sponsor responsible for the initiant&#x27;s spiritual formation and ceremonial participation.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Madrina, Marraine, Padrino, Parrain</p>
+        </div>
+        <div class="concept-item" id="concept-role-helper">
+          <div class="concept-label">Helper/Aide</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-helper</div>
+          <p class="concept-def">Initiated helper assisting with logistical or supporting ceremonial tasks.</p>
+        </div>
+        <div class="concept-item" id="concept-role-initiant">
+          <div class="concept-label">Initiant</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-initiant</div>
+          <p class="concept-def">The person receiving initiation or the primary recipient of the ceremony.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Initiate, Iyawo</p>
+        </div>
+        <div class="concept-item" id="concept-role-lead-officiant">
+          <div class="concept-label">Lead Officiant</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-lead-officiant</div>
+          <p class="concept-def">The principal authority leading the ceremony. Title varies by tradition.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Houngan, Mambo, Oriaté, Tata</p>
+        </div>
+        <div class="concept-item" id="concept-role-medium">
+          <div class="concept-label">Medium</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-medium</div>
+          <p class="concept-def">Practitioner who may receive spiritual possession during the ceremony. In Espiritismo context, medium for spirit communication.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Chwal, Horse</p>
+        </div>
+        <div class="concept-item" id="concept-role-musician">
+          <div class="concept-label">Musician/Drummer</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-musician</div>
+          <p class="concept-def">Drummer, singer, or musician providing ceremonial music. May have specific initiation requirements depending on tradition and ceremony type.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Akpwon, Tambolero</p>
+        </div>
+      </div>
+    </div>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Process Type Classification</span>
+        <span class="scheme-count">14 concepts</span>
+      </div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Classification of ritual process types across Afro-Atlantic traditions.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-processType-ancestor-veneration">
+          <div class="concept-label">Ancestor Veneration</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-ancestor-veneration</div>
+          <p class="concept-def">Ceremonies specifically directed to the ancestral dead. Includes misa espiritual (Espiritismo), egungún masquerade, boveda work, and ituto (funeral rites for initiates).</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Egun ceremony, Misa Espiritual</p>
+        </div>
+        <div class="concept-item" id="concept-processType-cleansing">
+          <div class="concept-label">Cleansing/Purification</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-cleansing</div>
+          <p class="concept-def">Ritual cleansing of a person, object, or space. Removes negative energies, spiritual impurities, or adversarial influences. Includes despojos, limpiezas, spiritual baths, and space cleansings.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Despojo, Limpieza</p>
+        </div>
+        <div class="concept-item" id="concept-processType-community-working">
+          <div class="concept-label">Community Working</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-community-working</div>
+          <p class="concept-def">Collective ceremonial work on behalf of a house, lineage, or community rather than an individual. Includes cabildo ceremonies, community ebbos, and house-level divination.</p>
+        </div>
+        <div class="concept-item" id="concept-processType-divination">
+          <div class="concept-label">Divination</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-divination</div>
+          <p class="concept-def">Ritual consultation for guidance. Includes Ifa consultation, dilogun reading, chamalongos in Palo, and card reading in Espiritismo context. Public category; specific methods and interpretations are access-restricted.</p>
+        </div>
+        <div class="concept-item" id="concept-processType-elevation">
+          <div class="concept-label">Elevation/Levantamiento</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-elevation</div>
+          <p class="concept-def">Ceremony to elevate the spirit of a deceased person or clear unresolved spiritual burdens. Common in Espiritismo and Lucumi death rites.</p>
+        </div>
+        <div class="concept-item" id="concept-processType-feast-celebration">
+          <div class="concept-label">Feast/Celebration</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-feast-celebration</div>
+          <p class="concept-def">Celebration ceremonies: anniversary of initiation, feast days of entities, communal celebrations.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Cumpleanos de Santo</p>
+        </div>
+        <div class="concept-item" id="concept-processType-funerary">
+          <div class="concept-label">Funerary</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-funerary</div>
+          <p class="concept-def">Death and funeral ceremonies specific to initiated practitioners. Includes ituto (Lucumi), axexe (Candomble), and rites handling spiritual obligations of deceased initiates.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Axexe, Ituto</p>
+        </div>
+        <div class="concept-item" id="concept-processType-head-feeding">
+          <div class="concept-label">Head Feeding/Rogation</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-head-feeding</div>
+          <p class="concept-def">Ritual feeding and cooling of the head (Ori) with white foods and prayers. Strengthens personal destiny and calms spiritual disturbances. One of the most fundamental ceremonies across Yoruba-derived traditions.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Rogacion de Cabeza</p>
+        </div>
+        <div class="concept-item" id="concept-processType-healing">
+          <div class="concept-label">Healing</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-healing</div>
+          <p class="concept-def">Ceremonial processes directed toward physical, spiritual, or psychological healing. May combine plant use, prayer, divination, and direct spiritual intervention.</p>
+        </div>
+        <div class="concept-item" id="concept-processType-initiation-full">
+          <div class="concept-label">Initiation - Full</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-initiation-full</div>
+          <p class="concept-def">Full head initiation permanently transforming the initiant&#x27;s spiritual status. Examples: kariocha (Lucumi), kanzo (Vodou), rayamiento (Palo), feitura (Candomble). The most restricted process type.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Head Initiation</p>
+        </div>
+        <div class="concept-item" id="concept-processType-initiation-reception">
+          <div class="concept-label">Initiation - Reception</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-initiation-reception</div>
+          <p class="concept-def">Reception of sacred objects conferring a level of initiation without full head initiation. Examples: receiving Warriors, receiving Olokun, receiving necklaces. Creates formal relationship with specific entities.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Receiving</p>
+        </div>
+        <div class="concept-item" id="concept-processType-possession-ceremony">
+          <div class="concept-label">Possession Ceremony</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-possession-ceremony</div>
+          <p class="concept-def">Ceremony in which spirits may manifest through initiated practitioners. Includes tambor, bembe, wemilere (Lucumi), Vodou fet, Candomble xire. Drumming, singing, and dance are central.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Bembe, Fet, Tambor, Wemilere</p>
+        </div>
+        <div class="concept-item" id="concept-processType-protection">
+          <div class="concept-label">Protection</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-protection</div>
+          <p class="concept-def">Ceremonial processes establishing or strengthening spiritual protection for a person, household, or space.</p>
+        </div>
+        <div class="concept-item" id="concept-processType-sacrifice-offering">
+          <div class="concept-label">Sacrifice/Major Offering</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">processType-sacrifice-offering</div>
+          <p class="concept-def">Ceremonies involving animal sacrifice or major offerings to spiritual entities. General category is public; specific animals, quantities, and procedures are initiated-only or initiated-elder.</p>
+          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Ebbo, Matanza</p>
+        </div>
+      </div>
+    </div>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Timing Requirement Classification</span>
+        <span class="scheme-count">7 concepts</span>
+      </div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Whether a ritual process has specific timing requirements.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-timing-annual-cycle">
+          <div class="concept-label">Annual Cycle</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">timing-annual-cycle</div>
+          <p class="concept-def">Performed on an annual cycle, such as anniversary of initiation.</p>
+        </div>
+        <div class="concept-item" id="concept-timing-any-time">
+          <div class="concept-label">Any Time</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">timing-any-time</div>
+          <p class="concept-def">No specific timing requirement; may be performed as needed.</p>
+        </div>
+        <div class="concept-item" id="concept-timing-calendar-feast">
+          <div class="concept-label">Calendar/Feast Day</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">timing-calendar-feast</div>
+          <p class="concept-def">Associated with a specific calendar date or feast day of the presiding entity.</p>
+        </div>
+        <div class="concept-item" id="concept-timing-divination-prescribed">
+          <div class="concept-label">Divination-Prescribed</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">timing-divination-prescribed</div>
+          <p class="concept-def">Timing determined through divination consultation. The appropriate time is revealed rather than predetermined.</p>
+        </div>
+        <div class="concept-item" id="concept-timing-emergency">
+          <div class="concept-label">Emergency/As Needed</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">timing-emergency</div>
+          <p class="concept-def">Performed in response to urgent spiritual or physical crisis without time constraint.</p>
+        </div>
+        <div class="concept-item" id="concept-timing-life-event">
+          <div class="concept-label">Life Event</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">timing-life-event</div>
+          <p class="concept-def">Triggered by a specific life event: birth, death, marriage, illness, major transition.</p>
+        </div>
+        <div class="concept-item" id="concept-timing-lunar-phase">
+          <div class="concept-label">Lunar Phase</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">timing-lunar-phase</div>
+          <p class="concept-def">Must be performed during a specific phase of the moon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<script>
-const MOD_SLUG = 'travay';
-const MOD_DISPLAY = 'Travay Module';
-const MOD_CITE = '"Travay Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/travay';
-const CLASSES = {
-  CeremonialSequence: {
-    uri:'iroko:CeremonialSequence', label:'Ceremonial Sequence',
-    definition:'An ordered set of steps within a RitualProcess. The existence of a sequence and its general structure are documented. Access control is at the property level: sequence step labels are initiated-only; operational content within each step is no-access.',
-    outgoing:[],
-    incoming:[{uri:'iroko:sequence',label:'sequence',domain:'iroko:RitualProcess',definition:'Links a RitualProcess to its CeremonialSequence. Access: initiated-only.',crossModule:'travay'  }],
-    crossModuleConnections:[]
-  },
-  Ceremony: {
-    uri:'iroko:Ceremony', label:'Ceremony',
-    definition:'A recurring ritual event that can be performed multiple times for one or many participants. Examples: bembe, tambor, wemilere, misa espiritual, rogacion de cabeza, ebbo, despojos, velacion. Ceremonies are ongoing practice rather than threshold events.',
-    outgoing:[],
-    incoming:[],
-    crossModuleConnections:[]
-  },
-  InitiatoryRite: {
-    uri:'iroko:InitiatoryRite', label:'Initiatory Rite',
-    definition:'A threshold ceremony that permanently changes the initiant\'s spiritual status. Examples: kariocha (making Ocha), mano de Orula, abo faca, pinaldo, rayamiento (Palo), kanzo (Vodou), feitura (Candomble). Initiatory rites are non-repeatable transformations. Operational details are initiated-elder access.',
-    outgoing:[{uri:'iroko:initiationLevel',label:'initiation level',range:'iroko:Concept',definition:'The level of initiation conferred by this InitiatoryRite. Values from InitiationLevelScheme. Access: public-unrestricted.',crossModule:''  }],
-    incoming:[],
-    crossModuleConnections:[]
-  },
-  RitualProcess: {
-    uri:'iroko:RitualProcess', label:'Ritual Process',
-    definition:'Base class for any structured ceremonial activity in an Afro-Atlantic tradition. Subclassed into Ceremony (recurring practice) and InitiatoryRite (threshold event). General process type, presiding entity, and tradition are public; operational sequences and instructions are restricted.',
-    outgoing:[{uri:'iroko:participantRole',label:'participant role',range:'iroko:Concept',definition:'Roles that participants may hold in this process. Values from ParticipantRoleScheme. Multiple values allowed. Access: public-unrestricted.',crossModule:''  },{uri:'iroko:plantUse',label:'plant use',range:'iroko:Plant',definition:'Plants used in this ritual process. Links to ewe:Plant instances. General association is public; specific quantities and combinations are initiated-only. Access: public-unrestricted.',crossModule:'ewe'  },{uri:'iroko:prerequisiteProcess',label:'prerequisite process',range:'iroko:RitualProcess',definition:'A RitualProcess that must be completed before this one. Example: receiving Warriors before kariocha. Links to iroko:RitualProcess instances. Access: public-unrestricted.',crossModule:'travay'  },{uri:'iroko:presidingEntity',label:'presiding entity',range:'iroko:SpiritualEntity',definition:'The spiritual entity (orisa, lwa, etc.) for whom or by whose authority this ceremony is performed. Links to iroko:SpiritualEntity. Access: public-unrestricted.',crossModule:'nkisi'  },{uri:'iroko:processType',label:'process type',range:'iroko:Concept',definition:'Classification of this ritual process. Values from ProcessTypeScheme. Access: public-unrestricted.',crossModule:''  },{uri:'iroko:requiredAuthority',label:'required authority',range:'iroko:Concept',definition:'The level of initiation or authority required to lead this process. Values from AuthorityLevelScheme. Access: public-unrestricted.',crossModule:''  },{uri:'iroko:sequence',label:'sequence',range:'iroko:CeremonialSequence',definition:'Links a RitualProcess to its CeremonialSequence. Access: initiated-only.',crossModule:'travay'  },{uri:'iroko:timingRequirement',label:'timing requirement',range:'iroko:Concept',definition:'Whether this process has specific timing requirements. Values from TimingRequirementScheme. Access: public-unrestricted.',crossModule:''  }],
-    incoming:[{uri:'iroko:prerequisiteProcess',label:'prerequisite process',domain:'iroko:RitualProcess',definition:'A RitualProcess that must be completed before this one. Example: receiving Warriors before kariocha. Links to iroko:RitualProcess instances. Access: public-unrestricted.',crossModule:'travay'  }],
-    crossModuleConnections:[{name:'Ewé Module',slug:'ewe',dotClass:'dot-ewe',props:'via iroko:plantUse',direction:'references'},{name:'Nkisi Module',slug:'nkisi',dotClass:'dot-nkisi',props:'via iroko:presidingEntity',direction:'references'}]
-  }
-};
-const MODULE_CONNECTIONS = [
-  {name:'Ewé Module',slug:'ewe',dotClass:'dot-ewe',props:'1 shared property'},
-  {name:'Nkisi Module',slug:'nkisi',dotClass:'dot-nkisi',props:'1 shared property'}
-];
+</div><!-- /page-wrap -->
 
-let activeClass = null;
+<footer>
+  <span class="footer-logo">Iroko Historical Society · Iroko Framework v2.0.0</span>
+  <div class="footer-links">
+    <a href="https://www.irokosociety.org">irokosociety.org</a>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Modules</a>
+    <a href="iroko-termlist.html">Term Index</a>
+  </div>
+  <span class="footer-cc">CC0 1.0 Universal · </span>
+</footer>
 
-function activateClass(classId) {
-  if (activeClass === classId) { deactivateClass(); return; }
-  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
-  activeClass = classId;
-  document.getElementById('card-' + classId)?.classList.add('is-active');
-  const data = CLASSES[classId];
-  if (!data) return;
-  document.getElementById('panel-uri').textContent = data.uri;
-  document.getElementById('panel-label').textContent = data.label;
-  document.getElementById('panel-definition').textContent = data.definition || '';
-  const citeText = data.uri + '. Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
-  document.getElementById('panel-cite-text').innerHTML = '<em>' + citeText + '</em>';
-  document.getElementById('panel-cite-btn').dataset.cite = citeText;
-  renderProps('incoming-props', data.incoming, 'in');
-  renderProps('outgoing-props', data.outgoing, 'out');
-  document.getElementById('zone2-empty').classList.add('hidden');
-  document.getElementById('zone2-hint').textContent = 'Click class again to close';
-  const panel = document.getElementById('property-panel');
-  panel.classList.add('visible');
-  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
-  renderClassSidebar(data, classId);
-  history.replaceState(null, '', '#' + classId);
-}
-
-function deactivateClass() {
-  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
-  activeClass = null;
-  document.getElementById('property-panel').classList.remove('visible');
-  document.getElementById('zone2-empty').classList.remove('hidden');
-  document.getElementById('zone2-hint').textContent = 'Select a class above to explore its properties';
-  renderModuleSidebar();
-  history.replaceState(null, '', window.location.pathname);
-}
-
-function renderProps(containerId, props, dir) {
-  const el = document.getElementById(containerId);
-  if (!props || props.length === 0) { el.innerHTML = '<div class="no-props">None documented in this module.</div>'; return; }
-  el.innerHTML = props.map((p, i) => {
-    const id = 'prop-' + dir + '-' + i;
-    const endLabel = dir === 'out' ? 'Range' : 'Domain';
-    const endVal   = dir === 'out' ? (p.range || '') : (p.domain || '');
-    const crossTag = (p.crossModule && p.crossModule !== MOD_SLUG) ? '<span class="cross-tag">[' + p.crossModule + ']</span>' : '';
-    return '<div class="prop-item" id="' + id + '" onclick="toggleProp(\'' + id + '\')">' +
-      '<div class="prop-item-top"><span class="prop-item-uri">' + p.uri + '</span>' +
-      '<svg class="prop-item-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,3 11,8 5,13"/></svg></div>' +
-      '<span class="prop-item-label">' + (p.label || '') + '</span>' +
-      '<div class="prop-detail" id="' + id + '-detail">' +
-      '<div class="prop-detail-row"><span class="pd-label">' + endLabel + '</span><span class="pd-value">' + endVal + crossTag + '</span></div>' +
-      '<div class="prop-detail-row"><span class="pd-label">Definition</span><span class="pd-value">' + (p.definition || '') + '</span></div>' +
-      '</div></div>';
-  }).join('');
-}
-
-function toggleProp(propId) {
-  const item = document.getElementById(propId);
-  const detail = document.getElementById(propId + '-detail');
-  if (!item || !detail) return;
-  const isOpen = item.classList.contains('is-expanded');
-  document.querySelectorAll('.prop-item.is-expanded').forEach(el => {
-    el.classList.remove('is-expanded');
-    el.querySelector('.prop-detail')?.classList.remove('visible');
-  });
-  if (!isOpen) { item.classList.add('is-expanded'); detail.classList.add('visible'); }
-}
-
-function renderClassSidebar(data, classId) {
-  const el = document.getElementById('sb-connections');
-  el.classList.add('fading');
-  setTimeout(() => {
-    document.getElementById('sb-title').textContent = 'iroko:' + classId + ' — connections';
-    const conns = data.crossModuleConnections || [];
-    el.innerHTML = '<div class="active-class-card"><span class="acc-uri">' + data.uri + '</span><span class="acc-label">' + data.label + '</span></div>' +
-      (conns.length === 0
-        ? '<p class="no-connections">No cross-module connections.</p>'
-        : conns.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
-            '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
-            '<span class="cc-props">' + c.props + '</span>' +
-            '<span class="cc-via">' + c.direction + '</span></a>').join(''));
-    el.classList.remove('fading');
-  }, 130);
-}
-
-function renderModuleSidebar() {
-  const el = document.getElementById('sb-connections');
-  el.classList.add('fading');
-  setTimeout(() => {
-    document.getElementById('sb-title').textContent = 'Connected modules';
-    el.innerHTML = MODULE_CONNECTIONS.length === 0
-      ? '<p class="no-connections">No cross-module connections documented.</p>'
-      : MODULE_CONNECTIONS.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
-          '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
-          '<span class="cc-props">' + c.props + '</span></a>').join('');
-    el.classList.remove('fading');
-  }, 130);
-}
-
-function copyPanelCitation(btn) {
-  navigator.clipboard.writeText(btn.dataset.cite).then(() => {
-    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
-    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
-  });
-}
-function copyModuleCitation(btn) {
-  navigator.clipboard.writeText(MOD_CITE).then(() => {
-    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
-    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
-  });
-}
-function copyPageLink(btn) {
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    const orig = btn.innerHTML; btn.textContent = '✓'; btn.classList.add('copied-state');
-    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied-state'); }, 2000);
-  });
-}
-function shareEmail(e) {
-  e.preventDefault();
-  window.location.href = 'mailto:?subject=' + encodeURIComponent('Iroko Framework Ontology — ' + MOD_DISPLAY) + '&body=' + encodeURIComponent(window.location.href);
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  renderModuleSidebar();
-  const hash = window.location.hash.slice(1);
-  if (hash && CLASSES[hash]) setTimeout(() => activateClass(hash), 100);
-});
-
-</script>
 </body>
 </html>

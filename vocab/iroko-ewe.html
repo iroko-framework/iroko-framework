@@ -1,545 +1,645 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ewé Module — Iroko Framework Ontology</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --ink:#1a1714; --ink-mid:#2e2a26; --ink-light:#4a4540;
-      --paper:#f7f4ef; --paper-warm:#efe9df;
-      --border:#d5cdc0; --border-mid:#c0b8ac;
-      --gold:#8b6914; --gold-light:#c49a2a; --gold-pale:#f0e6c8; --gold-mid:#a07820;
-      --sienna:#7a3b1e; --teal:#1f5c52; --teal-pale:#e4f0ee; --teal-mid:#2a7a6e;
-      --radius-sm:3px; --radius:6px; --radius-lg:10px;
-      --shadow-sm:0 1px 4px rgba(26,23,20,0.10); --shadow:0 3px 14px rgba(26,23,20,0.13);
-      --transition:180ms ease;
-    }
-    /* Module dot colors */
-    .dot-agency{background:#5a6e8a} .dot-authority{background:#6b4a8a}
-    .dot-core{background:#444} .dot-ekpe{background:#2a6b4a}
-    .dot-epistemic{background:#7a5a1e} .dot-ewe{background:#8b6914}
-    .dot-ile{background:#1f5c52} .dot-manifestation{background:#6b2a2a}
-    .dot-marca{background:#1e4a6b} .dot-narrative{background:#6b3a1e}
-    .dot-ngoma{background:#4a1e6b} .dot-nkisi{background:#7a3b1e}
-    .dot-qal{background:#2a4a6b} .dot-sankofa{background:#6b5a1e}
-    .dot-travay{background:#4a6b8a} .dot-veve{background:#3a1e6b}
-
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{font-size:16px;scroll-behavior:smooth}
-    body{font-family:'EB Garamond',Georgia,serif;font-size:1.0625rem;line-height:1.65;
-      background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
-
-    .site-nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;gap:2rem;
-      height:52px;position:sticky;top:0;z-index:200;border-bottom:2px solid var(--gold)}
-    .wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:600;
-      letter-spacing:0.04em;color:#f7f4ef;text-decoration:none;white-space:nowrap}
-    .wordmark span{color:var(--gold-light)}
-    .nav-links{display:flex;gap:1.5rem;list-style:none;margin-left:auto}
-    .nav-links a{font-family:'EB Garamond',Georgia,serif;font-size:0.875rem;letter-spacing:0.05em;
-      text-transform:uppercase;color:var(--border);text-decoration:none;transition:color var(--transition)}
-    .nav-links a:hover{color:var(--gold-light)}
-
-    .page-header{background:var(--ink-mid);color:var(--paper);padding:2.5rem 2rem 2rem;border-bottom:1px solid var(--gold)}
-    .breadcrumb{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
-    .breadcrumb a{color:var(--border-mid);text-decoration:none}
-    .breadcrumb a:hover{color:var(--gold-light)}
-    .page-header h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.25rem;font-weight:300;
-      letter-spacing:0.02em;line-height:1.2;margin-bottom:0.4rem}
-    .module-tag{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
-      background:var(--gold);color:var(--ink);padding:0.2em 0.6em;border-radius:var(--radius-sm);
-      vertical-align:middle;margin-left:0.75rem;font-family:'EB Garamond',serif}
-    .module-desc{font-size:0.88rem;color:var(--border-mid);margin-top:0.6rem;max-width:700px;line-height:1.5}
-    .module-stats{display:flex;gap:2rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)}
-    .stat .number{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.75rem;font-weight:300;
-      color:var(--gold-light);line-height:1;display:block}
-    .stat .label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--border-mid)}
-
-    .layout{display:grid;grid-template-columns:1fr 290px;flex:1;max-width:1280px;width:100%;margin:0 auto;align-items:start}
-    .main-content{padding:2rem;border-right:1px solid var(--border);min-width:0}
-
-    .zone-label{font-size:0.68rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-light);
-      margin-bottom:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);
-      display:flex;align-items:center;justify-content:space-between}
-    .zone-hint{font-size:0.7rem;letter-spacing:0.02em;text-transform:none;color:var(--border-mid);font-style:italic}
-
-    .class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.6rem;margin-bottom:2.25rem}
-    .class-card{padding:0.8rem 0.9rem;border:1px solid var(--border);border-radius:var(--radius);
-      background:white;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);
-      user-select:none;position:relative}
-    .class-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
-    .class-card.is-active{border-color:var(--gold);background:var(--gold-pale);box-shadow:var(--shadow)}
-    .class-card.is-active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
-      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--paper-warm)}
-    .card-uri{font-family:'JetBrains Mono',monospace;font-size:0.73rem;color:var(--gold);display:block;
-      margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .card-label{font-size:0.88rem;color:var(--ink);display:block;line-height:1.3}
-
-    .zone2-empty{display:flex;align-items:center;gap:0.75rem;padding:1.25rem 1.5rem;
-      background:var(--paper-warm);border:1px dashed var(--border-mid);border-radius:var(--radius);
-      color:var(--border-mid);font-size:0.85rem;font-style:italic;margin-bottom:2.25rem}
-    .zone2-empty svg{width:20px;height:20px;flex-shrink:0;opacity:0.5}
-    .zone2-empty.hidden{display:none}
-
-    .property-panel{display:none;background:var(--paper-warm);border:1px solid var(--border-mid);
-      border-radius:var(--radius-lg);margin-bottom:2.25rem;overflow:hidden;animation:panelIn 180ms ease forwards}
-    .property-panel.visible{display:block}
-    @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-    .panel-header{background:var(--ink-mid);color:var(--paper);padding:1rem 1.5rem;
-      display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
-    .ph-uri{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--gold-light)}
-    .ph-label{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:300;color:var(--paper)}
-    .panel-close{background:none;border:none;color:var(--border-mid);cursor:pointer;padding:0.2rem;
-      font-size:1.1rem;line-height:1;transition:color var(--transition);margin-left:auto;flex-shrink:0}
-    .panel-close:hover{color:var(--paper)}
-    .panel-definition{padding:1rem 1.5rem;font-size:0.92rem;color:var(--ink-mid);line-height:1.6;border-bottom:1px solid var(--border)}
-    .panel-body{display:grid;grid-template-columns:1fr 1fr}
-    .prop-col{padding:1.25rem 1.5rem}
-    .prop-col:first-child{border-right:1px solid var(--border)}
-    .prop-col-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
-      margin-bottom:0.85rem;display:flex;align-items:center;gap:0.4rem}
-    .direction-arrow{font-size:0.9rem;color:var(--gold)}
-    .col-sublabel{font-style:italic;text-transform:none;letter-spacing:0;font-size:0.67rem;color:var(--border-mid)}
-    .prop-item{padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius-sm);
-      background:white;margin-bottom:0.5rem;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition)}
-    .prop-item:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
-    .prop-item.is-expanded{border-color:var(--gold);background:#fffdf7}
-    .prop-item-top{display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
-    .prop-item-uri{font-family:'JetBrains Mono',monospace;font-size:0.74rem;color:var(--gold)}
-    .prop-item-chevron{width:13px;height:13px;color:var(--border-mid);flex-shrink:0;transition:transform var(--transition)}
-    .prop-item.is-expanded .prop-item-chevron{transform:rotate(90deg);color:var(--gold)}
-    .prop-item-label{font-size:0.82rem;color:var(--ink-light);display:block;margin-top:0.12rem}
-    .prop-detail{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border)}
-    .prop-detail.visible{display:block}
-    .prop-detail-row{display:flex;gap:0.75rem;margin-bottom:0.45rem;align-items:baseline}
-    .pd-label{font-size:0.65rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-light);min-width:60px;flex-shrink:0}
-    .pd-value{font-size:0.82rem;color:var(--ink-mid);line-height:1.4}
-    .cross-tag{font-size:0.65rem;color:var(--border-mid);font-style:italic;margin-left:0.3rem}
-    .no-props{font-size:0.82rem;color:var(--border-mid);font-style:italic;padding:0.5rem 0}
-    .panel-citation{padding:1rem 1.5rem;border-top:1px solid var(--border);
-      display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-    .panel-citation .cite-text{font-size:0.8rem;color:var(--ink-light);font-style:italic;flex:1;min-width:200px}
-    .btn-copy{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--gold);
-      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;
-      font-size:0.85rem;cursor:pointer;transition:background var(--transition),transform 80ms;white-space:nowrap;flex-shrink:0}
-    .btn-copy:hover{background:var(--ink)} .btn-copy:active{transform:scale(0.97)} .btn-copy.copied{background:var(--teal)}
-    .btn-copy svg{width:13px;height:13px;flex-shrink:0}
-
-    .concept-scheme-block{margin-bottom:2rem}
-    .concept-scheme-block:last-child{margin-bottom:0}
-    .csb-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.15rem}
-    .csb-uri{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--teal)}
-    .csb-count{font-size:0.7rem;color:var(--ink-light);letter-spacing:0.04em}
-    .csb-scheme-label{font-size:0.92rem;color:var(--ink-mid);font-style:italic;margin-bottom:0.2rem}
-    .csb-description{font-size:0.82rem;color:var(--ink-light);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--teal-pale)}
-    .concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.45rem}
-    .concept-card{padding:0.55rem 0.75rem;background:var(--teal-pale);border:1px solid rgba(31,92,82,0.18);
-      border-radius:var(--radius-sm);transition:background var(--transition),border-color var(--transition);cursor:default}
-    .concept-card:hover{background:rgba(31,92,82,0.14);border-color:var(--teal)}
-    .cc-label{font-size:0.85rem;color:var(--ink);display:block;line-height:1.3;margin-bottom:0.2rem}
-    .cc-id{font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--teal-mid);display:block}
-
-    .sidebar{padding:1.5rem 1.25rem;position:sticky;top:52px;max-height:calc(100vh - 52px);overflow-y:auto}
-    .sidebar-panel{margin-bottom:1.75rem}
-    .sidebar-panel-title{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
-      padding-bottom:0.5rem;border-bottom:1px solid var(--border);margin-bottom:0.85rem}
-    .active-class-card{padding:0.75rem 0.85rem;background:var(--gold-pale);border:1px solid var(--gold);
-      border-radius:var(--radius-sm);margin-bottom:0.85rem}
-    .acc-uri{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold-mid);display:block;margin-bottom:0.15rem}
-    .acc-label{font-size:0.9rem;color:var(--ink);font-weight:500}
-    .connection-card{padding:0.6rem 0.75rem;border:1px solid var(--border);border-radius:var(--radius-sm);
-      margin-bottom:0.45rem;background:white;text-decoration:none;display:block;
-      transition:border-color var(--transition),box-shadow var(--transition)}
-    .connection-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
-    .cc-top{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem}
-    .cc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-    .cc-module-name{font-size:0.85rem;color:var(--ink);font-weight:500}
-    .cc-props{font-size:0.72rem;color:var(--ink-light);display:block;margin-top:0.1rem}
-    .cc-via{font-size:0.67rem;color:var(--ink-light);font-style:italic;margin-top:0.1rem;display:block}
-    .sidebar-dynamic{transition:opacity 140ms ease}
-    .sidebar-dynamic.fading{opacity:0}
-    .no-connections{font-size:0.78rem;color:var(--border-mid);font-style:italic}
-    .share-buttons{display:flex;gap:0.5rem}
-    .share-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.55rem 0.25rem;
-      background:var(--paper-warm);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
-      font-family:'EB Garamond',serif;font-size:0.68rem;color:var(--ink-light);text-decoration:none;
-      letter-spacing:0.04em;text-transform:uppercase;transition:background var(--transition),border-color var(--transition),color var(--transition)}
-    .share-btn:hover{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
-    .share-btn svg{width:17px;height:17px}
-    .share-btn.copied-state{background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
-    .sidebar-citation{background:var(--paper-warm);border:1px solid var(--border-mid);border-radius:var(--radius-sm);padding:0.85rem}
-    .sidebar-citation .cite-text{font-size:0.77rem;line-height:1.5;color:var(--ink-mid);font-style:italic;margin-bottom:0.6rem}
-    .btn-copy-sm{display:inline-flex;align-items:center;gap:0.35rem;padding:0.42rem 0.85rem;background:var(--gold);
-      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;font-size:0.8rem;
-      cursor:pointer;transition:background var(--transition);width:100%;justify-content:center}
-    .btn-copy-sm:hover{background:var(--ink)} .btn-copy-sm.copied{background:var(--teal)}
-    .format-links{display:flex;flex-direction:column;gap:0.3rem}
-    .format-link{display:flex;align-items:center;justify-content:space-between;padding:0.38rem 0.6rem;
-      border-radius:var(--radius-sm);border:1px solid var(--border);background:white;font-family:'JetBrains Mono',monospace;
-      font-size:0.73rem;color:var(--gold);text-decoration:none;transition:background var(--transition),border-color var(--transition)}
-    .format-link:hover{background:var(--gold-pale);border-color:var(--gold)}
-    .format-arrow{color:var(--border-mid)}
-
-    footer{background:var(--ink);color:var(--paper);margin-top:auto}
-    .footer-inner{max-width:1280px;margin:0 auto;padding:2.5rem 2rem;
-      display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:2rem;align-items:start}
-    .footer-brand .fw{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-weight:300;
-      letter-spacing:0.04em;color:var(--paper);display:block;margin-bottom:0.5rem}
-    .footer-brand .fw span{color:var(--gold-light)}
-    .footer-brand p{font-size:0.8rem;color:var(--border-mid);line-height:1.5;max-width:220px}
-    .footer-col h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
-    .footer-col ul{list-style:none}
-    .footer-col li{margin-bottom:0.3rem}
-    .footer-col a{font-size:0.82rem;color:var(--border);text-decoration:none;transition:color var(--transition)}
-    .footer-col a:hover{color:var(--gold-light)}
-    .footer-funders{display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end}
-    .footer-funders h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);text-align:right;width:100%}
-    .funder-slot{width:140px;height:44px;border:1px dashed rgba(255,255,255,0.15);border-radius:var(--radius-sm);
-      display:flex;align-items:center;justify-content:center;font-size:0.67rem;letter-spacing:0.06em;
-      text-transform:uppercase;color:rgba(255,255,255,0.2)}
-    .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);max-width:1280px;margin:0 auto;padding:1rem 2rem;
-      display:flex;justify-content:space-between;align-items:center}
-    .footer-bottom p{font-size:0.75rem;color:rgba(255,255,255,0.3)}
-    .footer-bottom a{color:rgba(255,255,255,0.3);text-decoration:none}
-    .footer-bottom a:hover{color:var(--gold-light)}
-    .version-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:0.2em 0.5em;
-      border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);color:rgba(255,255,255,0.3)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ewé Module — Sacred Plant Knowledge — Iroko Framework Ontology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/iroko-style.css">
 </head>
 <body>
-  <nav class="site-nav">
-    <a class="wordmark" href="/">Iroko Framework <span>Ontology</span></a>
-    <ul class="nav-links">
-      <li><a href="/modules">Modules</a></li>
-      <li><a href="/classes">Classes</a></li>
-      <li><a href="/properties">Properties</a></li>
-      <li><a href="/concepts">Concepts</a></li>
-      <li><a href="/whitepaper">Whitepaper</a></li>
-    </ul>
-  </nav>
 
-  <header class="page-header">
-    <div class="breadcrumb"><a href="/">Iroko Framework</a> › <a href="/modules">Modules</a> › Ewé Module</div>
-    <h1>Ewé Module <span class="module-tag">Domain Layer</span></h1>
-    <div class="module-desc">Domain module.</div>
-    <div class="module-stats">
-      <div class="stat"><span class="number">4</span><span class="label">Classes</span></div>
-      <div class="stat"><span class="number">23</span><span class="label">Properties</span></div>
-      <div class="stat"><span class="number">5</span><span class="label">Concept Schemes</span></div>
-      <div class="stat"><span class="number">62</span><span class="label">Concepts</span></div>
+<nav class="site-nav">
+  <a href="../index.html"><img class="nav-logo" src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society"></a>
+  <a class="nav-wordmark" href="../index.html">Iroko Historical Society</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Modules</a></li>
+    <li><a href="iroko-termlist.html">Term Index</a></li>
+    <li><a href="../index.html#whitepaper">Whitepaper</a></li>
+    <li><a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="header-inner page-wrap">
+    <div class="breadcrumb">
+      <a href="../index.html">Iroko Framework</a>
+      <span>/</span>
+      <a href="index.html">Modules</a>
+      <span>/</span>
+      Ewé Module — Sacred Plant Knowledge
     </div>
-  </header>
+    <h1>Ewé Module — Sacred Plant Knowledge <span class="module-tag tag-botanical">Botanical</span></h1>
+    <p class="subtitle">Ritual use governance over botanical data</p>
+    <div class="module-stats">
+      <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+      <div class="stat-cell"><span class="stat-n">23</span><span class="stat-label">Properties</span></div>
+      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+      <div class="stat-cell"><span class="stat-n">62</span><span class="stat-label">Concepts</span></div>
+    </div>
+  </div>
+</div>
 
-  <div class="layout">
-    <main class="main-content">
+<div class="page-wrap">
 
-      <div class="zone-label">
-        Classes
-        <span class="zone-hint">Select a class to explore its properties</span>
-      </div>
-      <div class="class-grid">
-        <div class="class-card" id="card-EwePlantRecord" onclick="activateClass('EwePlantRecord')"><span class="card-uri">iroko:EwePlantRecord</span><span class="card-label">Ewe Plant Record</span></div>
-<div class="class-card" id="card-HerbariumSheet" onclick="activateClass('HerbariumSheet')"><span class="card-uri">iroko:HerbariumSheet</span><span class="card-label">Herbarium Sheet</span></div>
-<div class="class-card" id="card-Plant" onclick="activateClass('Plant')"><span class="card-uri">iroko:Plant</span><span class="card-label">Plant</span></div>
-<div class="class-card" id="card-PlantPreparation" onclick="activateClass('PlantPreparation')"><span class="card-uri">iroko:PlantPreparation</span><span class="card-label">Plant Preparation</span></div>
-      </div>
-
-      <div class="zone-label" id="zone2-label">
-        Properties
-        <span class="zone-hint" id="zone2-hint">Select a class above to explore its properties</span>
-      </div>
-      <div class="zone2-empty" id="zone2-empty">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
-        No class selected. Click any class card above to see its incoming and outgoing properties.
-      </div>
-
-      <div class="property-panel" id="property-panel">
-        <div class="panel-header">
-          <div><div class="ph-uri" id="panel-uri"></div><div class="ph-label" id="panel-label"></div></div>
-          <button class="panel-close" onclick="deactivateClass()">✕</button>
-        </div>
-        <div class="panel-definition" id="panel-definition"></div>
-        <div class="panel-body">
-          <div class="prop-col">
-            <div class="prop-col-label"><span class="direction-arrow">←</span> Incoming <span class="col-sublabel">(this class as range)</span></div>
-            <div id="incoming-props"></div>
-          </div>
-          <div class="prop-col">
-            <div class="prop-col-label"><span class="direction-arrow">→</span> Outgoing <span class="col-sublabel">(this class as domain)</span></div>
-            <div id="outgoing-props"></div>
-          </div>
-        </div>
-        <div class="panel-citation">
-          <div class="cite-text" id="panel-cite-text"></div>
-          <button class="btn-copy" id="panel-cite-btn" onclick="copyPanelCitation(this)">
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
-            Copy citation
-          </button>
-        </div>
-      </div>
-
-      
-      <div class="zone-label">Controlled Vocabulary</div>
-      <div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:HarvestProtocolScheme</span><span class="csb-count">8 concepts</span></div><div class="csb-scheme-label">Harvest Protocol Classification</div><div class="concept-grid"><div class="concept-card" title="Purchased from commercial sources or markets."><span class="cc-label">Commercial/Market</span><span class="cc-id">iroko:harvest-commercial-market</span></div><div class="concept-card" title="Grown intentionally in gardens or farms."><span class="cc-label">Cultivated</span><span class="cc-id">iroko:harvest-cultivated</span></div><div class="concept-card" title="Must be harvested during a specific moon phase."><span class="cc-label">Requires Lunar Phase</span><span class="cc-id">iroko:harvest-lunar-phase-required</span></div><div class="concept-card" title="Offering (water, coins, tobacco) must be left at plant base."><span class="cc-label">Requires Offering to Plant Spirit</span><span class="cc-id">iroko:harvest-plant-spirit-offering</span></div><div class="concept-card" title="Requires ritual protocol and offering to plant spirit before harvesting."><span class="cc-label">Ritual Harvest (Offering Required)</span><span class="cc-id">iroko:harvest-ritual-offering-required</span></div><div class="concept-card" title="Must be harvested by a practitioner with specific initiation."><span class="cc-label">Requires Specific Practitioner</span><span class="cc-id">iroko:harvest-specific-practitioner</span></div><div class="concept-card" title="Must be harvested at dawn, dusk, midnight, etc."><span class="cc-label">Requires Specific Time of Day</span><span class="cc-id">iroko:harvest-specific-time-of-day</span></div><div class="concept-card" title="Harvested from wild without specific ritual protocol."><span class="cc-label">Wildcrafted (No Ritual)</span><span class="cc-id">iroko:harvest-wildcrafted</span></div></div></div>
-<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:MedicinalUseScheme</span><span class="csb-count">12 concepts</span></div><div class="csb-scheme-label">Medicinal Use Classification</div><div class="concept-grid"><div class="concept-card" title="Reduces inflammation and swelling."><span class="cc-label">Anti-Inflammatory</span><span class="cc-id">iroko:medicinal-anti-inflammatory</span></div><div class="concept-card" title="Supports digestive system, relieves stomach issues."><span class="cc-label">Digestive Support</span><span class="cc-id">iroko:medicinal-digestive-support</span></div><div class="concept-card" title="Reduces fever, antipyretic properties."><span class="cc-label">Fever Reduction</span><span class="cc-id">iroko:medicinal-fever-reduction</span></div><div class="concept-card" title="Overall health tonic, vitality support."><span class="cc-label">General Tonic</span><span class="cc-id">iroko:medicinal-general-tonic</span></div><div class="concept-card" title="Postpartum recovery and maternal health."><span class="cc-label">Maternal/Postpartum</span><span class="cc-id">iroko:medicinal-maternal-postpartum</span></div><div class="concept-card" title="Analgesic properties, relieves pain."><span class="cc-label">Pain Relief</span><span class="cc-id">iroko:medicinal-pain-relief</span></div><div class="concept-card" title="Safe for children, pediatric applications."><span class="cc-label">Pediatric</span><span class="cc-id">iroko:medicinal-pediatric</span></div><div class="concept-card" title="Supports reproductive health and fertility."><span class="cc-label">Reproductive/Fertility</span><span class="cc-id">iroko:medicinal-reproductive-fertility</span></div><div class="concept-card" title="Supports respiratory system, cough relief, asthma."><span class="cc-label">Respiratory Support</span><span class="cc-id">iroko:medicinal-respiratory-support</span></div><div class="concept-card" title="Applied to skin for rashes, irritation, wounds."><span class="cc-label">Skin/Topical</span><span class="cc-id">iroko:medicinal-skin-topical</span></div><div class="concept-card" title="Addresses spiritual and emotional dimensions of illness."><span class="cc-label">Spiritual/Psychosomatic</span><span class="cc-id">iroko:medicinal-spiritual-psychosomatic</span></div><div class="concept-card" title="Promotes wound healing, tissue repair."><span class="cc-label">Wound Healing</span><span class="cc-id">iroko:medicinal-wound-healing</span></div></div></div>
-<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:PlantPartScheme</span><span class="csb-count">12 concepts</span></div><div class="csb-scheme-label">Plant Part Classification</div><div class="concept-grid"><div class="concept-card"><span class="cc-label">Bark</span><span class="cc-id">iroko:part-bark</span></div><div class="concept-card"><span class="cc-label">Bulb</span><span class="cc-id">iroko:part-bulb</span></div><div class="concept-card"><span class="cc-label">Flower</span><span class="cc-id">iroko:part-flower</span></div><div class="concept-card"><span class="cc-label">Fruit</span><span class="cc-id">iroko:part-fruit</span></div><div class="concept-card"><span class="cc-label">Leaf</span><span class="cc-id">iroko:part-leaf</span></div><div class="concept-card"><span class="cc-label">Pollen</span><span class="cc-id">iroko:part-pollen</span></div><div class="concept-card"><span class="cc-label">Resin</span><span class="cc-id">iroko:part-resin</span></div><div class="concept-card"><span class="cc-label">Root</span><span class="cc-id">iroko:part-root</span></div><div class="concept-card"><span class="cc-label">Sap</span><span class="cc-id">iroko:part-sap</span></div><div class="concept-card"><span class="cc-label">Seed</span><span class="cc-id">iroko:part-seed</span></div><div class="concept-card"><span class="cc-label">Stem</span><span class="cc-id">iroko:part-stem</span></div><div class="concept-card"><span class="cc-label">Whole Plant</span><span class="cc-id">iroko:part-whole-plant</span></div></div></div>
-<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:PreparationMethodScheme</span><span class="csb-count">13 concepts</span></div><div class="csb-scheme-label">Preparation Method Classification</div><div class="concept-grid"><div class="concept-card" title="Prepared as spiritual bath for immersion or washing."><span class="cc-label">Bath (Bano/Bain)</span><span class="cc-id">iroko:prep-bath</span></div><div class="concept-card" title="Boiled to extract properties from harder plant parts."><span class="cc-label">Decoction (Boiled)</span><span class="cc-id">iroko:prep-decoction</span></div><div class="concept-card" title="Dried and bundled for hanging or storage."><span class="cc-label">Dried Bundle</span><span class="cc-id">iroko:prep-dried-bundle</span></div><div class="concept-card" title="Burned as incense or smoke for cleansing."><span class="cc-label">Fumigation (Sahumerio)</span><span class="cc-id">iroko:prep-fumigation</span></div><div class="concept-card" title="Used ritually with words or prayers but not physically prepared."><span class="cc-label">Incantation-Only</span><span class="cc-id">iroko:prep-incantation-only</span></div><div class="concept-card" title="Steeped in hot water like tea."><span class="cc-label">Infusion (Hot Water)</span><span class="cc-id">iroko:prep-infusion</span></div><div class="concept-card" title="Consumed internally as tea, tonic, or food."><span class="cc-label">Ingestion (Tea/Food)</span><span class="cc-id">iroko:prep-ingestion</span></div><div class="concept-card" title="Soaked in cold water or oil for an extended period."><span class="cc-label">Maceration (Cold Soak)</span><span class="cc-id">iroko:prep-maceration</span></div><div class="concept-card" title="Applied topically as paste or compress."><span class="cc-label">Poultice/Compress</span><span class="cc-id">iroko:prep-poultice</span></div><div class="concept-card" title="Dried and ground into powder."><span class="cc-label">Powder (Afoche)</span><span class="cc-id">iroko:prep-powder</span></div><div class="concept-card" title="Extracted in alcohol or spirits."><span class="cc-label">Tincture/Alcohol</span><span class="cc-id">iroko:prep-tincture</span></div><div class="concept-card" title="Applied directly to skin or affected area."><span class="cc-label">Topical Application</span><span class="cc-id">iroko:prep-topical</span></div><div class="concept-card" title="Prepared as liquid wash for ritual bathing or anointing."><span class="cc-label">Wash (Omiero/Lavage)</span><span class="cc-id">iroko:prep-wash</span></div></div></div>
-<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:RitualUseScheme</span><span class="csb-count">17 concepts</span></div><div class="csb-scheme-label">Ritual Use Classification</div><div class="concept-grid"><div class="concept-card" title="Honors ancestors, facilitates ancestral connection."><span class="cc-label">Ancestor Veneration</span><span class="cc-id">iroko:ritual-ancestor-veneration</span></div><div class="concept-card" title="Consecrates objects, spaces, and persons."><span class="cc-label">Consecration</span><span class="cc-id">iroko:ritual-consecration</span></div><div class="concept-card" title="Represents cosmological principles and symbolic meaning."><span class="cc-label">Cosmological/Symbolic</span><span class="cc-id">iroko:ritual-cosmological-symbolic</span></div><div class="concept-card" title="Funeral ceremonies and death transitions."><span class="cc-label">Death Rites</span><span class="cc-id">iroko:ritual-death-rites</span></div><div class="concept-card" title="Enhances divinatory abilities and spiritual sight."><span class="cc-label">Divination Enhancement</span><span class="cc-id">iroko:ritual-divination-enhancement</span></div><div class="concept-card" title="Binds, controls, or dominates situations or people."><span class="cc-label">Domination/Binding</span><span class="cc-id">iroko:ritual-domination-binding</span></div><div class="concept-card" title="Spiritual healing, restoration of balance."><span class="cc-label">Healing/Restoration</span><span class="cc-id">iroko:ritual-healing-restoration</span></div><div class="concept-card" title="Blesses homes, workplaces, and sacred spaces."><span class="cc-label">House/Space Blessing</span><span class="cc-id">iroko:ritual-house-blessing</span></div><div class="concept-card" title="Facilitates communication with spirits and invocation."><span class="cc-label">Invocation/Communication</span><span class="cc-id">iroko:ritual-invocation-communication</span></div><div class="concept-card" title="Legal matters, court cases, justice."><span class="cc-label">Legal/Justice</span><span class="cc-id">iroko:ritual-legal-justice</span></div><div class="concept-card" title="Attracts love and enhances relationships."><span class="cc-label">Love/Attraction</span><span class="cc-id">iroko:ritual-love-attraction</span></div><div class="concept-card" title="Offered to spirits as devotion or tribute."><span class="cc-label">Offering/Devotion</span><span class="cc-id">iroko:ritual-offering-devotion</span></div><div class="concept-card" title="Attracts wealth, prosperity, and abundance."><span class="cc-label">Prosperity/Abundance</span><span class="cc-id">iroko:ritual-prosperity-abundance</span></div><div class="concept-card" title="Creates protective boundaries, shields from harm."><span class="cc-label">Protection/Boundary</span><span class="cc-id">iroko:ritual-protection-boundary</span></div><div class="concept-card" title="Spiritual cleansing, removal of negative influences."><span class="cc-label">Purification/Cleansing</span><span class="cc-id">iroko:ritual-purification-cleansing</span></div><div class="concept-card" title="Used in initiation, birth, death, and marriage ceremonies."><span class="cc-label">Rites of Transition</span><span class="cc-id">iroko:ritual-rites-of-transition</span></div><div class="concept-card" title="Opens paths, removes obstacles, facilitates opportunities."><span class="cc-label">Road Opening</span><span class="cc-id">iroko:ritual-road-opening</span></div></div></div>
-
-    </main>
-
-    <aside class="sidebar">
-      <div class="sidebar-panel">
-        <div class="sidebar-panel-title" id="sb-title">Connected modules</div>
-        <div class="sidebar-dynamic" id="sb-connections"></div>
-      </div>
-      <div class="sidebar-panel">
-        <div class="sidebar-panel-title">Share</div>
-        <div class="share-buttons">
-          <a class="share-btn" href="#" onclick="shareEmail(event)">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1.5"/><polyline points="2,4 10,12 18,4"/></svg>
-            Email
-          </a>
-          <a class="share-btn" href="#" onclick="window.print();return false;">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="6"/><rect x="2" y="8" width="16" height="8" rx="1"/><rect x="5" y="12" width="10" height="5"/><circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
-            Print
-          </a>
-          <button class="share-btn" id="share-link-btn" onclick="copyPageLink(this)">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12a4 4 0 005.66 0l2-2A4 4 0 009.9 4.24l-1 1"/><path d="M12 8a4 4 0 00-5.66 0l-2 2A4 4 0 006.1 15.76l1-1"/></svg>
-            Link
-          </button>
-        </div>
-      </div>
-      <div class="sidebar-panel">
-        <div class="sidebar-panel-title">Cite the Ewé Module</div>
-        <div class="sidebar-citation">
-          <div class="cite-text">"Ewé Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. <em>ontology.irokosociety.org/ewe</em></div>
-          <button class="btn-copy-sm" onclick="copyModuleCitation(this)">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
-            Copy citation
-          </button>
-        </div>
-      </div>
-      <div class="sidebar-panel">
-        <div class="sidebar-panel-title">Other formats</div>
-        <div class="format-links">
-          <a class="format-link" href="#">RDF/Turtle <span class="format-arrow">↗</span></a>
-          <a class="format-link" href="#">JSON-LD <span class="format-arrow">↗</span></a>
-          <a class="format-link" href="#">RDF/XML <span class="format-arrow">↗</span></a>
-          <a class="format-link" href="#">N-Triples <span class="format-arrow">↗</span></a>
-        </div>
-      </div>
-    </aside>
+  <div style="margin-top:1.75rem;">
+    <div class="header-meta">
+      <span class="meta-pill">ewe:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-ewe#</span>
+      <span class="meta-pill">v2.1.0</span>
+      <span class="meta-pill"><a href="iroko-ewe.ttl">Download TTL ↓</a></span>
+      <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a></span>
+    </div>
+    <p class="module-desc" style="max-width:80ch;margin-top:1.25rem;">Domain module. Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance over Darwin Core botanical data. Focus on medicinal and ritual applications, harvest protocols, preparation methods, and access control for operational knowledge. Use with iroko-epistemic to model harvest and preparation constraints; with iroko-travay for ceremony context in which plants are deployed. Darwin Core alignment declarations are in iroko-align-dwc.</p>
   </div>
 
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="fw">Iroko <span>Historical Society</span></span>
-        <p>Postcustodial cultural heritage complex for Afro-Atlantic sacred knowledge systems.</p>
+  <div class="term-section">
+    <div class="term-section-header">
+      <span class="term-section-title">Classes</span>
+      <span class="term-section-count">4 classes</span>
+    </div>
+    <div class="class-card" id="cls-EwePlantRecord">
+      <div class="class-name">EwePlantRecord</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ewe Plant Record</div>
+      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Plant</span></div>
+      <p class="class-def">An archival record documenting a sacred plant within the Iroko Historical Society dataset. Subclass of Plant. Use this class for dataset instances; use iroko:Plant for abstract botanical entities and cross-module joins.</p>
+    </div>
+    <div class="class-card" id="cls-HerbariumSheet">
+      <div class="class-name">HerbariumSheet</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Herbarium Sheet</div>
+      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">DocumentaryEvidence</span></div>
+      <p class="class-def">Physical plant specimen preserved for documentation. Links botanical voucher to a plant record and archival photograph via iroko:documentsPlant and iroko:photographicVoucher. Darwin Core alignment: iroko:specimenNumber skos:exactMatch dwc:catalogNumber (declared in iroko-align-dwc).</p>
+    </div>
+    <div class="class-card" id="cls-Plant">
+      <div class="class-name">Plant</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Plant</div>
+      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
+      <p class="class-def">Sacred plant entity in Afro-Atlantic traditions. Adds ritual, medicinal, and access governance dimensions to botanical description. Darwin Core alignment (owl:equivalentClass dwc:Occurrence, skos:exactMatch dwc:Taxon) is declared in iroko-align-dwc.</p>
+    </div>
+    <div class="class-card" id="cls-PlantPreparation">
+      <div class="class-name">PlantPreparation</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Plant Preparation</div>
+      
+      <p class="class-def">A prepared spiritual material combining specific plants with defined quantities and methods. Example: Omiero for Obatala (bath with 21 leaves of Akoko, Prodigiosa, Albahaca blanca). Constituent plants are linked via iroko:hasConstituent; quantities via iroko:constituentQuantity; full instructions via iroko:preparationInstructions (initiated-only).</p>
+    </div>
+  </div>
+
+  <div class="term-section">
+    <div class="term-section-header">
+      <span class="term-section-title">Properties</span>
+      <span class="term-section-count">23 properties</span>
+    </div>
+    <table class="prop-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Type</th>
+          <th>Domain → Range</th>
+          <th>Access</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="prop-collisionNote">
+          <td><span class="prop-name">collisionNote</span><br><span style="font-size:.75rem;color:var(--ink-soft);">collision note</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Ewe Plant Record → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Explanation of name collision: which plants share the name, how to distinguish, regional variations. Canonical singular form — use iroko:collisionNote, not iroko:collisionNotes.</td>
+        </tr>
+        <tr id="prop-collisionNotes">
+          <td><span class="prop-name">collisionNotes</span><br><span style="font-size:.75rem;color:var(--ink-soft);">collision notes (deprecated)</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">— → —</td>
+          <td style="white-space:nowrap;"></td>
+          <td class="prop-desc">Deprecated plural form. Use iroko:collisionNote instead.</td>
+        </tr>
+        <tr id="prop-constituentQuantity">
+          <td><span class="prop-name">constituentQuantity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">constituent quantity</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Plant Preparation → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Quantity of a constituent plant in a preparation. Free-text to accommodate ritual number conventions (e.g. &#x27;21 leaves&#x27;, &#x27;7 roots&#x27;, &#x27;a handful&#x27;). Attach to the PlantPreparation node, not to the Plant node directly.</td>
+        </tr>
+        <tr id="prop-contraindication">
+          <td><span class="prop-name">contraindication</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contraindication</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Plant → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Safety warnings: allergic reactions, pregnancy contraindications, toxic if ingested, etc.</td>
+        </tr>
+        <tr id="prop-documentsPlant">
+          <td><span class="prop-name">documentsPlant</span><br><span style="font-size:.75rem;color:var(--ink-soft);">documents plant</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Herbarium Sheet → Plant</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Links a HerbariumSheet voucher specimen to the Plant record it documents. Enables herbarium institution records to join to Iroko plant records.</td>
+        </tr>
+        <tr id="prop-entityAssociation">
+          <td><span class="prop-name">entityAssociation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">entity association</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant → SpiritualEntity</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module.</td>
+        </tr>
+        <tr id="prop-harvestProtocol">
+          <td><span class="prop-name">harvestProtocol</span><br><span style="font-size:.75rem;color:var(--ink-soft);">harvest protocol</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Method of harvesting: ritual vs. commercial, timing, offerings required. Values: iroko:harvest-ritual-offering-required, iroko:harvest-wildcrafted, iroko:harvest-cultivated, etc.</td>
+        </tr>
+        <tr id="prop-harvestProtocolDetailed">
+          <td><span class="prop-name">harvestProtocolDetailed</span><br><span style="font-size:.75rem;color:var(--ink-soft);">harvest protocol (detailed)</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Plant → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Detailed harvest instructions: exact timing (dawn, dusk), direction (face east), quantities (3, 7, 9, 21), offerings required.</td>
+        </tr>
+        <tr id="prop-hasConstituent">
+          <td><span class="prop-name">hasConstituent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has constituent</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant Preparation → Plant</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Links a PlantPreparation to each constituent Plant. A preparation may have multiple constituents. Use with iroko:constituentQuantity to record the quantity of each constituent.</td>
+        </tr>
+        <tr id="prop-medicinalUse">
+          <td><span class="prop-name">medicinalUse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">medicinal use</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Medicinal or healing application of this plant. Values from controlled vocabulary: iroko:medicinal-fever-reduction, iroko:medicinal-digestive-support, etc.</td>
+        </tr>
+        <tr id="prop-nameCollision">
+          <td><span class="prop-name">nameCollision</span><br><span style="font-size:.75rem;color:var(--ink-soft);">name collision</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Plant → boolean</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Boolean indicating if the same vernacular name refers to multiple distinct species.</td>
+        </tr>
+        <tr id="prop-photographicVoucher">
+          <td><span class="prop-name">photographicVoucher</span><br><span style="font-size:.75rem;color:var(--ink-soft);">photographic voucher</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant → DocumentaryEvidence</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Link to photographic documentation of this plant specimen. Aligns with dwc:associatedMedia (see iroko-align-dwc).</td>
+        </tr>
+        <tr id="prop-plantPart">
+          <td><span class="prop-name">plantPart</span><br><span style="font-size:.75rem;color:var(--ink-soft);">plant part</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Which part of the plant is used. Values: iroko:part-leaf, iroko:part-root, iroko:part-bark, etc.</td>
+        </tr>
+        <tr id="prop-preparationInstructions">
+          <td><span class="prop-name">preparationInstructions</span><br><span style="font-size:.75rem;color:var(--ink-soft);">preparation instructions</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Plant Preparation → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">Complete instructions for assembling the PlantPreparation: order of addition, timing, incantations, quantities, and critical steps. Governed at initiated-only minimum; elder-initiated for consecrated preparations such as Omiero.</td>
+        </tr>
+        <tr id="prop-preparationMethod">
+          <td><span class="prop-name">preparationMethod</span><br><span style="font-size:.75rem;color:var(--ink-soft);">preparation method</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">General preparation method. Values: iroko:prep-infusion, iroko:prep-decoction, iroko:prep-bath, etc.</td>
+        </tr>
+        <tr id="prop-preparationMethodDetailed">
+          <td><span class="prop-name">preparationMethodDetailed</span><br><span style="font-size:.75rem;color:var(--ink-soft);">preparation method (detailed)</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Plant → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">Exact preparation instructions including timing, quantities, and critical steps.</td>
+        </tr>
+        <tr id="prop-processReference">
+          <td><span class="prop-name">processReference</span><br><span style="font-size:.75rem;color:var(--ink-soft);">process reference</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant → RitualProcess</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Ritual process where this plant is used. Links to Travay module.</td>
+        </tr>
+        <tr id="prop-ritualContext">
+          <td><span class="prop-name">ritualContext</span><br><span style="font-size:.75rem;color:var(--ink-soft);">ritual context</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Plant → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
+          <td class="prop-desc">Textual description of ceremonial use context.</td>
+        </tr>
+        <tr id="prop-ritualNote">
+          <td><span class="prop-name">ritualNote</span><br><span style="font-size:.75rem;color:var(--ink-soft);">ritual note</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Annotation</span></td>
+          <td class="prop-domain-range">Ewe Plant Record → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Free-text annotation on ritual or linguistic context not captured by controlled vocabulary. Includes etymology, geographic distribution notes, and cross-tradition observations. Canonical singular form — use iroko:ritualNote, not iroko:ritualNotes.</td>
+        </tr>
+        <tr id="prop-ritualNotes">
+          <td><span class="prop-name">ritualNotes</span><br><span style="font-size:.75rem;color:var(--ink-soft);">ritual notes (deprecated)</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Annotation</span></td>
+          <td class="prop-domain-range">— → —</td>
+          <td style="white-space:nowrap;"></td>
+          <td class="prop-desc">Deprecated plural form. Use iroko:ritualNote instead.</td>
+        </tr>
+        <tr id="prop-ritualUse">
+          <td><span class="prop-name">ritualUse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">ritual use</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Ceremonial or spiritual application of this plant. Values: iroko:ritual-purification-cleansing, iroko:ritual-protection-boundary, etc.</td>
+        </tr>
+        <tr id="prop-signReference">
+          <td><span class="prop-name">signReference</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign reference</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Plant → DivinationSign</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
+          <td class="prop-desc">Divination sign that prescribes this plant. Links to Marca module.</td>
+        </tr>
+        <tr id="prop-specimenNumber">
+          <td><span class="prop-name">specimenNumber</span><br><span style="font-size:.75rem;color:var(--ink-soft);">specimen number</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Herbarium Sheet → string</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Herbarium catalog number or specimen identifier. Aligns with dwc:catalogNumber (see iroko-align-dwc).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="term-section">
+    <div class="term-section-header">
+      <span class="term-section-title">Concept Schemes</span>
+      <span class="term-section-count">5 schemes</span>
+    </div>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Harvest Protocol Classification</span>
+        <span class="scheme-count">8 concepts</span>
       </div>
-      <div class="footer-col">
-        <h4>Ontology</h4>
-        <ul>
-          <li><a href="#">Modules</a></li>
-          <li><a href="#">Classes</a></li>
-          <li><a href="#">Properties</a></li>
-          <li><a href="#">Concept Schemes</a></li>
-          <li><a href="#">Whitepaper</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Institution</h4>
-        <ul>
-          <li><a href="#">About IHS</a></li>
-          <li><a href="#">Governance</a></li>
-          <li><a href="#">Access Policy</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-funders">
-        <h4>Supported by</h4>
-        <div class="funder-slot">Funder logo</div>
-        <div class="funder-slot">Funder logo</div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Methods and requirements for harvesting plants.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-harvest-commercial-market">
+          <div class="concept-label">Commercial/Market</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">harvest-commercial-market</div>
+          <p class="concept-def">Purchased from commercial sources or markets.</p>
+        </div>
+        <div class="concept-item" id="concept-harvest-cultivated">
+          <div class="concept-label">Cultivated</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">harvest-cultivated</div>
+          <p class="concept-def">Grown intentionally in gardens or farms.</p>
+        </div>
+        <div class="concept-item" id="concept-harvest-lunar-phase-required">
+          <div class="concept-label">Requires Lunar Phase</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">harvest-lunar-phase-required</div>
+          <p class="concept-def">Must be harvested during a specific moon phase.</p>
+        </div>
+        <div class="concept-item" id="concept-harvest-plant-spirit-offering">
+          <div class="concept-label">Requires Offering to Plant Spirit</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">harvest-plant-spirit-offering</div>
+          <p class="concept-def">Offering (water, coins, tobacco) must be left at plant base.</p>
+        </div>
+        <div class="concept-item" id="concept-harvest-specific-practitioner">
+          <div class="concept-label">Requires Specific Practitioner</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">harvest-specific-practitioner</div>
+          <p class="concept-def">Must be harvested by a practitioner with specific initiation.</p>
+        </div>
+        <div class="concept-item" id="concept-harvest-specific-time-of-day">
+          <div class="concept-label">Requires Specific Time of Day</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">harvest-specific-time-of-day</div>
+          <p class="concept-def">Must be harvested at dawn, dusk, midnight, etc.</p>
+        </div>
+        <div class="concept-item" id="concept-harvest-ritual-offering-required">
+          <div class="concept-label">Ritual Harvest (Offering Required)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">harvest-ritual-offering-required</div>
+          <p class="concept-def">Requires ritual protocol and offering to plant spirit before harvesting.</p>
+        </div>
+        <div class="concept-item" id="concept-harvest-wildcrafted">
+          <div class="concept-label">Wildcrafted (No Ritual)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">harvest-wildcrafted</div>
+          <p class="concept-def">Harvested from wild without specific ritual protocol.</p>
+        </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2025 Iroko Historical Society / Ilé Aña Olofí, Inc. · <a href="#">Terms of Use</a> · <a href="#">Licensing</a></p>
-      <span class="version-badge">v1.2.0</span>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Medicinal Use Classification</span>
+        <span class="scheme-count">12 concepts</span>
+      </div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled vocabulary of medicinal and healing applications.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-medicinal-anti-inflammatory">
+          <div class="concept-label">Anti-Inflammatory</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-anti-inflammatory</div>
+          <p class="concept-def">Reduces inflammation and swelling.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-digestive-support">
+          <div class="concept-label">Digestive Support</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-digestive-support</div>
+          <p class="concept-def">Supports digestive system, relieves stomach issues.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-fever-reduction">
+          <div class="concept-label">Fever Reduction</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-fever-reduction</div>
+          <p class="concept-def">Reduces fever, antipyretic properties.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-general-tonic">
+          <div class="concept-label">General Tonic</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-general-tonic</div>
+          <p class="concept-def">Overall health tonic, vitality support.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-maternal-postpartum">
+          <div class="concept-label">Maternal/Postpartum</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-maternal-postpartum</div>
+          <p class="concept-def">Postpartum recovery and maternal health.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-pain-relief">
+          <div class="concept-label">Pain Relief</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-pain-relief</div>
+          <p class="concept-def">Analgesic properties, relieves pain.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-pediatric">
+          <div class="concept-label">Pediatric</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-pediatric</div>
+          <p class="concept-def">Safe for children, pediatric applications.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-reproductive-fertility">
+          <div class="concept-label">Reproductive/Fertility</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-reproductive-fertility</div>
+          <p class="concept-def">Supports reproductive health and fertility.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-respiratory-support">
+          <div class="concept-label">Respiratory Support</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-respiratory-support</div>
+          <p class="concept-def">Supports respiratory system, cough relief, asthma.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-skin-topical">
+          <div class="concept-label">Skin/Topical</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-skin-topical</div>
+          <p class="concept-def">Applied to skin for rashes, irritation, wounds.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-spiritual-psychosomatic">
+          <div class="concept-label">Spiritual/Psychosomatic</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-spiritual-psychosomatic</div>
+          <p class="concept-def">Addresses spiritual and emotional dimensions of illness.</p>
+        </div>
+        <div class="concept-item" id="concept-medicinal-wound-healing">
+          <div class="concept-label">Wound Healing</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medicinal-wound-healing</div>
+          <p class="concept-def">Promotes wound healing, tissue repair.</p>
+        </div>
+      </div>
     </div>
-  </footer>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Plant Part Classification</span>
+        <span class="scheme-count">12 concepts</span>
+      </div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Which part of the plant is used.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-part-bark">
+          <div class="concept-label">Bark</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-bark</div>
+          <p class="concept-def">part-bark</p>
+        </div>
+        <div class="concept-item" id="concept-part-bulb">
+          <div class="concept-label">Bulb</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-bulb</div>
+          <p class="concept-def">part-bulb</p>
+        </div>
+        <div class="concept-item" id="concept-part-flower">
+          <div class="concept-label">Flower</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-flower</div>
+          <p class="concept-def">part-flower</p>
+        </div>
+        <div class="concept-item" id="concept-part-fruit">
+          <div class="concept-label">Fruit</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-fruit</div>
+          <p class="concept-def">part-fruit</p>
+        </div>
+        <div class="concept-item" id="concept-part-leaf">
+          <div class="concept-label">Leaf</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-leaf</div>
+          <p class="concept-def">part-leaf</p>
+        </div>
+        <div class="concept-item" id="concept-part-pollen">
+          <div class="concept-label">Pollen</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-pollen</div>
+          <p class="concept-def">part-pollen</p>
+        </div>
+        <div class="concept-item" id="concept-part-resin">
+          <div class="concept-label">Resin</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-resin</div>
+          <p class="concept-def">part-resin</p>
+        </div>
+        <div class="concept-item" id="concept-part-root">
+          <div class="concept-label">Root</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-root</div>
+          <p class="concept-def">part-root</p>
+        </div>
+        <div class="concept-item" id="concept-part-sap">
+          <div class="concept-label">Sap</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-sap</div>
+          <p class="concept-def">part-sap</p>
+        </div>
+        <div class="concept-item" id="concept-part-seed">
+          <div class="concept-label">Seed</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-seed</div>
+          <p class="concept-def">part-seed</p>
+        </div>
+        <div class="concept-item" id="concept-part-stem">
+          <div class="concept-label">Stem</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-stem</div>
+          <p class="concept-def">part-stem</p>
+        </div>
+        <div class="concept-item" id="concept-part-whole-plant">
+          <div class="concept-label">Whole Plant</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">part-whole-plant</div>
+          <p class="concept-def">part-whole-plant</p>
+        </div>
+      </div>
+    </div>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Preparation Method Classification</span>
+        <span class="scheme-count">13 concepts</span>
+      </div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Methods for preparing plant materials.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-prep-bath">
+          <div class="concept-label">Bath (Bano/Bain)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-bath</div>
+          <p class="concept-def">Prepared as spiritual bath for immersion or washing.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-decoction">
+          <div class="concept-label">Decoction (Boiled)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-decoction</div>
+          <p class="concept-def">Boiled to extract properties from harder plant parts.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-dried-bundle">
+          <div class="concept-label">Dried Bundle</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-dried-bundle</div>
+          <p class="concept-def">Dried and bundled for hanging or storage.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-fumigation">
+          <div class="concept-label">Fumigation (Sahumerio)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-fumigation</div>
+          <p class="concept-def">Burned as incense or smoke for cleansing.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-incantation-only">
+          <div class="concept-label">Incantation-Only</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-incantation-only</div>
+          <p class="concept-def">Used ritually with words or prayers but not physically prepared.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-infusion">
+          <div class="concept-label">Infusion (Hot Water)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-infusion</div>
+          <p class="concept-def">Steeped in hot water like tea.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-ingestion">
+          <div class="concept-label">Ingestion (Tea/Food)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-ingestion</div>
+          <p class="concept-def">Consumed internally as tea, tonic, or food.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-maceration">
+          <div class="concept-label">Maceration (Cold Soak)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-maceration</div>
+          <p class="concept-def">Soaked in cold water or oil for an extended period.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-poultice">
+          <div class="concept-label">Poultice/Compress</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-poultice</div>
+          <p class="concept-def">Applied topically as paste or compress.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-powder">
+          <div class="concept-label">Powder (Afoche)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-powder</div>
+          <p class="concept-def">Dried and ground into powder.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-tincture">
+          <div class="concept-label">Tincture/Alcohol</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-tincture</div>
+          <p class="concept-def">Extracted in alcohol or spirits.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-topical">
+          <div class="concept-label">Topical Application</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-topical</div>
+          <p class="concept-def">Applied directly to skin or affected area.</p>
+        </div>
+        <div class="concept-item" id="concept-prep-wash">
+          <div class="concept-label">Wash (Omiero/Lavage)</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">prep-wash</div>
+          <p class="concept-def">Prepared as liquid wash for ritual bathing or anointing.</p>
+        </div>
+      </div>
+    </div>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Ritual Use Classification</span>
+        <span class="scheme-count">17 concepts</span>
+      </div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled vocabulary of ceremonial and spiritual applications.</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-ritual-ancestor-veneration">
+          <div class="concept-label">Ancestor Veneration</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-ancestor-veneration</div>
+          <p class="concept-def">Honors ancestors, facilitates ancestral connection.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-consecration">
+          <div class="concept-label">Consecration</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-consecration</div>
+          <p class="concept-def">Consecrates objects, spaces, and persons.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-cosmological-symbolic">
+          <div class="concept-label">Cosmological/Symbolic</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-cosmological-symbolic</div>
+          <p class="concept-def">Represents cosmological principles and symbolic meaning.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-death-rites">
+          <div class="concept-label">Death Rites</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-death-rites</div>
+          <p class="concept-def">Funeral ceremonies and death transitions.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-divination-enhancement">
+          <div class="concept-label">Divination Enhancement</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-divination-enhancement</div>
+          <p class="concept-def">Enhances divinatory abilities and spiritual sight.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-domination-binding">
+          <div class="concept-label">Domination/Binding</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-domination-binding</div>
+          <p class="concept-def">Binds, controls, or dominates situations or people.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-healing-restoration">
+          <div class="concept-label">Healing/Restoration</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-healing-restoration</div>
+          <p class="concept-def">Spiritual healing, restoration of balance.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-house-blessing">
+          <div class="concept-label">House/Space Blessing</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-house-blessing</div>
+          <p class="concept-def">Blesses homes, workplaces, and sacred spaces.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-invocation-communication">
+          <div class="concept-label">Invocation/Communication</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-invocation-communication</div>
+          <p class="concept-def">Facilitates communication with spirits and invocation.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-legal-justice">
+          <div class="concept-label">Legal/Justice</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-legal-justice</div>
+          <p class="concept-def">Legal matters, court cases, justice.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-love-attraction">
+          <div class="concept-label">Love/Attraction</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-love-attraction</div>
+          <p class="concept-def">Attracts love and enhances relationships.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-offering-devotion">
+          <div class="concept-label">Offering/Devotion</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-offering-devotion</div>
+          <p class="concept-def">Offered to spirits as devotion or tribute.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-prosperity-abundance">
+          <div class="concept-label">Prosperity/Abundance</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-prosperity-abundance</div>
+          <p class="concept-def">Attracts wealth, prosperity, and abundance.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-protection-boundary">
+          <div class="concept-label">Protection/Boundary</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-protection-boundary</div>
+          <p class="concept-def">Creates protective boundaries, shields from harm.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-purification-cleansing">
+          <div class="concept-label">Purification/Cleansing</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-purification-cleansing</div>
+          <p class="concept-def">Spiritual cleansing, removal of negative influences.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-rites-of-transition">
+          <div class="concept-label">Rites of Transition</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-rites-of-transition</div>
+          <p class="concept-def">Used in initiation, birth, death, and marriage ceremonies.</p>
+        </div>
+        <div class="concept-item" id="concept-ritual-road-opening">
+          <div class="concept-label">Road Opening</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ritual-road-opening</div>
+          <p class="concept-def">Opens paths, removes obstacles, facilitates opportunities.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<script>
-const MOD_SLUG = 'ewe';
-const MOD_DISPLAY = 'Ewé Module';
-const MOD_CITE = '"Ewé Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/ewe';
-const CLASSES = {
-  EwePlantRecord: {
-    uri:'iroko:EwePlantRecord', label:'Ewe Plant Record',
-    definition:'An archival record documenting a sacred plant within the Iroko Historical Society dataset. Subclass of Plant. Use this class for dataset instances; use iroko:Plant for abstract botanical entities and cross-module joins.',
-    outgoing:[],
-    incoming:[],
-    crossModuleConnections:[]
-  },
-  HerbariumSheet: {
-    uri:'iroko:HerbariumSheet', label:'Herbarium Sheet',
-    definition:'Physical plant specimen preserved for documentation. Links botanical voucher to a plant record and archival photograph via iroko:documentsPlant and iroko:photographicVoucher. Darwin Core alignment: iroko:specimenNumber skos:exactMatch dwc:catalogNumber (declared in iroko-align-dwc).',
-    outgoing:[{uri:'iroko:documentsPlant',label:'documents plant',range:'iroko:Plant',definition:'Links a HerbariumSheet voucher specimen to the Plant record it documents. Enables herbarium institution records to join to Iroko plant records.',crossModule:'ewe'  }],
-    incoming:[],
-    crossModuleConnections:[]
-  },
-  Plant: {
-    uri:'iroko:Plant', label:'Plant',
-    definition:'Sacred plant entity in Afro-Atlantic traditions. Adds ritual, medicinal, and access governance dimensions to botanical description. Darwin Core alignment (owl:equivalentClass dwc:Occurrence, skos:exactMatch dwc:Taxon) is declared in iroko-align-dwc.',
-    outgoing:[{uri:'iroko:entityAssociation',label:'entity association',range:'iroko:SpiritualEntity',definition:'Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module.',crossModule:'nkisi'  },{uri:'iroko:harvestProtocol',label:'harvest protocol',range:'iroko:Concept',definition:'Method of harvesting: ritual vs. commercial, timing, offerings required. Values: iroko:harvest-ritual-offering-required, iroko:harvest-wildcrafted, iroko:harvest-cultivated, etc.',crossModule:''  },{uri:'iroko:medicinalUse',label:'medicinal use',range:'iroko:Concept',definition:'Medicinal or healing application of this plant. Values from controlled vocabulary: iroko:medicinal-fever-reduction, iroko:medicinal-digestive-support, etc.',crossModule:''  },{uri:'iroko:photographicVoucher',label:'photographic voucher',range:'iroko:DocumentaryEvidence',definition:'Link to photographic documentation of this plant specimen. Aligns with dwc:associatedMedia (see iroko-align-dwc).',crossModule:'core'  },{uri:'iroko:plantPart',label:'plant part',range:'iroko:Concept',definition:'Which part of the plant is used. Values: iroko:part-leaf, iroko:part-root, iroko:part-bark, etc.',crossModule:''  },{uri:'iroko:preparationMethod',label:'preparation method',range:'iroko:Concept',definition:'General preparation method. Values: iroko:prep-infusion, iroko:prep-decoction, iroko:prep-bath, etc.',crossModule:''  },{uri:'iroko:processReference',label:'process reference',range:'iroko:RitualProcess',definition:'Ritual process where this plant is used. Links to Travay module.',crossModule:'travay'  },{uri:'iroko:ritualUse',label:'ritual use',range:'iroko:Concept',definition:'Ceremonial or spiritual application of this plant. Values: iroko:ritual-purification-cleansing, iroko:ritual-protection-boundary, etc.',crossModule:''  },{uri:'iroko:signReference',label:'sign reference',range:'iroko:DivinationSign',definition:'Divination sign that prescribes this plant. Links to Marca module.',crossModule:'marca'  }],
-    incoming:[{uri:'iroko:documentsPlant',label:'documents plant',domain:'iroko:HerbariumSheet',definition:'Links a HerbariumSheet voucher specimen to the Plant record it documents. Enables herbarium institution records to join to Iroko plant records.',crossModule:'ewe'  },{uri:'iroko:hasConstituent',label:'has constituent',domain:'iroko:PlantPreparation',definition:'Links a PlantPreparation to each constituent Plant. A preparation may have multiple constituents. Use with iroko:constituentQuantity to record the quantity of each constituent.',crossModule:'ewe'  }],
-    crossModuleConnections:[{name:'Nkisi Module',slug:'nkisi',dotClass:'dot-nkisi',props:'via iroko:entityAssociation',direction:'references'},{name:'Core Module',slug:'core',dotClass:'dot-core',props:'via iroko:photographicVoucher',direction:'references'},{name:'Travay Module',slug:'travay',dotClass:'dot-travay',props:'via iroko:processReference',direction:'references'},{name:'Marca Module',slug:'marca',dotClass:'dot-marca',props:'via iroko:signReference',direction:'references'}]
-  },
-  PlantPreparation: {
-    uri:'iroko:PlantPreparation', label:'Plant Preparation',
-    definition:'A prepared spiritual material combining specific plants with defined quantities and methods. Example: Omiero for Obatala (bath with 21 leaves of Akoko, Prodigiosa, Albahaca blanca). Constituent plants are linked via iroko:hasConstituent; quantities via iroko:constituentQuantity; full instructions via iroko:preparationInstructions (initiated-only).',
-    outgoing:[{uri:'iroko:hasConstituent',label:'has constituent',range:'iroko:Plant',definition:'Links a PlantPreparation to each constituent Plant. A preparation may have multiple constituents. Use with iroko:constituentQuantity to record the quantity of each constituent.',crossModule:'ewe'  }],
-    incoming:[],
-    crossModuleConnections:[]
-  }
-};
-const MODULE_CONNECTIONS = [
-  {name:'Nkisi Module',slug:'nkisi',dotClass:'dot-nkisi',props:'1 shared property'},
-  {name:'Core Module',slug:'core',dotClass:'dot-core',props:'1 shared property'},
-  {name:'Travay Module',slug:'travay',dotClass:'dot-travay',props:'1 shared property'},
-  {name:'Marca Module',slug:'marca',dotClass:'dot-marca',props:'1 shared property'}
-];
+</div><!-- /page-wrap -->
 
-let activeClass = null;
+<footer>
+  <span class="footer-logo">Iroko Historical Society · Iroko Framework v2.1.0</span>
+  <div class="footer-links">
+    <a href="https://www.irokosociety.org">irokosociety.org</a>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Modules</a>
+    <a href="iroko-termlist.html">Term Index</a>
+  </div>
+  <span class="footer-cc">CC0 1.0 Universal · </span>
+</footer>
 
-function activateClass(classId) {
-  if (activeClass === classId) { deactivateClass(); return; }
-  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
-  activeClass = classId;
-  document.getElementById('card-' + classId)?.classList.add('is-active');
-  const data = CLASSES[classId];
-  if (!data) return;
-  document.getElementById('panel-uri').textContent = data.uri;
-  document.getElementById('panel-label').textContent = data.label;
-  document.getElementById('panel-definition').textContent = data.definition || '';
-  const citeText = data.uri + '. Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
-  document.getElementById('panel-cite-text').innerHTML = '<em>' + citeText + '</em>';
-  document.getElementById('panel-cite-btn').dataset.cite = citeText;
-  renderProps('incoming-props', data.incoming, 'in');
-  renderProps('outgoing-props', data.outgoing, 'out');
-  document.getElementById('zone2-empty').classList.add('hidden');
-  document.getElementById('zone2-hint').textContent = 'Click class again to close';
-  const panel = document.getElementById('property-panel');
-  panel.classList.add('visible');
-  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
-  renderClassSidebar(data, classId);
-  history.replaceState(null, '', '#' + classId);
-}
-
-function deactivateClass() {
-  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
-  activeClass = null;
-  document.getElementById('property-panel').classList.remove('visible');
-  document.getElementById('zone2-empty').classList.remove('hidden');
-  document.getElementById('zone2-hint').textContent = 'Select a class above to explore its properties';
-  renderModuleSidebar();
-  history.replaceState(null, '', window.location.pathname);
-}
-
-function renderProps(containerId, props, dir) {
-  const el = document.getElementById(containerId);
-  if (!props || props.length === 0) { el.innerHTML = '<div class="no-props">None documented in this module.</div>'; return; }
-  el.innerHTML = props.map((p, i) => {
-    const id = 'prop-' + dir + '-' + i;
-    const endLabel = dir === 'out' ? 'Range' : 'Domain';
-    const endVal   = dir === 'out' ? (p.range || '') : (p.domain || '');
-    const crossTag = (p.crossModule && p.crossModule !== MOD_SLUG) ? '<span class="cross-tag">[' + p.crossModule + ']</span>' : '';
-    return '<div class="prop-item" id="' + id + '" onclick="toggleProp(\'' + id + '\')">' +
-      '<div class="prop-item-top"><span class="prop-item-uri">' + p.uri + '</span>' +
-      '<svg class="prop-item-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,3 11,8 5,13"/></svg></div>' +
-      '<span class="prop-item-label">' + (p.label || '') + '</span>' +
-      '<div class="prop-detail" id="' + id + '-detail">' +
-      '<div class="prop-detail-row"><span class="pd-label">' + endLabel + '</span><span class="pd-value">' + endVal + crossTag + '</span></div>' +
-      '<div class="prop-detail-row"><span class="pd-label">Definition</span><span class="pd-value">' + (p.definition || '') + '</span></div>' +
-      '</div></div>';
-  }).join('');
-}
-
-function toggleProp(propId) {
-  const item = document.getElementById(propId);
-  const detail = document.getElementById(propId + '-detail');
-  if (!item || !detail) return;
-  const isOpen = item.classList.contains('is-expanded');
-  document.querySelectorAll('.prop-item.is-expanded').forEach(el => {
-    el.classList.remove('is-expanded');
-    el.querySelector('.prop-detail')?.classList.remove('visible');
-  });
-  if (!isOpen) { item.classList.add('is-expanded'); detail.classList.add('visible'); }
-}
-
-function renderClassSidebar(data, classId) {
-  const el = document.getElementById('sb-connections');
-  el.classList.add('fading');
-  setTimeout(() => {
-    document.getElementById('sb-title').textContent = 'iroko:' + classId + ' — connections';
-    const conns = data.crossModuleConnections || [];
-    el.innerHTML = '<div class="active-class-card"><span class="acc-uri">' + data.uri + '</span><span class="acc-label">' + data.label + '</span></div>' +
-      (conns.length === 0
-        ? '<p class="no-connections">No cross-module connections.</p>'
-        : conns.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
-            '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
-            '<span class="cc-props">' + c.props + '</span>' +
-            '<span class="cc-via">' + c.direction + '</span></a>').join(''));
-    el.classList.remove('fading');
-  }, 130);
-}
-
-function renderModuleSidebar() {
-  const el = document.getElementById('sb-connections');
-  el.classList.add('fading');
-  setTimeout(() => {
-    document.getElementById('sb-title').textContent = 'Connected modules';
-    el.innerHTML = MODULE_CONNECTIONS.length === 0
-      ? '<p class="no-connections">No cross-module connections documented.</p>'
-      : MODULE_CONNECTIONS.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
-          '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
-          '<span class="cc-props">' + c.props + '</span></a>').join('');
-    el.classList.remove('fading');
-  }, 130);
-}
-
-function copyPanelCitation(btn) {
-  navigator.clipboard.writeText(btn.dataset.cite).then(() => {
-    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
-    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
-  });
-}
-function copyModuleCitation(btn) {
-  navigator.clipboard.writeText(MOD_CITE).then(() => {
-    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
-    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
-  });
-}
-function copyPageLink(btn) {
-  navigator.clipboard.writeText(window.location.href).then(() => {
-    const orig = btn.innerHTML; btn.textContent = '✓'; btn.classList.add('copied-state');
-    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied-state'); }, 2000);
-  });
-}
-function shareEmail(e) {
-  e.preventDefault();
-  window.location.href = 'mailto:?subject=' + encodeURIComponent('Iroko Framework Ontology — ' + MOD_DISPLAY) + '&body=' + encodeURIComponent(window.location.href);
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  renderModuleSidebar();
-  const hash = window.location.hash.slice(1);
-  if (hash && CLASSES[hash]) setTimeout(() => activateClass(hash), 100);
-});
-
-</script>
 </body>
 </html>
