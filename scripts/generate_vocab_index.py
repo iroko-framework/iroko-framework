@@ -174,28 +174,18 @@ PAGE_HTML = """\
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Full Vocabulary Index — Iroko Framework</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
-    /* ── Termlist overrides ─────────────────────────────────────── */
+    /* ── Index page overrides ───────────────────────────────────────── */
     .index-hero {{
-      padding: 2rem 0 1.75rem;
-      border-bottom: 1px solid var(--rule);
+      padding: 2rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
       margin-bottom: 1.5rem;
     }}
-    .index-hero h1 {{
-      font-family: 'Cinzel', serif;
-      font-size: 1.6rem;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      color: var(--ink);
-      margin-bottom: .4rem;
-    }}
-    .index-hero p  {{ font-size: .88rem; color: var(--ink-soft); max-width: 72ch; line-height: 1.6; }}
+    .index-hero h1 {{ font-size: 1.6rem; margin-bottom: .4rem; }}
+    .index-hero p  {{ font-size: .85rem; color: var(--ink-soft); max-width: 70ch; }}
 
-    /* ── Controls bar ───────────────────────────────────────────── */
+    /* ── Controls bar ───────────────────────────────────────────────── */
     .controls {{
       display: flex;
       gap: .75rem;
@@ -205,17 +195,15 @@ PAGE_HTML = """\
     }}
     .search-box {{
       flex: 1 1 260px;
-      padding: .45rem .85rem;
+      padding: .45rem .75rem;
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      border-radius: 5px;
       font-size: .85rem;
-      background: white;
+      background: var(--surface);
       color: var(--ink);
-      font-family: var(--mono);
-      outline: none;
-      transition: border-color var(--transition);
+      font-family: inherit;
     }}
-    .search-box:focus {{ border-color: var(--ochre); }}
+    .search-box:focus {{ outline: 2px solid var(--accent); outline-offset: 1px; }}
 
     .facet-group {{
       display: flex;
@@ -223,59 +211,54 @@ PAGE_HTML = """\
       flex-wrap: wrap;
     }}
     .facet-btn {{
-      padding: .3rem .7rem;
+      padding: .3rem .65rem;
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: .68rem;
-      font-family: var(--mono);
-      letter-spacing: .06em;
-      text-transform: uppercase;
+      border-radius: 4px;
+      font-size: .75rem;
       cursor: pointer;
-      background: var(--warm-white);
+      background: var(--surface);
       color: var(--ink-soft);
-      transition: background var(--transition), color var(--transition), border-color var(--transition);
+      font-family: inherit;
+      transition: background .1s, color .1s, border-color .1s;
     }}
-    .facet-btn:hover  {{ border-color: var(--ochre); color: var(--ochre); }}
+    .facet-btn:hover  {{ border-color: var(--accent); color: var(--accent); }}
     .facet-btn.active {{
-      background: var(--ochre);
-      border-color: var(--ochre);
+      background: var(--accent);
+      border-color: var(--accent);
       color: #fff;
     }}
     .result-count {{
-      font-family: var(--mono);
-      font-size: .72rem;
+      font-size: .78rem;
       color: var(--ink-soft);
       margin-left: auto;
       white-space: nowrap;
-      opacity: 0.7;
     }}
 
-    /* ── Table ──────────────────────────────────────────────────── */
+    /* ── Table ──────────────────────────────────────────────────────── */
     .vocab-index-table {{
       width: 100%;
       border-collapse: collapse;
-      font-size: .83rem;
+      font-size: .82rem;
     }}
     .vocab-index-table thead th {{
       text-align: left;
       padding: .5rem .75rem;
-      border-bottom: 2px solid var(--rule-strong);
-      font-family: var(--mono);
-      font-size: .65rem;
-      font-weight: 500;
-      letter-spacing: .10em;
+      border-bottom: 2px solid var(--border);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .04em;
       text-transform: uppercase;
-      color: var(--ink-light);
-      background: var(--warm-white);
+      color: var(--ink-soft);
+      background: var(--surface);
       position: sticky;
-      top: 48px;
+      top: 0;
       z-index: 1;
     }}
     .vocab-index-table tbody tr {{
-      border-bottom: 1px solid var(--rule);
-      transition: background var(--transition);
+      border-bottom: 1px solid var(--border);
+      transition: background .08s;
     }}
-    .vocab-index-table tbody tr:hover {{ background: var(--cream); }}
+    .vocab-index-table tbody tr:hover {{ background: var(--surface); }}
     .vocab-index-table tbody tr.hidden {{ display: none; }}
     .vocab-index-table td {{
       padding: .45rem .75rem;
@@ -283,12 +266,12 @@ PAGE_HTML = """\
     }}
     .term-link {{
       font-family: var(--mono);
-      font-size: .78rem;
-      font-weight: 500;
-      color: var(--ochre);
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--accent);
       text-decoration: none;
     }}
-    .term-link:hover {{ text-decoration: underline; color: var(--deep-ochre); }}
+    .term-link:hover {{ text-decoration: underline; }}
     .term-label {{
       font-size: .75rem;
       color: var(--ink-soft);
@@ -299,62 +282,56 @@ PAGE_HTML = """\
     .type-badge {{
       display: inline-block;
       padding: .15rem .45rem;
-      border-radius: var(--radius-sm);
-      font-family: var(--mono);
-      font-size: .62rem;
-      font-weight: 500;
+      border-radius: 3px;
+      font-size: .65rem;
+      font-weight: 700;
       letter-spacing: .03em;
       white-space: nowrap;
     }}
-    .type-class    {{ background: var(--teal-pale);   color: var(--teal);       border: 1px solid rgba(42,107,90,0.2); }}
-    .type-property {{ background: var(--gold-pale);   color: var(--deep-ochre); border: 1px solid var(--rule); }}
-    .type-concept  {{ background: var(--warm-white);  color: var(--ink-light);  border: 1px solid var(--border); }}
+    .type-class    {{ background: #e8f0e8; color: #2a5c1e; }}
+    .type-property {{ background: #e8eaf6; color: #3949ab; }}
+    .type-concept  {{ background: #fef3e2; color: #8a5a00; }}
 
+    /* Module tag — reuse existing tag-* classes from iroko-style.css */
     .mod-link {{
-      font-family: var(--mono);
-      font-size: .72rem;
-      color: var(--ink-soft);
+      font-size: .75rem;
       text-decoration: none;
-      opacity: 0.8;
+      color: var(--ink-soft);
     }}
-    .mod-link:hover {{ color: var(--ochre); opacity: 1; }}
+    .mod-link:hover {{ color: var(--accent); }}
 
-    .def-cell {{ color: var(--ink-mid); max-width: 40ch; font-size: .83rem; }}
+    .def-cell {{ color: var(--ink); max-width: 40ch; }}
 
     .no-results {{
       text-align: center;
       padding: 3rem;
       color: var(--ink-soft);
       font-size: .9rem;
-      font-style: italic;
     }}
   </style>
 </head>
 <body>
 
-<nav class="site-nav">
-  <a href="../index.html"><img class="nav-logo" src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society"></a>
-  <a class="nav-wordmark" href="../index.html">Iroko Historical Society</a>
-  <ul class="nav-links">
-    <li><a href="index.html">Modules</a></li>
-    <li><a href="iroko-termlist.html">Term Index</a></li>
-    <li><a href="../index.html#whitepaper">Whitepaper</a></li>
-    <li><a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a></li>
-  </ul>
-</nav>
+  <nav class="breadcrumb page-wrap">
+    <a href="../index.html">Iroko Framework</a>
+    <span>/</span>
+    <a href="index.html">Vocabularies</a>
+    <span>/</span>
+    Full Index
+  </nav>
 
   <div class="page-wrap">
 
     <div class="index-hero">
       <a href="../index.html">
         <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"
-             style="width:64px;height:auto;display:block;margin-bottom:1.25rem;opacity:0.8;">
+             style="width:72px;height:auto;display:block;margin-bottom:1rem;">
       </a>
       <h1>Full Vocabulary Index</h1>
       <p>Every class, property, and concept across all 16 Iroko Framework modules —
          {total_terms:,} terms total. Links go directly to the term's definition
          on its module browse page.</p>
-      <div class="header-meta" style="margin-top:.85rem;">
+      <div class="header-meta" style="margin-top:.75rem;">
         <span class="meta-pill">v1.2.0</span>
         <span class="meta-pill">{n_classes} Classes</span>
         <span class="meta-pill">{n_props} Properties</span>
@@ -407,15 +384,16 @@ PAGE_HTML = """\
 
   </div><!-- /page-wrap -->
 
-  <footer>
-    <span class="footer-logo">Iroko Historical Society · Iroko Framework v1.2.0</span>
+  <footer class="site-footer page-wrap">
+    <div class="footer-copy">
+      © 2026 Iroko Historical Society · CC0 1.0 Universal (Public Domain)
+    </div>
     <div class="footer-links">
       <a href="https://www.irokosociety.org">irokosociety.org</a>
       <a href="../index.html">Home</a>
-      <a href="index.html">Modules</a>
+      <a href="index.html">Vocabularies</a>
       <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
     </div>
-    <span class="footer-cc">CC0 1.0 Universal · © 2026 Iroko Historical Society</span>
   </footer>
 
   <script>
