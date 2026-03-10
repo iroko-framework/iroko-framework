@@ -1,261 +1,592 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agency Module — Sacred Agents &amp; Events — Iroko Framework Vocabularies</title>
-  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agency Module — Iroko Framework Ontology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    :root {
+      --ink:#1a1714; --ink-mid:#2e2a26; --ink-light:#4a4540;
+      --paper:#f7f4ef; --paper-warm:#efe9df;
+      --border:#d5cdc0; --border-mid:#c0b8ac;
+      --gold:#8b6914; --gold-light:#c49a2a; --gold-pale:#f0e6c8; --gold-mid:#a07820;
+      --sienna:#7a3b1e; --teal:#1f5c52; --teal-pale:#e4f0ee; --teal-mid:#2a7a6e;
+      --radius-sm:3px; --radius:6px; --radius-lg:10px;
+      --shadow-sm:0 1px 4px rgba(26,23,20,0.10); --shadow:0 3px 14px rgba(26,23,20,0.13);
+      --transition:180ms ease;
+    }
+    /* Module dot colors */
+    .dot-agency{background:#5a6e8a} .dot-authority{background:#6b4a8a}
+    .dot-core{background:#444} .dot-ekpe{background:#2a6b4a}
+    .dot-epistemic{background:#7a5a1e} .dot-ewe{background:#8b6914}
+    .dot-ile{background:#1f5c52} .dot-manifestation{background:#6b2a2a}
+    .dot-marca{background:#1e4a6b} .dot-narrative{background:#6b3a1e}
+    .dot-ngoma{background:#4a1e6b} .dot-nkisi{background:#7a3b1e}
+    .dot-qal{background:#2a4a6b} .dot-sankofa{background:#6b5a1e}
+    .dot-travay{background:#4a6b8a} .dot-veve{background:#3a1e6b}
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
-  </style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:'EB Garamond',Georgia,serif;font-size:1.0625rem;line-height:1.65;
+      background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+    .site-nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;gap:2rem;
+      height:52px;position:sticky;top:0;z-index:200;border-bottom:2px solid var(--gold)}
+    .wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:600;
+      letter-spacing:0.04em;color:#f7f4ef;text-decoration:none;white-space:nowrap}
+    .wordmark span{color:var(--gold-light)}
+    .nav-links{display:flex;gap:1.5rem;list-style:none;margin-left:auto}
+    .nav-links a{font-family:'EB Garamond',Georgia,serif;font-size:0.875rem;letter-spacing:0.05em;
+      text-transform:uppercase;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .nav-links a:hover{color:var(--gold-light)}
+
+    .page-header{background:var(--ink-mid);color:var(--paper);padding:2.5rem 2rem 2rem;border-bottom:1px solid var(--gold)}
+    .breadcrumb{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .breadcrumb a{color:var(--border-mid);text-decoration:none}
+    .breadcrumb a:hover{color:var(--gold-light)}
+    .page-header h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.25rem;font-weight:300;
+      letter-spacing:0.02em;line-height:1.2;margin-bottom:0.4rem}
+    .module-tag{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+      background:var(--gold);color:var(--ink);padding:0.2em 0.6em;border-radius:var(--radius-sm);
+      vertical-align:middle;margin-left:0.75rem;font-family:'EB Garamond',serif}
+    .module-desc{font-size:0.88rem;color:var(--border-mid);margin-top:0.6rem;max-width:700px;line-height:1.5}
+    .module-stats{display:flex;gap:2rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)}
+    .stat .number{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.75rem;font-weight:300;
+      color:var(--gold-light);line-height:1;display:block}
+    .stat .label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--border-mid)}
+
+    .layout{display:grid;grid-template-columns:1fr 290px;flex:1;max-width:1280px;width:100%;margin:0 auto;align-items:start}
+    .main-content{padding:2rem;border-right:1px solid var(--border);min-width:0}
+
+    .zone-label{font-size:0.68rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between}
+    .zone-hint{font-size:0.7rem;letter-spacing:0.02em;text-transform:none;color:var(--border-mid);font-style:italic}
+
+    .class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.6rem;margin-bottom:2.25rem}
+    .class-card{padding:0.8rem 0.9rem;border:1px solid var(--border);border-radius:var(--radius);
+      background:white;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);
+      user-select:none;position:relative}
+    .class-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .class-card.is-active{border-color:var(--gold);background:var(--gold-pale);box-shadow:var(--shadow)}
+    .class-card.is-active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--paper-warm)}
+    .card-uri{font-family:'JetBrains Mono',monospace;font-size:0.73rem;color:var(--gold);display:block;
+      margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-label{font-size:0.88rem;color:var(--ink);display:block;line-height:1.3}
+
+    .zone2-empty{display:flex;align-items:center;gap:0.75rem;padding:1.25rem 1.5rem;
+      background:var(--paper-warm);border:1px dashed var(--border-mid);border-radius:var(--radius);
+      color:var(--border-mid);font-size:0.85rem;font-style:italic;margin-bottom:2.25rem}
+    .zone2-empty svg{width:20px;height:20px;flex-shrink:0;opacity:0.5}
+    .zone2-empty.hidden{display:none}
+
+    .property-panel{display:none;background:var(--paper-warm);border:1px solid var(--border-mid);
+      border-radius:var(--radius-lg);margin-bottom:2.25rem;overflow:hidden;animation:panelIn 180ms ease forwards}
+    .property-panel.visible{display:block}
+    @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .panel-header{background:var(--ink-mid);color:var(--paper);padding:1rem 1.5rem;
+      display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+    .ph-uri{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--gold-light)}
+    .ph-label{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:300;color:var(--paper)}
+    .panel-close{background:none;border:none;color:var(--border-mid);cursor:pointer;padding:0.2rem;
+      font-size:1.1rem;line-height:1;transition:color var(--transition);margin-left:auto;flex-shrink:0}
+    .panel-close:hover{color:var(--paper)}
+    .panel-definition{padding:1rem 1.5rem;font-size:0.92rem;color:var(--ink-mid);line-height:1.6;border-bottom:1px solid var(--border)}
+    .panel-body{display:grid;grid-template-columns:1fr 1fr}
+    .prop-col{padding:1.25rem 1.5rem}
+    .prop-col:first-child{border-right:1px solid var(--border)}
+    .prop-col-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:0.85rem;display:flex;align-items:center;gap:0.4rem}
+    .direction-arrow{font-size:0.9rem;color:var(--gold)}
+    .col-sublabel{font-style:italic;text-transform:none;letter-spacing:0;font-size:0.67rem;color:var(--border-mid)}
+    .prop-item{padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      background:white;margin-bottom:0.5rem;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition)}
+    .prop-item:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .prop-item.is-expanded{border-color:var(--gold);background:#fffdf7}
+    .prop-item-top{display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
+    .prop-item-uri{font-family:'JetBrains Mono',monospace;font-size:0.74rem;color:var(--gold)}
+    .prop-item-chevron{width:13px;height:13px;color:var(--border-mid);flex-shrink:0;transition:transform var(--transition)}
+    .prop-item.is-expanded .prop-item-chevron{transform:rotate(90deg);color:var(--gold)}
+    .prop-item-label{font-size:0.82rem;color:var(--ink-light);display:block;margin-top:0.12rem}
+    .prop-detail{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border)}
+    .prop-detail.visible{display:block}
+    .prop-detail-row{display:flex;gap:0.75rem;margin-bottom:0.45rem;align-items:baseline}
+    .pd-label{font-size:0.65rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-light);min-width:60px;flex-shrink:0}
+    .pd-value{font-size:0.82rem;color:var(--ink-mid);line-height:1.4}
+    .cross-tag{font-size:0.65rem;color:var(--border-mid);font-style:italic;margin-left:0.3rem}
+    .no-props{font-size:0.82rem;color:var(--border-mid);font-style:italic;padding:0.5rem 0}
+    .panel-citation{padding:1rem 1.5rem;border-top:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .panel-citation .cite-text{font-size:0.8rem;color:var(--ink-light);font-style:italic;flex:1;min-width:200px}
+    .btn-copy{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;
+      font-size:0.85rem;cursor:pointer;transition:background var(--transition),transform 80ms;white-space:nowrap;flex-shrink:0}
+    .btn-copy:hover{background:var(--ink)} .btn-copy:active{transform:scale(0.97)} .btn-copy.copied{background:var(--teal)}
+    .btn-copy svg{width:13px;height:13px;flex-shrink:0}
+
+    .concept-scheme-block{margin-bottom:2rem}
+    .concept-scheme-block:last-child{margin-bottom:0}
+    .csb-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.15rem}
+    .csb-uri{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--teal)}
+    .csb-count{font-size:0.7rem;color:var(--ink-light);letter-spacing:0.04em}
+    .csb-scheme-label{font-size:0.92rem;color:var(--ink-mid);font-style:italic;margin-bottom:0.2rem}
+    .csb-description{font-size:0.82rem;color:var(--ink-light);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--teal-pale)}
+    .concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.45rem}
+    .concept-card{padding:0.55rem 0.75rem;background:var(--teal-pale);border:1px solid rgba(31,92,82,0.18);
+      border-radius:var(--radius-sm);transition:background var(--transition),border-color var(--transition);cursor:default}
+    .concept-card:hover{background:rgba(31,92,82,0.14);border-color:var(--teal)}
+    .cc-label{font-size:0.85rem;color:var(--ink);display:block;line-height:1.3;margin-bottom:0.2rem}
+    .cc-id{font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--teal-mid);display:block}
+
+    .sidebar{padding:1.5rem 1.25rem;position:sticky;top:52px;max-height:calc(100vh - 52px);overflow-y:auto}
+    .sidebar-panel{margin-bottom:1.75rem}
+    .sidebar-panel-title{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      padding-bottom:0.5rem;border-bottom:1px solid var(--border);margin-bottom:0.85rem}
+    .active-class-card{padding:0.75rem 0.85rem;background:var(--gold-pale);border:1px solid var(--gold);
+      border-radius:var(--radius-sm);margin-bottom:0.85rem}
+    .acc-uri{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold-mid);display:block;margin-bottom:0.15rem}
+    .acc-label{font-size:0.9rem;color:var(--ink);font-weight:500}
+    .connection-card{padding:0.6rem 0.75rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      margin-bottom:0.45rem;background:white;text-decoration:none;display:block;
+      transition:border-color var(--transition),box-shadow var(--transition)}
+    .connection-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .cc-top{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem}
+    .cc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .cc-module-name{font-size:0.85rem;color:var(--ink);font-weight:500}
+    .cc-props{font-size:0.72rem;color:var(--ink-light);display:block;margin-top:0.1rem}
+    .cc-via{font-size:0.67rem;color:var(--ink-light);font-style:italic;margin-top:0.1rem;display:block}
+    .sidebar-dynamic{transition:opacity 140ms ease}
+    .sidebar-dynamic.fading{opacity:0}
+    .no-connections{font-size:0.78rem;color:var(--border-mid);font-style:italic}
+    .share-buttons{display:flex;gap:0.5rem}
+    .share-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.55rem 0.25rem;
+      background:var(--paper-warm);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
+      font-family:'EB Garamond',serif;font-size:0.68rem;color:var(--ink-light);text-decoration:none;
+      letter-spacing:0.04em;text-transform:uppercase;transition:background var(--transition),border-color var(--transition),color var(--transition)}
+    .share-btn:hover{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
+    .share-btn svg{width:17px;height:17px}
+    .share-btn.copied-state{background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
+    .sidebar-citation{background:var(--paper-warm);border:1px solid var(--border-mid);border-radius:var(--radius-sm);padding:0.85rem}
+    .sidebar-citation .cite-text{font-size:0.77rem;line-height:1.5;color:var(--ink-mid);font-style:italic;margin-bottom:0.6rem}
+    .btn-copy-sm{display:inline-flex;align-items:center;gap:0.35rem;padding:0.42rem 0.85rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;font-size:0.8rem;
+      cursor:pointer;transition:background var(--transition);width:100%;justify-content:center}
+    .btn-copy-sm:hover{background:var(--ink)} .btn-copy-sm.copied{background:var(--teal)}
+    .format-links{display:flex;flex-direction:column;gap:0.3rem}
+    .format-link{display:flex;align-items:center;justify-content:space-between;padding:0.38rem 0.6rem;
+      border-radius:var(--radius-sm);border:1px solid var(--border);background:white;font-family:'JetBrains Mono',monospace;
+      font-size:0.73rem;color:var(--gold);text-decoration:none;transition:background var(--transition),border-color var(--transition)}
+    .format-link:hover{background:var(--gold-pale);border-color:var(--gold)}
+    .format-arrow{color:var(--border-mid)}
+
+    footer{background:var(--ink);color:var(--paper);margin-top:auto}
+    .footer-inner{max-width:1280px;margin:0 auto;padding:2.5rem 2rem;
+      display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:2rem;align-items:start}
+    .footer-brand .fw{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-weight:300;
+      letter-spacing:0.04em;color:var(--paper);display:block;margin-bottom:0.5rem}
+    .footer-brand .fw span{color:var(--gold-light)}
+    .footer-brand p{font-size:0.8rem;color:var(--border-mid);line-height:1.5;max-width:220px}
+    .footer-col h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .footer-col ul{list-style:none}
+    .footer-col li{margin-bottom:0.3rem}
+    .footer-col a{font-size:0.82rem;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .footer-col a:hover{color:var(--gold-light)}
+    .footer-funders{display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end}
+    .footer-funders h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);text-align:right;width:100%}
+    .funder-slot{width:140px;height:44px;border:1px dashed rgba(255,255,255,0.15);border-radius:var(--radius-sm);
+      display:flex;align-items:center;justify-content:center;font-size:0.67rem;letter-spacing:0.06em;
+      text-transform:uppercase;color:rgba(255,255,255,0.2)}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);max-width:1280px;margin:0 auto;padding:1rem 2rem;
+      display:flex;justify-content:space-between;align-items:center}
+    .footer-bottom p{font-size:0.75rem;color:rgba(255,255,255,0.3)}
+    .footer-bottom a{color:rgba(255,255,255,0.3);text-decoration:none}
+    .footer-bottom a:hover{color:var(--gold-light)}
+    .version-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:0.2em 0.5em;
+      border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);color:rgba(255,255,255,0.3)}
+</style>
 </head>
 <body>
-
-<div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="index.html">Vocabularies</a>
-    <a href="https://ontology.irokosociety.org">ontology.irokosociety.org ↗</a>
-    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+  <nav class="site-nav">
+    <a class="wordmark" href="/">Iroko Framework <span>Ontology</span></a>
+    <ul class="nav-links">
+      <li><a href="/modules">Modules</a></li>
+      <li><a href="/classes">Classes</a></li>
+      <li><a href="/properties">Properties</a></li>
+      <li><a href="/concepts">Concepts</a></li>
+      <li><a href="/whitepaper">Whitepaper</a></li>
+    </ul>
   </nav>
-</div>
 
-<div class="page-wrap">
-
-  <p class="breadcrumb">
-    <a href="../index.html">Iroko Framework</a>
-    <span>/</span>
-    <a href="index.html">Vocabularies</a>
-    <span>/</span>
-    Agency Module — Sacred Agents &amp; Events
-  </p>
-
-  <header class="vocab-header">
-    <div class="vocab-header-logo">
-      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
-    </div>
-    <div>
-      <span class="module-tag tag-agency">Agency</span>
-      <h1>Agency Module — Sacred Agents &amp; Events</h1>
-      <p class="subtitle">Sovereignty-aligned agency model: spirits, ritual events, authorization chains</p>
-      <div class="header-meta">
-        <span class="meta-pill">ag:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-agency#</span>
-        <span class="meta-pill">v2.0.0</span>
-        <span class="meta-pill"><a href="iroko-agency.ttl" style="color:inherit;">Download TTL ↓</a></span>
-        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
-      </div>
+  <header class="page-header">
+    <div class="breadcrumb"><a href="/">Iroko Framework</a> › <a href="/modules">Modules</a> › Agency Module</div>
+    <h1>Agency Module <span class="module-tag">Domain Layer</span></h1>
+    <div class="module-desc">Governance Layer module.</div>
+    <div class="module-stats">
+      <div class="stat"><span class="number">11</span><span class="label">Classes</span></div>
+      <div class="stat"><span class="number">11</span><span class="label">Properties</span></div>
+      <div class="stat"><span class="number">0</span><span class="label">Concept Schemes</span></div>
+      <div class="stat"><span class="number">0</span><span class="label">Concepts</span></div>
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Governance Layer module. Sovereignty-aligned agency model for sacred systems. Defines sacred agents, spirits, ritual events, authorization and refusal events, stewardship mandates, and authorization chains. Designed to degrade gracefully: minimal use requires only iroko:SacredAgent, iroko:Spirit, and iroko:RitualEvent. Use with iroko-authority for full authorization governance.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">12</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">11</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="layout">
+    <main class="main-content">
+
+      <div class="zone-label">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="class-card" id="card-AuthorizationChain" onclick="activateClass('AuthorizationChain')"><span class="card-uri">iroko:AuthorizationChain</span><span class="card-label">Authorization Chain</span></div>
+<div class="class-card" id="card-AuthorizationEvent" onclick="activateClass('AuthorizationEvent')"><span class="card-uri">iroko:AuthorizationEvent</span><span class="card-label">Authorization Event</span></div>
+<div class="class-card" id="card-ManifestationEvent" onclick="activateClass('ManifestationEvent')"><span class="card-uri">iroko:ManifestationEvent</span><span class="card-label">Manifestation Event</span></div>
+<div class="class-card" id="card-RefusalEvent" onclick="activateClass('RefusalEvent')"><span class="card-uri">iroko:RefusalEvent</span><span class="card-label">Refusal Event</span></div>
+<div class="class-card" id="card-RitualAction" onclick="activateClass('RitualAction')"><span class="card-uri">iroko:RitualAction</span><span class="card-label">Ritual Action</span></div>
+<div class="class-card" id="card-RitualConsequence" onclick="activateClass('RitualConsequence')"><span class="card-uri">iroko:RitualConsequence</span><span class="card-label">Ritual Consequence</span></div>
+<div class="class-card" id="card-RitualEvent" onclick="activateClass('RitualEvent')"><span class="card-uri">iroko:RitualEvent</span><span class="card-label">Ritual Event</span></div>
+<div class="class-card" id="card-RitualPractitioner" onclick="activateClass('RitualPractitioner')"><span class="card-uri">iroko:RitualPractitioner</span><span class="card-label">Ritual Practitioner</span></div>
+<div class="class-card" id="card-SacredAgent" onclick="activateClass('SacredAgent')"><span class="card-uri">iroko:SacredAgent</span><span class="card-label">Sacred Agent</span></div>
+<div class="class-card" id="card-Spirit" onclick="activateClass('Spirit')"><span class="card-uri">iroko:Spirit</span><span class="card-label">Spirit</span></div>
+<div class="class-card" id="card-StewardshipMandate" onclick="activateClass('StewardshipMandate')"><span class="card-uri">iroko:StewardshipMandate</span><span class="card-label">Stewardship Mandate</span></div>
+      </div>
+
+      <div class="zone-label" id="zone2-label">
+        Properties
+        <span class="zone-hint" id="zone2-hint">Select a class above to explore its properties</span>
+      </div>
+      <div class="zone2-empty" id="zone2-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        No class selected. Click any class card above to see its incoming and outgoing properties.
+      </div>
+
+      <div class="property-panel" id="property-panel">
+        <div class="panel-header">
+          <div><div class="ph-uri" id="panel-uri"></div><div class="ph-label" id="panel-label"></div></div>
+          <button class="panel-close" onclick="deactivateClass()">✕</button>
+        </div>
+        <div class="panel-definition" id="panel-definition"></div>
+        <div class="panel-body">
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">←</span> Incoming <span class="col-sublabel">(this class as range)</span></div>
+            <div id="incoming-props"></div>
+          </div>
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">→</span> Outgoing <span class="col-sublabel">(this class as domain)</span></div>
+            <div id="outgoing-props"></div>
+          </div>
+        </div>
+        <div class="panel-citation">
+          <div class="cite-text" id="panel-cite-text"></div>
+          <button class="btn-copy" id="panel-cite-btn" onclick="copyPanelCitation(this)">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+
+      <div class="zone-label">Controlled Vocabulary</div><p style="color:var(--border-mid);font-style:italic;font-size:0.85rem;padding:1rem 0;">No concept schemes defined in this module.</p>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title" id="sb-title">Connected modules</div>
+        <div class="sidebar-dynamic" id="sb-connections"></div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Share</div>
+        <div class="share-buttons">
+          <a class="share-btn" href="#" onclick="shareEmail(event)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1.5"/><polyline points="2,4 10,12 18,4"/></svg>
+            Email
+          </a>
+          <a class="share-btn" href="#" onclick="window.print();return false;">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="6"/><rect x="2" y="8" width="16" height="8" rx="1"/><rect x="5" y="12" width="10" height="5"/><circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
+            Print
+          </a>
+          <button class="share-btn" id="share-link-btn" onclick="copyPageLink(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12a4 4 0 005.66 0l2-2A4 4 0 009.9 4.24l-1 1"/><path d="M12 8a4 4 0 00-5.66 0l-2 2A4 4 0 006.1 15.76l1-1"/></svg>
+            Link
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Cite the Agency Module</div>
+        <div class="sidebar-citation">
+          <div class="cite-text">"Agency Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. <em>ontology.irokosociety.org/agency</em></div>
+          <button class="btn-copy-sm" onclick="copyModuleCitation(this)">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Other formats</div>
+        <div class="format-links">
+          <a class="format-link" href="#">RDF/Turtle <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">JSON-LD <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">RDF/XML <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">N-Triples <span class="format-arrow">↗</span></a>
+        </div>
+      </div>
+    </aside>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">12 classes</span>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="fw">Iroko <span>Historical Society</span></span>
+        <p>Postcustodial cultural heritage complex for Afro-Atlantic sacred knowledge systems.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Ontology</h4>
+        <ul>
+          <li><a href="#">Modules</a></li>
+          <li><a href="#">Classes</a></li>
+          <li><a href="#">Properties</a></li>
+          <li><a href="#">Concept Schemes</a></li>
+          <li><a href="#">Whitepaper</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Institution</h4>
+        <ul>
+          <li><a href="#">About IHS</a></li>
+          <li><a href="#">Governance</a></li>
+          <li><a href="#">Access Policy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-funders">
+        <h4>Supported by</h4>
+        <div class="funder-slot">Funder logo</div>
+        <div class="funder-slot">Funder logo</div>
+      </div>
     </div>
-    <div class="class-card" id="cls-AuthorizationChain">
-      <div class="class-name">AuthorizationChain</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Authorization Chain</div>
-      
-      <p class="class-def">A structured representation of delegated or layered authority across agents, mandates, and conditions. Models succession of authorization from one agent or office to another within a ritual governance system.</p>
-    </div>
-    <div class="class-card" id="cls-AuthorizationEvent">
-      <div class="class-name">AuthorizationEvent</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Authorization Event</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Ritual Event</span></div>
-      <p class="class-def">A ritual event in which authorization is asserted, delegated, conditioned, or revoked. Supports sovereignty modeling for access, disclosure, and stewardship mandates.</p>
-    </div>
-    <div class="class-card" id="cls-ManifestationEvent">
-      <div class="class-name">ManifestationEvent</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Manifestation Event</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Ritual Event</span></div>
-      <p class="class-def">A ritual event in which a sacred agent is asserted to manifest through a medium, place, dream, divination, or other mode. Connects to iroko-manifestation.ttl for mode and medium typing.</p>
-    </div>
-    <div class="class-card" id="cls-RefusalEvent">
-      <div class="class-name">RefusalEvent</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Refusal Event</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Ritual Event</span></div>
-      <p class="class-def">A ritual event in which a sacred agent is asserted to refuse participation, disclosure, access, or a requested action. Enables modeling of sacred refusal as a positive, governance-significant act rather than merely an absence.</p>
-    </div>
-    <div class="class-card" id="cls-RitualAction">
-      <div class="class-name">RitualAction</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ritual Action</div>
-      
-      <p class="class-def">A typed action asserted to be performed or effected within ritual practice. Use when finer granularity than RitualEvent is needed — for example, a sequence of actions within a ceremony.</p>
-    </div>
-    <div class="class-card" id="cls-RitualConsequence">
-      <div class="class-name">RitualConsequence</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ritual Consequence</div>
-      
-      <p class="class-def">An outcome category describing asserted consequences of ritual actions or events. Descriptive and claim-bearing — does not assert causal certainty. Access governance applies.</p>
-    </div>
-    <div class="class-card" id="cls-RitualEvent">
-      <div class="class-name">RitualEvent</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ritual Event</div>
-      
-      <p class="class-def">A time-bounded ritual activity in which agents participate. A ritual event may generate assertions, permissions, constraints, or records. For temporal calendar time on instances, use PROV-O time properties (prov:startedAtTime, prov:endedAtTime). Subclass of prov:Activity via iroko-align-prov.ttl.</p>
-    </div>
-    <div class="class-card" id="cls-RitualPractitioner">
-      <div class="class-name">RitualPractitioner</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ritual Practitioner</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Agent</span></div>
-      <p class="class-def">A human agent recognized as exercising sacred capacity within a ritual system — performing ceremonies, transmitting knowledge, authorizing or refusing actions, or operating with sacred materials. Subclass of iroko:SacredAgent. Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures (Bokor, independent operators). Legitimacy and jurisdiction, where applicable, are modeled separately via iroko:Authority in iroko-authority. A practitioner may be linked to an Authority record but the two are independent assertions.</p>
-    </div>
-    <div class="class-card" id="cls-SacredAgent">
-      <div class="class-name">SacredAgent</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Agent</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">An entity recognized within a ritual system as capable of intentional action — authorization, refusal, protection, sanctioning, or manifestation. Defined without metaphysical claims. Enables structured modeling of agency in sovereignty-aware archives. Subclass of prov:Agent via iroko-align-prov.ttl.</p>
-    </div>
-    <div class="class-card" id="cls-Spirit">
-      <div class="class-name">Spirit</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Spirit</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Agent</span></div>
-      <p class="class-def">A sacred agent recognized as a spirit within a cultural and ritual framework. Specific typologies (orisha, lwa, nkisi, egun, etc.) modeled via subclasses or concept schemes in domain modules.</p>
-    </div>
-    <div class="class-card" id="cls-StewardshipMandate">
-      <div class="class-name">StewardshipMandate</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Stewardship Mandate</div>
-      
-      <p class="class-def">A mandate asserted to govern stewardship, custody, disclosure, or use of materials. May be associated with agents, events, and access policies. Can condition iroko:AccessPolicy instances.</p>
-    </div>
-    <div class="class-card" id="cls-n5d067bcfffd443cf867382970ce01b15b1">
-      <div class="class-name">n5d067bcfffd443cf867382970ce01b15b1</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">n5d067bcfffd443cf867382970ce01b15b1</div>
-      
-      <p class="class-def">n5d067bcfffd443cf867382970ce01b15b1</p>
-    </div>
-  </div>
-
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">11 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-chainLink">
-          <td><span class="prop-name">chainLink</span><br><span style="font-size:.75rem;color:var(--ink-soft);">chain link</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Authorization Chain → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links one node in an AuthorizationChain to the next — the agent, event, or mandate that follows in the delegation sequence.</td>
-        </tr>
-        <tr id="prop-generatesRefusal">
-          <td><span class="prop-name">generatesRefusal</span><br><span style="font-size:.75rem;color:var(--ink-soft);">generates refusal</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">n5d067bcfffd443cf867382970ce01b15b1 → Refusal Event</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding.</td>
-        </tr>
-        <tr id="prop-hasAuthorizationChain">
-          <td><span class="prop-name">hasAuthorizationChain</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has authorization chain</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Authorization Chain</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Associates a RitualEvent, policy, or mandate with an AuthorizationChain.</td>
-        </tr>
-        <tr id="prop-hasMandate">
-          <td><span class="prop-name">hasMandate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has mandate</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Stewardship Mandate</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Associates an agent, event, or policy with a StewardshipMandate.</td>
-        </tr>
-        <tr id="prop-hasOutcome">
-          <td><span class="prop-name">hasOutcome</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has outcome</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → SacredEntity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links an event or action to an outcome entity — a RelationshipAssertion, RitualConsequence, RefusalEvent, AccessPolicy, or other outcome record. Range: iroko:SacredEntity — all current and anticipated outcome types (Assertion, RitualConsequence, RefusalEvent) are subclasses of SacredEntity, enabling traversal without locking in a union declaration.</td>
-        </tr>
-        <tr id="prop-hasRitualConsequence">
-          <td><span class="prop-name">hasRitualConsequence</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has ritual consequence</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Ritual Consequence</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Associates a ritual event or action with a RitualConsequence category.</td>
-        </tr>
-        <tr id="prop-includesAction">
-          <td><span class="prop-name">includesAction</span><br><span style="font-size:.75rem;color:var(--ink-soft);">includes action</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Ritual Event → Ritual Action</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a RitualEvent to a constituent RitualAction. Use when finer-grained action typing within an event is required — for example, to distinguish the invocation action from the offering action within a single ceremony. A RitualEvent may include multiple RitualActions. Access: community-only.</td>
-        </tr>
-        <tr id="prop-includesEvent">
-          <td><span class="prop-name">includesEvent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">includes event</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Authorization Chain → Authorization Event</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links an AuthorizationChain to a constituent AuthorizationEvent. Separates chain membership from chain sequence: iroko:chainLink traverses the sequence of links; iroko:includesEvent identifies which AuthorizationEvents belong to the chain without requiring full sequence traversal. A chain may include multiple events at different points in the delegation hierarchy. Access: community-only.</td>
-        </tr>
-        <tr id="prop-involvesAgent">
-          <td><span class="prop-name">involvesAgent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">involves agent</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Sacred Agent</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links an event, action, or assertion node to an agent involved. Complements prov:wasAssociatedWith in instance data without requiring PROV import.</td>
-        </tr>
-        <tr id="prop-mandateCondition">
-          <td><span class="prop-name">mandateCondition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">mandate condition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Stewardship Mandate → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Text description of conditions activating or limiting this stewardship mandate.</td>
-        </tr>
-        <tr id="prop-mandateScope">
-          <td><span class="prop-name">mandateScope</span><br><span style="font-size:.75rem;color:var(--ink-soft);">mandate scope</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Stewardship Mandate → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Free-text description of the scope of a StewardshipMandate — what materials, processes, or knowledge types it covers.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      Issued 2026-02-23 · Revised 2026-03-07<br>
-      License: CC0 1.0 Universal (Public Domain)
-    </div>
-    <div class="footer-links">
-      <a href="https://www.irokosociety.org">irokosociety.org</a>
-      <a href="../index.html">Home</a>
-      <a href="index.html">Vocabularies</a>
+    <div class="footer-bottom">
+      <p>© 2025 Iroko Historical Society / Ilé Aña Olofí, Inc. · <a href="#">Terms of Use</a> · <a href="#">Licensing</a></p>
+      <span class="version-badge">v1.2.0</span>
     </div>
   </footer>
 
-</div>
+<script>
+const MOD_SLUG = 'agency';
+const MOD_DISPLAY = 'Agency Module';
+const MOD_CITE = '"Agency Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/agency';
+const CLASSES = {
+  AuthorizationChain: {
+    uri:'iroko:AuthorizationChain', label:'Authorization Chain',
+    definition:'A structured representation of delegated or layered authority across agents, mandates, and conditions. Models succession of authorization from one agent or office to another within a ritual governance system.',
+    outgoing:[{uri:'iroko:chainLink',label:'chain link',range:'',definition:'Links one node in an AuthorizationChain to the next — the agent, event, or mandate that follows in the delegation sequence.',crossModule:''  },{uri:'iroko:includesEvent',label:'includes event',range:'iroko:AuthorizationEvent',definition:'Links an AuthorizationChain to a constituent AuthorizationEvent. Separates chain membership from chain sequence: iroko:chainLink traverses the sequence of links; iroko:includesEvent identifies which AuthorizationEvents belong to the chain without requiring full sequence traversal. A chain may include multiple events at different points in the delegation hierarchy. Access: community-only.',crossModule:'agency'  }],
+    incoming:[{uri:'iroko:hasAuthorizationChain',label:'has authorization chain',domain:'',definition:'Associates a RitualEvent, policy, or mandate with an AuthorizationChain.',crossModule:''  }],
+    crossModuleConnections:[]
+  },
+  AuthorizationEvent: {
+    uri:'iroko:AuthorizationEvent', label:'Authorization Event',
+    definition:'A ritual event in which authorization is asserted, delegated, conditioned, or revoked. Supports sovereignty modeling for access, disclosure, and stewardship mandates.',
+    outgoing:[],
+    incoming:[{uri:'iroko:includesEvent',label:'includes event',domain:'iroko:AuthorizationChain',definition:'Links an AuthorizationChain to a constituent AuthorizationEvent. Separates chain membership from chain sequence: iroko:chainLink traverses the sequence of links; iroko:includesEvent identifies which AuthorizationEvents belong to the chain without requiring full sequence traversal. A chain may include multiple events at different points in the delegation hierarchy. Access: community-only.',crossModule:'agency'  }],
+    crossModuleConnections:[]
+  },
+  ManifestationEvent: {
+    uri:'iroko:ManifestationEvent', label:'Manifestation Event',
+    definition:'A ritual event in which a sacred agent is asserted to manifest through a medium, place, dream, divination, or other mode. Connects to iroko-manifestation.ttl for mode and medium typing.',
+    outgoing:[],
+    incoming:[],
+    crossModuleConnections:[]
+  },
+  RefusalEvent: {
+    uri:'iroko:RefusalEvent', label:'Refusal Event',
+    definition:'A ritual event in which a sacred agent is asserted to refuse participation, disclosure, access, or a requested action. Enables modeling of sacred refusal as a positive, governance-significant act rather than merely an absence.',
+    outgoing:[],
+    incoming:[{uri:'iroko:generatesRefusal',label:'generates refusal',domain:'iroko:n71db8e14c8c348eeb224d07a18e5f59eb1',definition:'Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding.',crossModule:''  }],
+    crossModuleConnections:[]
+  },
+  RitualAction: {
+    uri:'iroko:RitualAction', label:'Ritual Action',
+    definition:'A typed action asserted to be performed or effected within ritual practice. Use when finer granularity than RitualEvent is needed — for example, a sequence of actions within a ceremony.',
+    outgoing:[],
+    incoming:[{uri:'iroko:includesAction',label:'includes action',domain:'iroko:RitualEvent',definition:'Links a RitualEvent to a constituent RitualAction. Use when finer-grained action typing within an event is required — for example, to distinguish the invocation action from the offering action within a single ceremony. A RitualEvent may include multiple RitualActions. Access: community-only.',crossModule:'agency'  }],
+    crossModuleConnections:[]
+  },
+  RitualConsequence: {
+    uri:'iroko:RitualConsequence', label:'Ritual Consequence',
+    definition:'An outcome category describing asserted consequences of ritual actions or events. Descriptive and claim-bearing — does not assert causal certainty. Access governance applies.',
+    outgoing:[],
+    incoming:[{uri:'iroko:hasRitualConsequence',label:'has ritual consequence',domain:'',definition:'Associates a ritual event or action with a RitualConsequence category.',crossModule:''  }],
+    crossModuleConnections:[]
+  },
+  RitualEvent: {
+    uri:'iroko:RitualEvent', label:'Ritual Event',
+    definition:'A time-bounded ritual activity in which agents participate. A ritual event may generate assertions, permissions, constraints, or records. For temporal calendar time on instances, use PROV-O time properties (prov:startedAtTime, prov:endedAtTime). Subclass of prov:Activity via iroko-align-prov.ttl.',
+    outgoing:[{uri:'iroko:includesAction',label:'includes action',range:'iroko:RitualAction',definition:'Links a RitualEvent to a constituent RitualAction. Use when finer-grained action typing within an event is required — for example, to distinguish the invocation action from the offering action within a single ceremony. A RitualEvent may include multiple RitualActions. Access: community-only.',crossModule:'agency'  }],
+    incoming:[],
+    crossModuleConnections:[]
+  },
+  RitualPractitioner: {
+    uri:'iroko:RitualPractitioner', label:'Ritual Practitioner',
+    definition:'A human agent recognized as exercising sacred capacity within a ritual system — performing ceremonies, transmitting knowledge, authorizing or refusing actions, or operating with sacred materials. Subclass of iroko:SacredAgent. Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures (Bokor, independent operators). Legitimacy and jurisdiction, where applicable, are modeled separately via iroko:Authority in iroko-authority. A practitioner may be linked to an Authority record but the two are independent assertions.',
+    outgoing:[],
+    incoming:[],
+    crossModuleConnections:[]
+  },
+  SacredAgent: {
+    uri:'iroko:SacredAgent', label:'Sacred Agent',
+    definition:'An entity recognized within a ritual system as capable of intentional action — authorization, refusal, protection, sanctioning, or manifestation. Defined without metaphysical claims. Enables structured modeling of agency in sovereignty-aware archives. Subclass of prov:Agent via iroko-align-prov.ttl.',
+    outgoing:[],
+    incoming:[{uri:'iroko:involvesAgent',label:'involves agent',domain:'',definition:'Links an event, action, or assertion node to an agent involved. Complements prov:wasAssociatedWith in instance data without requiring PROV import.',crossModule:''  }],
+    crossModuleConnections:[]
+  },
+  Spirit: {
+    uri:'iroko:Spirit', label:'Spirit',
+    definition:'A sacred agent recognized as a spirit within a cultural and ritual framework. Specific typologies (orisha, lwa, nkisi, egun, etc.) modeled via subclasses or concept schemes in domain modules.',
+    outgoing:[],
+    incoming:[],
+    crossModuleConnections:[]
+  },
+  StewardshipMandate: {
+    uri:'iroko:StewardshipMandate', label:'Stewardship Mandate',
+    definition:'A mandate asserted to govern stewardship, custody, disclosure, or use of materials. May be associated with agents, events, and access policies. Can condition iroko:AccessPolicy instances.',
+    outgoing:[],
+    incoming:[{uri:'iroko:hasMandate',label:'has mandate',domain:'',definition:'Associates an agent, event, or policy with a StewardshipMandate.',crossModule:''  }],
+    crossModuleConnections:[]
+  }
+};
+const MODULE_CONNECTIONS = [
+
+];
+
+let activeClass = null;
+
+function activateClass(classId) {
+  if (activeClass === classId) { deactivateClass(); return; }
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = classId;
+  document.getElementById('card-' + classId)?.classList.add('is-active');
+  const data = CLASSES[classId];
+  if (!data) return;
+  document.getElementById('panel-uri').textContent = data.uri;
+  document.getElementById('panel-label').textContent = data.label;
+  document.getElementById('panel-definition').textContent = data.definition || '';
+  const citeText = data.uri + '. Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
+  document.getElementById('panel-cite-text').innerHTML = '<em>' + citeText + '</em>';
+  document.getElementById('panel-cite-btn').dataset.cite = citeText;
+  renderProps('incoming-props', data.incoming, 'in');
+  renderProps('outgoing-props', data.outgoing, 'out');
+  document.getElementById('zone2-empty').classList.add('hidden');
+  document.getElementById('zone2-hint').textContent = 'Click class again to close';
+  const panel = document.getElementById('property-panel');
+  panel.classList.add('visible');
+  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  renderClassSidebar(data, classId);
+  history.replaceState(null, '', '#' + classId);
+}
+
+function deactivateClass() {
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = null;
+  document.getElementById('property-panel').classList.remove('visible');
+  document.getElementById('zone2-empty').classList.remove('hidden');
+  document.getElementById('zone2-hint').textContent = 'Select a class above to explore its properties';
+  renderModuleSidebar();
+  history.replaceState(null, '', window.location.pathname);
+}
+
+function renderProps(containerId, props, dir) {
+  const el = document.getElementById(containerId);
+  if (!props || props.length === 0) { el.innerHTML = '<div class="no-props">None documented in this module.</div>'; return; }
+  el.innerHTML = props.map((p, i) => {
+    const id = 'prop-' + dir + '-' + i;
+    const endLabel = dir === 'out' ? 'Range' : 'Domain';
+    const endVal   = dir === 'out' ? (p.range || '') : (p.domain || '');
+    const crossTag = (p.crossModule && p.crossModule !== MOD_SLUG) ? '<span class="cross-tag">[' + p.crossModule + ']</span>' : '';
+    return '<div class="prop-item" id="' + id + '" onclick="toggleProp(\'' + id + '\')">' +
+      '<div class="prop-item-top"><span class="prop-item-uri">' + p.uri + '</span>' +
+      '<svg class="prop-item-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,3 11,8 5,13"/></svg></div>' +
+      '<span class="prop-item-label">' + (p.label || '') + '</span>' +
+      '<div class="prop-detail" id="' + id + '-detail">' +
+      '<div class="prop-detail-row"><span class="pd-label">' + endLabel + '</span><span class="pd-value">' + endVal + crossTag + '</span></div>' +
+      '<div class="prop-detail-row"><span class="pd-label">Definition</span><span class="pd-value">' + (p.definition || '') + '</span></div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function toggleProp(propId) {
+  const item = document.getElementById(propId);
+  const detail = document.getElementById(propId + '-detail');
+  if (!item || !detail) return;
+  const isOpen = item.classList.contains('is-expanded');
+  document.querySelectorAll('.prop-item.is-expanded').forEach(el => {
+    el.classList.remove('is-expanded');
+    el.querySelector('.prop-detail')?.classList.remove('visible');
+  });
+  if (!isOpen) { item.classList.add('is-expanded'); detail.classList.add('visible'); }
+}
+
+function renderClassSidebar(data, classId) {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'iroko:' + classId + ' — connections';
+    const conns = data.crossModuleConnections || [];
+    el.innerHTML = '<div class="active-class-card"><span class="acc-uri">' + data.uri + '</span><span class="acc-label">' + data.label + '</span></div>' +
+      (conns.length === 0
+        ? '<p class="no-connections">No cross-module connections.</p>'
+        : conns.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+            '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+            '<span class="cc-props">' + c.props + '</span>' +
+            '<span class="cc-via">' + c.direction + '</span></a>').join(''));
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function renderModuleSidebar() {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'Connected modules';
+    el.innerHTML = MODULE_CONNECTIONS.length === 0
+      ? '<p class="no-connections">No cross-module connections documented.</p>'
+      : MODULE_CONNECTIONS.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+          '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+          '<span class="cc-props">' + c.props + '</span></a>').join('');
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function copyPanelCitation(btn) {
+  navigator.clipboard.writeText(btn.dataset.cite).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyModuleCitation(btn) {
+  navigator.clipboard.writeText(MOD_CITE).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyPageLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓'; btn.classList.add('copied-state');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied-state'); }, 2000);
+  });
+}
+function shareEmail(e) {
+  e.preventDefault();
+  window.location.href = 'mailto:?subject=' + encodeURIComponent('Iroko Framework Ontology — ' + MOD_DISPLAY) + '&body=' + encodeURIComponent(window.location.href);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderModuleSidebar();
+  const hash = window.location.hash.slice(1);
+  if (hash && CLASSES[hash]) setTimeout(() => activateClass(hash), 100);
+});
+
+</script>
 </body>
 </html>

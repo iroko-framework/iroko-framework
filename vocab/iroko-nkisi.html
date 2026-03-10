@@ -1,695 +1,543 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nkisi Module — Spiritual Entities — Iroko Framework Vocabularies</title>
-  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nkisi Module — Iroko Framework Ontology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    :root {
+      --ink:#1a1714; --ink-mid:#2e2a26; --ink-light:#4a4540;
+      --paper:#f7f4ef; --paper-warm:#efe9df;
+      --border:#d5cdc0; --border-mid:#c0b8ac;
+      --gold:#8b6914; --gold-light:#c49a2a; --gold-pale:#f0e6c8; --gold-mid:#a07820;
+      --sienna:#7a3b1e; --teal:#1f5c52; --teal-pale:#e4f0ee; --teal-mid:#2a7a6e;
+      --radius-sm:3px; --radius:6px; --radius-lg:10px;
+      --shadow-sm:0 1px 4px rgba(26,23,20,0.10); --shadow:0 3px 14px rgba(26,23,20,0.13);
+      --transition:180ms ease;
+    }
+    /* Module dot colors */
+    .dot-agency{background:#5a6e8a} .dot-authority{background:#6b4a8a}
+    .dot-core{background:#444} .dot-ekpe{background:#2a6b4a}
+    .dot-epistemic{background:#7a5a1e} .dot-ewe{background:#8b6914}
+    .dot-ile{background:#1f5c52} .dot-manifestation{background:#6b2a2a}
+    .dot-marca{background:#1e4a6b} .dot-narrative{background:#6b3a1e}
+    .dot-ngoma{background:#4a1e6b} .dot-nkisi{background:#7a3b1e}
+    .dot-qal{background:#2a4a6b} .dot-sankofa{background:#6b5a1e}
+    .dot-travay{background:#4a6b8a} .dot-veve{background:#3a1e6b}
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
-  </style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:'EB Garamond',Georgia,serif;font-size:1.0625rem;line-height:1.65;
+      background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+    .site-nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;gap:2rem;
+      height:52px;position:sticky;top:0;z-index:200;border-bottom:2px solid var(--gold)}
+    .wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:600;
+      letter-spacing:0.04em;color:#f7f4ef;text-decoration:none;white-space:nowrap}
+    .wordmark span{color:var(--gold-light)}
+    .nav-links{display:flex;gap:1.5rem;list-style:none;margin-left:auto}
+    .nav-links a{font-family:'EB Garamond',Georgia,serif;font-size:0.875rem;letter-spacing:0.05em;
+      text-transform:uppercase;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .nav-links a:hover{color:var(--gold-light)}
+
+    .page-header{background:var(--ink-mid);color:var(--paper);padding:2.5rem 2rem 2rem;border-bottom:1px solid var(--gold)}
+    .breadcrumb{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .breadcrumb a{color:var(--border-mid);text-decoration:none}
+    .breadcrumb a:hover{color:var(--gold-light)}
+    .page-header h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.25rem;font-weight:300;
+      letter-spacing:0.02em;line-height:1.2;margin-bottom:0.4rem}
+    .module-tag{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+      background:var(--gold);color:var(--ink);padding:0.2em 0.6em;border-radius:var(--radius-sm);
+      vertical-align:middle;margin-left:0.75rem;font-family:'EB Garamond',serif}
+    .module-desc{font-size:0.88rem;color:var(--border-mid);margin-top:0.6rem;max-width:700px;line-height:1.5}
+    .module-stats{display:flex;gap:2rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)}
+    .stat .number{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.75rem;font-weight:300;
+      color:var(--gold-light);line-height:1;display:block}
+    .stat .label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--border-mid)}
+
+    .layout{display:grid;grid-template-columns:1fr 290px;flex:1;max-width:1280px;width:100%;margin:0 auto;align-items:start}
+    .main-content{padding:2rem;border-right:1px solid var(--border);min-width:0}
+
+    .zone-label{font-size:0.68rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between}
+    .zone-hint{font-size:0.7rem;letter-spacing:0.02em;text-transform:none;color:var(--border-mid);font-style:italic}
+
+    .class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.6rem;margin-bottom:2.25rem}
+    .class-card{padding:0.8rem 0.9rem;border:1px solid var(--border);border-radius:var(--radius);
+      background:white;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);
+      user-select:none;position:relative}
+    .class-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .class-card.is-active{border-color:var(--gold);background:var(--gold-pale);box-shadow:var(--shadow)}
+    .class-card.is-active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--paper-warm)}
+    .card-uri{font-family:'JetBrains Mono',monospace;font-size:0.73rem;color:var(--gold);display:block;
+      margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-label{font-size:0.88rem;color:var(--ink);display:block;line-height:1.3}
+
+    .zone2-empty{display:flex;align-items:center;gap:0.75rem;padding:1.25rem 1.5rem;
+      background:var(--paper-warm);border:1px dashed var(--border-mid);border-radius:var(--radius);
+      color:var(--border-mid);font-size:0.85rem;font-style:italic;margin-bottom:2.25rem}
+    .zone2-empty svg{width:20px;height:20px;flex-shrink:0;opacity:0.5}
+    .zone2-empty.hidden{display:none}
+
+    .property-panel{display:none;background:var(--paper-warm);border:1px solid var(--border-mid);
+      border-radius:var(--radius-lg);margin-bottom:2.25rem;overflow:hidden;animation:panelIn 180ms ease forwards}
+    .property-panel.visible{display:block}
+    @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .panel-header{background:var(--ink-mid);color:var(--paper);padding:1rem 1.5rem;
+      display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+    .ph-uri{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--gold-light)}
+    .ph-label{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:300;color:var(--paper)}
+    .panel-close{background:none;border:none;color:var(--border-mid);cursor:pointer;padding:0.2rem;
+      font-size:1.1rem;line-height:1;transition:color var(--transition);margin-left:auto;flex-shrink:0}
+    .panel-close:hover{color:var(--paper)}
+    .panel-definition{padding:1rem 1.5rem;font-size:0.92rem;color:var(--ink-mid);line-height:1.6;border-bottom:1px solid var(--border)}
+    .panel-body{display:grid;grid-template-columns:1fr 1fr}
+    .prop-col{padding:1.25rem 1.5rem}
+    .prop-col:first-child{border-right:1px solid var(--border)}
+    .prop-col-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:0.85rem;display:flex;align-items:center;gap:0.4rem}
+    .direction-arrow{font-size:0.9rem;color:var(--gold)}
+    .col-sublabel{font-style:italic;text-transform:none;letter-spacing:0;font-size:0.67rem;color:var(--border-mid)}
+    .prop-item{padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      background:white;margin-bottom:0.5rem;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition)}
+    .prop-item:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .prop-item.is-expanded{border-color:var(--gold);background:#fffdf7}
+    .prop-item-top{display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
+    .prop-item-uri{font-family:'JetBrains Mono',monospace;font-size:0.74rem;color:var(--gold)}
+    .prop-item-chevron{width:13px;height:13px;color:var(--border-mid);flex-shrink:0;transition:transform var(--transition)}
+    .prop-item.is-expanded .prop-item-chevron{transform:rotate(90deg);color:var(--gold)}
+    .prop-item-label{font-size:0.82rem;color:var(--ink-light);display:block;margin-top:0.12rem}
+    .prop-detail{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border)}
+    .prop-detail.visible{display:block}
+    .prop-detail-row{display:flex;gap:0.75rem;margin-bottom:0.45rem;align-items:baseline}
+    .pd-label{font-size:0.65rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-light);min-width:60px;flex-shrink:0}
+    .pd-value{font-size:0.82rem;color:var(--ink-mid);line-height:1.4}
+    .cross-tag{font-size:0.65rem;color:var(--border-mid);font-style:italic;margin-left:0.3rem}
+    .no-props{font-size:0.82rem;color:var(--border-mid);font-style:italic;padding:0.5rem 0}
+    .panel-citation{padding:1rem 1.5rem;border-top:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .panel-citation .cite-text{font-size:0.8rem;color:var(--ink-light);font-style:italic;flex:1;min-width:200px}
+    .btn-copy{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;
+      font-size:0.85rem;cursor:pointer;transition:background var(--transition),transform 80ms;white-space:nowrap;flex-shrink:0}
+    .btn-copy:hover{background:var(--ink)} .btn-copy:active{transform:scale(0.97)} .btn-copy.copied{background:var(--teal)}
+    .btn-copy svg{width:13px;height:13px;flex-shrink:0}
+
+    .concept-scheme-block{margin-bottom:2rem}
+    .concept-scheme-block:last-child{margin-bottom:0}
+    .csb-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.15rem}
+    .csb-uri{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--teal)}
+    .csb-count{font-size:0.7rem;color:var(--ink-light);letter-spacing:0.04em}
+    .csb-scheme-label{font-size:0.92rem;color:var(--ink-mid);font-style:italic;margin-bottom:0.2rem}
+    .csb-description{font-size:0.82rem;color:var(--ink-light);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--teal-pale)}
+    .concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.45rem}
+    .concept-card{padding:0.55rem 0.75rem;background:var(--teal-pale);border:1px solid rgba(31,92,82,0.18);
+      border-radius:var(--radius-sm);transition:background var(--transition),border-color var(--transition);cursor:default}
+    .concept-card:hover{background:rgba(31,92,82,0.14);border-color:var(--teal)}
+    .cc-label{font-size:0.85rem;color:var(--ink);display:block;line-height:1.3;margin-bottom:0.2rem}
+    .cc-id{font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--teal-mid);display:block}
+
+    .sidebar{padding:1.5rem 1.25rem;position:sticky;top:52px;max-height:calc(100vh - 52px);overflow-y:auto}
+    .sidebar-panel{margin-bottom:1.75rem}
+    .sidebar-panel-title{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      padding-bottom:0.5rem;border-bottom:1px solid var(--border);margin-bottom:0.85rem}
+    .active-class-card{padding:0.75rem 0.85rem;background:var(--gold-pale);border:1px solid var(--gold);
+      border-radius:var(--radius-sm);margin-bottom:0.85rem}
+    .acc-uri{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold-mid);display:block;margin-bottom:0.15rem}
+    .acc-label{font-size:0.9rem;color:var(--ink);font-weight:500}
+    .connection-card{padding:0.6rem 0.75rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      margin-bottom:0.45rem;background:white;text-decoration:none;display:block;
+      transition:border-color var(--transition),box-shadow var(--transition)}
+    .connection-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .cc-top{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem}
+    .cc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .cc-module-name{font-size:0.85rem;color:var(--ink);font-weight:500}
+    .cc-props{font-size:0.72rem;color:var(--ink-light);display:block;margin-top:0.1rem}
+    .cc-via{font-size:0.67rem;color:var(--ink-light);font-style:italic;margin-top:0.1rem;display:block}
+    .sidebar-dynamic{transition:opacity 140ms ease}
+    .sidebar-dynamic.fading{opacity:0}
+    .no-connections{font-size:0.78rem;color:var(--border-mid);font-style:italic}
+    .share-buttons{display:flex;gap:0.5rem}
+    .share-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.55rem 0.25rem;
+      background:var(--paper-warm);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
+      font-family:'EB Garamond',serif;font-size:0.68rem;color:var(--ink-light);text-decoration:none;
+      letter-spacing:0.04em;text-transform:uppercase;transition:background var(--transition),border-color var(--transition),color var(--transition)}
+    .share-btn:hover{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
+    .share-btn svg{width:17px;height:17px}
+    .share-btn.copied-state{background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
+    .sidebar-citation{background:var(--paper-warm);border:1px solid var(--border-mid);border-radius:var(--radius-sm);padding:0.85rem}
+    .sidebar-citation .cite-text{font-size:0.77rem;line-height:1.5;color:var(--ink-mid);font-style:italic;margin-bottom:0.6rem}
+    .btn-copy-sm{display:inline-flex;align-items:center;gap:0.35rem;padding:0.42rem 0.85rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;font-size:0.8rem;
+      cursor:pointer;transition:background var(--transition);width:100%;justify-content:center}
+    .btn-copy-sm:hover{background:var(--ink)} .btn-copy-sm.copied{background:var(--teal)}
+    .format-links{display:flex;flex-direction:column;gap:0.3rem}
+    .format-link{display:flex;align-items:center;justify-content:space-between;padding:0.38rem 0.6rem;
+      border-radius:var(--radius-sm);border:1px solid var(--border);background:white;font-family:'JetBrains Mono',monospace;
+      font-size:0.73rem;color:var(--gold);text-decoration:none;transition:background var(--transition),border-color var(--transition)}
+    .format-link:hover{background:var(--gold-pale);border-color:var(--gold)}
+    .format-arrow{color:var(--border-mid)}
+
+    footer{background:var(--ink);color:var(--paper);margin-top:auto}
+    .footer-inner{max-width:1280px;margin:0 auto;padding:2.5rem 2rem;
+      display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:2rem;align-items:start}
+    .footer-brand .fw{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-weight:300;
+      letter-spacing:0.04em;color:var(--paper);display:block;margin-bottom:0.5rem}
+    .footer-brand .fw span{color:var(--gold-light)}
+    .footer-brand p{font-size:0.8rem;color:var(--border-mid);line-height:1.5;max-width:220px}
+    .footer-col h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .footer-col ul{list-style:none}
+    .footer-col li{margin-bottom:0.3rem}
+    .footer-col a{font-size:0.82rem;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .footer-col a:hover{color:var(--gold-light)}
+    .footer-funders{display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end}
+    .footer-funders h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);text-align:right;width:100%}
+    .funder-slot{width:140px;height:44px;border:1px dashed rgba(255,255,255,0.15);border-radius:var(--radius-sm);
+      display:flex;align-items:center;justify-content:center;font-size:0.67rem;letter-spacing:0.06em;
+      text-transform:uppercase;color:rgba(255,255,255,0.2)}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);max-width:1280px;margin:0 auto;padding:1rem 2rem;
+      display:flex;justify-content:space-between;align-items:center}
+    .footer-bottom p{font-size:0.75rem;color:rgba(255,255,255,0.3)}
+    .footer-bottom a{color:rgba(255,255,255,0.3);text-decoration:none}
+    .footer-bottom a:hover{color:var(--gold-light)}
+    .version-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:0.2em 0.5em;
+      border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);color:rgba(255,255,255,0.3)}
+</style>
 </head>
 <body>
-
-<div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="index.html">Vocabularies</a>
-    <a href="https://ontology.irokosociety.org">ontology.irokosociety.org ↗</a>
-    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+  <nav class="site-nav">
+    <a class="wordmark" href="/">Iroko Framework <span>Ontology</span></a>
+    <ul class="nav-links">
+      <li><a href="/modules">Modules</a></li>
+      <li><a href="/classes">Classes</a></li>
+      <li><a href="/properties">Properties</a></li>
+      <li><a href="/concepts">Concepts</a></li>
+      <li><a href="/whitepaper">Whitepaper</a></li>
+    </ul>
   </nav>
-</div>
 
-<div class="page-wrap">
-
-  <p class="breadcrumb">
-    <a href="../index.html">Iroko Framework</a>
-    <span>/</span>
-    <a href="index.html">Vocabularies</a>
-    <span>/</span>
-    Nkisi Module — Spiritual Entities
-  </p>
-
-  <header class="vocab-header">
-    <div class="vocab-header-logo">
-      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
-    </div>
-    <div>
-      <span class="module-tag tag-entities">Entities</span>
-      <h1>Nkisi Module — Spiritual Entities</h1>
-      <p class="subtitle">Spiritual entities and kinship across traditions</p>
-      <div class="header-meta">
-        <span class="meta-pill">nkisi:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-nkisi#</span>
-        <span class="meta-pill">v2.0.0</span>
-        <span class="meta-pill"><a href="iroko-nkisi.ttl" style="color:inherit;">Download TTL ↓</a></span>
-        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
-      </div>
+  <header class="page-header">
+    <div class="breadcrumb"><a href="/">Iroko Framework</a> › <a href="/modules">Modules</a> › Nkisi Module</div>
+    <h1>Nkisi Module <span class="module-tag">Domain Layer</span></h1>
+    <div class="module-desc">Domain module.</div>
+    <div class="module-stats">
+      <div class="stat"><span class="number">4</span><span class="label">Classes</span></div>
+      <div class="stat"><span class="number">28</span><span class="label">Properties</span></div>
+      <div class="stat"><span class="number">6</span><span class="label">Concept Schemes</span></div>
+      <div class="stat"><span class="number">54</span><span class="label">Concepts</span></div>
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting spiritual entities across Afro-Atlantic traditions. Covers orisa, lwa, mpungo/inquice, vodun, egun, ajogun, nature spirits, Espiritismo guides and commissions, and Ori. Supports path/camino modeling, shrine documentation, and syncretic identity tracking. Use with iroko-agency for manifestation events; iroko-authority to govern who may assert claims about entity identity, kinship, or caminos; iroko-narrative for patakí, odù verse attribution, and contested kinship claims.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">28</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">54</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="layout">
+    <main class="main-content">
+
+      <div class="zone-label">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="class-card" id="card-Offering" onclick="activateClass('Offering')"><span class="card-uri">iroko:Offering</span><span class="card-label">Offering</span></div>
+<div class="class-card" id="card-Path" onclick="activateClass('Path')"><span class="card-uri">iroko:Path</span><span class="card-label">Path</span></div>
+<div class="class-card" id="card-Shrine" onclick="activateClass('Shrine')"><span class="card-uri">iroko:Shrine</span><span class="card-label">Shrine</span></div>
+<div class="class-card" id="card-SpiritualEntity" onclick="activateClass('SpiritualEntity')"><span class="card-uri">iroko:SpiritualEntity</span><span class="card-label">Spiritual Entity</span></div>
+      </div>
+
+      <div class="zone-label" id="zone2-label">
+        Properties
+        <span class="zone-hint" id="zone2-hint">Select a class above to explore its properties</span>
+      </div>
+      <div class="zone2-empty" id="zone2-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        No class selected. Click any class card above to see its incoming and outgoing properties.
+      </div>
+
+      <div class="property-panel" id="property-panel">
+        <div class="panel-header">
+          <div><div class="ph-uri" id="panel-uri"></div><div class="ph-label" id="panel-label"></div></div>
+          <button class="panel-close" onclick="deactivateClass()">✕</button>
+        </div>
+        <div class="panel-definition" id="panel-definition"></div>
+        <div class="panel-body">
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">←</span> Incoming <span class="col-sublabel">(this class as range)</span></div>
+            <div id="incoming-props"></div>
+          </div>
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">→</span> Outgoing <span class="col-sublabel">(this class as domain)</span></div>
+            <div id="outgoing-props"></div>
+          </div>
+        </div>
+        <div class="panel-citation">
+          <div class="cite-text" id="panel-cite-text"></div>
+          <button class="btn-copy" id="panel-cite-btn" onclick="copyPanelCitation(this)">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+
+      
+      <div class="zone-label">Controlled Vocabulary</div>
+      <div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:CommissionTypeScheme</span><span class="csb-count">10 concepts</span></div><div class="csb-scheme-label">Commission Type Classification</div><div class="concept-grid"><div class="concept-card" title="Commission of African spirits, often depicted as enslaved Africans or African elders. Work with strength, protection, and grounding. Among the most powerful commissions."><span class="cc-label">Africano</span><span class="cc-id">iroko:commission-africano</span></div><div class="concept-card" title="Commission of Arab or Moorish spirits. Work with commerce, prosperity, and esoteric knowledge. Reflect historical Moorish presence in Iberian culture transmitted to the Caribbean."><span class="cc-label">Arabe</span><span class="cc-id">iroko:commission-arabe</span></div><div class="concept-card" title="Commission of highly evolved or elevated spirits associated with light, purity, and spiritual advancement. May include spirits identified as angels or exalted ancestors."><span class="cc-label">Celestial Commission</span><span class="cc-id">iroko:commission-celestial</span></div><div class="concept-card" title="Commission of Kongo-derived spirits in Espiritismo. Work with earthy, transformative, and protective matters. Bridge between Espiritismo and Palo traditions in syncretic practice."><span class="cc-label">Congo</span><span class="cc-id">iroko:commission-congo</span></div><div class="concept-card" title="Commission of Romani spirits. Work with divination, luck, commerce, and love. Often approached for card reading and matters of fortune."><span class="cc-label">Gitano</span><span class="cc-id">iroko:commission-gitano</span></div><div class="concept-card" title="Commission of Indigenous American spirits. Work with nature, healing, and the land. Common in Cuban, Puerto Rican, and Dominican Espiritismo reflecting indigenous Taino presence."><span class="cc-label">Indio</span><span class="cc-id">iroko:commission-indio</span></div><div class="concept-card" title="Spirits who died in conflict, trauma, or without resolution. Worked cautiously; associated with unrest and unfinished business. Distinct from the other commissions in that they are engaged for specific workings rather than as ongoing guides."><span class="cc-label">Intranquil Spirit</span><span class="cc-id">iroko:commission-intranquil</span></div><div class="concept-card" title="Commission of maternal African or Afro-Caribbean women spirits, often depicted as market women or healers. Work with protection, home, healing, and practical matters."><span class="cc-label">Madama</span><span class="cc-id">iroko:commission-madama</span></div><div class="concept-card" title="Commission of sailor or seafaring spirits. Work with travel, navigation, and matters of the sea. Reflect Caribbean maritime culture."><span class="cc-label">Marinero</span><span class="cc-id">iroko:commission-marinero</span></div><div class="concept-card" title="Commission of spirits who were doctors, healers, or medical practitioners in life. Work with healing and health matters. Sometimes called upon in misa for diagnosis."><span class="cc-label">Medical Commission</span><span class="cc-id">iroko:commission-medical</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:EntityTypeScheme</span><span class="csb-count">14 concepts</span></div><div class="csb-scheme-label">Entity Type Classification</div><div class="concept-grid"><div class="concept-card" title="Adversarial cosmic forces in Yoruba cosmology. The principal Ajogun are Iku (Death), Arun (Disease), Ofo (Loss), Egba (Paralysis), Oran (Legal Trouble), Epe (Curse), Ewon (Imprisonment), and Ese (all other afflictions). Powerful forces that are propitiated or deflected rather than worshipped. Not deities; not ancestors; ontologically distinct from orisa."><span class="cc-label">Ajogun</span><span class="cc-id">iroko:entityType-ajogun</span></div><div class="concept-card" title="The ancestral dead across Afro-Atlantic traditions. Not tradition-specific: encompasses egungún (Yoruba), the dead honored at boveda (Espiritismo), ancestral courts in Vodou, and the honored dead in all traditions where ancestors are engaged. The dead precede and supersede the orisa and lwa in most traditions."><span class="cc-label">Egun</span><span class="cc-id">iroko:entityType-egun</span></div><div class="concept-card" title="A spirit belonging to a named commission (comision) in Espiritismo. Commissions are groups of spirits sharing a common historical, cultural, or archetypal identity. Commission type is documented via iroko:commissionType property and the CommissionTypeScheme."><span class="cc-label">Espiritu de Commission</span><span class="cc-id">iroko:entityType-espiritu-commission</span></div><div class="concept-card" title="A personal spirit guide in the Espiritismo tradition. Part of an individual's cuadro espiritual (spiritual frame). Guides may be ancestral relatives, historical figures, or evolved spirits assigned to assist a specific person. Identified through mediumship and misa espiritual."><span class="cc-label">Espiritu Guia</span><span class="cc-id">iroko:entityType-espiritu-guia</span></div><div class="concept-card" title="Spirits of the Ghede nanchon in Haitian Vodou. Govern death, sexuality, resurrection, and the boundary between living and dead. Liminal in temperament. Composite New World origins distinct from both Rada and Petwo."><span class="cc-label">Lwa (Ghede)</span><span class="cc-id">iroko:entityType-lwa-ghede</span></div><div class="concept-card" title="Spirits of the Petwo nanchon in Haitian Vodou. Hot, fierce, and transformative in temperament. Kongo, New World maroon, and creole origins. Associated with fire and gunpowder."><span class="cc-label">Lwa (Petwo)</span><span class="cc-id">iroko:entityType-lwa-petwo</span></div><div class="concept-card" title="Spirits of the Rada nanchon in Haitian Vodou. Generally cool, sweet, and beneficent in temperament. Primary Fon/Dahomey origins. Received with white and light colors."><span class="cc-label">Lwa (Rada)</span><span class="cc-id">iroko:entityType-lwa-rada</span></div><div class="concept-card" title="Divine forces in Bantu-derived traditions: Mpungo in Palo Monte and Mayombe, Inquice in Candomble Angola. These are the same cosmic powers known by different names in the Kongo religious continuum. Example: Zarabanda (Palo) corresponds to Ogum (Candomble Angola)."><span class="cc-label">Mpungo/Inquice</span><span class="cc-id">iroko:entityType-mpungo-inquice</span></div><div class="concept-card" title="The human dead bound to a nganga in Palo Monte and Mayombe. Ontologically distinct from free ancestors (egun): the nfumbe enters a specific contractual and coercive relationship with the Palero and the nganga vessel. The nfumbe works within the nganga and is not free."><span class="cc-label">Nfumbe</span><span class="cc-id">iroko:entityType-nfumbe</span></div><div class="concept-card" title="The individual divine head and personal destiny in Yoruba and Yoruba-derived traditions. Not an external spirit but the innermost self and personal divine principle. Ori has a shrine (ile ori), receives rogacion and propitiation, and is considered the most important force in an individual's life. Its guidance supersedes that of the orisa."><span class="cc-label">Ori</span><span class="cc-id">iroko:entityType-ori</span></div><div class="concept-card" title="Divine forces in Yoruba and Yoruba-derived traditions (Lucumi, Candomble Ketu, Trinidad Orisha, Oyotunji). Orisa are cosmic powers governing natural and human domains, each with specific attributes, offerings, colors, and numbers."><span class="cc-label">Orisa</span><span class="cc-id">iroko:entityType-orisa</span></div><div class="concept-card" title="Spirits governing elemental forces — water, wind, fire, earth, lightning — not otherwise classified as orisa, lwa, or other named divine powers. Includes elemental presences recognized in folk traditions and syncretic contexts."><span class="cc-label">Spirit of Element</span><span class="cc-id">iroko:entityType-spirit-of-element</span></div><div class="concept-card" title="Spirits tied to specific locations, landscapes, or natural features: forests, rivers, crossroads, mountains, specific trees or stones. Not the dead, not divine powers, not malevolent by nature. Engaged through offering and acknowledgment. Found across multiple traditions including Hoodoo and syncretic folk practices."><span class="cc-label">Spirit of Place</span><span class="cc-id">iroko:entityType-spirit-of-place</span></div><div class="concept-card" title="Divine forces in Fon/Ewe-derived traditions including Arara in Cuba. Related to but distinct from Haitian lwa; represents the continental Dahomean tradition."><span class="cc-label">Vodun</span><span class="cc-id">iroko:entityType-vodun</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:OfferingTypeScheme</span><span class="csb-count">11 concepts</span></div><div class="csb-scheme-label">Offering Type Classification</div><div class="concept-grid"><div class="concept-card" title="Animal sacrifice or offering. Category is public; specific animals, method, and context are initiated-only."><span class="cc-label">Animal</span><span class="cc-id">iroko:offering-animal</span></div><div class="concept-card" title="Candles or other light sources offered or burned for an entity."><span class="cc-label">Candle/Light</span><span class="cc-id">iroko:offering-candle-light</span></div><div class="concept-card" title="Fabric, beads, or clothing offered or draped for an entity in the entity's sacred colors."><span class="cc-label">Cloth/Fabric</span><span class="cc-id">iroko:offering-cloth-fabric</span></div><div class="concept-card" title="Liquids offered to an entity: water, rum, wine, honey, etc."><span class="cc-label">Drink</span><span class="cc-id">iroko:offering-drink</span></div><div class="concept-card" title="Prepared or natural foods offered to an entity. Specific foods are tradition and entity specific."><span class="cc-label">Food</span><span class="cc-id">iroko:offering-food</span></div><div class="concept-card" title="Dedicated labor, service, or action performed as offering. Example: building a shrine, completing a vow, acts of charity associated with an entity's domain."><span class="cc-label">Labor/Action</span><span class="cc-id">iroko:offering-labor-action</span></div><div class="concept-card" title="Coins or currency offered to an entity, particularly common with Elegba, Oshun, and market-oriented spirits."><span class="cc-label">Money/Coin</span><span class="cc-id">iroko:offering-money-coin</span></div><div class="concept-card" title="Songs, drumming, or music performed in honor of an entity. General category is public; specific songs and rhythms are initiated-only."><span class="cc-label">Music/Song</span><span class="cc-id">iroko:offering-music-song</span></div><div class="concept-card" title="Ritual objects, implements, or symbolic items offered or dedicated to an entity."><span class="cc-label">Sacred Object</span><span class="cc-id">iroko:offering-object</span></div><div class="concept-card" title="Plants, flowers, or herbal preparations offered to an entity. Links to ewe:Plant instances."><span class="cc-label">Plant/Herb</span><span class="cc-id">iroko:offering-plant</span></div><div class="concept-card" title="Fresh water, ocean water, river water, or blessed water offered to an entity."><span class="cc-label">Water</span><span class="cc-id">iroko:offering-water</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:PolarityModalityScheme</span><span class="csb-count">6 concepts</span></div><div class="csb-scheme-label">Polarity and Gender Modality</div><div class="concept-grid"><div class="concept-card" title="Masculine and feminine qualities are simultaneously present and inseparable. Distinct from aspect-dependent, where polarity shifts between manifestations."><span class="cc-label">Androgynous</span><span class="cc-id">iroko:polarity-androgynous</span></div><div class="concept-card" title="Not described in gendered or polarity terms, or explicitly transcending the masculine/feminine binary. Not the same as unknown."><span class="cc-label">Apolar</span><span class="cc-id">iroko:polarity-apolar</span></div><div class="concept-card" title="Polarity varies by named camino, avatar, path, or manifestation. Individual paths should carry their own polarity assertion via iroko:RelationshipAssertion with assertionScope."><span class="cc-label">Aspect-Dependent</span><span class="cc-id">iroko:polarity-aspect-dependent</span></div><div class="concept-card" title="Consistent feminine polarity in ritual address, manifestation, and alignment across known caminos."><span class="cc-label">Feminine</span><span class="cc-id">iroko:polarity-feminine</span></div><div class="concept-card" title="Consistent masculine polarity in ritual address, manifestation, and alignment across known caminos."><span class="cc-label">Masculine</span><span class="cc-id">iroko:polarity-masculine</span></div><div class="concept-card" title="Polarity shifts according to time of year, liturgical calendar, season, or ritual period. The shift is cyclical and predictable, not camino-specific."><span class="cc-label">Temporal</span><span class="cc-id">iroko:polarity-temporal</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:SpiritKinshipRelationScheme</span><span class="csb-count">9 concepts</span></div><div class="csb-scheme-label">Spirit Kinship Relations</div><div class="concept-grid"><div class="concept-card"><span class="cc-label">brother of</span><span class="cc-id">iroko:kinship-brother-of</span></div><div class="concept-card"><span class="cc-label">child of</span><span class="cc-id">iroko:kinship-child-of</span></div><div class="concept-card"><span class="cc-label">father of</span><span class="cc-id">iroko:kinship-father-of</span></div><div class="concept-card"><span class="cc-label">mother of</span><span class="cc-id">iroko:kinship-mother-of</span></div><div class="concept-card"><span class="cc-label">parent of</span><span class="cc-id">iroko:kinship-parent-of</span></div><div class="concept-card"><span class="cc-label">sibling of</span><span class="cc-id">iroko:kinship-sibling-of</span></div><div class="concept-card"><span class="cc-label">sister of</span><span class="cc-id">iroko:kinship-sister-of</span></div><div class="concept-card"><span class="cc-label">spouse of</span><span class="cc-id">iroko:kinship-spouse-of</span></div><div class="concept-card"><span class="cc-label">twin of</span><span class="cc-id">iroko:kinship-twin-of</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:TemperamentScheme</span><span class="csb-count">4 concepts</span></div><div class="csb-scheme-label">Temperament Classification</div><div class="concept-grid"><div class="concept-card" title="Entities of cool, gentle, beneficent energy. Approached with white and light colors, cool water, and gentle offerings. Example: Obatala, Yemaya (certain paths), Rada lwa."><span class="cc-label">Cool/Sweet</span><span class="cc-id">iroko:temperament-cool-sweet</span></div><div class="concept-card" title="Entities of hot, intense, warrior energy. Approached with fire, iron, rum, and strong offerings. Example: Ogun, Shango, Petwo lwa."><span class="cc-label">Hot/Fierce</span><span class="cc-id">iroko:temperament-hot-fierce</span></div><div class="concept-card" title="Entities who exist at thresholds — between life and death, sacred and profane, this world and the next. Example: Ghede lwa, Eshu/Elegba as gatekeeper, Oya Igbale."><span class="cc-label">Liminal</span><span class="cc-id">iroko:temperament-liminal</span></div><div class="concept-card" title="Entities whose primary nature is change, transition, and transformation. Neither simply cool nor hot; work with both destruction and creation. Example: Oya, Elegba."><span class="cc-label">Transformative</span><span class="cc-id">iroko:temperament-transformative</span></div></div></div>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title" id="sb-title">Connected modules</div>
+        <div class="sidebar-dynamic" id="sb-connections"></div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Share</div>
+        <div class="share-buttons">
+          <a class="share-btn" href="#" onclick="shareEmail(event)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1.5"/><polyline points="2,4 10,12 18,4"/></svg>
+            Email
+          </a>
+          <a class="share-btn" href="#" onclick="window.print();return false;">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="6"/><rect x="2" y="8" width="16" height="8" rx="1"/><rect x="5" y="12" width="10" height="5"/><circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
+            Print
+          </a>
+          <button class="share-btn" id="share-link-btn" onclick="copyPageLink(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12a4 4 0 005.66 0l2-2A4 4 0 009.9 4.24l-1 1"/><path d="M12 8a4 4 0 00-5.66 0l-2 2A4 4 0 006.1 15.76l1-1"/></svg>
+            Link
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Cite the Nkisi Module</div>
+        <div class="sidebar-citation">
+          <div class="cite-text">"Nkisi Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. <em>ontology.irokosociety.org/nkisi</em></div>
+          <button class="btn-copy-sm" onclick="copyModuleCitation(this)">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Other formats</div>
+        <div class="format-links">
+          <a class="format-link" href="#">RDF/Turtle <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">JSON-LD <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">RDF/XML <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">N-Triples <span class="format-arrow">↗</span></a>
+        </div>
+      </div>
+    </aside>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">4 classes</span>
-    </div>
-    <div class="class-card" id="cls-Offering">
-      <div class="class-name">Offering</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Offering</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A material or symbolic offering given to a spiritual entity. Includes food, drink, objects, colors, animals, and actions. General offering categories are public; specific quantities, combinations, and preparation details are access-restricted.</p>
-    </div>
-    <div class="class-card" id="cls-Path">
-      <div class="class-name">Path</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Path</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A distinct manifestation, aspect, or camino of a spiritual entity. Paths share the parent entity&#x27;s fundamental nature but have distinct domains, temperaments, colors, numbers, offerings, and sometimes distinct syncretic identities. Example: Oya Yansa (fierce warrior aspect) vs. Oya Igbale (governess of the cemetery). Paths are not separate entities but distinct faces of the same power.</p>
-    </div>
-    <div class="class-card" id="cls-Shrine">
-      <div class="class-name">Shrine</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Shrine</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredSpecimen</span></div>
-      <p class="class-def">A consecrated physical space or vessel housing a spiritual entity. Includes ile (houses), soperas, nganga, peristyle altars, and boveda. Shrine records link physical location and custody to the entity and tradition. Operational shrine details are access-restricted.</p>
-    </div>
-    <div class="class-card" id="cls-SpiritualEntity">
-      <div class="class-name">SpiritualEntity</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Spiritual Entity</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Spirit</span></div>
-      <p class="class-def">A divine power, ancestral spirit, nature spirit, adversarial force, or personal essence recognized and engaged within an Afro-Atlantic tradition. Includes orisa, lwa, mpungo/inquice, vodun, egun, ajogun, Ori, Espiritismo guides and commissions, and spirits of place and element.</p>
-    </div>
-  </div>
-
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">28 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-color">
-          <td><span class="prop-name">color</span><br><span style="font-size:.75rem;color:var(--ink-soft);">color</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Sacred color or color combination associated with this entity. Example: white (Obatala), yellow and gold (Oshun), red and white (Shango). Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-commissionType">
-          <td><span class="prop-name">commissionType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">commission type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Spiritual Entity → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">For espiritu-commission entities: the specific commission they belong to. Values from CommissionTypeScheme. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-domain">
-          <td><span class="prop-name">domain</span><br><span style="font-size:.75rem;color:var(--ink-soft);">domain</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The sphere of influence or governance of this entity. Example: iron, war, roads (Ogun); love, rivers, beauty (Oshun); wind, death, transformation (Oya). Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-element">
-          <td><span class="prop-name">element</span><br><span style="font-size:.75rem;color:var(--ink-soft);">element</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Natural element or sphere associated with this entity. Example: ocean (Yemaya), river (Oshun), cemetery (Oya Igbale, Baron Samedi), forest (Ochosi, Ogun). Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-entityType">
-          <td><span class="prop-name">entityType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">entity type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Spiritual Entity → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Classification of this spiritual entity within the EntityType scheme. Values: iroko:entityType-orisa, iroko:entityType-lwa-rada, iroko:entityType-lwa-petwo, iroko:entityType-lwa-ghede, iroko:entityType-mpungo-inquice, iroko:entityType-vodun, iroko:entityType-ori, iroko:entityType-egun, iroko:entityType-nfumbe, iroko:entityType-espiritu-guia, iroko:entityType-espiritu-commission, iroko:entityType-spirit-of-place, iroko:entityType-spirit-of-element, iroko:entityType-ajogun. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-lineageNotes">
-          <td><span class="prop-name">lineageNotes</span><br><span style="font-size:.75rem;color:var(--ink-soft);">lineage notes</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Path → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Notes on which lineages recognize this path and any contested aspects of its identity or attributes. Access: community-only.</td>
-        </tr>
-        <tr id="prop-offeringDetailed">
-          <td><span class="prop-name">offeringDetailed</span><br><span style="font-size:.75rem;color:var(--ink-soft);">offering (detailed)</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Specific offering details: exact foods, quantities, preparation methods. Access: initiated-only.</td>
-        </tr>
-        <tr id="prop-offeringGeneral">
-          <td><span class="prop-name">offeringGeneral</span><br><span style="font-size:.75rem;color:var(--ink-soft);">offering (general)</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Spiritual Entity → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">General category of offering accepted by this entity. Values from OfferingTypeScheme. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-parentEntity">
-          <td><span class="prop-name">parentEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">parent entity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Path → Spiritual Entity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The SpiritualEntity of which this Path is an aspect or manifestation.</td>
-        </tr>
-        <tr id="prop-path">
-          <td><span class="prop-name">path</span><br><span style="font-size:.75rem;color:var(--ink-soft);">path</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Spiritual Entity → Path</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a SpiritualEntity to its known Path instances (caminos/avatars). A single entity may have many paths. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-pathColor">
-          <td><span class="prop-name">pathColor</span><br><span style="font-size:.75rem;color:var(--ink-soft);">path color</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Path → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Color specific to this path, which may differ from the parent entity&#x27;s general colors. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-pathDomain">
-          <td><span class="prop-name">pathDomain</span><br><span style="font-size:.75rem;color:var(--ink-soft);">path domain</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Path → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The specific domain of this path, which may differ from the parent entity&#x27;s general domain. Example: Oshun Ibu Kole governs vultures and transformation, distinct from Oshun&#x27;s general river domain. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-pathName">
-          <td><span class="prop-name">pathName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">path name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Path → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The name of this specific path or camino. Example: Oya Yansa, Oya Igbale, Oshun Ibu Kole, Obatala Ocha Grinan. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-pathNumber">
-          <td><span class="prop-name">pathNumber</span><br><span style="font-size:.75rem;color:var(--ink-soft);">path number</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Path → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Sacred number specific to this path. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-pathOfferingDetailed">
-          <td><span class="prop-name">pathOfferingDetailed</span><br><span style="font-size:.75rem;color:var(--ink-soft);">path offering (detailed)</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Path → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Offering details specific to this path. May differ significantly from parent entity offerings. Access: initiated-only.</td>
-        </tr>
-        <tr id="prop-pathSyncreticIdentity">
-          <td><span class="prop-name">pathSyncreticIdentity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">path syncretic identity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Path → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Catholic saint or other syncretic correspondence specific to this path, if different from parent entity. Example: some paths of Oshun correspond to Our Lady of Charity; others to Our Lady of Candelaria. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-pathTaboo">
-          <td><span class="prop-name">pathTaboo</span><br><span style="font-size:.75rem;color:var(--ink-soft);">path taboo</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Path → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Prohibitions specific to this path. Access: community-only.</td>
-        </tr>
-        <tr id="prop-pathTemperament">
-          <td><span class="prop-name">pathTemperament</span><br><span style="font-size:.75rem;color:var(--ink-soft);">path temperament</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Path → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Temperament of this specific path. Values from TemperamentScheme. A path may have a different temperament than its parent entity. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-plantAssociation">
-          <td><span class="prop-name">plantAssociation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">plant association</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Spiritual Entity → Plant</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Plants associated with this entity. Links to ewe:Plant instances. Inverse of ewe:entityAssociation. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-relatedEntity">
-          <td><span class="prop-name">relatedEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">related entity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Spiritual Entity → Spiritual Entity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Another spiritual entity with a significant relationship to this one. Example: Elegba and Ogun (road and iron); Oya and Shango (consort). Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-day">
-          <td><span class="prop-name">day</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sacred day</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Day of the week or calendar feast day associated with this entity. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-number">
-          <td><span class="prop-name">number</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sacred number</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Sacred number or numbers associated with this entity. Example: 8 (Oshun), 16 (Obatala), 4 and 6 (Shango). Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-salutation">
-          <td><span class="prop-name">salutation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">salutation</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Formal greeting or praise name used when addressing this entity in ceremony. Access: initiated-only.</td>
-        </tr>
-        <tr id="prop-shrine">
-          <td><span class="prop-name">shrine</span><br><span style="font-size:.75rem;color:var(--ink-soft);">shrine</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Spiritual Entity → Shrine</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a spiritual entity to a documented shrine or vessel. Access: community-only.</td>
-        </tr>
-        <tr id="prop-syncreticIdentity">
-          <td><span class="prop-name">syncreticIdentity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">syncretic identity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Catholic saint or other syncretic correspondence for this entity. Prevents santos from slipping through classification gaps. Example: Shango syncretizes with Santa Barbara in Lucumi; Ogou with Saint Jacques in Vodou. Free text to accommodate regional and lineage variation. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-taboo">
-          <td><span class="prop-name">taboo</span><br><span style="font-size:.75rem;color:var(--ink-soft);">taboo</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Prohibitions associated with this entity: foods, behaviors, or materials to avoid. Access: community-only.</td>
-        </tr>
-        <tr id="prop-temperament">
-          <td><span class="prop-name">temperament</span><br><span style="font-size:.75rem;color:var(--ink-soft);">temperament</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Spiritual Entity → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">General temperament classification. Values from TemperamentScheme: iroko:temperament-cool-sweet, iroko:temperament-hot-fierce, iroko:temperament-transformative, iroko:temperament-liminal. Access: public-unrestricted.</td>
-        </tr>
-        <tr id="prop-traditionalName">
-          <td><span class="prop-name">traditionalName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">traditional name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Spiritual Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Name of this entity in its tradition of origin. May differ from diaspora names. Example: Sango (Yoruba continental) vs. Shango (Lucumi) vs. Xango (Candomble). Access: public-unrestricted.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">6 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Commission Type Classification</span>
-        <span class="scheme-count">10 concepts</span>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="fw">Iroko <span>Historical Society</span></span>
+        <p>Postcustodial cultural heritage complex for Afro-Atlantic sacred knowledge systems.</p>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Named commissions (comisiones) in Espiritismo. Each commission represents a group of spirits sharing a common historical, cultural, or archetypal identity. Documented on espiritu-commission entities via iroko:commissionType.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-commission-africano">
-          <div class="concept-label">Africano</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-africano</div>
-          <p class="concept-def">Commission of African spirits, often depicted as enslaved Africans or African elders. Work with strength, protection, and grounding. Among the most powerful commissions.</p>
-        </div>
-        <div class="concept-item" id="concept-commission-arabe">
-          <div class="concept-label">Arabe</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-arabe</div>
-          <p class="concept-def">Commission of Arab or Moorish spirits. Work with commerce, prosperity, and esoteric knowledge. Reflect historical Moorish presence in Iberian culture transmitted to the Caribbean.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Arab, Moro</p>
-        </div>
-        <div class="concept-item" id="concept-commission-celestial">
-          <div class="concept-label">Celestial Commission</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-celestial</div>
-          <p class="concept-def">Commission of highly evolved or elevated spirits associated with light, purity, and spiritual advancement. May include spirits identified as angels or exalted ancestors.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Comision Celestial</p>
-        </div>
-        <div class="concept-item" id="concept-commission-congo">
-          <div class="concept-label">Congo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-congo</div>
-          <p class="concept-def">Commission of Kongo-derived spirits in Espiritismo. Work with earthy, transformative, and protective matters. Bridge between Espiritismo and Palo traditions in syncretic practice.</p>
-        </div>
-        <div class="concept-item" id="concept-commission-gitano">
-          <div class="concept-label">Gitano</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-gitano</div>
-          <p class="concept-def">Commission of Romani spirits. Work with divination, luck, commerce, and love. Often approached for card reading and matters of fortune.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Gypsy</p>
-        </div>
-        <div class="concept-item" id="concept-commission-indio">
-          <div class="concept-label">Indio</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-indio</div>
-          <p class="concept-def">Commission of Indigenous American spirits. Work with nature, healing, and the land. Common in Cuban, Puerto Rican, and Dominican Espiritismo reflecting indigenous Taino presence.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Native American</p>
-        </div>
-        <div class="concept-item" id="concept-commission-intranquil">
-          <div class="concept-label">Intranquil Spirit</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-intranquil</div>
-          <p class="concept-def">Spirits who died in conflict, trauma, or without resolution. Worked cautiously; associated with unrest and unfinished business. Distinct from the other commissions in that they are engaged for specific workings rather than as ongoing guides.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Espiritu Intranquilo</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Intranquil spirits occupy a contested category in Espiritismo — some practitioners consider them dangerous and do not work with them. Document lineage position via iroko:contestedNotes.</p>
-        </div>
-        <div class="concept-item" id="concept-commission-madama">
-          <div class="concept-label">Madama</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-madama</div>
-          <p class="concept-def">Commission of maternal African or Afro-Caribbean women spirits, often depicted as market women or healers. Work with protection, home, healing, and practical matters.</p>
-        </div>
-        <div class="concept-item" id="concept-commission-marinero">
-          <div class="concept-label">Marinero</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-marinero</div>
-          <p class="concept-def">Commission of sailor or seafaring spirits. Work with travel, navigation, and matters of the sea. Reflect Caribbean maritime culture.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Sailor</p>
-        </div>
-        <div class="concept-item" id="concept-commission-medical">
-          <div class="concept-label">Medical Commission</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">commission-medical</div>
-          <p class="concept-def">Commission of spirits who were doctors, healers, or medical practitioners in life. Work with healing and health matters. Sometimes called upon in misa for diagnosis.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Comision Medica</p>
-        </div>
+      <div class="footer-col">
+        <h4>Ontology</h4>
+        <ul>
+          <li><a href="#">Modules</a></li>
+          <li><a href="#">Classes</a></li>
+          <li><a href="#">Properties</a></li>
+          <li><a href="#">Concept Schemes</a></li>
+          <li><a href="#">Whitepaper</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Institution</h4>
+        <ul>
+          <li><a href="#">About IHS</a></li>
+          <li><a href="#">Governance</a></li>
+          <li><a href="#">Access Policy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-funders">
+        <h4>Supported by</h4>
+        <div class="funder-slot">Funder logo</div>
+        <div class="funder-slot">Funder logo</div>
       </div>
     </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Entity Type Classification</span>
-        <span class="scheme-count">14 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Classification of spiritual entity types across Afro-Atlantic traditions. Organized by ontological category: divine powers, personal essence, ancestral spirits, nature spirits, and adversarial forces.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-entityType-ajogun">
-          <div class="concept-label">Ajogun</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-ajogun</div>
-          <p class="concept-def">Adversarial cosmic forces in Yoruba cosmology. The principal Ajogun are Iku (Death), Arun (Disease), Ofo (Loss), Egba (Paralysis), Oran (Legal Trouble), Epe (Curse), Ewon (Imprisonment), and Ese (all other afflictions). Powerful forces that are propitiated or deflected rather than worshipped. Not deities; not ancestors; ontologically distinct from orisa.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Adversarial Force</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Ajogun are not evil spirits in a moral sense but cosmic forces of adversity that must be balanced. Their propitiation is a legitimate archival and ritual category distinct from orisa worship.</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-egun">
-          <div class="concept-label">Egun</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-egun</div>
-          <p class="concept-def">The ancestral dead across Afro-Atlantic traditions. Not tradition-specific: encompasses egungún (Yoruba), the dead honored at boveda (Espiritismo), ancestral courts in Vodou, and the honored dead in all traditions where ancestors are engaged. The dead precede and supersede the orisa and lwa in most traditions.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Ancestors, Eggun, The Dead</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Egun as a category is deliberately cross-traditional. Tradition-specific practices of ancestral engagement are documented via the iroko:tradition property on individual instances.</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-espiritu-guia">
-          <div class="concept-label">Espiritu Guia</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-espiritu-guia</div>
-          <p class="concept-def">A personal spirit guide in the Espiritismo tradition. Part of an individual&#x27;s cuadro espiritual (spiritual frame). Guides may be ancestral relatives, historical figures, or evolved spirits assigned to assist a specific person. Identified through mediumship and misa espiritual.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Guide, Spirit Guide</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-espiritu-commission">
-          <div class="concept-label">Espiritu de Commission</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-espiritu-commission</div>
-          <p class="concept-def">A spirit belonging to a named commission (comision) in Espiritismo. Commissions are groups of spirits sharing a common historical, cultural, or archetypal identity. Commission type is documented via iroko:commissionType property and the CommissionTypeScheme.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Commission Spirit</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-lwa-ghede">
-          <div class="concept-label">Lwa (Ghede)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-lwa-ghede</div>
-          <p class="concept-def">Spirits of the Ghede nanchon in Haitian Vodou. Govern death, sexuality, resurrection, and the boundary between living and dead. Liminal in temperament. Composite New World origins distinct from both Rada and Petwo.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Gede, Loa Gede</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-lwa-petwo">
-          <div class="concept-label">Lwa (Petwo)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-lwa-petwo</div>
-          <p class="concept-def">Spirits of the Petwo nanchon in Haitian Vodou. Hot, fierce, and transformative in temperament. Kongo, New World maroon, and creole origins. Associated with fire and gunpowder.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Loa Petro</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-lwa-rada">
-          <div class="concept-label">Lwa (Rada)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-lwa-rada</div>
-          <p class="concept-def">Spirits of the Rada nanchon in Haitian Vodou. Generally cool, sweet, and beneficent in temperament. Primary Fon/Dahomey origins. Received with white and light colors.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Loa Rada</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-mpungo-inquice">
-          <div class="concept-label">Mpungo/Inquice</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-mpungo-inquice</div>
-          <p class="concept-def">Divine forces in Bantu-derived traditions: Mpungo in Palo Monte and Mayombe, Inquice in Candomble Angola. These are the same cosmic powers known by different names in the Kongo religious continuum. Example: Zarabanda (Palo) corresponds to Ogum (Candomble Angola).</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Inquice, Mpungu</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-nfumbe">
-          <div class="concept-label">Nfumbe</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-nfumbe</div>
-          <p class="concept-def">The human dead bound to a nganga in Palo Monte and Mayombe. Ontologically distinct from free ancestors (egun): the nfumbe enters a specific contractual and coercive relationship with the Palero and the nganga vessel. The nfumbe works within the nganga and is not free.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Nfumbe should not be classified as egun. The bound nature of the nfumbe is a defining characteristic with significant ethical and archival implications.</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-ori">
-          <div class="concept-label">Ori</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-ori</div>
-          <p class="concept-def">The individual divine head and personal destiny in Yoruba and Yoruba-derived traditions. Not an external spirit but the innermost self and personal divine principle. Ori has a shrine (ile ori), receives rogacion and propitiation, and is considered the most important force in an individual&#x27;s life. Its guidance supersedes that of the orisa.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Ori is ontologically distinct from the orisa — personal rather than cosmic, internal rather than external. It should not be classified under orisa.</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-orisa">
-          <div class="concept-label">Orisa</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-orisa</div>
-          <p class="concept-def">Divine forces in Yoruba and Yoruba-derived traditions (Lucumi, Candomble Ketu, Trinidad Orisha, Oyotunji). Orisa are cosmic powers governing natural and human domains, each with specific attributes, offerings, colors, and numbers.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Orisha, Orixa</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-spirit-of-element">
-          <div class="concept-label">Spirit of Element</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-spirit-of-element</div>
-          <p class="concept-def">Spirits governing elemental forces — water, wind, fire, earth, lightning — not otherwise classified as orisa, lwa, or other named divine powers. Includes elemental presences recognized in folk traditions and syncretic contexts.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Elemental Spirit</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-spirit-of-place">
-          <div class="concept-label">Spirit of Place</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-spirit-of-place</div>
-          <p class="concept-def">Spirits tied to specific locations, landscapes, or natural features: forests, rivers, crossroads, mountains, specific trees or stones. Not the dead, not divine powers, not malevolent by nature. Engaged through offering and acknowledgment. Found across multiple traditions including Hoodoo and syncretic folk practices.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Faires, Spirit of the Land, Woodland Spirit</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">The term Faires may reflect crossover from European folk traditions into Hoodoo and syncretic contexts. Terminological certainty varies by regional tradition. Document tradition-specific terminology via iroko:alternateNames and iroko:tradition on individual instances.</p>
-        </div>
-        <div class="concept-item" id="concept-entityType-vodun">
-          <div class="concept-label">Vodun</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">entityType-vodun</div>
-          <p class="concept-def">Divine forces in Fon/Ewe-derived traditions including Arara in Cuba. Related to but distinct from Haitian lwa; represents the continental Dahomean tradition.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Vodu</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Offering Type Classification</span>
-        <span class="scheme-count">11 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">General categories of offerings given to spiritual entities. Specific quantities and preparation are access-restricted; these general categories are public.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-offering-animal">
-          <div class="concept-label">Animal</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-animal</div>
-          <p class="concept-def">Animal sacrifice or offering. Category is public; specific animals, method, and context are initiated-only.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-candle-light">
-          <div class="concept-label">Candle/Light</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-candle-light</div>
-          <p class="concept-def">Candles or other light sources offered or burned for an entity.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-cloth-fabric">
-          <div class="concept-label">Cloth/Fabric</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-cloth-fabric</div>
-          <p class="concept-def">Fabric, beads, or clothing offered or draped for an entity in the entity&#x27;s sacred colors.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-drink">
-          <div class="concept-label">Drink</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-drink</div>
-          <p class="concept-def">Liquids offered to an entity: water, rum, wine, honey, etc.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-food">
-          <div class="concept-label">Food</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-food</div>
-          <p class="concept-def">Prepared or natural foods offered to an entity. Specific foods are tradition and entity specific.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-labor-action">
-          <div class="concept-label">Labor/Action</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-labor-action</div>
-          <p class="concept-def">Dedicated labor, service, or action performed as offering. Example: building a shrine, completing a vow, acts of charity associated with an entity&#x27;s domain.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-money-coin">
-          <div class="concept-label">Money/Coin</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-money-coin</div>
-          <p class="concept-def">Coins or currency offered to an entity, particularly common with Elegba, Oshun, and market-oriented spirits.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-music-song">
-          <div class="concept-label">Music/Song</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-music-song</div>
-          <p class="concept-def">Songs, drumming, or music performed in honor of an entity. General category is public; specific songs and rhythms are initiated-only.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-plant">
-          <div class="concept-label">Plant/Herb</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-plant</div>
-          <p class="concept-def">Plants, flowers, or herbal preparations offered to an entity. Links to ewe:Plant instances.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-object">
-          <div class="concept-label">Sacred Object</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-object</div>
-          <p class="concept-def">Ritual objects, implements, or symbolic items offered or dedicated to an entity.</p>
-        </div>
-        <div class="concept-item" id="concept-offering-water">
-          <div class="concept-label">Water</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">offering-water</div>
-          <p class="concept-def">Fresh water, ocean water, river water, or blessed water offered to an entity.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Polarity and Gender Modality</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms for describing metaphysical polarity or gendered alignment in ritual address, cosmology, and manifestation. This scheme does not describe biological sex. Multiple concepts may apply to a single entity via different paths (iroko:RelationshipAssertion with assertionScope for camino-level distinctions).</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-polarity-androgynous">
-          <div class="concept-label">Androgynous</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">polarity-androgynous</div>
-          <p class="concept-def">Masculine and feminine qualities are simultaneously present and inseparable. Distinct from aspect-dependent, where polarity shifts between manifestations.</p>
-        </div>
-        <div class="concept-item" id="concept-polarity-apolar">
-          <div class="concept-label">Apolar</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">polarity-apolar</div>
-          <p class="concept-def">Not described in gendered or polarity terms, or explicitly transcending the masculine/feminine binary. Not the same as unknown.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Beyond polarity</p>
-        </div>
-        <div class="concept-item" id="concept-polarity-aspect-dependent">
-          <div class="concept-label">Aspect-Dependent</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">polarity-aspect-dependent</div>
-          <p class="concept-def">Polarity varies by named camino, avatar, path, or manifestation. Individual paths should carry their own polarity assertion via iroko:RelationshipAssertion with assertionScope.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Camino-dependent</p>
-        </div>
-        <div class="concept-item" id="concept-polarity-feminine">
-          <div class="concept-label">Feminine</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">polarity-feminine</div>
-          <p class="concept-def">Consistent feminine polarity in ritual address, manifestation, and alignment across known caminos.</p>
-        </div>
-        <div class="concept-item" id="concept-polarity-masculine">
-          <div class="concept-label">Masculine</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">polarity-masculine</div>
-          <p class="concept-def">Consistent masculine polarity in ritual address, manifestation, and alignment across known caminos.</p>
-        </div>
-        <div class="concept-item" id="concept-polarity-temporal">
-          <div class="concept-label">Temporal</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">polarity-temporal</div>
-          <p class="concept-def">Polarity shifts according to time of year, liturgical calendar, season, or ritual period. The shift is cyclical and predictable, not camino-specific.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Seasonal polarity shift</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Spirit Kinship Relation Types</span>
-        <span class="scheme-count">9 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled kinship relation types for spirit-to-spirit relationship assertions. Used as the range of iroko:relationType on iroko:RelationshipAssertion nodes. Kinship in this context is cosmological, not biological.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-kinship-brother-of">
-          <div class="concept-label">brother of</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-brother-of</div>
-          <p class="concept-def">kinship-brother-of</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-child-of">
-          <div class="concept-label">child of</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-child-of</div>
-          <p class="concept-def">kinship-child-of</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-father-of">
-          <div class="concept-label">father of</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-father-of</div>
-          <p class="concept-def">kinship-father-of</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-mother-of">
-          <div class="concept-label">mother of</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-mother-of</div>
-          <p class="concept-def">kinship-mother-of</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-parent-of">
-          <div class="concept-label">parent of</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-parent-of</div>
-          <p class="concept-def">kinship-parent-of</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Use when the gendered parent role is unspecified or ambiguous in source material.</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-sibling-of">
-          <div class="concept-label">sibling of</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-sibling-of</div>
-          <p class="concept-def">kinship-sibling-of</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Use when gendered sibling distinction is absent or contested in source material.</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-sister-of">
-          <div class="concept-label">sister of</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-sister-of</div>
-          <p class="concept-def">kinship-sister-of</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-spouse-of">
-          <div class="concept-label">spouse of</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-spouse-of</div>
-          <p class="concept-def">kinship-spouse-of</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-twin-of">
-          <div class="concept-label">twin of</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-twin-of</div>
-          <p class="concept-def">kinship-twin-of</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">In Lucumí cosmology, Ibeji (twins) hold specific sacred status. This relation type should be used with iroko:assertionStatus to indicate whether the twin relationship is consensual or lineage-specific.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Temperament Classification</span>
-        <span class="scheme-count">4 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Temperament or spiritual disposition of an entity or path. Reflects the nature and quality of the entity&#x27;s energy and how it is approached in ritual.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-temperament-cool-sweet">
-          <div class="concept-label">Cool/Sweet</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">temperament-cool-sweet</div>
-          <p class="concept-def">Entities of cool, gentle, beneficent energy. Approached with white and light colors, cool water, and gentle offerings. Example: Obatala, Yemaya (certain paths), Rada lwa.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Frio, Rada</p>
-        </div>
-        <div class="concept-item" id="concept-temperament-hot-fierce">
-          <div class="concept-label">Hot/Fierce</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">temperament-hot-fierce</div>
-          <p class="concept-def">Entities of hot, intense, warrior energy. Approached with fire, iron, rum, and strong offerings. Example: Ogun, Shango, Petwo lwa.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Caliente, Petwo</p>
-        </div>
-        <div class="concept-item" id="concept-temperament-liminal">
-          <div class="concept-label">Liminal</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">temperament-liminal</div>
-          <p class="concept-def">Entities who exist at thresholds — between life and death, sacred and profane, this world and the next. Example: Ghede lwa, Eshu/Elegba as gatekeeper, Oya Igbale.</p>
-        </div>
-        <div class="concept-item" id="concept-temperament-transformative">
-          <div class="concept-label">Transformative</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">temperament-transformative</div>
-          <p class="concept-def">Entities whose primary nature is change, transition, and transformation. Neither simply cool nor hot; work with both destruction and creation. Example: Oya, Elegba.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      License: CC0 1.0 Universal (Public Domain)
-    </div>
-    <div class="footer-links">
-      <a href="https://www.irokosociety.org">irokosociety.org</a>
-      <a href="../index.html">Home</a>
-      <a href="index.html">Vocabularies</a>
+    <div class="footer-bottom">
+      <p>© 2025 Iroko Historical Society / Ilé Aña Olofí, Inc. · <a href="#">Terms of Use</a> · <a href="#">Licensing</a></p>
+      <span class="version-badge">v1.2.0</span>
     </div>
   </footer>
 
-</div>
+<script>
+const MOD_SLUG = 'nkisi';
+const MOD_DISPLAY = 'Nkisi Module';
+const MOD_CITE = '"Nkisi Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/nkisi';
+const CLASSES = {
+  Offering: {
+    uri:'iroko:Offering', label:'Offering',
+    definition:'A material or symbolic offering given to a spiritual entity. Includes food, drink, objects, colors, animals, and actions. General offering categories are public; specific quantities, combinations, and preparation details are access-restricted.',
+    outgoing:[],
+    incoming:[],
+    crossModuleConnections:[]
+  },
+  Path: {
+    uri:'iroko:Path', label:'Path',
+    definition:'A distinct manifestation, aspect, or camino of a spiritual entity. Paths share the parent entity\'s fundamental nature but have distinct domains, temperaments, colors, numbers, offerings, and sometimes distinct syncretic identities. Example: Oya Yansa (fierce warrior aspect) vs. Oya Igbale (governess of the cemetery). Paths are not separate entities but distinct faces of the same power.',
+    outgoing:[{uri:'iroko:parentEntity',label:'parent entity',range:'iroko:SpiritualEntity',definition:'The SpiritualEntity of which this Path is an aspect or manifestation.',crossModule:'nkisi'  },{uri:'iroko:pathTemperament',label:'path temperament',range:'iroko:Concept',definition:'Temperament of this specific path. Values from TemperamentScheme. A path may have a different temperament than its parent entity. Access: public-unrestricted.',crossModule:''  }],
+    incoming:[{uri:'iroko:path',label:'path',domain:'iroko:SpiritualEntity',definition:'Links a SpiritualEntity to its known Path instances (caminos/avatars). A single entity may have many paths. Access: public-unrestricted.',crossModule:'nkisi'  }],
+    crossModuleConnections:[]
+  },
+  Shrine: {
+    uri:'iroko:Shrine', label:'Shrine',
+    definition:'A consecrated physical space or vessel housing a spiritual entity. Includes ile (houses), soperas, nganga, peristyle altars, and boveda. Shrine records link physical location and custody to the entity and tradition. Operational shrine details are access-restricted.',
+    outgoing:[],
+    incoming:[{uri:'iroko:shrine',label:'shrine',domain:'iroko:SpiritualEntity',definition:'Links a spiritual entity to a documented shrine or vessel. Access: community-only.',crossModule:'nkisi'  }],
+    crossModuleConnections:[]
+  },
+  SpiritualEntity: {
+    uri:'iroko:SpiritualEntity', label:'Spiritual Entity',
+    definition:'A divine power, ancestral spirit, nature spirit, adversarial force, or personal essence recognized and engaged within an Afro-Atlantic tradition. Includes orisa, lwa, mpungo/inquice, vodun, egun, ajogun, Ori, Espiritismo guides and commissions, and spirits of place and element.',
+    outgoing:[{uri:'iroko:commissionType',label:'commission type',range:'iroko:Concept',definition:'For espiritu-commission entities: the specific commission they belong to. Values from CommissionTypeScheme. Access: public-unrestricted.',crossModule:''  },{uri:'iroko:entityType',label:'entity type',range:'iroko:Concept',definition:'Classification of this spiritual entity within the EntityType scheme. Values: iroko:entityType-orisa, iroko:entityType-lwa-rada, iroko:entityType-lwa-petwo, iroko:entityType-lwa-ghede, iroko:entityType-mpungo-inquice, iroko:entityType-vodun, iroko:entityType-ori, iroko:entityType-egun, iroko:entityType-nfumbe, iroko:entityType-espiritu-guia, iroko:entityType-espiritu-commission, iroko:entityType-spirit-of-place, iroko:entityType-spirit-of-element, iroko:entityType-ajogun. Access: public-unrestricted.',crossModule:''  },{uri:'iroko:offeringGeneral',label:'offering (general)',range:'iroko:Concept',definition:'General category of offering accepted by this entity. Values from OfferingTypeScheme. Access: public-unrestricted.',crossModule:''  },{uri:'iroko:path',label:'path',range:'iroko:Path',definition:'Links a SpiritualEntity to its known Path instances (caminos/avatars). A single entity may have many paths. Access: public-unrestricted.',crossModule:'nkisi'  },{uri:'iroko:plantAssociation',label:'plant association',range:'iroko:Plant',definition:'Plants associated with this entity. Links to ewe:Plant instances. Inverse of ewe:entityAssociation. Access: public-unrestricted.',crossModule:'ewe'  },{uri:'iroko:relatedEntity',label:'related entity',range:'iroko:SpiritualEntity',definition:'Another spiritual entity with a significant relationship to this one. Example: Elegba and Ogun (road and iron); Oya and Shango (consort). Access: public-unrestricted.',crossModule:'nkisi'  },{uri:'iroko:shrine',label:'shrine',range:'iroko:Shrine',definition:'Links a spiritual entity to a documented shrine or vessel. Access: community-only.',crossModule:'nkisi'  },{uri:'iroko:temperament',label:'temperament',range:'iroko:Concept',definition:'General temperament classification. Values from TemperamentScheme: iroko:temperament-cool-sweet, iroko:temperament-hot-fierce, iroko:temperament-transformative, iroko:temperament-liminal. Access: public-unrestricted.',crossModule:''  }],
+    incoming:[{uri:'iroko:parentEntity',label:'parent entity',domain:'iroko:Path',definition:'The SpiritualEntity of which this Path is an aspect or manifestation.',crossModule:'nkisi'  },{uri:'iroko:relatedEntity',label:'related entity',domain:'iroko:SpiritualEntity',definition:'Another spiritual entity with a significant relationship to this one. Example: Elegba and Ogun (road and iron); Oya and Shango (consort). Access: public-unrestricted.',crossModule:'nkisi'  }],
+    crossModuleConnections:[{name:'Ewé Module',slug:'ewe',dotClass:'dot-ewe',props:'via iroko:plantAssociation',direction:'references'}]
+  }
+};
+const MODULE_CONNECTIONS = [
+  {name:'Ewé Module',slug:'ewe',dotClass:'dot-ewe',props:'1 shared property'}
+];
+
+let activeClass = null;
+
+function activateClass(classId) {
+  if (activeClass === classId) { deactivateClass(); return; }
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = classId;
+  document.getElementById('card-' + classId)?.classList.add('is-active');
+  const data = CLASSES[classId];
+  if (!data) return;
+  document.getElementById('panel-uri').textContent = data.uri;
+  document.getElementById('panel-label').textContent = data.label;
+  document.getElementById('panel-definition').textContent = data.definition || '';
+  const citeText = data.uri + '. Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
+  document.getElementById('panel-cite-text').innerHTML = '<em>' + citeText + '</em>';
+  document.getElementById('panel-cite-btn').dataset.cite = citeText;
+  renderProps('incoming-props', data.incoming, 'in');
+  renderProps('outgoing-props', data.outgoing, 'out');
+  document.getElementById('zone2-empty').classList.add('hidden');
+  document.getElementById('zone2-hint').textContent = 'Click class again to close';
+  const panel = document.getElementById('property-panel');
+  panel.classList.add('visible');
+  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  renderClassSidebar(data, classId);
+  history.replaceState(null, '', '#' + classId);
+}
+
+function deactivateClass() {
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = null;
+  document.getElementById('property-panel').classList.remove('visible');
+  document.getElementById('zone2-empty').classList.remove('hidden');
+  document.getElementById('zone2-hint').textContent = 'Select a class above to explore its properties';
+  renderModuleSidebar();
+  history.replaceState(null, '', window.location.pathname);
+}
+
+function renderProps(containerId, props, dir) {
+  const el = document.getElementById(containerId);
+  if (!props || props.length === 0) { el.innerHTML = '<div class="no-props">None documented in this module.</div>'; return; }
+  el.innerHTML = props.map((p, i) => {
+    const id = 'prop-' + dir + '-' + i;
+    const endLabel = dir === 'out' ? 'Range' : 'Domain';
+    const endVal   = dir === 'out' ? (p.range || '') : (p.domain || '');
+    const crossTag = (p.crossModule && p.crossModule !== MOD_SLUG) ? '<span class="cross-tag">[' + p.crossModule + ']</span>' : '';
+    return '<div class="prop-item" id="' + id + '" onclick="toggleProp(\'' + id + '\')">' +
+      '<div class="prop-item-top"><span class="prop-item-uri">' + p.uri + '</span>' +
+      '<svg class="prop-item-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,3 11,8 5,13"/></svg></div>' +
+      '<span class="prop-item-label">' + (p.label || '') + '</span>' +
+      '<div class="prop-detail" id="' + id + '-detail">' +
+      '<div class="prop-detail-row"><span class="pd-label">' + endLabel + '</span><span class="pd-value">' + endVal + crossTag + '</span></div>' +
+      '<div class="prop-detail-row"><span class="pd-label">Definition</span><span class="pd-value">' + (p.definition || '') + '</span></div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function toggleProp(propId) {
+  const item = document.getElementById(propId);
+  const detail = document.getElementById(propId + '-detail');
+  if (!item || !detail) return;
+  const isOpen = item.classList.contains('is-expanded');
+  document.querySelectorAll('.prop-item.is-expanded').forEach(el => {
+    el.classList.remove('is-expanded');
+    el.querySelector('.prop-detail')?.classList.remove('visible');
+  });
+  if (!isOpen) { item.classList.add('is-expanded'); detail.classList.add('visible'); }
+}
+
+function renderClassSidebar(data, classId) {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'iroko:' + classId + ' — connections';
+    const conns = data.crossModuleConnections || [];
+    el.innerHTML = '<div class="active-class-card"><span class="acc-uri">' + data.uri + '</span><span class="acc-label">' + data.label + '</span></div>' +
+      (conns.length === 0
+        ? '<p class="no-connections">No cross-module connections.</p>'
+        : conns.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+            '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+            '<span class="cc-props">' + c.props + '</span>' +
+            '<span class="cc-via">' + c.direction + '</span></a>').join(''));
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function renderModuleSidebar() {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'Connected modules';
+    el.innerHTML = MODULE_CONNECTIONS.length === 0
+      ? '<p class="no-connections">No cross-module connections documented.</p>'
+      : MODULE_CONNECTIONS.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+          '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+          '<span class="cc-props">' + c.props + '</span></a>').join('');
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function copyPanelCitation(btn) {
+  navigator.clipboard.writeText(btn.dataset.cite).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyModuleCitation(btn) {
+  navigator.clipboard.writeText(MOD_CITE).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyPageLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓'; btn.classList.add('copied-state');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied-state'); }, 2000);
+  });
+}
+function shareEmail(e) {
+  e.preventDefault();
+  window.location.href = 'mailto:?subject=' + encodeURIComponent('Iroko Framework Ontology — ' + MOD_DISPLAY) + '&body=' + encodeURIComponent(window.location.href);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderModuleSidebar();
+  const hash = window.location.hash.slice(1);
+  if (hash && CLASSES[hash]) setTimeout(() => activateClass(hash), 100);
+});
+
+</script>
 </body>
 </html>

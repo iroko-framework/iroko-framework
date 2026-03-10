@@ -1,338 +1,548 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Authority Module — Ritual Governance — Iroko Framework Vocabularies</title>
-  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authority Module — Iroko Framework Ontology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    :root {
+      --ink:#1a1714; --ink-mid:#2e2a26; --ink-light:#4a4540;
+      --paper:#f7f4ef; --paper-warm:#efe9df;
+      --border:#d5cdc0; --border-mid:#c0b8ac;
+      --gold:#8b6914; --gold-light:#c49a2a; --gold-pale:#f0e6c8; --gold-mid:#a07820;
+      --sienna:#7a3b1e; --teal:#1f5c52; --teal-pale:#e4f0ee; --teal-mid:#2a7a6e;
+      --radius-sm:3px; --radius:6px; --radius-lg:10px;
+      --shadow-sm:0 1px 4px rgba(26,23,20,0.10); --shadow:0 3px 14px rgba(26,23,20,0.13);
+      --transition:180ms ease;
+    }
+    /* Module dot colors */
+    .dot-agency{background:#5a6e8a} .dot-authority{background:#6b4a8a}
+    .dot-core{background:#444} .dot-ekpe{background:#2a6b4a}
+    .dot-epistemic{background:#7a5a1e} .dot-ewe{background:#8b6914}
+    .dot-ile{background:#1f5c52} .dot-manifestation{background:#6b2a2a}
+    .dot-marca{background:#1e4a6b} .dot-narrative{background:#6b3a1e}
+    .dot-ngoma{background:#4a1e6b} .dot-nkisi{background:#7a3b1e}
+    .dot-qal{background:#2a4a6b} .dot-sankofa{background:#6b5a1e}
+    .dot-travay{background:#4a6b8a} .dot-veve{background:#3a1e6b}
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
-  </style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:'EB Garamond',Georgia,serif;font-size:1.0625rem;line-height:1.65;
+      background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+    .site-nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;gap:2rem;
+      height:52px;position:sticky;top:0;z-index:200;border-bottom:2px solid var(--gold)}
+    .wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:600;
+      letter-spacing:0.04em;color:#f7f4ef;text-decoration:none;white-space:nowrap}
+    .wordmark span{color:var(--gold-light)}
+    .nav-links{display:flex;gap:1.5rem;list-style:none;margin-left:auto}
+    .nav-links a{font-family:'EB Garamond',Georgia,serif;font-size:0.875rem;letter-spacing:0.05em;
+      text-transform:uppercase;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .nav-links a:hover{color:var(--gold-light)}
+
+    .page-header{background:var(--ink-mid);color:var(--paper);padding:2.5rem 2rem 2rem;border-bottom:1px solid var(--gold)}
+    .breadcrumb{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .breadcrumb a{color:var(--border-mid);text-decoration:none}
+    .breadcrumb a:hover{color:var(--gold-light)}
+    .page-header h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.25rem;font-weight:300;
+      letter-spacing:0.02em;line-height:1.2;margin-bottom:0.4rem}
+    .module-tag{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+      background:var(--gold);color:var(--ink);padding:0.2em 0.6em;border-radius:var(--radius-sm);
+      vertical-align:middle;margin-left:0.75rem;font-family:'EB Garamond',serif}
+    .module-desc{font-size:0.88rem;color:var(--border-mid);margin-top:0.6rem;max-width:700px;line-height:1.5}
+    .module-stats{display:flex;gap:2rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)}
+    .stat .number{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.75rem;font-weight:300;
+      color:var(--gold-light);line-height:1;display:block}
+    .stat .label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--border-mid)}
+
+    .layout{display:grid;grid-template-columns:1fr 290px;flex:1;max-width:1280px;width:100%;margin:0 auto;align-items:start}
+    .main-content{padding:2rem;border-right:1px solid var(--border);min-width:0}
+
+    .zone-label{font-size:0.68rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between}
+    .zone-hint{font-size:0.7rem;letter-spacing:0.02em;text-transform:none;color:var(--border-mid);font-style:italic}
+
+    .class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.6rem;margin-bottom:2.25rem}
+    .class-card{padding:0.8rem 0.9rem;border:1px solid var(--border);border-radius:var(--radius);
+      background:white;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);
+      user-select:none;position:relative}
+    .class-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .class-card.is-active{border-color:var(--gold);background:var(--gold-pale);box-shadow:var(--shadow)}
+    .class-card.is-active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--paper-warm)}
+    .card-uri{font-family:'JetBrains Mono',monospace;font-size:0.73rem;color:var(--gold);display:block;
+      margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-label{font-size:0.88rem;color:var(--ink);display:block;line-height:1.3}
+
+    .zone2-empty{display:flex;align-items:center;gap:0.75rem;padding:1.25rem 1.5rem;
+      background:var(--paper-warm);border:1px dashed var(--border-mid);border-radius:var(--radius);
+      color:var(--border-mid);font-size:0.85rem;font-style:italic;margin-bottom:2.25rem}
+    .zone2-empty svg{width:20px;height:20px;flex-shrink:0;opacity:0.5}
+    .zone2-empty.hidden{display:none}
+
+    .property-panel{display:none;background:var(--paper-warm);border:1px solid var(--border-mid);
+      border-radius:var(--radius-lg);margin-bottom:2.25rem;overflow:hidden;animation:panelIn 180ms ease forwards}
+    .property-panel.visible{display:block}
+    @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .panel-header{background:var(--ink-mid);color:var(--paper);padding:1rem 1.5rem;
+      display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+    .ph-uri{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--gold-light)}
+    .ph-label{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:300;color:var(--paper)}
+    .panel-close{background:none;border:none;color:var(--border-mid);cursor:pointer;padding:0.2rem;
+      font-size:1.1rem;line-height:1;transition:color var(--transition);margin-left:auto;flex-shrink:0}
+    .panel-close:hover{color:var(--paper)}
+    .panel-definition{padding:1rem 1.5rem;font-size:0.92rem;color:var(--ink-mid);line-height:1.6;border-bottom:1px solid var(--border)}
+    .panel-body{display:grid;grid-template-columns:1fr 1fr}
+    .prop-col{padding:1.25rem 1.5rem}
+    .prop-col:first-child{border-right:1px solid var(--border)}
+    .prop-col-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:0.85rem;display:flex;align-items:center;gap:0.4rem}
+    .direction-arrow{font-size:0.9rem;color:var(--gold)}
+    .col-sublabel{font-style:italic;text-transform:none;letter-spacing:0;font-size:0.67rem;color:var(--border-mid)}
+    .prop-item{padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      background:white;margin-bottom:0.5rem;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition)}
+    .prop-item:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .prop-item.is-expanded{border-color:var(--gold);background:#fffdf7}
+    .prop-item-top{display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
+    .prop-item-uri{font-family:'JetBrains Mono',monospace;font-size:0.74rem;color:var(--gold)}
+    .prop-item-chevron{width:13px;height:13px;color:var(--border-mid);flex-shrink:0;transition:transform var(--transition)}
+    .prop-item.is-expanded .prop-item-chevron{transform:rotate(90deg);color:var(--gold)}
+    .prop-item-label{font-size:0.82rem;color:var(--ink-light);display:block;margin-top:0.12rem}
+    .prop-detail{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border)}
+    .prop-detail.visible{display:block}
+    .prop-detail-row{display:flex;gap:0.75rem;margin-bottom:0.45rem;align-items:baseline}
+    .pd-label{font-size:0.65rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-light);min-width:60px;flex-shrink:0}
+    .pd-value{font-size:0.82rem;color:var(--ink-mid);line-height:1.4}
+    .cross-tag{font-size:0.65rem;color:var(--border-mid);font-style:italic;margin-left:0.3rem}
+    .no-props{font-size:0.82rem;color:var(--border-mid);font-style:italic;padding:0.5rem 0}
+    .panel-citation{padding:1rem 1.5rem;border-top:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .panel-citation .cite-text{font-size:0.8rem;color:var(--ink-light);font-style:italic;flex:1;min-width:200px}
+    .btn-copy{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;
+      font-size:0.85rem;cursor:pointer;transition:background var(--transition),transform 80ms;white-space:nowrap;flex-shrink:0}
+    .btn-copy:hover{background:var(--ink)} .btn-copy:active{transform:scale(0.97)} .btn-copy.copied{background:var(--teal)}
+    .btn-copy svg{width:13px;height:13px;flex-shrink:0}
+
+    .concept-scheme-block{margin-bottom:2rem}
+    .concept-scheme-block:last-child{margin-bottom:0}
+    .csb-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.15rem}
+    .csb-uri{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--teal)}
+    .csb-count{font-size:0.7rem;color:var(--ink-light);letter-spacing:0.04em}
+    .csb-scheme-label{font-size:0.92rem;color:var(--ink-mid);font-style:italic;margin-bottom:0.2rem}
+    .csb-description{font-size:0.82rem;color:var(--ink-light);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--teal-pale)}
+    .concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.45rem}
+    .concept-card{padding:0.55rem 0.75rem;background:var(--teal-pale);border:1px solid rgba(31,92,82,0.18);
+      border-radius:var(--radius-sm);transition:background var(--transition),border-color var(--transition);cursor:default}
+    .concept-card:hover{background:rgba(31,92,82,0.14);border-color:var(--teal)}
+    .cc-label{font-size:0.85rem;color:var(--ink);display:block;line-height:1.3;margin-bottom:0.2rem}
+    .cc-id{font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--teal-mid);display:block}
+
+    .sidebar{padding:1.5rem 1.25rem;position:sticky;top:52px;max-height:calc(100vh - 52px);overflow-y:auto}
+    .sidebar-panel{margin-bottom:1.75rem}
+    .sidebar-panel-title{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      padding-bottom:0.5rem;border-bottom:1px solid var(--border);margin-bottom:0.85rem}
+    .active-class-card{padding:0.75rem 0.85rem;background:var(--gold-pale);border:1px solid var(--gold);
+      border-radius:var(--radius-sm);margin-bottom:0.85rem}
+    .acc-uri{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold-mid);display:block;margin-bottom:0.15rem}
+    .acc-label{font-size:0.9rem;color:var(--ink);font-weight:500}
+    .connection-card{padding:0.6rem 0.75rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      margin-bottom:0.45rem;background:white;text-decoration:none;display:block;
+      transition:border-color var(--transition),box-shadow var(--transition)}
+    .connection-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .cc-top{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem}
+    .cc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .cc-module-name{font-size:0.85rem;color:var(--ink);font-weight:500}
+    .cc-props{font-size:0.72rem;color:var(--ink-light);display:block;margin-top:0.1rem}
+    .cc-via{font-size:0.67rem;color:var(--ink-light);font-style:italic;margin-top:0.1rem;display:block}
+    .sidebar-dynamic{transition:opacity 140ms ease}
+    .sidebar-dynamic.fading{opacity:0}
+    .no-connections{font-size:0.78rem;color:var(--border-mid);font-style:italic}
+    .share-buttons{display:flex;gap:0.5rem}
+    .share-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.55rem 0.25rem;
+      background:var(--paper-warm);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
+      font-family:'EB Garamond',serif;font-size:0.68rem;color:var(--ink-light);text-decoration:none;
+      letter-spacing:0.04em;text-transform:uppercase;transition:background var(--transition),border-color var(--transition),color var(--transition)}
+    .share-btn:hover{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
+    .share-btn svg{width:17px;height:17px}
+    .share-btn.copied-state{background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
+    .sidebar-citation{background:var(--paper-warm);border:1px solid var(--border-mid);border-radius:var(--radius-sm);padding:0.85rem}
+    .sidebar-citation .cite-text{font-size:0.77rem;line-height:1.5;color:var(--ink-mid);font-style:italic;margin-bottom:0.6rem}
+    .btn-copy-sm{display:inline-flex;align-items:center;gap:0.35rem;padding:0.42rem 0.85rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;font-size:0.8rem;
+      cursor:pointer;transition:background var(--transition);width:100%;justify-content:center}
+    .btn-copy-sm:hover{background:var(--ink)} .btn-copy-sm.copied{background:var(--teal)}
+    .format-links{display:flex;flex-direction:column;gap:0.3rem}
+    .format-link{display:flex;align-items:center;justify-content:space-between;padding:0.38rem 0.6rem;
+      border-radius:var(--radius-sm);border:1px solid var(--border);background:white;font-family:'JetBrains Mono',monospace;
+      font-size:0.73rem;color:var(--gold);text-decoration:none;transition:background var(--transition),border-color var(--transition)}
+    .format-link:hover{background:var(--gold-pale);border-color:var(--gold)}
+    .format-arrow{color:var(--border-mid)}
+
+    footer{background:var(--ink);color:var(--paper);margin-top:auto}
+    .footer-inner{max-width:1280px;margin:0 auto;padding:2.5rem 2rem;
+      display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:2rem;align-items:start}
+    .footer-brand .fw{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-weight:300;
+      letter-spacing:0.04em;color:var(--paper);display:block;margin-bottom:0.5rem}
+    .footer-brand .fw span{color:var(--gold-light)}
+    .footer-brand p{font-size:0.8rem;color:var(--border-mid);line-height:1.5;max-width:220px}
+    .footer-col h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .footer-col ul{list-style:none}
+    .footer-col li{margin-bottom:0.3rem}
+    .footer-col a{font-size:0.82rem;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .footer-col a:hover{color:var(--gold-light)}
+    .footer-funders{display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end}
+    .footer-funders h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);text-align:right;width:100%}
+    .funder-slot{width:140px;height:44px;border:1px dashed rgba(255,255,255,0.15);border-radius:var(--radius-sm);
+      display:flex;align-items:center;justify-content:center;font-size:0.67rem;letter-spacing:0.06em;
+      text-transform:uppercase;color:rgba(255,255,255,0.2)}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);max-width:1280px;margin:0 auto;padding:1rem 2rem;
+      display:flex;justify-content:space-between;align-items:center}
+    .footer-bottom p{font-size:0.75rem;color:rgba(255,255,255,0.3)}
+    .footer-bottom a{color:rgba(255,255,255,0.3);text-decoration:none}
+    .footer-bottom a:hover{color:var(--gold-light)}
+    .version-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:0.2em 0.5em;
+      border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);color:rgba(255,255,255,0.3)}
+</style>
 </head>
 <body>
-
-<div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="index.html">Vocabularies</a>
-    <a href="https://ontology.irokosociety.org">ontology.irokosociety.org ↗</a>
-    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+  <nav class="site-nav">
+    <a class="wordmark" href="/">Iroko Framework <span>Ontology</span></a>
+    <ul class="nav-links">
+      <li><a href="/modules">Modules</a></li>
+      <li><a href="/classes">Classes</a></li>
+      <li><a href="/properties">Properties</a></li>
+      <li><a href="/concepts">Concepts</a></li>
+      <li><a href="/whitepaper">Whitepaper</a></li>
+    </ul>
   </nav>
-</div>
 
-<div class="page-wrap">
-
-  <p class="breadcrumb">
-    <a href="../index.html">Iroko Framework</a>
-    <span>/</span>
-    <a href="index.html">Vocabularies</a>
-    <span>/</span>
-    Authority Module — Ritual Governance
-  </p>
-
-  <header class="vocab-header">
-    <div class="vocab-header-logo">
-      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
-    </div>
-    <div>
-      <span class="module-tag tag-authority">Authority</span>
-      <h1>Authority Module — Ritual Governance</h1>
-      <p class="subtitle">Authority types, jurisdictions, basis, and recognition networks</p>
-      <div class="header-meta">
-        <span class="meta-pill">auth:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-authority#</span>
-        <span class="meta-pill">v2.0.0</span>
-        <span class="meta-pill"><a href="iroko-authority.ttl" style="color:inherit;">Download TTL ↓</a></span>
-        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
-      </div>
+  <header class="page-header">
+    <div class="breadcrumb"><a href="/">Iroko Framework</a> › <a href="/modules">Modules</a> › Authority Module</div>
+    <h1>Authority Module <span class="module-tag">Governance Layer</span></h1>
+    <div class="module-desc">Governance Layer module.</div>
+    <div class="module-stats">
+      <div class="stat"><span class="number">5</span><span class="label">Classes</span></div>
+      <div class="stat"><span class="number">11</span><span class="label">Properties</span></div>
+      <div class="stat"><span class="number">3</span><span class="label">Concept Schemes</span></div>
+      <div class="stat"><span class="number">17</span><span class="label">Concepts</span></div>
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Governance Layer module. Full governance model for ritual authority, jurisdiction, and authorization basis. Extends the iroko:RitualAuthority stub in Core with jurisdiction modeling, authority type and basis classification, ritual roles, recognition networks, and temporal validity. Used to authorize assertion-level claims across all modules. Commonly paired with iroko-epistemic for constraint-aware archives.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">11</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">17</span><span class="stat-label">Concepts</span></div>
-    </div>
-  </div>
+  <div class="layout">
+    <main class="main-content">
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">5 classes</span>
-    </div>
-    <div class="class-card" id="cls-Authority">
-      <div class="class-name">Authority</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Authority</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">RitualAuthority</span></div>
-      <p class="class-def">A jurisdictional authority capable of authorizing assertion-level claims and governance decisions. May represent a lineage, cabildo, religious house, elder council, or recognized individual in a governance role. Extends the iroko:RitualAuthority stub in Core. For the individual&#x27;s held credential (title, office), see ile:ReligiousOffice.</p>
-    </div>
-    <div class="class-card" id="cls-AuthorityBasis">
-      <div class="class-name">AuthorityBasis</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Authority Basis</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Concept</span></div>
-      <p class="class-def">What the authority rests on: lineage succession, consecration, appointment, community recognition, divinatory selection, or other basis.</p>
-    </div>
-    <div class="class-card" id="cls-AuthorityType">
-      <div class="class-name">AuthorityType</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Authority Type</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Concept</span></div>
-      <p class="class-def">Classifies the structural form of an authority — lineage, house, cabildo, council, individual elder, etc.</p>
-    </div>
-    <div class="class-card" id="cls-Jurisdiction">
-      <div class="class-name">Jurisdiction</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Jurisdiction</div>
+      <div class="zone-label">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="class-card" id="card-Authority" onclick="activateClass('Authority')"><span class="card-uri">iroko:Authority</span><span class="card-label">Authority</span></div>
+<div class="class-card" id="card-AuthorityBasis" onclick="activateClass('AuthorityBasis')"><span class="card-uri">iroko:AuthorityBasis</span><span class="card-label">Authority Basis</span></div>
+<div class="class-card" id="card-AuthorityType" onclick="activateClass('AuthorityType')"><span class="card-uri">iroko:AuthorityType</span><span class="card-label">Authority Type</span></div>
+<div class="class-card" id="card-Jurisdiction" onclick="activateClass('Jurisdiction')"><span class="card-uri">iroko:Jurisdiction</span><span class="card-label">Jurisdiction</span></div>
+<div class="class-card" id="card-RitualRole" onclick="activateClass('RitualRole')"><span class="card-uri">iroko:RitualRole</span><span class="card-label">Ritual Role</span></div>
+      </div>
+
+      <div class="zone-label" id="zone2-label">
+        Properties
+        <span class="zone-hint" id="zone2-hint">Select a class above to explore its properties</span>
+      </div>
+      <div class="zone2-empty" id="zone2-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        No class selected. Click any class card above to see its incoming and outgoing properties.
+      </div>
+
+      <div class="property-panel" id="property-panel">
+        <div class="panel-header">
+          <div><div class="ph-uri" id="panel-uri"></div><div class="ph-label" id="panel-label"></div></div>
+          <button class="panel-close" onclick="deactivateClass()">✕</button>
+        </div>
+        <div class="panel-definition" id="panel-definition"></div>
+        <div class="panel-body">
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">←</span> Incoming <span class="col-sublabel">(this class as range)</span></div>
+            <div id="incoming-props"></div>
+          </div>
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">→</span> Outgoing <span class="col-sublabel">(this class as domain)</span></div>
+            <div id="outgoing-props"></div>
+          </div>
+        </div>
+        <div class="panel-citation">
+          <div class="cite-text" id="panel-cite-text"></div>
+          <button class="btn-copy" id="panel-cite-btn" onclick="copyPanelCitation(this)">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+
       
-      <p class="class-def">A place, house, cabildo, lineage territory, nation, or other bounded domain in which an authority is recognized. May be geographic, genealogical, or institutional.</p>
-    </div>
-    <div class="class-card" id="cls-RitualRole">
-      <div class="class-name">RitualRole</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ritual Role</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Concept</span></div>
-      <p class="class-def">The functional role an authority occupies within a ritual governance system — elder, priest, archivist-steward, witness, etc. Distinct from ile:ReligiousOffice (specific held title) — RitualRole is a classification concept.</p>
-    </div>
+      <div class="zone-label">Controlled Vocabulary</div>
+      <div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:AuthorityBasisScheme</span><span class="csb-count">7 concepts</span></div><div class="csb-scheme-label">Authority Bases</div><div class="concept-grid"><div class="concept-card" title="Authority derives from formal appointment by a recognized governing body."><span class="cc-label">Appointment</span><span class="cc-id">iroko:basis-appointment</span></div><div class="concept-card" title="Authority derives from informal but sustained community acknowledgment."><span class="cc-label">Community Recognition</span><span class="cc-id">iroko:basis-community-recognition</span></div><div class="concept-card" title="Authority derives from a ritual consecration event."><span class="cc-label">Consecration</span><span class="cc-id">iroko:basis-consecration</span></div><div class="concept-card" title="The basis of the authority is itself disputed across lineages or houses."><span class="cc-label">Contested Basis</span><span class="cc-id">iroko:basis-contested</span></div><div class="concept-card" title="Authority derives from selection through divination (Ifa, oracle, sortition, etc.)."><span class="cc-label">Divinatory Selection</span><span class="cc-id">iroko:basis-divinatory-selection</span></div><div class="concept-card" title="Authority derives from family lineage independent of formal consecration or appointment."><span class="cc-label">Hereditary</span><span class="cc-id">iroko:basis-hereditary</span></div><div class="concept-card" title="Authority derives from recognized succession in a transmission line."><span class="cc-label">Lineage Succession</span><span class="cc-id">iroko:basis-succession</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:AuthorityTypeScheme</span><span class="csb-count">6 concepts</span></div><div class="csb-scheme-label">Authority Types</div><div class="concept-grid"><div class="concept-card" title="Authority vested in a cabildo or mutual aid association with ritual governance functions."><span class="cc-label">Cabildo Authority</span><span class="cc-id">iroko:authorityType-cabildo</span></div><div class="concept-card" title="Authority vested in a collective governing council of elders or priests."><span class="cc-label">Council Authority</span><span class="cc-id">iroko:authorityType-council</span></div><div class="concept-card" title="Authority vested in a specific divinatory office — Babalawo, Oluwo, Houngan Asogwe, etc. — rather than the individual holder."><span class="cc-label">Divinatory Office</span><span class="cc-id">iroko:authorityType-divinatory-office</span></div><div class="concept-card" title="Authority vested in a religious house (ile, sosyete, cabildo house, etc.)."><span class="cc-label">House Authority</span><span class="cc-id">iroko:authorityType-house</span></div><div class="concept-card" title="Authority vested in a recognized individual elder acting in their own governance capacity."><span class="cc-label">Individual Elder Authority</span><span class="cc-id">iroko:authorityType-individual-elder</span></div><div class="concept-card" title="Authority vested in a descent line or transmission chain."><span class="cc-label">Lineage Authority</span><span class="cc-id">iroko:authorityType-lineage</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:RitualRoleScheme</span><span class="csb-count">4 concepts</span></div><div class="csb-scheme-label">Ritual Roles</div><div class="concept-grid"><div class="concept-card" title="Recognized steward of archival materials within a tradition or house."><span class="cc-label">Archivist-Steward</span><span class="cc-id">iroko:role-archivist-steward</span></div><div class="concept-card" title="Person acting in an authorized representative capacity on behalf of a house or community."><span class="cc-label">Community Delegate</span><span class="cc-id">iroko:role-community-delegate</span></div><div class="concept-card"><span class="cc-label">Diviner</span><span class="cc-id">iroko:role-diviner</span></div><div class="concept-card"><span class="cc-label">Priest</span><span class="cc-id">iroko:role-priest</span></div></div></div>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title" id="sb-title">Connected modules</div>
+        <div class="sidebar-dynamic" id="sb-connections"></div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Share</div>
+        <div class="share-buttons">
+          <a class="share-btn" href="#" onclick="shareEmail(event)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1.5"/><polyline points="2,4 10,12 18,4"/></svg>
+            Email
+          </a>
+          <a class="share-btn" href="#" onclick="window.print();return false;">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="6"/><rect x="2" y="8" width="16" height="8" rx="1"/><rect x="5" y="12" width="10" height="5"/><circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
+            Print
+          </a>
+          <button class="share-btn" id="share-link-btn" onclick="copyPageLink(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12a4 4 0 005.66 0l2-2A4 4 0 009.9 4.24l-1 1"/><path d="M12 8a4 4 0 00-5.66 0l-2 2A4 4 0 006.1 15.76l1-1"/></svg>
+            Link
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Cite the Authority Module</div>
+        <div class="sidebar-citation">
+          <div class="cite-text">"Authority Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. <em>ontology.irokosociety.org/authority</em></div>
+          <button class="btn-copy-sm" onclick="copyModuleCitation(this)">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Other formats</div>
+        <div class="format-links">
+          <a class="format-link" href="#">RDF/Turtle <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">JSON-LD <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">RDF/XML <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">N-Triples <span class="format-arrow">↗</span></a>
+        </div>
+      </div>
+    </aside>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">11 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-authorityBasis">
-          <td><span class="prop-name">authorityBasis</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authority basis</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Authority → Authority Basis</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">What the authority rests on — the epistemic or social foundation for its recognition.</td>
-        </tr>
-        <tr id="prop-authorityNote">
-          <td><span class="prop-name">authorityNote</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authority note</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Authority → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Free-text note on the nature, history, or contested aspects of this authority&#x27;s standing.</td>
-        </tr>
-        <tr id="prop-authorityType">
-          <td><span class="prop-name">authorityType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authority type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Authority → Authority Type</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Classifies an Authority instance by its structural form.</td>
-        </tr>
-        <tr id="prop-culturalFrame">
-          <td><span class="prop-name">culturalFrame</span><br><span style="font-size:.75rem;color:var(--ink-soft);">cultural frame</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Authority → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Short label for the tradition frame within which this authority operates. Example: Lucumi, Palo, Espiritismo, Vodou, Candomble. Use iroko:tradition for linked-data-typed values.</td>
-        </tr>
-        <tr id="prop-hasJurisdiction">
-          <td><span class="prop-name">hasJurisdiction</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has jurisdiction</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Authority → Jurisdiction</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links an authority to the domain(s) where it is recognized.</td>
-        </tr>
-        <tr id="prop-jurisdictionLabel">
-          <td><span class="prop-name">jurisdictionLabel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">jurisdiction label</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Jurisdiction → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Human-readable name for this jurisdiction.</td>
-        </tr>
-        <tr id="prop-jurisdictionType">
-          <td><span class="prop-name">jurisdictionType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">jurisdiction type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Jurisdiction → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Short classifer for the jurisdiction type: &#x27;geographic&#x27;, &#x27;genealogical&#x27;, &#x27;institutional&#x27;, &#x27;diasporic&#x27;, etc.</td>
-        </tr>
-        <tr id="prop-recognizedBy">
-          <td><span class="prop-name">recognizedBy</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recognized by</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Authority → Authority</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments.</td>
-        </tr>
-        <tr id="prop-ritualRole">
-          <td><span class="prop-name">ritualRole</span><br><span style="font-size:.75rem;color:var(--ink-soft);">ritual role</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Authority → Ritual Role</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The functional governance role this authority occupies.</td>
-        </tr>
-        <tr id="prop-validFrom">
-          <td><span class="prop-name">validFrom</span><br><span style="font-size:.75rem;color:var(--ink-soft);">valid from</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Authority → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Date from which the authority&#x27;s governance standing is recognized or effective.</td>
-        </tr>
-        <tr id="prop-validUntil">
-          <td><span class="prop-name">validUntil</span><br><span style="font-size:.75rem;color:var(--ink-soft);">valid until</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Authority → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Date until which the authority&#x27;s governance standing is recognized. Absence of this property does not imply perpetual validity — use iroko:contestedStatus where appropriate.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">3 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Authority Bases</span>
-        <span class="scheme-count">7 concepts</span>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="fw">Iroko <span>Historical Society</span></span>
+        <p>Postcustodial cultural heritage complex for Afro-Atlantic sacred knowledge systems.</p>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">What a ritual authority rests on — the social and epistemic foundation for recognition.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-basis-appointment">
-          <div class="concept-label">Appointment</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-appointment</div>
-          <p class="concept-def">Authority derives from formal appointment by a recognized governing body.</p>
-        </div>
-        <div class="concept-item" id="concept-basis-community-recognition">
-          <div class="concept-label">Community Recognition</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-community-recognition</div>
-          <p class="concept-def">Authority derives from informal but sustained community acknowledgment.</p>
-        </div>
-        <div class="concept-item" id="concept-basis-consecration">
-          <div class="concept-label">Consecration</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-consecration</div>
-          <p class="concept-def">Authority derives from a ritual consecration event.</p>
-        </div>
-        <div class="concept-item" id="concept-basis-contested">
-          <div class="concept-label">Contested Basis</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-contested</div>
-          <p class="concept-def">The basis of the authority is itself disputed across lineages or houses.</p>
-        </div>
-        <div class="concept-item" id="concept-basis-divinatory-selection">
-          <div class="concept-label">Divinatory Selection</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-divinatory-selection</div>
-          <p class="concept-def">Authority derives from selection through divination (Ifa, oracle, sortition, etc.).</p>
-        </div>
-        <div class="concept-item" id="concept-basis-hereditary">
-          <div class="concept-label">Hereditary</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-hereditary</div>
-          <p class="concept-def">Authority derives from family lineage independent of formal consecration or appointment.</p>
-        </div>
-        <div class="concept-item" id="concept-basis-succession">
-          <div class="concept-label">Lineage Succession</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">basis-succession</div>
-          <p class="concept-def">Authority derives from recognized succession in a transmission line.</p>
-        </div>
+      <div class="footer-col">
+        <h4>Ontology</h4>
+        <ul>
+          <li><a href="#">Modules</a></li>
+          <li><a href="#">Classes</a></li>
+          <li><a href="#">Properties</a></li>
+          <li><a href="#">Concept Schemes</a></li>
+          <li><a href="#">Whitepaper</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Institution</h4>
+        <ul>
+          <li><a href="#">About IHS</a></li>
+          <li><a href="#">Governance</a></li>
+          <li><a href="#">Access Policy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-funders">
+        <h4>Supported by</h4>
+        <div class="funder-slot">Funder logo</div>
+        <div class="funder-slot">Funder logo</div>
       </div>
     </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Authority Types</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Structural classification of ritual authority entities.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-authorityType-cabildo">
-          <div class="concept-label">Cabildo Authority</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authorityType-cabildo</div>
-          <p class="concept-def">Authority vested in a cabildo or mutual aid association with ritual governance functions.</p>
-        </div>
-        <div class="concept-item" id="concept-authorityType-council">
-          <div class="concept-label">Council Authority</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authorityType-council</div>
-          <p class="concept-def">Authority vested in a collective governing council of elders or priests.</p>
-        </div>
-        <div class="concept-item" id="concept-authorityType-divinatory-office">
-          <div class="concept-label">Divinatory Office</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authorityType-divinatory-office</div>
-          <p class="concept-def">Authority vested in a specific divinatory office — Babalawo, Oluwo, Houngan Asogwe, etc. — rather than the individual holder.</p>
-        </div>
-        <div class="concept-item" id="concept-authorityType-house">
-          <div class="concept-label">House Authority</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authorityType-house</div>
-          <p class="concept-def">Authority vested in a religious house (ile, sosyete, cabildo house, etc.).</p>
-        </div>
-        <div class="concept-item" id="concept-authorityType-individual-elder">
-          <div class="concept-label">Individual Elder Authority</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authorityType-individual-elder</div>
-          <p class="concept-def">Authority vested in a recognized individual elder acting in their own governance capacity.</p>
-        </div>
-        <div class="concept-item" id="concept-authorityType-lineage">
-          <div class="concept-label">Lineage Authority</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">authorityType-lineage</div>
-          <p class="concept-def">Authority vested in a descent line or transmission chain.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Ritual Roles</span>
-        <span class="scheme-count">4 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Functional roles within ritual governance systems.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-role-archivist-steward">
-          <div class="concept-label">Archivist-Steward</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-archivist-steward</div>
-          <p class="concept-def">Recognized steward of archival materials within a tradition or house.</p>
-        </div>
-        <div class="concept-item" id="concept-role-community-delegate">
-          <div class="concept-label">Community Delegate</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-community-delegate</div>
-          <p class="concept-def">Person acting in an authorized representative capacity on behalf of a house or community.</p>
-        </div>
-        <div class="concept-item" id="concept-role-diviner">
-          <div class="concept-label">Diviner</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-diviner</div>
-          <p class="concept-def">role-diviner</p>
-        </div>
-        <div class="concept-item" id="concept-role-priest">
-          <div class="concept-label">Priest</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-priest</div>
-          <p class="concept-def">role-priest</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      Issued 2026-02-23 · Revised 2026-02-25<br>
-      License: CC0 1.0 Universal (Public Domain)
-    </div>
-    <div class="footer-links">
-      <a href="https://www.irokosociety.org">irokosociety.org</a>
-      <a href="../index.html">Home</a>
-      <a href="index.html">Vocabularies</a>
+    <div class="footer-bottom">
+      <p>© 2025 Iroko Historical Society / Ilé Aña Olofí, Inc. · <a href="#">Terms of Use</a> · <a href="#">Licensing</a></p>
+      <span class="version-badge">v1.2.0</span>
     </div>
   </footer>
 
-</div>
+<script>
+const MOD_SLUG = 'authority';
+const MOD_DISPLAY = 'Authority Module';
+const MOD_CITE = '"Authority Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/authority';
+const CLASSES = {
+  Authority: {
+    uri:'iroko:Authority', label:'Authority',
+    definition:'A jurisdictional authority capable of authorizing assertion-level claims and governance decisions. May represent a lineage, cabildo, religious house, elder council, or recognized individual in a governance role. Extends the iroko:RitualAuthority stub in Core. For the individual\'s held credential (title, office), see ile:ReligiousOffice.',
+    outgoing:[{uri:'iroko:authorityBasis',label:'authority basis',range:'iroko:AuthorityBasis',definition:'What the authority rests on — the epistemic or social foundation for its recognition.',crossModule:'authority'  },{uri:'iroko:authorityType',label:'authority type',range:'iroko:AuthorityType',definition:'Classifies an Authority instance by its structural form.',crossModule:'authority'  },{uri:'iroko:hasJurisdiction',label:'has jurisdiction',range:'iroko:Jurisdiction',definition:'Links an authority to the domain(s) where it is recognized.',crossModule:'authority'  },{uri:'iroko:recognizedBy',label:'recognized by',range:'iroko:Authority',definition:'Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments.',crossModule:'authority'  },{uri:'iroko:ritualRole',label:'ritual role',range:'iroko:RitualRole',definition:'The functional governance role this authority occupies.',crossModule:'authority'  }],
+    incoming:[{uri:'iroko:recognizedBy',label:'recognized by',domain:'iroko:Authority',definition:'Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments.',crossModule:'authority'  }],
+    crossModuleConnections:[]
+  },
+  AuthorityBasis: {
+    uri:'iroko:AuthorityBasis', label:'Authority Basis',
+    definition:'What the authority rests on: lineage succession, consecration, appointment, community recognition, divinatory selection, or other basis.',
+    outgoing:[],
+    incoming:[{uri:'iroko:authorityBasis',label:'authority basis',domain:'iroko:Authority',definition:'What the authority rests on — the epistemic or social foundation for its recognition.',crossModule:'authority'  }],
+    crossModuleConnections:[]
+  },
+  AuthorityType: {
+    uri:'iroko:AuthorityType', label:'Authority Type',
+    definition:'Classifies the structural form of an authority — lineage, house, cabildo, council, individual elder, etc.',
+    outgoing:[],
+    incoming:[{uri:'iroko:authorityType',label:'authority type',domain:'iroko:Authority',definition:'Classifies an Authority instance by its structural form.',crossModule:'authority'  }],
+    crossModuleConnections:[]
+  },
+  Jurisdiction: {
+    uri:'iroko:Jurisdiction', label:'Jurisdiction',
+    definition:'A place, house, cabildo, lineage territory, nation, or other bounded domain in which an authority is recognized. May be geographic, genealogical, or institutional.',
+    outgoing:[],
+    incoming:[{uri:'iroko:hasJurisdiction',label:'has jurisdiction',domain:'iroko:Authority',definition:'Links an authority to the domain(s) where it is recognized.',crossModule:'authority'  }],
+    crossModuleConnections:[]
+  },
+  RitualRole: {
+    uri:'iroko:RitualRole', label:'Ritual Role',
+    definition:'The functional role an authority occupies within a ritual governance system — elder, priest, archivist-steward, witness, etc. Distinct from ile:ReligiousOffice (specific held title) — RitualRole is a classification concept.',
+    outgoing:[],
+    incoming:[{uri:'iroko:ritualRole',label:'ritual role',domain:'iroko:Authority',definition:'The functional governance role this authority occupies.',crossModule:'authority'  }],
+    crossModuleConnections:[]
+  }
+};
+const MODULE_CONNECTIONS = [
+
+];
+
+let activeClass = null;
+
+function activateClass(classId) {
+  if (activeClass === classId) { deactivateClass(); return; }
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = classId;
+  document.getElementById('card-' + classId)?.classList.add('is-active');
+  const data = CLASSES[classId];
+  if (!data) return;
+  document.getElementById('panel-uri').textContent = data.uri;
+  document.getElementById('panel-label').textContent = data.label;
+  document.getElementById('panel-definition').textContent = data.definition || '';
+  const citeText = data.uri + '. Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
+  document.getElementById('panel-cite-text').innerHTML = '<em>' + citeText + '</em>';
+  document.getElementById('panel-cite-btn').dataset.cite = citeText;
+  renderProps('incoming-props', data.incoming, 'in');
+  renderProps('outgoing-props', data.outgoing, 'out');
+  document.getElementById('zone2-empty').classList.add('hidden');
+  document.getElementById('zone2-hint').textContent = 'Click class again to close';
+  const panel = document.getElementById('property-panel');
+  panel.classList.add('visible');
+  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  renderClassSidebar(data, classId);
+  history.replaceState(null, '', '#' + classId);
+}
+
+function deactivateClass() {
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = null;
+  document.getElementById('property-panel').classList.remove('visible');
+  document.getElementById('zone2-empty').classList.remove('hidden');
+  document.getElementById('zone2-hint').textContent = 'Select a class above to explore its properties';
+  renderModuleSidebar();
+  history.replaceState(null, '', window.location.pathname);
+}
+
+function renderProps(containerId, props, dir) {
+  const el = document.getElementById(containerId);
+  if (!props || props.length === 0) { el.innerHTML = '<div class="no-props">None documented in this module.</div>'; return; }
+  el.innerHTML = props.map((p, i) => {
+    const id = 'prop-' + dir + '-' + i;
+    const endLabel = dir === 'out' ? 'Range' : 'Domain';
+    const endVal   = dir === 'out' ? (p.range || '') : (p.domain || '');
+    const crossTag = (p.crossModule && p.crossModule !== MOD_SLUG) ? '<span class="cross-tag">[' + p.crossModule + ']</span>' : '';
+    return '<div class="prop-item" id="' + id + '" onclick="toggleProp(\'' + id + '\')">' +
+      '<div class="prop-item-top"><span class="prop-item-uri">' + p.uri + '</span>' +
+      '<svg class="prop-item-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,3 11,8 5,13"/></svg></div>' +
+      '<span class="prop-item-label">' + (p.label || '') + '</span>' +
+      '<div class="prop-detail" id="' + id + '-detail">' +
+      '<div class="prop-detail-row"><span class="pd-label">' + endLabel + '</span><span class="pd-value">' + endVal + crossTag + '</span></div>' +
+      '<div class="prop-detail-row"><span class="pd-label">Definition</span><span class="pd-value">' + (p.definition || '') + '</span></div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function toggleProp(propId) {
+  const item = document.getElementById(propId);
+  const detail = document.getElementById(propId + '-detail');
+  if (!item || !detail) return;
+  const isOpen = item.classList.contains('is-expanded');
+  document.querySelectorAll('.prop-item.is-expanded').forEach(el => {
+    el.classList.remove('is-expanded');
+    el.querySelector('.prop-detail')?.classList.remove('visible');
+  });
+  if (!isOpen) { item.classList.add('is-expanded'); detail.classList.add('visible'); }
+}
+
+function renderClassSidebar(data, classId) {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'iroko:' + classId + ' — connections';
+    const conns = data.crossModuleConnections || [];
+    el.innerHTML = '<div class="active-class-card"><span class="acc-uri">' + data.uri + '</span><span class="acc-label">' + data.label + '</span></div>' +
+      (conns.length === 0
+        ? '<p class="no-connections">No cross-module connections.</p>'
+        : conns.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+            '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+            '<span class="cc-props">' + c.props + '</span>' +
+            '<span class="cc-via">' + c.direction + '</span></a>').join(''));
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function renderModuleSidebar() {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'Connected modules';
+    el.innerHTML = MODULE_CONNECTIONS.length === 0
+      ? '<p class="no-connections">No cross-module connections documented.</p>'
+      : MODULE_CONNECTIONS.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+          '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+          '<span class="cc-props">' + c.props + '</span></a>').join('');
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function copyPanelCitation(btn) {
+  navigator.clipboard.writeText(btn.dataset.cite).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyModuleCitation(btn) {
+  navigator.clipboard.writeText(MOD_CITE).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyPageLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓'; btn.classList.add('copied-state');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied-state'); }, 2000);
+  });
+}
+function shareEmail(e) {
+  e.preventDefault();
+  window.location.href = 'mailto:?subject=' + encodeURIComponent('Iroko Framework Ontology — ' + MOD_DISPLAY) + '&body=' + encodeURIComponent(window.location.href);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderModuleSidebar();
+  const hash = window.location.hash.slice(1);
+  if (hash && CLASSES[hash]) setTimeout(() => activateClass(hash), 100);
+});
+
+</script>
 </body>
 </html>

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iroko Framework — Controlled Vocabularies</title>
+  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <style>
+    .site-header      { align-items: flex-start; }
+    .header-logo      { padding-top: .25rem; flex-shrink: 0; }
+    .header-logo img  { width: 256px; height: auto; display: block; }
+  </style>
+</head>
+<body>
+
+  <nav class="breadcrumb page-wrap">
+    <a href="../index.html">Iroko Framework</a>
+    <span>/</span>
+    Controlled Vocabularies
+  </nav>
+
+  <div class="page-wrap">
+
+    <header class="site-header">
+      <div class="header-logo">
+        <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
+      </div>
+      <div class="header-title">
+        <h1>Controlled Vocabularies</h1>
+        <p class="subtitle">Sixteen modules in three tiers: one foundation, five governance-layer modules that compose onto any domain, and ten tradition-specific domain modules — each annotated at the property level for field-level access control</p>
+        <div class="header-meta">
+          <span class="meta-pill">v1.2.0</span>
+          <span class="meta-pill">February 2026</span>
+          <span class="meta-pill">OWL · SKOS · RDF/TTL</span>
+          <span class="meta-pill">16 Modules</span>
+          <span class="meta-pill">94 Classes · 389 Properties · 589 Concepts</span>
+          <span class="meta-pill"><a href="iroko-termlist.html" style="color:inherit;">Full Term List ↗</a></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- TIER 1: FOUNDATION                                           -->
+    <!-- ============================================================ -->
+    <p class="section-label">Foundation</p>
+
+    <div class="module-grid">
+
+      <!-- CORE -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-core">Core</span>
+          <span class="module-name"><a href="iroko-core.html">Core Vocabulary</a></span>
+          <span class="module-subtitle">Shared infrastructure for all modules</span>
+          <div class="module-ns">iroko:</div>
+          <div class="module-version">v1.2.0 · iroko-core.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">The foundation every module builds on. Defines access level governance (<code>iroko:minimumAccessLevel</code>, six levels from public-unrestricted to no-access), the Assertion superclass and RelationshipAssertion reification pattern, AccessPolicy, TemporalVariation, FieldworkEvent, SacredMedia, and a thin narrative spine (Narrative, NarrativeVariant, TextSegment, Commentary) that iroko-narrative extends. All 58 properties are annotated with their minimum access level; numeric notations (1–5, 99) support filter-based enforcement.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">17</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">75</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">10</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">96</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">SacredEntity, SacredSpecimen, LineageKnowledgeGraph, ContestedAuthority, DocumentaryEvidence, SacredMedia, Assertion, RelationshipAssertion, RitualAuthority, TemporalVariation, AccessPolicy, FieldworkEvent, Narrative, NarrativeVariant, TextSegment, Commentary</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Access Levels (6); Traditions (incl. Vodou, Ghede, Obeah, New Orleans Voodoo); Epistemic Types; Sacred Status; Custodial Relationships; Community Endorsement; Assertion Status; Media Types; Recording Context; Consent Status</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-core.html">Browse</a>
+            <a class="action-secondary" href="iroko-core.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /foundation grid -->
+
+    <!-- ============================================================ -->
+    <!-- TIER 2: GOVERNANCE LAYER                                     -->
+    <!-- ============================================================ -->
+    <p class="section-label" style="margin-top:3rem;">Governance Layer</p>
+    <p class="section-desc">These five modules compose onto any domain module to add sovereignty infrastructure. Load the ones your use case requires — each declares its dependencies and cross-references. See the <a href="../docs/ARCHITECTURE.html">Architecture documentation</a> for module combination patterns.</p>
+
+    <div class="module-grid">
+
+      <!-- AGENCY -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-agency">Agency</span>
+          <span class="module-name"><a href="iroko-agency.html">Agency Module</a></span>
+          <span class="module-subtitle">Sacred agents, spirits &amp; ritual events</span>
+          <div class="module-ns">ag:</div>
+          <div class="module-version">v1.2.0 · iroko-agency.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Sovereignty-aligned agency model. Defines sacred agents (including spirits as first-class participants) and ritual events without metaphysical claims. Covers authorization events, refusal events, stewardship mandates, and authorization chains. Designed for graceful degradation — minimal use requires only <code>ag:SacredAgent</code>, <code>ag:Spirit</code>, and <code>ag:RitualEvent</code>. Pair with iroko-authority for full authorization governance; iroko-manifestation for mode-of-presence modeling.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">11</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">11</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">SacredAgent, Spirit, RitualEvent, ManifestationEvent, AuthorizationEvent, RefusalEvent, RitualAction, AuthorizationChain, StewardshipMandate, RitualConsequence</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Note</span>
+              <span class="contents-val">No concept schemes — event and agent subtype classification is handled in domain modules. PROV-O alignment available in iroko-align-prov.ttl.</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-agency.html">Browse</a>
+            <a class="action-secondary" href="iroko-agency.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUTHORITY -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-authority">Authority</span>
+          <span class="module-name"><a href="iroko-authority.html">Authority Module</a></span>
+          <span class="module-subtitle">Ritual governance &amp; jurisdiction</span>
+          <div class="module-ns">auth:</div>
+          <div class="module-version">v1.2.0 · iroko-authority.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Full development of the <code>iroko:RitualAuthority</code> stub in Core. Models authority types, authorization basis (succession, consecration, community recognition, divinatory selection, hereditary, appointment), jurisdictions, recognition networks, and temporal validity. Used to authorize assertion-level claims across all modules. Distinct from <code>ile:ReligiousOffice</code>, which models specific title instances held by individuals. Commonly paired with iroko-epistemic.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">11</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">17</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">Authority, AuthorityType, AuthorityBasis, RitualRole, Jurisdiction</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Authority Types (6): house, lineage, council, individual elder, cabildo, divinatory office; Authority Bases (7); Ritual Roles (6): priest, diviner, elder, witness, community delegate, archivist-steward</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-authority.html">Browse</a>
+            <a class="action-secondary" href="iroko-authority.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- EPISTEMIC -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-epistemic">Epistemic</span>
+          <span class="module-name"><a href="iroko-epistemic.html">Epistemic Module</a></span>
+          <span class="module-subtitle">Knowledge gating &amp; disclosure governance</span>
+          <div class="module-ns">ep:</div>
+          <div class="module-version">v1.2.0 · iroko-epistemic.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Knowledge gating for sovereignty-aware archives. Governs <em>when</em>, <em>to whom</em>, and <em>under what conditions</em> knowledge may be disclosed, withheld, or restricted — without encoding the restricted knowledge itself. Distinct from <code>iroko:accessLevel</code> (which controls who may access a resource): epistemic constraints model the basis and conditions of restriction. Basis types: initiation, lineage, gender regime, community mandate, ritual condition, safety, temporal, unknown.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">1</span><span class="stat-label">Scheme</span></div>
+            <div class="stat-cell"><span class="stat-n">8</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">EpistemicConstraint, DisclosurePermission, DisclosureRestriction, SanctionedDisclosure, ConstraintBasis</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Scheme</span>
+              <span class="contents-val">Constraint Bases (8): initiation, lineage, gender regime, community mandate, ritual condition, safety, temporal, unknown</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-epistemic.html">Browse</a>
+            <a class="action-secondary" href="iroko-epistemic.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NARRATIVE -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-narrative">Narrative</span>
+          <span class="module-name"><a href="iroko-narrative.html">Narrative Module</a></span>
+          <span class="module-subtitle">Sacred story systems &amp; transmission chains</span>
+          <div class="module-ns">narr:</div>
+          <div class="module-version">v1.2.0 · iroko-narrative.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Full narrative modeling built on the thin Core spine. Adds story transmission chains (<code>narr:StoryLineage</code>), contested kinship claims as Assertion subtypes (<code>narr:KinshipClaim</code>), testimonies, fieldnotes, and typed variant relationships. Researcher voice (Fieldnote) is kept structurally distinct from community voice (Testimony). Covers odù verse traditions, patakí, konté, and equivalent narrative corpora across traditions.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">24</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">33</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">Testimony, Fieldnote, StoryLineage, KinshipClaim, InterpretiveStance</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Narrative Roles (7), Segment Types (8), Variant Relation Types (6), Interpretive Stances (6), Kinship Types (8)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-narrative.html">Browse</a>
+            <a class="action-secondary" href="iroko-narrative.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MANIFESTATION -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-manifestation">Manifestation</span>
+          <span class="module-name"><a href="iroko-manifestation.html">Manifestation Module</a></span>
+          <span class="module-subtitle">Sacred agent manifestation modes &amp; media</span>
+          <div class="module-ns">mani:</div>
+          <div class="module-version">v1.2.0 · iroko-manifestation.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Optional module for modeling how sacred agents are asserted to manifest — through embodied presence, possession, dream, divination, symbolic representation, territorial claim, or auditory sign. Plugs into <code>ag:ManifestationEvent</code>. Supports <code>iroko:TemporalVariation</code> where manifestation modes shift by ritual calendar or initiation cycle. These are descriptive, not metaphysical — they record what a tradition asserts in its own terms.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">3</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">2</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">14</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">ManifestationMode, Medium, MediumType</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Manifestation Modes (8): embodied, possession, dream, divination, symbolic, territorial, auditory, unknown; Medium Types (6)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-manifestation.html">Browse</a>
+            <a class="action-secondary" href="iroko-manifestation.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /governance layer grid -->
+
+    <!-- ============================================================ -->
+    <!-- TIER 3: DOMAIN MODULES                                       -->
+    <!-- ============================================================ -->
+    <p class="section-label" style="margin-top:3rem;">Domain Modules</p>
+    <p class="section-desc">Ten tradition-specific modules, each covering a distinct knowledge domain. All depend on iroko-core; each declares <code>dcterms:references</code> to the governance-layer modules it is designed to work with.</p>
+
+    <div class="module-grid">
+
+      <!-- EWÉ -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-botanical">Botanical</span>
+          <span class="module-name"><a href="iroko-ewe.html">Ewé Module</a></span>
+          <span class="module-subtitle">Sacred plant knowledge</span>
+          <div class="module-ns">ewe:</div>
+          <div class="module-version">v1.2.0 · iroko-ewe.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting sacred plant knowledge in Afro-Atlantic traditions. Provides ritual use governance layered over Darwin Core botanical data, with field-level access control down to harvest protocol and preparation method. Composes with iroko-epistemic for disclosure constraints on preparation details; iroko-travay for the ceremony contexts in which plants are deployed.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">23</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">62</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">Plant, PlantPreparation, HerbariumSheet</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Medicinal Uses, Ritual Uses, Plant Parts, Harvest Protocols, Preparation Methods</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-ewe.html">Browse</a>
+            <a class="action-secondary" href="iroko-ewe.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NKISI -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-entities">Entities</span>
+          <span class="module-name"><a href="iroko-nkisi.html">Nkisi Module</a></span>
+          <span class="module-subtitle">Spiritual entities &amp; kinship</span>
+          <div class="module-ns">nkisi:</div>
+          <div class="module-version">v1.2.0 · iroko-nkisi.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting spiritual entities across Afro-Atlantic traditions. Covers orisa, lwa, mpungo, vodun, egun, ajogun, Ori, and spirits of place. Supports camino/path modeling, syncretic identity tracking, spirit kinship relations, and polarity modality. Composes with iroko-agency for manifestation events; iroko-authority to govern assertion claims about entity identity; iroko-narrative for patakí and odù verse attribution.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">28</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">54</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">SpiritualEntity, Path, Offering, Shrine</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Entity Types, Commission Types, Spirit Kinship Relations, Polarity &amp; Gender Modality, Offering Types, Shrine Types</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-nkisi.html">Browse</a>
+            <a class="action-secondary" href="iroko-nkisi.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRAVAY -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-ritual">Ritual</span>
+          <span class="module-name"><a href="iroko-travay.html">Travay Module</a></span>
+          <span class="module-subtitle">Ritual processes &amp; ceremonies</span>
+          <div class="module-ns">travay:</div>
+          <div class="module-version">v1.2.0 · iroko-travay.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting ritual processes in Afro-Atlantic traditions. Distinguishes recurring ceremonies from threshold initiatory rites. Access control operates at the property level: ceremony existence is public; operational sequences and material details are restricted. Composes with iroko-authority to document who may perform or authorize a ceremony; iroko-epistemic for disclosure constraints on operational sequences.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">22</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">41</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">RitualProcess, Ceremony, InitiatoryRite, CeremonialSequence</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Process Types, Authority Levels, Participant Roles, Initiation Levels, Timing Requirements</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-travay.html">Browse</a>
+            <a class="action-secondary" href="iroko-travay.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ILÉ -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-lineage">Lineage</span>
+          <span class="module-name"><a href="iroko-ile.html">Ilé Module</a></span>
+          <span class="module-subtitle">Houses, lineage &amp; religious office</span>
+          <div class="module-ns">ile:</div>
+          <div class="module-version">v1.2.0 · iroko-ile.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting Afro-Atlantic religious houses, lineage structures, initiation genealogy, authority transmission, and schism events. Extends schema:Organization and FOAF with tradition-specific governance and lineage modeling. Covers ilé, terreiro, hounfò, cabildo, and analogous institutions. Composes with iroko-authority for title and governance modeling; iroko-epistemic to constrain disclosure of initiation details and membership records.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">38</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">58</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">House, Cabildo, Lineage, InitiationEvent, ReligiousOffice, SchismEvent</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">House Types (12), Authority Titles (20), Initiation Types (13), Governance Models (8), Transmission Types (5)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-ile.html">Browse</a>
+            <a class="action-secondary" href="iroko-ile.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MARCA -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-divination">Divination</span>
+          <span class="module-name"><a href="iroko-marca.html">Marca Module</a></span>
+          <span class="module-subtitle">Divination systems &amp; verse corpora</span>
+          <div class="module-ns">marca:</div>
+          <div class="module-version">v1.2.0 · iroko-marca.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting divination systems, sacred signs, reading records, and verse corpora across Afro-Atlantic traditions. Covers Ifá (256 odù), Dilogún, Fá, Obi, and Chamalongo. Sign names and system typologies are public; verse texts, reading details, and prescribed works are restricted at the property level. Composes with iroko-authority to document reading authorization; iroko-narrative for verse corpus transmission and patakí variant relationships.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">25</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">32</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">DivinationSystem, DivinationSign, DivinationReading, DivinationVerse, DivinationCorpus</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Divination System Types (9), Casting Media (8), Outcome Types (9), Prescribed Work Types (8)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-marca.html">Browse</a>
+            <a class="action-secondary" href="iroko-marca.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ÉKPÈ -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-societies">Societies</span>
+          <span class="module-name"><a href="iroko-ekpe.html">Ékpè Module</a></span>
+          <span class="module-subtitle">Initiatory societies &amp; esoteric governance</span>
+          <div class="module-ns">ekpe:</div>
+          <div class="module-version">v1.2.0 · iroko-ekpe.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting initiatory societies, graded initiation systems, esoteric governance structures, and masquerade traditions. Covers Ékpè/Ngbe, Abakuá, Ogboni, Oro, Gelede, Egungun, Poro, and Sande. Models institutional structure without exposing restricted grade content or member identities. Composes with iroko-authority for grade conferral and recognition networks; iroko-epistemic for restricted content constraints.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">33</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">30</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">InitiatorySociety, SocietyLodge, SocietyGrade, SocietyTitle, MembershipRecord, SocietyMasquerade</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Society Types (10), Governance Structures (6), Title Conferral Methods (6), Masquerade Functions (8)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-ekpe.html">Browse</a>
+            <a class="action-secondary" href="iroko-ekpe.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- VÈVÈ -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-graphic">Graphic</span>
+          <span class="module-name"><a href="iroko-veve.html">Vèvè Module</a></span>
+          <span class="module-subtitle">Graphic sign systems &amp; sacred diagrams</span>
+          <div class="module-ns">veve:</div>
+          <div class="module-version">v1.2.0 · iroko-veve.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting graphic sign systems, sacred diagrams, and esoteric scripts across Afro-Atlantic traditions. Covers Vèvè (Vodou), Firma/Patipemba (Palo Monte), Ponto Riscado (Umbanda/Quimbanda), Anaforuana (Abakuá), Nsibidi (Ejagham), Adinkra (Akan), and Kongo cosmograms. Access control runs from public (sign system typology) through initiated-elder (operational drawing sequences) to no-access (selected Anaforuana protected by tradition authority). Composes with iroko-authority to document transmission authorization.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">14</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">44</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">GraphicSign, SignSystem, SignInstance, SignCorpus</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Sign System Types (8), Sign Functions (11), Drawing Media (13), Drawing Surfaces (12), Sign Permanence (4)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-veve.html">Browse</a>
+            <a class="action-secondary" href="iroko-veve.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- NGOMA -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-music">Music</span>
+          <span class="module-name"><a href="iroko-ngoma.html">Ngoma Module</a></span>
+          <span class="module-subtitle">Sacred music, rhythms &amp; instruments</span>
+          <div class="module-ns">ngoma:</div>
+          <div class="module-version">v1.2.0 · iroko-ngoma.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting sacred rhythms, songs, consecrated instruments, drum set lineages, and musician authority transmission. Covers Lucumí bàtá (Añá), Vodou Rada/Petwo, Candomblé atabaques, and Palo nkómo. Public knowledge includes rhythm names and entity associations; toque sequences, song texts, and drum consecration details are restricted. Composes with iroko-agency for consecrated instrument agency; iroko-authority for musician lineage authorization; iroko-narrative for song transmission chains.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">27</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">31</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">SacredRhythm, SacredSong, SacredInstrument, SacredDrumSet, MusicianLineage</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Rhythm Families (9), Rhythm Functions (9), Instrument Types (8), Song Functions (7)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-ngoma.html">Browse</a>
+            <a class="action-secondary" href="iroko-ngoma.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SANKOFA -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-upcoming">Movements</span>
+          <span class="module-name"><a href="iroko-sankofa.html">Sankofa Module</a></span>
+          <span class="module-subtitle">Reclamation movements &amp; diaspora returns</span>
+          <div class="module-ns">sankofa:</div>
+          <div class="module-version">v1.2.0 · iroko-sankofa.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting revitalization movements, diaspora returns to African source communities, and reconstructed practices. Heritage relationships are modeled as <code>iroko:RelationshipAssertion</code> — multiple perspectives documented without adjudicating authenticity. Composes with iroko-authority to document who may authorize heritage relationship claims and tradition recognition; iroko-narrative for movement histories and contested origin accounts.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">23</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">32</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">ReclamationMovement, DiasporaReturn, ReconstructedPractice, HeritageRelationship</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Movement Types (8), Return Types (6), Reconstruction Methods (6), Heritage Relationship Types (6), Recognition Status (6)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-sankofa.html">Browse</a>
+            <a class="action-secondary" href="iroko-sankofa.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- QAL -->
+      <div class="module-row">
+        <div class="module-identity">
+          <span class="module-tag tag-language">Language</span>
+          <span class="module-name"><a href="iroko-qal.html">Qal Module</a></span>
+          <span class="module-subtitle">Sacred lexicons &amp; liturgical language</span>
+          <div class="module-ns">qal:</div>
+          <div class="module-version">v1.2.0 · iroko-qal.ttl</div>
+        </div>
+        <div class="module-detail">
+          <p class="module-desc">Vocabulary for documenting sacred lexicons, liturgical languages, and esoteric terminology. <em>Qal</em> (ቃል) — Ge'ez for "word." Covers Lucumí, Kikongo, Haitian Kreyòl ceremonial register, Fon/Ewe, and Ge'ez. Integrates OntoLex-Lemon for multilingual lexicographic infrastructure. Access runs from public definitions through no-access secret names. Composes with iroko-epistemic for secret name and esoteric term disclosure constraints; iroko-narrative for liturgical phrase transmission chains and praise poetry provenance.</p>
+          <div class="module-stats">
+            <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
+            <div class="stat-cell"><span class="stat-n">27</span><span class="stat-label">Properties</span></div>
+            <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+            <div class="stat-cell"><span class="stat-n">37</span><span class="stat-label">Concepts</span></div>
+          </div>
+          <div class="module-contents">
+            <div class="contents-row">
+              <span class="contents-key">Classes</span>
+              <span class="contents-val">SacredLanguage, LexicalEntry, LexicalSense, LiturgicalPhrase, SacredSpeechAct, SecretName</span>
+            </div>
+            <div class="contents-row">
+              <span class="contents-key">Schemes</span>
+              <span class="contents-val">Language Types (6), Speech Act Types (10), Script Systems (8), Secret Name Conventions (6), Parts of Speech (7)</span>
+            </div>
+          </div>
+          <div class="module-actions">
+            <a class="action-primary" href="iroko-qal.html">Browse</a>
+            <a class="action-secondary" href="iroko-qal.ttl">Download TTL</a>
+            <a class="action-ghost" href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /domain module grid -->
+
+    <!-- ── About ──────────────────────────────────────────────── -->
+    <div class="info-section">
+      <div class="info-block">
+        <h2>About the Iroko Framework</h2>
+        <p>The Iroko Framework provides controlled vocabularies and access governance mechanisms for documenting sacred knowledge in Afro-Atlantic traditions. It supports postcustodial archival approaches where communities maintain authority over their knowledge while enabling semantic interoperability with institutional archives and linked data systems.</p>
+        <p>All modules serialize to RDF/Turtle and integrate with standard external vocabularies including Darwin Core, Dublin Core, PROV-O, FOAF, schema.org, and OntoLex-Lemon. The PROV-O alignment (<code>iroko-align-prov.ttl</code>) is available as an optional reference file for interoperability contexts.</p>
+        <ul class="feature-list">
+          <li><div><strong>Field-Level Access Control</strong> — Every property in every module carries an <code>iroko:minimumAccessLevel</code> annotation (six levels, numeric notations 1–5 and 99) enabling filter-based enforcement at the application layer. See <a href="../docs/ARCHITECTURE.html">Architecture</a> for the enforcement contract and SPARQL filter pattern.</div></li>
+          <li><div><strong>Three-Tier Architecture</strong> — One foundation (Core), five composable Governance Layer modules (Agency, Authority, Epistemic, Narrative, Manifestation), and ten Domain modules. Load only what your use case requires.</div></li>
+          <li><div><strong>Contested Knowledge Support</strong> — Multiple lineage perspectives coexist through Assertion reification without forcing resolution. Contested, lineage-specific, and consensual claims are all first-class.</div></li>
+          <li><div><strong>Sovereign Agency</strong> — Refusal events, stewardship mandates, and authorization chains model community authority as positive assertions, not just access restrictions.</div></li>
+          <li><div><strong>Provenance Tracking</strong> — Oral transmission chains, fieldwork events, epistemic basis, and community endorsement status throughout.</div></li>
+          <li><div><strong>Semantic Interoperability</strong> — Darwin Core, SKOS, Dublin Core, PROV-O, FOAF, schema.org, OntoLex-Lemon.</div></li>
+        </ul>
+      </div>
+      <div class="info-block">
+        <h2>Resources</h2>
+        <ul class="resource-list">
+          <li><a href="../docs/ARCHITECTURE.html">Technical Architecture &amp; Enforcement Contract</a></li>
+          <li><a href="../docs/REUSE.html">How to Use These Vocabularies</a></li>
+          <li><a href="../docs/CONTRIBUTING.html">Contributing Guidelines</a></li>
+          <li><a href="https://ontology.irokosociety.org">Iroko Framework — irokosociety.org</a></li>
+          <li><a href="https://github.com/iroko-framework/iroko-framework">GitHub Repository</a></li>
+        </ul>
+
+        <h2 style="margin-top:2rem;">Namespace Prefixes</h2>
+        <p style="font-size:.8rem;color:var(--ink-soft);margin-bottom:.75rem;">Base: <code>https://ontology.irokosociety.org/</code></p>
+        <ul class="resource-list" style="font-family:var(--mono);font-size:.75rem;">
+          <li>iroko: &nbsp;<span style="color:var(--ink-soft)">…/core#</span></li>
+          <li>ag: &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--ink-soft)">…/agency#</span></li>
+          <li>auth: &nbsp;&nbsp;<span style="color:var(--ink-soft)">…/authority#</span></li>
+          <li>ep: &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--ink-soft)">…/epistemic#</span></li>
+          <li>narr: &nbsp;&nbsp;<span style="color:var(--ink-soft)">…/narrative#</span></li>
+          <li>mani: &nbsp;&nbsp;<span style="color:var(--ink-soft)">…/manifestation#</span></li>
+          <li>ewe: &nbsp;&nbsp;&nbsp;<span style="color:var(--ink-soft)">…/ewe#</span></li>
+          <li>nkisi: &nbsp;<span style="color:var(--ink-soft)">…/nkisi#</span></li>
+          <li>travay:<span style="color:var(--ink-soft)"> …/travay#</span></li>
+          <li>ile: &nbsp;&nbsp;&nbsp;<span style="color:var(--ink-soft)">…/ile#</span></li>
+          <li>marca: &nbsp;<span style="color:var(--ink-soft)">…/marca#</span></li>
+          <li>ekpe: &nbsp;&nbsp;<span style="color:var(--ink-soft)">…/ekpe#</span></li>
+          <li>veve: &nbsp;&nbsp;<span style="color:var(--ink-soft)">…/veve#</span></li>
+          <li>ngoma: &nbsp;<span style="color:var(--ink-soft)">…/ngoma#</span></li>
+          <li>sankofa:<span style="color:var(--ink-soft)"> …/sankofa#</span></li>
+          <li>qal: &nbsp;&nbsp;&nbsp;<span style="color:var(--ink-soft)">…/qal#</span></li>
+        </ul>
+
+        <h2 style="margin-top:2rem;">Citation</h2>
+        <p style="font-size:.8rem;color:var(--ink-soft);">Iroko Historical Society. (2026). <em>Iroko Framework: Controlled Vocabularies for Afro-Atlantic Sacred Knowledge Systems</em> (v1.2.0). <a href="https://ontology.irokosociety.org">https://ontology.irokosociety.org</a>. CC0 1.0 Universal.</p>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:2rem 0 1rem;border-top:1px solid var(--border);margin-top:1rem;">
+      <a href="iroko-termlist.html" style="font-size:.9rem;font-weight:600;color:var(--accent);text-decoration:none;">
+        Full Vocabulary Index — all 1,072 terms across 16 modules →
+      </a>
+      <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.4rem;">
+        Every class, property, and concept with definitions and direct links to module browse pages.
+      </p>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-copy">
+        © 2026 Iroko Historical Society · CC0 1.0 Universal (Public Domain)
+      </div>
+      <div class="footer-links">
+        <a href="https://www.irokosociety.org">irokosociety.org</a>
+        <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
+        <a href="/cdn-cgi/l/email-protection#c0a1b2a3a8a9b6a5b380a9b2afabafb3afa3a9a5b4b9eeafb2a7">Contact</a>
+      </div>
+    </footer>
+
+  </div><!-- /page-wrap -->
+
+</body>
+</html>

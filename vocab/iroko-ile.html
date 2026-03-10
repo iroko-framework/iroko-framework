@@ -1,763 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ilé Module — Houses, Lineage &amp; Religious Office — Iroko Framework Vocabularies</title>
-  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ilé Module — Iroko Framework Ontology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    :root {
+      --ink:#1a1714; --ink-mid:#2e2a26; --ink-light:#4a4540;
+      --paper:#f7f4ef; --paper-warm:#efe9df;
+      --border:#d5cdc0; --border-mid:#c0b8ac;
+      --gold:#8b6914; --gold-light:#c49a2a; --gold-pale:#f0e6c8; --gold-mid:#a07820;
+      --sienna:#7a3b1e; --teal:#1f5c52; --teal-pale:#e4f0ee; --teal-mid:#2a7a6e;
+      --radius-sm:3px; --radius:6px; --radius-lg:10px;
+      --shadow-sm:0 1px 4px rgba(26,23,20,0.10); --shadow:0 3px 14px rgba(26,23,20,0.13);
+      --transition:180ms ease;
+    }
+    /* Module dot colors */
+    .dot-agency{background:#5a6e8a} .dot-authority{background:#6b4a8a}
+    .dot-core{background:#444} .dot-ekpe{background:#2a6b4a}
+    .dot-epistemic{background:#7a5a1e} .dot-ewe{background:#8b6914}
+    .dot-ile{background:#1f5c52} .dot-manifestation{background:#6b2a2a}
+    .dot-marca{background:#1e4a6b} .dot-narrative{background:#6b3a1e}
+    .dot-ngoma{background:#4a1e6b} .dot-nkisi{background:#7a3b1e}
+    .dot-qal{background:#2a4a6b} .dot-sankofa{background:#6b5a1e}
+    .dot-travay{background:#4a6b8a} .dot-veve{background:#3a1e6b}
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
-  </style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:'EB Garamond',Georgia,serif;font-size:1.0625rem;line-height:1.65;
+      background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+    .site-nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;gap:2rem;
+      height:52px;position:sticky;top:0;z-index:200;border-bottom:2px solid var(--gold)}
+    .wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:600;
+      letter-spacing:0.04em;color:#f7f4ef;text-decoration:none;white-space:nowrap}
+    .wordmark span{color:var(--gold-light)}
+    .nav-links{display:flex;gap:1.5rem;list-style:none;margin-left:auto}
+    .nav-links a{font-family:'EB Garamond',Georgia,serif;font-size:0.875rem;letter-spacing:0.05em;
+      text-transform:uppercase;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .nav-links a:hover{color:var(--gold-light)}
+
+    .page-header{background:var(--ink-mid);color:var(--paper);padding:2.5rem 2rem 2rem;border-bottom:1px solid var(--gold)}
+    .breadcrumb{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .breadcrumb a{color:var(--border-mid);text-decoration:none}
+    .breadcrumb a:hover{color:var(--gold-light)}
+    .page-header h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.25rem;font-weight:300;
+      letter-spacing:0.02em;line-height:1.2;margin-bottom:0.4rem}
+    .module-tag{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+      background:var(--gold);color:var(--ink);padding:0.2em 0.6em;border-radius:var(--radius-sm);
+      vertical-align:middle;margin-left:0.75rem;font-family:'EB Garamond',serif}
+    .module-desc{font-size:0.88rem;color:var(--border-mid);margin-top:0.6rem;max-width:700px;line-height:1.5}
+    .module-stats{display:flex;gap:2rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)}
+    .stat .number{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.75rem;font-weight:300;
+      color:var(--gold-light);line-height:1;display:block}
+    .stat .label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--border-mid)}
+
+    .layout{display:grid;grid-template-columns:1fr 290px;flex:1;max-width:1280px;width:100%;margin:0 auto;align-items:start}
+    .main-content{padding:2rem;border-right:1px solid var(--border);min-width:0}
+
+    .zone-label{font-size:0.68rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between}
+    .zone-hint{font-size:0.7rem;letter-spacing:0.02em;text-transform:none;color:var(--border-mid);font-style:italic}
+
+    .class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.6rem;margin-bottom:2.25rem}
+    .class-card{padding:0.8rem 0.9rem;border:1px solid var(--border);border-radius:var(--radius);
+      background:white;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);
+      user-select:none;position:relative}
+    .class-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .class-card.is-active{border-color:var(--gold);background:var(--gold-pale);box-shadow:var(--shadow)}
+    .class-card.is-active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--paper-warm)}
+    .card-uri{font-family:'JetBrains Mono',monospace;font-size:0.73rem;color:var(--gold);display:block;
+      margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-label{font-size:0.88rem;color:var(--ink);display:block;line-height:1.3}
+
+    .zone2-empty{display:flex;align-items:center;gap:0.75rem;padding:1.25rem 1.5rem;
+      background:var(--paper-warm);border:1px dashed var(--border-mid);border-radius:var(--radius);
+      color:var(--border-mid);font-size:0.85rem;font-style:italic;margin-bottom:2.25rem}
+    .zone2-empty svg{width:20px;height:20px;flex-shrink:0;opacity:0.5}
+    .zone2-empty.hidden{display:none}
+
+    .property-panel{display:none;background:var(--paper-warm);border:1px solid var(--border-mid);
+      border-radius:var(--radius-lg);margin-bottom:2.25rem;overflow:hidden;animation:panelIn 180ms ease forwards}
+    .property-panel.visible{display:block}
+    @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .panel-header{background:var(--ink-mid);color:var(--paper);padding:1rem 1.5rem;
+      display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+    .ph-uri{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--gold-light)}
+    .ph-label{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:300;color:var(--paper)}
+    .panel-close{background:none;border:none;color:var(--border-mid);cursor:pointer;padding:0.2rem;
+      font-size:1.1rem;line-height:1;transition:color var(--transition);margin-left:auto;flex-shrink:0}
+    .panel-close:hover{color:var(--paper)}
+    .panel-definition{padding:1rem 1.5rem;font-size:0.92rem;color:var(--ink-mid);line-height:1.6;border-bottom:1px solid var(--border)}
+    .panel-body{display:grid;grid-template-columns:1fr 1fr}
+    .prop-col{padding:1.25rem 1.5rem}
+    .prop-col:first-child{border-right:1px solid var(--border)}
+    .prop-col-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:0.85rem;display:flex;align-items:center;gap:0.4rem}
+    .direction-arrow{font-size:0.9rem;color:var(--gold)}
+    .col-sublabel{font-style:italic;text-transform:none;letter-spacing:0;font-size:0.67rem;color:var(--border-mid)}
+    .prop-item{padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      background:white;margin-bottom:0.5rem;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition)}
+    .prop-item:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .prop-item.is-expanded{border-color:var(--gold);background:#fffdf7}
+    .prop-item-top{display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
+    .prop-item-uri{font-family:'JetBrains Mono',monospace;font-size:0.74rem;color:var(--gold)}
+    .prop-item-chevron{width:13px;height:13px;color:var(--border-mid);flex-shrink:0;transition:transform var(--transition)}
+    .prop-item.is-expanded .prop-item-chevron{transform:rotate(90deg);color:var(--gold)}
+    .prop-item-label{font-size:0.82rem;color:var(--ink-light);display:block;margin-top:0.12rem}
+    .prop-detail{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border)}
+    .prop-detail.visible{display:block}
+    .prop-detail-row{display:flex;gap:0.75rem;margin-bottom:0.45rem;align-items:baseline}
+    .pd-label{font-size:0.65rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-light);min-width:60px;flex-shrink:0}
+    .pd-value{font-size:0.82rem;color:var(--ink-mid);line-height:1.4}
+    .cross-tag{font-size:0.65rem;color:var(--border-mid);font-style:italic;margin-left:0.3rem}
+    .no-props{font-size:0.82rem;color:var(--border-mid);font-style:italic;padding:0.5rem 0}
+    .panel-citation{padding:1rem 1.5rem;border-top:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .panel-citation .cite-text{font-size:0.8rem;color:var(--ink-light);font-style:italic;flex:1;min-width:200px}
+    .btn-copy{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;
+      font-size:0.85rem;cursor:pointer;transition:background var(--transition),transform 80ms;white-space:nowrap;flex-shrink:0}
+    .btn-copy:hover{background:var(--ink)} .btn-copy:active{transform:scale(0.97)} .btn-copy.copied{background:var(--teal)}
+    .btn-copy svg{width:13px;height:13px;flex-shrink:0}
+
+    .concept-scheme-block{margin-bottom:2rem}
+    .concept-scheme-block:last-child{margin-bottom:0}
+    .csb-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.15rem}
+    .csb-uri{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--teal)}
+    .csb-count{font-size:0.7rem;color:var(--ink-light);letter-spacing:0.04em}
+    .csb-scheme-label{font-size:0.92rem;color:var(--ink-mid);font-style:italic;margin-bottom:0.2rem}
+    .csb-description{font-size:0.82rem;color:var(--ink-light);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--teal-pale)}
+    .concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.45rem}
+    .concept-card{padding:0.55rem 0.75rem;background:var(--teal-pale);border:1px solid rgba(31,92,82,0.18);
+      border-radius:var(--radius-sm);transition:background var(--transition),border-color var(--transition);cursor:default}
+    .concept-card:hover{background:rgba(31,92,82,0.14);border-color:var(--teal)}
+    .cc-label{font-size:0.85rem;color:var(--ink);display:block;line-height:1.3;margin-bottom:0.2rem}
+    .cc-id{font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--teal-mid);display:block}
+
+    .sidebar{padding:1.5rem 1.25rem;position:sticky;top:52px;max-height:calc(100vh - 52px);overflow-y:auto}
+    .sidebar-panel{margin-bottom:1.75rem}
+    .sidebar-panel-title{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      padding-bottom:0.5rem;border-bottom:1px solid var(--border);margin-bottom:0.85rem}
+    .active-class-card{padding:0.75rem 0.85rem;background:var(--gold-pale);border:1px solid var(--gold);
+      border-radius:var(--radius-sm);margin-bottom:0.85rem}
+    .acc-uri{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold-mid);display:block;margin-bottom:0.15rem}
+    .acc-label{font-size:0.9rem;color:var(--ink);font-weight:500}
+    .connection-card{padding:0.6rem 0.75rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      margin-bottom:0.45rem;background:white;text-decoration:none;display:block;
+      transition:border-color var(--transition),box-shadow var(--transition)}
+    .connection-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .cc-top{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem}
+    .cc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .cc-module-name{font-size:0.85rem;color:var(--ink);font-weight:500}
+    .cc-props{font-size:0.72rem;color:var(--ink-light);display:block;margin-top:0.1rem}
+    .cc-via{font-size:0.67rem;color:var(--ink-light);font-style:italic;margin-top:0.1rem;display:block}
+    .sidebar-dynamic{transition:opacity 140ms ease}
+    .sidebar-dynamic.fading{opacity:0}
+    .no-connections{font-size:0.78rem;color:var(--border-mid);font-style:italic}
+    .share-buttons{display:flex;gap:0.5rem}
+    .share-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.55rem 0.25rem;
+      background:var(--paper-warm);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
+      font-family:'EB Garamond',serif;font-size:0.68rem;color:var(--ink-light);text-decoration:none;
+      letter-spacing:0.04em;text-transform:uppercase;transition:background var(--transition),border-color var(--transition),color var(--transition)}
+    .share-btn:hover{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
+    .share-btn svg{width:17px;height:17px}
+    .share-btn.copied-state{background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
+    .sidebar-citation{background:var(--paper-warm);border:1px solid var(--border-mid);border-radius:var(--radius-sm);padding:0.85rem}
+    .sidebar-citation .cite-text{font-size:0.77rem;line-height:1.5;color:var(--ink-mid);font-style:italic;margin-bottom:0.6rem}
+    .btn-copy-sm{display:inline-flex;align-items:center;gap:0.35rem;padding:0.42rem 0.85rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;font-size:0.8rem;
+      cursor:pointer;transition:background var(--transition);width:100%;justify-content:center}
+    .btn-copy-sm:hover{background:var(--ink)} .btn-copy-sm.copied{background:var(--teal)}
+    .format-links{display:flex;flex-direction:column;gap:0.3rem}
+    .format-link{display:flex;align-items:center;justify-content:space-between;padding:0.38rem 0.6rem;
+      border-radius:var(--radius-sm);border:1px solid var(--border);background:white;font-family:'JetBrains Mono',monospace;
+      font-size:0.73rem;color:var(--gold);text-decoration:none;transition:background var(--transition),border-color var(--transition)}
+    .format-link:hover{background:var(--gold-pale);border-color:var(--gold)}
+    .format-arrow{color:var(--border-mid)}
+
+    footer{background:var(--ink);color:var(--paper);margin-top:auto}
+    .footer-inner{max-width:1280px;margin:0 auto;padding:2.5rem 2rem;
+      display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:2rem;align-items:start}
+    .footer-brand .fw{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-weight:300;
+      letter-spacing:0.04em;color:var(--paper);display:block;margin-bottom:0.5rem}
+    .footer-brand .fw span{color:var(--gold-light)}
+    .footer-brand p{font-size:0.8rem;color:var(--border-mid);line-height:1.5;max-width:220px}
+    .footer-col h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .footer-col ul{list-style:none}
+    .footer-col li{margin-bottom:0.3rem}
+    .footer-col a{font-size:0.82rem;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .footer-col a:hover{color:var(--gold-light)}
+    .footer-funders{display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end}
+    .footer-funders h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);text-align:right;width:100%}
+    .funder-slot{width:140px;height:44px;border:1px dashed rgba(255,255,255,0.15);border-radius:var(--radius-sm);
+      display:flex;align-items:center;justify-content:center;font-size:0.67rem;letter-spacing:0.06em;
+      text-transform:uppercase;color:rgba(255,255,255,0.2)}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);max-width:1280px;margin:0 auto;padding:1rem 2rem;
+      display:flex;justify-content:space-between;align-items:center}
+    .footer-bottom p{font-size:0.75rem;color:rgba(255,255,255,0.3)}
+    .footer-bottom a{color:rgba(255,255,255,0.3);text-decoration:none}
+    .footer-bottom a:hover{color:var(--gold-light)}
+    .version-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:0.2em 0.5em;
+      border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);color:rgba(255,255,255,0.3)}
+</style>
 </head>
 <body>
-
-<div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="index.html">Vocabularies</a>
-    <a href="https://ontology.irokosociety.org">ontology.irokosociety.org ↗</a>
-    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+  <nav class="site-nav">
+    <a class="wordmark" href="/">Iroko Framework <span>Ontology</span></a>
+    <ul class="nav-links">
+      <li><a href="/modules">Modules</a></li>
+      <li><a href="/classes">Classes</a></li>
+      <li><a href="/properties">Properties</a></li>
+      <li><a href="/concepts">Concepts</a></li>
+      <li><a href="/whitepaper">Whitepaper</a></li>
+    </ul>
   </nav>
-</div>
 
-<div class="page-wrap">
-
-  <p class="breadcrumb">
-    <a href="../index.html">Iroko Framework</a>
-    <span>/</span>
-    <a href="index.html">Vocabularies</a>
-    <span>/</span>
-    Ilé Module — Houses, Lineage &amp; Religious Office
-  </p>
-
-  <header class="vocab-header">
-    <div class="vocab-header-logo">
-      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
-    </div>
-    <div>
-      <span class="module-tag tag-lineage">Lineage</span>
-      <h1>Ilé Module — Houses, Lineage &amp; Religious Office</h1>
-      <p class="subtitle">Religious institutions, initiation genealogy, and office transmission</p>
-      <div class="header-meta">
-        <span class="meta-pill">ile:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-ile#</span>
-        <span class="meta-pill">v2.0.0</span>
-        <span class="meta-pill"><a href="iroko-ile.ttl" style="color:inherit;">Download TTL ↓</a></span>
-        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
-      </div>
+  <header class="page-header">
+    <div class="breadcrumb"><a href="/">Iroko Framework</a> › <a href="/modules">Modules</a> › Ilé Module</div>
+    <h1>Ilé Module <span class="module-tag">Domain Layer</span></h1>
+    <div class="module-desc">Domain module.</div>
+    <div class="module-stats">
+      <div class="stat"><span class="number">6</span><span class="label">Classes</span></div>
+      <div class="stat"><span class="number">38</span><span class="label">Properties</span></div>
+      <div class="stat"><span class="number">5</span><span class="label">Concept Schemes</span></div>
+      <div class="stat"><span class="number">58</span><span class="label">Concepts</span></div>
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting Afro-Atlantic religious houses, lineage structures, initiation genealogy, authority transmission, and schism events. Extends schema:Organization and FOAF with tradition-specific governance and lineage modeling. Covers ilé, terreiro, hounfò, cabildo, and analogous institutions. Use with iroko-authority to model the authority titles and governance structures held by specific individuals; iroko-epistemic to constrain disclosure of initiation details and membership records.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">38</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">58</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="layout">
+    <main class="main-content">
+
+      <div class="zone-label">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="class-card" id="card-Cabildo" onclick="activateClass('Cabildo')"><span class="card-uri">iroko:Cabildo</span><span class="card-label">Cabildo</span></div>
+<div class="class-card" id="card-House" onclick="activateClass('House')"><span class="card-uri">iroko:House</span><span class="card-label">House</span></div>
+<div class="class-card" id="card-InitiationEvent" onclick="activateClass('InitiationEvent')"><span class="card-uri">iroko:InitiationEvent</span><span class="card-label">Initiation Event</span></div>
+<div class="class-card" id="card-Lineage" onclick="activateClass('Lineage')"><span class="card-uri">iroko:Lineage</span><span class="card-label">Lineage</span></div>
+<div class="class-card" id="card-ReligiousOffice" onclick="activateClass('ReligiousOffice')"><span class="card-uri">iroko:ReligiousOffice</span><span class="card-label">Religious Office</span></div>
+<div class="class-card" id="card-SchismEvent" onclick="activateClass('SchismEvent')"><span class="card-uri">iroko:SchismEvent</span><span class="card-label">Schism Event</span></div>
+      </div>
+
+      <div class="zone-label" id="zone2-label">
+        Properties
+        <span class="zone-hint" id="zone2-hint">Select a class above to explore its properties</span>
+      </div>
+      <div class="zone2-empty" id="zone2-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        No class selected. Click any class card above to see its incoming and outgoing properties.
+      </div>
+
+      <div class="property-panel" id="property-panel">
+        <div class="panel-header">
+          <div><div class="ph-uri" id="panel-uri"></div><div class="ph-label" id="panel-label"></div></div>
+          <button class="panel-close" onclick="deactivateClass()">✕</button>
+        </div>
+        <div class="panel-definition" id="panel-definition"></div>
+        <div class="panel-body">
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">←</span> Incoming <span class="col-sublabel">(this class as range)</span></div>
+            <div id="incoming-props"></div>
+          </div>
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">→</span> Outgoing <span class="col-sublabel">(this class as domain)</span></div>
+            <div id="outgoing-props"></div>
+          </div>
+        </div>
+        <div class="panel-citation">
+          <div class="cite-text" id="panel-cite-text"></div>
+          <button class="btn-copy" id="panel-cite-btn" onclick="copyPanelCitation(this)">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+
+      
+      <div class="zone-label">Controlled Vocabulary</div>
+      <div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:AuthorityTitleScheme</span><span class="csb-count">20 concepts</span></div><div class="csb-scheme-label">Religious Office Titles</div><div class="concept-grid"><div class="concept-card" title="Initiated member of an Abakuá potencia."><span class="cc-label">Abakuá Member</span><span class="cc-id">iroko:title-abakua-member</span></div><div class="concept-card" title="Senior elder in a Yoruba-derived tradition, often with lineage-wide ceremonial authority."><span class="cc-label">Alagba</span><span class="cc-id">iroko:title-alagba</span></div><div class="concept-card" title="Chief Babaláwo in a Yoruba community or lineage. Highest recognized Ifá authority."><span class="cc-label">Araba</span><span class="cc-id">iroko:title-araba</span></div><div class="concept-card" title="Initiated Ifá priest. Authorized to perform Ifá divination and related ceremonies."><span class="cc-label">Babaláwo</span><span class="cc-id">iroko:title-babalawo</span></div><div class="concept-card" title="Senior male Orisha priest with the authority to initiate others."><span class="cc-label">Babalosha</span><span class="cc-id">iroko:title-babalosha</span></div><div class="concept-card" title="Initiated member of the Ekpe leopard society (Cross River / Calabari tradition)."><span class="cc-label">Ekpe Member</span><span class="cc-id">iroko:title-ekpe-member</span></div><div class="concept-card" title="Male Haitian Vodou priest."><span class="cc-label">Houngan</span><span class="cc-id">iroko:title-houngan</span></div><div class="concept-card" title="Senior female Orisha priest with the authority to initiate others."><span class="cc-label">Iyalosha</span><span class="cc-id">iroko:title-iyalosha</span></div><div class="concept-card" title="Female Ifá priest. Recognition is contested across lineages; use iroko:contestedStatus when applicable."><span class="cc-label">Iyanifa</span><span class="cc-id">iroko:title-iyanifa</span></div><div class="concept-card" title="Female head of a Brazilian terreiro."><span class="cc-label">Mãe de Santo</span><span class="cc-id">iroko:title-mae-de-santo</span></div><div class="concept-card" title="Female Haitian Vodou priest."><span class="cc-label">Mambo</span><span class="cc-id">iroko:title-mambo</span></div><div class="concept-card" title="Priest initiated into the Olofin mysteries. Among the highest initiatory grades in Lucumí."><span class="cc-label">Olofista</span><span class="cc-id">iroko:title-olofista</span></div><div class="concept-card" title="Initiated Orisha priest of any gender. General term covering Iyalosha and Babalosha."><span class="cc-label">Olorisha</span><span class="cc-id">iroko:title-olorisha</span></div><div class="concept-card" title="Consecration to the Iroko tree spirit. Rare; received through specific lineage authorization."><span class="cc-label">Olu-Iroko</span><span class="cc-id">iroko:title-olu-iroko</span></div><div class="concept-card" title="Initiated child of an orisha. General term for those who have completed kariosha/asiento."><span class="cc-label">Omo Orisha</span><span class="cc-id">iroko:title-omo-orisha</span></div><div class="concept-card" title="Member of the Osugbo/Ogboni earth society, holding judicial and spiritual authority."><span class="cc-label">Osugbo Member</span><span class="cc-id">iroko:title-osugbo</span></div><div class="concept-card"><span class="cc-label">Other</span><span class="cc-id">iroko:title-other</span></div><div class="concept-card" title="Male head of a Brazilian terreiro."><span class="cc-label">Pai de Santo</span><span class="cc-id">iroko:title-pai-de-santo</span></div><div class="concept-card" title="Male initiated priest in Palo Monte with authority over an nganga."><span class="cc-label">Tata Nkisi</span><span class="cc-id">iroko:title-tata-nkisi</span></div><div class="concept-card" title="Female initiated priest in Palo Monte with authority over an nganga."><span class="cc-label">Yaya Nkisi</span><span class="cc-id">iroko:title-yaya-nkisi</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:GovernanceModelScheme</span><span class="csb-count">8 concepts</span></div><div class="csb-scheme-label">Governance Models</div><div class="concept-grid"><div class="concept-card" title="Authority structured by seniority within initiation grade rather than individual title."><span class="cc-label">Age-Grade</span><span class="cc-id">iroko:governance-age-grade</span></div><div class="concept-card" title="Decisions made by member consensus or elected leadership."><span class="cc-label">Democratic / Consensus</span><span class="cc-id">iroko:governance-democratic</span></div><div class="concept-card" title="Collective of recognized elders sharing governance authority."><span class="cc-label">Elder Council</span><span class="cc-id">iroko:governance-elder-council</span></div><div class="concept-card" title="Male and female authorities govern separate domains within the same institution."><span class="cc-label">Gender-Divided Authority</span><span class="cc-id">iroko:governance-gender-divided</span></div><div class="concept-card" title="Leadership passes through biological or ritual family succession."><span class="cc-label">Hereditary</span><span class="cc-id">iroko:governance-hereditary</span></div><div class="concept-card" title="Federated structure of affiliated houses under loose shared authority."><span class="cc-label">Lineage Federation</span><span class="cc-id">iroko:governance-lineage-federation</span></div><div class="concept-card"><span class="cc-label">Other</span><span class="cc-id">iroko:governance-other</span></div><div class="concept-card" title="One recognized head (Iyalosha, Babalosha, Mambo, etc.) with primary authority."><span class="cc-label">Single Elder Authority</span><span class="cc-id">iroko:governance-single-elder</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:HouseTypeScheme</span><span class="csb-count">12 concepts</span></div><div class="csb-scheme-label">House Types</div><div class="concept-grid"><div class="concept-card" title="An Abakuá lodge (potencia). Abakuá is a Cuban secret society of Calabari/Cross River origin."><span class="cc-label">Abakuá Potencia</span><span class="cc-id">iroko:houseType-abakua-potencia</span></div><div class="concept-card" title="Cuban colonial mutual aid and religious society organized by African ethnic identity. Use iroko:Cabildo subclass for records of this type."><span class="cc-label">Cabildo</span><span class="cc-id">iroko:houseType-cabildo</span></div><div class="concept-card" title="Association or society organized around a specific orisha or shared ritual purpose."><span class="cc-label">Egbé</span><span class="cc-id">iroko:houseType-egbe</span></div><div class="concept-card" title="Centre for Kardecist or Afro-influenced Espiritismo practice."><span class="cc-label">Espiritismo Centre</span><span class="cc-id">iroko:houseType-espiritismo-centre</span></div><div class="concept-card" title="Haitian Vodou temple and its associated community."><span class="cc-label">Hounfò</span><span class="cc-id">iroko:houseType-hounfo</span></div><div class="concept-card" title="House organized primarily around Ifá divination practice and Babaláwo lineage."><span class="cc-label">Ilé Ifá</span><span class="cc-id">iroko:houseType-ile-ifa</span></div><div class="concept-card" title="Lucumí/Candomblé Ketu house organized around Orisha worship."><span class="cc-label">Ilé Orisha</span><span class="cc-id">iroko:houseType-ile-orisha</span></div><div class="concept-card"><span class="cc-label">Other</span><span class="cc-id">iroko:houseType-other</span></div><div class="concept-card" title="House organized around Palo Monte/Mayombe practice and nganga custody."><span class="cc-label">Palo House</span><span class="cc-id">iroko:houseType-palero-house</span></div><div class="concept-card" title="Haitian Vodou society, often with named lineage and territorial identity."><span class="cc-label">Sosyete</span><span class="cc-id">iroko:houseType-sosyete</span></div><div class="concept-card" title="An informal group organized for learning, not yet constituted as a full house."><span class="cc-label">Study / Learning Group</span><span class="cc-id">iroko:houseType-study-group</span></div><div class="concept-card" title="Brazilian ritual space for Candomblé, Umbanda, or Quimbanda practice."><span class="cc-label">Terreiro</span><span class="cc-id">iroko:houseType-terreiro</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:InitiationTypeScheme</span><span class="csb-count">13 concepts</span></div><div class="csb-scheme-label">Initiation Types</div><div class="concept-grid"><div class="concept-card" title="Initiation into an Abakuá potencia."><span class="cc-label">Abakuá Initiation</span><span class="cc-id">iroko:initiation-abakua</span></div><div class="concept-card" title="The lying-in period component of Vodou kanzo initiation."><span class="cc-label">Couche</span><span class="cc-id">iroko:initiation-couche</span></div><div class="concept-card" title="Initiation into an Egbé society or association."><span class="cc-label">Egbé Initiation</span><span class="cc-id">iroko:initiation-egbe</span></div><div class="concept-card" title="Full initiation into the Ifá corpus, conferring the title of Babaláwo."><span class="cc-label">Ifá Initiation</span><span class="cc-id">iroko:initiation-ifa</span></div><div class="concept-card" title="Haitian Vodou initiation ceremony. Levels include Sur Pwen, Hounsi Kanzo, Si Pwen, and Asogwe."><span class="cc-label">Kanzo</span><span class="cc-id">iroko:initiation-kanzo</span></div><div class="concept-card" title="Full head initiation in Lucumí/Candomblé Ketu. An orisha is seated on the initiate's head."><span class="cc-label">Kariosha</span><span class="cc-id">iroko:initiation-kariosha</span></div><div class="concept-card" title="Reception of Orula's hand. First level of Ifá initiation, open to non-Babaláwo."><span class="cc-label">Mano de Orula</span><span class="cc-id">iroko:initiation-mano-orula</span></div><div class="concept-card" title="Reception of the five sacred beaded necklaces. Often the first formal initiation in Lucumí."><span class="cc-label">Necklaces</span><span class="cc-id">iroko:initiation-necklaces</span></div><div class="concept-card" title="Reception of the Olofin mysteries. Among the highest grades in Lucumí practice."><span class="cc-label">Olofin Initiation</span><span class="cc-id">iroko:initiation-olofin</span></div><div class="concept-card"><span class="cc-label">Other</span><span class="cc-id">iroko:initiation-other</span></div><div class="concept-card" title="Palo Monte/Mayombe initiation ceremony marking entry into a munanso."><span class="cc-label">Rayamiento</span><span class="cc-id">iroko:initiation-palo-rayamiento</span></div><div class="concept-card" title="Haitian Vodou ceremony of recognition and elevation within a sosyete."><span class="cc-label">Rayisman</span><span class="cc-id">iroko:initiation-rayisman</span></div><div class="concept-card" title="Reception of the warrior orishas: Elegua, Ogun, Ochosi, and Osun."><span class="cc-label">Warriors</span><span class="cc-id">iroko:initiation-warriors</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:TransmissionTypeScheme</span><span class="csb-count">5 concepts</span></div><div class="csb-scheme-label">Knowledge Transmission Types</div><div class="concept-grid"><div class="concept-card" title="Transmission involves both embodied/oral and written components."><span class="cc-label">Combined</span><span class="cc-id">iroko:transmission-combined</span></div><div class="concept-card" title="The specific form of transmission was determined by divination rather than fixed protocol."><span class="cc-label">Divination-Prescribed</span><span class="cc-id">iroko:transmission-divination-prescribed</span></div><div class="concept-card" title="Knowledge transmitted through physical ceremony, practice, and direct experiential transmission. Cannot be fully conveyed through text."><span class="cc-label">Embodied</span><span class="cc-id">iroko:transmission-embodied</span></div><div class="concept-card" title="Transmitted through speech, song, proverb, and oral recitation."><span class="cc-label">Oral</span><span class="cc-id">iroko:transmission-oral</span></div><div class="concept-card" title="Transmitted through notebooks, libreta, manuscripts, or printed texts."><span class="cc-label">Written</span><span class="cc-id">iroko:transmission-written</span></div></div></div>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title" id="sb-title">Connected modules</div>
+        <div class="sidebar-dynamic" id="sb-connections"></div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Share</div>
+        <div class="share-buttons">
+          <a class="share-btn" href="#" onclick="shareEmail(event)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1.5"/><polyline points="2,4 10,12 18,4"/></svg>
+            Email
+          </a>
+          <a class="share-btn" href="#" onclick="window.print();return false;">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="6"/><rect x="2" y="8" width="16" height="8" rx="1"/><rect x="5" y="12" width="10" height="5"/><circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
+            Print
+          </a>
+          <button class="share-btn" id="share-link-btn" onclick="copyPageLink(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12a4 4 0 005.66 0l2-2A4 4 0 009.9 4.24l-1 1"/><path d="M12 8a4 4 0 00-5.66 0l-2 2A4 4 0 006.1 15.76l1-1"/></svg>
+            Link
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Cite the Ilé Module</div>
+        <div class="sidebar-citation">
+          <div class="cite-text">"Ilé Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. <em>ontology.irokosociety.org/ile</em></div>
+          <button class="btn-copy-sm" onclick="copyModuleCitation(this)">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Other formats</div>
+        <div class="format-links">
+          <a class="format-link" href="#">RDF/Turtle <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">JSON-LD <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">RDF/XML <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">N-Triples <span class="format-arrow">↗</span></a>
+        </div>
+      </div>
+    </aside>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">6 classes</span>
-    </div>
-    <div class="class-card" id="cls-Cabildo">
-      <div class="class-name">Cabildo</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Cabildo</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">House</span></div>
-      <p class="class-def">A Cuban colonial-era mutual aid and religious society organized by African ethnic identity. Cabildos were the institutional vessels for Lucumí, Arará, Kongo, and other traditions in Cuba. Distinct from contemporary houses in legal form and historical structure. May have successor houses linked via iroko:successorHouse.</p>
-    </div>
-    <div class="class-card" id="cls-House">
-      <div class="class-name">House</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">House</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Organization</span>, <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A religious house, temple, or community organized around a lineage and founding elder. Encompasses ilé (Lucumí/Candomblé), terreiro (Candomblé/Umbanda), hounfò (Vodou), ile orisha, and analogous institutions. Subclass of schema:Organization for interoperability with external directories.</p>
-    </div>
-    <div class="class-card" id="cls-InitiationEvent">
-      <div class="class-name">InitiationEvent</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Initiation Event</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A specific ceremony creating a formal genealogical link between initiator and initiate. The primary mechanism by which lineage is transmitted and authority is conferred. Access to records is typically initiated-only; existence of the event may be public.</p>
-    </div>
-    <div class="class-card" id="cls-Lineage">
-      <div class="class-name">Lineage</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Lineage</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A rama, branch, or transmission line descending from a founding house or practitioner. Represents what makes a specific lineage distinct from others within the same tradition: liturgical variations, oriki, priestly protocols, or founding relationships.</p>
-    </div>
-    <div class="class-card" id="cls-ReligiousOffice">
-      <div class="class-name">ReligiousOffice</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Religious Office</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A religious title or position held by a practitioner, authorizing specific ritual functions within a tradition. Linked to the person (foaf:Person), the house, and the authority figure who conferred it. Distinct from iroko:ContestedAuthority in core, which models disputed titles at the category level — iroko:ReligiousOffice models specific individual instances.</p>
-    </div>
-    <div class="class-card" id="cls-SchismEvent">
-      <div class="class-name">SchismEvent</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Schism Event</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A documented lineage split creating a new house from an existing one. Records the parent house, child house, date, cause, and parties involved. Often sensitive; access level is typically community-restricted or initiated-only.</p>
-    </div>
-  </div>
-
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">38 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-affiliatedHouse">
-          <td><span class="prop-name">affiliatedHouse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">affiliated house</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">A house with recognized but non-hierarchical affiliation: alliance, shared lineage recognition, or ongoing ceremonial cooperation.</td>
-        </tr>
-        <tr id="prop-authorityHolder">
-          <td><span class="prop-name">authorityHolder</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authority holder</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Religious Office → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The person holding this title. Range: foaf:Person.</td>
-        </tr>
-        <tr id="prop-authorityHouse">
-          <td><span class="prop-name">authorityHouse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authority house</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Religious Office → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The house within which this authority is recognized.</td>
-        </tr>
-        <tr id="prop-authorityScope">
-          <td><span class="prop-name">authorityScope</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authority scope</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Religious Office → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">What ritual functions this title authorizes.</td>
-        </tr>
-        <tr id="prop-authorityTitle">
-          <td><span class="prop-name">authorityTitle</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authority title</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Religious Office → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The formal title held. Range: iroko:AuthorityTitleScheme.</td>
-        </tr>
-        <tr id="prop-authorityTradition">
-          <td><span class="prop-name">authorityTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authority tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Religious Office → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">authorityTradition</td>
-        </tr>
-        <tr id="prop-conferralDate">
-          <td><span class="prop-name">conferralDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">conferral date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Religious Office → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">conferralDate</td>
-        </tr>
-        <tr id="prop-entityCrowned">
-          <td><span class="prop-name">entityCrowned</span><br><span style="font-size:.75rem;color:var(--ink-soft);">entity crowned</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiation Event → SacredEntity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">For head initiations: the orisha/entity seated on the initiate&#x27;s head. Range: nkisi:SpiritualEntity.</td>
-        </tr>
-        <tr id="prop-eventHouse">
-          <td><span class="prop-name">eventHouse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">event house</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiation Event → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The house in which the initiation took place.</td>
-        </tr>
-        <tr id="prop-founder">
-          <td><span class="prop-name">founder</span><br><span style="font-size:.75rem;color:var(--ink-soft);">founder</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The founding practitioner of the house. Range: foaf:Person.</td>
-        </tr>
-        <tr id="prop-foundingHouse">
-          <td><span class="prop-name">foundingHouse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">founding house</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Lineage → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The house from which this lineage (rama/branch) originates.</td>
-        </tr>
-        <tr id="prop-grantedBy">
-          <td><span class="prop-name">grantedBy</span><br><span style="font-size:.75rem;color:var(--ink-soft);">granted by</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Religious Office → Religious Office</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The authority figure who conferred this title. Range: iroko:ReligiousOffice.</td>
-        </tr>
-        <tr id="prop-hasLineage">
-          <td><span class="prop-name">hasLineage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has lineage</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → Lineage</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a house to a formal Lineage record documenting its rama characteristics.</td>
-        </tr>
-        <tr id="prop-holdsOffice">
-          <td><span class="prop-name">holdsOffice</span><br><span style="font-size:.75rem;color:var(--ink-soft);">holds office</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Person → Religious Office</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">A religious office currently or historically held by this person. Inverse of iroko:authorityHolder. Multiple offices may be held simultaneously or sequentially; each is a separate ReligiousOffice instance with its own iroko:conferralDate. This property does not distinguish current from historical — that distinction is carried by the office record. Access: community-only — office holding within a house is internal governance information not appropriate for public disclosure.</td>
-        </tr>
-        <tr id="prop-houseGovernanceModel">
-          <td><span class="prop-name">houseGovernanceModel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">house governance model</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">How authority and decision-making are structured within the house. Range: iroko:GovernanceModelScheme.</td>
-        </tr>
-        <tr id="prop-houseType">
-          <td><span class="prop-name">houseType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">house type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Institutional form of the house. Range: iroko:HouseTypeScheme.</td>
-        </tr>
-        <tr id="prop-initiatedPerson">
-          <td><span class="prop-name">initiatedPerson</span><br><span style="font-size:.75rem;color:var(--ink-soft);">initiated person</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiation Event → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
-          <td class="prop-desc">The person who received initiation. Range: foaf:Person. Highly sensitive — access no-access by default except to the individual and their house.</td>
-        </tr>
-        <tr id="prop-initiationType">
-          <td><span class="prop-name">initiationType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">initiation type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiation Event → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Type of initiation ceremony. Range: iroko:InitiationTypeScheme.</td>
-        </tr>
-        <tr id="prop-initiationWitness">
-          <td><span class="prop-name">initiationWitness</span><br><span style="font-size:.75rem;color:var(--ink-soft);">initiation witness</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiation Event → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
-          <td class="prop-desc">Witnesses present at the initiation. Range: foaf:Person. Sensitive; access no-access by default.</td>
-        </tr>
-        <tr id="prop-initiator">
-          <td><span class="prop-name">initiator</span><br><span style="font-size:.75rem;color:var(--ink-soft);">initiator</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiation Event → Religious Office</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The authority figure who performed the initiation. Range: iroko:ReligiousOffice.</td>
-        </tr>
-        <tr id="prop-itaPerformed">
-          <td><span class="prop-name">itaPerformed</span><br><span style="font-size:.75rem;color:var(--ink-soft);">itá performed</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Initiation Event → boolean</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">True if a life reading (itá) was conducted as part of this initiation.</td>
-        </tr>
-        <tr id="prop-lineageCharacteristics">
-          <td><span class="prop-name">lineageCharacteristics</span><br><span style="font-size:.75rem;color:var(--ink-soft);">lineage characteristics</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Lineage → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Description of what distinguishes this rama: liturgical variations, oriki, priestly protocols, founding relationships, regional practices.</td>
-        </tr>
-        <tr id="prop-lineageChild">
-          <td><span class="prop-name">lineageChild</span><br><span style="font-size:.75rem;color:var(--ink-soft);">lineage child</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">A house that descends from this house through initiation. Inverse of iroko:lineageParent.</td>
-        </tr>
-        <tr id="prop-lineageParent">
-          <td><span class="prop-name">lineageParent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">lineage parent</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The house from which this house descends through initiation. Equivalent to godparent-house in common practice.</td>
-        </tr>
-        <tr id="prop-lineageTradition">
-          <td><span class="prop-name">lineageTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">lineage tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Lineage → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">lineageTradition</td>
-        </tr>
-        <tr id="prop-location">
-          <td><span class="prop-name">location</span><br><span style="font-size:.75rem;color:var(--ink-soft);">location</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Geographic location of the house. May be city/country only for active houses; full address behind access control.</td>
-        </tr>
-        <tr id="prop-membershipEstimate">
-          <td><span class="prop-name">membershipEstimate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">membership estimate</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">House → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Approximate number of initiated members. Text to allow ranges or qualitative descriptions.</td>
-        </tr>
-        <tr id="prop-multiTradition">
-          <td><span class="prop-name">multiTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">multi-tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">House → boolean</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">True if the house actively practices more than one distinct tradition.</td>
-        </tr>
-        <tr id="prop-publicPresence">
-          <td><span class="prop-name">publicPresence</span><br><span style="font-size:.75rem;color:var(--ink-soft);">public presence</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">House → boolean</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">True if the house maintains a publicly known identity (website, social media, public events). False does not imply the house is secret — many houses simply operate privately.</td>
-        </tr>
-        <tr id="prop-recognizedOffice">
-          <td><span class="prop-name">recognizedOffice</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recognized office</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → Religious Office</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">A religious office recognized and active within this house. Inverse of iroko:authorityHouse. A house may recognize multiple offices; each office is a separate ReligiousOffice instance. Active vs. historical status determined by iroko:conferralDate on the office record. Access: community-only — office structure of a house is internal governance information.</td>
-        </tr>
-        <tr id="prop-schismCause">
-          <td><span class="prop-name">schismCause</span><br><span style="font-size:.75rem;color:var(--ink-soft);">schism cause</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Schism Event → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Documented reason for the lineage split. Often contested; use iroko:contestedNotes alongside.</td>
-        </tr>
-        <tr id="prop-schismChildHouse">
-          <td><span class="prop-name">schismChildHouse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">schism child house</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Schism Event → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">schismChildHouse</td>
-        </tr>
-        <tr id="prop-schismDate">
-          <td><span class="prop-name">schismDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">schism date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Schism Event → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">schismDate</td>
-        </tr>
-        <tr id="prop-schismParentHouse">
-          <td><span class="prop-name">schismParentHouse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">schism parent house</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Schism Event → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">schismParentHouse</td>
-        </tr>
-        <tr id="prop-schismParty">
-          <td><span class="prop-name">schismParty</span><br><span style="font-size:.75rem;color:var(--ink-soft);">schism party</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Schism Event → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Persons involved in the schism. Range: foaf:Person. Sensitive.</td>
-        </tr>
-        <tr id="prop-successorHouse">
-          <td><span class="prop-name">successorHouse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">successor house</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Cabildo → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">For historical cabildos: the contemporary house that descends from or claims continuity with this institution.</td>
-        </tr>
-        <tr id="prop-traditionPracticed">
-          <td><span class="prop-name">traditionPracticed</span><br><span style="font-size:.75rem;color:var(--ink-soft);">tradition practiced</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">House → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Tradition(s) practiced in this house. Range: iroko:TraditionScheme in core.</td>
-        </tr>
-        <tr id="prop-transmissionMethod">
-          <td><span class="prop-name">transmissionMethod</span><br><span style="font-size:.75rem;color:var(--ink-soft);">transmission method</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiation Event → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">How the authority or knowledge was transmitted. Range: iroko:TransmissionTypeScheme.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">5 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Governance Models</span>
-        <span class="scheme-count">8 concepts</span>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="fw">Iroko <span>Historical Society</span></span>
+        <p>Postcustodial cultural heritage complex for Afro-Atlantic sacred knowledge systems.</p>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">GovernanceModelScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-governance-age-grade">
-          <div class="concept-label">Age-Grade</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">governance-age-grade</div>
-          <p class="concept-def">Authority structured by seniority within initiation grade rather than individual title.</p>
-        </div>
-        <div class="concept-item" id="concept-governance-democratic">
-          <div class="concept-label">Democratic / Consensus</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">governance-democratic</div>
-          <p class="concept-def">Decisions made by member consensus or elected leadership.</p>
-        </div>
-        <div class="concept-item" id="concept-governance-elder-council">
-          <div class="concept-label">Elder Council</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">governance-elder-council</div>
-          <p class="concept-def">Collective of recognized elders sharing governance authority.</p>
-        </div>
-        <div class="concept-item" id="concept-governance-gender-divided">
-          <div class="concept-label">Gender-Divided Authority</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">governance-gender-divided</div>
-          <p class="concept-def">Male and female authorities govern separate domains within the same institution.</p>
-        </div>
-        <div class="concept-item" id="concept-governance-hereditary">
-          <div class="concept-label">Hereditary</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">governance-hereditary</div>
-          <p class="concept-def">Leadership passes through biological or ritual family succession.</p>
-        </div>
-        <div class="concept-item" id="concept-governance-lineage-federation">
-          <div class="concept-label">Lineage Federation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">governance-lineage-federation</div>
-          <p class="concept-def">Federated structure of affiliated houses under loose shared authority.</p>
-        </div>
-        <div class="concept-item" id="concept-governance-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">governance-other</div>
-          <p class="concept-def">governance-other</p>
-        </div>
-        <div class="concept-item" id="concept-governance-single-elder">
-          <div class="concept-label">Single Elder Authority</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">governance-single-elder</div>
-          <p class="concept-def">One recognized head (Iyalosha, Babalosha, Mambo, etc.) with primary authority.</p>
-        </div>
+      <div class="footer-col">
+        <h4>Ontology</h4>
+        <ul>
+          <li><a href="#">Modules</a></li>
+          <li><a href="#">Classes</a></li>
+          <li><a href="#">Properties</a></li>
+          <li><a href="#">Concept Schemes</a></li>
+          <li><a href="#">Whitepaper</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Institution</h4>
+        <ul>
+          <li><a href="#">About IHS</a></li>
+          <li><a href="#">Governance</a></li>
+          <li><a href="#">Access Policy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-funders">
+        <h4>Supported by</h4>
+        <div class="funder-slot">Funder logo</div>
+        <div class="funder-slot">Funder logo</div>
       </div>
     </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">House Types</span>
-        <span class="scheme-count">12 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">HouseTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-houseType-abakua-potencia">
-          <div class="concept-label">Abakuá Potencia</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-abakua-potencia</div>
-          <p class="concept-def">An Abakuá lodge (potencia). Abakuá is a Cuban secret society of Calabari/Cross River origin.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-cabildo">
-          <div class="concept-label">Cabildo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-cabildo</div>
-          <p class="concept-def">Cuban colonial mutual aid and religious society organized by African ethnic identity. Use iroko:Cabildo subclass for records of this type.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-egbe">
-          <div class="concept-label">Egbé</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-egbe</div>
-          <p class="concept-def">Association or society organized around a specific orisha or shared ritual purpose.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-espiritismo-centre">
-          <div class="concept-label">Espiritismo Centre</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-espiritismo-centre</div>
-          <p class="concept-def">Centre for Kardecist or Afro-influenced Espiritismo practice.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-hounfo">
-          <div class="concept-label">Hounfò</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-hounfo</div>
-          <p class="concept-def">Haitian Vodou temple and its associated community.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-ile-ifa">
-          <div class="concept-label">Ilé Ifá</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-ile-ifa</div>
-          <p class="concept-def">House organized primarily around Ifá divination practice and Babaláwo lineage.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-ile-orisha">
-          <div class="concept-label">Ilé Orisha</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-ile-orisha</div>
-          <p class="concept-def">Lucumí/Candomblé Ketu house organized around Orisha worship.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-other</div>
-          <p class="concept-def">houseType-other</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-palero-house">
-          <div class="concept-label">Palo House</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-palero-house</div>
-          <p class="concept-def">House organized around Palo Monte/Mayombe practice and nganga custody.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-sosyete">
-          <div class="concept-label">Sosyete</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-sosyete</div>
-          <p class="concept-def">Haitian Vodou society, often with named lineage and territorial identity.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-study-group">
-          <div class="concept-label">Study / Learning Group</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-study-group</div>
-          <p class="concept-def">An informal group organized for learning, not yet constituted as a full house.</p>
-        </div>
-        <div class="concept-item" id="concept-houseType-terreiro">
-          <div class="concept-label">Terreiro</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">houseType-terreiro</div>
-          <p class="concept-def">Brazilian ritual space for Candomblé, Umbanda, or Quimbanda practice.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Initiation Types</span>
-        <span class="scheme-count">13 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">InitiationTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-initiation-abakua">
-          <div class="concept-label">Abakuá Initiation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-abakua</div>
-          <p class="concept-def">Initiation into an Abakuá potencia.</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-couche">
-          <div class="concept-label">Couche</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-couche</div>
-          <p class="concept-def">The lying-in period component of Vodou kanzo initiation.</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-egbe">
-          <div class="concept-label">Egbé Initiation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-egbe</div>
-          <p class="concept-def">Initiation into an Egbé society or association.</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-ifa">
-          <div class="concept-label">Ifá Initiation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-ifa</div>
-          <p class="concept-def">Full initiation into the Ifá corpus, conferring the title of Babaláwo.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Itefa</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-kanzo">
-          <div class="concept-label">Kanzo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-kanzo</div>
-          <p class="concept-def">Haitian Vodou initiation ceremony. Levels include Sur Pwen, Hounsi Kanzo, Si Pwen, and Asogwe.</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-kariosha">
-          <div class="concept-label">Kariosha</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-kariosha</div>
-          <p class="concept-def">Full head initiation in Lucumí/Candomblé Ketu. An orisha is seated on the initiate&#x27;s head.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Making Ocha</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-mano-orula">
-          <div class="concept-label">Mano de Orula</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-mano-orula</div>
-          <p class="concept-def">Reception of Orula&#x27;s hand. First level of Ifá initiation, open to non-Babaláwo.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Awofakan / Ikofa</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-necklaces">
-          <div class="concept-label">Necklaces</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-necklaces</div>
-          <p class="concept-def">Reception of the five sacred beaded necklaces. Often the first formal initiation in Lucumí.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Elekes</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-olofin">
-          <div class="concept-label">Olofin Initiation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-olofin</div>
-          <p class="concept-def">Reception of the Olofin mysteries. Among the highest grades in Lucumí practice.</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-other</div>
-          <p class="concept-def">initiation-other</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-palo-rayamiento">
-          <div class="concept-label">Rayamiento</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-palo-rayamiento</div>
-          <p class="concept-def">Palo Monte/Mayombe initiation ceremony marking entry into a munanso.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Palo Initiation</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-rayisman">
-          <div class="concept-label">Rayisman</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-rayisman</div>
-          <p class="concept-def">Haitian Vodou ceremony of recognition and elevation within a sosyete.</p>
-        </div>
-        <div class="concept-item" id="concept-initiation-warriors">
-          <div class="concept-label">Warriors</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">initiation-warriors</div>
-          <p class="concept-def">Reception of the warrior orishas: Elegua, Ogun, Ochosi, and Osun.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Knowledge Transmission Types</span>
-        <span class="scheme-count">5 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">TransmissionTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-transmission-combined">
-          <div class="concept-label">Combined</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">transmission-combined</div>
-          <p class="concept-def">Transmission involves both embodied/oral and written components.</p>
-        </div>
-        <div class="concept-item" id="concept-transmission-divination-prescribed">
-          <div class="concept-label">Divination-Prescribed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">transmission-divination-prescribed</div>
-          <p class="concept-def">The specific form of transmission was determined by divination rather than fixed protocol.</p>
-        </div>
-        <div class="concept-item" id="concept-transmission-embodied">
-          <div class="concept-label">Embodied</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">transmission-embodied</div>
-          <p class="concept-def">Knowledge transmitted through physical ceremony, practice, and direct experiential transmission. Cannot be fully conveyed through text.</p>
-        </div>
-        <div class="concept-item" id="concept-transmission-oral">
-          <div class="concept-label">Oral</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">transmission-oral</div>
-          <p class="concept-def">Transmitted through speech, song, proverb, and oral recitation.</p>
-        </div>
-        <div class="concept-item" id="concept-transmission-written">
-          <div class="concept-label">Written</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">transmission-written</div>
-          <p class="concept-def">Transmitted through notebooks, libreta, manuscripts, or printed texts.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Religious Office Titles</span>
-        <span class="scheme-count">20 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">AuthorityTitleScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-title-abakua-member">
-          <div class="concept-label">Abakuá Member</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-abakua-member</div>
-          <p class="concept-def">Initiated member of an Abakuá potencia.</p>
-        </div>
-        <div class="concept-item" id="concept-title-alagba">
-          <div class="concept-label">Alagba</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-alagba</div>
-          <p class="concept-def">Senior elder in a Yoruba-derived tradition, often with lineage-wide ceremonial authority.</p>
-        </div>
-        <div class="concept-item" id="concept-title-araba">
-          <div class="concept-label">Araba</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-araba</div>
-          <p class="concept-def">Chief Babaláwo in a Yoruba community or lineage. Highest recognized Ifá authority.</p>
-        </div>
-        <div class="concept-item" id="concept-title-babalosha">
-          <div class="concept-label">Babalosha</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-babalosha</div>
-          <p class="concept-def">Senior male Orisha priest with the authority to initiate others.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Babalorishaisha</p>
-        </div>
-        <div class="concept-item" id="concept-title-babalawo">
-          <div class="concept-label">Babaláwo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-babalawo</div>
-          <p class="concept-def">Initiated Ifá priest. Authorized to perform Ifá divination and related ceremonies.</p>
-        </div>
-        <div class="concept-item" id="concept-title-ekpe-member">
-          <div class="concept-label">Ekpe Member</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-ekpe-member</div>
-          <p class="concept-def">Initiated member of the Ekpe leopard society (Cross River / Calabari tradition).</p>
-        </div>
-        <div class="concept-item" id="concept-title-houngan">
-          <div class="concept-label">Houngan</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-houngan</div>
-          <p class="concept-def">Male Haitian Vodou priest.</p>
-        </div>
-        <div class="concept-item" id="concept-title-iyalosha">
-          <div class="concept-label">Iyalosha</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-iyalosha</div>
-          <p class="concept-def">Senior female Orisha priest with the authority to initiate others.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Iyalorisha</p>
-        </div>
-        <div class="concept-item" id="concept-title-iyanifa">
-          <div class="concept-label">Iyanifa</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-iyanifa</div>
-          <p class="concept-def">Female Ifá priest. Recognition is contested across lineages; use iroko:contestedStatus when applicable.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">The recognition of Iyanifa is a live dispute in Lucumí communities. iroko:ReligiousOffice records for this title should carry iroko:contestedStatus and iroko:contestedNotes.</p>
-        </div>
-        <div class="concept-item" id="concept-title-mambo">
-          <div class="concept-label">Mambo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-mambo</div>
-          <p class="concept-def">Female Haitian Vodou priest.</p>
-        </div>
-        <div class="concept-item" id="concept-title-mae-de-santo">
-          <div class="concept-label">Mãe de Santo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-mae-de-santo</div>
-          <p class="concept-def">Female head of a Brazilian terreiro.</p>
-        </div>
-        <div class="concept-item" id="concept-title-olofista">
-          <div class="concept-label">Olofista</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-olofista</div>
-          <p class="concept-def">Priest initiated into the Olofin mysteries. Among the highest initiatory grades in Lucumí.</p>
-        </div>
-        <div class="concept-item" id="concept-title-olorisha">
-          <div class="concept-label">Olorisha</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-olorisha</div>
-          <p class="concept-def">Initiated Orisha priest of any gender. General term covering Iyalosha and Babalosha.</p>
-        </div>
-        <div class="concept-item" id="concept-title-olu-iroko">
-          <div class="concept-label">Olu-Iroko</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-olu-iroko</div>
-          <p class="concept-def">Consecration to the Iroko tree spirit. Rare; received through specific lineage authorization.</p>
-        </div>
-        <div class="concept-item" id="concept-title-omo-orisha">
-          <div class="concept-label">Omo Orisha</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-omo-orisha</div>
-          <p class="concept-def">Initiated child of an orisha. General term for those who have completed kariosha/asiento.</p>
-        </div>
-        <div class="concept-item" id="concept-title-osugbo">
-          <div class="concept-label">Osugbo Member</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-osugbo</div>
-          <p class="concept-def">Member of the Osugbo/Ogboni earth society, holding judicial and spiritual authority.</p>
-        </div>
-        <div class="concept-item" id="concept-title-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-other</div>
-          <p class="concept-def">title-other</p>
-        </div>
-        <div class="concept-item" id="concept-title-pai-de-santo">
-          <div class="concept-label">Pai de Santo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-pai-de-santo</div>
-          <p class="concept-def">Male head of a Brazilian terreiro.</p>
-        </div>
-        <div class="concept-item" id="concept-title-tata-nkisi">
-          <div class="concept-label">Tata Nkisi</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-tata-nkisi</div>
-          <p class="concept-def">Male initiated priest in Palo Monte with authority over an nganga.</p>
-        </div>
-        <div class="concept-item" id="concept-title-yaya-nkisi">
-          <div class="concept-label">Yaya Nkisi</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">title-yaya-nkisi</div>
-          <p class="concept-def">Female initiated priest in Palo Monte with authority over an nganga.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      License: CC0 1.0 Universal (Public Domain)
-    </div>
-    <div class="footer-links">
-      <a href="https://www.irokosociety.org">irokosociety.org</a>
-      <a href="../index.html">Home</a>
-      <a href="index.html">Vocabularies</a>
+    <div class="footer-bottom">
+      <p>© 2025 Iroko Historical Society / Ilé Aña Olofí, Inc. · <a href="#">Terms of Use</a> · <a href="#">Licensing</a></p>
+      <span class="version-badge">v1.2.0</span>
     </div>
   </footer>
 
-</div>
+<script>
+const MOD_SLUG = 'ile';
+const MOD_DISPLAY = 'Ilé Module';
+const MOD_CITE = '"Ilé Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/ile';
+const CLASSES = {
+  Cabildo: {
+    uri:'iroko:Cabildo', label:'Cabildo',
+    definition:'A Cuban colonial-era mutual aid and religious society organized by African ethnic identity. Cabildos were the institutional vessels for Lucumí, Arará, Kongo, and other traditions in Cuba. Distinct from contemporary houses in legal form and historical structure. May have successor houses linked via iroko:successorHouse.',
+    outgoing:[{uri:'iroko:successorHouse',label:'successor house',range:'iroko:House',definition:'For historical cabildos: the contemporary house that descends from or claims continuity with this institution.',crossModule:'ile'  }],
+    incoming:[],
+    crossModuleConnections:[]
+  },
+  House: {
+    uri:'iroko:House', label:'House',
+    definition:'A religious house, temple, or community organized around a lineage and founding elder. Encompasses ilé (Lucumí/Candomblé), terreiro (Candomblé/Umbanda), hounfò (Vodou), ile orisha, and analogous institutions. Subclass of schema:Organization for interoperability with external directories.',
+    outgoing:[{uri:'iroko:affiliatedHouse',label:'affiliated house',range:'iroko:House',definition:'A house with recognized but non-hierarchical affiliation: alliance, shared lineage recognition, or ongoing ceremonial cooperation.',crossModule:'ile'  },{uri:'iroko:founder',label:'founder',range:'iroko:Person',definition:'The founding practitioner of the house. Range: foaf:Person.',crossModule:''  },{uri:'iroko:hasLineage',label:'has lineage',range:'iroko:Lineage',definition:'Links a house to a formal Lineage record documenting its rama characteristics.',crossModule:'ile'  },{uri:'iroko:houseGovernanceModel',label:'house governance model',range:'iroko:Concept',definition:'How authority and decision-making are structured within the house. Range: iroko:GovernanceModelScheme.',crossModule:''  },{uri:'iroko:houseType',label:'house type',range:'iroko:Concept',definition:'Institutional form of the house. Range: iroko:HouseTypeScheme.',crossModule:''  },{uri:'iroko:lineageChild',label:'lineage child',range:'iroko:House',definition:'A house that descends from this house through initiation. Inverse of iroko:lineageParent.',crossModule:'ile'  },{uri:'iroko:location',label:'location',range:'',definition:'Geographic location of the house. May be city/country only for active houses; full address behind access control.',crossModule:''  },{uri:'iroko:traditionPracticed',label:'tradition practiced',range:'iroko:Concept',definition:'Tradition(s) practiced in this house. Range: iroko:TraditionScheme in core.',crossModule:''  },{uri:'iroko:lineageParent',label:'lineage parent',range:'iroko:House',definition:'The house from which this house descends through initiation. Equivalent to godparent-house in common practice.',crossModule:'ile'  },{uri:'iroko:recognizedOffice',label:'recognized office',range:'iroko:ReligiousOffice',definition:'A religious office recognized and active within this house. Inverse of iroko:authorityHouse. A house may recognize multiple offices; each office is a separate ReligiousOffice instance. Active vs. historical status determined by iroko:conferralDate on the office record. Access: community-only — office structure of a house is internal governance information.',crossModule:'ile'  }],
+    incoming:[{uri:'iroko:affiliatedHouse',label:'affiliated house',domain:'iroko:House',definition:'A house with recognized but non-hierarchical affiliation: alliance, shared lineage recognition, or ongoing ceremonial cooperation.',crossModule:'ile'  },{uri:'iroko:authorityHouse',label:'authority house',domain:'iroko:ReligiousOffice',definition:'The house within which this authority is recognized.',crossModule:'ile'  },{uri:'iroko:eventHouse',label:'event house',domain:'iroko:InitiationEvent',definition:'The house in which the initiation took place.',crossModule:'ile'  },{uri:'iroko:foundingHouse',label:'founding house',domain:'iroko:Lineage',definition:'The house from which this lineage (rama/branch) originates.',crossModule:'ile'  },{uri:'iroko:lineageChild',label:'lineage child',domain:'iroko:House',definition:'A house that descends from this house through initiation. Inverse of iroko:lineageParent.',crossModule:'ile'  },{uri:'iroko:schismChildHouse',label:'schism child house',domain:'iroko:SchismEvent',definition:'',crossModule:'ile'  },{uri:'iroko:schismParentHouse',label:'schism parent house',domain:'iroko:SchismEvent',definition:'',crossModule:'ile'  },{uri:'iroko:successorHouse',label:'successor house',domain:'iroko:Cabildo',definition:'For historical cabildos: the contemporary house that descends from or claims continuity with this institution.',crossModule:'ile'  },{uri:'iroko:lineageParent',label:'lineage parent',domain:'iroko:House',definition:'The house from which this house descends through initiation. Equivalent to godparent-house in common practice.',crossModule:'ile'  }],
+    crossModuleConnections:[]
+  },
+  InitiationEvent: {
+    uri:'iroko:InitiationEvent', label:'Initiation Event',
+    definition:'A specific ceremony creating a formal genealogical link between initiator and initiate. The primary mechanism by which lineage is transmitted and authority is conferred. Access to records is typically initiated-only; existence of the event may be public.',
+    outgoing:[{uri:'iroko:entityCrowned',label:'entity crowned',range:'iroko:SacredEntity',definition:'For head initiations: the orisha/entity seated on the initiate\'s head. Range: nkisi:SpiritualEntity.',crossModule:'core'  },{uri:'iroko:eventHouse',label:'event house',range:'iroko:House',definition:'The house in which the initiation took place.',crossModule:'ile'  },{uri:'iroko:initiatedPerson',label:'initiated person',range:'iroko:Person',definition:'The person who received initiation. Range: foaf:Person. Highly sensitive — access no-access by default except to the individual and their house.',crossModule:''  },{uri:'iroko:initiationType',label:'initiation type',range:'iroko:Concept',definition:'Type of initiation ceremony. Range: iroko:InitiationTypeScheme.',crossModule:''  },{uri:'iroko:initiationWitness',label:'initiation witness',range:'iroko:Person',definition:'Witnesses present at the initiation. Range: foaf:Person. Sensitive; access no-access by default.',crossModule:''  },{uri:'iroko:initiator',label:'initiator',range:'iroko:ReligiousOffice',definition:'The authority figure who performed the initiation. Range: iroko:ReligiousOffice.',crossModule:'ile'  },{uri:'iroko:transmissionMethod',label:'transmission method',range:'iroko:Concept',definition:'How the authority or knowledge was transmitted. Range: iroko:TransmissionTypeScheme.',crossModule:''  }],
+    incoming:[],
+    crossModuleConnections:[{name:'Core Module',slug:'core',dotClass:'dot-core',props:'via iroko:entityCrowned',direction:'references'}]
+  },
+  Lineage: {
+    uri:'iroko:Lineage', label:'Lineage',
+    definition:'A rama, branch, or transmission line descending from a founding house or practitioner. Represents what makes a specific lineage distinct from others within the same tradition: liturgical variations, oriki, priestly protocols, or founding relationships.',
+    outgoing:[{uri:'iroko:foundingHouse',label:'founding house',range:'iroko:House',definition:'The house from which this lineage (rama/branch) originates.',crossModule:'ile'  },{uri:'iroko:lineageTradition',label:'lineage tradition',range:'iroko:Concept',definition:'',crossModule:''  }],
+    incoming:[{uri:'iroko:hasLineage',label:'has lineage',domain:'iroko:House',definition:'Links a house to a formal Lineage record documenting its rama characteristics.',crossModule:'ile'  }],
+    crossModuleConnections:[]
+  },
+  ReligiousOffice: {
+    uri:'iroko:ReligiousOffice', label:'Religious Office',
+    definition:'A religious title or position held by a practitioner, authorizing specific ritual functions within a tradition. Linked to the person (foaf:Person), the house, and the authority figure who conferred it. Distinct from iroko:ContestedAuthority in core, which models disputed titles at the category level — iroko:ReligiousOffice models specific individual instances.',
+    outgoing:[{uri:'iroko:authorityHolder',label:'authority holder',range:'iroko:Person',definition:'The person holding this title. Range: foaf:Person.',crossModule:''  },{uri:'iroko:authorityHouse',label:'authority house',range:'iroko:House',definition:'The house within which this authority is recognized.',crossModule:'ile'  },{uri:'iroko:authorityTitle',label:'authority title',range:'iroko:Concept',definition:'The formal title held. Range: iroko:AuthorityTitleScheme.',crossModule:''  },{uri:'iroko:authorityTradition',label:'authority tradition',range:'iroko:Concept',definition:'',crossModule:''  },{uri:'iroko:grantedBy',label:'granted by',range:'iroko:ReligiousOffice',definition:'The authority figure who conferred this title. Range: iroko:ReligiousOffice.',crossModule:'ile'  }],
+    incoming:[{uri:'iroko:grantedBy',label:'granted by',domain:'iroko:ReligiousOffice',definition:'The authority figure who conferred this title. Range: iroko:ReligiousOffice.',crossModule:'ile'  },{uri:'iroko:initiator',label:'initiator',domain:'iroko:InitiationEvent',definition:'The authority figure who performed the initiation. Range: iroko:ReligiousOffice.',crossModule:'ile'  },{uri:'iroko:recognizedOffice',label:'recognized office',domain:'iroko:House',definition:'A religious office recognized and active within this house. Inverse of iroko:authorityHouse. A house may recognize multiple offices; each office is a separate ReligiousOffice instance. Active vs. historical status determined by iroko:conferralDate on the office record. Access: community-only — office structure of a house is internal governance information.',crossModule:'ile'  },{uri:'iroko:holdsOffice',label:'holds office',domain:'iroko:Person',definition:'A religious office currently or historically held by this person. Inverse of iroko:authorityHolder. Multiple offices may be held simultaneously or sequentially; each is a separate ReligiousOffice instance with its own iroko:conferralDate. This property does not distinguish current from historical — that distinction is carried by the office record. Access: community-only — office holding within a house is internal governance information not appropriate for public disclosure.',crossModule:''  }],
+    crossModuleConnections:[]
+  },
+  SchismEvent: {
+    uri:'iroko:SchismEvent', label:'Schism Event',
+    definition:'A documented lineage split creating a new house from an existing one. Records the parent house, child house, date, cause, and parties involved. Often sensitive; access level is typically community-restricted or initiated-only.',
+    outgoing:[{uri:'iroko:schismChildHouse',label:'schism child house',range:'iroko:House',definition:'',crossModule:'ile'  },{uri:'iroko:schismParentHouse',label:'schism parent house',range:'iroko:House',definition:'',crossModule:'ile'  },{uri:'iroko:schismParty',label:'schism party',range:'iroko:Person',definition:'Persons involved in the schism. Range: foaf:Person. Sensitive.',crossModule:''  }],
+    incoming:[],
+    crossModuleConnections:[]
+  }
+};
+const MODULE_CONNECTIONS = [
+  {name:'Core Module',slug:'core',dotClass:'dot-core',props:'1 shared property'}
+];
+
+let activeClass = null;
+
+function activateClass(classId) {
+  if (activeClass === classId) { deactivateClass(); return; }
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = classId;
+  document.getElementById('card-' + classId)?.classList.add('is-active');
+  const data = CLASSES[classId];
+  if (!data) return;
+  document.getElementById('panel-uri').textContent = data.uri;
+  document.getElementById('panel-label').textContent = data.label;
+  document.getElementById('panel-definition').textContent = data.definition || '';
+  const citeText = data.uri + '. Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
+  document.getElementById('panel-cite-text').innerHTML = '<em>' + citeText + '</em>';
+  document.getElementById('panel-cite-btn').dataset.cite = citeText;
+  renderProps('incoming-props', data.incoming, 'in');
+  renderProps('outgoing-props', data.outgoing, 'out');
+  document.getElementById('zone2-empty').classList.add('hidden');
+  document.getElementById('zone2-hint').textContent = 'Click class again to close';
+  const panel = document.getElementById('property-panel');
+  panel.classList.add('visible');
+  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  renderClassSidebar(data, classId);
+  history.replaceState(null, '', '#' + classId);
+}
+
+function deactivateClass() {
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = null;
+  document.getElementById('property-panel').classList.remove('visible');
+  document.getElementById('zone2-empty').classList.remove('hidden');
+  document.getElementById('zone2-hint').textContent = 'Select a class above to explore its properties';
+  renderModuleSidebar();
+  history.replaceState(null, '', window.location.pathname);
+}
+
+function renderProps(containerId, props, dir) {
+  const el = document.getElementById(containerId);
+  if (!props || props.length === 0) { el.innerHTML = '<div class="no-props">None documented in this module.</div>'; return; }
+  el.innerHTML = props.map((p, i) => {
+    const id = 'prop-' + dir + '-' + i;
+    const endLabel = dir === 'out' ? 'Range' : 'Domain';
+    const endVal   = dir === 'out' ? (p.range || '') : (p.domain || '');
+    const crossTag = (p.crossModule && p.crossModule !== MOD_SLUG) ? '<span class="cross-tag">[' + p.crossModule + ']</span>' : '';
+    return '<div class="prop-item" id="' + id + '" onclick="toggleProp(\'' + id + '\')">' +
+      '<div class="prop-item-top"><span class="prop-item-uri">' + p.uri + '</span>' +
+      '<svg class="prop-item-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,3 11,8 5,13"/></svg></div>' +
+      '<span class="prop-item-label">' + (p.label || '') + '</span>' +
+      '<div class="prop-detail" id="' + id + '-detail">' +
+      '<div class="prop-detail-row"><span class="pd-label">' + endLabel + '</span><span class="pd-value">' + endVal + crossTag + '</span></div>' +
+      '<div class="prop-detail-row"><span class="pd-label">Definition</span><span class="pd-value">' + (p.definition || '') + '</span></div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function toggleProp(propId) {
+  const item = document.getElementById(propId);
+  const detail = document.getElementById(propId + '-detail');
+  if (!item || !detail) return;
+  const isOpen = item.classList.contains('is-expanded');
+  document.querySelectorAll('.prop-item.is-expanded').forEach(el => {
+    el.classList.remove('is-expanded');
+    el.querySelector('.prop-detail')?.classList.remove('visible');
+  });
+  if (!isOpen) { item.classList.add('is-expanded'); detail.classList.add('visible'); }
+}
+
+function renderClassSidebar(data, classId) {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'iroko:' + classId + ' — connections';
+    const conns = data.crossModuleConnections || [];
+    el.innerHTML = '<div class="active-class-card"><span class="acc-uri">' + data.uri + '</span><span class="acc-label">' + data.label + '</span></div>' +
+      (conns.length === 0
+        ? '<p class="no-connections">No cross-module connections.</p>'
+        : conns.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+            '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+            '<span class="cc-props">' + c.props + '</span>' +
+            '<span class="cc-via">' + c.direction + '</span></a>').join(''));
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function renderModuleSidebar() {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'Connected modules';
+    el.innerHTML = MODULE_CONNECTIONS.length === 0
+      ? '<p class="no-connections">No cross-module connections documented.</p>'
+      : MODULE_CONNECTIONS.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+          '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+          '<span class="cc-props">' + c.props + '</span></a>').join('');
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function copyPanelCitation(btn) {
+  navigator.clipboard.writeText(btn.dataset.cite).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyModuleCitation(btn) {
+  navigator.clipboard.writeText(MOD_CITE).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyPageLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓'; btn.classList.add('copied-state');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied-state'); }, 2000);
+  });
+}
+function shareEmail(e) {
+  e.preventDefault();
+  window.location.href = 'mailto:?subject=' + encodeURIComponent('Iroko Framework Ontology — ' + MOD_DISPLAY) + '&body=' + encodeURIComponent(window.location.href);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderModuleSidebar();
+  const hash = window.location.hash.slice(1);
+  if (hash && CLASSES[hash]) setTimeout(() => activateClass(hash), 100);
+});
+
+</script>
 </body>
 </html>

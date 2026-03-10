@@ -1,520 +1,551 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marca Module — Divination Systems — Iroko Framework Vocabularies</title>
-  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marca Module — Iroko Framework Ontology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    :root {
+      --ink:#1a1714; --ink-mid:#2e2a26; --ink-light:#4a4540;
+      --paper:#f7f4ef; --paper-warm:#efe9df;
+      --border:#d5cdc0; --border-mid:#c0b8ac;
+      --gold:#8b6914; --gold-light:#c49a2a; --gold-pale:#f0e6c8; --gold-mid:#a07820;
+      --sienna:#7a3b1e; --teal:#1f5c52; --teal-pale:#e4f0ee; --teal-mid:#2a7a6e;
+      --radius-sm:3px; --radius:6px; --radius-lg:10px;
+      --shadow-sm:0 1px 4px rgba(26,23,20,0.10); --shadow:0 3px 14px rgba(26,23,20,0.13);
+      --transition:180ms ease;
+    }
+    /* Module dot colors */
+    .dot-agency{background:#5a6e8a} .dot-authority{background:#6b4a8a}
+    .dot-core{background:#444} .dot-ekpe{background:#2a6b4a}
+    .dot-epistemic{background:#7a5a1e} .dot-ewe{background:#8b6914}
+    .dot-ile{background:#1f5c52} .dot-manifestation{background:#6b2a2a}
+    .dot-marca{background:#1e4a6b} .dot-narrative{background:#6b3a1e}
+    .dot-ngoma{background:#4a1e6b} .dot-nkisi{background:#7a3b1e}
+    .dot-qal{background:#2a4a6b} .dot-sankofa{background:#6b5a1e}
+    .dot-travay{background:#4a6b8a} .dot-veve{background:#3a1e6b}
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
-  </style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:'EB Garamond',Georgia,serif;font-size:1.0625rem;line-height:1.65;
+      background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+    .site-nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;gap:2rem;
+      height:52px;position:sticky;top:0;z-index:200;border-bottom:2px solid var(--gold)}
+    .wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:600;
+      letter-spacing:0.04em;color:#f7f4ef;text-decoration:none;white-space:nowrap}
+    .wordmark span{color:var(--gold-light)}
+    .nav-links{display:flex;gap:1.5rem;list-style:none;margin-left:auto}
+    .nav-links a{font-family:'EB Garamond',Georgia,serif;font-size:0.875rem;letter-spacing:0.05em;
+      text-transform:uppercase;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .nav-links a:hover{color:var(--gold-light)}
+
+    .page-header{background:var(--ink-mid);color:var(--paper);padding:2.5rem 2rem 2rem;border-bottom:1px solid var(--gold)}
+    .breadcrumb{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .breadcrumb a{color:var(--border-mid);text-decoration:none}
+    .breadcrumb a:hover{color:var(--gold-light)}
+    .page-header h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.25rem;font-weight:300;
+      letter-spacing:0.02em;line-height:1.2;margin-bottom:0.4rem}
+    .module-tag{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+      background:var(--gold);color:var(--ink);padding:0.2em 0.6em;border-radius:var(--radius-sm);
+      vertical-align:middle;margin-left:0.75rem;font-family:'EB Garamond',serif}
+    .module-desc{font-size:0.88rem;color:var(--border-mid);margin-top:0.6rem;max-width:700px;line-height:1.5}
+    .module-stats{display:flex;gap:2rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)}
+    .stat .number{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.75rem;font-weight:300;
+      color:var(--gold-light);line-height:1;display:block}
+    .stat .label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--border-mid)}
+
+    .layout{display:grid;grid-template-columns:1fr 290px;flex:1;max-width:1280px;width:100%;margin:0 auto;align-items:start}
+    .main-content{padding:2rem;border-right:1px solid var(--border);min-width:0}
+
+    .zone-label{font-size:0.68rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between}
+    .zone-hint{font-size:0.7rem;letter-spacing:0.02em;text-transform:none;color:var(--border-mid);font-style:italic}
+
+    .class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.6rem;margin-bottom:2.25rem}
+    .class-card{padding:0.8rem 0.9rem;border:1px solid var(--border);border-radius:var(--radius);
+      background:white;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);
+      user-select:none;position:relative}
+    .class-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .class-card.is-active{border-color:var(--gold);background:var(--gold-pale);box-shadow:var(--shadow)}
+    .class-card.is-active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--paper-warm)}
+    .card-uri{font-family:'JetBrains Mono',monospace;font-size:0.73rem;color:var(--gold);display:block;
+      margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-label{font-size:0.88rem;color:var(--ink);display:block;line-height:1.3}
+
+    .zone2-empty{display:flex;align-items:center;gap:0.75rem;padding:1.25rem 1.5rem;
+      background:var(--paper-warm);border:1px dashed var(--border-mid);border-radius:var(--radius);
+      color:var(--border-mid);font-size:0.85rem;font-style:italic;margin-bottom:2.25rem}
+    .zone2-empty svg{width:20px;height:20px;flex-shrink:0;opacity:0.5}
+    .zone2-empty.hidden{display:none}
+
+    .property-panel{display:none;background:var(--paper-warm);border:1px solid var(--border-mid);
+      border-radius:var(--radius-lg);margin-bottom:2.25rem;overflow:hidden;animation:panelIn 180ms ease forwards}
+    .property-panel.visible{display:block}
+    @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .panel-header{background:var(--ink-mid);color:var(--paper);padding:1rem 1.5rem;
+      display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+    .ph-uri{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--gold-light)}
+    .ph-label{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:300;color:var(--paper)}
+    .panel-close{background:none;border:none;color:var(--border-mid);cursor:pointer;padding:0.2rem;
+      font-size:1.1rem;line-height:1;transition:color var(--transition);margin-left:auto;flex-shrink:0}
+    .panel-close:hover{color:var(--paper)}
+    .panel-definition{padding:1rem 1.5rem;font-size:0.92rem;color:var(--ink-mid);line-height:1.6;border-bottom:1px solid var(--border)}
+    .panel-body{display:grid;grid-template-columns:1fr 1fr}
+    .prop-col{padding:1.25rem 1.5rem}
+    .prop-col:first-child{border-right:1px solid var(--border)}
+    .prop-col-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:0.85rem;display:flex;align-items:center;gap:0.4rem}
+    .direction-arrow{font-size:0.9rem;color:var(--gold)}
+    .col-sublabel{font-style:italic;text-transform:none;letter-spacing:0;font-size:0.67rem;color:var(--border-mid)}
+    .prop-item{padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      background:white;margin-bottom:0.5rem;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition)}
+    .prop-item:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .prop-item.is-expanded{border-color:var(--gold);background:#fffdf7}
+    .prop-item-top{display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
+    .prop-item-uri{font-family:'JetBrains Mono',monospace;font-size:0.74rem;color:var(--gold)}
+    .prop-item-chevron{width:13px;height:13px;color:var(--border-mid);flex-shrink:0;transition:transform var(--transition)}
+    .prop-item.is-expanded .prop-item-chevron{transform:rotate(90deg);color:var(--gold)}
+    .prop-item-label{font-size:0.82rem;color:var(--ink-light);display:block;margin-top:0.12rem}
+    .prop-detail{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border)}
+    .prop-detail.visible{display:block}
+    .prop-detail-row{display:flex;gap:0.75rem;margin-bottom:0.45rem;align-items:baseline}
+    .pd-label{font-size:0.65rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-light);min-width:60px;flex-shrink:0}
+    .pd-value{font-size:0.82rem;color:var(--ink-mid);line-height:1.4}
+    .cross-tag{font-size:0.65rem;color:var(--border-mid);font-style:italic;margin-left:0.3rem}
+    .no-props{font-size:0.82rem;color:var(--border-mid);font-style:italic;padding:0.5rem 0}
+    .panel-citation{padding:1rem 1.5rem;border-top:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .panel-citation .cite-text{font-size:0.8rem;color:var(--ink-light);font-style:italic;flex:1;min-width:200px}
+    .btn-copy{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;
+      font-size:0.85rem;cursor:pointer;transition:background var(--transition),transform 80ms;white-space:nowrap;flex-shrink:0}
+    .btn-copy:hover{background:var(--ink)} .btn-copy:active{transform:scale(0.97)} .btn-copy.copied{background:var(--teal)}
+    .btn-copy svg{width:13px;height:13px;flex-shrink:0}
+
+    .concept-scheme-block{margin-bottom:2rem}
+    .concept-scheme-block:last-child{margin-bottom:0}
+    .csb-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.15rem}
+    .csb-uri{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--teal)}
+    .csb-count{font-size:0.7rem;color:var(--ink-light);letter-spacing:0.04em}
+    .csb-scheme-label{font-size:0.92rem;color:var(--ink-mid);font-style:italic;margin-bottom:0.2rem}
+    .csb-description{font-size:0.82rem;color:var(--ink-light);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--teal-pale)}
+    .concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.45rem}
+    .concept-card{padding:0.55rem 0.75rem;background:var(--teal-pale);border:1px solid rgba(31,92,82,0.18);
+      border-radius:var(--radius-sm);transition:background var(--transition),border-color var(--transition);cursor:default}
+    .concept-card:hover{background:rgba(31,92,82,0.14);border-color:var(--teal)}
+    .cc-label{font-size:0.85rem;color:var(--ink);display:block;line-height:1.3;margin-bottom:0.2rem}
+    .cc-id{font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--teal-mid);display:block}
+
+    .sidebar{padding:1.5rem 1.25rem;position:sticky;top:52px;max-height:calc(100vh - 52px);overflow-y:auto}
+    .sidebar-panel{margin-bottom:1.75rem}
+    .sidebar-panel-title{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      padding-bottom:0.5rem;border-bottom:1px solid var(--border);margin-bottom:0.85rem}
+    .active-class-card{padding:0.75rem 0.85rem;background:var(--gold-pale);border:1px solid var(--gold);
+      border-radius:var(--radius-sm);margin-bottom:0.85rem}
+    .acc-uri{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold-mid);display:block;margin-bottom:0.15rem}
+    .acc-label{font-size:0.9rem;color:var(--ink);font-weight:500}
+    .connection-card{padding:0.6rem 0.75rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      margin-bottom:0.45rem;background:white;text-decoration:none;display:block;
+      transition:border-color var(--transition),box-shadow var(--transition)}
+    .connection-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .cc-top{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem}
+    .cc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .cc-module-name{font-size:0.85rem;color:var(--ink);font-weight:500}
+    .cc-props{font-size:0.72rem;color:var(--ink-light);display:block;margin-top:0.1rem}
+    .cc-via{font-size:0.67rem;color:var(--ink-light);font-style:italic;margin-top:0.1rem;display:block}
+    .sidebar-dynamic{transition:opacity 140ms ease}
+    .sidebar-dynamic.fading{opacity:0}
+    .no-connections{font-size:0.78rem;color:var(--border-mid);font-style:italic}
+    .share-buttons{display:flex;gap:0.5rem}
+    .share-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.55rem 0.25rem;
+      background:var(--paper-warm);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
+      font-family:'EB Garamond',serif;font-size:0.68rem;color:var(--ink-light);text-decoration:none;
+      letter-spacing:0.04em;text-transform:uppercase;transition:background var(--transition),border-color var(--transition),color var(--transition)}
+    .share-btn:hover{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
+    .share-btn svg{width:17px;height:17px}
+    .share-btn.copied-state{background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
+    .sidebar-citation{background:var(--paper-warm);border:1px solid var(--border-mid);border-radius:var(--radius-sm);padding:0.85rem}
+    .sidebar-citation .cite-text{font-size:0.77rem;line-height:1.5;color:var(--ink-mid);font-style:italic;margin-bottom:0.6rem}
+    .btn-copy-sm{display:inline-flex;align-items:center;gap:0.35rem;padding:0.42rem 0.85rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;font-size:0.8rem;
+      cursor:pointer;transition:background var(--transition);width:100%;justify-content:center}
+    .btn-copy-sm:hover{background:var(--ink)} .btn-copy-sm.copied{background:var(--teal)}
+    .format-links{display:flex;flex-direction:column;gap:0.3rem}
+    .format-link{display:flex;align-items:center;justify-content:space-between;padding:0.38rem 0.6rem;
+      border-radius:var(--radius-sm);border:1px solid var(--border);background:white;font-family:'JetBrains Mono',monospace;
+      font-size:0.73rem;color:var(--gold);text-decoration:none;transition:background var(--transition),border-color var(--transition)}
+    .format-link:hover{background:var(--gold-pale);border-color:var(--gold)}
+    .format-arrow{color:var(--border-mid)}
+
+    footer{background:var(--ink);color:var(--paper);margin-top:auto}
+    .footer-inner{max-width:1280px;margin:0 auto;padding:2.5rem 2rem;
+      display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:2rem;align-items:start}
+    .footer-brand .fw{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-weight:300;
+      letter-spacing:0.04em;color:var(--paper);display:block;margin-bottom:0.5rem}
+    .footer-brand .fw span{color:var(--gold-light)}
+    .footer-brand p{font-size:0.8rem;color:var(--border-mid);line-height:1.5;max-width:220px}
+    .footer-col h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .footer-col ul{list-style:none}
+    .footer-col li{margin-bottom:0.3rem}
+    .footer-col a{font-size:0.82rem;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .footer-col a:hover{color:var(--gold-light)}
+    .footer-funders{display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end}
+    .footer-funders h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);text-align:right;width:100%}
+    .funder-slot{width:140px;height:44px;border:1px dashed rgba(255,255,255,0.15);border-radius:var(--radius-sm);
+      display:flex;align-items:center;justify-content:center;font-size:0.67rem;letter-spacing:0.06em;
+      text-transform:uppercase;color:rgba(255,255,255,0.2)}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);max-width:1280px;margin:0 auto;padding:1rem 2rem;
+      display:flex;justify-content:space-between;align-items:center}
+    .footer-bottom p{font-size:0.75rem;color:rgba(255,255,255,0.3)}
+    .footer-bottom a{color:rgba(255,255,255,0.3);text-decoration:none}
+    .footer-bottom a:hover{color:var(--gold-light)}
+    .version-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:0.2em 0.5em;
+      border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);color:rgba(255,255,255,0.3)}
+</style>
 </head>
 <body>
-
-<div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="index.html">Vocabularies</a>
-    <a href="https://ontology.irokosociety.org">ontology.irokosociety.org ↗</a>
-    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+  <nav class="site-nav">
+    <a class="wordmark" href="/">Iroko Framework <span>Ontology</span></a>
+    <ul class="nav-links">
+      <li><a href="/modules">Modules</a></li>
+      <li><a href="/classes">Classes</a></li>
+      <li><a href="/properties">Properties</a></li>
+      <li><a href="/concepts">Concepts</a></li>
+      <li><a href="/whitepaper">Whitepaper</a></li>
+    </ul>
   </nav>
-</div>
 
-<div class="page-wrap">
-
-  <p class="breadcrumb">
-    <a href="../index.html">Iroko Framework</a>
-    <span>/</span>
-    <a href="index.html">Vocabularies</a>
-    <span>/</span>
-    Marca Module — Divination Systems
-  </p>
-
-  <header class="vocab-header">
-    <div class="vocab-header-logo">
-      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
-    </div>
-    <div>
-      <span class="module-tag tag-divination">Divination</span>
-      <h1>Marca Module — Divination Systems</h1>
-      <p class="subtitle">Sacred signs, reading records, and verse corpora</p>
-      <div class="header-meta">
-        <span class="meta-pill">marca:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-marca#</span>
-        <span class="meta-pill">v2.0.0</span>
-        <span class="meta-pill"><a href="iroko-marca.ttl" style="color:inherit;">Download TTL ↓</a></span>
-        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
-      </div>
+  <header class="page-header">
+    <div class="breadcrumb"><a href="/">Iroko Framework</a> › <a href="/modules">Modules</a> › Marca Module</div>
+    <h1>Marca Module <span class="module-tag">Domain Layer</span></h1>
+    <div class="module-desc">Domain module.</div>
+    <div class="module-stats">
+      <div class="stat"><span class="number">5</span><span class="label">Classes</span></div>
+      <div class="stat"><span class="number">25</span><span class="label">Properties</span></div>
+      <div class="stat"><span class="number">4</span><span class="label">Concept Schemes</span></div>
+      <div class="stat"><span class="number">32</span><span class="label">Concepts</span></div>
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting divination systems, sacred signs, reading records, and verse corpora across Afro-Atlantic traditions. Covers Ifá (256 odù), Dilogún, Fá, Obi, Chamalongo, and analogous systems. Sign names and system typologies are public; verse texts, reading details, and prescribed works are restricted at the property level. Use with iroko-authority to document who may perform or transmit readings; iroko-narrative for verse corpus transmission chains and patakí variant relationships.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">25</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">32</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="layout">
+    <main class="main-content">
+
+      <div class="zone-label">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="class-card" id="card-DivinationCorpus" onclick="activateClass('DivinationCorpus')"><span class="card-uri">iroko:DivinationCorpus</span><span class="card-label">Divination Corpus</span></div>
+<div class="class-card" id="card-DivinationReading" onclick="activateClass('DivinationReading')"><span class="card-uri">iroko:DivinationReading</span><span class="card-label">Divination Reading</span></div>
+<div class="class-card" id="card-DivinationSign" onclick="activateClass('DivinationSign')"><span class="card-uri">iroko:DivinationSign</span><span class="card-label">Divination Sign</span></div>
+<div class="class-card" id="card-DivinationSystem" onclick="activateClass('DivinationSystem')"><span class="card-uri">iroko:DivinationSystem</span><span class="card-label">Divination System</span></div>
+<div class="class-card" id="card-DivinationVerse" onclick="activateClass('DivinationVerse')"><span class="card-uri">iroko:DivinationVerse</span><span class="card-label">Divination Verse</span></div>
+      </div>
+
+      <div class="zone-label" id="zone2-label">
+        Properties
+        <span class="zone-hint" id="zone2-hint">Select a class above to explore its properties</span>
+      </div>
+      <div class="zone2-empty" id="zone2-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        No class selected. Click any class card above to see its incoming and outgoing properties.
+      </div>
+
+      <div class="property-panel" id="property-panel">
+        <div class="panel-header">
+          <div><div class="ph-uri" id="panel-uri"></div><div class="ph-label" id="panel-label"></div></div>
+          <button class="panel-close" onclick="deactivateClass()">✕</button>
+        </div>
+        <div class="panel-definition" id="panel-definition"></div>
+        <div class="panel-body">
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">←</span> Incoming <span class="col-sublabel">(this class as range)</span></div>
+            <div id="incoming-props"></div>
+          </div>
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">→</span> Outgoing <span class="col-sublabel">(this class as domain)</span></div>
+            <div id="outgoing-props"></div>
+          </div>
+        </div>
+        <div class="panel-citation">
+          <div class="cite-text" id="panel-cite-text"></div>
+          <button class="btn-copy" id="panel-cite-btn" onclick="copyPanelCitation(this)">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+
+      
+      <div class="zone-label">Controlled Vocabulary</div>
+      <div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:CastingMediumScheme</span><span class="csb-count">7 concepts</span></div><div class="csb-scheme-label">Casting Media</div><div class="concept-grid"><div class="concept-card" title="Prepared bones or discs used as an alternative casting medium for Chamalongo. The specific preparation is lineage-specific and restricted."><span class="cc-label">Chamalongo (prepared bones/discs)</span><span class="cc-id">iroko:medium-chamalongo-bone</span></div><div class="concept-card" title="Four coconut shell halves prepared and consecrated for Chamalongo divination in Palo traditions."><span class="cc-label">Chamalongo (coconut shells)</span><span class="cc-id">iroko:medium-chamalongo-coconut</span></div><div class="concept-card" title="Sixteen cowrie shells used in Dilogún divination by authorized Olorisha."><span class="cc-label">Owó Dilogún (cowrie shells)</span><span class="cc-id">iroko:medium-cowrie</span></div><div class="concept-card" title="Sacred palm nuts (ikin Ifá, obi Ifá) used by Babalawos for Ifá divination. Considered the highest-authority casting medium in Lucumí/Yorùbá tradition."><span class="cc-label">Ikin (palm nuts)</span><span class="cc-id">iroko:medium-ikin</span></div><div class="concept-card" title="Coconut divided into four pieces for Obi divination."><span class="cc-label">Obi Abata (coconut)</span><span class="cc-id">iroko:medium-obi-coconut</span></div><div class="concept-card" title="Kola nut divided into lobes for Obi divination. More traditional form in continental Yorùbá practice."><span class="cc-label">Obi Kola (kola nut)</span><span class="cc-id">iroko:medium-obi-kola</span></div><div class="concept-card" title="Eight-piece divining chain of alternating concave and convex seed halves used by Babalawos as a faster alternative to palm nut casting in Ifá."><span class="cc-label">Okuele / Ekuele (divining chain)</span><span class="cc-id">iroko:medium-okuele</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:DivinationSystemScheme</span><span class="csb-count">8 concepts</span></div><div class="csb-scheme-label">Divination System Types</div><div class="concept-grid"><div class="concept-card" title="Kongo-derived divination using four coconut shell halves or prepared bones/discs. Generates 5 configurations. Used in Palo Monte and related Bantu-Atlantic traditions. Practiced by authorized Paleros (Tatas and Yayas)."><span class="cc-label">Chamalongo</span><span class="cc-id">iroko:system-chamalongo</span></div><div class="concept-card" title="Card-based or object-based divination associated with Espiritismo and Haitian Vodou mesa blanca practice. Distinct from African-derived binary casting systems."><span class="cc-label">Derlé</span><span class="cc-id">iroko:system-derle</span></div><div class="concept-card" title="Cowrie shell divination using 16 shells (owó dilogún) to generate 16 principal signs. Practiced by authorized Olorisha. Used in Lucumí/Ocha, Candomblé, and related traditions. Shares sign names with Ifá odù but distinct system, corpus, and authority structure."><span class="cc-label">Dilogún</span><span class="cc-id">iroko:system-dilogún</span></div><div class="concept-card" title="The Fon and Ewe divination system cognate to Ifá, using palm nuts or a divining chain to generate du figures. Practiced by Bokonon (male diviners). The du corpus is distinct from but related to Yorùbá odù. Primary in Benin, Togo, and Haitian Vodou communities with Rada/Fon lineages."><span class="cc-label">Fá</span><span class="cc-id">iroko:system-fa</span></div><div class="concept-card" title="The Yorùbá-derived divination system using ikin (palm nuts) or okuele (divining chain) to generate 256 binary odù configurations. Practiced by authorized Babalawos. Versions found in Lucumí (Cuba), Candomblé de Ifá (Brazil), Trinidadian Orisha, and continental Yorùbá communities."><span class="cc-label">Ifá</span><span class="cc-id">iroko:system-ifa</span></div><div class="concept-card" title="The extended Ifá reading performed for an individual at initiation (kariosha, itá de kariosha) or as a life-path consultation. Typically multi-sign, conducted by a Babalawo, and interpreted by Olorisha elders. The itá record is among the most sensitive personal documents in the tradition."><span class="cc-label">Itá</span><span class="cc-id">iroko:system-ita</span></div><div class="concept-card" title="Four-piece binary divination using coconut (obi abata) or kola nut (obi kola). Generates 5 configurations from the binary state of four pieces. Used across Lucumí, Candomblé, and Yorùbá traditions for confirmation and yes/no queries. Less elaborate than Ifá or Dilogún but widely practiced."><span class="cc-label">Obi</span><span class="cc-id">iroko:system-obi</span></div><div class="concept-card" title="Mirror or reflective-surface divination used in Palo Monte for spiritual vision and consultation. Complementary to but distinct from Chamalongo; requires specific nganga authorization."><span class="cc-label">Vititi Nfinda</span><span class="cc-id">iroko:system-vititi-nfinda</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:EboTypeScheme</span><span class="csb-count">8 concepts</span></div><div class="csb-scheme-label">Prescribed Work Types</div><div class="concept-grid"><div class="concept-card" title="A behavioral abstention or avoidance prescribed by the reading: specific foods, colors, locations, or activities to avoid for a defined period."><span class="cc-label">Abstention / Prohibition</span><span class="cc-id">iroko:ebo-abstention</span></div><div class="concept-card" title="A food or vegetable offering (without blood) to an Orisha. Accessible outside of full ebó; considered the first step in propitiation."><span class="cc-label">Adimu</span><span class="cc-id">iroko:ebo-adimú</span></div><div class="concept-card" title="A prescribed ceremony (initiation, reception of Orisha, specific feast) indicated by the reading as necessary."><span class="cc-label">Full ceremony</span><span class="cc-id">iroko:ebo-ceremony</span></div><div class="concept-card" title="A full-body or environmental cleansing (despojo, limpieza) using herbs, waters, or other materials prescribed by the reading."><span class="cc-label">Spiritual cleansing</span><span class="cc-id">iroko:ebo-cleansing</span></div><div class="concept-card" title="A prescribed offering to the Orisha or Ifá indicated by the reading. Includes specific materials, animals, foods, or objects. Operational details are initiated-only."><span class="cc-label">Ebó</span><span class="cc-id">iroko:ebo-ebo</span></div><div class="concept-card" title="A cooling or pacifying ceremony, often performed after death, severe osogbo, or to address Egun. Requires specific authority and materials."><span class="cc-label">Itutu / Etutu</span><span class="cc-id">iroko:ebo-etutu</span></div><div class="concept-card" title="A cleansing and feeding of the head (ori/eleda) using specific cool and white materials. One of the most commonly prescribed works across Lucumí and related traditions."><span class="cc-label">Head Rogation</span><span class="cc-id">iroko:ebo-rogacion</span></div><div class="concept-card" title="Ritual sacrifice of an animal specified by the reading. Species, preparation, and allocation are operational details held at initiated-only access."><span class="cc-label">Animal sacrifice</span><span class="cc-id">iroko:ebo-sacrifice</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:OutcomeTypeScheme</span><span class="csb-count">9 concepts</span></div><div class="csb-scheme-label">Divination Outcome Types</div><div class="concept-grid"><div class="concept-card" title="A sign comes with positive polarity. The indicated blessings are accessible. Prescribed works (ebó) confirm and open the path."><span class="cc-label">Iré (positive)</span><span class="cc-id">iroko:outcome-ire</span></div><div class="concept-card" title="Iré of long life. The sign comes with the blessing of longevity."><span class="cc-label">Iré Aiku (long life)</span><span class="cc-id">iroko:outcome-ire-aiku</span></div><div class="concept-card" title="Iré of victory or achievement. The sign comes with the blessing of success in endeavor."><span class="cc-label">Iré Aré (victory)</span><span class="cc-id">iroko:outcome-ire-are</span></div><div class="concept-card" title="Iré of children or generativity. The sign comes with the blessing of progeny or creative fruitfulness."><span class="cc-label">Iré Omo (children)</span><span class="cc-id">iroko:outcome-ire-omo</span></div><div class="concept-card" title="Iré of prosperity. The sign comes with the blessing of material abundance."><span class="cc-label">Iré Owó (wealth)</span><span class="cc-id">iroko:outcome-ire-owo</span></div><div class="concept-card" title="A sign comes with negative polarity. The indicated difficulties or blockages are present. Prescribed works (ebó) are required to avert or mitigate."><span class="cc-label">Osogbo (negative)</span><span class="cc-id">iroko:outcome-osogbo</span></div><div class="concept-card" title="Osogbo of illness or physical affliction."><span class="cc-label">Osogbo Arun (illness)</span><span class="cc-id">iroko:outcome-osogbo-arun</span></div><div class="concept-card" title="Osogbo of death or severe loss. The most serious category; requires immediate and specific ebó."><span class="cc-label">Osogbo Ikú (death)</span><span class="cc-id">iroko:outcome-osogbo-iku</span></div><div class="concept-card" title="Osogbo of enemies or opposition. The negative force indicated involves interpersonal conflict or hostility."><span class="cc-label">Osogbo Ojú (enmity)</span><span class="cc-id">iroko:outcome-osogbo-ojú</span></div></div></div>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title" id="sb-title">Connected modules</div>
+        <div class="sidebar-dynamic" id="sb-connections"></div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Share</div>
+        <div class="share-buttons">
+          <a class="share-btn" href="#" onclick="shareEmail(event)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1.5"/><polyline points="2,4 10,12 18,4"/></svg>
+            Email
+          </a>
+          <a class="share-btn" href="#" onclick="window.print();return false;">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="6"/><rect x="2" y="8" width="16" height="8" rx="1"/><rect x="5" y="12" width="10" height="5"/><circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
+            Print
+          </a>
+          <button class="share-btn" id="share-link-btn" onclick="copyPageLink(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12a4 4 0 005.66 0l2-2A4 4 0 009.9 4.24l-1 1"/><path d="M12 8a4 4 0 00-5.66 0l-2 2A4 4 0 006.1 15.76l1-1"/></svg>
+            Link
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Cite the Marca Module</div>
+        <div class="sidebar-citation">
+          <div class="cite-text">"Marca Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. <em>ontology.irokosociety.org/marca</em></div>
+          <button class="btn-copy-sm" onclick="copyModuleCitation(this)">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Other formats</div>
+        <div class="format-links">
+          <a class="format-link" href="#">RDF/Turtle <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">JSON-LD <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">RDF/XML <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">N-Triples <span class="format-arrow">↗</span></a>
+        </div>
+      </div>
+    </aside>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">5 classes</span>
-    </div>
-    <div class="class-card" id="cls-DivinationCorpus">
-      <div class="class-name">DivinationCorpus</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination Corpus</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">LineageKnowledgeGraph</span></div>
-      <p class="class-def">The complete body of verses, prescriptions, proverbs, and interpretive commentary associated with a divination system as transmitted through a specific lineage. Distinct from the system itself (which is the abstract framework) and from individual verses (which are its units). A corpus is lineage-specific: Ifá lineages in Havana may hold different verse inventories than those in Lagos or Trinidad, each representing a distinct corpus.</p>
-    </div>
-    <div class="class-card" id="cls-DivinationReading">
-      <div class="class-name">DivinationReading</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination Reading</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A specific divination event performed for a recipient by an authorized diviner. Records the sign(s) that appeared, the outcome polarity (iré/osogbo), prescribed works, and the entities indicated. Reading records are among the most sensitive data in the framework: recipient identity is no-access; the date and officiant are community-restricted; the prescribed work and entity are initiated-only.</p>
-    </div>
-    <div class="class-card" id="cls-DivinationSign">
-      <div class="class-name">DivinationSign</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination Sign</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sign</span></div>
-      <p class="class-def">A discrete sign, figure, or configuration within a divination system. In Ifá: one of 256 odù (each identified by primary + secondary throw). In Dilogún: one of 16 principal signs (odù Dilogún, omieros, and their paths). In Fá: du figures. In Chamalongo: one of 5 configurations. Each sign has an associated corpus of verses, prescriptions, and spirit-entity relationships. The sign&#x27;s name and number are public; verses and prescribed works are restricted.</p>
-    </div>
-    <div class="class-card" id="cls-DivinationSystem">
-      <div class="class-name">DivinationSystem</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination System</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A tradition-specific divination system consisting of a defined corpus of signs, casting methods, and interpretive frameworks. Examples: Ifá (256 odù, palm nut or chain casting), Dilogún (16 principal signs, cowrie casting), Fá (Fon parallel to Ifá), Obi (4-part binary coconut or kola reading), Chamalongo (Palo Kongo coconut/bone divination). A DivinationSystem belongs to one or more traditions and may have regional variants.</p>
-    </div>
-    <div class="class-card" id="cls-DivinationVerse">
-      <div class="class-name">DivinationVerse</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Divination Verse</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A single verse, story, or pataki within a sign&#x27;s corpus. In Ifá: an ese Ifá. In Dilogún: a rezo or pataki. In Fá: a hwenoho. Verses carry narrative, ethical, prescriptive, and esoteric content. They are the primary means by which divination knowledge is transmitted and applied. Verse text is initiated-elder access; the existence of a verse corpus for a sign is public.</p>
-    </div>
-  </div>
-
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">25 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-authorizedPractitioner">
-          <td><span class="prop-name">authorizedPractitioner</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authorized practitioner type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination System → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The authority title required to cast this system. In Ifá: Babalawo. In Dilogún: Olorisha with dilogún authorization. In Fá: Bokonon. Range: iroko:AuthorityTitleScheme.</td>
-        </tr>
-        <tr id="prop-castingMedium">
-          <td><span class="prop-name">castingMedium</span><br><span style="font-size:.75rem;color:var(--ink-soft);">casting medium</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination System → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The physical medium used to cast or generate the sign in this system. Examples: ikin (palm nuts), okuele/ekuele (divining chain), owó dilogún (cowries), obi (coconut), obi kola (kola nut), chamalongo (coconut shells or bones). Range: iroko:CastingMediumScheme.</td>
-        </tr>
-        <tr id="prop-genderRestriction">
-          <td><span class="prop-name">genderRestriction</span><br><span style="font-size:.75rem;color:var(--ink-soft);">gender restriction</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Divination System → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Documents tradition-specific restrictions on who may cast this system, expressed as a free-text note. For Ifá in the Lucumí tradition: historically restricted to initiated men (Babalawos); contested in some lineages and Afro-Atlantic communities. This property records the documented practice of the lineage being described, not a normative judgment.</td>
-        </tr>
-        <tr id="prop-governingEntity">
-          <td><span class="prop-name">governingEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">governing entity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Sign → SpiritualEntity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The spirit or deity principally associated with this sign across the tradition. In Ifá: Ogbe Meji is governed by Obatala; Oshé Meji by Oshun. This is a tradition-level association, not reading-specific. Range: iroko:SpiritualEntity.</td>
-        </tr>
-        <tr id="prop-hasCorpus">
-          <td><span class="prop-name">hasCorpus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has corpus</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination System → Divination Corpus</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a DivinationSystem to its DivinationCorpus. The corpus is the complete body of verses, prescriptions, and commentary associated with this system within a specific lineage. A system may have multiple corpora across lineages — each lineage&#x27;s corpus is a separate DivinationCorpus instance (subclass of LineageKnowledgeGraph). Access: public-unrestricted — the existence of a corpus associated with a system is public knowledge; the verse content within the corpus is governed at elder-initiated level on the DivinationVerse instances themselves.</td>
-        </tr>
-        <tr id="prop-prescribedEntity">
-          <td><span class="prop-name">prescribedEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">prescribed entity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Reading → SpiritualEntity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The spiritual entity indicated by the reading as requiring propitiation, attention, or ceremony. Range: iroko:SpiritualEntity.</td>
-        </tr>
-        <tr id="prop-prescribedWork">
-          <td><span class="prop-name">prescribedWork</span><br><span style="font-size:.75rem;color:var(--ink-soft);">prescribed work</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Reading → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The ebó, rogation, ceremony, or spiritual work prescribed as a result of this reading. Range: iroko:EboTypeScheme. Among the most sensitive data: links divination outcome to specific prescribed action.</td>
-        </tr>
-        <tr id="prop-primarySign">
-          <td><span class="prop-name">primarySign</span><br><span style="font-size:.75rem;color:var(--ink-soft);">primary sign</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Sign → Divination Sign</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">In composite systems (Ifá), the sign generated by the first cast. The primary odù of a compound figure.</td>
-        </tr>
-        <tr id="prop-readingDate">
-          <td><span class="prop-name">readingDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Divination Reading → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">readingDate</td>
-        </tr>
-        <tr id="prop-readingNotes">
-          <td><span class="prop-name">readingNotes</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading notes</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Divination Reading → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
-          <td class="prop-desc">Free-text notes from the diviner. Elder-only: may contain specific operational detail.</td>
-        </tr>
-        <tr id="prop-readingOfficiant">
-          <td><span class="prop-name">readingOfficiant</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading officiant</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Reading → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The diviner who performed the reading. Range: foaf:Person. Community-restricted to protect practitioner privacy unless the officiant has consented to public attribution.</td>
-        </tr>
-        <tr id="prop-readingOutcome">
-          <td><span class="prop-name">readingOutcome</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading outcome</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Reading → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Whether the sign came iré (positive polarity) or osogbo (negative polarity) in this reading. Range: iroko:OutcomeTypeScheme.</td>
-        </tr>
-        <tr id="prop-readingRecipient">
-          <td><span class="prop-name">readingRecipient</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reading recipient</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Reading → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
-          <td class="prop-desc">The person for whom the reading was performed. No-access: reading recipients have a reasonable expectation of confidentiality. Stored internally for provenance tracking only.</td>
-        </tr>
-        <tr id="prop-secondarySign">
-          <td><span class="prop-name">secondarySign</span><br><span style="font-size:.75rem;color:var(--ink-soft);">secondary sign</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Sign → Divination Sign</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">In composite systems (Ifá), the sign generated by the second cast. Together with primarySign, identifies the full odù compound.</td>
-        </tr>
-        <tr id="prop-signNumber">
-          <td><span class="prop-name">signNumber</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign number</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Divination Sign → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The numeric identifier for this sign within its system. For Dilogún: 1–16. For Ifá: the composite index of primary (1–16) and secondary (1–16) throw.</td>
-        </tr>
-        <tr id="prop-signProverb">
-          <td><span class="prop-name">signProverb</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign proverb</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Divination Sign → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The principal proverb (owe) associated with this sign. Proverbs are often publicly known and shared in scholarly literature. Language-tagged.</td>
-        </tr>
-        <tr id="prop-signReceived">
-          <td><span class="prop-name">signReceived</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign received</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Reading → Divination Sign</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The divination sign(s) that appeared in this reading.</td>
-        </tr>
-        <tr id="prop-signTaboo">
-          <td><span class="prop-name">signTaboo</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign taboo</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Divination Sign → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">A prohibition (eewo) traditionally associated with this sign. Taboos relate to foods, behaviors, materials, or associations that persons born under this sign or receiving this sign in reading should avoid.</td>
-        </tr>
-        <tr id="prop-signVerseCorpus">
-          <td><span class="prop-name">signVerseCorpus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse corpus</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Sign → Divination Corpus</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
-          <td class="prop-desc">The set of DivinationVerse instances in a specific lineage&#x27;s corpus for this sign. The existence of a corpus is public; the verse content is initiated-elder only.</td>
-        </tr>
-        <tr id="prop-verseLineage">
-          <td><span class="prop-name">verseLineage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse lineage</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Verse → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The ile or lineage corpus from which this verse version derives. Different lineages may hold different versions of verses for the same sign.</td>
-        </tr>
-        <tr id="prop-verseSign">
-          <td><span class="prop-name">verseSign</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse sign</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Verse → Divination Sign</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The divination sign to which this verse belongs.</td>
-        </tr>
-        <tr id="prop-verseSource">
-          <td><span class="prop-name">verseSource</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse source</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Divination Verse → DocumentaryEvidence</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Provenance of this verse record: oral transmission, field recording, published collection. Range: iroko:DocumentaryEvidence.</td>
-        </tr>
-        <tr id="prop-verseText">
-          <td><span class="prop-name">verseText</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse text</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Divination Verse → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
-          <td class="prop-desc">The full text of the verse. Elder-only: ese Ifá and analogous verses are among the most sacred and operationally powerful materials in the tradition. Their disclosure outside authorized transmission is a serious breach.</td>
-        </tr>
-        <tr id="prop-verseTheme">
-          <td><span class="prop-name">verseTheme</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse theme</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Divination Verse → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Thematic summary of the verse&#x27;s principal narrative or prescription, without reproducing the text. Initiated-only.</td>
-        </tr>
-        <tr id="prop-verseTitle">
-          <td><span class="prop-name">verseTitle</span><br><span style="font-size:.75rem;color:var(--ink-soft);">verse title</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Divination Verse → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The title or opening line of the verse as used within the lineage. Community-restricted: verse titles alone can partially disclose operational content.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">4 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Casting Media</span>
-        <span class="scheme-count">7 concepts</span>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="fw">Iroko <span>Historical Society</span></span>
+        <p>Postcustodial cultural heritage complex for Afro-Atlantic sacred knowledge systems.</p>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">CastingMediumScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-medium-chamalongo-coconut">
-          <div class="concept-label">Chamalongo (coconut shells)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-chamalongo-coconut</div>
-          <p class="concept-def">Four coconut shell halves prepared and consecrated for Chamalongo divination in Palo traditions.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-chamalongo-bone">
-          <div class="concept-label">Chamalongo (prepared bones/discs)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-chamalongo-bone</div>
-          <p class="concept-def">Prepared bones or discs used as an alternative casting medium for Chamalongo. The specific preparation is lineage-specific and restricted.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-ikin">
-          <div class="concept-label">Ikin (palm nuts)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-ikin</div>
-          <p class="concept-def">Sacred palm nuts (ikin Ifá, obi Ifá) used by Babalawos for Ifá divination. Considered the highest-authority casting medium in Lucumí/Yorùbá tradition.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-obi-coconut">
-          <div class="concept-label">Obi Abata (coconut)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-obi-coconut</div>
-          <p class="concept-def">Coconut divided into four pieces for Obi divination.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-obi-kola">
-          <div class="concept-label">Obi Kola (kola nut)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-obi-kola</div>
-          <p class="concept-def">Kola nut divided into lobes for Obi divination. More traditional form in continental Yorùbá practice.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-okuele">
-          <div class="concept-label">Okuele / Ekuele (divining chain)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-okuele</div>
-          <p class="concept-def">Eight-piece divining chain of alternating concave and convex seed halves used by Babalawos as a faster alternative to palm nut casting in Ifá.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-cowrie">
-          <div class="concept-label">Owó Dilogún (cowrie shells)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-cowrie</div>
-          <p class="concept-def">Sixteen cowrie shells used in Dilogún divination by authorized Olorisha.</p>
-        </div>
+      <div class="footer-col">
+        <h4>Ontology</h4>
+        <ul>
+          <li><a href="#">Modules</a></li>
+          <li><a href="#">Classes</a></li>
+          <li><a href="#">Properties</a></li>
+          <li><a href="#">Concept Schemes</a></li>
+          <li><a href="#">Whitepaper</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Institution</h4>
+        <ul>
+          <li><a href="#">About IHS</a></li>
+          <li><a href="#">Governance</a></li>
+          <li><a href="#">Access Policy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-funders">
+        <h4>Supported by</h4>
+        <div class="funder-slot">Funder logo</div>
+        <div class="funder-slot">Funder logo</div>
       </div>
     </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Divination Outcome Types</span>
-        <span class="scheme-count">9 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">OutcomeTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-outcome-ire">
-          <div class="concept-label">Iré (positive)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire</div>
-          <p class="concept-def">A sign comes with positive polarity. The indicated blessings are accessible. Prescribed works (ebó) confirm and open the path.</p>
-        </div>
-        <div class="concept-item" id="concept-outcome-ire-aiku">
-          <div class="concept-label">Iré Aiku (long life)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire-aiku</div>
-          <p class="concept-def">Iré of long life. The sign comes with the blessing of longevity.</p>
-        </div>
-        <div class="concept-item" id="concept-outcome-ire-are">
-          <div class="concept-label">Iré Aré (victory)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire-are</div>
-          <p class="concept-def">Iré of victory or achievement. The sign comes with the blessing of success in endeavor.</p>
-        </div>
-        <div class="concept-item" id="concept-outcome-ire-omo">
-          <div class="concept-label">Iré Omo (children)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire-omo</div>
-          <p class="concept-def">Iré of children or generativity. The sign comes with the blessing of progeny or creative fruitfulness.</p>
-        </div>
-        <div class="concept-item" id="concept-outcome-ire-owo">
-          <div class="concept-label">Iré Owó (wealth)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-ire-owo</div>
-          <p class="concept-def">Iré of prosperity. The sign comes with the blessing of material abundance.</p>
-        </div>
-        <div class="concept-item" id="concept-outcome-osogbo">
-          <div class="concept-label">Osogbo (negative)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-osogbo</div>
-          <p class="concept-def">A sign comes with negative polarity. The indicated difficulties or blockages are present. Prescribed works (ebó) are required to avert or mitigate.</p>
-        </div>
-        <div class="concept-item" id="concept-outcome-osogbo-arun">
-          <div class="concept-label">Osogbo Arun (illness)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-osogbo-arun</div>
-          <p class="concept-def">Osogbo of illness or physical affliction.</p>
-        </div>
-        <div class="concept-item" id="concept-outcome-osogbo-iku">
-          <div class="concept-label">Osogbo Ikú (death)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-osogbo-iku</div>
-          <p class="concept-def">Osogbo of death or severe loss. The most serious category; requires immediate and specific ebó.</p>
-        </div>
-        <div class="concept-item" id="concept-outcome-osogbo-ojú">
-          <div class="concept-label">Osogbo Ojú (enmity)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">outcome-osogbo-ojú</div>
-          <p class="concept-def">Osogbo of enemies or opposition. The negative force indicated involves interpersonal conflict or hostility.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Divination System Types</span>
-        <span class="scheme-count">8 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">DivinationSystemScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-system-chamalongo">
-          <div class="concept-label">Chamalongo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-chamalongo</div>
-          <p class="concept-def">Kongo-derived divination using four coconut shell halves or prepared bones/discs. Generates 5 configurations. Used in Palo Monte and related Bantu-Atlantic traditions. Practiced by authorized Paleros (Tatas and Yayas).</p>
-        </div>
-        <div class="concept-item" id="concept-system-derle">
-          <div class="concept-label">Derlé</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-derle</div>
-          <p class="concept-def">Card-based or object-based divination associated with Espiritismo and Haitian Vodou mesa blanca practice. Distinct from African-derived binary casting systems.</p>
-        </div>
-        <div class="concept-item" id="concept-system-dilogún">
-          <div class="concept-label">Dilogún</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-dilogún</div>
-          <p class="concept-def">Cowrie shell divination using 16 shells (owó dilogún) to generate 16 principal signs. Practiced by authorized Olorisha. Used in Lucumí/Ocha, Candomblé, and related traditions. Shares sign names with Ifá odù but distinct system, corpus, and authority structure.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Lineage-specific variations exist in casting protocol, sign count, and authority requirements.</p>
-        </div>
-        <div class="concept-item" id="concept-system-fa">
-          <div class="concept-label">Fá</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-fa</div>
-          <p class="concept-def">The Fon and Ewe divination system cognate to Ifá, using palm nuts or a divining chain to generate du figures. Practiced by Bokonon (male diviners). The du corpus is distinct from but related to Yorùbá odù. Primary in Benin, Togo, and Haitian Vodou communities with Rada/Fon lineages.</p>
-        </div>
-        <div class="concept-item" id="concept-system-ifa">
-          <div class="concept-label">Ifá</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-ifa</div>
-          <p class="concept-def">The Yorùbá-derived divination system using ikin (palm nuts) or okuele (divining chain) to generate 256 binary odù configurations. Practiced by authorized Babalawos. Versions found in Lucumí (Cuba), Candomblé de Ifá (Brazil), Trinidadian Orisha, and continental Yorùbá communities.</p>
-        </div>
-        <div class="concept-item" id="concept-system-ita">
-          <div class="concept-label">Itá</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-ita</div>
-          <p class="concept-def">The extended Ifá reading performed for an individual at initiation (kariosha, itá de kariosha) or as a life-path consultation. Typically multi-sign, conducted by a Babalawo, and interpreted by Olorisha elders. The itá record is among the most sensitive personal documents in the tradition.</p>
-        </div>
-        <div class="concept-item" id="concept-system-obi">
-          <div class="concept-label">Obi</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-obi</div>
-          <p class="concept-def">Four-piece binary divination using coconut (obi abata) or kola nut (obi kola). Generates 5 configurations from the binary state of four pieces. Used across Lucumí, Candomblé, and Yorùbá traditions for confirmation and yes/no queries. Less elaborate than Ifá or Dilogún but widely practiced.</p>
-        </div>
-        <div class="concept-item" id="concept-system-vititi-nfinda">
-          <div class="concept-label">Vititi Nfinda</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-vititi-nfinda</div>
-          <p class="concept-def">Mirror or reflective-surface divination used in Palo Monte for spiritual vision and consultation. Complementary to but distinct from Chamalongo; requires specific nganga authorization.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Prescribed Work Types</span>
-        <span class="scheme-count">8 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">EboTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-ebo-abstention">
-          <div class="concept-label">Abstention / Prohibition</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-abstention</div>
-          <p class="concept-def">A behavioral abstention or avoidance prescribed by the reading: specific foods, colors, locations, or activities to avoid for a defined period.</p>
-        </div>
-        <div class="concept-item" id="concept-ebo-adimú">
-          <div class="concept-label">Adimu</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-adimú</div>
-          <p class="concept-def">A food or vegetable offering (without blood) to an Orisha. Accessible outside of full ebó; considered the first step in propitiation.</p>
-        </div>
-        <div class="concept-item" id="concept-ebo-sacrifice">
-          <div class="concept-label">Animal sacrifice</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-sacrifice</div>
-          <p class="concept-def">Ritual sacrifice of an animal specified by the reading. Species, preparation, and allocation are operational details held at initiated-only access.</p>
-        </div>
-        <div class="concept-item" id="concept-ebo-ebo">
-          <div class="concept-label">Ebó</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-ebo</div>
-          <p class="concept-def">A prescribed offering to the Orisha or Ifá indicated by the reading. Includes specific materials, animals, foods, or objects. Operational details are initiated-only.</p>
-        </div>
-        <div class="concept-item" id="concept-ebo-ceremony">
-          <div class="concept-label">Full ceremony</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-ceremony</div>
-          <p class="concept-def">A prescribed ceremony (initiation, reception of Orisha, specific feast) indicated by the reading as necessary.</p>
-        </div>
-        <div class="concept-item" id="concept-ebo-rogacion">
-          <div class="concept-label">Head Rogation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-rogacion</div>
-          <p class="concept-def">A cleansing and feeding of the head (ori/eleda) using specific cool and white materials. One of the most commonly prescribed works across Lucumí and related traditions.</p>
-        </div>
-        <div class="concept-item" id="concept-ebo-etutu">
-          <div class="concept-label">Itutu / Etutu</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-etutu</div>
-          <p class="concept-def">A cooling or pacifying ceremony, often performed after death, severe osogbo, or to address Egun. Requires specific authority and materials.</p>
-        </div>
-        <div class="concept-item" id="concept-ebo-cleansing">
-          <div class="concept-label">Spiritual cleansing</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">ebo-cleansing</div>
-          <p class="concept-def">A full-body or environmental cleansing (despojo, limpieza) using herbs, waters, or other materials prescribed by the reading.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      License: CC0 1.0 Universal (Public Domain)
-    </div>
-    <div class="footer-links">
-      <a href="https://www.irokosociety.org">irokosociety.org</a>
-      <a href="../index.html">Home</a>
-      <a href="index.html">Vocabularies</a>
+    <div class="footer-bottom">
+      <p>© 2025 Iroko Historical Society / Ilé Aña Olofí, Inc. · <a href="#">Terms of Use</a> · <a href="#">Licensing</a></p>
+      <span class="version-badge">v1.2.0</span>
     </div>
   </footer>
 
-</div>
+<script>
+const MOD_SLUG = 'marca';
+const MOD_DISPLAY = 'Marca Module';
+const MOD_CITE = '"Marca Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/marca';
+const CLASSES = {
+  DivinationCorpus: {
+    uri:'iroko:DivinationCorpus', label:'Divination Corpus',
+    definition:'The complete body of verses, prescriptions, proverbs, and interpretive commentary associated with a divination system as transmitted through a specific lineage. Distinct from the system itself (which is the abstract framework) and from individual verses (which are its units). A corpus is lineage-specific: Ifá lineages in Havana may hold different verse inventories than those in Lagos or Trinidad, each representing a distinct corpus.',
+    outgoing:[],
+    incoming:[{uri:'iroko:signVerseCorpus',label:'verse corpus',domain:'iroko:DivinationSign',definition:'The set of DivinationVerse instances in a specific lineage\'s corpus for this sign. The existence of a corpus is public; the verse content is initiated-elder only.',crossModule:'marca'  },{uri:'iroko:hasCorpus',label:'has corpus',domain:'iroko:DivinationSystem',definition:'Links a DivinationSystem to its DivinationCorpus. The corpus is the complete body of verses, prescriptions, and commentary associated with this system within a specific lineage. A system may have multiple corpora across lineages — each lineage\'s corpus is a separate DivinationCorpus instance (subclass of LineageKnowledgeGraph). Access: public-unrestricted — the existence of a corpus associated with a system is public knowledge; the verse content within the corpus is governed at elder-initiated level on the DivinationVerse instances themselves.',crossModule:'marca'  }],
+    crossModuleConnections:[]
+  },
+  DivinationReading: {
+    uri:'iroko:DivinationReading', label:'Divination Reading',
+    definition:'A specific divination event performed for a recipient by an authorized diviner. Records the sign(s) that appeared, the outcome polarity (iré/osogbo), prescribed works, and the entities indicated. Reading records are among the most sensitive data in the framework: recipient identity is no-access; the date and officiant are community-restricted; the prescribed work and entity are initiated-only.',
+    outgoing:[{uri:'iroko:prescribedEntity',label:'prescribed entity',range:'iroko:SpiritualEntity',definition:'The spiritual entity indicated by the reading as requiring propitiation, attention, or ceremony. Range: iroko:SpiritualEntity.',crossModule:'nkisi'  },{uri:'iroko:prescribedWork',label:'prescribed work',range:'iroko:Concept',definition:'The ebó, rogation, ceremony, or spiritual work prescribed as a result of this reading. Range: iroko:EboTypeScheme. Among the most sensitive data: links divination outcome to specific prescribed action.',crossModule:''  },{uri:'iroko:readingOfficiant',label:'reading officiant',range:'iroko:Person',definition:'The diviner who performed the reading. Range: foaf:Person. Community-restricted to protect practitioner privacy unless the officiant has consented to public attribution.',crossModule:''  },{uri:'iroko:readingOutcome',label:'reading outcome',range:'iroko:Concept',definition:'Whether the sign came iré (positive polarity) or osogbo (negative polarity) in this reading. Range: iroko:OutcomeTypeScheme.',crossModule:''  },{uri:'iroko:readingRecipient',label:'reading recipient',range:'iroko:Person',definition:'The person for whom the reading was performed. No-access: reading recipients have a reasonable expectation of confidentiality. Stored internally for provenance tracking only.',crossModule:''  },{uri:'iroko:signReceived',label:'sign received',range:'iroko:DivinationSign',definition:'The divination sign(s) that appeared in this reading.',crossModule:'marca'  }],
+    incoming:[],
+    crossModuleConnections:[{name:'Nkisi Module',slug:'nkisi',dotClass:'dot-nkisi',props:'via iroko:prescribedEntity',direction:'references'}]
+  },
+  DivinationSign: {
+    uri:'iroko:DivinationSign', label:'Divination Sign',
+    definition:'A discrete sign, figure, or configuration within a divination system. In Ifá: one of 256 odù (each identified by primary + secondary throw). In Dilogún: one of 16 principal signs (odù Dilogún, omieros, and their paths). In Fá: du figures. In Chamalongo: one of 5 configurations. Each sign has an associated corpus of verses, prescriptions, and spirit-entity relationships. The sign\'s name and number are public; verses and prescribed works are restricted.',
+    outgoing:[{uri:'iroko:governingEntity',label:'governing entity',range:'iroko:SpiritualEntity',definition:'The spirit or deity principally associated with this sign across the tradition. In Ifá: Ogbe Meji is governed by Obatala; Oshé Meji by Oshun. This is a tradition-level association, not reading-specific. Range: iroko:SpiritualEntity.',crossModule:'nkisi'  },{uri:'iroko:primarySign',label:'primary sign',range:'iroko:DivinationSign',definition:'In composite systems (Ifá), the sign generated by the first cast. The primary odù of a compound figure.',crossModule:'marca'  },{uri:'iroko:secondarySign',label:'secondary sign',range:'iroko:DivinationSign',definition:'In composite systems (Ifá), the sign generated by the second cast. Together with primarySign, identifies the full odù compound.',crossModule:'marca'  },{uri:'iroko:signVerseCorpus',label:'verse corpus',range:'iroko:DivinationCorpus',definition:'The set of DivinationVerse instances in a specific lineage\'s corpus for this sign. The existence of a corpus is public; the verse content is initiated-elder only.',crossModule:'marca'  }],
+    incoming:[{uri:'iroko:primarySign',label:'primary sign',domain:'iroko:DivinationSign',definition:'In composite systems (Ifá), the sign generated by the first cast. The primary odù of a compound figure.',crossModule:'marca'  },{uri:'iroko:secondarySign',label:'secondary sign',domain:'iroko:DivinationSign',definition:'In composite systems (Ifá), the sign generated by the second cast. Together with primarySign, identifies the full odù compound.',crossModule:'marca'  },{uri:'iroko:signReceived',label:'sign received',domain:'iroko:DivinationReading',definition:'The divination sign(s) that appeared in this reading.',crossModule:'marca'  },{uri:'iroko:verseSign',label:'verse sign',domain:'iroko:DivinationVerse',definition:'The divination sign to which this verse belongs.',crossModule:'marca'  }],
+    crossModuleConnections:[{name:'Nkisi Module',slug:'nkisi',dotClass:'dot-nkisi',props:'via iroko:governingEntity',direction:'references'}]
+  },
+  DivinationSystem: {
+    uri:'iroko:DivinationSystem', label:'Divination System',
+    definition:'A tradition-specific divination system consisting of a defined corpus of signs, casting methods, and interpretive frameworks. Examples: Ifá (256 odù, palm nut or chain casting), Dilogún (16 principal signs, cowrie casting), Fá (Fon parallel to Ifá), Obi (4-part binary coconut or kola reading), Chamalongo (Palo Kongo coconut/bone divination). A DivinationSystem belongs to one or more traditions and may have regional variants.',
+    outgoing:[{uri:'iroko:authorizedPractitioner',label:'authorized practitioner type',range:'iroko:Concept',definition:'The authority title required to cast this system. In Ifá: Babalawo. In Dilogún: Olorisha with dilogún authorization. In Fá: Bokonon. Range: iroko:AuthorityTitleScheme.',crossModule:''  },{uri:'iroko:castingMedium',label:'casting medium',range:'iroko:Concept',definition:'The physical medium used to cast or generate the sign in this system. Examples: ikin (palm nuts), okuele/ekuele (divining chain), owó dilogún (cowries), obi (coconut), obi kola (kola nut), chamalongo (coconut shells or bones). Range: iroko:CastingMediumScheme.',crossModule:''  },{uri:'iroko:hasCorpus',label:'has corpus',range:'iroko:DivinationCorpus',definition:'Links a DivinationSystem to its DivinationCorpus. The corpus is the complete body of verses, prescriptions, and commentary associated with this system within a specific lineage. A system may have multiple corpora across lineages — each lineage\'s corpus is a separate DivinationCorpus instance (subclass of LineageKnowledgeGraph). Access: public-unrestricted — the existence of a corpus associated with a system is public knowledge; the verse content within the corpus is governed at elder-initiated level on the DivinationVerse instances themselves.',crossModule:'marca'  }],
+    incoming:[],
+    crossModuleConnections:[]
+  },
+  DivinationVerse: {
+    uri:'iroko:DivinationVerse', label:'Divination Verse',
+    definition:'A single verse, story, or pataki within a sign\'s corpus. In Ifá: an ese Ifá. In Dilogún: a rezo or pataki. In Fá: a hwenoho. Verses carry narrative, ethical, prescriptive, and esoteric content. They are the primary means by which divination knowledge is transmitted and applied. Verse text is initiated-elder access; the existence of a verse corpus for a sign is public.',
+    outgoing:[{uri:'iroko:verseLineage',label:'verse lineage',range:'iroko:House',definition:'The ile or lineage corpus from which this verse version derives. Different lineages may hold different versions of verses for the same sign.',crossModule:'ile'  },{uri:'iroko:verseSign',label:'verse sign',range:'iroko:DivinationSign',definition:'The divination sign to which this verse belongs.',crossModule:'marca'  },{uri:'iroko:verseSource',label:'verse source',range:'iroko:DocumentaryEvidence',definition:'Provenance of this verse record: oral transmission, field recording, published collection. Range: iroko:DocumentaryEvidence.',crossModule:'core'  }],
+    incoming:[],
+    crossModuleConnections:[{name:'Ilé Module',slug:'ile',dotClass:'dot-ile',props:'via iroko:verseLineage',direction:'references'},{name:'Core Module',slug:'core',dotClass:'dot-core',props:'via iroko:verseSource',direction:'references'}]
+  }
+};
+const MODULE_CONNECTIONS = [
+  {name:'Nkisi Module',slug:'nkisi',dotClass:'dot-nkisi',props:'2 shared properties'},
+  {name:'Ilé Module',slug:'ile',dotClass:'dot-ile',props:'1 shared property'},
+  {name:'Core Module',slug:'core',dotClass:'dot-core',props:'1 shared property'}
+];
+
+let activeClass = null;
+
+function activateClass(classId) {
+  if (activeClass === classId) { deactivateClass(); return; }
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = classId;
+  document.getElementById('card-' + classId)?.classList.add('is-active');
+  const data = CLASSES[classId];
+  if (!data) return;
+  document.getElementById('panel-uri').textContent = data.uri;
+  document.getElementById('panel-label').textContent = data.label;
+  document.getElementById('panel-definition').textContent = data.definition || '';
+  const citeText = data.uri + '. Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
+  document.getElementById('panel-cite-text').innerHTML = '<em>' + citeText + '</em>';
+  document.getElementById('panel-cite-btn').dataset.cite = citeText;
+  renderProps('incoming-props', data.incoming, 'in');
+  renderProps('outgoing-props', data.outgoing, 'out');
+  document.getElementById('zone2-empty').classList.add('hidden');
+  document.getElementById('zone2-hint').textContent = 'Click class again to close';
+  const panel = document.getElementById('property-panel');
+  panel.classList.add('visible');
+  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  renderClassSidebar(data, classId);
+  history.replaceState(null, '', '#' + classId);
+}
+
+function deactivateClass() {
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = null;
+  document.getElementById('property-panel').classList.remove('visible');
+  document.getElementById('zone2-empty').classList.remove('hidden');
+  document.getElementById('zone2-hint').textContent = 'Select a class above to explore its properties';
+  renderModuleSidebar();
+  history.replaceState(null, '', window.location.pathname);
+}
+
+function renderProps(containerId, props, dir) {
+  const el = document.getElementById(containerId);
+  if (!props || props.length === 0) { el.innerHTML = '<div class="no-props">None documented in this module.</div>'; return; }
+  el.innerHTML = props.map((p, i) => {
+    const id = 'prop-' + dir + '-' + i;
+    const endLabel = dir === 'out' ? 'Range' : 'Domain';
+    const endVal   = dir === 'out' ? (p.range || '') : (p.domain || '');
+    const crossTag = (p.crossModule && p.crossModule !== MOD_SLUG) ? '<span class="cross-tag">[' + p.crossModule + ']</span>' : '';
+    return '<div class="prop-item" id="' + id + '" onclick="toggleProp(\'' + id + '\')">' +
+      '<div class="prop-item-top"><span class="prop-item-uri">' + p.uri + '</span>' +
+      '<svg class="prop-item-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,3 11,8 5,13"/></svg></div>' +
+      '<span class="prop-item-label">' + (p.label || '') + '</span>' +
+      '<div class="prop-detail" id="' + id + '-detail">' +
+      '<div class="prop-detail-row"><span class="pd-label">' + endLabel + '</span><span class="pd-value">' + endVal + crossTag + '</span></div>' +
+      '<div class="prop-detail-row"><span class="pd-label">Definition</span><span class="pd-value">' + (p.definition || '') + '</span></div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function toggleProp(propId) {
+  const item = document.getElementById(propId);
+  const detail = document.getElementById(propId + '-detail');
+  if (!item || !detail) return;
+  const isOpen = item.classList.contains('is-expanded');
+  document.querySelectorAll('.prop-item.is-expanded').forEach(el => {
+    el.classList.remove('is-expanded');
+    el.querySelector('.prop-detail')?.classList.remove('visible');
+  });
+  if (!isOpen) { item.classList.add('is-expanded'); detail.classList.add('visible'); }
+}
+
+function renderClassSidebar(data, classId) {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'iroko:' + classId + ' — connections';
+    const conns = data.crossModuleConnections || [];
+    el.innerHTML = '<div class="active-class-card"><span class="acc-uri">' + data.uri + '</span><span class="acc-label">' + data.label + '</span></div>' +
+      (conns.length === 0
+        ? '<p class="no-connections">No cross-module connections.</p>'
+        : conns.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+            '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+            '<span class="cc-props">' + c.props + '</span>' +
+            '<span class="cc-via">' + c.direction + '</span></a>').join(''));
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function renderModuleSidebar() {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'Connected modules';
+    el.innerHTML = MODULE_CONNECTIONS.length === 0
+      ? '<p class="no-connections">No cross-module connections documented.</p>'
+      : MODULE_CONNECTIONS.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+          '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+          '<span class="cc-props">' + c.props + '</span></a>').join('');
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function copyPanelCitation(btn) {
+  navigator.clipboard.writeText(btn.dataset.cite).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyModuleCitation(btn) {
+  navigator.clipboard.writeText(MOD_CITE).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyPageLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓'; btn.classList.add('copied-state');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied-state'); }, 2000);
+  });
+}
+function shareEmail(e) {
+  e.preventDefault();
+  window.location.href = 'mailto:?subject=' + encodeURIComponent('Iroko Framework Ontology — ' + MOD_DISPLAY) + '&body=' + encodeURIComponent(window.location.href);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderModuleSidebar();
+  const hash = window.location.hash.slice(1);
+  if (hash && CLASSES[hash]) setTimeout(() => activateClass(hash), 100);
+});
+
+</script>
 </body>
 </html>

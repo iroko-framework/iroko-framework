@@ -1,527 +1,551 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Narrative Module — Sacred Story Systems — Iroko Framework Vocabularies</title>
-  <link rel="stylesheet" href="../assets/iroko-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Narrative Module — Iroko Framework Ontology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    :root {
+      --ink:#1a1714; --ink-mid:#2e2a26; --ink-light:#4a4540;
+      --paper:#f7f4ef; --paper-warm:#efe9df;
+      --border:#d5cdc0; --border-mid:#c0b8ac;
+      --gold:#8b6914; --gold-light:#c49a2a; --gold-pale:#f0e6c8; --gold-mid:#a07820;
+      --sienna:#7a3b1e; --teal:#1f5c52; --teal-pale:#e4f0ee; --teal-mid:#2a7a6e;
+      --radius-sm:3px; --radius:6px; --radius-lg:10px;
+      --shadow-sm:0 1px 4px rgba(26,23,20,0.10); --shadow:0 3px 14px rgba(26,23,20,0.13);
+      --transition:180ms ease;
+    }
+    /* Module dot colors */
+    .dot-agency{background:#5a6e8a} .dot-authority{background:#6b4a8a}
+    .dot-core{background:#444} .dot-ekpe{background:#2a6b4a}
+    .dot-epistemic{background:#7a5a1e} .dot-ewe{background:#8b6914}
+    .dot-ile{background:#1f5c52} .dot-manifestation{background:#6b2a2a}
+    .dot-marca{background:#1e4a6b} .dot-narrative{background:#6b3a1e}
+    .dot-ngoma{background:#4a1e6b} .dot-nkisi{background:#7a3b1e}
+    .dot-qal{background:#2a4a6b} .dot-sankofa{background:#6b5a1e}
+    .dot-travay{background:#4a6b8a} .dot-veve{background:#3a1e6b}
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
-  </style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:'EB Garamond',Georgia,serif;font-size:1.0625rem;line-height:1.65;
+      background:var(--paper);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+    .site-nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;gap:2rem;
+      height:52px;position:sticky;top:0;z-index:200;border-bottom:2px solid var(--gold)}
+    .wordmark{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:600;
+      letter-spacing:0.04em;color:#f7f4ef;text-decoration:none;white-space:nowrap}
+    .wordmark span{color:var(--gold-light)}
+    .nav-links{display:flex;gap:1.5rem;list-style:none;margin-left:auto}
+    .nav-links a{font-family:'EB Garamond',Georgia,serif;font-size:0.875rem;letter-spacing:0.05em;
+      text-transform:uppercase;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .nav-links a:hover{color:var(--gold-light)}
+
+    .page-header{background:var(--ink-mid);color:var(--paper);padding:2.5rem 2rem 2rem;border-bottom:1px solid var(--gold)}
+    .breadcrumb{font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .breadcrumb a{color:var(--border-mid);text-decoration:none}
+    .breadcrumb a:hover{color:var(--gold-light)}
+    .page-header h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.25rem;font-weight:300;
+      letter-spacing:0.02em;line-height:1.2;margin-bottom:0.4rem}
+    .module-tag{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;
+      background:var(--gold);color:var(--ink);padding:0.2em 0.6em;border-radius:var(--radius-sm);
+      vertical-align:middle;margin-left:0.75rem;font-family:'EB Garamond',serif}
+    .module-desc{font-size:0.88rem;color:var(--border-mid);margin-top:0.6rem;max-width:700px;line-height:1.5}
+    .module-stats{display:flex;gap:2rem;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1)}
+    .stat .number{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.75rem;font-weight:300;
+      color:var(--gold-light);line-height:1;display:block}
+    .stat .label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--border-mid)}
+
+    .layout{display:grid;grid-template-columns:1fr 290px;flex:1;max-width:1280px;width:100%;margin:0 auto;align-items:start}
+    .main-content{padding:2rem;border-right:1px solid var(--border);min-width:0}
+
+    .zone-label{font-size:0.68rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:1rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between}
+    .zone-hint{font-size:0.7rem;letter-spacing:0.02em;text-transform:none;color:var(--border-mid);font-style:italic}
+
+    .class-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.6rem;margin-bottom:2.25rem}
+    .class-card{padding:0.8rem 0.9rem;border:1px solid var(--border);border-radius:var(--radius);
+      background:white;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition),background var(--transition);
+      user-select:none;position:relative}
+    .class-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .class-card.is-active{border-color:var(--gold);background:var(--gold-pale);box-shadow:var(--shadow)}
+    .class-card.is-active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+      width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--paper-warm)}
+    .card-uri{font-family:'JetBrains Mono',monospace;font-size:0.73rem;color:var(--gold);display:block;
+      margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-label{font-size:0.88rem;color:var(--ink);display:block;line-height:1.3}
+
+    .zone2-empty{display:flex;align-items:center;gap:0.75rem;padding:1.25rem 1.5rem;
+      background:var(--paper-warm);border:1px dashed var(--border-mid);border-radius:var(--radius);
+      color:var(--border-mid);font-size:0.85rem;font-style:italic;margin-bottom:2.25rem}
+    .zone2-empty svg{width:20px;height:20px;flex-shrink:0;opacity:0.5}
+    .zone2-empty.hidden{display:none}
+
+    .property-panel{display:none;background:var(--paper-warm);border:1px solid var(--border-mid);
+      border-radius:var(--radius-lg);margin-bottom:2.25rem;overflow:hidden;animation:panelIn 180ms ease forwards}
+    .property-panel.visible{display:block}
+    @keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .panel-header{background:var(--ink-mid);color:var(--paper);padding:1rem 1.5rem;
+      display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+    .ph-uri{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--gold-light)}
+    .ph-label{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:300;color:var(--paper)}
+    .panel-close{background:none;border:none;color:var(--border-mid);cursor:pointer;padding:0.2rem;
+      font-size:1.1rem;line-height:1;transition:color var(--transition);margin-left:auto;flex-shrink:0}
+    .panel-close:hover{color:var(--paper)}
+    .panel-definition{padding:1rem 1.5rem;font-size:0.92rem;color:var(--ink-mid);line-height:1.6;border-bottom:1px solid var(--border)}
+    .panel-body{display:grid;grid-template-columns:1fr 1fr}
+    .prop-col{padding:1.25rem 1.5rem}
+    .prop-col:first-child{border-right:1px solid var(--border)}
+    .prop-col-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      margin-bottom:0.85rem;display:flex;align-items:center;gap:0.4rem}
+    .direction-arrow{font-size:0.9rem;color:var(--gold)}
+    .col-sublabel{font-style:italic;text-transform:none;letter-spacing:0;font-size:0.67rem;color:var(--border-mid)}
+    .prop-item{padding:0.7rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      background:white;margin-bottom:0.5rem;cursor:pointer;transition:border-color var(--transition),box-shadow var(--transition)}
+    .prop-item:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .prop-item.is-expanded{border-color:var(--gold);background:#fffdf7}
+    .prop-item-top{display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
+    .prop-item-uri{font-family:'JetBrains Mono',monospace;font-size:0.74rem;color:var(--gold)}
+    .prop-item-chevron{width:13px;height:13px;color:var(--border-mid);flex-shrink:0;transition:transform var(--transition)}
+    .prop-item.is-expanded .prop-item-chevron{transform:rotate(90deg);color:var(--gold)}
+    .prop-item-label{font-size:0.82rem;color:var(--ink-light);display:block;margin-top:0.12rem}
+    .prop-detail{display:none;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border)}
+    .prop-detail.visible{display:block}
+    .prop-detail-row{display:flex;gap:0.75rem;margin-bottom:0.45rem;align-items:baseline}
+    .pd-label{font-size:0.65rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-light);min-width:60px;flex-shrink:0}
+    .pd-value{font-size:0.82rem;color:var(--ink-mid);line-height:1.4}
+    .cross-tag{font-size:0.65rem;color:var(--border-mid);font-style:italic;margin-left:0.3rem}
+    .no-props{font-size:0.82rem;color:var(--border-mid);font-style:italic;padding:0.5rem 0}
+    .panel-citation{padding:1rem 1.5rem;border-top:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+    .panel-citation .cite-text{font-size:0.8rem;color:var(--ink-light);font-style:italic;flex:1;min-width:200px}
+    .btn-copy{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;
+      font-size:0.85rem;cursor:pointer;transition:background var(--transition),transform 80ms;white-space:nowrap;flex-shrink:0}
+    .btn-copy:hover{background:var(--ink)} .btn-copy:active{transform:scale(0.97)} .btn-copy.copied{background:var(--teal)}
+    .btn-copy svg{width:13px;height:13px;flex-shrink:0}
+
+    .concept-scheme-block{margin-bottom:2rem}
+    .concept-scheme-block:last-child{margin-bottom:0}
+    .csb-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0.15rem}
+    .csb-uri{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--teal)}
+    .csb-count{font-size:0.7rem;color:var(--ink-light);letter-spacing:0.04em}
+    .csb-scheme-label{font-size:0.92rem;color:var(--ink-mid);font-style:italic;margin-bottom:0.2rem}
+    .csb-description{font-size:0.82rem;color:var(--ink-light);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--teal-pale)}
+    .concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.45rem}
+    .concept-card{padding:0.55rem 0.75rem;background:var(--teal-pale);border:1px solid rgba(31,92,82,0.18);
+      border-radius:var(--radius-sm);transition:background var(--transition),border-color var(--transition);cursor:default}
+    .concept-card:hover{background:rgba(31,92,82,0.14);border-color:var(--teal)}
+    .cc-label{font-size:0.85rem;color:var(--ink);display:block;line-height:1.3;margin-bottom:0.2rem}
+    .cc-id{font-family:'JetBrains Mono',monospace;font-size:0.67rem;color:var(--teal-mid);display:block}
+
+    .sidebar{padding:1.5rem 1.25rem;position:sticky;top:52px;max-height:calc(100vh - 52px);overflow-y:auto}
+    .sidebar-panel{margin-bottom:1.75rem}
+    .sidebar-panel-title{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);
+      padding-bottom:0.5rem;border-bottom:1px solid var(--border);margin-bottom:0.85rem}
+    .active-class-card{padding:0.75rem 0.85rem;background:var(--gold-pale);border:1px solid var(--gold);
+      border-radius:var(--radius-sm);margin-bottom:0.85rem}
+    .acc-uri{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold-mid);display:block;margin-bottom:0.15rem}
+    .acc-label{font-size:0.9rem;color:var(--ink);font-weight:500}
+    .connection-card{padding:0.6rem 0.75rem;border:1px solid var(--border);border-radius:var(--radius-sm);
+      margin-bottom:0.45rem;background:white;text-decoration:none;display:block;
+      transition:border-color var(--transition),box-shadow var(--transition)}
+    .connection-card:hover{border-color:var(--gold);box-shadow:var(--shadow-sm)}
+    .cc-top{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.15rem}
+    .cc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .cc-module-name{font-size:0.85rem;color:var(--ink);font-weight:500}
+    .cc-props{font-size:0.72rem;color:var(--ink-light);display:block;margin-top:0.1rem}
+    .cc-via{font-size:0.67rem;color:var(--ink-light);font-style:italic;margin-top:0.1rem;display:block}
+    .sidebar-dynamic{transition:opacity 140ms ease}
+    .sidebar-dynamic.fading{opacity:0}
+    .no-connections{font-size:0.78rem;color:var(--border-mid);font-style:italic}
+    .share-buttons{display:flex;gap:0.5rem}
+    .share-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.55rem 0.25rem;
+      background:var(--paper-warm);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
+      font-family:'EB Garamond',serif;font-size:0.68rem;color:var(--ink-light);text-decoration:none;
+      letter-spacing:0.04em;text-transform:uppercase;transition:background var(--transition),border-color var(--transition),color var(--transition)}
+    .share-btn:hover{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
+    .share-btn svg{width:17px;height:17px}
+    .share-btn.copied-state{background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
+    .sidebar-citation{background:var(--paper-warm);border:1px solid var(--border-mid);border-radius:var(--radius-sm);padding:0.85rem}
+    .sidebar-citation .cite-text{font-size:0.77rem;line-height:1.5;color:var(--ink-mid);font-style:italic;margin-bottom:0.6rem}
+    .btn-copy-sm{display:inline-flex;align-items:center;gap:0.35rem;padding:0.42rem 0.85rem;background:var(--gold);
+      color:var(--paper);border:none;border-radius:var(--radius-sm);font-family:'EB Garamond',serif;font-size:0.8rem;
+      cursor:pointer;transition:background var(--transition);width:100%;justify-content:center}
+    .btn-copy-sm:hover{background:var(--ink)} .btn-copy-sm.copied{background:var(--teal)}
+    .format-links{display:flex;flex-direction:column;gap:0.3rem}
+    .format-link{display:flex;align-items:center;justify-content:space-between;padding:0.38rem 0.6rem;
+      border-radius:var(--radius-sm);border:1px solid var(--border);background:white;font-family:'JetBrains Mono',monospace;
+      font-size:0.73rem;color:var(--gold);text-decoration:none;transition:background var(--transition),border-color var(--transition)}
+    .format-link:hover{background:var(--gold-pale);border-color:var(--gold)}
+    .format-arrow{color:var(--border-mid)}
+
+    footer{background:var(--ink);color:var(--paper);margin-top:auto}
+    .footer-inner{max-width:1280px;margin:0 auto;padding:2.5rem 2rem;
+      display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:2rem;align-items:start}
+    .footer-brand .fw{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-weight:300;
+      letter-spacing:0.04em;color:var(--paper);display:block;margin-bottom:0.5rem}
+    .footer-brand .fw span{color:var(--gold-light)}
+    .footer-brand p{font-size:0.8rem;color:var(--border-mid);line-height:1.5;max-width:220px}
+    .footer-col h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);margin-bottom:0.75rem}
+    .footer-col ul{list-style:none}
+    .footer-col li{margin-bottom:0.3rem}
+    .footer-col a{font-size:0.82rem;color:var(--border);text-decoration:none;transition:color var(--transition)}
+    .footer-col a:hover{color:var(--gold-light)}
+    .footer-funders{display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end}
+    .footer-funders h4{font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--border-mid);text-align:right;width:100%}
+    .funder-slot{width:140px;height:44px;border:1px dashed rgba(255,255,255,0.15);border-radius:var(--radius-sm);
+      display:flex;align-items:center;justify-content:center;font-size:0.67rem;letter-spacing:0.06em;
+      text-transform:uppercase;color:rgba(255,255,255,0.2)}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);max-width:1280px;margin:0 auto;padding:1rem 2rem;
+      display:flex;justify-content:space-between;align-items:center}
+    .footer-bottom p{font-size:0.75rem;color:rgba(255,255,255,0.3)}
+    .footer-bottom a{color:rgba(255,255,255,0.3);text-decoration:none}
+    .footer-bottom a:hover{color:var(--gold-light)}
+    .version-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:0.2em 0.5em;
+      border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius-sm);color:rgba(255,255,255,0.3)}
+</style>
 </head>
 <body>
-
-<div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v2.0.0</span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="index.html">Vocabularies</a>
-    <a href="https://ontology.irokosociety.org">ontology.irokosociety.org ↗</a>
-    <a href="https://github.com/iroko-framework/iroko-framework">GitHub ↗</a>
+  <nav class="site-nav">
+    <a class="wordmark" href="/">Iroko Framework <span>Ontology</span></a>
+    <ul class="nav-links">
+      <li><a href="/modules">Modules</a></li>
+      <li><a href="/classes">Classes</a></li>
+      <li><a href="/properties">Properties</a></li>
+      <li><a href="/concepts">Concepts</a></li>
+      <li><a href="/whitepaper">Whitepaper</a></li>
+    </ul>
   </nav>
-</div>
 
-<div class="page-wrap">
-
-  <p class="breadcrumb">
-    <a href="../index.html">Iroko Framework</a>
-    <span>/</span>
-    <a href="index.html">Vocabularies</a>
-    <span>/</span>
-    Narrative Module — Sacred Story Systems
-  </p>
-
-  <header class="vocab-header">
-    <div class="vocab-header-logo">
-      <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
-    </div>
-    <div>
-      <span class="module-tag tag-narrative">Narrative</span>
-      <h1>Narrative Module — Sacred Story Systems</h1>
-      <p class="subtitle">Transmission chains, variant relations, kinship claims, interpretive stances</p>
-      <div class="header-meta">
-        <span class="meta-pill">narr:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-narrative#</span>
-        <span class="meta-pill">v2.0.0</span>
-        <span class="meta-pill"><a href="iroko-narrative.ttl" style="color:inherit;">Download TTL ↓</a></span>
-        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
-      </div>
+  <header class="page-header">
+    <div class="breadcrumb"><a href="/">Iroko Framework</a> › <a href="/modules">Modules</a> › Narrative Module</div>
+    <h1>Narrative Module <span class="module-tag">Domain Layer</span></h1>
+    <div class="module-desc">Governance Layer module.</div>
+    <div class="module-stats">
+      <div class="stat"><span class="number">5</span><span class="label">Classes</span></div>
+      <div class="stat"><span class="number">24</span><span class="label">Properties</span></div>
+      <div class="stat"><span class="number">5</span><span class="label">Concept Schemes</span></div>
+      <div class="stat"><span class="number">33</span><span class="label">Concepts</span></div>
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Governance Layer module. Full narrative modeling for Afro-Atlantic sacred knowledge systems. Covers story transmission chains, contested kinship claims, testimonies, fieldnotes, interpretive stances, and narrative variant relationships. Builds on the thin narrative spine in iroko-core v1.2.0. Researcher voice (Fieldnote) is kept structurally distinct from community voice (Testimony). Use with iroko-authority to govern who may assert transmission claims, iroko-agency to link sacred agents to narrative appearances, and iroko-epistemic to constrain access to sensitive narrative content.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">24</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">33</span><span class="stat-label">Concepts</span></div>
-    </div>
-  </div>
+  <div class="layout">
+    <main class="main-content">
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">5 classes</span>
-    </div>
-    <div class="class-card" id="cls-Fieldnote">
-      <div class="class-name">Fieldnote</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Fieldnote</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">NarrativeVariant</span></div>
-      <p class="class-def">Researcher-authored note, observation, or analytic memo. Treated as a NarrativeVariant with explicit authorship and interpretive stance to keep researcher voice distinct from community voice.</p>
-    </div>
-    <div class="class-card" id="cls-InterpretiveStance">
-      <div class="class-name">InterpretiveStance</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Interpretive Stance</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Concept</span></div>
-      <p class="class-def">A hermeneutic or epistemological approach to reading a narrative or variant. Tags the reading frame rather than the content.</p>
-    </div>
-    <div class="class-card" id="cls-KinshipClaim">
-      <div class="class-name">KinshipClaim</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Kinship Claim</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Assertion</span></div>
-      <p class="class-def">A claim about relationships between entities (spirit-father, spirit-sibling, ancestor, etc.) that may be contested and authority-scoped. Implemented as an iroko:Assertion subtype so it inherits full assertion governance: authorizedBy, accessLevel, contestedStatus, assertionStatus.</p>
-    </div>
-    <div class="class-card" id="cls-StoryLineage">
-      <div class="class-name">StoryLineage</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Story Lineage</div>
+      <div class="zone-label">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="class-card" id="card-Fieldnote" onclick="activateClass('Fieldnote')"><span class="card-uri">iroko:Fieldnote</span><span class="card-label">Fieldnote</span></div>
+<div class="class-card" id="card-InterpretiveStance" onclick="activateClass('InterpretiveStance')"><span class="card-uri">iroko:InterpretiveStance</span><span class="card-label">Interpretive Stance</span></div>
+<div class="class-card" id="card-KinshipClaim" onclick="activateClass('KinshipClaim')"><span class="card-uri">iroko:KinshipClaim</span><span class="card-label">Kinship Claim</span></div>
+<div class="class-card" id="card-StoryLineage" onclick="activateClass('StoryLineage')"><span class="card-uri">iroko:StoryLineage</span><span class="card-label">Story Lineage</span></div>
+<div class="class-card" id="card-Testimony" onclick="activateClass('Testimony')"><span class="card-uri">iroko:Testimony</span><span class="card-label">Testimony</span></div>
+      </div>
+
+      <div class="zone-label" id="zone2-label">
+        Properties
+        <span class="zone-hint" id="zone2-hint">Select a class above to explore its properties</span>
+      </div>
+      <div class="zone2-empty" id="zone2-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        No class selected. Click any class card above to see its incoming and outgoing properties.
+      </div>
+
+      <div class="property-panel" id="property-panel">
+        <div class="panel-header">
+          <div><div class="ph-uri" id="panel-uri"></div><div class="ph-label" id="panel-label"></div></div>
+          <button class="panel-close" onclick="deactivateClass()">✕</button>
+        </div>
+        <div class="panel-definition" id="panel-definition"></div>
+        <div class="panel-body">
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">←</span> Incoming <span class="col-sublabel">(this class as range)</span></div>
+            <div id="incoming-props"></div>
+          </div>
+          <div class="prop-col">
+            <div class="prop-col-label"><span class="direction-arrow">→</span> Outgoing <span class="col-sublabel">(this class as domain)</span></div>
+            <div id="outgoing-props"></div>
+          </div>
+        </div>
+        <div class="panel-citation">
+          <div class="cite-text" id="panel-cite-text"></div>
+          <button class="btn-copy" id="panel-cite-btn" onclick="copyPanelCitation(this)">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+
       
-      <p class="class-def">A transmission chain for a narrative — who transmitted the story to whom, in what context. Separate from biological kinship. Models oral transmission provenance.</p>
-    </div>
-    <div class="class-card" id="cls-Testimony">
-      <div class="class-name">Testimony</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Testimony</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">NarrativeVariant</span></div>
-      <p class="class-def">A narrated account offered by a participant or witness. A Testimony is a NarrativeVariant with an identified speaker whose presence or role is itself the epistemic claim — the content derives its authority from the speaker&#x27;s position.</p>
-    </div>
+      <div class="zone-label">Controlled Vocabulary</div>
+      <div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:InterpretiveStanceScheme</span><span class="csb-count">6 concepts</span></div><div class="csb-scheme-label">Interpretive Stances</div><div class="concept-grid"><div class="concept-card"><span class="cc-label">Allegorical</span><span class="cc-id">iroko:stance-allegorical</span></div><div class="concept-card" title="Researcher or scholarly reading, necessarily outside community interpretive authority."><span class="cc-label">Analytic</span><span class="cc-id">iroko:stance-analytic</span></div><div class="concept-card" title="Reading the narrative as a diagnostic tool — for divination, consultation, or situational assessment."><span class="cc-label">Diagnostic</span><span class="cc-id">iroko:stance-diagnostic</span></div><div class="concept-card" title="Reading reserved for or shaped by initiatory context."><span class="cc-label">Initiatory</span><span class="cc-id">iroko:stance-initiatory</span></div><div class="concept-card"><span class="cc-label">Literal</span><span class="cc-id">iroko:stance-literal</span></div><div class="concept-card" title="Narrative produced or shaped by an argument about tradition, authority, or lineage legitimacy."><span class="cc-label">Polemic</span><span class="cc-id">iroko:stance-polemic</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:KinshipTypeScheme</span><span class="csb-count">8 concepts</span></div><div class="csb-scheme-label">Kinship Types</div><div class="concept-grid"><div class="concept-card"><span class="cc-label">ancestor</span><span class="cc-id">iroko:kinship-ancestor</span></div><div class="concept-card"><span class="cc-label">brother</span><span class="cc-id">iroko:kinship-brother</span></div><div class="concept-card"><span class="cc-label">child</span><span class="cc-id">iroko:kinship-child</span></div><div class="concept-card"><span class="cc-label">father</span><span class="cc-id">iroko:kinship-father</span></div><div class="concept-card"><span class="cc-label">mother</span><span class="cc-id">iroko:kinship-mother</span></div><div class="concept-card" title="Describes the relationship between an orisha or lwa and the practitioner over whom they have primary claim."><span class="cc-label">owner/patron</span><span class="cc-id">iroko:kinship-owner</span></div><div class="concept-card" title="Describes a relationship between aspects of a spirit or between a spirit and a tradition-specific manifestation."><span class="cc-label">road/camino</span><span class="cc-id">iroko:kinship-road</span></div><div class="concept-card"><span class="cc-label">sister</span><span class="cc-id">iroko:kinship-sister</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:NarrativeRoleScheme</span><span class="csb-count">5 concepts</span></div><div class="csb-scheme-label">Narrative Roles</div><div class="concept-grid"><div class="concept-card" title="Collective voice responding to or accompanying the narrator."><span class="cc-label">Chorus</span><span class="cc-id">iroko:role-chorus</span></div><div class="concept-card" title="Collective community voice or assembled participants."><span class="cc-label">Community</span><span class="cc-id">iroko:role-community</span></div><div class="concept-card" title="Primary teller or transmitter of the narrative."><span class="cc-label">Narrator</span><span class="cc-id">iroko:role-narrator</span></div><div class="concept-card" title="Ritual officiant whose role shapes the telling."><span class="cc-label">Officiant</span><span class="cc-id">iroko:role-officiant</span></div><div class="concept-card" title="Ethnographer, archivist, or scholar whose authorship must be distinguished from community voice."><span class="cc-label">Researcher</span><span class="cc-id">iroko:role-researcher</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:SegmentTypeScheme</span><span class="csb-count">8 concepts</span></div><div class="csb-scheme-label">Segment Types</div><div class="concept-grid"><div class="concept-card"><span class="cc-label">Chant Line</span><span class="cc-id">iroko:segType-chant-line</span></div><div class="concept-card"><span class="cc-label">Episode</span><span class="cc-id">iroko:segType-episode</span></div><div class="concept-card" title="An explanatory note or translation embedded within the narrative."><span class="cc-label">Gloss</span><span class="cc-id">iroko:segType-gloss</span></div><div class="concept-card"><span class="cc-label">Praise Name</span><span class="cc-id">iroko:segType-praise-name</span></div><div class="concept-card"><span class="cc-label">Prayer</span><span class="cc-id">iroko:segType-prayer</span></div><div class="concept-card" title="A stated prohibition or interdiction within the narrative."><span class="cc-label">Prohibition</span><span class="cc-id">iroko:segType-prohibition</span></div><div class="concept-card" title="A heading, liturgical direction, or structural marker in the narrative."><span class="cc-label">Rubric</span><span class="cc-id">iroko:segType-rubric</span></div><div class="concept-card"><span class="cc-label">Verse</span><span class="cc-id">iroko:segType-verse</span></div></div></div>
+<div class="concept-scheme-block"><div class="csb-header"><span class="csb-uri">iroko:VariantRelationTypeScheme</span><span class="csb-count">6 concepts</span></div><div class="csb-scheme-label">Variant Relation Types</div><div class="concept-grid"><div class="concept-card" title="Two variants sharing the same core content with minor differences."><span class="cc-label">Close Variant</span><span class="cc-id">iroko:varRel-close</span></div><div class="concept-card" title="Two variants that contradict each other on a key claim."><span class="cc-label">Contested</span><span class="cc-id">iroko:varRel-contested</span></div><div class="concept-card" title="One variant clearly derives from or expands upon the other."><span class="cc-label">Derived</span><span class="cc-id">iroko:varRel-derived</span></div><div class="concept-card" title="A variant produced by reconciling two or more divergent tellings."><span class="cc-label">Harmonized</span><span class="cc-id">iroko:varRel-harmonized</span></div><div class="concept-card" title="A variant that applies only within a specific lineage — not a deviation, but a legitimate lineage-specific telling."><span class="cc-label">Lineage-Bound</span><span class="cc-id">iroko:varRel-lineage-bound</span></div><div class="concept-card" title="A variant that is a translation into another language, which may introduce interpretive differences."><span class="cc-label">Translation</span><span class="cc-id">iroko:varRel-translation</span></div></div></div>
+
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title" id="sb-title">Connected modules</div>
+        <div class="sidebar-dynamic" id="sb-connections"></div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Share</div>
+        <div class="share-buttons">
+          <a class="share-btn" href="#" onclick="shareEmail(event)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="1.5"/><polyline points="2,4 10,12 18,4"/></svg>
+            Email
+          </a>
+          <a class="share-btn" href="#" onclick="window.print();return false;">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="6"/><rect x="2" y="8" width="16" height="8" rx="1"/><rect x="5" y="12" width="10" height="5"/><circle cx="15" cy="11" r="1" fill="currentColor" stroke="none"/></svg>
+            Print
+          </a>
+          <button class="share-btn" id="share-link-btn" onclick="copyPageLink(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12a4 4 0 005.66 0l2-2A4 4 0 009.9 4.24l-1 1"/><path d="M12 8a4 4 0 00-5.66 0l-2 2A4 4 0 006.1 15.76l1-1"/></svg>
+            Link
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Cite the Narrative Module</div>
+        <div class="sidebar-citation">
+          <div class="cite-text">"Narrative Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. <em>ontology.irokosociety.org/narrative</em></div>
+          <button class="btn-copy-sm" onclick="copyModuleCitation(this)">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="9" height="10" rx="1"/><path d="M3 3H2a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-1"/></svg>
+            Copy citation
+          </button>
+        </div>
+      </div>
+      <div class="sidebar-panel">
+        <div class="sidebar-panel-title">Other formats</div>
+        <div class="format-links">
+          <a class="format-link" href="#">RDF/Turtle <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">JSON-LD <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">RDF/XML <span class="format-arrow">↗</span></a>
+          <a class="format-link" href="#">N-Triples <span class="format-arrow">↗</span></a>
+        </div>
+      </div>
+    </aside>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">24 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-aboutEntity">
-          <td><span class="prop-name">aboutEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">about entity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">NarrativeVariant → SacredEntity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a narrative or variant to entities it concerns — a spirit, plant, place, ritual, person, or any other resource. Range: iroko:SacredEntity — the top-level class for all tradition-specific concepts in the framework.</td>
-        </tr>
-        <tr id="prop-assertsKinship">
-          <td><span class="prop-name">assertsKinship</span><br><span style="font-size:.75rem;color:var(--ink-soft);">asserts kinship</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">NarrativeVariant → Kinship Claim</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a NarrativeVariant to a KinshipClaim it asserts. Used for spirit kinship — spirit-father, spirit-sibling, ancestral claims — where the bond is narrated or testified rather than generated by a documented event. The claim may be contested across lineages or traditions; iroko:KinshipClaim is a subclass of iroko:Assertion and inherits its contested-knowledge modeling. Access: community-only.</td>
-        </tr>
-        <tr id="prop-claimObject">
-          <td><span class="prop-name">claimObject</span><br><span style="font-size:.75rem;color:var(--ink-soft);">claim object</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Kinship Claim → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The entity to whom the subject is related by this claim.</td>
-        </tr>
-        <tr id="prop-claimSubject">
-          <td><span class="prop-name">claimSubject</span><br><span style="font-size:.75rem;color:var(--ink-soft);">claim subject</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Kinship Claim → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The entity about whom the kinship claim is made.</td>
-        </tr>
-        <tr id="prop-featuresSacredAgent">
-          <td><span class="prop-name">featuresSacredAgent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">features sacred agent</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → SacredAgent</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a narrative or variant to a sacred agent (spirit, ancestor) who appears as an actor within the narrative content.</td>
-        </tr>
-        <tr id="prop-generatesKinship">
-          <td><span class="prop-name">generatesKinship</span><br><span style="font-size:.75rem;color:var(--ink-soft);">generates kinship</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">InitiationEvent → Kinship Claim</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Links an InitiationEvent to the KinshipClaim it creates. Covers initiation-based human kinship bonds: godfather/godson (padrino/ahijado), initiator/initiate, elder/junior lineage member. Unlike assertsKinship, this bond is generated by a documented event of record rather than narrated — the initiation created the bond. Access: initiated-only — initiation genealogy and godparent lineage are internal community records not appropriate for public or community-tier disclosure.</td>
-        </tr>
-        <tr id="prop-hasStoryLineage">
-          <td><span class="prop-name">hasStoryLineage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has story lineage</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Story Lineage</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a Narrative or NarrativeVariant to a StoryLineage node documenting its transmission chain.</td>
-        </tr>
-        <tr id="prop-interpretiveStance">
-          <td><span class="prop-name">interpretiveStance</span><br><span style="font-size:.75rem;color:var(--ink-soft);">interpretive stance</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Interpretive Stance</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Tags a NarrativeVariant or Commentary with an interpretive hermeneutic frame.</td>
-        </tr>
-        <tr id="prop-narratedBy">
-          <td><span class="prop-name">narratedBy</span><br><span style="font-size:.75rem;color:var(--ink-soft);">narrated by</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">NarrativeVariant → Agent</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The person or agent who narrated this variant. Range: foaf:Person or prov:Agent. For sovereignty-aligned archives: consider access governance on the identity of narrators.</td>
-        </tr>
-        <tr id="prop-narrativeLanguage">
-          <td><span class="prop-name">narrativeLanguage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">narrative language</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">NarrativeVariant → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">BCP 47 language tag of the language in which the variant is expressed.</td>
-        </tr>
-        <tr id="prop-narrativeRole">
-          <td><span class="prop-name">narrativeRole</span><br><span style="font-size:.75rem;color:var(--ink-soft);">narrative role</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The role played by a participant in a narrative event — narrator, elder, witness, chorus, officiant, etc.</td>
-        </tr>
-        <tr id="prop-narrativeText">
-          <td><span class="prop-name">narrativeText</span><br><span style="font-size:.75rem;color:var(--ink-soft);">narrative text</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">NarrativeVariant → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The text of this narrative variant. Language-tagged. Access governed by iroko:accessLevel on the variant instance.</td>
-        </tr>
-        <tr id="prop-relatedAs">
-          <td><span class="prop-name">relatedAs</span><br><span style="font-size:.75rem;color:var(--ink-soft);">related as</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Kinship Claim → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The type of kinship or relational bond asserted. Range: concepts from iroko:KinshipTypeScheme or tradition-specific kinship schemes.</td>
-        </tr>
-        <tr id="prop-supportsAssertion">
-          <td><span class="prop-name">supportsAssertion</span><br><span style="font-size:.75rem;color:var(--ink-soft);">supports assertion</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">NarrativeVariant → Assertion</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a NarrativeVariant to iroko:Assertion nodes it supports or motivates. The narrative is the evidentiary basis for the assertion.</td>
-        </tr>
-        <tr id="prop-transmissionDate">
-          <td><span class="prop-name">transmissionDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">transmission date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Story Lineage → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Date or date range of this transmission event.</td>
-        </tr>
-        <tr id="prop-transmissionFrom">
-          <td><span class="prop-name">transmissionFrom</span><br><span style="font-size:.75rem;color:var(--ink-soft);">transmission from</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Story Lineage → Agent</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The agent who transmitted this story to the next link in the chain.</td>
-        </tr>
-        <tr id="prop-transmissionNote">
-          <td><span class="prop-name">transmissionNote</span><br><span style="font-size:.75rem;color:var(--ink-soft);">transmission note</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Story Lineage → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Free-text note on context, mode, or conditions of transmission.</td>
-        </tr>
-        <tr id="prop-transmissionTo">
-          <td><span class="prop-name">transmissionTo</span><br><span style="font-size:.75rem;color:var(--ink-soft);">transmission to</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Story Lineage → Agent</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The agent who received this story.</td>
-        </tr>
-        <tr id="prop-variantAuthority">
-          <td><span class="prop-name">variantAuthority</span><br><span style="font-size:.75rem;color:var(--ink-soft);">variant authority</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">NarrativeVariant → RitualAuthority</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The Authority context recognized for this variant. Which lineage or house endorses this telling as authoritative.</td>
-        </tr>
-        <tr id="prop-variantCreatedOn">
-          <td><span class="prop-name">variantCreatedOn</span><br><span style="font-size:.75rem;color:var(--ink-soft);">variant created on</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">NarrativeVariant → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Date on which this narrative variant was recorded, transcribed, or published.</td>
-        </tr>
-        <tr id="prop-variantEvent">
-          <td><span class="prop-name">variantEvent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">variant event</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">NarrativeVariant → FieldworkEvent</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The FieldworkEvent or ritual event that captured or generated this narrative variant.</td>
-        </tr>
-        <tr id="prop-variantPlace">
-          <td><span class="prop-name">variantPlace</span><br><span style="font-size:.75rem;color:var(--ink-soft);">variant place</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">NarrativeVariant → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Place where the telling occurred or was recorded.</td>
-        </tr>
-        <tr id="prop-variantRelation">
-          <td><span class="prop-name">variantRelation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">variant relation</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">NarrativeVariant → NarrativeVariant</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Typed relationship between two NarrativeVariants. Range: iroko:VariantRelationTypeScheme concepts.</td>
-        </tr>
-        <tr id="prop-variantRelationType">
-          <td><span class="prop-name">variantRelationType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">variant relation type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Classifies the nature of a variant relationship — close variant, contested, derived, harmonized, lineage-bound.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">5 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Interpretive Stances</span>
-        <span class="scheme-count">6 concepts</span>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="fw">Iroko <span>Historical Society</span></span>
+        <p>Postcustodial cultural heritage complex for Afro-Atlantic sacred knowledge systems.</p>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Hermeneutic approaches to reading or transmitting a narrative.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-stance-allegorical">
-          <div class="concept-label">Allegorical</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">stance-allegorical</div>
-          <p class="concept-def">stance-allegorical</p>
-        </div>
-        <div class="concept-item" id="concept-stance-analytic">
-          <div class="concept-label">Analytic</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">stance-analytic</div>
-          <p class="concept-def">Researcher or scholarly reading, necessarily outside community interpretive authority.</p>
-        </div>
-        <div class="concept-item" id="concept-stance-diagnostic">
-          <div class="concept-label">Diagnostic</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">stance-diagnostic</div>
-          <p class="concept-def">Reading the narrative as a diagnostic tool — for divination, consultation, or situational assessment.</p>
-        </div>
-        <div class="concept-item" id="concept-stance-initiatory">
-          <div class="concept-label">Initiatory</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">stance-initiatory</div>
-          <p class="concept-def">Reading reserved for or shaped by initiatory context.</p>
-        </div>
-        <div class="concept-item" id="concept-stance-literal">
-          <div class="concept-label">Literal</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">stance-literal</div>
-          <p class="concept-def">stance-literal</p>
-        </div>
-        <div class="concept-item" id="concept-stance-polemic">
-          <div class="concept-label">Polemic</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">stance-polemic</div>
-          <p class="concept-def">Narrative produced or shaped by an argument about tradition, authority, or lineage legitimacy.</p>
-        </div>
+      <div class="footer-col">
+        <h4>Ontology</h4>
+        <ul>
+          <li><a href="#">Modules</a></li>
+          <li><a href="#">Classes</a></li>
+          <li><a href="#">Properties</a></li>
+          <li><a href="#">Concept Schemes</a></li>
+          <li><a href="#">Whitepaper</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Institution</h4>
+        <ul>
+          <li><a href="#">About IHS</a></li>
+          <li><a href="#">Governance</a></li>
+          <li><a href="#">Access Policy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-funders">
+        <h4>Supported by</h4>
+        <div class="funder-slot">Funder logo</div>
+        <div class="funder-slot">Funder logo</div>
       </div>
     </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Kinship Types</span>
-        <span class="scheme-count">8 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Relational categories for kinship and lineage claims, particularly in sacred genealogies and spirit family assertions.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-kinship-ancestor">
-          <div class="concept-label">ancestor</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-ancestor</div>
-          <p class="concept-def">kinship-ancestor</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-brother">
-          <div class="concept-label">brother</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-brother</div>
-          <p class="concept-def">kinship-brother</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-child">
-          <div class="concept-label">child</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-child</div>
-          <p class="concept-def">kinship-child</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-father">
-          <div class="concept-label">father</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-father</div>
-          <p class="concept-def">kinship-father</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-mother">
-          <div class="concept-label">mother</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-mother</div>
-          <p class="concept-def">kinship-mother</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-owner">
-          <div class="concept-label">owner/patron</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-owner</div>
-          <p class="concept-def">Describes the relationship between an orisha or lwa and the practitioner over whom they have primary claim.</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-road">
-          <div class="concept-label">road/camino</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-road</div>
-          <p class="concept-def">Describes a relationship between aspects of a spirit or between a spirit and a tradition-specific manifestation.</p>
-        </div>
-        <div class="concept-item" id="concept-kinship-sister">
-          <div class="concept-label">sister</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">kinship-sister</div>
-          <p class="concept-def">kinship-sister</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Narrative Roles</span>
-        <span class="scheme-count">5 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Roles of participants in narrative events.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-role-chorus">
-          <div class="concept-label">Chorus</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-chorus</div>
-          <p class="concept-def">Collective voice responding to or accompanying the narrator.</p>
-        </div>
-        <div class="concept-item" id="concept-role-community">
-          <div class="concept-label">Community</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-community</div>
-          <p class="concept-def">Collective community voice or assembled participants.</p>
-        </div>
-        <div class="concept-item" id="concept-role-narrator">
-          <div class="concept-label">Narrator</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-narrator</div>
-          <p class="concept-def">Primary teller or transmitter of the narrative.</p>
-        </div>
-        <div class="concept-item" id="concept-role-officiant">
-          <div class="concept-label">Officiant</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-officiant</div>
-          <p class="concept-def">Ritual officiant whose role shapes the telling.</p>
-        </div>
-        <div class="concept-item" id="concept-role-researcher">
-          <div class="concept-label">Researcher</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">role-researcher</div>
-          <p class="concept-def">Ethnographer, archivist, or scholar whose authorship must be distinguished from community voice.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Segment Types</span>
-        <span class="scheme-count">8 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Types of addressable narrative segments.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-segType-chant-line">
-          <div class="concept-label">Chant Line</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">segType-chant-line</div>
-          <p class="concept-def">segType-chant-line</p>
-        </div>
-        <div class="concept-item" id="concept-segType-episode">
-          <div class="concept-label">Episode</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">segType-episode</div>
-          <p class="concept-def">segType-episode</p>
-        </div>
-        <div class="concept-item" id="concept-segType-gloss">
-          <div class="concept-label">Gloss</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">segType-gloss</div>
-          <p class="concept-def">An explanatory note or translation embedded within the narrative.</p>
-        </div>
-        <div class="concept-item" id="concept-segType-praise-name">
-          <div class="concept-label">Praise Name</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">segType-praise-name</div>
-          <p class="concept-def">segType-praise-name</p>
-        </div>
-        <div class="concept-item" id="concept-segType-prayer">
-          <div class="concept-label">Prayer</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">segType-prayer</div>
-          <p class="concept-def">segType-prayer</p>
-        </div>
-        <div class="concept-item" id="concept-segType-prohibition">
-          <div class="concept-label">Prohibition</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">segType-prohibition</div>
-          <p class="concept-def">A stated prohibition or interdiction within the narrative.</p>
-        </div>
-        <div class="concept-item" id="concept-segType-rubric">
-          <div class="concept-label">Rubric</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">segType-rubric</div>
-          <p class="concept-def">A heading, liturgical direction, or structural marker in the narrative.</p>
-        </div>
-        <div class="concept-item" id="concept-segType-verse">
-          <div class="concept-label">Verse</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">segType-verse</div>
-          <p class="concept-def">segType-verse</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Variant Relation Types</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Classification of the relationship between two narrative variants.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-varRel-close">
-          <div class="concept-label">Close Variant</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">varRel-close</div>
-          <p class="concept-def">Two variants sharing the same core content with minor differences.</p>
-        </div>
-        <div class="concept-item" id="concept-varRel-contested">
-          <div class="concept-label">Contested</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">varRel-contested</div>
-          <p class="concept-def">Two variants that contradict each other on a key claim.</p>
-        </div>
-        <div class="concept-item" id="concept-varRel-derived">
-          <div class="concept-label">Derived</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">varRel-derived</div>
-          <p class="concept-def">One variant clearly derives from or expands upon the other.</p>
-        </div>
-        <div class="concept-item" id="concept-varRel-harmonized">
-          <div class="concept-label">Harmonized</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">varRel-harmonized</div>
-          <p class="concept-def">A variant produced by reconciling two or more divergent tellings.</p>
-        </div>
-        <div class="concept-item" id="concept-varRel-lineage-bound">
-          <div class="concept-label">Lineage-Bound</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">varRel-lineage-bound</div>
-          <p class="concept-def">A variant that applies only within a specific lineage — not a deviation, but a legitimate lineage-specific telling.</p>
-        </div>
-        <div class="concept-item" id="concept-varRel-translation">
-          <div class="concept-label">Translation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">varRel-translation</div>
-          <p class="concept-def">A variant that is a translation into another language, which may introduce interpretive differences.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      Issued 2026-02-23 · Revised 2026-02-25<br>
-      License: CC0 1.0 Universal (Public Domain)
-    </div>
-    <div class="footer-links">
-      <a href="https://www.irokosociety.org">irokosociety.org</a>
-      <a href="../index.html">Home</a>
-      <a href="index.html">Vocabularies</a>
+    <div class="footer-bottom">
+      <p>© 2025 Iroko Historical Society / Ilé Aña Olofí, Inc. · <a href="#">Terms of Use</a> · <a href="#">Licensing</a></p>
+      <span class="version-badge">v1.2.0</span>
     </div>
   </footer>
 
-</div>
+<script>
+const MOD_SLUG = 'narrative';
+const MOD_DISPLAY = 'Narrative Module';
+const MOD_CITE = '"Narrative Module." Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/narrative';
+const CLASSES = {
+  Fieldnote: {
+    uri:'iroko:Fieldnote', label:'Fieldnote',
+    definition:'Researcher-authored note, observation, or analytic memo. Treated as a NarrativeVariant with explicit authorship and interpretive stance to keep researcher voice distinct from community voice.',
+    outgoing:[],
+    incoming:[],
+    crossModuleConnections:[]
+  },
+  InterpretiveStance: {
+    uri:'iroko:InterpretiveStance', label:'Interpretive Stance',
+    definition:'A hermeneutic or epistemological approach to reading a narrative or variant. Tags the reading frame rather than the content.',
+    outgoing:[],
+    incoming:[{uri:'iroko:interpretiveStance',label:'interpretive stance',domain:'',definition:'Tags a NarrativeVariant or Commentary with an interpretive hermeneutic frame.',crossModule:''  }],
+    crossModuleConnections:[]
+  },
+  KinshipClaim: {
+    uri:'iroko:KinshipClaim', label:'Kinship Claim',
+    definition:'A claim about relationships between entities (spirit-father, spirit-sibling, ancestor, etc.) that may be contested and authority-scoped. Implemented as an iroko:Assertion subtype so it inherits full assertion governance: authorizedBy, accessLevel, contestedStatus, assertionStatus.',
+    outgoing:[{uri:'iroko:claimObject',label:'claim object',range:'',definition:'The entity to whom the subject is related by this claim.',crossModule:''  },{uri:'iroko:claimSubject',label:'claim subject',range:'',definition:'The entity about whom the kinship claim is made.',crossModule:''  },{uri:'iroko:relatedAs',label:'related as',range:'iroko:Concept',definition:'The type of kinship or relational bond asserted. Range: concepts from iroko:KinshipTypeScheme or tradition-specific kinship schemes.',crossModule:''  }],
+    incoming:[{uri:'iroko:assertsKinship',label:'asserts kinship',domain:'iroko:NarrativeVariant',definition:'Links a NarrativeVariant to a KinshipClaim it asserts. Used for spirit kinship — spirit-father, spirit-sibling, ancestral claims — where the bond is narrated or testified rather than generated by a documented event. The claim may be contested across lineages or traditions; iroko:KinshipClaim is a subclass of iroko:Assertion and inherits its contested-knowledge modeling. Access: community-only.',crossModule:'core'  },{uri:'iroko:generatesKinship',label:'generates kinship',domain:'iroko:InitiationEvent',definition:'Links an InitiationEvent to the KinshipClaim it creates. Covers initiation-based human kinship bonds: godfather/godson (padrino/ahijado), initiator/initiate, elder/junior lineage member. Unlike assertsKinship, this bond is generated by a documented event of record rather than narrated — the initiation created the bond. Access: initiated-only — initiation genealogy and godparent lineage are internal community records not appropriate for public or community-tier disclosure.',crossModule:'ile'  }],
+    crossModuleConnections:[{name:'Core Module',slug:'core',dotClass:'dot-core',props:'via iroko:assertsKinship',direction:'referenced by'},{name:'Ilé Module',slug:'ile',dotClass:'dot-ile',props:'via iroko:generatesKinship',direction:'referenced by'}]
+  },
+  StoryLineage: {
+    uri:'iroko:StoryLineage', label:'Story Lineage',
+    definition:'A transmission chain for a narrative — who transmitted the story to whom, in what context. Separate from biological kinship. Models oral transmission provenance.',
+    outgoing:[{uri:'iroko:transmissionFrom',label:'transmission from',range:'iroko:Agent',definition:'The agent who transmitted this story to the next link in the chain.',crossModule:''  },{uri:'iroko:transmissionTo',label:'transmission to',range:'iroko:Agent',definition:'The agent who received this story.',crossModule:''  }],
+    incoming:[{uri:'iroko:hasStoryLineage',label:'has story lineage',domain:'',definition:'Links a Narrative or NarrativeVariant to a StoryLineage node documenting its transmission chain.',crossModule:''  }],
+    crossModuleConnections:[]
+  },
+  Testimony: {
+    uri:'iroko:Testimony', label:'Testimony',
+    definition:'A narrated account offered by a participant or witness. A Testimony is a NarrativeVariant with an identified speaker whose presence or role is itself the epistemic claim — the content derives its authority from the speaker\'s position.',
+    outgoing:[],
+    incoming:[],
+    crossModuleConnections:[]
+  }
+};
+const MODULE_CONNECTIONS = [
+  {name:'Core Module',slug:'core',dotClass:'dot-core',props:'1 shared property'},
+  {name:'Ilé Module',slug:'ile',dotClass:'dot-ile',props:'1 shared property'}
+];
+
+let activeClass = null;
+
+function activateClass(classId) {
+  if (activeClass === classId) { deactivateClass(); return; }
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = classId;
+  document.getElementById('card-' + classId)?.classList.add('is-active');
+  const data = CLASSES[classId];
+  if (!data) return;
+  document.getElementById('panel-uri').textContent = data.uri;
+  document.getElementById('panel-label').textContent = data.label;
+  document.getElementById('panel-definition').textContent = data.definition || '';
+  const citeText = data.uri + '. Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
+  document.getElementById('panel-cite-text').innerHTML = '<em>' + citeText + '</em>';
+  document.getElementById('panel-cite-btn').dataset.cite = citeText;
+  renderProps('incoming-props', data.incoming, 'in');
+  renderProps('outgoing-props', data.outgoing, 'out');
+  document.getElementById('zone2-empty').classList.add('hidden');
+  document.getElementById('zone2-hint').textContent = 'Click class again to close';
+  const panel = document.getElementById('property-panel');
+  panel.classList.add('visible');
+  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  renderClassSidebar(data, classId);
+  history.replaceState(null, '', '#' + classId);
+}
+
+function deactivateClass() {
+  if (activeClass) document.getElementById('card-' + activeClass)?.classList.remove('is-active');
+  activeClass = null;
+  document.getElementById('property-panel').classList.remove('visible');
+  document.getElementById('zone2-empty').classList.remove('hidden');
+  document.getElementById('zone2-hint').textContent = 'Select a class above to explore its properties';
+  renderModuleSidebar();
+  history.replaceState(null, '', window.location.pathname);
+}
+
+function renderProps(containerId, props, dir) {
+  const el = document.getElementById(containerId);
+  if (!props || props.length === 0) { el.innerHTML = '<div class="no-props">None documented in this module.</div>'; return; }
+  el.innerHTML = props.map((p, i) => {
+    const id = 'prop-' + dir + '-' + i;
+    const endLabel = dir === 'out' ? 'Range' : 'Domain';
+    const endVal   = dir === 'out' ? (p.range || '') : (p.domain || '');
+    const crossTag = (p.crossModule && p.crossModule !== MOD_SLUG) ? '<span class="cross-tag">[' + p.crossModule + ']</span>' : '';
+    return '<div class="prop-item" id="' + id + '" onclick="toggleProp(\'' + id + '\')">' +
+      '<div class="prop-item-top"><span class="prop-item-uri">' + p.uri + '</span>' +
+      '<svg class="prop-item-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5,3 11,8 5,13"/></svg></div>' +
+      '<span class="prop-item-label">' + (p.label || '') + '</span>' +
+      '<div class="prop-detail" id="' + id + '-detail">' +
+      '<div class="prop-detail-row"><span class="pd-label">' + endLabel + '</span><span class="pd-value">' + endVal + crossTag + '</span></div>' +
+      '<div class="prop-detail-row"><span class="pd-label">Definition</span><span class="pd-value">' + (p.definition || '') + '</span></div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function toggleProp(propId) {
+  const item = document.getElementById(propId);
+  const detail = document.getElementById(propId + '-detail');
+  if (!item || !detail) return;
+  const isOpen = item.classList.contains('is-expanded');
+  document.querySelectorAll('.prop-item.is-expanded').forEach(el => {
+    el.classList.remove('is-expanded');
+    el.querySelector('.prop-detail')?.classList.remove('visible');
+  });
+  if (!isOpen) { item.classList.add('is-expanded'); detail.classList.add('visible'); }
+}
+
+function renderClassSidebar(data, classId) {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'iroko:' + classId + ' — connections';
+    const conns = data.crossModuleConnections || [];
+    el.innerHTML = '<div class="active-class-card"><span class="acc-uri">' + data.uri + '</span><span class="acc-label">' + data.label + '</span></div>' +
+      (conns.length === 0
+        ? '<p class="no-connections">No cross-module connections.</p>'
+        : conns.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+            '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+            '<span class="cc-props">' + c.props + '</span>' +
+            '<span class="cc-via">' + c.direction + '</span></a>').join(''));
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function renderModuleSidebar() {
+  const el = document.getElementById('sb-connections');
+  el.classList.add('fading');
+  setTimeout(() => {
+    document.getElementById('sb-title').textContent = 'Connected modules';
+    el.innerHTML = MODULE_CONNECTIONS.length === 0
+      ? '<p class="no-connections">No cross-module connections documented.</p>'
+      : MODULE_CONNECTIONS.map(c => '<a class="connection-card" href="../' + c.slug + '/">' +
+          '<div class="cc-top"><span class="cc-dot ' + c.dotClass + '"></span><span class="cc-module-name">' + c.name + '</span></div>' +
+          '<span class="cc-props">' + c.props + '</span></a>').join('');
+    el.classList.remove('fading');
+  }, 130);
+}
+
+function copyPanelCitation(btn) {
+  navigator.clipboard.writeText(btn.dataset.cite).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyModuleCitation(btn) {
+  navigator.clipboard.writeText(MOD_CITE).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function copyPageLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const orig = btn.innerHTML; btn.textContent = '✓'; btn.classList.add('copied-state');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied-state'); }, 2000);
+  });
+}
+function shareEmail(e) {
+  e.preventDefault();
+  window.location.href = 'mailto:?subject=' + encodeURIComponent('Iroko Framework Ontology — ' + MOD_DISPLAY) + '&body=' + encodeURIComponent(window.location.href);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderModuleSidebar();
+  const hash = window.location.hash.slice(1);
+  if (hash && CLASSES[hash]) setTimeout(() => activateClass(hash), 100);
+});
+
+</script>
 </body>
 </html>
