@@ -1,6 +1,6 @@
 # Iroko Framework — Technical Architecture
 
-**Version:** 2.0.0  
+**Version:** 1.2.0  
 **Date:** February 2026  
 **Maintainer:** Iroko Historical Society  
 **Base URI:** `https://www.irokosociety.org/iroko-framework/`
