@@ -187,7 +187,7 @@ function activateClass(classId) {
   document.getElementById('panel-uri').textContent   = data.uri;
   document.getElementById('panel-label').textContent = data.label;
   document.getElementById('panel-definition').textContent = data.definition || '';
-  const cite = data.uri + '. Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
+  const cite = data.uri + '. Iroko Framework Ontology v1.3.0. Iroko Historical Society. https://ontology.irokosociety.org/iroko#' + classId;
   document.getElementById('panel-cite-text').innerHTML = '<em>' + cite + '</em>';
   document.getElementById('panel-cite-btn').dataset.cite = cite;
   renderProps('incoming-props', data.incoming, 'in');
@@ -333,7 +333,7 @@ def page_html(mod, data):
     stats   = data["stats"]
     desc    = data.get("description") or ""
     short   = (desc.split(".")[0] + ".") if desc else ""
-    cite    = '"' + title + '." Iroko Framework Ontology v1.2.0. Iroko Historical Society. https://ontology.irokosociety.org/' + mod
+    cite    = '"' + title + '." Iroko Framework Ontology v1.3.0. Iroko Historical Society. https://ontology.irokosociety.org/' + mod
     classes_js  = build_classes_js(data["classes"], mod)
     modconn_js  = build_module_connections_js(mod, data["classes"])
     cards_html  = class_cards_html(data["classes"])
@@ -492,7 +492,7 @@ def page_html(mod, data):
       <div class="sidebar-panel">
         <div class="sidebar-panel-title">Cite the {title}</div>
         <div class="sidebar-citation">
-          <div class="cite-text">"{title}." Iroko Framework Ontology v1.2.0. Iroko Historical Society. <em>ontology.irokosociety.org/{mod}</em></div>
+          <div class="cite-text">"{title}." Iroko Framework Ontology v1.3.0. Iroko Historical Society. <em>ontology.irokosociety.org/{mod}</em></div>
           <button class="btn-copy-sm" onclick="copyModuleCitation(this)">
             <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
               <rect x="4" y="4" width="9" height="10" rx="1"/>
@@ -523,7 +523,7 @@ def page_html(mod, data):
       <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
     </div>
     <div class="footer-cc">CC0 1.0 Universal · Public Domain</div>
-    <span class="version-badge">v1.2.0</span>
+    <span class="version-badge">v1.3.0</span>
   </footer>
 
 <script>
