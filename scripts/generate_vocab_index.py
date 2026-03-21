@@ -126,7 +126,7 @@ def extract_terms(ttl_path: Path, mod_name: str, ns: str) -> list[dict]:
         })
 
     # Properties
-    for ptype in (OWL.ObjectProperty, OWL.DatatypeProperty):
+    for ptype in (OWL.ObjectProperty, OWL.DatatypeProperty, OWL.AnnotationProperty):
         for uri in g.subjects(RDF.type, ptype):
             if not str(uri).startswith(ns):
                 continue

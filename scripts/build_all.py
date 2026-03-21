@@ -40,20 +40,24 @@ MONTH_YEAR = "March 2026"
 
 def patch_docs_html(docs_dir: Path, root_dir: Path, dry_run: bool = False):
     """
-    Patches version and date strings in the hand-maintained docs HTML files.
-    Does not touch vocab HTML files (those are handled by generate_vocab_html.py).
+    Patches version and date strings in all hand-maintained HTML files.
+    Term counts are handled by update_index_counts.py (step 3) — not here.
 
     Files patched:
-      docs/index.html      — meta-pill date
-      docs/ARCHITECTURE.html — top-bar version, meta-pill date
-      docs/REUSE.html      — top-bar version
-      docs/CONTRIBUTING.html — top-bar version
+      docs/index.html         — meta-pill date
+      docs/ARCHITECTURE.html  — top-bar version, meta-pill date, doc-meta line
+      docs/REUSE.html         — top-bar version
+      docs/CONTRIBUTING.html  — top-bar version
+      vocab/index.html        — meta-pill date (version already set by generator)
+      index.html              — top-bar version, meta-pill date (root landing page)
     """
     targets = [
         docs_dir / "index.html",
         docs_dir / "ARCHITECTURE.html",
         docs_dir / "REUSE.html",
         docs_dir / "CONTRIBUTING.html",
+        root_dir / "vocab" / "index.html",
+        root_dir / "index.html",
     ]
 
     version_pattern = re.compile(r'(Iroko Framework v)\d+\.\d+\.\d+')
