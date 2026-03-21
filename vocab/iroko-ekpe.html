@@ -59,17 +59,23 @@
   <div style="margin-top:1.5rem;">
     <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting initiatory societies, grade structures, esoteric governance, and sodality membership across Afro-Atlantic traditions. Covers Ékpè/Ngbe, Abakuá, Ogboni/Oshugbo, Oro, Gelede, Egungun, and analogous institutions. Distinct from iroko-ile (religious houses and lineages) and iroko-travay (ritual processes): this module focuses on the institutional architecture of sodalities as systems of graded authority, esoteric knowledge, and community governance. Use with iroko-authority to model grade conferral authority and recognition networks; iroko-epistemic to constrain disclosure of restricted grade content and member identities.</p>
     <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">33</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">30</span><span class="stat-label">Concepts</span></div>
+      <div class="stat-cell"><span class="stat-n">7</span><span class="stat-label">Classes</span></div>
+      <div class="stat-cell"><span class="stat-n">37</span><span class="stat-label">Properties</span></div>
+      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+      <div class="stat-cell"><span class="stat-n">34</span><span class="stat-label">Concepts</span></div>
     </div>
   </div>
 
   <div class="term-section">
     <div class="term-section-header">
       <span class="term-section-title">Classes</span>
-      <span class="term-section-count">6 classes</span>
+      <span class="term-section-count">7 classes</span>
+    </div>
+    <div class="class-card" id="cls-ForcedDissolution">
+      <div class="class-name">ForcedDissolution</div>
+      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Forced Dissolution</div>
+      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
+      <p class="class-def">An event in which an initiatory society was suppressed, banned, or destroyed by an external authority. Enables structured documentation of state violence against sacred institutions. Primary case study: Machado-era suppression of Abakuá potencias in Cuba (1923). Key governance principle: forced dissolution by an external authority does not transfer custodial rights over the society&#x27;s sacred materials, records, or knowledge to the suppressing state or to the public. Materials held by a forcibly dissolved society remain governed by iroko:Ritual Sovereignty under iroko:RitualPractitioner authority.</p>
     </div>
     <div class="class-card" id="cls-InitiatorySociety">
       <div class="class-name">InitiatorySociety</div>
@@ -112,7 +118,7 @@
   <div class="term-section">
     <div class="term-section-header">
       <span class="term-section-title">Properties</span>
-      <span class="term-section-count">33 properties</span>
+      <span class="term-section-count">37 properties</span>
     </div>
     <table class="prop-table">
       <thead>
@@ -131,6 +137,27 @@
           <td class="prop-domain-range">Initiatory Society → House</td>
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">A religious house (iroko:House) with which this society maintains an ongoing ceremonial relationship. In many traditions, society and house membership overlap for senior practitioners.</td>
+        </tr>
+        <tr id="prop-dissolutionAuthority">
+          <td><span class="prop-name">dissolutionAuthority</span><br><span style="font-size:.75rem;color:var(--ink-soft);">dissolution authority</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Forced Dissolution → langString</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">The external authority (state, colonial power, occupying government) that forced dissolution of the society. Free text, language-tagged.</td>
+        </tr>
+        <tr id="prop-dissolutionDate">
+          <td><span class="prop-name">dissolutionDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">dissolution date</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
+          <td class="prop-domain-range">Forced Dissolution → langString</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">The date or approximate period of the forced dissolution event.</td>
+        </tr>
+        <tr id="prop-dissolutionEvent">
+          <td><span class="prop-name">dissolutionEvent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">dissolution event</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Initiatory Society → Forced Dissolution</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">Links an InitiatorySociety to a ForcedDissolution event that ended or suspended its operation by external authority.</td>
         </tr>
         <tr id="prop-foundingLocation">
           <td><span class="prop-name">foundingLocation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">founding location</span></td>
@@ -314,6 +341,13 @@
           <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
           <td class="prop-desc">The governance model of this society. Range: iroko:GovernanceStructureScheme.</td>
         </tr>
+        <tr id="prop-societyStatus">
+          <td><span class="prop-name">societyStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">society status</span></td>
+          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
+          <td class="prop-domain-range">Initiatory Society → Concept</td>
+          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
+          <td class="prop-desc">The current operational status of an initiatory society. Range: iroko:SocietyStatusScheme concepts (active, historical, reformed, forcibly-dissolved). A forcibly-dissolved society&#x27;s archival records retain their access restrictions — dissolution by external authority does not transfer governance to the suppressing power or to the public.</td>
+        </tr>
         <tr id="prop-societyTradition">
           <td><span class="prop-name">societyTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">society tradition</span></td>
           <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
@@ -363,7 +397,7 @@
   <div class="term-section">
     <div class="term-section-header">
       <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">4 schemes</span>
+      <span class="term-section-count">5 schemes</span>
     </div>
     <div class="scheme-block">
       <div class="scheme-header">
@@ -513,6 +547,35 @@
           <div class="concept-label">Other</div>
           <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">gov-other</div>
           <p class="concept-def">Governance structure not covered by existing concepts.</p>
+        </div>
+      </div>
+    </div>
+    <div class="scheme-block">
+      <div class="scheme-header">
+        <span class="scheme-name">Society Status Scheme</span>
+        <span class="scheme-count">4 concepts</span>
+      </div>
+      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">SocietyStatusScheme</p>
+      <div class="concept-list">
+        <div class="concept-item" id="concept-societyStatus-active">
+          <div class="concept-label">active</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">societyStatus-active</div>
+          <p class="concept-def">The society is currently operating, initiating members, and exercising its governance functions.</p>
+        </div>
+        <div class="concept-item" id="concept-societyStatus-forcibly-dissolved">
+          <div class="concept-label">forcibly dissolved</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">societyStatus-forcibly-dissolved</div>
+          <p class="concept-def">The society was suppressed by an external authority — colonial administration, state government, or occupying power — rather than ceasing through internal process. Records held by a forcibly dissolved society do not become public as a result of the dissolution. See also: iroko:ForcedDissolution.</p>
+        </div>
+        <div class="concept-item" id="concept-societyStatus-historical">
+          <div class="concept-label">historical</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">societyStatus-historical</div>
+          <p class="concept-def">The society is no longer operating but was not forcibly dissolved — it ceased through natural discontinuity, succession failure, or community decision.</p>
+        </div>
+        <div class="concept-item" id="concept-societyStatus-reformed">
+          <div class="concept-label">reformed</div>
+          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">societyStatus-reformed</div>
+          <p class="concept-def">The society has been reconstituted after a period of dormancy or dissolution, with continuity of tradition but a break in institutional operation.</p>
         </div>
       </div>
     </div>
