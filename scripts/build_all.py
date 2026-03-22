@@ -13,10 +13,11 @@ Usage:
     python build_all.py --step 3                 # run only step 3
 
 Steps:
-    1  generate_vocab_html.py      — vocab browse pages (iroko-*.html)
-    2  generate_vocab_index.py     — vocab/iroko-termlist.html
-    3  update_index_counts.py      — sync counts in all index files
-    +  update_docs_html()          — patch version/date in docs HTML
+    1  generate_vocab_html.py         — v8 interactive module pages (iroko-*.html)
+    2  generate_vocab_index.py        — vocab/iroko-termlist.html
+    3  update_index_counts.py         — sync counts in all index files
+    4  generate_serializations.py     — JSON-LD, RDF/XML, N-Triples from each TTL
+    +  update_docs_html()             — patch version/date in docs HTML
 
 All scripts are located in the same directory as build_all.py.
 """
@@ -131,8 +132,8 @@ def build_parser():
     p.add_argument("--docs",   metavar="DIR", help="Path to docs/ directory")
     p.add_argument("--dry-run", action="store_true",
                    help="Print what would change without writing")
-    p.add_argument("--step", type=int, choices=[1, 2, 3],
-                   help="Run only this step (1, 2, or 3)")
+    p.add_argument("--step", type=int, choices=[1, 2, 3, 4],
+                   help="Run only this step (1, 2, 3, or 4)")
     return p
 
 
@@ -200,7 +201,21 @@ def main():
             errors += 1
         print()
 
-    # ── Docs HTML: version + date strings ─────────────────────────────
+    # ── Step 4: Alternate serializations ──────────────────────────────
+    if only is None or only == 4:
+        print("── Step 4: Generating alternate serializations ────────────────")
+        extra = ["--vocab", str(vocab_dir)]
+        if args.dry_run:
+            extra += ["--dry-run"]
+        rc = run_script("generate_serializations.py", extra)
+        if rc != 0:
+            print(f"  \u2717 generate_serializations.py failed (exit {rc})")
+            errors += 1
+        elif not args.dry_run:
+            print("  \u2713 JSON-LD, RDF/XML, N-Triples written")
+        print()
+
+    # ── Docs HTML: version + date strings ─────────────────────────────────────
     if only is None:
         print("── Docs HTML: patching version and date strings ───────────────")
         patch_docs_html(docs_dir, root_dir, dry_run=args.dry_run)
@@ -214,7 +229,7 @@ def main():
     else:
         print(f"  All steps completed successfully")
         print()
-        print(f"  Next: git add -A && git commit -m 'chore: v{VERSION} HTML rebuild'")
+        print(f"  Next: git add -A && git commit -m 'build: v{VERSION} full HTML rebuild + serializations'")
 
 
 if __name__ == "__main__":

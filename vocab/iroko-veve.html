@@ -6,15 +6,209 @@
   <title>Vèvè Module — Graphic Sign Systems — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    /* ── Module page layout ──────────────────────────────────────── */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+    .module-main { min-width: 0; }
+    .zone-head {
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--rule-strong);
+      padding-bottom: .4rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .zone-hint { font-size: .68rem; letter-spacing: 0; text-transform: none;
+      color: var(--ink-soft); font-family: var(--serif); font-style: italic; opacity: .7; }
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
+    /* Zone 1 */
+    .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: .5rem; margin-bottom: 2rem; }
+    .cls-card { border: 1px solid var(--rule-strong); border-radius: 3px; padding: .75rem 1rem;
+      background: var(--paper); cursor: pointer;
+      transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
+    .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
+    .cls-card.active { border-color: var(--green); background: var(--green-light);
+      box-shadow: 0 2px 8px rgba(46,74,30,.12); }
+    .cls-card.active::after { content:''; position:absolute; bottom:-1px; left:50%;
+      transform:translateX(-50%); width:0; height:0;
+      border-left:7px solid transparent; border-right:7px solid transparent;
+      border-bottom:7px solid var(--paper-warm); }
+    .cls-uri { font-family: var(--mono); font-size: .7rem; color: var(--green-mid);
+      display: block; margin-bottom: .2rem; }
+    .cls-label { font-family: var(--serif); font-size: .95rem; font-weight: 600;
+      color: var(--ink); display: block; line-height: 1.2; }
+    .cls-hint { font-size: .67rem; color: var(--ink-soft); margin-top: .2rem;
+      display: block; font-style: italic; }
+
+    /* Zone 2 */
+    .prop-placeholder { background: var(--paper-warm); border: 1px dashed var(--rule-strong);
+      border-radius: 3px; padding: 1.25rem 1.5rem; color: var(--ink-soft); font-size: .84rem;
+      font-style: italic; margin-bottom: 2rem; display: flex; align-items: center; gap: .75rem; }
+    .prop-placeholder.hidden { display: none; }
+    .prop-panel { display: none; border: 1px solid var(--rule-strong); border-radius: 3px;
+      margin-bottom: 2rem; overflow: hidden; animation: panelIn 160ms ease forwards; }
+    .prop-panel.visible { display: block; }
+    @keyframes panelIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+    .pp-head { background: var(--green); color:#fff; padding:.9rem 1.25rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .pp-uri { font-family: var(--mono); font-size: .72rem; color: rgba(255,255,255,.65); }
+    .pp-label { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: #fff; }
+    .pp-close { background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer;
+      font-size:1.1rem; line-height:1; padding:.1rem; transition:color .15s;
+      margin-left:auto; flex-shrink:0; }
+    .pp-close:hover { color:#fff; }
+    .pp-def { padding:.85rem 1.25rem; font-size:.85rem; color:var(--ink-mid); line-height:1.6;
+      border-bottom:1px solid var(--rule); background:var(--paper-warm); }
+    .pp-cols { display:grid; grid-template-columns:1fr 1fr; background:var(--paper); }
+    .pp-col { padding:1.1rem 1.25rem; }
+    .pp-col:first-child { border-right:1px solid var(--rule); }
+    .pp-col-label { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.75rem;
+      display:flex; align-items:center; gap:.35rem; }
+    .dir-arrow { color: var(--green-mid); }
+    .pr-item { padding:.6rem .8rem; border:1px solid var(--rule); border-radius:3px;
+      background:var(--paper); margin-bottom:.4rem; }
+    .pr-top { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+    .pr-uri { font-family:var(--mono); font-size:.72rem; color:var(--green-mid); flex:1; }
+    .pr-type { font-family:var(--mono); font-size:.55rem; letter-spacing:.04em;
+      padding:.1em .4em; border-radius:2px; flex-shrink:0; }
+    .pr-type-obj  { background:#e8e0f0; color:#5c3d8f; }
+    .pr-type-data { background:#e0ecf8; color:#1a4a5e; }
+    .pr-type-ann  { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .pr-label { font-size:.8rem; color:var(--ink-soft); margin-top:.1rem; }
+    .pr-meta { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.3rem; }
+    .pr-def { font-size:.78rem; color:var(--ink-mid); margin-top:.35rem; line-height:1.45; }
+    .pr-source { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); font-style:italic; margin-top:.2rem; }
+    .no-props { font-size:.8rem; color:var(--ink-soft); font-style:italic; }
+    .ab { display:inline-block; font-family:var(--mono); font-size:.55rem; letter-spacing:.05em; padding:.1em .45em; border-radius:2px; }
+    .ab-pub  { background:var(--green-light); color:var(--green); }
+    .ab-comm { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .ab-init { background:#fde8e0; color:var(--terracotta,#8b3a1a); }
+    .pp-cite { padding:.85rem 1.25rem; border-top:1px solid var(--rule);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:1rem; flex-wrap:wrap; background:var(--paper-warm); }
+    .pp-cite-text { font-family:var(--mono); font-size:.7rem; color:var(--ink-soft);
+      flex:1; min-width:200px; }
+    .btn-copy-sm { font-family:var(--mono); font-size:.68rem; letter-spacing:.08em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.4em 1em; cursor:pointer; transition:background .15s;
+      flex-shrink:0; white-space:nowrap; }
+    .btn-copy-sm:hover { background:var(--ink); }
+    .btn-copy-sm.copied { background:var(--green-mid); }
+
+    /* Zone 3 */
+    .scheme-block { margin-bottom: 1.5rem; }
+    .scheme-head { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px 3px 0 0; padding:.6rem 1rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .sh-uri { font-family:var(--mono); font-size:.75rem; color:var(--green-mid); }
+    .sh-label { font-family:var(--serif); font-size:.92rem; font-weight:600; color:var(--ink); }
+    .sh-count { font-family:var(--mono); font-size:.62rem; color:var(--ink-soft); white-space:nowrap; }
+    .concept-chips { border:1px solid var(--rule-strong); border-top:none;
+      border-radius:0 0 3px 3px; display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
+    .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+    .chip:hover { background:var(--paper-warm); }
+    .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
+    .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+
+    /* Sidebar */
+    .module-sidebar { position:sticky; top:2rem; }
+    .sidebar-panel { border:1px solid var(--rule-strong); border-radius:3px; overflow:hidden; margin-bottom:1.25rem; }
+    .sp-head { background:var(--paper-warm); border-bottom:1px solid var(--rule-strong);
+      padding:.6rem 1rem; display:flex; justify-content:space-between; align-items:center; }
+    .sp-title { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); }
+    .sp-active-uri { font-family:var(--mono); font-size:.67rem; color:var(--green); display:none; }
+    .sp-body { padding:.75rem 1rem; }
+    .conn-card { border:1px solid var(--rule); border-radius:3px; padding:.55rem .75rem;
+      margin-bottom:.4rem; background:var(--paper); text-decoration:none; display:block;
+      transition:border-color .15s, background .15s; }
+    .conn-card:hover { border-color:var(--green-mid); background:var(--paper-warm); }
+    .cc-row { display:flex; align-items:center; gap:.4rem; }
+    .cc-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .dot-core        { background:var(--green); }
+    .dot-agency      { background:#6b3a10; }
+    .dot-authority   { background:#3a4a5e; }
+    .dot-epistemic   { background:#1a4a40; }
+    .dot-narrative   { background:#5e3a2a; }
+    .dot-manifestation { background:#5c3d8f; }
+    .dot-botanical   { background:#3a5e28; }
+    .dot-entities    { background:#5c3d8f; }
+    .dot-ritual      { background:var(--terracotta,#8b3a1a); }
+    .dot-lineage     { background:#4a3010; }
+    .dot-divination  { background:#1a4a5e; }
+    .dot-societies   { background:#5e1a3a; }
+    .dot-graphic     { background:#3a3a1a; }
+    .dot-music       { background:#1a3a5e; }
+    .dot-language    { background:#2a1a5e; }
+    .dot-other       { background:var(--ink-soft); }
+    .cc-name { font-family:var(--serif); font-size:.88rem; font-weight:600; color:var(--ink); }
+    .cc-via { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.15rem; display:block; }
+    .cc-dir { font-size:.68rem; color:var(--ink-soft); font-style:italic; }
+    .share-row { display:flex; gap:.4rem; margin-bottom:1.25rem; }
+    .share-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:.25rem;
+      padding:.5rem .25rem; background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; cursor:pointer; font-family:var(--mono); font-size:.6rem;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); text-decoration:none;
+      transition:border-color .15s, background .15s, color .15s; }
+    .share-btn:hover { background:var(--green-light); border-color:var(--green-mid); color:var(--green); }
+    .share-btn.copied { background:var(--green-light); border-color:var(--green); color:var(--green); }
+    .share-btn svg { width:16px; height:16px; }
+    .sidebar-cite { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; padding:.85rem 1rem; }
+    .cite-head { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.5rem; }
+    .cite-tabs { display:flex; gap:0; margin-bottom:.6rem; border:1px solid var(--rule-strong);
+      border-radius:3px; overflow:hidden; }
+    .cite-tab { flex:1; font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; padding:.35em 0; background:var(--paper); border:none;
+      border-right:1px solid var(--rule-strong); color:var(--ink-soft);
+      cursor:pointer; transition:background .15s, color .15s; }
+    .cite-tab:last-child { border-right:none; }
+    .cite-tab:hover { background:var(--paper-warm); color:var(--ink); }
+    .cite-tab.active { background:var(--green-light); color:var(--green); font-weight:500; }
+    .cite-text { font-family:var(--mono); font-size:.7rem; line-height:1.55;
+      color:var(--ink-mid); font-style:italic; margin-bottom:.65rem; }
+    .cite-text pre { font-family:var(--mono); font-size:.68rem; line-height:1.55;
+      white-space:pre-wrap; word-break:break-all; margin:0; font-style:normal; }
+    .btn-cite-copy { width:100%; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.45em 0; cursor:pointer; transition:background .15s; }
+    .btn-cite-copy:hover { background:var(--ink); }
+    .btn-cite-copy.copied { background:var(--green-mid); }
+    .format-links { margin-top:.65rem; display:flex; flex-direction:column; gap:.25rem; }
+    .fmt-link { display:flex; justify-content:space-between; align-items:center;
+      font-family:var(--mono); font-size:.7rem; padding:.35rem .6rem;
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper);
+      color:var(--green-mid); text-decoration:none; transition:background .15s, border-color .15s; }
+    .fmt-link:hover { background:var(--paper-warm); border-color:var(--rule-strong); color:var(--green); }
+    .fmt-arrow { color:var(--ink-soft); }
+    .sidebar-dynamic { transition:opacity 120ms ease; }
+    .sidebar-dynamic.fading { opacity:0; pointer-events:none; }
+    .active-class-card { background:var(--green-light); border:1px solid var(--green-mid);
+      border-radius:3px; padding:.6rem .75rem; margin-bottom:.65rem; }
+    .acc-uri { font-family:var(--mono); font-size:.67rem; color:var(--green-mid); display:block; margin-bottom:.1rem; }
+    .acc-label { font-family:var(--serif); font-size:.9rem; font-weight:600; color:var(--ink); }
+    @media (max-width:900px) {
+      .module-layout { grid-template-columns:1fr; }
+      .module-sidebar { position:static; }
+      .pp-cols { grid-template-columns:1fr; }
+      .pp-col:first-child { border-right:none; border-bottom:1px solid var(--rule); }
+    }
+
   </style>
 </head>
 <body>
@@ -48,7 +242,7 @@
       <h1>Vèvè Module — Graphic Sign Systems</h1>
       <p class="subtitle">Sacred diagrams, signs, and esoteric scripts</p>
       <div class="header-meta">
-        <span class="meta-pill">veve:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-veve#</span>
+        <span class="meta-pill">veve:&nbsp; https://ontology.irokosociety.org/iroko-veve#</span>
         <span class="meta-pill">v1.3.0</span>
         <span class="meta-pill"><a href="iroko-veve.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
@@ -56,440 +250,377 @@
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting graphic sign systems, sacred diagrams, and esoteric scripts across Afro-Atlantic traditions. Covers Vèvè (Vodou), Firma/Patipemba (Palo), Ponto Riscado (Umbanda/Quimbanda), Anaforuana (Abakuá), Nsibidi (Ejagham), Adinkra (Akan), and Kongo cosmograms. Access control runs from public (sign system typology) through initiated-elder (operational drawing sequences) and no-access (selected Anaforuana protected by tradition authority). Use with iroko-authority to document which lineage or sodality context authorizes transmission of a sign system.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">14</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">44</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="module-stats" style="margin-top:1.5rem;">
+    <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+    <div class="stat-cell"><span class="stat-n">14</span><span class="stat-label">Properties</span></div>
+    <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+    <div class="stat-cell"><span class="stat-n">44</span><span class="stat-label">Concepts</span></div>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">4 classes</span>
-    </div>
-    <div class="class-card" id="cls-GraphicSign">
-      <div class="class-name">GraphicSign</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Graphic Sign</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sign</span></div>
-      <p class="class-def">A discrete ritual diagram, symbol, or graphic mark belonging to a sacred sign system. Each sign has a conventional form, a tradition-specific name, and one or more ceremonial functions. Examples: a specific Vodou vèvè drawn for Ogou Feray; an Abakuá Anaforuana sign protecting a potencia&#x27;s territory; a Palo firma drawn to open a Nganga. The sign&#x27;s form and name are community-restricted in active traditions; its operational use and drawing sequence are initiated-only.</p>
-    </div>
-    <div class="class-card" id="cls-SignCorpus">
-      <div class="class-name">SignCorpus</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sign Corpus</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">LineageKnowledgeGraph</span></div>
-      <p class="class-def">The complete inventory of graphic signs held and transmitted by a specific lineage, house, or tradition community. Different lineages within the same tradition may hold different signs or use the same sign with different operational meanings. A sign corpus is lineage-specific and represents a distinct LineageKnowledgeGraph.</p>
-    </div>
-    <div class="class-card" id="cls-SignInstance">
-      <div class="class-name">SignInstance</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sign Instance</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A specific documented occurrence of a graphic sign: a particular vèvè drawn at a specific ceremony, a firma traced before a consultation, an Adinkra stamped on cloth. Distinct from the abstract sign type (iroko:GraphicSign). Records medium, surface, date, ritual context, and photographer/recorder where available. Photographic documentation of sign instances is community-restricted; the sign&#x27;s existence is public.</p>
-    </div>
-    <div class="class-card" id="cls-SignSystem">
-      <div class="class-name">SignSystem</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sign System</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A tradition-specific graphic communication system consisting of a defined corpus of signs with shared visual grammar, drawing conventions, and ceremonial functions. Examples: the Vodou vèvè corpus; the Palo Monte firma/patipemba tradition; Ejagham Nsibidi; Abakuá Anaforuana; Akan Adinkra. A sign system is identified by tradition, geographic origin, and governing authority. The existence of a system and its name are public; its internal grammar and full sign inventory may be restricted.</p>
-    </div>
-  </div>
+  <div class="module-layout">
+    <main class="module-main">
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">14 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-colorSignificance">
-          <td><span class="prop-name">colorSignificance</span><br><span style="font-size:.75rem;color:var(--ink-soft);">color significance</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Graphic Sign → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The ritual significance of colors used with this sign, where applicable. Initiated-only.</td>
-        </tr>
-        <tr id="prop-directionality">
-          <td><span class="prop-name">directionality</span><br><span style="font-size:.75rem;color:var(--ink-soft);">directionality</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Graphic Sign → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Whether and how orientation of the sign affects its function (e.g., inverted signs in some Palo and Kongo traditions activate opposite polarity). Initiated-only.</td>
-        </tr>
-        <tr id="prop-documentationRecord">
-          <td><span class="prop-name">documentationRecord</span><br><span style="font-size:.75rem;color:var(--ink-soft);">documentation record</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sign Instance → SacredMedia</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Photographic, rubbing, or tracing record of this sign instance. Range: iroko:SacredMedia. Community-restricted: documentation should not enable replication.</td>
-        </tr>
-        <tr id="prop-drawingMedium">
-          <td><span class="prop-name">drawingMedium</span><br><span style="font-size:.75rem;color:var(--ink-soft);">drawing medium</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sign Instance → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The material used to draw this instance. Range: iroko:DrawingMediumScheme.</td>
-        </tr>
-        <tr id="prop-drawingSequence">
-          <td><span class="prop-name">drawingSequence</span><br><span style="font-size:.75rem;color:var(--ink-soft);">drawing sequence</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Graphic Sign → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
-          <td class="prop-desc">The step-by-step sequence in which the sign must be drawn. The directionality and order of strokes often carries operational significance. Initiated-elder only.</td>
-        </tr>
-        <tr id="prop-drawingSurface">
-          <td><span class="prop-name">drawingSurface</span><br><span style="font-size:.75rem;color:var(--ink-soft);">drawing surface</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sign Instance → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The surface on or within which this instance was drawn. Range: iroko:DrawingSurfaceScheme.</td>
-        </tr>
-        <tr id="prop-drawnBy">
-          <td><span class="prop-name">drawnBy</span><br><span style="font-size:.75rem;color:var(--ink-soft);">drawn by</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sign Instance → RitualPractitioner</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The practitioner who drew this sign instance. Range: iroko:RitualPractitioner — a vèvè, anaforuana, or other sacred graphic sign is always drawn by a human agent exercising ritual capacity, not merely any person. Community-restricted.</td>
-        </tr>
-        <tr id="prop-governingAuthority">
-          <td><span class="prop-name">governingAuthority</span><br><span style="font-size:.75rem;color:var(--ink-soft);">governing authority</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sign System → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The title or institution with authority over this sign system. For Anaforuana: the Abakuá potencia leadership. For Vodou vèvè: the Houngan/Mambo body. Community-restricted.</td>
-        </tr>
-        <tr id="prop-invokedEntity">
-          <td><span class="prop-name">invokedEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">invoked entity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Graphic Sign → SpiritualEntity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The spiritual entity primarily associated with or invoked by this sign. Range: iroko:SpiritualEntity. Community-restricted.</td>
-        </tr>
-        <tr id="prop-permanence">
-          <td><span class="prop-name">permanence</span><br><span style="font-size:.75rem;color:var(--ink-soft);">permanence</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sign Instance → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Whether this instance is ephemeral, temporary, or permanent. Range: iroko:PermanenceScheme.</td>
-        </tr>
-        <tr id="prop-relatedSign">
-          <td><span class="prop-name">relatedSign</span><br><span style="font-size:.75rem;color:var(--ink-soft);">related sign</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Graphic Sign → Graphic Sign</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">A sign within the same system that shares visual elements, modifies this sign&#x27;s function, or is typically drawn in sequence with it.</td>
-        </tr>
-        <tr id="prop-signFunction">
-          <td><span class="prop-name">signFunction</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign function</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Graphic Sign → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The primary ceremonial function of this sign. Range: iroko:SignFunctionScheme.</td>
-        </tr>
-        <tr id="prop-signMeaning">
-          <td><span class="prop-name">signMeaning</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign meaning</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Graphic Sign → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The semantic or esoteric meaning of the sign as transmitted within the lineage. Initiated-only.</td>
-        </tr>
-        <tr id="prop-instanceSign">
-          <td><span class="prop-name">instanceSign</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sign Instance → Graphic Sign</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The abstract GraphicSign of which this is a specific drawn instance.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <!-- ZONE 1: Classes -->
+      <div class="zone-head">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="cls-card" id="card-GraphicSign" onclick="activateClass('GraphicSign')">
+          <span class="cls-uri">iroko:GraphicSign</span>
+          <span class="cls-label">Graphic Sign</span>
+          <span class="cls-hint">subClassOf Sign</span>
+        </div>
+        <div class="cls-card" id="card-SignCorpus" onclick="activateClass('SignCorpus')">
+          <span class="cls-uri">iroko:SignCorpus</span>
+          <span class="cls-label">Sign Corpus</span>
+          <span class="cls-hint">subClassOf LineageKnowledgeGraph</span>
+        </div>
+        <div class="cls-card" id="card-SignInstance" onclick="activateClass('SignInstance')">
+          <span class="cls-uri">iroko:SignInstance</span>
+          <span class="cls-label">Sign Instance</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-SignSystem" onclick="activateClass('SignSystem')">
+          <span class="cls-uri">iroko:SignSystem</span>
+          <span class="cls-label">Sign System</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+      </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">5 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Drawing Media</span>
-        <span class="scheme-count">12 concepts</span>
+      <!-- ZONE 2: Property panel -->
+      <div class="zone-head" style="margin-top:0;">
+        Properties
+        <span class="zone-hint" id="z2-hint">Click a class card above</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">DrawingMediumScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-medium-ash">
-          <div class="concept-label">Ash</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-ash</div>
-          <p class="concept-def">Wood ash or specific burned materials used for cooling, ancestral, and threshold-crossing signs.</p>
+      <div class="prop-placeholder" id="prop-placeholder">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        No class selected. Click any class card above to see incoming and outgoing properties.
+      </div>
+      <div class="prop-panel" id="prop-panel">
+        <div class="pp-head">
+          <div>
+            <div class="pp-uri" id="pp-uri"></div>
+            <div class="pp-label" id="pp-label"></div>
+          </div>
+          <button class="pp-close" onclick="closePanel()" title="Close">&#x2715;</button>
         </div>
-        <div class="concept-item" id="concept-medium-blood">
-          <div class="concept-label">Blood</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-blood</div>
-          <p class="concept-def">Animal or human blood used as a drawing medium in highly restricted ceremonies. Initiated-elder access for operational detail.</p>
+        <div class="pp-def" id="pp-def"></div>
+        <div class="pp-cols">
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8592;</span> Incoming <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(range = this class)</span></div>
+            <div id="pp-incoming"></div>
+          </div>
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8594;</span> Outgoing <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(domain = this class)</span></div>
+            <div id="pp-outgoing"></div>
+          </div>
         </div>
-        <div class="concept-item" id="concept-medium-carved">
-          <div class="concept-label">Carved / incised</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-carved</div>
-          <p class="concept-def">Signs carved or incised into wood, stone, metal, or other materials for permanent installation.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-cascarilla">
-          <div class="concept-label">Cascarilla (eggshell powder)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-cascarilla</div>
-          <p class="concept-def">Powdered eggshell (cascarilla), a cooling and purifying medium used across multiple Afro-Atlantic traditions.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-charcoal">
-          <div class="concept-label">Charcoal</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-charcoal</div>
-          <p class="concept-def">Ground charcoal used for ancestral, funerary, and dark-force-related signs.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-chalk-colored">
-          <div class="concept-label">Colored chalk</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-chalk-colored</div>
-          <p class="concept-def">Pigmented chalk in tradition-specific colors, used for signs associated with particular spiritual forces or chromatic requirements.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-cornmeal">
-          <div class="concept-label">Cornmeal</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-cornmeal</div>
-          <p class="concept-def">Ground cornmeal used for vèvè and some Lucumí ground drawings.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-gunpowder">
-          <div class="concept-label">Gunpowder</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-gunpowder</div>
-          <p class="concept-def">Gunpowder used in Palo Monte firmás and some Vodou vèvè for Ogou/Oggun-family entities. Associated with warrior and fire forces.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-ink">
-          <div class="concept-label">Ink</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-ink</div>
-          <p class="concept-def">Ink applied with pen, brush, or stamp. Common in Nsibidi documentation and Adinkra cloth stamping.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-paint">
-          <div class="concept-label">Paint</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-paint</div>
-          <p class="concept-def">Commercial or natural paint used for wall murals, cloth stamping, or semi-permanent sign installation. Common in Adinkra cloth production.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-flour">
-          <div class="concept-label">Wheat flour</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-flour</div>
-          <p class="concept-def">Refined wheat flour, the most common medium for Haitian Vodou vèvè.</p>
-        </div>
-        <div class="concept-item" id="concept-medium-chalk-white">
-          <div class="concept-label">White chalk (cascarilla)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">medium-chalk-white</div>
-          <p class="concept-def">White chalk or powdered eggshell (cascarilla/efun) used for protective and cooling signs in Lucumí, Palo, and Vodou traditions.</p>
+        <div class="pp-cite">
+          <span class="pp-cite-text" id="pp-cite-text"></span>
+          <button class="btn-copy-sm" id="pp-cite-btn" onclick="copyCite()">Copy URI</button>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Drawing Surfaces</span>
-        <span class="scheme-count">12 concepts</span>
+
+      <!-- ZONE 3: Concept Schemes -->
+      <div class="zone-head" style="margin-top:1rem;">
+        Concept Schemes
+        <span class="zone-hint">44 concepts across 5 schemes</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">DrawingSurfaceScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-surface-altar">
-          <div class="concept-label">Altar surface</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-altar</div>
-          <p class="concept-def">The surface of an altar, throne, or ritual table.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:DrawingMediumScheme</span>
+            <span class="sh-label">Drawing Media</span>
+          </div>
+          <span class="sh-count">12 concepts</span>
         </div>
-        <div class="concept-item" id="concept-surface-body">
-          <div class="concept-label">Body (skin)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-body</div>
-          <p class="concept-def">The skin of a practitioner or initiate. Used for protective and initiatory markings.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-cloth">
-          <div class="concept-label">Cloth / fabric</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-cloth</div>
-          <p class="concept-def">Fabric or cloth, particularly for Adinkra stamping and some Vodou ceremonial use.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-door">
-          <div class="concept-label">Door / threshold</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-door</div>
-          <p class="concept-def">Door, doorframe, or threshold — boundary surfaces with protective and liminal significance.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-floor">
-          <div class="concept-label">Floor (interior)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-floor</div>
-          <p class="concept-def">Interior floor of a temple, hounfò, or ilé. The most common surface for Vodou vèvè.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-ground">
-          <div class="concept-label">Ground / earth</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-ground</div>
-          <p class="concept-def">Bare earth or dirt surface, often at crossroads or outdoor ceremony spaces.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-other</div>
-          <p class="concept-def">Drawing surface not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-paper">
-          <div class="concept-label">Paper / document</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-paper</div>
-          <p class="concept-def">Paper, parchment, or documentary material. Used in some Palo and Espiritismo contexts.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-object">
-          <div class="concept-label">Sacred object</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-object</div>
-          <p class="concept-def">A consecrated object, vessel, drum, or implement.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-tree">
-          <div class="concept-label">Tree / bark</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-tree</div>
-          <p class="concept-def">Living tree or bark surface. Used in some outdoor and forest-spirit ceremonies.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-wall">
-          <div class="concept-label">Wall</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-wall</div>
-          <p class="concept-def">Interior or exterior wall surface. Used for semi-permanent protective signs.</p>
-        </div>
-        <div class="concept-item" id="concept-surface-water">
-          <div class="concept-label">Water surface</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">surface-water</div>
-          <p class="concept-def">A body of water, basin, or liquid surface. Used in some healing and cooling ceremonies.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Ash</span>
+            <span class="chip-id">iroko:medium-ash</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Blood</span>
+            <span class="chip-id">iroko:medium-blood</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Carved / incised</span>
+            <span class="chip-id">iroko:medium-carved</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Cascarilla (eggshell powder)</span>
+            <span class="chip-id">iroko:medium-cascarilla</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Charcoal</span>
+            <span class="chip-id">iroko:medium-charcoal</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Colored chalk</span>
+            <span class="chip-id">iroko:medium-chalk-colored</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Cornmeal</span>
+            <span class="chip-id">iroko:medium-cornmeal</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Gunpowder</span>
+            <span class="chip-id">iroko:medium-gunpowder</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ink</span>
+            <span class="chip-id">iroko:medium-ink</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Paint</span>
+            <span class="chip-id">iroko:medium-paint</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Wheat flour</span>
+            <span class="chip-id">iroko:medium-flour</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">White chalk (cascarilla)</span>
+            <span class="chip-id">iroko:medium-chalk-white</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Sign Functions</span>
-        <span class="scheme-count">9 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">SignFunctionScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-func-binding">
-          <div class="concept-label">Binding</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">func-binding</div>
-          <p class="concept-def">The sign constrains or binds a force or entity. Initiated-only detail.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:DrawingSurfaceScheme</span>
+            <span class="sh-label">Drawing Surfaces</span>
+          </div>
+          <span class="sh-count">12 concepts</span>
         </div>
-        <div class="concept-item" id="concept-func-communication">
-          <div class="concept-label">Communication</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">func-communication</div>
-          <p class="concept-def">The sign transmits information or messages between practitioners or between practitioners and spiritual forces.</p>
-        </div>
-        <div class="concept-item" id="concept-func-consecration">
-          <div class="concept-label">Consecration</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">func-consecration</div>
-          <p class="concept-def">The sign activates or consecrates an object, person, or space for sacred use.</p>
-        </div>
-        <div class="concept-item" id="concept-func-identification">
-          <div class="concept-label">Identification / Territory</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">func-identification</div>
-          <p class="concept-def">The sign identifies a house, potencia, lineage, or practitioner&#x27;s affiliation. Primary function of Anaforuana territorial marks.</p>
-        </div>
-        <div class="concept-item" id="concept-func-narrative">
-          <div class="concept-label">Narrative / Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">func-narrative</div>
-          <p class="concept-def">The sign records an event, tells a story, or encodes historical knowledge. Characteristic of Nsibidi&#x27;s documentary function.</p>
-        </div>
-        <div class="concept-item" id="concept-func-opening">
-          <div class="concept-label">Opening</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">func-opening</div>
-          <p class="concept-def">The sign opens a ceremony, a spiritual pathway, or a sacred space for work.</p>
-        </div>
-        <div class="concept-item" id="concept-func-protection">
-          <div class="concept-label">Protection</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">func-protection</div>
-          <p class="concept-def">The sign creates a boundary of spiritual protection around a person, object, or space.</p>
-        </div>
-        <div class="concept-item" id="concept-func-sealing">
-          <div class="concept-label">Sealing</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">func-sealing</div>
-          <p class="concept-def">The sign closes or concludes a ceremony or seals a spiritual agreement.</p>
-        </div>
-        <div class="concept-item" id="concept-func-territorial">
-          <div class="concept-label">Territorial marking</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">func-territorial</div>
-          <p class="concept-def">The sign marks the boundary or domain of a spiritual entity, house, or society. Particularly important in Abakuá Anaforuana.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Sign Permanence</span>
-        <span class="scheme-count">4 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">PermanenceScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-perm-ephemeral">
-          <div class="concept-label">Ephemeral</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">perm-ephemeral</div>
-          <p class="concept-def">Destroyed or erased immediately after use as part of the ceremony (e.g., vèvè covered by dance, flour swept away).</p>
-        </div>
-        <div class="concept-item" id="concept-perm-permanent">
-          <div class="concept-label">Permanent</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">perm-permanent</div>
-          <p class="concept-def">Intended to endure: carved stone or metal, tattooed or scarified body marks, Nsibidi on permanent objects.</p>
-        </div>
-        <div class="concept-item" id="concept-perm-semi-permanent">
-          <div class="concept-label">Semi-permanent</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">perm-semi-permanent</div>
-          <p class="concept-def">Remains for an extended period but is understood to be renewable (e.g., wall signs, painted objects, cloth).</p>
-        </div>
-        <div class="concept-item" id="concept-perm-temporary">
-          <div class="concept-label">Temporary</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">perm-temporary</div>
-          <p class="concept-def">Fades naturally or is ritually removed after the ceremony concludes (e.g., ground drawings exposed to weather).</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Altar surface</span>
+            <span class="chip-id">iroko:surface-altar</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Body (skin)</span>
+            <span class="chip-id">iroko:surface-body</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Cloth / fabric</span>
+            <span class="chip-id">iroko:surface-cloth</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Door / threshold</span>
+            <span class="chip-id">iroko:surface-door</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Floor (interior)</span>
+            <span class="chip-id">iroko:surface-floor</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ground / earth</span>
+            <span class="chip-id">iroko:surface-ground</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:surface-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Paper / document</span>
+            <span class="chip-id">iroko:surface-paper</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Sacred object</span>
+            <span class="chip-id">iroko:surface-object</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Tree / bark</span>
+            <span class="chip-id">iroko:surface-tree</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Wall</span>
+            <span class="chip-id">iroko:surface-wall</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Water surface</span>
+            <span class="chip-id">iroko:surface-water</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Sign System Types</span>
-        <span class="scheme-count">7 concepts</span>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:SignFunctionScheme</span>
+            <span class="sh-label">Sign Functions</span>
+          </div>
+          <span class="sh-count">9 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Binding</span>
+            <span class="chip-id">iroko:func-binding</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Communication</span>
+            <span class="chip-id">iroko:func-communication</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Consecration</span>
+            <span class="chip-id">iroko:func-consecration</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Identification / Territory</span>
+            <span class="chip-id">iroko:func-identification</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Narrative / Recording</span>
+            <span class="chip-id">iroko:func-narrative</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Opening</span>
+            <span class="chip-id">iroko:func-opening</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Protection</span>
+            <span class="chip-id">iroko:func-protection</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Sealing</span>
+            <span class="chip-id">iroko:func-sealing</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Territorial marking</span>
+            <span class="chip-id">iroko:func-territorial</span>
+          </div>
+        </div>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">SignSystemTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-system-adinkra">
-          <div class="concept-label">Adinkra (Akan)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-adinkra</div>
-          <p class="concept-def">A system of visual symbols originating among the Akan of Ghana and Côte d&#x27;Ivoire, each symbol encoding a proverb, concept, or value. Traditionally stamped on cloth for funerary and ceremonial use. More publicly documented than many Afro-Atlantic sign systems due to widespread commercial adoption, though ceremonial uses retain their gravity. Increasingly present in diaspora contexts.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">While many Adinkra symbols are widely published, their ceremonial and mortuary use context should be documented with appropriate respect for Akan tradition authority.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:PermanenceScheme</span>
+            <span class="sh-label">Sign Permanence</span>
+          </div>
+          <span class="sh-count">4 concepts</span>
         </div>
-        <div class="concept-item" id="concept-system-anaforuana">
-          <div class="concept-label">Anaforuana (Abakuá)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-anaforuana</div>
-          <p class="concept-def">The esoteric graphic script of the Abakuá society in Cuba, derived from Ejagham Nsibidi through enslaved Cross River practitioners. Anaforuana signs represent potencia territories, spiritual forces, and society knowledge. Among the most protected sign systems in the Afro-Atlantic world; specific signs are restricted to initiated members at specific grades. Related to but institutionally distinct from Nsibidi.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Many Anaforuana signs are protected at initiated-only or no-access level by potencia authority. Researchers must obtain community approval before documenting or publishing specific signs.</p>
-        </div>
-        <div class="concept-item" id="concept-system-firma">
-          <div class="concept-label">Firma / Patipemba (Palo Monte)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-firma</div>
-          <p class="concept-def">The Kongo-derived graphic sign system of Palo Monte and related Cuban-Bantu traditions. Firmas are drawn to open, close, seal, and communicate with Nganga (spirit vessels) and their governing Mpungo. Patipemba are specific ground-drawing configurations. The directionality and polarity of firmas is operationally significant.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Prenda signature</p>
-        </div>
-        <div class="concept-item" id="concept-system-cosmogram">
-          <div class="concept-label">Kongo Cosmogram</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-cosmogram</div>
-          <p class="concept-def">The foundational Kongo cosmological diagram (dikenga dia Kongo) representing the cyclical journey of the soul through the four moments of the sun. A cross-in-circle form that underlies both Palo Monte firmás and traces of Kongo spiritual geography throughout the Afro-Atlantic diaspora. Foundational to understanding other Kongo-derived sign systems.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Dikenga</p>
-        </div>
-        <div class="concept-item" id="concept-system-nsibidi">
-          <div class="concept-label">Nsibidi (Ejagham/Cross River)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-nsibidi</div>
-          <p class="concept-def">An ideographic script and graphic sign system originating among the Ejagham and neighboring Cross River peoples of Nigeria and Cameroon. Used by Ékpè society members for communication, record-keeping, and ceremonial marking. Nsibidi predates colonial contact; some signs are public while esoteric variants remain restricted to Ékpè initiates. Ancestor system to Cuban Abakuá Anaforuana.</p>
-        </div>
-        <div class="concept-item" id="concept-system-ponto-riscado">
-          <div class="concept-label">Ponto Riscado (Umbanda/Quimbanda)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-ponto-riscado</div>
-          <p class="concept-def">The graphic sign system of Brazilian Umbanda and Quimbanda, consisting of drawn points (pontos) associated with Orixás, Exus, and Pombagiras. Related to but distinct from Palo Monte firmás; developed in the Brazilian context with syncretic elements from African, Indigenous, and Spiritist sources.</p>
-        </div>
-        <div class="concept-item" id="concept-system-veve">
-          <div class="concept-label">Vèvè (Haitian Vodou)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">system-veve</div>
-          <p class="concept-def">The graphic sign system of Haitian Vodou, consisting of elaborate diagrams drawn in flour, cornmeal, ash, or gunpowder on the ground or altar surface to invoke and represent specific lwa. Each lwa has one or more canonical vèvè; regional and lineage variations are well-documented. Drawn at the opening of ceremonies and during possession rites.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Ephemeral</span>
+            <span class="chip-id">iroko:perm-ephemeral</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Permanent</span>
+            <span class="chip-id">iroko:perm-permanent</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Semi-permanent</span>
+            <span class="chip-id">iroko:perm-semi-permanent</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Temporary</span>
+            <span class="chip-id">iroko:perm-temporary</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:SignSystemTypeScheme</span>
+            <span class="sh-label">Sign System Types</span>
+          </div>
+          <span class="sh-count">7 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Adinkra (Akan)</span>
+            <span class="chip-id">iroko:system-adinkra</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Anaforuana (Abakuá)</span>
+            <span class="chip-id">iroko:system-anaforuana</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Firma / Patipemba (Palo Monte)</span>
+            <span class="chip-id">iroko:system-firma</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Kongo Cosmogram</span>
+            <span class="chip-id">iroko:system-cosmogram</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Nsibidi (Ejagham/Cross River)</span>
+            <span class="chip-id">iroko:system-nsibidi</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ponto Riscado (Umbanda/Quimbanda)</span>
+            <span class="chip-id">iroko:system-ponto-riscado</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Vèvè (Haitian Vodou)</span>
+            <span class="chip-id">iroko:system-veve</span>
+          </div>
+        </div>
+      </div>
+    </main><!-- /module-main -->
+
+    <!-- SIDEBAR -->
+    <aside class="module-sidebar">
+
+      <div class="share-row">
+        <a class="share-btn" href="mailto:?subject=Iroko%20Framework%20%E2%80%94%20Vèvè%20Module&amp;body=https://ontology.irokosociety.org/vocab/iroko-veve.html" title="Share via email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          Email
+        </a>
+        <button class="share-btn" onclick="window.print()" title="Print">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/></svg>
+          Print
+        </button>
+        <button class="share-btn" id="link-btn" onclick="copyLink(this)" title="Copy link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Copy Link
+        </button>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="sp-head">
+          <span class="sp-title" id="sb-title">Connected Modules</span>
+          <span class="sp-active-uri" id="sb-active-uri"></span>
+        </div>
+        <div class="sp-body sidebar-dynamic" id="sb-body">
+          <div id="sb-module-view">
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-societies"></span>
+                <span class="cc-name">Ékpè Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:gradeSign</span>
+            </div>
+          </div>
+          <div id="sb-class-view" style="display:none;">
+            <div id="sb-active-card"></div>
+            <div id="sb-class-conns"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-cite">
+        <div class="cite-head">Cite the Vèvè Module</div>
+        <div class="cite-tabs">
+          <button class="cite-tab active" onclick="setCiteFormat('plain',this)">Plain</button>
+          <button class="cite-tab" onclick="setCiteFormat('bibtex',this)">BibTeX</button>
+          <button class="cite-tab" onclick="setCiteFormat('ris',this)">RIS</button>
+        </div>
+        <div class="cite-text" id="cite-display">
+          Iroko Historical Society. (2026). <em>Iroko Framework: Vèvè Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-veve.html. CC0 1.0 Universal.
+        </div>
+        <button class="btn-cite-copy" id="module-cite-btn" onclick="copyModuleCite()">Copy Citation</button>
+        <div class="format-links">
+          <a class="fmt-link" href="iroko-veve.ttl">Turtle (.ttl) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-veve.jsonld">JSON-LD (.jsonld) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-veve.rdf">RDF/XML (.rdf) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-veve.nt">N-Triples (.nt) <span class="fmt-arrow">&#8595;</span></a>
+        </div>
+      </div>
+
+    </aside>
+  </div><!-- /module-layout -->
 
   <footer class="site-footer">
     <div class="footer-left">
@@ -504,6 +635,177 @@
     </div>
   </footer>
 
-</div>
+</div><!-- /page-wrap -->
+
+<script>
+
+// ── JS data injected by generator ──────────────────────────────────────────
+const MODULE_STEM = "iroko-veve";
+const MOD_TITLE_SHORT = "Vèvè Module";
+const CLASSES = {"GraphicSign": {"uri": "iroko:GraphicSign", "label": "Graphic Sign", "definition": "A discrete ritual diagram, symbol, or graphic mark belonging to a sacred sign system. Each sign has a conventional form, a tradition-specific name, and one or more ceremonial functions. Examples: a specific Vodou vèvè drawn for Ogou Feray; an Abakuá Anaforuana sign protecting a potencia's territory; a Palo firma drawn to open a Nganga. The sign's form and name are community-restricted in active traditions; its operational use and drawing sequence are initiated-only.", "outgoing": [{"uri": "iroko:colorSignificance", "label": "color significance", "type": "data", "range": "langString", "access": "init", "def": "The ritual significance of colors used with this sign, where applicable. Initiated-only."}, {"uri": "iroko:directionality", "label": "directionality", "type": "data", "range": "langString", "access": "init", "def": "Whether and how orientation of the sign affects its function (e.g., inverted signs in some Palo and Kongo traditions activate opposite polarity). Initiated-only."}, {"uri": "iroko:drawingSequence", "label": "drawing sequence", "type": "data", "range": "langString", "access": "init", "def": "The step-by-step sequence in which the sign must be drawn. The directionality and order of strokes often carries operational significance. Initiated-elder only."}, {"uri": "iroko:invokedEntity", "label": "invoked entity", "type": "obj", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity primarily associated with or invoked by this sign. Range: iroko:SpiritualEntity. Community-restricted."}, {"uri": "iroko:relatedSign", "label": "related sign", "type": "obj", "range": "Graphic Sign", "access": "init", "def": "A sign within the same system that shares visual elements, modifies this sign's function, or is typically drawn in sequence with it."}, {"uri": "iroko:signFunction", "label": "sign function", "type": "obj", "range": "Concept", "access": "comm", "def": "The primary ceremonial function of this sign. Range: iroko:SignFunctionScheme."}, {"uri": "iroko:signMeaning", "label": "sign meaning", "type": "data", "range": "langString", "access": "init", "def": "The semantic or esoteric meaning of the sign as transmitted within the lineage. Initiated-only."}], "incoming": [{"uri": "iroko:gradeSign", "label": "grade sign", "type": "obj", "access": "init", "def": "The esoteric graphic sign or identifying mark associated with this grade. Range: iroko:GraphicSign — grade signs in Ékpè and cognate societies are drawn symbols belonging to a sacred sign system, not free-text strings. Initiated-elder only.", "domain": "Society Grade", "from": "iroko:Society Grade", "fromLabel": "Society Grade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:instanceSign", "label": "sign type", "type": "obj", "access": "pub", "def": "The abstract GraphicSign of which this is a specific drawn instance.", "domain": "Sign Instance", "from": "iroko:Sign Instance", "fromLabel": "Sign Instance", "module": "Vèvè Module", "stem": "iroko-veve"}, {"uri": "iroko:relatedSign", "label": "related sign", "type": "obj", "access": "init", "def": "A sign within the same system that shares visual elements, modifies this sign's function, or is typically drawn in sequence with it.", "domain": "Graphic Sign", "from": "iroko:Graphic Sign", "fromLabel": "Graphic Sign", "module": "Vèvè Module", "stem": "iroko-veve"}], "cross": [{"name": "Ékpè Module", "dotCls": "dot-societies", "via": "iroko:gradeSign", "dir": "referenced by"}]}, "SignCorpus": {"uri": "iroko:SignCorpus", "label": "Sign Corpus", "definition": "The complete inventory of graphic signs held and transmitted by a specific lineage, house, or tradition community. Different lineages within the same tradition may hold different signs or use the same sign with different operational meanings. A sign corpus is lineage-specific and represents a distinct LineageKnowledgeGraph.", "outgoing": [], "incoming": [], "cross": []}, "SignInstance": {"uri": "iroko:SignInstance", "label": "Sign Instance", "definition": "A specific documented occurrence of a graphic sign: a particular vèvè drawn at a specific ceremony, a firma traced before a consultation, an Adinkra stamped on cloth. Distinct from the abstract sign type (iroko:GraphicSign). Records medium, surface, date, ritual context, and photographer/recorder where available. Photographic documentation of sign instances is community-restricted; the sign's existence is public.", "outgoing": [{"uri": "iroko:documentationRecord", "label": "documentation record", "type": "obj", "range": "SacredMedia", "access": "comm", "def": "Photographic, rubbing, or tracing record of this sign instance. Range: iroko:SacredMedia. Community-restricted: documentation should not enable replication."}, {"uri": "iroko:drawingMedium", "label": "drawing medium", "type": "obj", "range": "Concept", "access": "comm", "def": "The material used to draw this instance. Range: iroko:DrawingMediumScheme."}, {"uri": "iroko:drawingSurface", "label": "drawing surface", "type": "obj", "range": "Concept", "access": "comm", "def": "The surface on or within which this instance was drawn. Range: iroko:DrawingSurfaceScheme."}, {"uri": "iroko:drawnBy", "label": "drawn by", "type": "obj", "range": "RitualPractitioner", "access": "comm", "def": "The practitioner who drew this sign instance. Range: iroko:RitualPractitioner — a vèvè, anaforuana, or other sacred graphic sign is always drawn by a human agent exercising ritual capacity, not merely any person. Community-restricted."}, {"uri": "iroko:permanence", "label": "permanence", "type": "obj", "range": "Concept", "access": "comm", "def": "Whether this instance is ephemeral, temporary, or permanent. Range: iroko:PermanenceScheme."}, {"uri": "iroko:instanceSign", "label": "sign type", "type": "obj", "range": "Graphic Sign", "access": "pub", "def": "The abstract GraphicSign of which this is a specific drawn instance."}], "incoming": [], "cross": []}, "SignSystem": {"uri": "iroko:SignSystem", "label": "Sign System", "definition": "A tradition-specific graphic communication system consisting of a defined corpus of signs with shared visual grammar, drawing conventions, and ceremonial functions. Examples: the Vodou vèvè corpus; the Palo Monte firma/patipemba tradition; Ejagham Nsibidi; Abakuá Anaforuana; Akan Adinkra. A sign system is identified by tradition, geographic origin, and governing authority. The existence of a system and its name are public; its internal grammar and full sign inventory may be restricted.", "outgoing": [{"uri": "iroko:governingAuthority", "label": "governing authority", "type": "obj", "range": "Concept", "access": "comm", "def": "The title or institution with authority over this sign system. For Anaforuana: the Abakuá potencia leadership. For Vodou vèvè: the Houngan/Mambo body. Community-restricted."}], "incoming": [], "cross": []}};
+const MODULE_CROSS = [{"name": "Ékpè Module", "dotCls": "dot-societies", "via": "iroko:gradeSign", "dir": "referenced by"}];
+const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Vèvè Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-veve.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Vèvè Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-veve.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_veve_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Vèvè Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-veve.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Vèvè Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-veve.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
+
+// ── Access badge ─────────────────────────────────────────────────────────────
+function accessBadge(a) {
+  if (a==='pub')  return '<span class="ab ab-pub">Public</span>';
+  if (a==='comm') return '<span class="ab ab-comm">Community</span>';
+  if (a==='init') return '<span class="ab ab-init">Initiated</span>';
+  return '';
+}
+function typeBadge(t) {
+  if (t==='obj')  return '<span class="pr-type pr-type-obj">Object</span>';
+  if (t==='data') return '<span class="pr-type pr-type-data">Datatype</span>';
+  if (t==='ann')  return '<span class="pr-type pr-type-ann">Annotation</span>';
+  return '';
+}
+
+// ── Render property item ──────────────────────────────────────────────────────
+function renderProp(p, isIncoming) {
+  const meta = isIncoming
+    ? `<div class="pr-source">from ${p.from} · ${p.module}</div>`
+    : `<div class="pr-meta">${p.range||''}</div>`;
+  return `<div class="pr-item">
+    <div class="pr-top">
+      <span class="pr-uri">${p.uri}</span>
+      ${isIncoming ? '' : typeBadge(p.type)}
+      ${isIncoming ? '' : accessBadge(p.access)}
+    </div>
+    <div class="pr-label">${p.label}</div>
+    ${meta}
+    <div class="pr-def">${p.def||''}</div>
+  </div>`;
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let activeClass = null;
+let activeCiteFormat = 'plain';
+
+function activateClass(key) {
+  if (activeClass === key) { closePanel(); return; }
+  activeClass = key;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('card-'+key)?.classList.add('active');
+  const d = CLASSES[key];
+  if (!d) return;
+  document.getElementById('prop-placeholder').classList.add('hidden');
+  document.getElementById('z2-hint').textContent = 'Click class again to close';
+  document.getElementById('pp-uri').textContent  = d.uri;
+  document.getElementById('pp-label').textContent = d.label;
+  document.getElementById('pp-def').textContent   = d.definition||'';
+  const inEl  = document.getElementById('pp-incoming');
+  inEl.innerHTML = d.incoming && d.incoming.length
+    ? d.incoming.map(p=>renderProp(p,true)).join('')
+    : '<p class="no-props">No incoming connections detected in this module.</p>';
+  const outEl = document.getElementById('pp-outgoing');
+  outEl.innerHTML = d.outgoing && d.outgoing.length
+    ? d.outgoing.map(p=>renderProp(p,false)).join('')
+    : '<p class="no-props">No outgoing properties.</p>';
+  document.getElementById('pp-cite-text').textContent =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  document.getElementById('pp-cite-btn').dataset.uri  =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  const panel = document.getElementById('prop-panel');
+  panel.classList.remove('visible');
+  void panel.offsetWidth;
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  updateSidebar(key, d);
+}
+
+function closePanel() {
+  activeClass = null;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('prop-placeholder').classList.remove('hidden');
+  document.getElementById('prop-panel').classList.remove('visible');
+  document.getElementById('z2-hint').textContent = 'Click a class card above';
+  resetSidebar();
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+function updateSidebar(key, d) {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'External links';
+    document.getElementById('sb-active-uri').style.display = 'block';
+    document.getElementById('sb-active-uri').textContent = d.uri;
+    document.getElementById('sb-module-view').style.display = 'none';
+    document.getElementById('sb-class-view').style.display  = 'block';
+    document.getElementById('sb-active-card').innerHTML =
+      `<div class="active-class-card"><span class="acc-uri">${d.uri}</span><span class="acc-label">${d.label}</span></div>`;
+    const conns = (d.cross||[]);
+    const connsEl = document.getElementById('sb-class-conns');
+    connsEl.innerHTML = conns.length
+      ? conns.map(c=>`<div class="conn-card">
+          <div class="cc-row"><span class="cc-dot ${c.dotCls}"></span><span class="cc-name">${c.name}</span><span class="cc-dir" style="margin-left:auto;">${c.dir}</span></div>
+          <span class="cc-via">${c.via}</span>
+        </div>`).join('')
+      : '<p class="no-props">No cross-module connections for this class.</p>';
+    body.classList.remove('fading');
+  },120);
+}
+
+function resetSidebar() {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'Connected Modules';
+    document.getElementById('sb-active-uri').style.display = 'none';
+    document.getElementById('sb-module-view').style.display = 'block';
+    document.getElementById('sb-class-view').style.display  = 'none';
+    body.classList.remove('fading');
+  },120);
+}
+
+// ── Citation ──────────────────────────────────────────────────────────────────
+function setCiteFormat(fmt, btn) {
+  activeCiteFormat = fmt;
+  document.querySelectorAll('.cite-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const display = document.getElementById('cite-display');
+  if (fmt==='plain') {
+    display.innerHTML = CITE_FORMATS.plainHTML;
+  } else {
+    display.innerHTML = `<pre>${CITE_FORMATS[fmt].replace(/</g,'&lt;')}</pre>`;
+  }
+}
+
+function copyModuleCite() {
+  const text = activeCiteFormat==='plain' ? CITE_FORMATS.plain : CITE_FORMATS[activeCiteFormat];
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('module-cite-btn');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy Citation';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyCite() {
+  const btn = document.getElementById('pp-cite-btn');
+  navigator.clipboard.writeText(btn.dataset.uri).then(()=>{
+    btn.textContent='✓ Copied'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy URI';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    btn.classList.add('copied');
+    btn.lastChild.textContent='Copied';
+    setTimeout(()=>{btn.classList.remove('copied');btn.lastChild.textContent='Copy Link';},2000);
+  });
+}
+
+// ── Fragment URI auto-open ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  const hash = window.location.hash.replace('#','');
+  if (hash && CLASSES[hash]) {
+    activateClass(hash);
+    document.getElementById('card-'+hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+});
+
+</script>
 </body>
 </html>

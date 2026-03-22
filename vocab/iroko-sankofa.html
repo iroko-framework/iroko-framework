@@ -6,15 +6,209 @@
   <title>Sankofa Module — Reclamation Movements — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    /* ── Module page layout ──────────────────────────────────────── */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+    .module-main { min-width: 0; }
+    .zone-head {
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--rule-strong);
+      padding-bottom: .4rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .zone-hint { font-size: .68rem; letter-spacing: 0; text-transform: none;
+      color: var(--ink-soft); font-family: var(--serif); font-style: italic; opacity: .7; }
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
+    /* Zone 1 */
+    .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: .5rem; margin-bottom: 2rem; }
+    .cls-card { border: 1px solid var(--rule-strong); border-radius: 3px; padding: .75rem 1rem;
+      background: var(--paper); cursor: pointer;
+      transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
+    .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
+    .cls-card.active { border-color: var(--green); background: var(--green-light);
+      box-shadow: 0 2px 8px rgba(46,74,30,.12); }
+    .cls-card.active::after { content:''; position:absolute; bottom:-1px; left:50%;
+      transform:translateX(-50%); width:0; height:0;
+      border-left:7px solid transparent; border-right:7px solid transparent;
+      border-bottom:7px solid var(--paper-warm); }
+    .cls-uri { font-family: var(--mono); font-size: .7rem; color: var(--green-mid);
+      display: block; margin-bottom: .2rem; }
+    .cls-label { font-family: var(--serif); font-size: .95rem; font-weight: 600;
+      color: var(--ink); display: block; line-height: 1.2; }
+    .cls-hint { font-size: .67rem; color: var(--ink-soft); margin-top: .2rem;
+      display: block; font-style: italic; }
+
+    /* Zone 2 */
+    .prop-placeholder { background: var(--paper-warm); border: 1px dashed var(--rule-strong);
+      border-radius: 3px; padding: 1.25rem 1.5rem; color: var(--ink-soft); font-size: .84rem;
+      font-style: italic; margin-bottom: 2rem; display: flex; align-items: center; gap: .75rem; }
+    .prop-placeholder.hidden { display: none; }
+    .prop-panel { display: none; border: 1px solid var(--rule-strong); border-radius: 3px;
+      margin-bottom: 2rem; overflow: hidden; animation: panelIn 160ms ease forwards; }
+    .prop-panel.visible { display: block; }
+    @keyframes panelIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+    .pp-head { background: var(--green); color:#fff; padding:.9rem 1.25rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .pp-uri { font-family: var(--mono); font-size: .72rem; color: rgba(255,255,255,.65); }
+    .pp-label { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: #fff; }
+    .pp-close { background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer;
+      font-size:1.1rem; line-height:1; padding:.1rem; transition:color .15s;
+      margin-left:auto; flex-shrink:0; }
+    .pp-close:hover { color:#fff; }
+    .pp-def { padding:.85rem 1.25rem; font-size:.85rem; color:var(--ink-mid); line-height:1.6;
+      border-bottom:1px solid var(--rule); background:var(--paper-warm); }
+    .pp-cols { display:grid; grid-template-columns:1fr 1fr; background:var(--paper); }
+    .pp-col { padding:1.1rem 1.25rem; }
+    .pp-col:first-child { border-right:1px solid var(--rule); }
+    .pp-col-label { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.75rem;
+      display:flex; align-items:center; gap:.35rem; }
+    .dir-arrow { color: var(--green-mid); }
+    .pr-item { padding:.6rem .8rem; border:1px solid var(--rule); border-radius:3px;
+      background:var(--paper); margin-bottom:.4rem; }
+    .pr-top { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+    .pr-uri { font-family:var(--mono); font-size:.72rem; color:var(--green-mid); flex:1; }
+    .pr-type { font-family:var(--mono); font-size:.55rem; letter-spacing:.04em;
+      padding:.1em .4em; border-radius:2px; flex-shrink:0; }
+    .pr-type-obj  { background:#e8e0f0; color:#5c3d8f; }
+    .pr-type-data { background:#e0ecf8; color:#1a4a5e; }
+    .pr-type-ann  { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .pr-label { font-size:.8rem; color:var(--ink-soft); margin-top:.1rem; }
+    .pr-meta { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.3rem; }
+    .pr-def { font-size:.78rem; color:var(--ink-mid); margin-top:.35rem; line-height:1.45; }
+    .pr-source { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); font-style:italic; margin-top:.2rem; }
+    .no-props { font-size:.8rem; color:var(--ink-soft); font-style:italic; }
+    .ab { display:inline-block; font-family:var(--mono); font-size:.55rem; letter-spacing:.05em; padding:.1em .45em; border-radius:2px; }
+    .ab-pub  { background:var(--green-light); color:var(--green); }
+    .ab-comm { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .ab-init { background:#fde8e0; color:var(--terracotta,#8b3a1a); }
+    .pp-cite { padding:.85rem 1.25rem; border-top:1px solid var(--rule);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:1rem; flex-wrap:wrap; background:var(--paper-warm); }
+    .pp-cite-text { font-family:var(--mono); font-size:.7rem; color:var(--ink-soft);
+      flex:1; min-width:200px; }
+    .btn-copy-sm { font-family:var(--mono); font-size:.68rem; letter-spacing:.08em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.4em 1em; cursor:pointer; transition:background .15s;
+      flex-shrink:0; white-space:nowrap; }
+    .btn-copy-sm:hover { background:var(--ink); }
+    .btn-copy-sm.copied { background:var(--green-mid); }
+
+    /* Zone 3 */
+    .scheme-block { margin-bottom: 1.5rem; }
+    .scheme-head { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px 3px 0 0; padding:.6rem 1rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .sh-uri { font-family:var(--mono); font-size:.75rem; color:var(--green-mid); }
+    .sh-label { font-family:var(--serif); font-size:.92rem; font-weight:600; color:var(--ink); }
+    .sh-count { font-family:var(--mono); font-size:.62rem; color:var(--ink-soft); white-space:nowrap; }
+    .concept-chips { border:1px solid var(--rule-strong); border-top:none;
+      border-radius:0 0 3px 3px; display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
+    .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+    .chip:hover { background:var(--paper-warm); }
+    .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
+    .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+
+    /* Sidebar */
+    .module-sidebar { position:sticky; top:2rem; }
+    .sidebar-panel { border:1px solid var(--rule-strong); border-radius:3px; overflow:hidden; margin-bottom:1.25rem; }
+    .sp-head { background:var(--paper-warm); border-bottom:1px solid var(--rule-strong);
+      padding:.6rem 1rem; display:flex; justify-content:space-between; align-items:center; }
+    .sp-title { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); }
+    .sp-active-uri { font-family:var(--mono); font-size:.67rem; color:var(--green); display:none; }
+    .sp-body { padding:.75rem 1rem; }
+    .conn-card { border:1px solid var(--rule); border-radius:3px; padding:.55rem .75rem;
+      margin-bottom:.4rem; background:var(--paper); text-decoration:none; display:block;
+      transition:border-color .15s, background .15s; }
+    .conn-card:hover { border-color:var(--green-mid); background:var(--paper-warm); }
+    .cc-row { display:flex; align-items:center; gap:.4rem; }
+    .cc-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .dot-core        { background:var(--green); }
+    .dot-agency      { background:#6b3a10; }
+    .dot-authority   { background:#3a4a5e; }
+    .dot-epistemic   { background:#1a4a40; }
+    .dot-narrative   { background:#5e3a2a; }
+    .dot-manifestation { background:#5c3d8f; }
+    .dot-botanical   { background:#3a5e28; }
+    .dot-entities    { background:#5c3d8f; }
+    .dot-ritual      { background:var(--terracotta,#8b3a1a); }
+    .dot-lineage     { background:#4a3010; }
+    .dot-divination  { background:#1a4a5e; }
+    .dot-societies   { background:#5e1a3a; }
+    .dot-graphic     { background:#3a3a1a; }
+    .dot-music       { background:#1a3a5e; }
+    .dot-language    { background:#2a1a5e; }
+    .dot-other       { background:var(--ink-soft); }
+    .cc-name { font-family:var(--serif); font-size:.88rem; font-weight:600; color:var(--ink); }
+    .cc-via { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.15rem; display:block; }
+    .cc-dir { font-size:.68rem; color:var(--ink-soft); font-style:italic; }
+    .share-row { display:flex; gap:.4rem; margin-bottom:1.25rem; }
+    .share-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:.25rem;
+      padding:.5rem .25rem; background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; cursor:pointer; font-family:var(--mono); font-size:.6rem;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); text-decoration:none;
+      transition:border-color .15s, background .15s, color .15s; }
+    .share-btn:hover { background:var(--green-light); border-color:var(--green-mid); color:var(--green); }
+    .share-btn.copied { background:var(--green-light); border-color:var(--green); color:var(--green); }
+    .share-btn svg { width:16px; height:16px; }
+    .sidebar-cite { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; padding:.85rem 1rem; }
+    .cite-head { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.5rem; }
+    .cite-tabs { display:flex; gap:0; margin-bottom:.6rem; border:1px solid var(--rule-strong);
+      border-radius:3px; overflow:hidden; }
+    .cite-tab { flex:1; font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; padding:.35em 0; background:var(--paper); border:none;
+      border-right:1px solid var(--rule-strong); color:var(--ink-soft);
+      cursor:pointer; transition:background .15s, color .15s; }
+    .cite-tab:last-child { border-right:none; }
+    .cite-tab:hover { background:var(--paper-warm); color:var(--ink); }
+    .cite-tab.active { background:var(--green-light); color:var(--green); font-weight:500; }
+    .cite-text { font-family:var(--mono); font-size:.7rem; line-height:1.55;
+      color:var(--ink-mid); font-style:italic; margin-bottom:.65rem; }
+    .cite-text pre { font-family:var(--mono); font-size:.68rem; line-height:1.55;
+      white-space:pre-wrap; word-break:break-all; margin:0; font-style:normal; }
+    .btn-cite-copy { width:100%; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.45em 0; cursor:pointer; transition:background .15s; }
+    .btn-cite-copy:hover { background:var(--ink); }
+    .btn-cite-copy.copied { background:var(--green-mid); }
+    .format-links { margin-top:.65rem; display:flex; flex-direction:column; gap:.25rem; }
+    .fmt-link { display:flex; justify-content:space-between; align-items:center;
+      font-family:var(--mono); font-size:.7rem; padding:.35rem .6rem;
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper);
+      color:var(--green-mid); text-decoration:none; transition:background .15s, border-color .15s; }
+    .fmt-link:hover { background:var(--paper-warm); border-color:var(--rule-strong); color:var(--green); }
+    .fmt-arrow { color:var(--ink-soft); }
+    .sidebar-dynamic { transition:opacity 120ms ease; }
+    .sidebar-dynamic.fading { opacity:0; pointer-events:none; }
+    .active-class-card { background:var(--green-light); border:1px solid var(--green-mid);
+      border-radius:3px; padding:.6rem .75rem; margin-bottom:.65rem; }
+    .acc-uri { font-family:var(--mono); font-size:.67rem; color:var(--green-mid); display:block; margin-bottom:.1rem; }
+    .acc-label { font-family:var(--serif); font-size:.9rem; font-weight:600; color:var(--ink); }
+    @media (max-width:900px) {
+      .module-layout { grid-template-columns:1fr; }
+      .module-sidebar { position:static; }
+      .pp-cols { grid-template-columns:1fr; }
+      .pp-col:first-child { border-right:none; border-bottom:1px solid var(--rule); }
+    }
+
   </style>
 </head>
 <body>
@@ -46,9 +240,9 @@
     <div>
       <span class="module-tag tag-upcoming">Movements</span>
       <h1>Sankofa Module — Reclamation Movements</h1>
-      <p class="subtitle">Diaspora returns and reconstructed practice</p>
+      <p class="subtitle">Diaspora returns, reconstructed practice, and reclamation networks</p>
       <div class="header-meta">
-        <span class="meta-pill">sankofa:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-sankofa#</span>
+        <span class="meta-pill">sankofa:&nbsp; https://ontology.irokosociety.org/iroko-sankofa#</span>
         <span class="meta-pill">v1.3.0</span>
         <span class="meta-pill"><a href="iroko-sankofa.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
@@ -56,445 +250,323 @@
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting revitalization and reclamation movements, Trans-Afro-Atlantic returns to African source communities, reconstructed traditions, and heritage relationships. Models semantic relationships between Afro-Atlantic practice and African source traditions without adjudicating authenticity. All heritage relationship claims are modeled as iroko:RelationshipAssertion to reflect their contested and negotiated character. Use with iroko-authority to document who may authorize heritage relationship claims and recognition; iroko-narrative for movement histories, oral transmission chains, and contested origin accounts.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">23</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">32</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="module-stats" style="margin-top:1.5rem;">
+    <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Classes</span></div>
+    <div class="stat-cell"><span class="stat-n">24</span><span class="stat-label">Properties</span></div>
+    <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+    <div class="stat-cell"><span class="stat-n">32</span><span class="stat-label">Concepts</span></div>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">5 classes</span>
-    </div>
-    <div class="class-card" id="cls-HeritageRelationship">
-      <div class="class-name">HeritageRelationship</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Heritage Relationship</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">RelationshipAssertion</span></div>
-      <p class="class-def">A formal assertion of the relationship between a Afro-Atlantic tradition and its claimed African source tradition. Subclass of iroko:RelationshipAssertion: the claim is documented with its source, asserter, and status (widely attested, lineage-specific, or contested) without requiring resolution. Examples: the documented Yorùbá–Lucumí relationship; the contested specificity of Fon vs. Ewe sources for Haitian Vodou Rada; the debated connection between specific Cuban Abakuá potencias and Cross River Ékpè lodges.</p>
-    </div>
-    <div class="class-card" id="cls-ReclamationMovement">
-      <div class="class-name">ReclamationMovement</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Reclamation Movement</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Event</span>, <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">An organized or semi-organized community effort to recover, revitalize, or Africanize a Afro-Atlantic religious tradition. Examples: the Candomblé re-Africanization movement beginning in the 1930s–70s (Mãe Aninha, Martiniano do Bonfim, and later the SECNEB research agenda); the Lucumí decolonization efforts removing Catholic syncretism from Ocha practice; the Ifá revival in Trinidad and other Afro-Atlantic communities seeking direct Yorùbá validation; the African American Ifá reclamation beginning in the late 20th century. A movement is documented without adjudicating whether its claims of authenticity are correct.</p>
-    </div>
-    <div class="class-card" id="cls-ReconstructedPractice">
-      <div class="class-name">ReconstructedPractice</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Reconstructed Practice</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A religious practice or tradition that has been assembled or restored from documentary sources, scholarly research, or cross-tradition synthesis rather than direct lineage transmission. Examples: reconstructed Yorùbá practice in communities without living initiatory lineage; synthesis traditions drawing on Farrow, Bascom, or Verger ethnographic documentation; Neo-African traditions developed from scholarly sources in North America or Europe. The reconstruction method and its evidentiary basis are the core data here; the framework makes no judgment about the resulting practice&#x27;s validity.</p>
-    </div>
-    <div class="class-card" id="cls-TransAfroAtlanticReturn">
-      <div class="class-name">TransAfroAtlanticReturn</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Trans-Afro-Atlantic Return</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A documented instance of a Afro-Atlantic practitioner or community making contact with, seeking validation from, or receiving initiation within an African source community. Examples: Cuban Babalawos traveling to Yorùbáland for Ifá validation; Haitian Vodouisants conducting ceremonies in Benin at Ouidah; Candomblé priests initiating in West Africa. A Trans-Afro-Atlantic return may be documented as an event, a relationship, or a formal protocol exchange. The outcomes of such encounters — including mutual recognition or rejection — should be documented without taking sides.</p>
-    </div>
-    <div class="class-card" id="cls-nadbfdf7cf3c04b558b264697cc789bdfb1">
-      <div class="class-name">nadbfdf7cf3c04b558b264697cc789bdfb1</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">nadbfdf7cf3c04b558b264697cc789bdfb1</div>
-      
-      <p class="class-def">nadbfdf7cf3c04b558b264697cc789bdfb1</p>
-    </div>
-  </div>
+  <div class="module-layout">
+    <main class="module-main">
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">23 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-africanTradition">
-          <td><span class="prop-name">africanTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">African source tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Heritage Relationship → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The African source tradition claimed in this heritage relationship. Range: iroko:TraditionScheme concept.</td>
-        </tr>
-        <tr id="prop-afroAtlanticTradition">
-          <td><span class="prop-name">afroAtlanticTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">Afro-Atlantic tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Heritage Relationship → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The Afro-Atlantic side of the claimed heritage relationship. Range: iroko:TraditionScheme concept.</td>
-        </tr>
-        <tr id="prop-communityRecognition">
-          <td><span class="prop-name">communityRecognition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">community recognition status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Reconstructed Practice → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Whether and how this reconstructed practice has been recognized by source tradition communities. Range: iroko:RecognitionStatusScheme.</td>
-        </tr>
-        <tr id="prop-movementContestation">
-          <td><span class="prop-name">movementContestation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contestation notes</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Reclamation Movement → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Notes on how this movement has been received, resisted, or debated within and outside the tradition community.</td>
-        </tr>
-        <tr id="prop-returnContestation">
-          <td><span class="prop-name">returnContestation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contestation notes</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Trans-Afro-Atlantic Return → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">How this return has been evaluated or contested within the broader tradition community.</td>
-        </tr>
-        <tr id="prop-currentCommunity">
-          <td><span class="prop-name">currentCommunity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">current practicing community</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Reconstructed Practice → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The house or community practicing this reconstructed tradition. Range: iroko:House.</td>
-        </tr>
-        <tr id="prop-evidenceBase">
-          <td><span class="prop-name">evidenceBase</span><br><span style="font-size:.75rem;color:var(--ink-soft);">evidence base</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Heritage Relationship → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Summary of the scholarly and community evidence supporting or complicating this heritage relationship claim.</td>
-        </tr>
-        <tr id="prop-evidentiarySources">
-          <td><span class="prop-name">evidentiarySources</span><br><span style="font-size:.75rem;color:var(--ink-soft);">evidentiary sources</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Reconstructed Practice → DocumentaryEvidence</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The documentary, scholarly, or oral sources used as the basis for reconstruction. Range: iroko:DocumentaryEvidence.</td>
-        </tr>
-        <tr id="prop-groundedIn">
-          <td><span class="prop-name">groundedIn</span><br><span style="font-size:.75rem;color:var(--ink-soft);">grounded in</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">nadbfdf7cf3c04b558b264697cc789bdfb1 → Heritage Relationship</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The heritage relationship assertion that grounds this return event or reclamation movement. A TransAfroAtlanticReturn or ReclamationMovement is typically predicated on a claimed relationship between an Afro-Atlantic tradition and an African source tradition; this property links the event or movement to that formal assertion. The heritage claim may be widely attested, lineage-specific, or contested — the property records the claim without adjudicating it.</td>
-        </tr>
-        <tr id="prop-hostCommunity">
-          <td><span class="prop-name">hostCommunity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">host community</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Trans-Afro-Atlantic Return → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The African community or institution receiving the Afro-Atlantic visitors. Range: iroko:House.</td>
-        </tr>
-        <tr id="prop-keyFigures">
-          <td><span class="prop-name">keyFigures</span><br><span style="font-size:.75rem;color:var(--ink-soft);">key figures</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Reclamation Movement → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Principal practitioners, scholars, or leaders associated with this movement. Range: foaf:Person.</td>
-        </tr>
-        <tr id="prop-movementName">
-          <td><span class="prop-name">movementName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">movement name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Reclamation Movement → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The name or designation of this reclamation or revitalization movement. Language-tagged.</td>
-        </tr>
-        <tr id="prop-movementOutcome">
-          <td><span class="prop-name">movementOutcome</span><br><span style="font-size:.75rem;color:var(--ink-soft);">movement outcome</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Reclamation Movement → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The documented or ongoing result of this movement. Range: iroko:MovementOutcomeScheme.</td>
-        </tr>
-        <tr id="prop-movementType">
-          <td><span class="prop-name">movementType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">movement type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Reclamation Movement → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The typological category of this movement. Range: iroko:MovementTypeScheme.</td>
-        </tr>
-        <tr id="prop-originDate">
-          <td><span class="prop-name">originDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">origin date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Reclamation Movement → gYear</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Approximate date the movement began.</td>
-        </tr>
-        <tr id="prop-reconstructionMethod">
-          <td><span class="prop-name">reconstructionMethod</span><br><span style="font-size:.75rem;color:var(--ink-soft);">reconstruction method</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Reconstructed Practice → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The primary method used to reconstruct this practice. Range: iroko:ReconstructionMethodScheme.</td>
-        </tr>
-        <tr id="prop-relationshipType">
-          <td><span class="prop-name">relationshipType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">relationship type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Heritage Relationship → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The type of heritage relationship claimed. Range: iroko:HeritageRelationshipTypeScheme.</td>
-        </tr>
-        <tr id="prop-returnDate">
-          <td><span class="prop-name">returnDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">return date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Trans-Afro-Atlantic Return → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">returnDate</td>
-        </tr>
-        <tr id="prop-returnOutcome">
-          <td><span class="prop-name">returnOutcome</span><br><span style="font-size:.75rem;color:var(--ink-soft);">return outcome</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Trans-Afro-Atlantic Return → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The documented result of this return: mutual recognition, initiation, rejection, or ongoing relationship. Free-text.</td>
-        </tr>
-        <tr id="prop-returnType">
-          <td><span class="prop-name">returnType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">return type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Trans-Afro-Atlantic Return → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The nature of the return encounter. Range: iroko:ReturnTypeScheme.</td>
-        </tr>
-        <tr id="prop-returningCommunity">
-          <td><span class="prop-name">returningCommunity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">returning community</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Trans-Afro-Atlantic Return → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The Afro-Atlantic house or community making the return. Range: iroko:House.</td>
-        </tr>
-        <tr id="prop-sourceTradition">
-          <td><span class="prop-name">sourceTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">source tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Reclamation Movement → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The African tradition identified as the reclamation&#x27;s reference point. Range: iroko:TraditionScheme concept.</td>
-        </tr>
-        <tr id="prop-targetTradition">
-          <td><span class="prop-name">targetTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">target tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Reclamation Movement → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The Afro-Atlantic tradition this movement seeks to reclaim or revitalize. Range: iroko:TraditionScheme concept.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <!-- ZONE 1: Classes -->
+      <div class="zone-head">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="cls-card" id="card-HeritageRelationship" onclick="activateClass('HeritageRelationship')">
+          <span class="cls-uri">iroko:HeritageRelationship</span>
+          <span class="cls-label">Heritage Relationship</span>
+          <span class="cls-hint">subClassOf RelationshipAssertion</span>
+        </div>
+        <div class="cls-card" id="card-ReclamationMovement" onclick="activateClass('ReclamationMovement')">
+          <span class="cls-uri">iroko:ReclamationMovement</span>
+          <span class="cls-label">Reclamation Movement</span>
+          <span class="cls-hint">subClassOf Event · subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-ReconstructedPractice" onclick="activateClass('ReconstructedPractice')">
+          <span class="cls-uri">iroko:ReconstructedPractice</span>
+          <span class="cls-label">Reconstructed Practice</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-TransAfroAtlanticReturn" onclick="activateClass('TransAfroAtlanticReturn')">
+          <span class="cls-uri">iroko:TransAfroAtlanticReturn</span>
+          <span class="cls-label">Trans-Afro-Atlantic Return</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+      </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">5 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Heritage Relationship Types</span>
-        <span class="scheme-count">6 concepts</span>
+      <!-- ZONE 2: Property panel -->
+      <div class="zone-head" style="margin-top:0;">
+        Properties
+        <span class="zone-hint" id="z2-hint">Click a class card above</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">HeritageRelationshipTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-rel-claimed-disputed">
-          <div class="concept-label">Claimed but contested</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">rel-claimed-disputed</div>
-          <p class="concept-def">The Afro-Atlantic tradition claims a relationship to the African source, but this claim is disputed by scholars, the African community, or other Afro-Atlantic communities.</p>
+      <div class="prop-placeholder" id="prop-placeholder">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        No class selected. Click any class card above to see incoming and outgoing properties.
+      </div>
+      <div class="prop-panel" id="prop-panel">
+        <div class="pp-head">
+          <div>
+            <div class="pp-uri" id="pp-uri"></div>
+            <div class="pp-label" id="pp-label"></div>
+          </div>
+          <button class="pp-close" onclick="closePanel()" title="Close">&#x2715;</button>
         </div>
-        <div class="concept-item" id="concept-rel-direct-descent">
-          <div class="concept-label">Direct descent (widely attested)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">rel-direct-descent</div>
-          <p class="concept-def">The Afro-Atlantic tradition descends directly from the African source tradition through documented enslaved practitioner transmission. Widely recognized by scholars and both communities.</p>
+        <div class="pp-def" id="pp-def"></div>
+        <div class="pp-cols">
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8592;</span> Incoming <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(range = this class)</span></div>
+            <div id="pp-incoming"></div>
+          </div>
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8594;</span> Outgoing <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(domain = this class)</span></div>
+            <div id="pp-outgoing"></div>
+          </div>
         </div>
-        <div class="concept-item" id="concept-rel-influence">
-          <div class="concept-label">Historical influence</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">rel-influence</div>
-          <p class="concept-def">The African tradition influenced the Afro-Atlantic tradition without a direct descent relationship. Elements were adopted or adapted.</p>
-        </div>
-        <div class="concept-item" id="concept-rel-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">rel-other</div>
-          <p class="concept-def">Heritage relationship type not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-rel-parallel-development">
-          <div class="concept-label">Parallel development from shared source</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">rel-parallel-development</div>
-          <p class="concept-def">The Afro-Atlantic and African traditions share a common ancestor but developed in parallel rather than one descending from the other.</p>
-        </div>
-        <div class="concept-item" id="concept-rel-reconstructed">
-          <div class="concept-label">Reconstructed / claimed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">rel-reconstructed</div>
-          <p class="concept-def">The relationship is based on reconstruction from historical evidence rather than surviving living transmission.</p>
+        <div class="pp-cite">
+          <span class="pp-cite-text" id="pp-cite-text"></span>
+          <button class="btn-copy-sm" id="pp-cite-btn" onclick="copyCite()">Copy URI</button>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Reclamation Movement Types</span>
-        <span class="scheme-count">8 concepts</span>
+
+      <!-- ZONE 3: Concept Schemes -->
+      <div class="zone-head" style="margin-top:1rem;">
+        Concept Schemes
+        <span class="zone-hint">32 concepts across 5 schemes</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">MovementTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-type-decolonization">
-          <div class="concept-label">Decolonization</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">type-decolonization</div>
-          <p class="concept-def">Specifically framed efforts to identify and remove colonial impositions (Catholic syncretism, colonial-era secrecy requirements, European naming conventions) from a Afro-Atlantic tradition. Overlaps with re-Africanization but emphasizes the political critique of colonialism.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:HeritageRelationshipTypeScheme</span>
+            <span class="sh-label">Heritage Relationship Types</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
         </div>
-        <div class="concept-item" id="concept-type-heritage-tourism">
-          <div class="concept-label">Heritage tourism / pilgrimage</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">type-heritage-tourism</div>
-          <p class="concept-def">Organized or individual Afro-Atlantic visits to African source sites for spiritual, cultural, or commemorative purposes. Distinguished from TransAfroAtlanticReturn in being primarily observational rather than initiatory.</p>
-        </div>
-        <div class="concept-item" id="concept-type-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">type-other</div>
-          <p class="concept-def">Movement type not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-type-purification">
-          <div class="concept-label">Purification / orthodoxy movement</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">type-purification</div>
-          <p class="concept-def">Efforts within a tradition community to establish or enforce a more &#x27;authentic&#x27; or &#x27;pure&#x27; practice, often by marginalizing innovations perceived as non-traditional. May be conservative (defending existing Afro-Atlantic practice) or reformist (seeking African models).</p>
-        </div>
-        <div class="concept-item" id="concept-type-re-africanization">
-          <div class="concept-label">Re-Africanization</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">type-re-africanization</div>
-          <p class="concept-def">Efforts to restore African elements to Afro-Atlantic traditions that have been transformed by colonialism, syncretism, or assimilation. Exemplified by the Candomblé re-Africanization movement in Bahia and the movement to remove Catholic saint imagery from Lucumí/Ocha practice.</p>
-        </div>
-        <div class="concept-item" id="concept-type-repatriation">
-          <div class="concept-label">Repatriation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">type-repatriation</div>
-          <p class="concept-def">Physical return of Afro-Atlantic people to African source communities, creating new hybrid communities and exchanges. Examples: Brazilian returnee (aguda/tabom) communities in West Africa who brought Afro-Atlantic Candomblé elements back to Benin and Nigeria.</p>
-        </div>
-        <div class="concept-item" id="concept-type-reconstruction">
-          <div class="concept-label">Tradition reconstruction</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">type-reconstruction</div>
-          <p class="concept-def">Efforts to create or restore a practice from documentary, archaeological, or cross-tradition scholarly sources where direct lineage transmission has been lost.</p>
-        </div>
-        <div class="concept-item" id="concept-type-validation-seeking">
-          <div class="concept-label">Validation-seeking</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">type-validation-seeking</div>
-          <p class="concept-def">Efforts by Afro-Atlantic practitioners to obtain formal recognition, initiation, or endorsement from African source communities or their representatives. May involve travel, correspondence, or receiving African elders in Afro-Atlantic contexts.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Claimed but contested</span>
+            <span class="chip-id">iroko:rel-claimed-disputed</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Direct descent (widely attested)</span>
+            <span class="chip-id">iroko:rel-direct-descent</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Historical influence</span>
+            <span class="chip-id">iroko:rel-influence</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:rel-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Parallel development from shared source</span>
+            <span class="chip-id">iroko:rel-parallel-development</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Reconstructed / claimed</span>
+            <span class="chip-id">iroko:rel-reconstructed</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Recognition Status</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">RecognitionStatusScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-recognition-disputed">
-          <div class="concept-label">Disputed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recognition-disputed</div>
-          <p class="concept-def">Some source tradition representatives recognize the practice; others do not. Contested.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:MovementTypeScheme</span>
+            <span class="sh-label">Reclamation Movement Types</span>
+          </div>
+          <span class="sh-count">8 concepts</span>
         </div>
-        <div class="concept-item" id="concept-recognition-formally-recognized">
-          <div class="concept-label">Formally recognized</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recognition-formally-recognized</div>
-          <p class="concept-def">The reconstructed or Afro-Atlantic practice has received formal recognition from a source tradition authority.</p>
-        </div>
-        <div class="concept-item" id="concept-recognition-informally-recognized">
-          <div class="concept-label">Informally recognized</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recognition-informally-recognized</div>
-          <p class="concept-def">Recognition exists through interpersonal relationships and mutual respect without formal institutional endorsement.</p>
-        </div>
-        <div class="concept-item" id="concept-recognition-not-sought">
-          <div class="concept-label">Not sought</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recognition-not-sought</div>
-          <p class="concept-def">The community practices without seeking external recognition, asserting autonomy over its own validity.</p>
-        </div>
-        <div class="concept-item" id="concept-recognition-pending">
-          <div class="concept-label">Pending</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recognition-pending</div>
-          <p class="concept-def">Recognition process is underway; outcome not yet determined.</p>
-        </div>
-        <div class="concept-item" id="concept-recognition-rejected">
-          <div class="concept-label">Rejected</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recognition-rejected</div>
-          <p class="concept-def">Source tradition authorities have formally rejected or declined to recognize this practice or community.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Reconstruction Methods</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">ReconstructionMethodScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-method-archival">
-          <div class="concept-label">Archival / documentary sources</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">method-archival</div>
-          <p class="concept-def">Reconstruction based on primary archival sources: colonial records, religious registers, fieldwork notes, photographs.</p>
-        </div>
-        <div class="concept-item" id="concept-method-community-consensus">
-          <div class="concept-label">Community deliberation and consensus</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">method-community-consensus</div>
-          <p class="concept-def">Reconstruction through formal community process: elders and practitioners deliberating together to establish or restore practice.</p>
-        </div>
-        <div class="concept-item" id="concept-method-cross-tradition-synthesis">
-          <div class="concept-label">Cross-tradition synthesis</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">method-cross-tradition-synthesis</div>
-          <p class="concept-def">Reconstruction by synthesizing elements from multiple related surviving traditions to fill gaps in a fragmented one.</p>
-        </div>
-        <div class="concept-item" id="concept-method-oral-tradition">
-          <div class="concept-label">Oral tradition and living practitioners</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">method-oral-tradition</div>
-          <p class="concept-def">Reconstruction based on oral transmission from living elders or communities with partial survival of the tradition.</p>
-        </div>
-        <div class="concept-item" id="concept-method-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">method-other</div>
-          <p class="concept-def">Reconstruction method not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-method-ethnographic">
-          <div class="concept-label">Published ethnographic sources</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">method-ethnographic</div>
-          <p class="concept-def">Reconstruction based primarily on published ethnographic literature (Bascom, Farrow, Verger, Cabrera, Herskovits, etc.).</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Decolonization</span>
+            <span class="chip-id">iroko:type-decolonization</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Heritage tourism / pilgrimage</span>
+            <span class="chip-id">iroko:type-heritage-tourism</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:type-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Purification / orthodoxy movement</span>
+            <span class="chip-id">iroko:type-purification</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Re-Africanization</span>
+            <span class="chip-id">iroko:type-re-africanization</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Repatriation</span>
+            <span class="chip-id">iroko:type-repatriation</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Tradition reconstruction</span>
+            <span class="chip-id">iroko:type-reconstruction</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Validation-seeking</span>
+            <span class="chip-id">iroko:type-validation-seeking</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Trans-Afro-Atlantic Return Types</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">ReturnTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-return-initiation">
-          <div class="concept-label">African initiation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">return-initiation</div>
-          <p class="concept-def">Afro-Atlantic practitioner receives initiation in Africa within a source tradition.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:RecognitionStatusScheme</span>
+            <span class="sh-label">Recognition Status</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
         </div>
-        <div class="concept-item" id="concept-return-ceremony-participation">
-          <div class="concept-label">Ceremony participation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">return-ceremony-participation</div>
-          <p class="concept-def">Afro-Atlantic practitioner participates in African ceremonies without receiving initiation.</p>
-        </div>
-        <div class="concept-item" id="concept-return-consultation">
-          <div class="concept-label">Consultation / divination</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">return-consultation</div>
-          <p class="concept-def">Afro-Atlantic practitioner receives divination or consultation from African authority figures.</p>
-        </div>
-        <div class="concept-item" id="concept-return-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">return-other</div>
-          <p class="concept-def">Return type not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-return-protocol-exchange">
-          <div class="concept-label">Protocol / knowledge exchange</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">return-protocol-exchange</div>
-          <p class="concept-def">Formal exchange of liturgical, ceremonial, or governance knowledge between Afro-Atlantic and African communities.</p>
-        </div>
-        <div class="concept-item" id="concept-return-research">
-          <div class="concept-label">Research / ethnographic</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">return-research</div>
-          <p class="concept-def">Afro-Atlantic practitioner or scholar conducts fieldwork in African source communities.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Disputed</span>
+            <span class="chip-id">iroko:recognition-disputed</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Formally recognized</span>
+            <span class="chip-id">iroko:recognition-formally-recognized</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Informally recognized</span>
+            <span class="chip-id">iroko:recognition-informally-recognized</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Not sought</span>
+            <span class="chip-id">iroko:recognition-not-sought</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Pending</span>
+            <span class="chip-id">iroko:recognition-pending</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Rejected</span>
+            <span class="chip-id">iroko:recognition-rejected</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:ReconstructionMethodScheme</span>
+            <span class="sh-label">Reconstruction Methods</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Archival / documentary sources</span>
+            <span class="chip-id">iroko:method-archival</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Community deliberation and consensus</span>
+            <span class="chip-id">iroko:method-community-consensus</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Cross-tradition synthesis</span>
+            <span class="chip-id">iroko:method-cross-tradition-synthesis</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Oral tradition and living practitioners</span>
+            <span class="chip-id">iroko:method-oral-tradition</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:method-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Published ethnographic sources</span>
+            <span class="chip-id">iroko:method-ethnographic</span>
+          </div>
+        </div>
+      </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:ReturnTypeScheme</span>
+            <span class="sh-label">Trans-Afro-Atlantic Return Types</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">African initiation</span>
+            <span class="chip-id">iroko:return-initiation</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ceremony participation</span>
+            <span class="chip-id">iroko:return-ceremony-participation</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Consultation / divination</span>
+            <span class="chip-id">iroko:return-consultation</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:return-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Protocol / knowledge exchange</span>
+            <span class="chip-id">iroko:return-protocol-exchange</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Research / ethnographic</span>
+            <span class="chip-id">iroko:return-research</span>
+          </div>
+        </div>
+      </div>
+    </main><!-- /module-main -->
+
+    <!-- SIDEBAR -->
+    <aside class="module-sidebar">
+
+      <div class="share-row">
+        <a class="share-btn" href="mailto:?subject=Iroko%20Framework%20%E2%80%94%20Sankofa%20Module&amp;body=https://ontology.irokosociety.org/vocab/iroko-sankofa.html" title="Share via email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          Email
+        </a>
+        <button class="share-btn" onclick="window.print()" title="Print">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/></svg>
+          Print
+        </button>
+        <button class="share-btn" id="link-btn" onclick="copyLink(this)" title="Copy link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Copy Link
+        </button>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="sp-head">
+          <span class="sp-title" id="sb-title">Connected Modules</span>
+          <span class="sp-active-uri" id="sb-active-uri"></span>
+        </div>
+        <div class="sp-body sidebar-dynamic" id="sb-body">
+          <div id="sb-module-view">
+<p class="no-props" style="font-size:.8rem;color:var(--ink-soft);font-style:italic;">No external connections detected.</p>
+          </div>
+          <div id="sb-class-view" style="display:none;">
+            <div id="sb-active-card"></div>
+            <div id="sb-class-conns"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-cite">
+        <div class="cite-head">Cite the Sankofa Module</div>
+        <div class="cite-tabs">
+          <button class="cite-tab active" onclick="setCiteFormat('plain',this)">Plain</button>
+          <button class="cite-tab" onclick="setCiteFormat('bibtex',this)">BibTeX</button>
+          <button class="cite-tab" onclick="setCiteFormat('ris',this)">RIS</button>
+        </div>
+        <div class="cite-text" id="cite-display">
+          Iroko Historical Society. (2026). <em>Iroko Framework: Sankofa Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-sankofa.html. CC0 1.0 Universal.
+        </div>
+        <button class="btn-cite-copy" id="module-cite-btn" onclick="copyModuleCite()">Copy Citation</button>
+        <div class="format-links">
+          <a class="fmt-link" href="iroko-sankofa.ttl">Turtle (.ttl) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-sankofa.jsonld">JSON-LD (.jsonld) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-sankofa.rdf">RDF/XML (.rdf) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-sankofa.nt">N-Triples (.nt) <span class="fmt-arrow">&#8595;</span></a>
+        </div>
+      </div>
+
+    </aside>
+  </div><!-- /module-layout -->
 
   <footer class="site-footer">
     <div class="footer-left">
@@ -509,6 +581,177 @@
     </div>
   </footer>
 
-</div>
+</div><!-- /page-wrap -->
+
+<script>
+
+// ── JS data injected by generator ──────────────────────────────────────────
+const MODULE_STEM = "iroko-sankofa";
+const MOD_TITLE_SHORT = "Sankofa Module";
+const CLASSES = {"HeritageRelationship": {"uri": "iroko:HeritageRelationship", "label": "Heritage Relationship", "definition": "A formal assertion of the relationship between a Afro-Atlantic tradition and its claimed African source tradition. Subclass of iroko:RelationshipAssertion: the claim is documented with its source, asserter, and status (widely attested, lineage-specific, or contested) without requiring resolution. Examples: the documented Yorùbá–Lucumí relationship; the contested specificity of Fon vs. Ewe sources for Haitian Vodou Rada; the debated connection between specific Cuban Abakuá potencias and Cross River Ékpè lodges.", "outgoing": [{"uri": "iroko:africanTradition", "label": "African source tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The African source tradition claimed in this heritage relationship. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:afroAtlanticTradition", "label": "Afro-Atlantic tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic side of the claimed heritage relationship. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:evidenceBase", "label": "evidence base", "type": "data", "range": "langString", "access": "pub", "def": "Summary of the scholarly and community evidence supporting or complicating this heritage relationship claim."}, {"uri": "iroko:relationshipType", "label": "relationship type", "type": "obj", "range": "Concept", "access": "pub", "def": "The type of heritage relationship claimed. Range: iroko:HeritageRelationshipTypeScheme."}], "incoming": [{"uri": "iroko:groundedIn", "label": "grounded in", "type": "obj", "access": "pub", "def": "The heritage relationship assertion that grounds this return event or reclamation movement. A TransAfroAtlanticReturn or ReclamationMovement is typically predicated on a claimed relationship between an Afro-Atlantic tradition and an African source tradition; this property links the event or movement to that formal assertion. The heritage claim may be widely attested, lineage-specific, or contested — the property records the claim without adjudicating it.", "domain": "TransAfroAtlanticReturn | ReclamationMovement", "from": "iroko:TransAfroAtlanticReturn | ReclamationMovement", "fromLabel": "TransAfroAtlanticReturn | ReclamationMovement", "module": "Sankofa Module", "stem": "iroko-sankofa"}], "cross": []}, "ReclamationMovement": {"uri": "iroko:ReclamationMovement", "label": "Reclamation Movement", "definition": "An organized or semi-organized community effort to recover, revitalize, or Africanize a Afro-Atlantic religious tradition. Examples: the Candomblé re-Africanization movement beginning in the 1930s–70s (Mãe Aninha, Martiniano do Bonfim, and later the SECNEB research agenda); the Lucumí decolonization efforts removing Catholic syncretism from Ocha practice; the Ifá revival in Trinidad and other Afro-Atlantic communities seeking direct Yorùbá validation; the African American Ifá reclamation beginning in the late 20th century. A movement is documented without adjudicating whether its claims of authenticity are correct.", "outgoing": [{"uri": "iroko:movementContestation", "label": "contestation notes", "type": "data", "range": "langString", "access": "pub", "def": "Notes on how this movement has been received, resisted, or debated within and outside the tradition community."}, {"uri": "iroko:groundedIn", "label": "grounded in", "type": "obj", "range": "Heritage Relationship", "access": "pub", "def": "The heritage relationship assertion that grounds this return event or reclamation movement. A TransAfroAtlanticReturn or ReclamationMovement is typically predicated on a claimed relationship between an Afro-Atlantic tradition and an African source tradition; this property links the event or movement to that formal assertion. The heritage claim may be widely attested, lineage-specific, or contested — the property records the claim without adjudicating it."}, {"uri": "iroko:keyFigures", "label": "key figures", "type": "obj", "range": "Person", "access": "pub", "def": "Principal practitioners, scholars, or leaders associated with this movement. Range: foaf:Person."}, {"uri": "iroko:movementName", "label": "movement name", "type": "data", "range": "langString", "access": "pub", "def": "The name or designation of this reclamation or revitalization movement. Language-tagged."}, {"uri": "iroko:movementOutcome", "label": "movement outcome", "type": "obj", "range": "Concept", "access": "pub", "def": "The documented or ongoing result of this movement. Range: iroko:MovementOutcomeScheme."}, {"uri": "iroko:movementType", "label": "movement type", "type": "obj", "range": "Concept", "access": "pub", "def": "The typological category of this movement. Range: iroko:MovementTypeScheme."}, {"uri": "iroko:originDate", "label": "origin date", "type": "data", "range": "gYear", "access": "pub", "def": "Approximate date the movement began."}, {"uri": "iroko:sourceTradition", "label": "source tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The African tradition identified as the reclamation's reference point. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:targetTradition", "label": "target tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic tradition this movement seeks to reclaim or revitalize. Range: iroko:TraditionScheme concept."}], "incoming": [], "cross": []}, "ReconstructedPractice": {"uri": "iroko:ReconstructedPractice", "label": "Reconstructed Practice", "definition": "A religious practice or tradition that has been assembled or restored from documentary sources, scholarly research, or cross-tradition synthesis rather than direct lineage transmission. Examples: reconstructed Yorùbá practice in communities without living initiatory lineage; synthesis traditions drawing on Farrow, Bascom, or Verger ethnographic documentation; Neo-African traditions developed from scholarly sources in North America or Europe. The reconstruction method and its evidentiary basis are the core data here; the framework makes no judgment about the resulting practice's validity.", "outgoing": [{"uri": "iroko:communityRecognition", "label": "community recognition status", "type": "obj", "range": "Concept", "access": "pub", "def": "Whether and how this reconstructed practice has been recognized by source tradition communities. Range: iroko:RecognitionStatusScheme."}, {"uri": "iroko:currentCommunity", "label": "current practicing community", "type": "obj", "range": "House", "access": "pub", "def": "The house or community practicing this reconstructed tradition. Range: iroko:House."}, {"uri": "iroko:evidentiarySources", "label": "evidentiary sources", "type": "obj", "range": "DocumentaryEvidence", "access": "pub", "def": "The documentary, scholarly, or oral sources used as the basis for reconstruction. Range: iroko:DocumentaryEvidence."}, {"uri": "iroko:reconstructionMethod", "label": "reconstruction method", "type": "obj", "range": "Concept", "access": "pub", "def": "The primary method used to reconstruct this practice. Range: iroko:ReconstructionMethodScheme."}], "incoming": [], "cross": []}, "TransAfroAtlanticReturn": {"uri": "iroko:TransAfroAtlanticReturn", "label": "Trans-Afro-Atlantic Return", "definition": "A documented instance of a Afro-Atlantic practitioner or community making contact with, seeking validation from, or receiving initiation within an African source community. Examples: Cuban Babalawos traveling to Yorùbáland for Ifá validation; Haitian Vodouisants conducting ceremonies in Benin at Ouidah; Candomblé priests initiating in West Africa. A Trans-Afro-Atlantic return may be documented as an event, a relationship, or a formal protocol exchange. The outcomes of such encounters — including mutual recognition or rejection — should be documented without taking sides.", "outgoing": [{"uri": "iroko:returnContestation", "label": "contestation notes", "type": "data", "range": "langString", "access": "pub", "def": "How this return has been evaluated or contested within the broader tradition community."}, {"uri": "iroko:groundedIn", "label": "grounded in", "type": "obj", "range": "Heritage Relationship", "access": "pub", "def": "The heritage relationship assertion that grounds this return event or reclamation movement. A TransAfroAtlanticReturn or ReclamationMovement is typically predicated on a claimed relationship between an Afro-Atlantic tradition and an African source tradition; this property links the event or movement to that formal assertion. The heritage claim may be widely attested, lineage-specific, or contested — the property records the claim without adjudicating it."}, {"uri": "iroko:hostCommunity", "label": "host community", "type": "obj", "range": "House", "access": "pub", "def": "The African community or institution receiving the Afro-Atlantic visitors. Range: iroko:House."}, {"uri": "iroko:returnDate", "label": "return date", "type": "data", "range": "date", "access": "pub", "def": "returnDate"}, {"uri": "iroko:returnOutcome", "label": "return outcome", "type": "data", "range": "langString", "access": "pub", "def": "The documented result of this return: mutual recognition, initiation, rejection, or ongoing relationship. Free-text."}, {"uri": "iroko:returnType", "label": "return type", "type": "obj", "range": "Concept", "access": "pub", "def": "The nature of the return encounter. Range: iroko:ReturnTypeScheme."}, {"uri": "iroko:returningCommunity", "label": "returning community", "type": "obj", "range": "House", "access": "pub", "def": "The Afro-Atlantic house or community making the return. Range: iroko:House."}], "incoming": [], "cross": []}};
+const MODULE_CROSS = [];
+const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Sankofa Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-sankofa.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Sankofa Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-sankofa.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_sankofa_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Sankofa Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-sankofa.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Sankofa Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-sankofa.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
+
+// ── Access badge ─────────────────────────────────────────────────────────────
+function accessBadge(a) {
+  if (a==='pub')  return '<span class="ab ab-pub">Public</span>';
+  if (a==='comm') return '<span class="ab ab-comm">Community</span>';
+  if (a==='init') return '<span class="ab ab-init">Initiated</span>';
+  return '';
+}
+function typeBadge(t) {
+  if (t==='obj')  return '<span class="pr-type pr-type-obj">Object</span>';
+  if (t==='data') return '<span class="pr-type pr-type-data">Datatype</span>';
+  if (t==='ann')  return '<span class="pr-type pr-type-ann">Annotation</span>';
+  return '';
+}
+
+// ── Render property item ──────────────────────────────────────────────────────
+function renderProp(p, isIncoming) {
+  const meta = isIncoming
+    ? `<div class="pr-source">from ${p.from} · ${p.module}</div>`
+    : `<div class="pr-meta">${p.range||''}</div>`;
+  return `<div class="pr-item">
+    <div class="pr-top">
+      <span class="pr-uri">${p.uri}</span>
+      ${isIncoming ? '' : typeBadge(p.type)}
+      ${isIncoming ? '' : accessBadge(p.access)}
+    </div>
+    <div class="pr-label">${p.label}</div>
+    ${meta}
+    <div class="pr-def">${p.def||''}</div>
+  </div>`;
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let activeClass = null;
+let activeCiteFormat = 'plain';
+
+function activateClass(key) {
+  if (activeClass === key) { closePanel(); return; }
+  activeClass = key;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('card-'+key)?.classList.add('active');
+  const d = CLASSES[key];
+  if (!d) return;
+  document.getElementById('prop-placeholder').classList.add('hidden');
+  document.getElementById('z2-hint').textContent = 'Click class again to close';
+  document.getElementById('pp-uri').textContent  = d.uri;
+  document.getElementById('pp-label').textContent = d.label;
+  document.getElementById('pp-def').textContent   = d.definition||'';
+  const inEl  = document.getElementById('pp-incoming');
+  inEl.innerHTML = d.incoming && d.incoming.length
+    ? d.incoming.map(p=>renderProp(p,true)).join('')
+    : '<p class="no-props">No incoming connections detected in this module.</p>';
+  const outEl = document.getElementById('pp-outgoing');
+  outEl.innerHTML = d.outgoing && d.outgoing.length
+    ? d.outgoing.map(p=>renderProp(p,false)).join('')
+    : '<p class="no-props">No outgoing properties.</p>';
+  document.getElementById('pp-cite-text').textContent =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  document.getElementById('pp-cite-btn').dataset.uri  =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  const panel = document.getElementById('prop-panel');
+  panel.classList.remove('visible');
+  void panel.offsetWidth;
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  updateSidebar(key, d);
+}
+
+function closePanel() {
+  activeClass = null;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('prop-placeholder').classList.remove('hidden');
+  document.getElementById('prop-panel').classList.remove('visible');
+  document.getElementById('z2-hint').textContent = 'Click a class card above';
+  resetSidebar();
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+function updateSidebar(key, d) {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'External links';
+    document.getElementById('sb-active-uri').style.display = 'block';
+    document.getElementById('sb-active-uri').textContent = d.uri;
+    document.getElementById('sb-module-view').style.display = 'none';
+    document.getElementById('sb-class-view').style.display  = 'block';
+    document.getElementById('sb-active-card').innerHTML =
+      `<div class="active-class-card"><span class="acc-uri">${d.uri}</span><span class="acc-label">${d.label}</span></div>`;
+    const conns = (d.cross||[]);
+    const connsEl = document.getElementById('sb-class-conns');
+    connsEl.innerHTML = conns.length
+      ? conns.map(c=>`<div class="conn-card">
+          <div class="cc-row"><span class="cc-dot ${c.dotCls}"></span><span class="cc-name">${c.name}</span><span class="cc-dir" style="margin-left:auto;">${c.dir}</span></div>
+          <span class="cc-via">${c.via}</span>
+        </div>`).join('')
+      : '<p class="no-props">No cross-module connections for this class.</p>';
+    body.classList.remove('fading');
+  },120);
+}
+
+function resetSidebar() {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'Connected Modules';
+    document.getElementById('sb-active-uri').style.display = 'none';
+    document.getElementById('sb-module-view').style.display = 'block';
+    document.getElementById('sb-class-view').style.display  = 'none';
+    body.classList.remove('fading');
+  },120);
+}
+
+// ── Citation ──────────────────────────────────────────────────────────────────
+function setCiteFormat(fmt, btn) {
+  activeCiteFormat = fmt;
+  document.querySelectorAll('.cite-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const display = document.getElementById('cite-display');
+  if (fmt==='plain') {
+    display.innerHTML = CITE_FORMATS.plainHTML;
+  } else {
+    display.innerHTML = `<pre>${CITE_FORMATS[fmt].replace(/</g,'&lt;')}</pre>`;
+  }
+}
+
+function copyModuleCite() {
+  const text = activeCiteFormat==='plain' ? CITE_FORMATS.plain : CITE_FORMATS[activeCiteFormat];
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('module-cite-btn');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy Citation';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyCite() {
+  const btn = document.getElementById('pp-cite-btn');
+  navigator.clipboard.writeText(btn.dataset.uri).then(()=>{
+    btn.textContent='✓ Copied'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy URI';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    btn.classList.add('copied');
+    btn.lastChild.textContent='Copied';
+    setTimeout(()=>{btn.classList.remove('copied');btn.lastChild.textContent='Copy Link';},2000);
+  });
+}
+
+// ── Fragment URI auto-open ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  const hash = window.location.hash.replace('#','');
+  if (hash && CLASSES[hash]) {
+    activateClass(hash);
+    document.getElementById('card-'+hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+});
+
+</script>
 </body>
 </html>

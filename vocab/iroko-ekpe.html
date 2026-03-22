@@ -6,15 +6,209 @@
   <title>Ékpè Module — Initiatory Societies — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    /* ── Module page layout ──────────────────────────────────────── */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+    .module-main { min-width: 0; }
+    .zone-head {
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--rule-strong);
+      padding-bottom: .4rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .zone-hint { font-size: .68rem; letter-spacing: 0; text-transform: none;
+      color: var(--ink-soft); font-family: var(--serif); font-style: italic; opacity: .7; }
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
+    /* Zone 1 */
+    .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: .5rem; margin-bottom: 2rem; }
+    .cls-card { border: 1px solid var(--rule-strong); border-radius: 3px; padding: .75rem 1rem;
+      background: var(--paper); cursor: pointer;
+      transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
+    .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
+    .cls-card.active { border-color: var(--green); background: var(--green-light);
+      box-shadow: 0 2px 8px rgba(46,74,30,.12); }
+    .cls-card.active::after { content:''; position:absolute; bottom:-1px; left:50%;
+      transform:translateX(-50%); width:0; height:0;
+      border-left:7px solid transparent; border-right:7px solid transparent;
+      border-bottom:7px solid var(--paper-warm); }
+    .cls-uri { font-family: var(--mono); font-size: .7rem; color: var(--green-mid);
+      display: block; margin-bottom: .2rem; }
+    .cls-label { font-family: var(--serif); font-size: .95rem; font-weight: 600;
+      color: var(--ink); display: block; line-height: 1.2; }
+    .cls-hint { font-size: .67rem; color: var(--ink-soft); margin-top: .2rem;
+      display: block; font-style: italic; }
+
+    /* Zone 2 */
+    .prop-placeholder { background: var(--paper-warm); border: 1px dashed var(--rule-strong);
+      border-radius: 3px; padding: 1.25rem 1.5rem; color: var(--ink-soft); font-size: .84rem;
+      font-style: italic; margin-bottom: 2rem; display: flex; align-items: center; gap: .75rem; }
+    .prop-placeholder.hidden { display: none; }
+    .prop-panel { display: none; border: 1px solid var(--rule-strong); border-radius: 3px;
+      margin-bottom: 2rem; overflow: hidden; animation: panelIn 160ms ease forwards; }
+    .prop-panel.visible { display: block; }
+    @keyframes panelIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+    .pp-head { background: var(--green); color:#fff; padding:.9rem 1.25rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .pp-uri { font-family: var(--mono); font-size: .72rem; color: rgba(255,255,255,.65); }
+    .pp-label { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: #fff; }
+    .pp-close { background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer;
+      font-size:1.1rem; line-height:1; padding:.1rem; transition:color .15s;
+      margin-left:auto; flex-shrink:0; }
+    .pp-close:hover { color:#fff; }
+    .pp-def { padding:.85rem 1.25rem; font-size:.85rem; color:var(--ink-mid); line-height:1.6;
+      border-bottom:1px solid var(--rule); background:var(--paper-warm); }
+    .pp-cols { display:grid; grid-template-columns:1fr 1fr; background:var(--paper); }
+    .pp-col { padding:1.1rem 1.25rem; }
+    .pp-col:first-child { border-right:1px solid var(--rule); }
+    .pp-col-label { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.75rem;
+      display:flex; align-items:center; gap:.35rem; }
+    .dir-arrow { color: var(--green-mid); }
+    .pr-item { padding:.6rem .8rem; border:1px solid var(--rule); border-radius:3px;
+      background:var(--paper); margin-bottom:.4rem; }
+    .pr-top { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+    .pr-uri { font-family:var(--mono); font-size:.72rem; color:var(--green-mid); flex:1; }
+    .pr-type { font-family:var(--mono); font-size:.55rem; letter-spacing:.04em;
+      padding:.1em .4em; border-radius:2px; flex-shrink:0; }
+    .pr-type-obj  { background:#e8e0f0; color:#5c3d8f; }
+    .pr-type-data { background:#e0ecf8; color:#1a4a5e; }
+    .pr-type-ann  { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .pr-label { font-size:.8rem; color:var(--ink-soft); margin-top:.1rem; }
+    .pr-meta { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.3rem; }
+    .pr-def { font-size:.78rem; color:var(--ink-mid); margin-top:.35rem; line-height:1.45; }
+    .pr-source { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); font-style:italic; margin-top:.2rem; }
+    .no-props { font-size:.8rem; color:var(--ink-soft); font-style:italic; }
+    .ab { display:inline-block; font-family:var(--mono); font-size:.55rem; letter-spacing:.05em; padding:.1em .45em; border-radius:2px; }
+    .ab-pub  { background:var(--green-light); color:var(--green); }
+    .ab-comm { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .ab-init { background:#fde8e0; color:var(--terracotta,#8b3a1a); }
+    .pp-cite { padding:.85rem 1.25rem; border-top:1px solid var(--rule);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:1rem; flex-wrap:wrap; background:var(--paper-warm); }
+    .pp-cite-text { font-family:var(--mono); font-size:.7rem; color:var(--ink-soft);
+      flex:1; min-width:200px; }
+    .btn-copy-sm { font-family:var(--mono); font-size:.68rem; letter-spacing:.08em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.4em 1em; cursor:pointer; transition:background .15s;
+      flex-shrink:0; white-space:nowrap; }
+    .btn-copy-sm:hover { background:var(--ink); }
+    .btn-copy-sm.copied { background:var(--green-mid); }
+
+    /* Zone 3 */
+    .scheme-block { margin-bottom: 1.5rem; }
+    .scheme-head { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px 3px 0 0; padding:.6rem 1rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .sh-uri { font-family:var(--mono); font-size:.75rem; color:var(--green-mid); }
+    .sh-label { font-family:var(--serif); font-size:.92rem; font-weight:600; color:var(--ink); }
+    .sh-count { font-family:var(--mono); font-size:.62rem; color:var(--ink-soft); white-space:nowrap; }
+    .concept-chips { border:1px solid var(--rule-strong); border-top:none;
+      border-radius:0 0 3px 3px; display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
+    .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+    .chip:hover { background:var(--paper-warm); }
+    .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
+    .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+
+    /* Sidebar */
+    .module-sidebar { position:sticky; top:2rem; }
+    .sidebar-panel { border:1px solid var(--rule-strong); border-radius:3px; overflow:hidden; margin-bottom:1.25rem; }
+    .sp-head { background:var(--paper-warm); border-bottom:1px solid var(--rule-strong);
+      padding:.6rem 1rem; display:flex; justify-content:space-between; align-items:center; }
+    .sp-title { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); }
+    .sp-active-uri { font-family:var(--mono); font-size:.67rem; color:var(--green); display:none; }
+    .sp-body { padding:.75rem 1rem; }
+    .conn-card { border:1px solid var(--rule); border-radius:3px; padding:.55rem .75rem;
+      margin-bottom:.4rem; background:var(--paper); text-decoration:none; display:block;
+      transition:border-color .15s, background .15s; }
+    .conn-card:hover { border-color:var(--green-mid); background:var(--paper-warm); }
+    .cc-row { display:flex; align-items:center; gap:.4rem; }
+    .cc-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .dot-core        { background:var(--green); }
+    .dot-agency      { background:#6b3a10; }
+    .dot-authority   { background:#3a4a5e; }
+    .dot-epistemic   { background:#1a4a40; }
+    .dot-narrative   { background:#5e3a2a; }
+    .dot-manifestation { background:#5c3d8f; }
+    .dot-botanical   { background:#3a5e28; }
+    .dot-entities    { background:#5c3d8f; }
+    .dot-ritual      { background:var(--terracotta,#8b3a1a); }
+    .dot-lineage     { background:#4a3010; }
+    .dot-divination  { background:#1a4a5e; }
+    .dot-societies   { background:#5e1a3a; }
+    .dot-graphic     { background:#3a3a1a; }
+    .dot-music       { background:#1a3a5e; }
+    .dot-language    { background:#2a1a5e; }
+    .dot-other       { background:var(--ink-soft); }
+    .cc-name { font-family:var(--serif); font-size:.88rem; font-weight:600; color:var(--ink); }
+    .cc-via { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.15rem; display:block; }
+    .cc-dir { font-size:.68rem; color:var(--ink-soft); font-style:italic; }
+    .share-row { display:flex; gap:.4rem; margin-bottom:1.25rem; }
+    .share-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:.25rem;
+      padding:.5rem .25rem; background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; cursor:pointer; font-family:var(--mono); font-size:.6rem;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); text-decoration:none;
+      transition:border-color .15s, background .15s, color .15s; }
+    .share-btn:hover { background:var(--green-light); border-color:var(--green-mid); color:var(--green); }
+    .share-btn.copied { background:var(--green-light); border-color:var(--green); color:var(--green); }
+    .share-btn svg { width:16px; height:16px; }
+    .sidebar-cite { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; padding:.85rem 1rem; }
+    .cite-head { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.5rem; }
+    .cite-tabs { display:flex; gap:0; margin-bottom:.6rem; border:1px solid var(--rule-strong);
+      border-radius:3px; overflow:hidden; }
+    .cite-tab { flex:1; font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; padding:.35em 0; background:var(--paper); border:none;
+      border-right:1px solid var(--rule-strong); color:var(--ink-soft);
+      cursor:pointer; transition:background .15s, color .15s; }
+    .cite-tab:last-child { border-right:none; }
+    .cite-tab:hover { background:var(--paper-warm); color:var(--ink); }
+    .cite-tab.active { background:var(--green-light); color:var(--green); font-weight:500; }
+    .cite-text { font-family:var(--mono); font-size:.7rem; line-height:1.55;
+      color:var(--ink-mid); font-style:italic; margin-bottom:.65rem; }
+    .cite-text pre { font-family:var(--mono); font-size:.68rem; line-height:1.55;
+      white-space:pre-wrap; word-break:break-all; margin:0; font-style:normal; }
+    .btn-cite-copy { width:100%; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.45em 0; cursor:pointer; transition:background .15s; }
+    .btn-cite-copy:hover { background:var(--ink); }
+    .btn-cite-copy.copied { background:var(--green-mid); }
+    .format-links { margin-top:.65rem; display:flex; flex-direction:column; gap:.25rem; }
+    .fmt-link { display:flex; justify-content:space-between; align-items:center;
+      font-family:var(--mono); font-size:.7rem; padding:.35rem .6rem;
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper);
+      color:var(--green-mid); text-decoration:none; transition:background .15s, border-color .15s; }
+    .fmt-link:hover { background:var(--paper-warm); border-color:var(--rule-strong); color:var(--green); }
+    .fmt-arrow { color:var(--ink-soft); }
+    .sidebar-dynamic { transition:opacity 120ms ease; }
+    .sidebar-dynamic.fading { opacity:0; pointer-events:none; }
+    .active-class-card { background:var(--green-light); border:1px solid var(--green-mid);
+      border-radius:3px; padding:.6rem .75rem; margin-bottom:.65rem; }
+    .acc-uri { font-family:var(--mono); font-size:.67rem; color:var(--green-mid); display:block; margin-bottom:.1rem; }
+    .acc-label { font-family:var(--serif); font-size:.9rem; font-weight:600; color:var(--ink); }
+    @media (max-width:900px) {
+      .module-layout { grid-template-columns:1fr; }
+      .module-sidebar { position:static; }
+      .pp-cols { grid-template-columns:1fr; }
+      .pp-col:first-child { border-right:none; border-bottom:1px solid var(--rule); }
+    }
+
   </style>
 </head>
 <body>
@@ -44,11 +238,11 @@
       <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home"></a>
     </div>
     <div>
-      <span class="module-tag tag-societies">Society</span>
+      <span class="module-tag tag-societies">Societies</span>
       <h1>Ékpè Module — Initiatory Societies</h1>
-      <p class="subtitle">Graded societies, esoteric governance, and masquerade traditions</p>
+      <p class="subtitle">Graded societies, esoteric governance, society status, and masquerade traditions</p>
       <div class="header-meta">
-        <span class="meta-pill">ekpe:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-ekpe#</span>
+        <span class="meta-pill">ekpe:&nbsp; https://ontology.irokosociety.org/iroko-ekpe#</span>
         <span class="meta-pill">v1.3.0</span>
         <span class="meta-pill"><a href="iroko-ekpe.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
@@ -56,569 +250,346 @@
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting initiatory societies, grade structures, esoteric governance, and sodality membership across Afro-Atlantic traditions. Covers Ékpè/Ngbe, Abakuá, Ogboni/Oshugbo, Oro, Gelede, Egungun, and analogous institutions. Distinct from iroko-ile (religious houses and lineages) and iroko-travay (ritual processes): this module focuses on the institutional architecture of sodalities as systems of graded authority, esoteric knowledge, and community governance. Use with iroko-authority to model grade conferral authority and recognition networks; iroko-epistemic to constrain disclosure of restricted grade content and member identities.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">7</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">37</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">34</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="module-stats" style="margin-top:1.5rem;">
+    <div class="stat-cell"><span class="stat-n">7</span><span class="stat-label">Classes</span></div>
+    <div class="stat-cell"><span class="stat-n">37</span><span class="stat-label">Properties</span></div>
+    <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+    <div class="stat-cell"><span class="stat-n">34</span><span class="stat-label">Concepts</span></div>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">7 classes</span>
-    </div>
-    <div class="class-card" id="cls-ForcedDissolution">
-      <div class="class-name">ForcedDissolution</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Forced Dissolution</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">An event in which an initiatory society was suppressed, banned, or destroyed by an external authority. Enables structured documentation of state violence against sacred institutions. Primary case study: Machado-era suppression of Abakuá potencias in Cuba (1923). Key governance principle: forced dissolution by an external authority does not transfer custodial rights over the society&#x27;s sacred materials, records, or knowledge to the suppressing state or to the public. Materials held by a forcibly dissolved society remain governed by iroko:Ritual Sovereignty under iroko:RitualPractitioner authority.</p>
-    </div>
-    <div class="class-card" id="cls-InitiatorySociety">
-      <div class="class-name">InitiatorySociety</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Initiatory Society</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Organization</span>, <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A sodality or secret society organized around graded initiation, with esoteric knowledge and authority distributed across hierarchical grades. Membership is earned through initiation rather than birth or lineage alone. Examples: Ékpè/Ngbe lodges (Ejagham, Cross River Nigeria/Cameroon), Abakuá potencias (Cuba), Ogboni chapters (Yorùbáland), Gelede societies (Yorùbá/Fon/Ewe), Egungun lineage associations. Subclasses schema:Organization for interoperability with external directories, and iroko:SacredEntity for access control. Distinguished from iroko:House (which organizes around founding-elder lineage) in that membership cross-cuts lineage boundaries.</p>
-    </div>
-    <div class="class-card" id="cls-MembershipRecord">
-      <div class="class-name">MembershipRecord</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Membership Record</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A record documenting an individual&#x27;s initiation into and progression through a society. Membership records are among the most sensitive data in this framework: the identity of initiates is strictly guarded by all documented traditions, and their disclosure to outsiders is a serious breach. Default access is no-access; date and grade level may be community-restricted in contexts where historical record-keeping is an accepted practice (e.g., Cuban Abakuá records kept since the 19th century).</p>
-    </div>
-    <div class="class-card" id="cls-SocietyGrade">
-      <div class="class-name">SocietyGrade</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Society Grade</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A defined rank or level within an initiatory society&#x27;s graded hierarchy. Each grade confers specific knowledge, privileges, obligations, and esoteric rights. Grade names, their sequence, and their content are among the most carefully protected knowledge in these traditions. The existence of a grade structure is public; grade names are community-restricted; grade content and sequence are initiated-only or initiated-elder.</p>
-    </div>
-    <div class="class-card" id="cls-SocietyLodge">
-      <div class="class-name">SocietyLodge</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Society Lodge</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Initiatory Society</span></div>
-      <p class="class-def">A local chapter or lodge of an initiatory society. Ékpè lodges in Cross River; Abakuá potencias in Havana and Matanzas; Ogboni chapters in Yorùbá towns. Each lodge may have its own territory, titleholders, and charter, while being part of a broader society network. Uses iroko:parentSociety to link to the overarching tradition-level society.</p>
-    </div>
-    <div class="class-card" id="cls-SocietyMasquerade">
-      <div class="class-name">SocietyMasquerade</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Society Masquerade</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A masked or costumed ritual embodiment associated with an initiatory society, representing an ancestor, force, or principle. Examples: Abakuá íremes (diablitos) representing the voice of the fish Tanze; Egungun masquerades embodying ancestral spirits; Gelede masquerades honoring the mothers. The masquerade as a cultural form (name, tradition, function) is community-restricted; the identities of performers and operational sequences are initiated-only. Distinct from iroko:SpiritualEntity (which covers the spiritual force) and travay:CeremonialSequence (which covers the ritual sequence).</p>
-    </div>
-    <div class="class-card" id="cls-SocietyTitle">
-      <div class="class-name">SocietyTitle</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Society Title</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A named office or titled position within an initiatory society, distinct from grade level. Titles may be elected, inherited, purchased, or conferred. Examples: Iyamba (Abakuá), Isue (Abakuá), Ekueñón (Abakuá), Apetebi Ogboni, Olori Egungun. Each title carries specific ritual functions, insignia, and governance authority. Title names are community-restricted; the ritual functions attached to them are initiated-only.</p>
-    </div>
-  </div>
+  <div class="module-layout">
+    <main class="module-main">
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">37 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-associatedHouse">
-          <td><span class="prop-name">associatedHouse</span><br><span style="font-size:.75rem;color:var(--ink-soft);">associated house</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiatory Society → House</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">A religious house (iroko:House) with which this society maintains an ongoing ceremonial relationship. In many traditions, society and house membership overlap for senior practitioners.</td>
-        </tr>
-        <tr id="prop-dissolutionAuthority">
-          <td><span class="prop-name">dissolutionAuthority</span><br><span style="font-size:.75rem;color:var(--ink-soft);">dissolution authority</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Forced Dissolution → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The external authority (state, colonial power, occupying government) that forced dissolution of the society. Free text, language-tagged.</td>
-        </tr>
-        <tr id="prop-dissolutionDate">
-          <td><span class="prop-name">dissolutionDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">dissolution date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Forced Dissolution → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The date or approximate period of the forced dissolution event.</td>
-        </tr>
-        <tr id="prop-dissolutionEvent">
-          <td><span class="prop-name">dissolutionEvent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">dissolution event</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiatory Society → Forced Dissolution</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links an InitiatorySociety to a ForcedDissolution event that ended or suspended its operation by external authority.</td>
-        </tr>
-        <tr id="prop-foundingLocation">
-          <td><span class="prop-name">foundingLocation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">founding location</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Initiatory Society → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Place of origin or founding of the society. City/country level is public; specific address is community-restricted.</td>
-        </tr>
-        <tr id="prop-genderPolicy">
-          <td><span class="prop-name">genderPolicy</span><br><span style="font-size:.75rem;color:var(--ink-soft);">gender policy</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Initiatory Society → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Documents tradition-specific rules regarding gender and membership. For Abakuá: historically male-only (juramento); for Ogboni: both male and female members, with distinct female titleholder roles (Iyalode); for Gelede: primarily concerns gender complementarity (mothers/fathers). Free-text, records documented practice without normative judgment.</td>
-        </tr>
-        <tr id="prop-gradeCount">
-          <td><span class="prop-name">gradeCount</span><br><span style="font-size:.75rem;color:var(--ink-soft);">grade count</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Initiatory Society → integer</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Number of grades in this society&#x27;s hierarchy. The count is community-restricted in active societies; public for historical documentation.</td>
-        </tr>
-        <tr id="prop-gradeLevel">
-          <td><span class="prop-name">gradeLevel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">grade level</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Grade → integer</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Numeric position in the grade sequence. 1 = lowest/entry. Community-restricted.</td>
-        </tr>
-        <tr id="prop-gradeName">
-          <td><span class="prop-name">gradeName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">grade name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Grade → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The name of the grade in the tradition&#x27;s language. Community-restricted for active societies.</td>
-        </tr>
-        <tr id="prop-gradePrerequisite">
-          <td><span class="prop-name">gradePrerequisite</span><br><span style="font-size:.75rem;color:var(--ink-soft);">grade prerequisite</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Grade → Society Grade</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The grade that must be held before this grade may be received. Initiated-only: the sequencing of grades is esoteric knowledge.</td>
-        </tr>
-        <tr id="prop-gradePrivileges">
-          <td><span class="prop-name">gradePrivileges</span><br><span style="font-size:.75rem;color:var(--ink-soft);">grade privileges</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Grade → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
-          <td class="prop-desc">The ritual, governance, or social privileges conferred by this grade. Initiated-elder only.</td>
-        </tr>
-        <tr id="prop-gradeSign">
-          <td><span class="prop-name">gradeSign</span><br><span style="font-size:.75rem;color:var(--ink-soft);">grade sign</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Grade → GraphicSign</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
-          <td class="prop-desc">The esoteric graphic sign or identifying mark associated with this grade. Range: iroko:GraphicSign — grade signs in Ékpè and cognate societies are drawn symbols belonging to a sacred sign system, not free-text strings. Initiated-elder only.</td>
-        </tr>
-        <tr id="prop-gradeSociety">
-          <td><span class="prop-name">gradeSociety</span><br><span style="font-size:.75rem;color:var(--ink-soft);">grade society</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Grade → Initiatory Society</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The initiatory society to which this grade belongs.</td>
-        </tr>
-        <tr id="prop-initiatingOfficiant">
-          <td><span class="prop-name">initiatingOfficiant</span><br><span style="font-size:.75rem;color:var(--ink-soft);">initiating officiant</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Membership Record → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
-          <td class="prop-desc">The titleholder who performed the initiation. No-access.</td>
-        </tr>
-        <tr id="prop-lodgeName">
-          <td><span class="prop-name">lodgeName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">lodge name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Lodge → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The public name of the lodge or potencia. In Abakuá: the potencia name (e.g., Efik Butón, Efik Efor). Community-restricted for active lodges; public for historical lodges documented in scholarly sources.</td>
-        </tr>
-        <tr id="prop-lodgeTerritory">
-          <td><span class="prop-name">lodgeTerritory</span><br><span style="font-size:.75rem;color:var(--ink-soft);">lodge territory</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Lodge → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The geographic or community territory over which a lodge exercises spiritual and social jurisdiction. Free-text description.</td>
-        </tr>
-        <tr id="prop-masqueradeFunction">
-          <td><span class="prop-name">masqueradeFunction</span><br><span style="font-size:.75rem;color:var(--ink-soft);">masquerade function</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Masquerade → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The ceremonial function of this masquerade. Range: iroko:MasqueradeFunctionScheme.</td>
-        </tr>
-        <tr id="prop-masqueradeInsignia">
-          <td><span class="prop-name">masqueradeInsignia</span><br><span style="font-size:.75rem;color:var(--ink-soft);">masquerade insignia</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Masquerade → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
-          <td class="prop-desc">Description of costume elements, materials, and identifying features. Initiated-elder only.</td>
-        </tr>
-        <tr id="prop-masqueradeName">
-          <td><span class="prop-name">masqueradeName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">masquerade name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Masquerade → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The name of the masquerade or masked figure. Community-restricted.</td>
-        </tr>
-        <tr id="prop-masqueradeSociety">
-          <td><span class="prop-name">masqueradeSociety</span><br><span style="font-size:.75rem;color:var(--ink-soft);">masquerade society</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Masquerade → Initiatory Society</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The initiatory society to which this masquerade belongs.</td>
-        </tr>
-        <tr id="prop-memberPerson">
-          <td><span class="prop-name">memberPerson</span><br><span style="font-size:.75rem;color:var(--ink-soft);">member person</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Membership Record → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
-          <td class="prop-desc">The person to whom this membership record belongs. No-access: member identity is the most protected information in society records.</td>
-        </tr>
-        <tr id="prop-membershipDate">
-          <td><span class="prop-name">membershipDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">membership date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Membership Record → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Date of initiation into this grade. Community-restricted for historical records.</td>
-        </tr>
-        <tr id="prop-membershipGrade">
-          <td><span class="prop-name">membershipGrade</span><br><span style="font-size:.75rem;color:var(--ink-soft);">membership grade</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Membership Record → Society Grade</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The grade held by this member.</td>
-        </tr>
-        <tr id="prop-membershipSociety">
-          <td><span class="prop-name">membershipSociety</span><br><span style="font-size:.75rem;color:var(--ink-soft);">membership society</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Membership Record → Initiatory Society</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The society into which the individual was initiated.</td>
-        </tr>
-        <tr id="prop-membershipTitle">
-          <td><span class="prop-name">membershipTitle</span><br><span style="font-size:.75rem;color:var(--ink-soft);">membership title</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Membership Record → Society Title</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">A title held by this member within the society.</td>
-        </tr>
-        <tr id="prop-parentSociety">
-          <td><span class="prop-name">parentSociety</span><br><span style="font-size:.75rem;color:var(--ink-soft);">parent society</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Lodge → Initiatory Society</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The broader society network or tradition of which this lodge is a chapter. A Havana Abakuá potencia links to the Abakuá tradition; a Calabar Ékpè lodge links to the Ékpè tradition. Subproperty of prov:wasDerivedFrom.</td>
-        </tr>
-        <tr id="prop-representedEntity">
-          <td><span class="prop-name">representedEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">represented entity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Masquerade → SpiritualEntity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The ancestral spirit, principle, or force embodied by this masquerade. Range: iroko:SpiritualEntity. Initiated-only: the identity of what a masquerade embodies is esoteric in many traditions.</td>
-        </tr>
-        <tr id="prop-titleRequiredGrade">
-          <td><span class="prop-name">titleRequiredGrade</span><br><span style="font-size:.75rem;color:var(--ink-soft);">required grade</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Title → Society Grade</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The minimum grade required to hold this title. Initiated-only.</td>
-        </tr>
-        <tr id="prop-masqueradeRequiredGrade">
-          <td><span class="prop-name">masqueradeRequiredGrade</span><br><span style="font-size:.75rem;color:var(--ink-soft);">required grade for performance</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Masquerade → Society Grade</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The minimum grade required to perform or wear this masquerade. Initiated-only.</td>
-        </tr>
-        <tr id="prop-societyGovernanceStructure">
-          <td><span class="prop-name">societyGovernanceStructure</span><br><span style="font-size:.75rem;color:var(--ink-soft);">society governance structure</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiatory Society → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The governance model of this society. Range: iroko:GovernanceStructureScheme.</td>
-        </tr>
-        <tr id="prop-societyStatus">
-          <td><span class="prop-name">societyStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">society status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiatory Society → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The current operational status of an initiatory society. Range: iroko:SocietyStatusScheme concepts (active, historical, reformed, forcibly-dissolved). A forcibly-dissolved society&#x27;s archival records retain their access restrictions — dissolution by external authority does not transfer governance to the suppressing power or to the public.</td>
-        </tr>
-        <tr id="prop-societyTradition">
-          <td><span class="prop-name">societyTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">society tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiatory Society → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The Afro-Atlantic tradition within which this society operates. Range: iroko:TraditionScheme.</td>
-        </tr>
-        <tr id="prop-societyType">
-          <td><span class="prop-name">societyType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">society type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Initiatory Society → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Typological classification of the society. Range: iroko:InitiatorySocietyTypeScheme.</td>
-        </tr>
-        <tr id="prop-titleConferralMethod">
-          <td><span class="prop-name">titleConferralMethod</span><br><span style="font-size:.75rem;color:var(--ink-soft);">title conferral method</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Society Title → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">How this title is conferred: election, hereditary succession, purchase, senior nomination. Range: iroko:TitleConferralScheme.</td>
-        </tr>
-        <tr id="prop-titleFunction">
-          <td><span class="prop-name">titleFunction</span><br><span style="font-size:.75rem;color:var(--ink-soft);">title function</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Title → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The ritual, ceremonial, or governance function of this title holder. Initiated-only.</td>
-        </tr>
-        <tr id="prop-titleInsignia">
-          <td><span class="prop-name">titleInsignia</span><br><span style="font-size:.75rem;color:var(--ink-soft);">title insignia</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Title → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Elder</span></td>
-          <td class="prop-desc">Material objects, dress, or identifying marks associated with this title. Initiated-elder only: insignia descriptions can enable unauthorized imitation.</td>
-        </tr>
-        <tr id="prop-titleName">
-          <td><span class="prop-name">titleName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">title name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Society Title → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The name of the office or title in the tradition&#x27;s language. Community-restricted.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <!-- ZONE 1: Classes -->
+      <div class="zone-head">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="cls-card" id="card-ForcedDissolution" onclick="activateClass('ForcedDissolution')">
+          <span class="cls-uri">iroko:ForcedDissolution</span>
+          <span class="cls-label">Forced Dissolution</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-InitiatorySociety" onclick="activateClass('InitiatorySociety')">
+          <span class="cls-uri">iroko:InitiatorySociety</span>
+          <span class="cls-label">Initiatory Society</span>
+          <span class="cls-hint">subClassOf Organization · subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-MembershipRecord" onclick="activateClass('MembershipRecord')">
+          <span class="cls-uri">iroko:MembershipRecord</span>
+          <span class="cls-label">Membership Record</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-SocietyGrade" onclick="activateClass('SocietyGrade')">
+          <span class="cls-uri">iroko:SocietyGrade</span>
+          <span class="cls-label">Society Grade</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-SocietyLodge" onclick="activateClass('SocietyLodge')">
+          <span class="cls-uri">iroko:SocietyLodge</span>
+          <span class="cls-label">Society Lodge</span>
+          <span class="cls-hint">subClassOf InitiatorySociety</span>
+        </div>
+        <div class="cls-card" id="card-SocietyMasquerade" onclick="activateClass('SocietyMasquerade')">
+          <span class="cls-uri">iroko:SocietyMasquerade</span>
+          <span class="cls-label">Society Masquerade</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-SocietyTitle" onclick="activateClass('SocietyTitle')">
+          <span class="cls-uri">iroko:SocietyTitle</span>
+          <span class="cls-label">Society Title</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+      </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">5 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Initiatory Society Types</span>
-        <span class="scheme-count">10 concepts</span>
+      <!-- ZONE 2: Property panel -->
+      <div class="zone-head" style="margin-top:0;">
+        Properties
+        <span class="zone-hint" id="z2-hint">Click a class card above</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">InitiatorySocietyTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-society-abakua">
-          <div class="concept-label">Abakuá</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-abakua</div>
-          <p class="concept-def">The Abakuá mutual aid and initiatory society founded in Cuba in 1836, derived from Ékpè/Ngbe through enslaved Efik and Efut practitioners in Havana and Matanzas. Organized into potencias (lodges), each with a specific founding charter and ranked titleholders. Known in Cuban public life through the íremes (diablito masquerades) which appear at funerals and public ceremonies. Male-only by tradition (juramento).</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">One of the most extensively documented Afro-Atlantic initiatory societies due to 19th-century Cuban court records and 20th-century ethnographic work (Cabrera, Sosa). Historical lodge names and early records are in the public domain; contemporary lodge governance and membership remain restricted.</p>
+      <div class="prop-placeholder" id="prop-placeholder">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        No class selected. Click any class card above to see incoming and outgoing properties.
+      </div>
+      <div class="prop-panel" id="prop-panel">
+        <div class="pp-head">
+          <div>
+            <div class="pp-uri" id="pp-uri"></div>
+            <div class="pp-label" id="pp-label"></div>
+          </div>
+          <button class="pp-close" onclick="closePanel()" title="Close">&#x2715;</button>
         </div>
-        <div class="concept-item" id="concept-society-agemo">
-          <div class="concept-label">Agemo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-agemo</div>
-          <p class="concept-def">An Ijebu Yorùbá priestly and masquerade society associated with Agemo, a deity of transformation and mediation between worlds. The Agemo festival cycle involves multiple masquerades representing aspects of Agemo&#x27;s power. Restricted primarily to Ijebu initiates.</p>
+        <div class="pp-def" id="pp-def"></div>
+        <div class="pp-cols">
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8592;</span> Incoming <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(range = this class)</span></div>
+            <div id="pp-incoming"></div>
+          </div>
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8594;</span> Outgoing <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(domain = this class)</span></div>
+            <div id="pp-outgoing"></div>
+          </div>
         </div>
-        <div class="concept-item" id="concept-society-egungun">
-          <div class="concept-label">Egungun</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-egungun</div>
-          <p class="concept-def">The Yorùbá ancestral masquerade society responsible for summoning and embodying ancestral spirits (egungun). Membership and performance rights are typically hereditary through specific lineages. The masked figure is understood as a manifestation of the collective ancestral force, not a theatrical performance. Widespread across Yorùbáland and Afro-Atlantic.</p>
-        </div>
-        <div class="concept-item" id="concept-society-gelede">
-          <div class="concept-label">Gelede</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-gelede</div>
-          <p class="concept-def">A masquerade society of the Yorùbá, Nago, and Fon peoples honoring the power of women, especially elder women, ancestresses, and the mothers (àwọn ìyá wa). Gelede festivals feature carved wooden masks worn by male dancers who embody female spiritual authority. UNESCO Intangible Cultural Heritage. Active in Nigeria, Benin, and Afro-Atlantic communities.</p>
-        </div>
-        <div class="concept-item" id="concept-society-ogboni">
-          <div class="concept-label">Ogboni / Oshugbo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-ogboni</div>
-          <p class="concept-def">The Yorùbá earth-deity society organized around Onilé (the earth) and its representations. Historically a governance institution with judicial, political, and ritual authority in Yorùbá towns. Members include both men and women. The Reformed Ogboni Fraternity (ROF) is a Christianized offshoot. Distinct from the traditional Oshugbo lineages in Ijebu and other areas.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Reformed Ogboni Fraternity</p>
-        </div>
-        <div class="concept-item" id="concept-society-oro">
-          <div class="concept-label">Oro</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-oro</div>
-          <p class="concept-def">A Yorùbá male initiatory society associated with the voice of Oro (heard as a bullroarer), ancestral authority, and community sanction. Oro festivals enforce communal prohibitions and conduct ancestral rites. Strict gender separation is central to Oro practice: women must remain indoors when Oro goes out.</p>
-        </div>
-        <div class="concept-item" id="concept-society-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-other</div>
-          <p class="concept-def">Initiatory society type not covered by existing concepts. Use skos:scopeNote to describe.</p>
-        </div>
-        <div class="concept-item" id="concept-society-poro">
-          <div class="concept-label">Poro</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-poro</div>
-          <p class="concept-def">The male initiatory bush school society widespread among Mande, Kpelle, Temne, and neighboring peoples of Sierra Leone, Liberia, and Guinea. Poro manages male initiation, education, and community governance through a graded forest-based curriculum.</p>
-        </div>
-        <div class="concept-item" id="concept-society-sande">
-          <div class="concept-label">Sande / Bundo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-sande</div>
-          <p class="concept-def">The female counterpart to Poro, managing female initiation among Mende, Temne, and neighboring peoples. Sande is distinctive in African contexts as a society where women wear and operate the sacred Sowei helmet mask.</p>
-        </div>
-        <div class="concept-item" id="concept-society-ekpe">
-          <div class="concept-label">Ékpè / Ngbe</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">society-ekpe</div>
-          <p class="concept-def">The Ékpè (also Ngbe) leopard society originating among Ejagham and neighboring Cross River peoples of Nigeria and Cameroon. One of the most widespread and influential initiatory societies in West Africa, with documented Afro-Atlantic presence through enslaved Africans in Cuba (Abakuá) and elsewhere. Organized around graded leopard-force initiation; Nsibidi script is associated with Ékpè esoteric communication.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Leopard Society</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Ékpè and Abakuá are historically related but institutionally distinct. Use iroko:parentSociety to express the derived relationship.</p>
+        <div class="pp-cite">
+          <span class="pp-cite-text" id="pp-cite-text"></span>
+          <button class="btn-copy-sm" id="pp-cite-btn" onclick="copyCite()">Copy URI</button>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Masquerade Functions</span>
-        <span class="scheme-count">8 concepts</span>
+
+      <!-- ZONE 3: Concept Schemes -->
+      <div class="zone-head" style="margin-top:1rem;">
+        Concept Schemes
+        <span class="zone-hint">34 concepts across 5 schemes</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">MasqueradeFunctionScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-mask-function-ancestral-embodiment">
-          <div class="concept-label">Ancestral embodiment</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mask-function-ancestral-embodiment</div>
-          <p class="concept-def">The masquerade manifests an ancestral spirit or collective ancestral force. Primary function of Egungun.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:InitiatorySocietyTypeScheme</span>
+            <span class="sh-label">Initiatory Society Types</span>
+          </div>
+          <span class="sh-count">10 concepts</span>
         </div>
-        <div class="concept-item" id="concept-mask-function-communal-sanction">
-          <div class="concept-label">Communal sanction / enforcement</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mask-function-communal-sanction</div>
-          <p class="concept-def">The masquerade enforces community rules or social norms through symbolic or direct intervention. Function of Oro.</p>
-        </div>
-        <div class="concept-item" id="concept-mask-function-entertainment">
-          <div class="concept-label">Entertainment / social satire</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mask-function-entertainment</div>
-          <p class="concept-def">The masquerade performs entertainment, social commentary, or satire as a secondary function. Often combined with sacred primary functions.</p>
-        </div>
-        <div class="concept-item" id="concept-mask-function-funerary">
-          <div class="concept-label">Funerary / transition rites</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mask-function-funerary</div>
-          <p class="concept-def">The masquerade participates in funerary ceremonies, guiding the deceased or honoring the passing. Abakuá íremes appear at members&#x27; funerals.</p>
-        </div>
-        <div class="concept-item" id="concept-mask-function-healing">
-          <div class="concept-label">Healing / protective</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mask-function-healing</div>
-          <p class="concept-def">The masquerade carries healing or protective power for the community or individual supplicants.</p>
-        </div>
-        <div class="concept-item" id="concept-mask-function-honor-mothers">
-          <div class="concept-label">Honoring the mothers</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mask-function-honor-mothers</div>
-          <p class="concept-def">The masquerade pays tribute to the power of elder women, ancestresses, and female spiritual authority. Primary function of Gelede.</p>
-        </div>
-        <div class="concept-item" id="concept-mask-function-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mask-function-other</div>
-          <p class="concept-def">Masquerade function not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-mask-function-society-voice">
-          <div class="concept-label">Society voice / announcement</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mask-function-society-voice</div>
-          <p class="concept-def">The masquerade carries and communicates the voice or authority of the society. Function of Abakuá íremes and Ékpè masquerades.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Society Governance Structures</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">GovernanceStructureScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-gov-consensus">
-          <div class="concept-label">Consensus / deliberative</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">gov-consensus</div>
-          <p class="concept-def">Decisions made through deliberation among all members or all senior members without fixed hierarchical authority.</p>
-        </div>
-        <div class="concept-item" id="concept-gov-council-of-elders">
-          <div class="concept-label">Council of elders</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">gov-council-of-elders</div>
-          <p class="concept-def">Governance by a council of senior members without strict linear grade hierarchy. Characteristic of Ogboni and some Egungun lineages.</p>
-        </div>
-        <div class="concept-item" id="concept-gov-elected-officers">
-          <div class="concept-label">Elected officers</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">gov-elected-officers</div>
-          <p class="concept-def">Governance officers are elected by the membership for defined terms. More common in Afro-Atlantic adaptations (Reformed Ogboni Fraternity, some Abakuá mutual aid structures).</p>
-        </div>
-        <div class="concept-item" id="concept-gov-hereditary-title">
-          <div class="concept-label">Hereditary title succession</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">gov-hereditary-title</div>
-          <p class="concept-def">Key titles pass within specific families or lineages. Characteristic of some Egungun and Agemo societies.</p>
-        </div>
-        <div class="concept-item" id="concept-gov-hierarchical-grade">
-          <div class="concept-label">Hierarchical grade system</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">gov-hierarchical-grade</div>
-          <p class="concept-def">Authority flows through a defined sequence of grades; higher grades govern lower. Characteristic of Ékpè, Abakuá, and similar tiered societies.</p>
-        </div>
-        <div class="concept-item" id="concept-gov-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">gov-other</div>
-          <p class="concept-def">Governance structure not covered by existing concepts.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Abakuá</span>
+            <span class="chip-id">iroko:society-abakua</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Agemo</span>
+            <span class="chip-id">iroko:society-agemo</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Egungun</span>
+            <span class="chip-id">iroko:society-egungun</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Gelede</span>
+            <span class="chip-id">iroko:society-gelede</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ogboni / Oshugbo</span>
+            <span class="chip-id">iroko:society-ogboni</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Oro</span>
+            <span class="chip-id">iroko:society-oro</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:society-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Poro</span>
+            <span class="chip-id">iroko:society-poro</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Sande / Bundo</span>
+            <span class="chip-id">iroko:society-sande</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ékpè / Ngbe</span>
+            <span class="chip-id">iroko:society-ekpe</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Society Status Scheme</span>
-        <span class="scheme-count">4 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">SocietyStatusScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-societyStatus-active">
-          <div class="concept-label">active</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">societyStatus-active</div>
-          <p class="concept-def">The society is currently operating, initiating members, and exercising its governance functions.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:MasqueradeFunctionScheme</span>
+            <span class="sh-label">Masquerade Functions</span>
+          </div>
+          <span class="sh-count">8 concepts</span>
         </div>
-        <div class="concept-item" id="concept-societyStatus-forcibly-dissolved">
-          <div class="concept-label">forcibly dissolved</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">societyStatus-forcibly-dissolved</div>
-          <p class="concept-def">The society was suppressed by an external authority — colonial administration, state government, or occupying power — rather than ceasing through internal process. Records held by a forcibly dissolved society do not become public as a result of the dissolution. See also: iroko:ForcedDissolution.</p>
-        </div>
-        <div class="concept-item" id="concept-societyStatus-historical">
-          <div class="concept-label">historical</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">societyStatus-historical</div>
-          <p class="concept-def">The society is no longer operating but was not forcibly dissolved — it ceased through natural discontinuity, succession failure, or community decision.</p>
-        </div>
-        <div class="concept-item" id="concept-societyStatus-reformed">
-          <div class="concept-label">reformed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">societyStatus-reformed</div>
-          <p class="concept-def">The society has been reconstituted after a period of dormancy or dissolution, with continuity of tradition but a break in institutional operation.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Title Conferral Methods</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">TitleConferralScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-conferral-election">
-          <div class="concept-label">Election by membership</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">conferral-election</div>
-          <p class="concept-def">Title conferred by vote of eligible members.</p>
-        </div>
-        <div class="concept-item" id="concept-conferral-hereditary">
-          <div class="concept-label">Hereditary succession</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">conferral-hereditary</div>
-          <p class="concept-def">Title passes within a family or lineage by birthright or elder designation.</p>
-        </div>
-        <div class="concept-item" id="concept-conferral-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">conferral-other</div>
-          <p class="concept-def">Title conferral method not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-conferral-purchase">
-          <div class="concept-label">Purchase / fee-based conferral</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">conferral-purchase</div>
-          <p class="concept-def">Title conferred in exchange for a defined payment or contribution to the society. Common in some Ékpè and Abakuá grade structures.</p>
-        </div>
-        <div class="concept-item" id="concept-conferral-senior-nomination">
-          <div class="concept-label">Senior nomination</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">conferral-senior-nomination</div>
-          <p class="concept-def">Title conferred by nomination from existing titleholders or elders.</p>
-        </div>
-        <div class="concept-item" id="concept-conferral-spiritual-designation">
-          <div class="concept-label">Spiritual designation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">conferral-spiritual-designation</div>
-          <p class="concept-def">Title conferred through divination or spiritual indication rather than human election.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Ancestral embodiment</span>
+            <span class="chip-id">iroko:mask-function-ancestral-embodiment</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Communal sanction / enforcement</span>
+            <span class="chip-id">iroko:mask-function-communal-sanction</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Entertainment / social satire</span>
+            <span class="chip-id">iroko:mask-function-entertainment</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Funerary / transition rites</span>
+            <span class="chip-id">iroko:mask-function-funerary</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Healing / protective</span>
+            <span class="chip-id">iroko:mask-function-healing</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Honoring the mothers</span>
+            <span class="chip-id">iroko:mask-function-honor-mothers</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:mask-function-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Society voice / announcement</span>
+            <span class="chip-id">iroko:mask-function-society-voice</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:GovernanceStructureScheme</span>
+            <span class="sh-label">Society Governance Structures</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Consensus / deliberative</span>
+            <span class="chip-id">iroko:gov-consensus</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Council of elders</span>
+            <span class="chip-id">iroko:gov-council-of-elders</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Elected officers</span>
+            <span class="chip-id">iroko:gov-elected-officers</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Hereditary title succession</span>
+            <span class="chip-id">iroko:gov-hereditary-title</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Hierarchical grade system</span>
+            <span class="chip-id">iroko:gov-hierarchical-grade</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:gov-other</span>
+          </div>
+        </div>
+      </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:SocietyStatusScheme</span>
+            <span class="sh-label">Society Status Scheme</span>
+          </div>
+          <span class="sh-count">4 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">active</span>
+            <span class="chip-id">iroko:societyStatus-active</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">forcibly dissolved</span>
+            <span class="chip-id">iroko:societyStatus-forcibly-dissolved</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">historical</span>
+            <span class="chip-id">iroko:societyStatus-historical</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">reformed</span>
+            <span class="chip-id">iroko:societyStatus-reformed</span>
+          </div>
+        </div>
+      </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:TitleConferralScheme</span>
+            <span class="sh-label">Title Conferral Methods</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Election by membership</span>
+            <span class="chip-id">iroko:conferral-election</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Hereditary succession</span>
+            <span class="chip-id">iroko:conferral-hereditary</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:conferral-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Purchase / fee-based conferral</span>
+            <span class="chip-id">iroko:conferral-purchase</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Senior nomination</span>
+            <span class="chip-id">iroko:conferral-senior-nomination</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Spiritual designation</span>
+            <span class="chip-id">iroko:conferral-spiritual-designation</span>
+          </div>
+        </div>
+      </div>
+    </main><!-- /module-main -->
+
+    <!-- SIDEBAR -->
+    <aside class="module-sidebar">
+
+      <div class="share-row">
+        <a class="share-btn" href="mailto:?subject=Iroko%20Framework%20%E2%80%94%20Ékpè%20Module&amp;body=https://ontology.irokosociety.org/vocab/iroko-ekpe.html" title="Share via email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          Email
+        </a>
+        <button class="share-btn" onclick="window.print()" title="Print">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/></svg>
+          Print
+        </button>
+        <button class="share-btn" id="link-btn" onclick="copyLink(this)" title="Copy link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Copy Link
+        </button>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="sp-head">
+          <span class="sp-title" id="sb-title">Connected Modules</span>
+          <span class="sp-active-uri" id="sb-active-uri"></span>
+        </div>
+        <div class="sp-body sidebar-dynamic" id="sb-body">
+          <div id="sb-module-view">
+<p class="no-props" style="font-size:.8rem;color:var(--ink-soft);font-style:italic;">No external connections detected.</p>
+          </div>
+          <div id="sb-class-view" style="display:none;">
+            <div id="sb-active-card"></div>
+            <div id="sb-class-conns"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-cite">
+        <div class="cite-head">Cite the Ékpè Module</div>
+        <div class="cite-tabs">
+          <button class="cite-tab active" onclick="setCiteFormat('plain',this)">Plain</button>
+          <button class="cite-tab" onclick="setCiteFormat('bibtex',this)">BibTeX</button>
+          <button class="cite-tab" onclick="setCiteFormat('ris',this)">RIS</button>
+        </div>
+        <div class="cite-text" id="cite-display">
+          Iroko Historical Society. (2026). <em>Iroko Framework: Ékpè Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-ekpe.html. CC0 1.0 Universal.
+        </div>
+        <button class="btn-cite-copy" id="module-cite-btn" onclick="copyModuleCite()">Copy Citation</button>
+        <div class="format-links">
+          <a class="fmt-link" href="iroko-ekpe.ttl">Turtle (.ttl) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-ekpe.jsonld">JSON-LD (.jsonld) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-ekpe.rdf">RDF/XML (.rdf) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-ekpe.nt">N-Triples (.nt) <span class="fmt-arrow">&#8595;</span></a>
+        </div>
+      </div>
+
+    </aside>
+  </div><!-- /module-layout -->
 
   <footer class="site-footer">
     <div class="footer-left">
@@ -633,6 +604,177 @@
     </div>
   </footer>
 
-</div>
+</div><!-- /page-wrap -->
+
+<script>
+
+// ── JS data injected by generator ──────────────────────────────────────────
+const MODULE_STEM = "iroko-ekpe";
+const MOD_TITLE_SHORT = "Ékpè Module";
+const CLASSES = {"ForcedDissolution": {"uri": "iroko:ForcedDissolution", "label": "Forced Dissolution", "definition": "An event in which an initiatory society was suppressed, banned, or destroyed by an external authority. Enables structured documentation of state violence against sacred institutions. Primary case study: Machado-era suppression of Abakuá potencias in Cuba (1923). Key governance principle: forced dissolution by an external authority does not transfer custodial rights over the society's sacred materials, records, or knowledge to the suppressing state or to the public. Materials held by a forcibly dissolved society remain governed by iroko:Ritual Sovereignty under iroko:RitualPractitioner authority.", "outgoing": [{"uri": "iroko:dissolutionAuthority", "label": "dissolution authority", "type": "data", "range": "langString", "access": "pub", "def": "The external authority (state, colonial power, occupying government) that forced dissolution of the society. Free text, language-tagged."}, {"uri": "iroko:dissolutionDate", "label": "dissolution date", "type": "data", "range": "langString", "access": "pub", "def": "The date or approximate period of the forced dissolution event."}], "incoming": [{"uri": "iroko:dissolutionEvent", "label": "dissolution event", "type": "obj", "access": "pub", "def": "Links an InitiatorySociety to a ForcedDissolution event that ended or suspended its operation by external authority.", "domain": "Initiatory Society", "from": "iroko:Initiatory Society", "fromLabel": "Initiatory Society", "module": "Ékpè Module", "stem": "iroko-ekpe"}], "cross": []}, "InitiatorySociety": {"uri": "iroko:InitiatorySociety", "label": "Initiatory Society", "definition": "A sodality or secret society organized around graded initiation, with esoteric knowledge and authority distributed across hierarchical grades. Membership is earned through initiation rather than birth or lineage alone. Examples: Ékpè/Ngbe lodges (Ejagham, Cross River Nigeria/Cameroon), Abakuá potencias (Cuba), Ogboni chapters (Yorùbáland), Gelede societies (Yorùbá/Fon/Ewe), Egungun lineage associations. Subclasses schema:Organization for interoperability with external directories, and iroko:SacredEntity for access control. Distinguished from iroko:House (which organizes around founding-elder lineage) in that membership cross-cuts lineage boundaries.", "outgoing": [{"uri": "iroko:associatedHouse", "label": "associated house", "type": "obj", "range": "House", "access": "comm", "def": "A religious house (iroko:House) with which this society maintains an ongoing ceremonial relationship. In many traditions, society and house membership overlap for senior practitioners."}, {"uri": "iroko:dissolutionEvent", "label": "dissolution event", "type": "obj", "range": "Forced Dissolution", "access": "pub", "def": "Links an InitiatorySociety to a ForcedDissolution event that ended or suspended its operation by external authority."}, {"uri": "iroko:foundingLocation", "label": "founding location", "type": "data", "range": "langString", "access": "pub", "def": "Place of origin or founding of the society. City/country level is public; specific address is community-restricted."}, {"uri": "iroko:genderPolicy", "label": "gender policy", "type": "data", "range": "langString", "access": "comm", "def": "Documents tradition-specific rules regarding gender and membership. For Abakuá: historically male-only (juramento); for Ogboni: both male and female members, with distinct female titleholder roles (Iyalode); for Gelede: primarily concerns gender complementarity (mothers/fathers). Free-text, records documented practice without normative judgment."}, {"uri": "iroko:gradeCount", "label": "grade count", "type": "data", "range": "integer", "access": "comm", "def": "Number of grades in this society's hierarchy. The count is community-restricted in active societies; public for historical documentation."}, {"uri": "iroko:societyGovernanceStructure", "label": "society governance structure", "type": "obj", "range": "Concept", "access": "comm", "def": "The governance model of this society. Range: iroko:GovernanceStructureScheme."}, {"uri": "iroko:societyStatus", "label": "society status", "type": "obj", "range": "Concept", "access": "pub", "def": "The current operational status of an initiatory society. Range: iroko:SocietyStatusScheme concepts (active, historical, reformed, forcibly-dissolved). A forcibly-dissolved society's archival records retain their access restrictions — dissolution by external authority does not transfer governance to the suppressing power or to the public."}, {"uri": "iroko:societyTradition", "label": "society tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic tradition within which this society operates. Range: iroko:TraditionScheme."}, {"uri": "iroko:societyType", "label": "society type", "type": "obj", "range": "Concept", "access": "pub", "def": "Typological classification of the society. Range: iroko:InitiatorySocietyTypeScheme."}], "incoming": [{"uri": "iroko:gradeSociety", "label": "grade society", "type": "obj", "access": "comm", "def": "The initiatory society to which this grade belongs.", "domain": "Society Grade", "from": "iroko:Society Grade", "fromLabel": "Society Grade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:masqueradeSociety", "label": "masquerade society", "type": "obj", "access": "comm", "def": "The initiatory society to which this masquerade belongs.", "domain": "Society Masquerade", "from": "iroko:Society Masquerade", "fromLabel": "Society Masquerade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:membershipSociety", "label": "membership society", "type": "obj", "access": "comm", "def": "The society into which the individual was initiated.", "domain": "Membership Record", "from": "iroko:Membership Record", "fromLabel": "Membership Record", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:parentSociety", "label": "parent society", "type": "obj", "access": "pub", "def": "The broader society network or tradition of which this lodge is a chapter. A Havana Abakuá potencia links to the Abakuá tradition; a Calabar Ékpè lodge links to the Ékpè tradition. Subproperty of prov:wasDerivedFrom.", "domain": "Society Lodge", "from": "iroko:Society Lodge", "fromLabel": "Society Lodge", "module": "Ékpè Module", "stem": "iroko-ekpe"}], "cross": []}, "MembershipRecord": {"uri": "iroko:MembershipRecord", "label": "Membership Record", "definition": "A record documenting an individual's initiation into and progression through a society. Membership records are among the most sensitive data in this framework: the identity of initiates is strictly guarded by all documented traditions, and their disclosure to outsiders is a serious breach. Default access is no-access; date and grade level may be community-restricted in contexts where historical record-keeping is an accepted practice (e.g., Cuban Abakuá records kept since the 19th century).", "outgoing": [{"uri": "iroko:initiatingOfficiant", "label": "initiating officiant", "type": "obj", "range": "Person", "access": "none", "def": "The titleholder who performed the initiation. No-access."}, {"uri": "iroko:memberPerson", "label": "member person", "type": "obj", "range": "Person", "access": "none", "def": "The person to whom this membership record belongs. No-access: member identity is the most protected information in society records."}, {"uri": "iroko:membershipDate", "label": "membership date", "type": "data", "range": "date", "access": "comm", "def": "Date of initiation into this grade. Community-restricted for historical records."}, {"uri": "iroko:membershipGrade", "label": "membership grade", "type": "obj", "range": "Society Grade", "access": "init", "def": "The grade held by this member."}, {"uri": "iroko:membershipSociety", "label": "membership society", "type": "obj", "range": "Initiatory Society", "access": "comm", "def": "The society into which the individual was initiated."}, {"uri": "iroko:membershipTitle", "label": "membership title", "type": "obj", "range": "Society Title", "access": "init", "def": "A title held by this member within the society."}], "incoming": [], "cross": []}, "SocietyGrade": {"uri": "iroko:SocietyGrade", "label": "Society Grade", "definition": "A defined rank or level within an initiatory society's graded hierarchy. Each grade confers specific knowledge, privileges, obligations, and esoteric rights. Grade names, their sequence, and their content are among the most carefully protected knowledge in these traditions. The existence of a grade structure is public; grade names are community-restricted; grade content and sequence are initiated-only or initiated-elder.", "outgoing": [{"uri": "iroko:gradeLevel", "label": "grade level", "type": "data", "range": "integer", "access": "comm", "def": "Numeric position in the grade sequence. 1 = lowest/entry. Community-restricted."}, {"uri": "iroko:gradeName", "label": "grade name", "type": "data", "range": "langString", "access": "comm", "def": "The name of the grade in the tradition's language. Community-restricted for active societies."}, {"uri": "iroko:gradePrerequisite", "label": "grade prerequisite", "type": "obj", "range": "Society Grade", "access": "init", "def": "The grade that must be held before this grade may be received. Initiated-only: the sequencing of grades is esoteric knowledge."}, {"uri": "iroko:gradePrivileges", "label": "grade privileges", "type": "data", "range": "langString", "access": "init", "def": "The ritual, governance, or social privileges conferred by this grade. Initiated-elder only."}, {"uri": "iroko:gradeSign", "label": "grade sign", "type": "obj", "range": "GraphicSign", "access": "init", "def": "The esoteric graphic sign or identifying mark associated with this grade. Range: iroko:GraphicSign — grade signs in Ékpè and cognate societies are drawn symbols belonging to a sacred sign system, not free-text strings. Initiated-elder only."}, {"uri": "iroko:gradeSociety", "label": "grade society", "type": "obj", "range": "Initiatory Society", "access": "comm", "def": "The initiatory society to which this grade belongs."}], "incoming": [{"uri": "iroko:gradePrerequisite", "label": "grade prerequisite", "type": "obj", "access": "init", "def": "The grade that must be held before this grade may be received. Initiated-only: the sequencing of grades is esoteric knowledge.", "domain": "Society Grade", "from": "iroko:Society Grade", "fromLabel": "Society Grade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:masqueradeRequiredGrade", "label": "required grade for performance", "type": "obj", "access": "init", "def": "The minimum grade required to perform or wear this masquerade. Initiated-only.", "domain": "Society Masquerade", "from": "iroko:Society Masquerade", "fromLabel": "Society Masquerade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:membershipGrade", "label": "membership grade", "type": "obj", "access": "init", "def": "The grade held by this member.", "domain": "Membership Record", "from": "iroko:Membership Record", "fromLabel": "Membership Record", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:titleRequiredGrade", "label": "required grade", "type": "obj", "access": "init", "def": "The minimum grade required to hold this title. Initiated-only.", "domain": "Society Title", "from": "iroko:Society Title", "fromLabel": "Society Title", "module": "Ékpè Module", "stem": "iroko-ekpe"}], "cross": []}, "SocietyLodge": {"uri": "iroko:SocietyLodge", "label": "Society Lodge", "definition": "A local chapter or lodge of an initiatory society. Ékpè lodges in Cross River; Abakuá potencias in Havana and Matanzas; Ogboni chapters in Yorùbá towns. Each lodge may have its own territory, titleholders, and charter, while being part of a broader society network. Uses iroko:parentSociety to link to the overarching tradition-level society.", "outgoing": [{"uri": "iroko:lodgeName", "label": "lodge name", "type": "data", "range": "langString", "access": "comm", "def": "The public name of the lodge or potencia. In Abakuá: the potencia name (e.g., Efik Butón, Efik Efor). Community-restricted for active lodges; public for historical lodges documented in scholarly sources."}, {"uri": "iroko:lodgeTerritory", "label": "lodge territory", "type": "data", "range": "langString", "access": "pub", "def": "The geographic or community territory over which a lodge exercises spiritual and social jurisdiction. Free-text description."}, {"uri": "iroko:parentSociety", "label": "parent society", "type": "obj", "range": "Initiatory Society", "access": "pub", "def": "The broader society network or tradition of which this lodge is a chapter. A Havana Abakuá potencia links to the Abakuá tradition; a Calabar Ékpè lodge links to the Ékpè tradition. Subproperty of prov:wasDerivedFrom."}], "incoming": [], "cross": []}, "SocietyMasquerade": {"uri": "iroko:SocietyMasquerade", "label": "Society Masquerade", "definition": "A masked or costumed ritual embodiment associated with an initiatory society, representing an ancestor, force, or principle. Examples: Abakuá íremes (diablitos) representing the voice of the fish Tanze; Egungun masquerades embodying ancestral spirits; Gelede masquerades honoring the mothers. The masquerade as a cultural form (name, tradition, function) is community-restricted; the identities of performers and operational sequences are initiated-only. Distinct from iroko:SpiritualEntity (which covers the spiritual force) and travay:CeremonialSequence (which covers the ritual sequence).", "outgoing": [{"uri": "iroko:masqueradeFunction", "label": "masquerade function", "type": "obj", "range": "Concept", "access": "comm", "def": "The ceremonial function of this masquerade. Range: iroko:MasqueradeFunctionScheme."}, {"uri": "iroko:masqueradeInsignia", "label": "masquerade insignia", "type": "data", "range": "langString", "access": "init", "def": "Description of costume elements, materials, and identifying features. Initiated-elder only."}, {"uri": "iroko:masqueradeName", "label": "masquerade name", "type": "data", "range": "langString", "access": "comm", "def": "The name of the masquerade or masked figure. Community-restricted."}, {"uri": "iroko:masqueradeSociety", "label": "masquerade society", "type": "obj", "range": "Initiatory Society", "access": "comm", "def": "The initiatory society to which this masquerade belongs."}, {"uri": "iroko:representedEntity", "label": "represented entity", "type": "obj", "range": "SpiritualEntity", "access": "init", "def": "The ancestral spirit, principle, or force embodied by this masquerade. Range: iroko:SpiritualEntity. Initiated-only: the identity of what a masquerade embodies is esoteric in many traditions."}, {"uri": "iroko:masqueradeRequiredGrade", "label": "required grade for performance", "type": "obj", "range": "Society Grade", "access": "init", "def": "The minimum grade required to perform or wear this masquerade. Initiated-only."}], "incoming": [], "cross": []}, "SocietyTitle": {"uri": "iroko:SocietyTitle", "label": "Society Title", "definition": "A named office or titled position within an initiatory society, distinct from grade level. Titles may be elected, inherited, purchased, or conferred. Examples: Iyamba (Abakuá), Isue (Abakuá), Ekueñón (Abakuá), Apetebi Ogboni, Olori Egungun. Each title carries specific ritual functions, insignia, and governance authority. Title names are community-restricted; the ritual functions attached to them are initiated-only.", "outgoing": [{"uri": "iroko:titleRequiredGrade", "label": "required grade", "type": "obj", "range": "Society Grade", "access": "init", "def": "The minimum grade required to hold this title. Initiated-only."}, {"uri": "iroko:titleConferralMethod", "label": "title conferral method", "type": "obj", "range": "Concept", "access": "comm", "def": "How this title is conferred: election, hereditary succession, purchase, senior nomination. Range: iroko:TitleConferralScheme."}, {"uri": "iroko:titleFunction", "label": "title function", "type": "data", "range": "langString", "access": "init", "def": "The ritual, ceremonial, or governance function of this title holder. Initiated-only."}, {"uri": "iroko:titleInsignia", "label": "title insignia", "type": "data", "range": "langString", "access": "init", "def": "Material objects, dress, or identifying marks associated with this title. Initiated-elder only: insignia descriptions can enable unauthorized imitation."}, {"uri": "iroko:titleName", "label": "title name", "type": "data", "range": "langString", "access": "comm", "def": "The name of the office or title in the tradition's language. Community-restricted."}], "incoming": [{"uri": "iroko:membershipTitle", "label": "membership title", "type": "obj", "access": "init", "def": "A title held by this member within the society.", "domain": "Membership Record", "from": "iroko:Membership Record", "fromLabel": "Membership Record", "module": "Ékpè Module", "stem": "iroko-ekpe"}], "cross": []}};
+const MODULE_CROSS = [];
+const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Ékpè Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-ekpe.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Ékpè Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-ekpe.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_ekpe_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Ékpè Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-ekpe.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Ékpè Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-ekpe.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
+
+// ── Access badge ─────────────────────────────────────────────────────────────
+function accessBadge(a) {
+  if (a==='pub')  return '<span class="ab ab-pub">Public</span>';
+  if (a==='comm') return '<span class="ab ab-comm">Community</span>';
+  if (a==='init') return '<span class="ab ab-init">Initiated</span>';
+  return '';
+}
+function typeBadge(t) {
+  if (t==='obj')  return '<span class="pr-type pr-type-obj">Object</span>';
+  if (t==='data') return '<span class="pr-type pr-type-data">Datatype</span>';
+  if (t==='ann')  return '<span class="pr-type pr-type-ann">Annotation</span>';
+  return '';
+}
+
+// ── Render property item ──────────────────────────────────────────────────────
+function renderProp(p, isIncoming) {
+  const meta = isIncoming
+    ? `<div class="pr-source">from ${p.from} · ${p.module}</div>`
+    : `<div class="pr-meta">${p.range||''}</div>`;
+  return `<div class="pr-item">
+    <div class="pr-top">
+      <span class="pr-uri">${p.uri}</span>
+      ${isIncoming ? '' : typeBadge(p.type)}
+      ${isIncoming ? '' : accessBadge(p.access)}
+    </div>
+    <div class="pr-label">${p.label}</div>
+    ${meta}
+    <div class="pr-def">${p.def||''}</div>
+  </div>`;
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let activeClass = null;
+let activeCiteFormat = 'plain';
+
+function activateClass(key) {
+  if (activeClass === key) { closePanel(); return; }
+  activeClass = key;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('card-'+key)?.classList.add('active');
+  const d = CLASSES[key];
+  if (!d) return;
+  document.getElementById('prop-placeholder').classList.add('hidden');
+  document.getElementById('z2-hint').textContent = 'Click class again to close';
+  document.getElementById('pp-uri').textContent  = d.uri;
+  document.getElementById('pp-label').textContent = d.label;
+  document.getElementById('pp-def').textContent   = d.definition||'';
+  const inEl  = document.getElementById('pp-incoming');
+  inEl.innerHTML = d.incoming && d.incoming.length
+    ? d.incoming.map(p=>renderProp(p,true)).join('')
+    : '<p class="no-props">No incoming connections detected in this module.</p>';
+  const outEl = document.getElementById('pp-outgoing');
+  outEl.innerHTML = d.outgoing && d.outgoing.length
+    ? d.outgoing.map(p=>renderProp(p,false)).join('')
+    : '<p class="no-props">No outgoing properties.</p>';
+  document.getElementById('pp-cite-text').textContent =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  document.getElementById('pp-cite-btn').dataset.uri  =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  const panel = document.getElementById('prop-panel');
+  panel.classList.remove('visible');
+  void panel.offsetWidth;
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  updateSidebar(key, d);
+}
+
+function closePanel() {
+  activeClass = null;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('prop-placeholder').classList.remove('hidden');
+  document.getElementById('prop-panel').classList.remove('visible');
+  document.getElementById('z2-hint').textContent = 'Click a class card above';
+  resetSidebar();
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+function updateSidebar(key, d) {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'External links';
+    document.getElementById('sb-active-uri').style.display = 'block';
+    document.getElementById('sb-active-uri').textContent = d.uri;
+    document.getElementById('sb-module-view').style.display = 'none';
+    document.getElementById('sb-class-view').style.display  = 'block';
+    document.getElementById('sb-active-card').innerHTML =
+      `<div class="active-class-card"><span class="acc-uri">${d.uri}</span><span class="acc-label">${d.label}</span></div>`;
+    const conns = (d.cross||[]);
+    const connsEl = document.getElementById('sb-class-conns');
+    connsEl.innerHTML = conns.length
+      ? conns.map(c=>`<div class="conn-card">
+          <div class="cc-row"><span class="cc-dot ${c.dotCls}"></span><span class="cc-name">${c.name}</span><span class="cc-dir" style="margin-left:auto;">${c.dir}</span></div>
+          <span class="cc-via">${c.via}</span>
+        </div>`).join('')
+      : '<p class="no-props">No cross-module connections for this class.</p>';
+    body.classList.remove('fading');
+  },120);
+}
+
+function resetSidebar() {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'Connected Modules';
+    document.getElementById('sb-active-uri').style.display = 'none';
+    document.getElementById('sb-module-view').style.display = 'block';
+    document.getElementById('sb-class-view').style.display  = 'none';
+    body.classList.remove('fading');
+  },120);
+}
+
+// ── Citation ──────────────────────────────────────────────────────────────────
+function setCiteFormat(fmt, btn) {
+  activeCiteFormat = fmt;
+  document.querySelectorAll('.cite-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const display = document.getElementById('cite-display');
+  if (fmt==='plain') {
+    display.innerHTML = CITE_FORMATS.plainHTML;
+  } else {
+    display.innerHTML = `<pre>${CITE_FORMATS[fmt].replace(/</g,'&lt;')}</pre>`;
+  }
+}
+
+function copyModuleCite() {
+  const text = activeCiteFormat==='plain' ? CITE_FORMATS.plain : CITE_FORMATS[activeCiteFormat];
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('module-cite-btn');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy Citation';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyCite() {
+  const btn = document.getElementById('pp-cite-btn');
+  navigator.clipboard.writeText(btn.dataset.uri).then(()=>{
+    btn.textContent='✓ Copied'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy URI';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    btn.classList.add('copied');
+    btn.lastChild.textContent='Copied';
+    setTimeout(()=>{btn.classList.remove('copied');btn.lastChild.textContent='Copy Link';},2000);
+  });
+}
+
+// ── Fragment URI auto-open ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  const hash = window.location.hash.replace('#','');
+  if (hash && CLASSES[hash]) {
+    activateClass(hash);
+    document.getElementById('card-'+hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+});
+
+</script>
 </body>
 </html>
