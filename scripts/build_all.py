@@ -188,12 +188,14 @@ def main():
                 print("  ✓ iroko-termlist.html written")
         print()
 
-    # ── Step 3: Sync index counts ──────────────────────────────────────
+    # ── Step 3: Sync index counts + ARCHITECTURE patches ─────────────
     if only is None or only == 3:
-        print("── Step 3: Syncing index counts ───────────────────────────────")
+        print("── Step 3: Syncing index counts + ARCHITECTURE ─────────────────")
         extra = []
         if args.vocab: extra += ["--vocab", str(vocab_dir)]
         if args.root:  extra += ["--root",  str(root_dir)]
+        if args.docs:  extra += ["--docs",  str(docs_dir)]
+        else:          extra += ["--docs",  str(docs_dir)]
         if args.dry_run: extra += ["--dry-run"]
         rc = run_script("update_index_counts.py", extra)
         if rc != 0:

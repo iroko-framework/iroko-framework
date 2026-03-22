@@ -280,25 +280,25 @@ The PROV-O alignment file (`iroko-align-prov.ttl`) is provided as a reference-on
 
 | Module | Classes | Properties | Schemes | Concepts |
 |---|---:|---:|---:|---:|
-| iroko-core | 16 | 58 | 10 | 96 |
-| iroko-agency | 12 | 11 | — | — |
-| iroko-authority | 5 | 11 | 3 | 19 |
+| iroko-core | 17 | 75 | 10 | 96 |
+| iroko-agency | 11 | 11 | — | — |
+| iroko-authority | 5 | 11 | 3 | 17 |
 | iroko-epistemic | 5 | 5 | 1 | 8 |
-| iroko-narrative | 5 | 22 | 5 | 35 |
-| iroko-manifestation | 3 | 4 | 2 | 14 |
-| iroko-ewe | 3 | 22 | 5 | 62 |
-| iroko-nkisi | 4 | 31 | 6 | 54 |
-| iroko-travay | 4 | 23 | 5 | 42 |
+| iroko-narrative | 5 | 24 | 5 | 33 |
+| iroko-manifestation | 3 | 3 | 2 | 14 |
+| iroko-ewe | 4 | 23 | 5 | 62 |
+| iroko-nkisi | 4 | 28 | 6 | 54 |
+| iroko-travay | 4 | 22 | 5 | 41 |
 | iroko-ile | 6 | 38 | 5 | 58 |
-| iroko-marca | 5 | 29 | 4 | 34 |
-| iroko-ekpe | 7 | 38 | 5 | 34 |
-| iroko-veve | 4 | 21 | 5 | 48 |
-| iroko-ngoma | 5 | 28 | 4 | 33 |
-| iroko-sankofa | 4 | 22 | 5 | 32 |
-| iroko-qal | 6 | 23 | 5 | 37 |
-| **Total** | **94** | **386** | **70** | **606** |
+| iroko-marca | 5 | 25 | 4 | 32 |
+| iroko-ekpe | 7 | 37 | 5 | 34 |
+| iroko-veve | 4 | 14 | 5 | 44 |
+| iroko-ngoma | 5 | 27 | 4 | 31 |
+| iroko-sankofa | 4 | 23 | 5 | 32 |
+| iroko-qal | 6 | 27 | 5 | 37 |
+| **Total** | **95** | **393** | **70** | **593** |
 
-All 386 properties across all 16 modules carry `iroko:minimumAccessLevel` annotations.
+All 393 properties across all 16 modules carry `iroko:minimumAccessLevel` annotations.
 
 ---
 
