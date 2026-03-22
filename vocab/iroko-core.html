@@ -6,21 +6,215 @@
   <title>Core Vocabulary — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    /* ── Module page layout ──────────────────────────────────────── */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+    .module-main { min-width: 0; }
+    .zone-head {
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--rule-strong);
+      padding-bottom: .4rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .zone-hint { font-size: .68rem; letter-spacing: 0; text-transform: none;
+      color: var(--ink-soft); font-family: var(--serif); font-style: italic; opacity: .7; }
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
+    /* Zone 1 */
+    .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: .5rem; margin-bottom: 2rem; }
+    .cls-card { border: 1px solid var(--rule-strong); border-radius: 3px; padding: .75rem 1rem;
+      background: var(--paper); cursor: pointer;
+      transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
+    .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
+    .cls-card.active { border-color: var(--green); background: var(--green-light);
+      box-shadow: 0 2px 8px rgba(46,74,30,.12); }
+    .cls-card.active::after { content:''; position:absolute; bottom:-1px; left:50%;
+      transform:translateX(-50%); width:0; height:0;
+      border-left:7px solid transparent; border-right:7px solid transparent;
+      border-bottom:7px solid var(--paper-warm); }
+    .cls-uri { font-family: var(--mono); font-size: .7rem; color: var(--green-mid);
+      display: block; margin-bottom: .2rem; }
+    .cls-label { font-family: var(--serif); font-size: .95rem; font-weight: 600;
+      color: var(--ink); display: block; line-height: 1.2; }
+    .cls-hint { font-size: .67rem; color: var(--ink-soft); margin-top: .2rem;
+      display: block; font-style: italic; }
+
+    /* Zone 2 */
+    .prop-placeholder { background: var(--paper-warm); border: 1px dashed var(--rule-strong);
+      border-radius: 3px; padding: 1.25rem 1.5rem; color: var(--ink-soft); font-size: .84rem;
+      font-style: italic; margin-bottom: 2rem; display: flex; align-items: center; gap: .75rem; }
+    .prop-placeholder.hidden { display: none; }
+    .prop-panel { display: none; border: 1px solid var(--rule-strong); border-radius: 3px;
+      margin-bottom: 2rem; overflow: hidden; animation: panelIn 160ms ease forwards; }
+    .prop-panel.visible { display: block; }
+    @keyframes panelIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+    .pp-head { background: var(--green); color:#fff; padding:.9rem 1.25rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .pp-uri { font-family: var(--mono); font-size: .72rem; color: rgba(255,255,255,.65); }
+    .pp-label { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: #fff; }
+    .pp-close { background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer;
+      font-size:1.1rem; line-height:1; padding:.1rem; transition:color .15s;
+      margin-left:auto; flex-shrink:0; }
+    .pp-close:hover { color:#fff; }
+    .pp-def { padding:.85rem 1.25rem; font-size:.85rem; color:var(--ink-mid); line-height:1.6;
+      border-bottom:1px solid var(--rule); background:var(--paper-warm); }
+    .pp-cols { display:grid; grid-template-columns:1fr 1fr; background:var(--paper); }
+    .pp-col { padding:1.1rem 1.25rem; }
+    .pp-col:first-child { border-right:1px solid var(--rule); }
+    .pp-col-label { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.75rem;
+      display:flex; align-items:center; gap:.35rem; }
+    .dir-arrow { color: var(--green-mid); }
+    .pr-item { padding:.6rem .8rem; border:1px solid var(--rule); border-radius:3px;
+      background:var(--paper); margin-bottom:.4rem; }
+    .pr-top { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+    .pr-uri { font-family:var(--mono); font-size:.72rem; color:var(--green-mid); flex:1; }
+    .pr-type { font-family:var(--mono); font-size:.55rem; letter-spacing:.04em;
+      padding:.1em .4em; border-radius:2px; flex-shrink:0; }
+    .pr-type-obj  { background:#e8e0f0; color:#5c3d8f; }
+    .pr-type-data { background:#e0ecf8; color:#1a4a5e; }
+    .pr-type-ann  { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .pr-label { font-size:.8rem; color:var(--ink-soft); margin-top:.1rem; }
+    .pr-meta { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.3rem; }
+    .pr-def { font-size:.78rem; color:var(--ink-mid); margin-top:.35rem; line-height:1.45; }
+    .pr-source { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); font-style:italic; margin-top:.2rem; }
+    .no-props { font-size:.8rem; color:var(--ink-soft); font-style:italic; }
+    .ab { display:inline-block; font-family:var(--mono); font-size:.55rem; letter-spacing:.05em; padding:.1em .45em; border-radius:2px; }
+    .ab-pub  { background:var(--green-light); color:var(--green); }
+    .ab-comm { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .ab-init { background:#fde8e0; color:var(--terracotta,#8b3a1a); }
+    .pp-cite { padding:.85rem 1.25rem; border-top:1px solid var(--rule);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:1rem; flex-wrap:wrap; background:var(--paper-warm); }
+    .pp-cite-text { font-family:var(--mono); font-size:.7rem; color:var(--ink-soft);
+      flex:1; min-width:200px; }
+    .btn-copy-sm { font-family:var(--mono); font-size:.68rem; letter-spacing:.08em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.4em 1em; cursor:pointer; transition:background .15s;
+      flex-shrink:0; white-space:nowrap; }
+    .btn-copy-sm:hover { background:var(--ink); }
+    .btn-copy-sm.copied { background:var(--green-mid); }
+
+    /* Zone 3 */
+    .scheme-block { margin-bottom: 1.5rem; }
+    .scheme-head { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px 3px 0 0; padding:.6rem 1rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .sh-uri { font-family:var(--mono); font-size:.75rem; color:var(--green-mid); }
+    .sh-label { font-family:var(--serif); font-size:.92rem; font-weight:600; color:var(--ink); }
+    .sh-count { font-family:var(--mono); font-size:.62rem; color:var(--ink-soft); white-space:nowrap; }
+    .concept-chips { border:1px solid var(--rule-strong); border-top:none;
+      border-radius:0 0 3px 3px; display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
+    .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+    .chip:hover { background:var(--paper-warm); }
+    .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
+    .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+
+    /* Sidebar */
+    .module-sidebar { position:sticky; top:2rem; }
+    .sidebar-panel { border:1px solid var(--rule-strong); border-radius:3px; overflow:hidden; margin-bottom:1.25rem; }
+    .sp-head { background:var(--paper-warm); border-bottom:1px solid var(--rule-strong);
+      padding:.6rem 1rem; display:flex; justify-content:space-between; align-items:center; }
+    .sp-title { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); }
+    .sp-active-uri { font-family:var(--mono); font-size:.67rem; color:var(--green); display:none; }
+    .sp-body { padding:.75rem 1rem; }
+    .conn-card { border:1px solid var(--rule); border-radius:3px; padding:.55rem .75rem;
+      margin-bottom:.4rem; background:var(--paper); text-decoration:none; display:block;
+      transition:border-color .15s, background .15s; }
+    .conn-card:hover { border-color:var(--green-mid); background:var(--paper-warm); }
+    .cc-row { display:flex; align-items:center; gap:.4rem; }
+    .cc-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .dot-core        { background:var(--green); }
+    .dot-agency      { background:#6b3a10; }
+    .dot-authority   { background:#3a4a5e; }
+    .dot-epistemic   { background:#1a4a40; }
+    .dot-narrative   { background:#5e3a2a; }
+    .dot-manifestation { background:#5c3d8f; }
+    .dot-botanical   { background:#3a5e28; }
+    .dot-entities    { background:#5c3d8f; }
+    .dot-ritual      { background:var(--terracotta,#8b3a1a); }
+    .dot-lineage     { background:#4a3010; }
+    .dot-divination  { background:#1a4a5e; }
+    .dot-societies   { background:#5e1a3a; }
+    .dot-graphic     { background:#3a3a1a; }
+    .dot-music       { background:#1a3a5e; }
+    .dot-language    { background:#2a1a5e; }
+    .dot-other       { background:var(--ink-soft); }
+    .cc-name { font-family:var(--serif); font-size:.88rem; font-weight:600; color:var(--ink); }
+    .cc-via { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.15rem; display:block; }
+    .cc-dir { font-size:.68rem; color:var(--ink-soft); font-style:italic; }
+    .share-row { display:flex; gap:.4rem; margin-bottom:1.25rem; }
+    .share-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:.25rem;
+      padding:.5rem .25rem; background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; cursor:pointer; font-family:var(--mono); font-size:.6rem;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); text-decoration:none;
+      transition:border-color .15s, background .15s, color .15s; }
+    .share-btn:hover { background:var(--green-light); border-color:var(--green-mid); color:var(--green); }
+    .share-btn.copied { background:var(--green-light); border-color:var(--green); color:var(--green); }
+    .share-btn svg { width:16px; height:16px; }
+    .sidebar-cite { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; padding:.85rem 1rem; }
+    .cite-head { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.5rem; }
+    .cite-tabs { display:flex; gap:0; margin-bottom:.6rem; border:1px solid var(--rule-strong);
+      border-radius:3px; overflow:hidden; }
+    .cite-tab { flex:1; font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; padding:.35em 0; background:var(--paper); border:none;
+      border-right:1px solid var(--rule-strong); color:var(--ink-soft);
+      cursor:pointer; transition:background .15s, color .15s; }
+    .cite-tab:last-child { border-right:none; }
+    .cite-tab:hover { background:var(--paper-warm); color:var(--ink); }
+    .cite-tab.active { background:var(--green-light); color:var(--green); font-weight:500; }
+    .cite-text { font-family:var(--mono); font-size:.7rem; line-height:1.55;
+      color:var(--ink-mid); font-style:italic; margin-bottom:.65rem; }
+    .cite-text pre { font-family:var(--mono); font-size:.68rem; line-height:1.55;
+      white-space:pre-wrap; word-break:break-all; margin:0; font-style:normal; }
+    .btn-cite-copy { width:100%; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.45em 0; cursor:pointer; transition:background .15s; }
+    .btn-cite-copy:hover { background:var(--ink); }
+    .btn-cite-copy.copied { background:var(--green-mid); }
+    .format-links { margin-top:.65rem; display:flex; flex-direction:column; gap:.25rem; }
+    .fmt-link { display:flex; justify-content:space-between; align-items:center;
+      font-family:var(--mono); font-size:.7rem; padding:.35rem .6rem;
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper);
+      color:var(--green-mid); text-decoration:none; transition:background .15s, border-color .15s; }
+    .fmt-link:hover { background:var(--paper-warm); border-color:var(--rule-strong); color:var(--green); }
+    .fmt-arrow { color:var(--ink-soft); }
+    .sidebar-dynamic { transition:opacity 120ms ease; }
+    .sidebar-dynamic.fading { opacity:0; pointer-events:none; }
+    .active-class-card { background:var(--green-light); border:1px solid var(--green-mid);
+      border-radius:3px; padding:.6rem .75rem; margin-bottom:.65rem; }
+    .acc-uri { font-family:var(--mono); font-size:.67rem; color:var(--green-mid); display:block; margin-bottom:.1rem; }
+    .acc-label { font-family:var(--serif); font-size:.9rem; font-weight:600; color:var(--ink); }
+    @media (max-width:900px) {
+      .module-layout { grid-template-columns:1fr; }
+      .module-sidebar { position:static; }
+      .pp-cols { grid-template-columns:1fr; }
+      .pp-col:first-child { border-right:none; border-bottom:1px solid var(--rule); }
+    }
+
   </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.2.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.3.0</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -46,1276 +240,771 @@
     <div>
       <span class="module-tag tag-core">Core</span>
       <h1>Core Vocabulary</h1>
-      <p class="subtitle">Cross-module governance infrastructure</p>
+      <p class="subtitle">Cross-module governance infrastructure: access control, assertions, provenance, concept schemes</p>
       <div class="header-meta">
-        <span class="meta-pill">iroko:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-core#</span>
-        <span class="meta-pill">v1.2.0</span>
+        <span class="meta-pill">iroko:&nbsp; https://ontology.irokosociety.org/iroko-core#</span>
+        <span class="meta-pill">v1.3.0</span>
         <span class="meta-pill"><a href="iroko-core.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
       </div>
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Cross-module infrastructure for governance and semantic integration of Afro-Atlantic sacred knowledge systems. Provides access control, provenance tracking, contested knowledge modeling, assertion governance, temporal variation, fieldwork capture, and thin narrative primitives.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">18</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">75</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">10</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">96</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="module-stats" style="margin-top:1.5rem;">
+    <div class="stat-cell"><span class="stat-n">17</span><span class="stat-label">Classes</span></div>
+    <div class="stat-cell"><span class="stat-n">58</span><span class="stat-label">Properties</span></div>
+    <div class="stat-cell"><span class="stat-n">10</span><span class="stat-label">Schemes</span></div>
+    <div class="stat-cell"><span class="stat-n">96</span><span class="stat-label">Concepts</span></div>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">18 classes</span>
-    </div>
-    <div class="class-card" id="cls-AccessPolicy">
-      <div class="class-name">AccessPolicy</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Access Policy</div>
-      
-      <p class="class-def">A named policy governing disclosure, access, or use of a resource, assertion, or collection. Policies may be conditioned on temporal variation, authority authorization, or community mandate. Used to attach institutional policy nodes to records and assertions. Full governance via iroko:accessLevel (per-property), iroko:EpistemicConstraint (per iroko-epistemic.ttl), and iroko:StewardshipMandate (per iroko-agency.ttl).</p>
-    </div>
-    <div class="class-card" id="cls-Assertion">
-      <div class="class-name">Assertion</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Assertion</div>
-      
-      <p class="class-def">A first-class statement node representing a single claim about any subject in the framework. Attach authority, access level, epistemic type, contested status, and fieldwork provenance at the property level. iroko:RelationshipAssertion is a subclass for relationship-specific claims. All Assertion instances are semantically governed — they do not imply factual truth, only documented assertion.</p>
-    </div>
-    <div class="class-card" id="cls-Commentary">
-      <div class="class-name">Commentary</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Commentary</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">A commentary, gloss, or interpretive note attached to any resource in the framework — a narrative, an assertion, a sacred entity, a text segment. Keeps interpretive voice distinct from primary narrative content.</p>
-    </div>
-    <div class="class-card" id="cls-ContestedAuthority">
-      <div class="class-name">ContestedAuthority</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Contested Authority</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">An authority (religious title, position, or role) whose legitimacy or historical continuity is disputed across lineages. Example: Iyanifa (women Ifa priests) — some lineages affirm historical continuity, others claim modern innovation.</p>
-    </div>
-    <div class="class-card" id="cls-DocumentaryEvidence">
-      <div class="class-name">DocumentaryEvidence</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Documentary Evidence</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">Umbrella class for archival materials (photographs, manuscripts, audio recordings, herbarium specimens) that document sacred knowledge practices. Maps to schema:CreativeWork in RDF serialization.</p>
-    </div>
-    <div class="class-card" id="cls-FieldworkEvent">
-      <div class="class-name">FieldworkEvent</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Fieldwork Event</div>
-      
-      <p class="class-def">A bounded fieldwork session or interview event during which assertions, narratives, or recordings were captured. Connects knowledge claims to their fieldwork provenance. rdfs:subClassOf prov:Activity asserted in iroko-align-prov.ttl.</p>
-    </div>
-    <div class="class-card" id="cls-LineageKnowledgeGraph">
-      <div class="class-name">LineageKnowledgeGraph</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Lineage Knowledge Graph</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Entity</span></div>
-      <p class="class-def">A named graph representing one lineage&#x27;s perspective on contested knowledge. Enables multiple community-endorsed positions to coexist without requiring resolution. Core mechanism for postcustodial knowledge governance.</p>
-    </div>
-    <div class="class-card" id="cls-Narrative">
-      <div class="class-name">Narrative</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Narrative</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">A narrative cluster that may have multiple variants across place, time, authority, and lineage. First-class in Core so any domain module (Marca for odu essays, Ngoma for lyric traditions, Ékpè for origin stories) can attach narratives without importing the full narrative module.</p>
-    </div>
-    <div class="class-card" id="cls-NarrativeVariant">
-      <div class="class-name">NarrativeVariant</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Narrative Variant</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">A specific telling, transcript, or rendering of a narrative within a particular context, lineage, or temporal frame. The unit that carries text, language tag, authority scope, and access control.</p>
-    </div>
-    <div class="class-card" id="cls-RelationshipAssertion">
-      <div class="class-name">RelationshipAssertion</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Relationship Assertion</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Assertion</span>, <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">A structured reification node recording a claimed relationship between two entities. Extends iroko:Assertion with relationship-specific slots: relationType, assertionScope, assertionLineage. Inherits governance properties (authorizedBy, recordedInEvent, assertionStatus, accessLevel) from the Assertion superclass.</p>
-    </div>
-    <div class="class-card" id="cls-RitualAuthority">
-      <div class="class-name">RitualAuthority</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Ritual Authority</div>
-      
-      <p class="class-def">A governance entity capable of authorizing assertion-level claims. May represent a lineage, cabildo, religious house, elder council, or individual office-holder. This is the minimal Core stub — full modeling of jurisdiction, basis, and recognition is in iroko-authority.ttl. Distinguished from ile:ReligiousOffice, which models the specific title instance held by an individual practitioner.</p>
-    </div>
-    <div class="class-card" id="cls-SacredEntity">
-      <div class="class-name">SacredEntity</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Entity</div>
-      
-      <p class="class-def">Top-level class for any tradition-specific concept within the Iroko Framework. All module-specific classes (Plant, SpiritualEntity, RitualProcess, etc.) are subclasses of this.</p>
-    </div>
-    <div class="class-card" id="cls-SacredMedia">
-      <div class="class-name">SacredMedia</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Media</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Documentary Evidence</span></div>
-      <p class="class-def">Audio, photographic, or video records of sacred knowledge, ceremonies, instruments, or practitioners. Extends DocumentaryEvidence with media-specific metadata including format, instrumentation, consent status, and depicted entities.</p>
-    </div>
-    <div class="class-card" id="cls-SacredSpecimen">
-      <div class="class-name">SacredSpecimen</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Specimen</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">Distinguishes objects that maintain active sacred status (consecrated, in ritual use) from decommissioned objects or museum specimens. Used to track the ritual life cycle of material culture.</p>
-    </div>
-    <div class="class-card" id="cls-Sign">
-      <div class="class-name">Sign</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sign</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">A named unit within a sacred sign system — divination sign, graphic symbol, rhythmic pattern identifier, or similar structured signifier. Superclass of tradition-specific sign types such as marca:DivinationSign and veve:GraphicSign.</p>
-    </div>
-    <div class="class-card" id="cls-TemporalVariation">
-      <div class="class-name">TemporalVariation</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Temporal Variation</div>
-      
-      <p class="class-def">A named temporal regime, calendar cycle, or context that conditions how a property, assertion, or policy applies. Covers: ritual calendar seasons, festival-bound periods, pre/post-initiation thresholds, gender regime cycles, and any other time-bounded condition affecting sacred knowledge governance. TemporalVariation instances are named nodes shared across modules — define once, reference everywhere. Examples: iroko:TemporalVariation/egungun-festival-period, iroko:TemporalVariation/post-kariocha-year.</p>
-    </div>
-    <div class="class-card" id="cls-TextSegment">
-      <div class="class-name">TextSegment</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Text Segment</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">Sacred Entity</span></div>
-      <p class="class-def">An addressable, orderable segment within a narrative or narrative variant. Used for verse-level segmentation of odu essays, chant lines, prayers, and other structured oral or textual corpora.</p>
-    </div>
-    <div class="class-card" id="cls-nbdce116359d54a61bae06be0faaa45fbb1">
-      <div class="class-name">nbdce116359d54a61bae06be0faaa45fbb1</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">nbdce116359d54a61bae06be0faaa45fbb1</div>
-      
-      <p class="class-def">nbdce116359d54a61bae06be0faaa45fbb1</p>
-    </div>
-  </div>
+  <div class="module-layout">
+    <main class="module-main">
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">75 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-accessLevel">
-          <td><span class="prop-name">accessLevel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">access level</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Governs who may view this knowledge. Values: iroko:access-public-unrestricted through iroko:access-no-access. Applied at record level and/or field level.</td>
-        </tr>
-        <tr id="prop-alternateNames">
-          <td><span class="prop-name">alternateNames</span><br><span style="font-size:.75rem;color:var(--ink-soft);">alternate names</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">— → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Other names, honorifics, or tradition-specific designations for this entity across traditions or lineages. Language-tagged strings. Example: Babalu Aye (Lucumí) / Obaluaye (Candomblé) / Sakpata (Fon).</td>
-        </tr>
-        <tr id="prop-assertionLineage">
-          <td><span class="prop-name">assertionLineage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion lineage</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Relationship Assertion → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The specific lineage, house, or community within which this assertion holds.</td>
-        </tr>
-        <tr id="prop-assertionNote">
-          <td><span class="prop-name">assertionNote</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion note</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Assertion → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Free-text note explaining the basis, source, or dispute surrounding the claim.</td>
-        </tr>
-        <tr id="prop-assertionObject">
-          <td><span class="prop-name">assertionObject</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion object</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Assertion → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The entity that is the object of the claim. Named assertionObject (not object) to avoid shadowing rdf:object. Range is intentionally untyped — the object of an assertion may be any resource inside or outside the framework, including external URIs, foaf:Person instances, geographic locations, or framework entities. Constraining the range would break the generality of the reification model.</td>
-        </tr>
-        <tr id="prop-assertionPredicate">
-          <td><span class="prop-name">assertionPredicate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion predicate</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Assertion → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The property or relationship type being asserted in an n-ary assertion node. Named assertionPredicate (not predicate) to avoid shadowing rdf:predicate.</td>
-        </tr>
-        <tr id="prop-assertionScope">
-          <td><span class="prop-name">assertionScope</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion scope</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Relationship Assertion → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Restricts the claim to a specific camino, aspect, or manifestation.</td>
-        </tr>
-        <tr id="prop-assertionStatus">
-          <td><span class="prop-name">assertionStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Assertion → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Whether the claim is consensual, lineage-specific, or contested. Range: iroko:AssertionStatusScheme.</td>
-        </tr>
-        <tr id="prop-assertionSubject">
-          <td><span class="prop-name">assertionSubject</span><br><span style="font-size:.75rem;color:var(--ink-soft);">assertion subject</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Assertion → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The entity that is the subject of the claim. Named assertionSubject (not subject) to avoid shadowing rdf:subject.</td>
-        </tr>
-        <tr id="prop-authorizedBy">
-          <td><span class="prop-name">authorizedBy</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authorized by</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Assertion → Ritual Authority</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links an Assertion to the RitualAuthority that authorizes it. An assertion without this property is undeclared as to authority — it may still carry other provenance (fieldwork event, epistemic type).</td>
-        </tr>
-        <tr id="prop-ceremonyContext">
-          <td><span class="prop-name">ceremonyContext</span><br><span style="font-size:.75rem;color:var(--ink-soft);">ceremony context</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → RitualProcess</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The ritual process in which this entity — sign, rhythm, plant use, or artifact — is employed. Range: travay:RitualProcess.</td>
-        </tr>
-        <tr id="prop-commentaryOn">
-          <td><span class="prop-name">commentaryOn</span><br><span style="font-size:.75rem;color:var(--ink-soft);">commentary on</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Commentary → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a Commentary to the resource it annotates. Range is intentionally open — commentary may attach to a Narrative, NarrativeVariant, TextSegment, Assertion, SacredEntity, or any other resource.</td>
-        </tr>
-        <tr id="prop-communityEndorsement">
-          <td><span class="prop-name">communityEndorsement</span><br><span style="font-size:.75rem;color:var(--ink-soft);">community endorsement</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Status of community review and approval. Values from iroko:CommunityEndorsementScheme. Flips institutional authority model by centering community validation.</td>
-        </tr>
-        <tr id="prop-communityReleaseApproval">
-          <td><span class="prop-name">communityReleaseApproval</span><br><span style="font-size:.75rem;color:var(--ink-soft);">community release approval</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → boolean</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">communityReleaseApproval</td>
-        </tr>
-        <tr id="prop-competingClaim">
-          <td><span class="prop-name">competingClaim</span><br><span style="font-size:.75rem;color:var(--ink-soft);">competing claim</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Entity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links to a prov:Entity representing an alternative position on this contested knowledge.</td>
-        </tr>
-        <tr id="prop-contestedAuthorityOf">
-          <td><span class="prop-name">contestedAuthorityOf</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contested authority of</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Contested Authority → Ritual Authority</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a ContestedAuthority back to the RitualAuthority whose legitimacy is in question. Inverse of iroko:contestsAuthority. Enables bidirectional traversal: from the contesting party to the ContestedAuthority record, and from the ContestedAuthority record back to the authority being contested.</td>
-        </tr>
-        <tr id="prop-contestedNotes">
-          <td><span class="prop-name">contestedNotes</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contested notes</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">— → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Free-text description of the nature of contestation.</td>
-        </tr>
-        <tr id="prop-contestedStatus">
-          <td><span class="prop-name">contestedStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contested status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">— → boolean</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Boolean indicating whether this entity&#x27;s attributes, existence, or interpretation are disputed across lineages.</td>
-        </tr>
-        <tr id="prop-contestsAuthority">
-          <td><span class="prop-name">contestsAuthority</span><br><span style="font-size:.75rem;color:var(--ink-soft);">contests authority</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">nbdce116359d54a61bae06be0faaa45fbb1 → Contested Authority</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a RitualAuthority, SacredEntity, or Assertion to a ContestedAuthority instance it generates or references. A RitualAuthority contests another when it challenges the legitimacy or historical continuity of that authority&#x27;s claims. A SacredEntity may have its governing authority contested across lineages. An Assertion may formally contest an authority&#x27;s basis.</td>
-        </tr>
-        <tr id="prop-custodialRelationship">
-          <td><span class="prop-name">custodialRelationship</span><br><span style="font-size:.75rem;color:var(--ink-soft);">custodial relationship</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Specimen → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Nature of custody for sacred objects. Values from iroko:CustodialRelationshipScheme.</td>
-        </tr>
-        <tr id="prop-depictedCeremony">
-          <td><span class="prop-name">depictedCeremony</span><br><span style="font-size:.75rem;color:var(--ink-soft);">depicted ceremony</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → RitualProcess</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">depictedCeremony</td>
-        </tr>
-        <tr id="prop-depictedEntity">
-          <td><span class="prop-name">depictedEntity</span><br><span style="font-size:.75rem;color:var(--ink-soft);">depicted entity</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">depictedEntity</td>
-        </tr>
-        <tr id="prop-depicts">
-          <td><span class="prop-name">depicts</span><br><span style="font-size:.75rem;color:var(--ink-soft);">depicts</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Documentary Evidence → Sacred Entity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links archival materials to the entities they depict. Range: iroko:SacredEntity — covers plants, spirits, ceremonies, practitioners, instruments, and all other framework entities. Geographic locations not yet modeled as SacredEntity subclasses may be referenced via rdfs:label or external URI.</td>
-        </tr>
-        <tr id="prop-documents">
-          <td><span class="prop-name">documents</span><br><span style="font-size:.75rem;color:var(--ink-soft);">documents</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Documentary Evidence → Sacred Entity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links archival materials to practices or events they document. Range: iroko:SacredEntity — covers ceremonies, ritual events, plants, spirits, lineages, and all other framework entities. Parallel treatment with iroko:depicts: both are documentary links from archival materials to framework entities.</td>
-        </tr>
-        <tr id="prop-documentsSpecimen">
-          <td><span class="prop-name">documentsSpecimen</span><br><span style="font-size:.75rem;color:var(--ink-soft);">documents specimen</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Documentary Evidence → Sacred Specimen</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a DocumentaryEvidence record to a SacredSpecimen it documents. A photograph, manuscript, or archival record may document one or more sacred objects. The existence of documentation is public-unrestricted; the ritual details of the object are governed by iroko:sacredStatus on the SacredSpecimen instance.</td>
-        </tr>
-        <tr id="prop-mediaDuration">
-          <td><span class="prop-name">mediaDuration</span><br><span style="font-size:.75rem;color:var(--ink-soft);">duration</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → duration</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">mediaDuration</td>
-        </tr>
-        <tr id="prop-epistemicType">
-          <td><span class="prop-name">epistemicType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">epistemic type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Epistemological source classification. Values from iroko:EpistemicTypeScheme.</td>
-        </tr>
-        <tr id="prop-eventDate">
-          <td><span class="prop-name">eventDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">event date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Fieldwork Event → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Date or date range of the fieldwork event.</td>
-        </tr>
-        <tr id="prop-eventLocation">
-          <td><span class="prop-name">eventLocation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">event location</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Fieldwork Event → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Location where the fieldwork event took place. Language-tagged string; may be general (city/country) for access-controlled records.</td>
-        </tr>
-        <tr id="prop-eventProtocol">
-          <td><span class="prop-name">eventProtocol</span><br><span style="font-size:.75rem;color:var(--ink-soft);">event protocol</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Fieldwork Event → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Notes on consent, permissions, recording protocols, and any community authorization obtained for this fieldwork event.</td>
-        </tr>
-        <tr id="prop-fieldworkProvenance">
-          <td><span class="prop-name">fieldworkProvenance</span><br><span style="font-size:.75rem;color:var(--ink-soft);">fieldwork provenance</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Details of fieldwork context if this knowledge derives from direct ethnographic observation.</td>
-        </tr>
-        <tr id="prop-fieldworker">
-          <td><span class="prop-name">fieldworker</span><br><span style="font-size:.75rem;color:var(--ink-soft);">fieldworker</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Fieldwork Event → Person</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Person who conducted the fieldwork. Range: foaf:Person or prov:Agent.</td>
-        </tr>
-        <tr id="prop-foundingDate">
-          <td><span class="prop-name">foundingDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">founding date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">— → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Date or approximate date when this community, house, society, or lineage was established. Applies to ile, ekpe lodge, sankofa project, or any organizational entity.</td>
-        </tr>
-        <tr id="prop-geographicVariation">
-          <td><span class="prop-name">geographicVariation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">geographic variation</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">— → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Regional or lineage-specific differences in use, form, identification, or meaning. Applies to plants, signs, rhythms, and other cross-domain entities.</td>
-        </tr>
-        <tr id="prop-governedBy">
-          <td><span class="prop-name">governedBy</span><br><span style="font-size:.75rem;color:var(--ink-soft);">governed by</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Access Policy</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a resource or assertion to an AccessPolicy that governs it.</td>
-        </tr>
-        <tr id="prop-hasRelationshipAssertion">
-          <td><span class="prop-name">hasRelationshipAssertion</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has relationship assertion</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Relationship Assertion</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">hasRelationshipAssertion</td>
-        </tr>
-        <tr id="prop-hasSegment">
-          <td><span class="prop-name">hasSegment</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has segment</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Text Segment</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a Narrative or NarrativeVariant to a constituent TextSegment.</td>
-        </tr>
-        <tr id="prop-hasSourceCitation">
-          <td><span class="prop-name">hasSourceCitation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has source citation</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → BibliographicResource</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links any archival record — plant, spirit, Odu, ceremony, lineage — to a structured bibliographic citation. Range is dcterms:BibliographicResource, which covers both plain dcterms string citations and structured BIBO nodes (bibo:Book, bibo:DocumentPart). Use dcterms:bibliographicCitation for simple string citations on instances; use this property with BIBO nodes for queryable structured citations. Cross-domain: applies to all Iroko module entity types.</td>
-        </tr>
-        <tr id="prop-hasTemporalVariation">
-          <td><span class="prop-name">hasTemporalVariation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has temporal variation</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Temporal Variation</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Cross-cutting qualifier linking any resource — assertion, policy, property value, access rule, narrative — to a TemporalVariation node. Defined once in Core and referenced across all modules. Do not redefine per-module.</td>
-        </tr>
-        <tr id="prop-hasVariant">
-          <td><span class="prop-name">hasVariant</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has variant</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Narrative → Narrative Variant</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a Narrative to one of its NarrativeVariants.</td>
-        </tr>
-        <tr id="prop-instrumentation">
-          <td><span class="prop-name">instrumentation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">instrumentation</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">instrumentation</td>
-        </tr>
-        <tr id="prop-invocationText">
-          <td><span class="prop-name">invocationText</span><br><span style="font-size:.75rem;color:var(--ink-soft);">invocation text</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">— → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
-          <td class="prop-desc">Exact words, prayers, or songs recited when working with this entity — plant, spirit, or ceremony. Applies to any domain module. OPERATIONAL ONLY — never exported to public RDF.</td>
-        </tr>
-        <tr id="prop-languageOfPerformance">
-          <td><span class="prop-name">languageOfPerformance</span><br><span style="font-size:.75rem;color:var(--ink-soft);">language of performance</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">languageOfPerformance</td>
-        </tr>
-        <tr id="prop-mediaFormat">
-          <td><span class="prop-name">mediaFormat</span><br><span style="font-size:.75rem;color:var(--ink-soft);">media format</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Technical format of the file. Example: FLAC, WAV, TIFF, JPEG, MP4.</td>
-        </tr>
-        <tr id="prop-mediaType">
-          <td><span class="prop-name">mediaType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">media type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">mediaType</td>
-        </tr>
-        <tr id="prop-minimumAccessLevel">
-          <td><span class="prop-name">minimumAccessLevel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">minimum access level</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Annotation</span></td>
-          <td class="prop-domain-range">— → —</td>
-          <td style="white-space:nowrap;"></td>
-          <td class="prop-desc">Annotation property used on other properties to indicate the minimum access level required to view their values. Used in vocabulary documentation and RDF export filtering.</td>
-        </tr>
-        <tr id="prop-oralTransmissionChain">
-          <td><span class="prop-name">oralTransmissionChain</span><br><span style="font-size:.75rem;color:var(--ink-soft);">oral transmission chain</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Documented chain of oral transmission for this knowledge. Example: Elder A (Havana) to Elder B (Matanzas) to Informant C (2018).</td>
-        </tr>
-        <tr id="prop-policyCondition">
-          <td><span class="prop-name">policyCondition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">policy condition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Access Policy → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Text description of the conditions under which this policy applies. May reference initiation levels, authority authorizations, temporal variations, or community mandates.</td>
-        </tr>
-        <tr id="prop-policyLabel">
-          <td><span class="prop-name">policyLabel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">policy label</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Access Policy → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Human-readable name or identifier for this access policy.</td>
-        </tr>
-        <tr id="prop-recordedInEvent">
-          <td><span class="prop-name">recordedInEvent</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recorded in event</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Assertion → Fieldwork Event</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links an Assertion to the FieldworkEvent during which it was captured.</td>
-        </tr>
-        <tr id="prop-recordedOn">
-          <td><span class="prop-name">recordedOn</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recorded on</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Assertion → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Date on which the assertion was captured or recorded.</td>
-        </tr>
-        <tr id="prop-recordingContext">
-          <td><span class="prop-name">recordingContext</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recording context</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">recordingContext</td>
-        </tr>
-        <tr id="prop-recordingDate">
-          <td><span class="prop-name">recordingDate</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recording date</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → date</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">recordingDate</td>
-        </tr>
-        <tr id="prop-recordingLocation">
-          <td><span class="prop-name">recordingLocation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recording location</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">recordingLocation</td>
-        </tr>
-        <tr id="prop-recordist">
-          <td><span class="prop-name">recordist</span><br><span style="font-size:.75rem;color:var(--ink-soft);">recordist</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Media → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">recordist</td>
-        </tr>
-        <tr id="prop-rejectingLineages">
-          <td><span class="prop-name">rejectingLineages</span><br><span style="font-size:.75rem;color:var(--ink-soft);">rejecting lineages</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Text list of lineages or houses that reject this position on contested knowledge.</td>
-        </tr>
-        <tr id="prop-relatedTradition">
-          <td><span class="prop-name">relatedTradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">related tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links to related traditions when knowledge spans multiple systems.</td>
-        </tr>
-        <tr id="prop-relationType">
-          <td><span class="prop-name">relationType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">relation type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Relationship Assertion → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The semantic type of relationship being asserted.</td>
-        </tr>
-        <tr id="prop-sacredStatus">
-          <td><span class="prop-name">sacredStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sacred status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Specimen → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Current ritual status of an object. Values from iroko:SacredStatusScheme.</td>
-        </tr>
-        <tr id="prop-secretName">
-          <td><span class="prop-name">secretName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">secret name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">— → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
-          <td class="prop-desc">Esoteric or secret name used only in restricted ceremonial contexts. Applies to any sacred entity — plant, spirit, or lineage. OPERATIONAL ONLY — never exported to public RDF.</td>
-        </tr>
-        <tr id="prop-segmentOrder">
-          <td><span class="prop-name">segmentOrder</span><br><span style="font-size:.75rem;color:var(--ink-soft);">segment order</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Text Segment → integer</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Integer position of this TextSegment within its containing narrative or variant. Used to reconstruct canonical ordering.</td>
-        </tr>
-        <tr id="prop-segmentText">
-          <td><span class="prop-name">segmentText</span><br><span style="font-size:.75rem;color:var(--ink-soft);">segment text</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Text Segment → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The text content of this segment. Language-tagged. Use iroko:accessLevel on the TextSegment instance to govern disclosure.</td>
-        </tr>
-        <tr id="prop-signAlternateName">
-          <td><span class="prop-name">signAlternateName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign alternate name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sign → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Alternative or regional names for this sign across traditions or lineage variants. Language-tagged.</td>
-        </tr>
-        <tr id="prop-signCount">
-          <td><span class="prop-name">signCount</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign count</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sign → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The number of discrete signs in the system. Example: Ifá 256, Dilogún 16 principal odù.</td>
-        </tr>
-        <tr id="prop-signName">
-          <td><span class="prop-name">signName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sign → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The canonical name of the sign in the tradition&#x27;s liturgical language. Language-tagged. Examples: Ogbe Meji (Ifá), Ogún vèvè (Vodou).</td>
-        </tr>
-        <tr id="prop-signSystem">
-          <td><span class="prop-name">signSystem</span><br><span style="font-size:.75rem;color:var(--ink-soft);">sign system</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sign → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The sacred sign system to which this sign belongs — divination, graphic, rhythmic, or other.</td>
-        </tr>
-        <tr id="prop-sourceRelationship">
-          <td><span class="prop-name">sourceRelationship</span><br><span style="font-size:.75rem;color:var(--ink-soft);">source relationship</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">— → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Nature of relationship to source tradition for reconstructed or reclaimed practices. Primarily used in Sankofa module.</td>
-        </tr>
-        <tr id="prop-specimenEncounteredIn">
-          <td><span class="prop-name">specimenEncounteredIn</span><br><span style="font-size:.75rem;color:var(--ink-soft);">specimen encountered in</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Fieldwork Event → Sacred Specimen</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Links a FieldworkEvent to a SacredSpecimen encountered or documented during that session. Access: initiated-only — the association between a fieldwork event and a specific sacred object record discloses custody, location, and lineage information appropriate only for initiated practitioners.</td>
-        </tr>
-        <tr id="prop-subjectConsentStatus">
-          <td><span class="prop-name">subjectConsentStatus</span><br><span style="font-size:.75rem;color:var(--ink-soft);">subject consent status</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Media → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">subjectConsentStatus</td>
-        </tr>
-        <tr id="prop-supportingLineages">
-          <td><span class="prop-name">supportingLineages</span><br><span style="font-size:.75rem;color:var(--ink-soft);">supporting lineages</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Entity → string</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Text list of lineages or houses that endorse this position on contested knowledge.</td>
-        </tr>
-        <tr id="prop-systemType">
-          <td><span class="prop-name">systemType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">system type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sign → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Typological classification of the sign system. Range is tradition-specific concept scheme in marca or veve modules.</td>
-        </tr>
-        <tr id="prop-tradition">
-          <td><span class="prop-name">tradition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">tradition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Entity → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The Afro-Atlantic tradition to which this entity belongs. Values from controlled vocabulary: iroko:tradition-lucumi, iroko:tradition-candomble-ketu, iroko:tradition-vodou-rada, etc.</td>
-        </tr>
-        <tr id="prop-variationCondition">
-          <td><span class="prop-name">variationCondition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">variation condition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Temporal Variation → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Text description of the condition that activates this temporal variation. Example: &#x27;Applies during the 40-day post-kariocha seclusion period&#x27;.</td>
-        </tr>
-        <tr id="prop-variationContext">
-          <td><span class="prop-name">variationContext</span><br><span style="font-size:.75rem;color:var(--ink-soft);">variation context</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Temporal Variation → —</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Links a TemporalVariation to the context that activates it — a ceremony, liturgical calendar event, fieldwork session, or other conditioning context. Range is intentionally untyped: activating contexts are heterogeneous (RitualProcess, FieldworkEvent, calendar concept, geographic context) and constraining the range now would create fragility. Revisit when TemporalVariation has sufficient data to determine the realistic range.</td>
-        </tr>
-        <tr id="prop-variationLabel">
-          <td><span class="prop-name">variationLabel</span><br><span style="font-size:.75rem;color:var(--ink-soft);">variation label</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Temporal Variation → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Human-readable name for the temporal regime or cycle.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <!-- ZONE 1: Classes -->
+      <div class="zone-head">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="cls-card" id="card-AccessPolicy" onclick="activateClass('AccessPolicy')">
+          <span class="cls-uri">iroko:AccessPolicy</span>
+          <span class="cls-label">Access Policy</span>
+          
+        </div>
+        <div class="cls-card" id="card-Assertion" onclick="activateClass('Assertion')">
+          <span class="cls-uri">iroko:Assertion</span>
+          <span class="cls-label">Assertion</span>
+          
+        </div>
+        <div class="cls-card" id="card-Commentary" onclick="activateClass('Commentary')">
+          <span class="cls-uri">iroko:Commentary</span>
+          <span class="cls-label">Commentary</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-ContestedAuthority" onclick="activateClass('ContestedAuthority')">
+          <span class="cls-uri">iroko:ContestedAuthority</span>
+          <span class="cls-label">Contested Authority</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-DocumentaryEvidence" onclick="activateClass('DocumentaryEvidence')">
+          <span class="cls-uri">iroko:DocumentaryEvidence</span>
+          <span class="cls-label">Documentary Evidence</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-FieldworkEvent" onclick="activateClass('FieldworkEvent')">
+          <span class="cls-uri">iroko:FieldworkEvent</span>
+          <span class="cls-label">Fieldwork Event</span>
+          
+        </div>
+        <div class="cls-card" id="card-LineageKnowledgeGraph" onclick="activateClass('LineageKnowledgeGraph')">
+          <span class="cls-uri">iroko:LineageKnowledgeGraph</span>
+          <span class="cls-label">Lineage Knowledge Graph</span>
+          <span class="cls-hint">subClassOf Entity</span>
+        </div>
+        <div class="cls-card" id="card-Narrative" onclick="activateClass('Narrative')">
+          <span class="cls-uri">iroko:Narrative</span>
+          <span class="cls-label">Narrative</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-NarrativeVariant" onclick="activateClass('NarrativeVariant')">
+          <span class="cls-uri">iroko:NarrativeVariant</span>
+          <span class="cls-label">Narrative Variant</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-RelationshipAssertion" onclick="activateClass('RelationshipAssertion')">
+          <span class="cls-uri">iroko:RelationshipAssertion</span>
+          <span class="cls-label">Relationship Assertion</span>
+          <span class="cls-hint">subClassOf Assertion · subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-RitualAuthority" onclick="activateClass('RitualAuthority')">
+          <span class="cls-uri">iroko:RitualAuthority</span>
+          <span class="cls-label">Ritual Authority</span>
+          
+        </div>
+        <div class="cls-card" id="card-SacredEntity" onclick="activateClass('SacredEntity')">
+          <span class="cls-uri">iroko:SacredEntity</span>
+          <span class="cls-label">Sacred Entity</span>
+          
+        </div>
+        <div class="cls-card" id="card-SacredMedia" onclick="activateClass('SacredMedia')">
+          <span class="cls-uri">iroko:SacredMedia</span>
+          <span class="cls-label">Sacred Media</span>
+          <span class="cls-hint">subClassOf DocumentaryEvidence</span>
+        </div>
+        <div class="cls-card" id="card-SacredSpecimen" onclick="activateClass('SacredSpecimen')">
+          <span class="cls-uri">iroko:SacredSpecimen</span>
+          <span class="cls-label">Sacred Specimen</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-Sign" onclick="activateClass('Sign')">
+          <span class="cls-uri">iroko:Sign</span>
+          <span class="cls-label">Sign</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-TemporalVariation" onclick="activateClass('TemporalVariation')">
+          <span class="cls-uri">iroko:TemporalVariation</span>
+          <span class="cls-label">Temporal Variation</span>
+          
+        </div>
+        <div class="cls-card" id="card-TextSegment" onclick="activateClass('TextSegment')">
+          <span class="cls-uri">iroko:TextSegment</span>
+          <span class="cls-label">Text Segment</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+      </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">10 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Access Level Classification</span>
-        <span class="scheme-count">6 concepts</span>
+      <!-- ZONE 2: Property panel -->
+      <div class="zone-head" style="margin-top:0;">
+        Properties
+        <span class="zone-hint" id="z2-hint">Click a class card above</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Six-tier classification of access restrictions for sacred knowledge.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-access-community-only">
-          <div class="concept-label">Community Only</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-community-only</div>
-          <p class="concept-def">Accessible to verified community members. Requires authentication.</p>
+      <div class="prop-placeholder" id="prop-placeholder">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        No class selected. Click any class card above to see incoming and outgoing properties.
+      </div>
+      <div class="prop-panel" id="prop-panel">
+        <div class="pp-head">
+          <div>
+            <div class="pp-uri" id="pp-uri"></div>
+            <div class="pp-label" id="pp-label"></div>
+          </div>
+          <button class="pp-close" onclick="closePanel()" title="Close">&#x2715;</button>
         </div>
-        <div class="concept-item" id="concept-access-initiated-elder">
-          <div class="concept-label">Initiated Elder</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-initiated-elder</div>
-          <p class="concept-def">Requires elder designation within tradition — recognized by community as having authority to access lineage-specific teachings.</p>
+        <div class="pp-def" id="pp-def"></div>
+        <div class="pp-cols">
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8592;</span> Incoming <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(range = this class)</span></div>
+            <div id="pp-incoming"></div>
+          </div>
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8594;</span> Outgoing <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(domain = this class)</span></div>
+            <div id="pp-outgoing"></div>
+          </div>
         </div>
-        <div class="concept-item" id="concept-access-initiated-only">
-          <div class="concept-label">Initiated Only</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-initiated-only</div>
-          <p class="concept-def">Accessible only to initiated practitioners whose initiation has been verified.</p>
-        </div>
-        <div class="concept-item" id="concept-access-no-access">
-          <div class="concept-label">No Access</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-no-access</div>
-          <p class="concept-def">Operational or internal use only. Never exported to RDF.</p>
-        </div>
-        <div class="concept-item" id="concept-access-public-no-amplification">
-          <div class="concept-label">Public - No Amplification</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-public-no-amplification</div>
-          <p class="concept-def">Publicly viewable but should not be amplified, shared widely, or used for commercial purposes.</p>
-        </div>
-        <div class="concept-item" id="concept-access-public-unrestricted">
-          <div class="concept-label">Public - Unrestricted</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">access-public-unrestricted</div>
-          <p class="concept-def">Freely accessible to anyone. No authentication required.</p>
+        <div class="pp-cite">
+          <span class="pp-cite-text" id="pp-cite-text"></span>
+          <button class="btn-copy-sm" id="pp-cite-btn" onclick="copyCite()">Copy URI</button>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Assertion Status</span>
-        <span class="scheme-count">3 concepts</span>
+
+      <!-- ZONE 3: Concept Schemes -->
+      <div class="zone-head" style="margin-top:1rem;">
+        Concept Schemes
+        <span class="zone-hint">96 concepts across 10 schemes</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled terms for whether a claim is widely attested, lineage-specific, or actively contested.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-assertion-contested">
-          <div class="concept-label">Contested</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">assertion-contested</div>
-          <p class="concept-def">Actively disputed; multiple contradictory positions exist across lineages.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:AccessLevelScheme</span>
+            <span class="sh-label">Access Level Classification</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
         </div>
-        <div class="concept-item" id="concept-assertion-lineage-specific">
-          <div class="concept-label">Lineage-Specific</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">assertion-lineage-specific</div>
-          <p class="concept-def">Recognized within a specific lineage or house but not universally.</p>
-        </div>
-        <div class="concept-item" id="concept-assertion-consensual">
-          <div class="concept-label">Widely Attested</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">assertion-consensual</div>
-          <p class="concept-def">Affirmed by multiple independent lineages or sources.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Cross-lineage consensus</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Community Endorsement Status</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">CommunityEndorsementScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-endorsement-community-reviewed">
-          <div class="concept-label">Community-Reviewed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-community-reviewed</div>
-          <p class="concept-def">endorsement-community-reviewed</p>
-        </div>
-        <div class="concept-item" id="concept-endorsement-contested">
-          <div class="concept-label">Contested</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-contested</div>
-          <p class="concept-def">endorsement-contested</p>
-        </div>
-        <div class="concept-item" id="concept-endorsement-elder-approved">
-          <div class="concept-label">Elder-Approved</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-elder-approved</div>
-          <p class="concept-def">endorsement-elder-approved</p>
-        </div>
-        <div class="concept-item" id="concept-endorsement-pending-review">
-          <div class="concept-label">Pending Review</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-pending-review</div>
-          <p class="concept-def">endorsement-pending-review</p>
-        </div>
-        <div class="concept-item" id="concept-endorsement-unreviewed">
-          <div class="concept-label">Unreviewed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-unreviewed</div>
-          <p class="concept-def">endorsement-unreviewed</p>
-        </div>
-        <div class="concept-item" id="concept-endorsement-withdrawn">
-          <div class="concept-label">Withdrawn</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">endorsement-withdrawn</div>
-          <p class="concept-def">endorsement-withdrawn</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Community Only</span>
+            <span class="chip-id">iroko:access-community-only</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Initiated Elder</span>
+            <span class="chip-id">iroko:access-initiated-elder</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Initiated Only</span>
+            <span class="chip-id">iroko:access-initiated-only</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">No Access</span>
+            <span class="chip-id">iroko:access-no-access</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Public - No Amplification</span>
+            <span class="chip-id">iroko:access-public-no-amplification</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Public - Unrestricted</span>
+            <span class="chip-id">iroko:access-public-unrestricted</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Consent Status</span>
-        <span class="scheme-count">5 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">ConsentStatusScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-consent-community-authorized">
-          <div class="concept-label">Community-Authorized</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-community-authorized</div>
-          <p class="concept-def">consent-community-authorized</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:AssertionStatusScheme</span>
+            <span class="sh-label">Assertion Status</span>
+          </div>
+          <span class="sh-count">3 concepts</span>
         </div>
-        <div class="concept-item" id="concept-consent-documented">
-          <div class="concept-label">Documented Consent</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-documented</div>
-          <p class="concept-def">consent-documented</p>
-        </div>
-        <div class="concept-item" id="concept-consent-not-obtained">
-          <div class="concept-label">Not Obtained</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-not-obtained</div>
-          <p class="concept-def">consent-not-obtained</p>
-        </div>
-        <div class="concept-item" id="concept-consent-unknown">
-          <div class="concept-label">Unknown</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-unknown</div>
-          <p class="concept-def">consent-unknown</p>
-        </div>
-        <div class="concept-item" id="concept-consent-verbal-undocumented">
-          <div class="concept-label">Verbal (Undocumented)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">consent-verbal-undocumented</div>
-          <p class="concept-def">consent-verbal-undocumented</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Contested</span>
+            <span class="chip-id">iroko:assertion-contested</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Lineage-Specific</span>
+            <span class="chip-id">iroko:assertion-lineage-specific</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Widely Attested</span>
+            <span class="chip-id">iroko:assertion-consensual</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Custodial Relationship</span>
-        <span class="scheme-count">9 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">CustodialRelationshipScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-custodial-community-held">
-          <div class="concept-label">Community-Held</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-community-held</div>
-          <p class="concept-def">custodial-community-held</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:CommunityEndorsementScheme</span>
+            <span class="sh-label">Community Endorsement Status</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
         </div>
-        <div class="concept-item" id="concept-custodial-institutional-disputed">
-          <div class="concept-label">Institutional Holding Disputed</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-institutional-disputed</div>
-          <p class="concept-def">custodial-institutional-disputed</p>
-        </div>
-        <div class="concept-item" id="concept-custodial-institutional-with-access">
-          <div class="concept-label">Institutional Holding with Community Access</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-institutional-with-access</div>
-          <p class="concept-def">custodial-institutional-with-access</p>
-        </div>
-        <div class="concept-item" id="concept-custodial-lineage-succession">
-          <div class="concept-label">Lineage Succession</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-lineage-succession</div>
-          <p class="concept-def">Object received through lineage or house transmission. Paired with sacredStatus-hereditary-custody on the object record.</p>
-        </div>
-        <div class="concept-item" id="concept-custodial-private-collection">
-          <div class="concept-label">Private Collection</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-private-collection</div>
-          <p class="concept-def">custodial-private-collection</p>
-        </div>
-        <div class="concept-item" id="concept-custodial-repatriation-active">
-          <div class="concept-label">Repatriation Claim Active</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-repatriation-active</div>
-          <p class="concept-def">custodial-repatriation-active</p>
-        </div>
-        <div class="concept-item" id="concept-custodial-shared-custody">
-          <div class="concept-label">Shared Custody</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-shared-custody</div>
-          <p class="concept-def">custodial-shared-custody</p>
-        </div>
-        <div class="concept-item" id="concept-custodial-under-negotiation">
-          <div class="concept-label">Under Negotiation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-under-negotiation</div>
-          <p class="concept-def">custodial-under-negotiation</p>
-        </div>
-        <div class="concept-item" id="concept-custodial-unknown-location">
-          <div class="concept-label">Unknown Location</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">custodial-unknown-location</div>
-          <p class="concept-def">custodial-unknown-location</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Community-Reviewed</span>
+            <span class="chip-id">iroko:endorsement-community-reviewed</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Contested</span>
+            <span class="chip-id">iroko:endorsement-contested</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Elder-Approved</span>
+            <span class="chip-id">iroko:endorsement-elder-approved</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Pending Review</span>
+            <span class="chip-id">iroko:endorsement-pending-review</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Unreviewed</span>
+            <span class="chip-id">iroko:endorsement-unreviewed</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Withdrawn</span>
+            <span class="chip-id">iroko:endorsement-withdrawn</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Epistemic Source Type</span>
-        <span class="scheme-count">10 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Classification of knowledge sources for epistemological transparency.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-epistemicType-archival-document">
-          <div class="concept-label">Archival Document</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-archival-document</div>
-          <p class="concept-def">epistemicType-archival-document</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:ConsentStatusScheme</span>
+            <span class="sh-label">Consent Status</span>
+          </div>
+          <span class="sh-count">5 concepts</span>
         </div>
-        <div class="concept-item" id="concept-epistemicType-claimed-revelation">
-          <div class="concept-label">Claimed Direct Revelation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-claimed-revelation</div>
-          <p class="concept-def">epistemicType-claimed-revelation</p>
-        </div>
-        <div class="concept-item" id="concept-epistemicType-continuous-oral-transmission">
-          <div class="concept-label">Continuous Oral Transmission</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-continuous-oral-transmission</div>
-          <p class="concept-def">epistemicType-continuous-oral-transmission</p>
-        </div>
-        <div class="concept-item" id="concept-epistemicType-fieldwork-recording">
-          <div class="concept-label">Fieldwork Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-fieldwork-recording</div>
-          <p class="concept-def">epistemicType-fieldwork-recording</p>
-        </div>
-        <div class="concept-item" id="concept-epistemicType-material-culture">
-          <div class="concept-label">Material Culture</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-material-culture</div>
-          <p class="concept-def">epistemicType-material-culture</p>
-        </div>
-        <div class="concept-item" id="concept-epistemicType-political-reinterpretation">
-          <div class="concept-label">Political Reinterpretation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-political-reinterpretation</div>
-          <p class="concept-def">epistemicType-political-reinterpretation</p>
-        </div>
-        <div class="concept-item" id="concept-epistemicType-published-ethnography">
-          <div class="concept-label">Published Ethnography</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-published-ethnography</div>
-          <p class="concept-def">epistemicType-published-ethnography</p>
-        </div>
-        <div class="concept-item" id="concept-epistemicType-reconstructed-from-text">
-          <div class="concept-label">Reconstructed from Text</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-reconstructed-from-text</div>
-          <p class="concept-def">epistemicType-reconstructed-from-text</p>
-        </div>
-        <div class="concept-item" id="concept-epistemicType-ritual-performance">
-          <div class="concept-label">Ritual Performance (Embodied)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-ritual-performance</div>
-          <p class="concept-def">epistemicType-ritual-performance</p>
-        </div>
-        <div class="concept-item" id="concept-epistemicType-speculative-reconstruction">
-          <div class="concept-label">Speculative Reconstruction</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">epistemicType-speculative-reconstruction</div>
-          <p class="concept-def">epistemicType-speculative-reconstruction</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Community-Authorized</span>
+            <span class="chip-id">iroko:consent-community-authorized</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Documented Consent</span>
+            <span class="chip-id">iroko:consent-documented</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Not Obtained</span>
+            <span class="chip-id">iroko:consent-not-obtained</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Unknown</span>
+            <span class="chip-id">iroko:consent-unknown</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Verbal (Undocumented)</span>
+            <span class="chip-id">iroko:consent-verbal-undocumented</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Media Type</span>
-        <span class="scheme-count">5 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">MediaTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-mediaType-audio">
-          <div class="concept-label">Audio Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-audio</div>
-          <p class="concept-def">mediaType-audio</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:CustodialRelationshipScheme</span>
+            <span class="sh-label">Custodial Relationship</span>
+          </div>
+          <span class="sh-count">9 concepts</span>
         </div>
-        <div class="concept-item" id="concept-mediaType-ephemera">
-          <div class="concept-label">Ephemera</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-ephemera</div>
-          <p class="concept-def">Printed or handwritten items of transient purpose: programs, invitations, ritual schedules, advertisements for religious events.</p>
-        </div>
-        <div class="concept-item" id="concept-mediaType-manuscript">
-          <div class="concept-label">Manuscript</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-manuscript</div>
-          <p class="concept-def">mediaType-manuscript</p>
-        </div>
-        <div class="concept-item" id="concept-mediaType-photograph">
-          <div class="concept-label">Photograph</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-photograph</div>
-          <p class="concept-def">mediaType-photograph</p>
-        </div>
-        <div class="concept-item" id="concept-mediaType-video">
-          <div class="concept-label">Video Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">mediaType-video</div>
-          <p class="concept-def">mediaType-video</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Recording Context</span>
-        <span class="scheme-count">4 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">RecordingContextScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-recordingContext-archival-transfer">
-          <div class="concept-label">Archival Transfer</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recordingContext-archival-transfer</div>
-          <p class="concept-def">recordingContext-archival-transfer</p>
-        </div>
-        <div class="concept-item" id="concept-recordingContext-ceremonial">
-          <div class="concept-label">Ceremonial Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recordingContext-ceremonial</div>
-          <p class="concept-def">recordingContext-ceremonial</p>
-        </div>
-        <div class="concept-item" id="concept-recordingContext-field">
-          <div class="concept-label">Field Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recordingContext-field</div>
-          <p class="concept-def">recordingContext-field</p>
-        </div>
-        <div class="concept-item" id="concept-recordingContext-studio">
-          <div class="concept-label">Studio Recording</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">recordingContext-studio</div>
-          <p class="concept-def">recordingContext-studio</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Community-Held</span>
+            <span class="chip-id">iroko:custodial-community-held</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Institutional Holding Disputed</span>
+            <span class="chip-id">iroko:custodial-institutional-disputed</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Institutional Holding with Community Access</span>
+            <span class="chip-id">iroko:custodial-institutional-with-access</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Lineage Succession</span>
+            <span class="chip-id">iroko:custodial-lineage-succession</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Private Collection</span>
+            <span class="chip-id">iroko:custodial-private-collection</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Repatriation Claim Active</span>
+            <span class="chip-id">iroko:custodial-repatriation-active</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Shared Custody</span>
+            <span class="chip-id">iroko:custodial-shared-custody</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Under Negotiation</span>
+            <span class="chip-id">iroko:custodial-under-negotiation</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Unknown Location</span>
+            <span class="chip-id">iroko:custodial-unknown-location</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Sacred Object Status</span>
-        <span class="scheme-count">9 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">SacredStatusScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-sacredStatus-awaiting-consecration">
-          <div class="concept-label">Awaiting Consecration</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-awaiting-consecration</div>
-          <p class="concept-def">sacredStatus-awaiting-consecration</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:EpistemicTypeScheme</span>
+            <span class="sh-label">Epistemic Source Type</span>
+          </div>
+          <span class="sh-count">10 concepts</span>
         </div>
-        <div class="concept-item" id="concept-sacredStatus-consecrated-active">
-          <div class="concept-label">Consecrated/Active Use</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-consecrated-active</div>
-          <p class="concept-def">sacredStatus-consecrated-active</p>
-        </div>
-        <div class="concept-item" id="concept-sacredStatus-contested-consecration">
-          <div class="concept-label">Contested Consecration</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-contested-consecration</div>
-          <p class="concept-def">sacredStatus-contested-consecration</p>
-        </div>
-        <div class="concept-item" id="concept-sacredStatus-decommissioned">
-          <div class="concept-label">Decommissioned</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-decommissioned</div>
-          <p class="concept-def">sacredStatus-decommissioned</p>
-        </div>
-        <div class="concept-item" id="concept-sacredStatus-hereditary-custody">
-          <div class="concept-label">Hereditary Custody</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-hereditary-custody</div>
-          <p class="concept-def">Object has passed to a new keeper through lineage or house succession and is actively maintained.</p>
-        </div>
-        <div class="concept-item" id="concept-sacredStatus-honored-rest">
-          <div class="concept-label">Honored Rest</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-honored-rest</div>
-          <p class="concept-def">Object retired from active ritual use but continues to be tended with respect. Distinguished from decommissioned — no formal ritual deactivation has occurred.</p>
-        </div>
-        <div class="concept-item" id="concept-sacredStatus-museum-specimen">
-          <div class="concept-label">Museum Specimen</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-museum-specimen</div>
-          <p class="concept-def">sacredStatus-museum-specimen</p>
-        </div>
-        <div class="concept-item" id="concept-sacredStatus-replica-teaching">
-          <div class="concept-label">Replica/Teaching Object</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-replica-teaching</div>
-          <p class="concept-def">sacredStatus-replica-teaching</p>
-        </div>
-        <div class="concept-item" id="concept-sacredStatus-unknown">
-          <div class="concept-label">Unknown Status</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">sacredStatus-unknown</div>
-          <p class="concept-def">sacredStatus-unknown</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Archival Document</span>
+            <span class="chip-id">iroko:epistemicType-archival-document</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Claimed Direct Revelation</span>
+            <span class="chip-id">iroko:epistemicType-claimed-revelation</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Continuous Oral Transmission</span>
+            <span class="chip-id">iroko:epistemicType-continuous-oral-transmission</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Fieldwork Recording</span>
+            <span class="chip-id">iroko:epistemicType-fieldwork-recording</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Material Culture</span>
+            <span class="chip-id">iroko:epistemicType-material-culture</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Political Reinterpretation</span>
+            <span class="chip-id">iroko:epistemicType-political-reinterpretation</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Published Ethnography</span>
+            <span class="chip-id">iroko:epistemicType-published-ethnography</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Reconstructed from Text</span>
+            <span class="chip-id">iroko:epistemicType-reconstructed-from-text</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ritual Performance (Embodied)</span>
+            <span class="chip-id">iroko:epistemicType-ritual-performance</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Speculative Reconstruction</span>
+            <span class="chip-id">iroko:epistemicType-speculative-reconstruction</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Tradition Classification</span>
-        <span class="scheme-count">39 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">Controlled vocabulary of Afro-Atlantic tradition classifications.</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-tradition-21-divisiones">
-          <div class="concept-label">21 Divisiones</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-21-divisiones</div>
-          <p class="concept-def">tradition-21-divisiones</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Dominican Vodu</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:MediaTypeScheme</span>
+            <span class="sh-label">Media Type</span>
+          </div>
+          <span class="sh-count">5 concepts</span>
         </div>
-        <div class="concept-item" id="concept-tradition-abakua">
-          <div class="concept-label">Abakua</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-abakua</div>
-          <p class="concept-def">Calabari/Efik-derived all-male secret society in Cuba.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-afro-indigenous">
-          <div class="concept-label">Afro-Indigenous</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-afro-indigenous</div>
-          <p class="concept-def">Traditions that blend African and Indigenous American religious elements.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-akan-derived">
-          <div class="concept-label">Akan-Derived</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-akan-derived</div>
-          <p class="concept-def">Traditions with primary roots in Akan religious culture.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-arara">
-          <div class="concept-label">Arara</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-arara</div>
-          <p class="concept-def">Fon/Ewe-derived tradition in Cuba.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-ausar-auset">
-          <div class="concept-label">Ausar Auset Society</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-ausar-auset</div>
-          <p class="concept-def">tradition-ausar-auset</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-bantu-derived">
-          <div class="concept-label">Bantu-Derived</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-bantu-derived</div>
-          <p class="concept-def">Traditions with primary roots in Bantu and Kongo religious culture.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-calabari">
-          <div class="concept-label">Calabari/Cross River</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-calabari</div>
-          <p class="concept-def">Traditions rooted in Efik, Ejagham, and Cross River peoples.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-candomble-angola">
-          <div class="concept-label">Candomble Angola</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-candomble-angola</div>
-          <p class="concept-def">tradition-candomble-angola</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-candomble-jeje">
-          <div class="concept-label">Candomble Jeje</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-candomble-jeje</div>
-          <p class="concept-def">tradition-candomble-jeje</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-candomble-ketu">
-          <div class="concept-label">Candomble Ketu</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-candomble-ketu</div>
-          <p class="concept-def">Yoruba-derived Candomble tradition in Brazil (Nago/Ketu nation).</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-ekpe">
-          <div class="concept-label">Ekpe</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-ekpe</div>
-          <p class="concept-def">tradition-ekpe</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Egbo</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-espiritismo">
-          <div class="concept-label">Espiritismo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-espiritismo</div>
-          <p class="concept-def">tradition-espiritismo</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-fon-ewe-derived">
-          <div class="concept-label">Fon/Ewe-Derived</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-fon-ewe-derived</div>
-          <p class="concept-def">Traditions with primary roots in Fon and Ewe religious culture from Dahomey.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-garifuna">
-          <div class="concept-label">Garifuna</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-garifuna</div>
-          <p class="concept-def">tradition-garifuna</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Dugu</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-haitian-vodou">
-          <div class="concept-label">Haitian Vodou</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-haitian-vodou</div>
-          <p class="concept-def">The creolized sacred tradition of Haiti, encompassing multiple nanchon (nations) with distinct African, Kongo, and New World origins.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-hoodoo">
-          <div class="concept-label">Hoodoo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-hoodoo</div>
-          <p class="concept-def">tradition-hoodoo</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Conjure, Rootwork</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-kemetic-orthodoxy">
-          <div class="concept-label">Kemetic Orthodoxy</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-kemetic-orthodoxy</div>
-          <p class="concept-def">tradition-kemetic-orthodoxy</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-kemetic">
-          <div class="concept-label">Kemetic/Revivalist</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-kemetic</div>
-          <p class="concept-def">Traditions reconstructing or reviving Ancient Egyptian (Kemetic) religious practice.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-kromanti">
-          <div class="concept-label">Kromanti</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-kromanti</div>
-          <p class="concept-def">tradition-kromanti</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-kumina">
-          <div class="concept-label">Kumina</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-kumina</div>
-          <p class="concept-def">tradition-kumina</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-lucumi">
-          <div class="concept-label">Lucumi</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-lucumi</div>
-          <p class="concept-def">Yoruba-derived tradition in Cuba.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Regla de Ocha, Santeria</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-new-orleans-voodoo">
-          <div class="concept-label">New Orleans Voodoo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-new-orleans-voodoo</div>
-          <p class="concept-def">The syncretic sacred tradition of New Orleans and Louisiana.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Louisiana Voodoo</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-obeah">
-          <div class="concept-label">Obeah</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-obeah</div>
-          <p class="concept-def">A category of spiritual practice found across the Anglophone Caribbean. Systematically criminalized under British colonial law; this history shapes the archival record significantly.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Obi, Obia</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);font-style:italic;margin-top:.2rem;">Obeah&#x27;s criminalization history means archival materials are often court records or colonial surveillance documents. Access governance and provenance tracking are especially important.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-oyotunji">
-          <div class="concept-label">Oyotunji</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-oyotunji</div>
-          <p class="concept-def">African-centered Yoruba revivalist tradition founded in South Carolina.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-palo-mayombe">
-          <div class="concept-label">Palo Mayombe</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-palo-mayombe</div>
-          <p class="concept-def">tradition-palo-mayombe</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-palo-monte">
-          <div class="concept-label">Palo Monte</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-palo-monte</div>
-          <p class="concept-def">Bantu-derived Kongo religious tradition in Cuba.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Regla de Congo</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-pan-african">
-          <div class="concept-label">Pan-African Political-Spiritual</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-pan-african</div>
-          <p class="concept-def">Traditions that integrate African religious identity with political liberation frameworks.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-quimbanda">
-          <div class="concept-label">Quimbanda</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-quimbanda</div>
-          <p class="concept-def">tradition-quimbanda</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-rastafari">
-          <div class="concept-label">Rastafari</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-rastafari</div>
-          <p class="concept-def">tradition-rastafari</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-syncretic">
-          <div class="concept-label">Syncretic/Creole</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-syncretic</div>
-          <p class="concept-def">Traditions that deliberately blend multiple African, European, or Indigenous religious streams.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-trinidad-orisha">
-          <div class="concept-label">Trinidad Orisha</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-trinidad-orisha</div>
-          <p class="concept-def">tradition-trinidad-orisha</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Shango Baptist</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-umbanda">
-          <div class="concept-label">Umbanda</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-umbanda</div>
-          <p class="concept-def">tradition-umbanda</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-vodou-ghede">
-          <div class="concept-label">Vodou Ghede</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-vodou-ghede</div>
-          <p class="concept-def">Ghede nanchon in Haitian Vodou. Governs death, sexuality, resurrection, and the boundary between living and dead.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Gede</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-vodou-petwo">
-          <div class="concept-label">Vodou Petwo</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-vodou-petwo</div>
-          <p class="concept-def">Petwo nanchon in Haitian Vodou. Hot, fierce rites with Kongo, New World maroon, and creole origins.</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Petro</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-vodou-rada">
-          <div class="concept-label">Vodou Rada</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-vodou-rada</div>
-          <p class="concept-def">Rada nanchon in Haitian Vodou. Cool, sweet rites with primary Fon/Dahomey origins.</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-winti">
-          <div class="concept-label">Winti</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-winti</div>
-          <p class="concept-def">tradition-winti</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-yoruba-continental">
-          <div class="concept-label">Yoruba (continental)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-yoruba-continental</div>
-          <p class="concept-def">tradition-yoruba-continental</p>
-          <p style="font-size:.75rem;color:var(--ink-soft);margin-top:.2rem;">Also known as: Nigerian Yoruba</p>
-        </div>
-        <div class="concept-item" id="concept-tradition-yoruba-derived">
-          <div class="concept-label">Yoruba-Derived</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">tradition-yoruba-derived</div>
-          <p class="concept-def">Traditions with primary roots in Yoruba religious culture.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Audio Recording</span>
+            <span class="chip-id">iroko:mediaType-audio</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ephemera</span>
+            <span class="chip-id">iroko:mediaType-ephemera</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Manuscript</span>
+            <span class="chip-id">iroko:mediaType-manuscript</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Photograph</span>
+            <span class="chip-id">iroko:mediaType-photograph</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Video Recording</span>
+            <span class="chip-id">iroko:mediaType-video</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:RecordingContextScheme</span>
+            <span class="sh-label">Recording Context</span>
+          </div>
+          <span class="sh-count">4 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Archival Transfer</span>
+            <span class="chip-id">iroko:recordingContext-archival-transfer</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ceremonial Recording</span>
+            <span class="chip-id">iroko:recordingContext-ceremonial</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Field Recording</span>
+            <span class="chip-id">iroko:recordingContext-field</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Studio Recording</span>
+            <span class="chip-id">iroko:recordingContext-studio</span>
+          </div>
+        </div>
+      </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:SacredStatusScheme</span>
+            <span class="sh-label">Sacred Object Status</span>
+          </div>
+          <span class="sh-count">9 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Awaiting Consecration</span>
+            <span class="chip-id">iroko:sacredStatus-awaiting-consecration</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Consecrated/Active Use</span>
+            <span class="chip-id">iroko:sacredStatus-consecrated-active</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Contested Consecration</span>
+            <span class="chip-id">iroko:sacredStatus-contested-consecration</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Decommissioned</span>
+            <span class="chip-id">iroko:sacredStatus-decommissioned</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Hereditary Custody</span>
+            <span class="chip-id">iroko:sacredStatus-hereditary-custody</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Honored Rest</span>
+            <span class="chip-id">iroko:sacredStatus-honored-rest</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Museum Specimen</span>
+            <span class="chip-id">iroko:sacredStatus-museum-specimen</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Replica/Teaching Object</span>
+            <span class="chip-id">iroko:sacredStatus-replica-teaching</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Unknown Status</span>
+            <span class="chip-id">iroko:sacredStatus-unknown</span>
+          </div>
+        </div>
+      </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:TraditionScheme</span>
+            <span class="sh-label">Tradition Classification</span>
+          </div>
+          <span class="sh-count">39 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">21 Divisiones</span>
+            <span class="chip-id">iroko:tradition-21-divisiones</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Abakua</span>
+            <span class="chip-id">iroko:tradition-abakua</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Afro-Indigenous</span>
+            <span class="chip-id">iroko:tradition-afro-indigenous</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Akan-Derived</span>
+            <span class="chip-id">iroko:tradition-akan-derived</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Arara</span>
+            <span class="chip-id">iroko:tradition-arara</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ausar Auset Society</span>
+            <span class="chip-id">iroko:tradition-ausar-auset</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Bantu-Derived</span>
+            <span class="chip-id">iroko:tradition-bantu-derived</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Calabari/Cross River</span>
+            <span class="chip-id">iroko:tradition-calabari</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Candomble Angola</span>
+            <span class="chip-id">iroko:tradition-candomble-angola</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Candomble Jeje</span>
+            <span class="chip-id">iroko:tradition-candomble-jeje</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Candomble Ketu</span>
+            <span class="chip-id">iroko:tradition-candomble-ketu</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ekpe</span>
+            <span class="chip-id">iroko:tradition-ekpe</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Espiritismo</span>
+            <span class="chip-id">iroko:tradition-espiritismo</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Fon/Ewe-Derived</span>
+            <span class="chip-id">iroko:tradition-fon-ewe-derived</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Garifuna</span>
+            <span class="chip-id">iroko:tradition-garifuna</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Haitian Vodou</span>
+            <span class="chip-id">iroko:tradition-haitian-vodou</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Hoodoo</span>
+            <span class="chip-id">iroko:tradition-hoodoo</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Kemetic Orthodoxy</span>
+            <span class="chip-id">iroko:tradition-kemetic-orthodoxy</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Kemetic/Revivalist</span>
+            <span class="chip-id">iroko:tradition-kemetic</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Kromanti</span>
+            <span class="chip-id">iroko:tradition-kromanti</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Kumina</span>
+            <span class="chip-id">iroko:tradition-kumina</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Lucumi</span>
+            <span class="chip-id">iroko:tradition-lucumi</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">New Orleans Voodoo</span>
+            <span class="chip-id">iroko:tradition-new-orleans-voodoo</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Obeah</span>
+            <span class="chip-id">iroko:tradition-obeah</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Oyotunji</span>
+            <span class="chip-id">iroko:tradition-oyotunji</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Palo Mayombe</span>
+            <span class="chip-id">iroko:tradition-palo-mayombe</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Palo Monte</span>
+            <span class="chip-id">iroko:tradition-palo-monte</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Pan-African Political-Spiritual</span>
+            <span class="chip-id">iroko:tradition-pan-african</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Quimbanda</span>
+            <span class="chip-id">iroko:tradition-quimbanda</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Rastafari</span>
+            <span class="chip-id">iroko:tradition-rastafari</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Syncretic/Creole</span>
+            <span class="chip-id">iroko:tradition-syncretic</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Trinidad Orisha</span>
+            <span class="chip-id">iroko:tradition-trinidad-orisha</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Umbanda</span>
+            <span class="chip-id">iroko:tradition-umbanda</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Vodou Ghede</span>
+            <span class="chip-id">iroko:tradition-vodou-ghede</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Vodou Petwo</span>
+            <span class="chip-id">iroko:tradition-vodou-petwo</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Vodou Rada</span>
+            <span class="chip-id">iroko:tradition-vodou-rada</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Winti</span>
+            <span class="chip-id">iroko:tradition-winti</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Yoruba (continental)</span>
+            <span class="chip-id">iroko:tradition-yoruba-continental</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Yoruba-Derived</span>
+            <span class="chip-id">iroko:tradition-yoruba-derived</span>
+          </div>
+        </div>
+      </div>
+    </main><!-- /module-main -->
+
+    <!-- SIDEBAR -->
+    <aside class="module-sidebar">
+
+      <div class="share-row">
+        <a class="share-btn" href="mailto:?subject=Iroko%20Framework%20%E2%80%94%20Core%20Vocabulary&amp;body=https://ontology.irokosociety.org/vocab/iroko-core.html" title="Share via email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          Email
+        </a>
+        <button class="share-btn" onclick="window.print()" title="Print">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/></svg>
+          Print
+        </button>
+        <button class="share-btn" id="link-btn" onclick="copyLink(this)" title="Copy link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Copy Link
+        </button>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="sp-head">
+          <span class="sp-title" id="sb-title">Connected Modules</span>
+          <span class="sp-active-uri" id="sb-active-uri"></span>
+        </div>
+        <div class="sp-body sidebar-dynamic" id="sb-body">
+          <div id="sb-module-view">
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-narrative"></span>
+                <span class="cc-name">Narrative Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:supportsAssertion</span>
+            </div>
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-botanical"></span>
+                <span class="cc-name">Ewé Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:photographicVoucher</span>
+            </div>
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-divination"></span>
+                <span class="cc-name">Marca Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:verseSource</span>
+            </div>
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-other"></span>
+                <span class="cc-name">Sankofa Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:evidentiarySources</span>
+            </div>
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-epistemic"></span>
+                <span class="cc-name">Epistemic Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:constraintSanctionedBy</span>
+            </div>
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-agency"></span>
+                <span class="cc-name">Agency Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:hasOutcome</span>
+            </div>
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-lineage"></span>
+                <span class="cc-name">Ilé Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:entityCrowned</span>
+            </div>
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-language"></span>
+                <span class="cc-name">Qal Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:secretNameHolder</span>
+            </div>
+            <div class="conn-card">
+              <div class="cc-row"><span class="cc-dot dot-graphic"></span>
+                <span class="cc-name">Vèvè Module</span>
+                <span class="cc-dir" style="margin-left:auto;">referenced by</span>
+              </div>
+              <span class="cc-via">iroko:documentationRecord</span>
+            </div>
+          </div>
+          <div id="sb-class-view" style="display:none;">
+            <div id="sb-active-card"></div>
+            <div id="sb-class-conns"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-cite">
+        <div class="cite-head">Cite the Core Vocabulary</div>
+        <div class="cite-tabs">
+          <button class="cite-tab active" onclick="setCiteFormat('plain',this)">Plain</button>
+          <button class="cite-tab" onclick="setCiteFormat('bibtex',this)">BibTeX</button>
+          <button class="cite-tab" onclick="setCiteFormat('ris',this)">RIS</button>
+        </div>
+        <div class="cite-text" id="cite-display">
+          Iroko Historical Society. (2026). <em>Iroko Framework: Core Vocabulary</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-core.html. CC0 1.0 Universal.
+        </div>
+        <button class="btn-cite-copy" id="module-cite-btn" onclick="copyModuleCite()">Copy Citation</button>
+        <div class="format-links">
+          <a class="fmt-link" href="iroko-core.ttl">Turtle (.ttl) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-core.jsonld">JSON-LD (.jsonld) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-core.rdf">RDF/XML (.rdf) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-core.nt">N-Triples (.nt) <span class="fmt-arrow">&#8595;</span></a>
+        </div>
+      </div>
+
+    </aside>
+  </div><!-- /module-layout -->
 
   <footer class="site-footer">
     <div class="footer-left">
@@ -1330,6 +1019,177 @@
     </div>
   </footer>
 
-</div>
+</div><!-- /page-wrap -->
+
+<script>
+
+// ── JS data injected by generator ──────────────────────────────────────────
+const MODULE_STEM = "iroko-core";
+const MOD_TITLE_SHORT = "Core Vocabulary";
+const CLASSES = {"AccessPolicy": {"uri": "iroko:AccessPolicy", "label": "Access Policy", "definition": "A named policy governing disclosure, access, or use of a resource, assertion, or collection. Policies may be conditioned on temporal variation, authority authorization, or community mandate. Used to attach institutional policy nodes to records and assertions. Full governance via iroko:accessLevel (per-property), iroko:EpistemicConstraint (per iroko-epistemic.ttl), and iroko:StewardshipMandate (per iroko-agency.ttl).", "outgoing": [{"uri": "iroko:policyCondition", "label": "policy condition", "type": "data", "range": "langString", "access": "comm", "def": "Text description of the conditions under which this policy applies. May reference initiation levels, authority authorizations, temporal variations, or community mandates."}, {"uri": "iroko:policyLabel", "label": "policy label", "type": "data", "range": "langString", "access": "pub", "def": "Human-readable name or identifier for this access policy."}], "incoming": [{"uri": "iroko:governedBy", "label": "governed by", "type": "obj", "access": "pub", "def": "Links a resource or assertion to an AccessPolicy that governs it.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Core Vocabulary", "stem": "iroko-core"}], "cross": []}, "Assertion": {"uri": "iroko:Assertion", "label": "Assertion", "definition": "A first-class statement node representing a single claim about any subject in the framework. Attach authority, access level, epistemic type, contested status, and fieldwork provenance at the property level. iroko:RelationshipAssertion is a subclass for relationship-specific claims. All Assertion instances are semantically governed — they do not imply factual truth, only documented assertion.", "outgoing": [{"uri": "iroko:assertionNote", "label": "assertion note", "type": "data", "range": "langString", "access": "comm", "def": "Free-text note explaining the basis, source, or dispute surrounding the claim."}, {"uri": "iroko:assertionObject", "label": "assertion object", "type": "obj", "range": "—", "access": "pub", "def": "The entity that is the object of the claim. Named assertionObject (not object) to avoid shadowing rdf:object. Range is intentionally untyped — the object of an assertion may be any resource inside or outside the framework, including external URIs, foaf:Person instances, geographic locations, or framework entities. Constraining the range would break the generality of the reification model."}, {"uri": "iroko:assertionPredicate", "label": "assertion predicate", "type": "obj", "range": "—", "access": "pub", "def": "The property or relationship type being asserted in an n-ary assertion node. Named assertionPredicate (not predicate) to avoid shadowing rdf:predicate."}, {"uri": "iroko:assertionStatus", "label": "assertion status", "type": "obj", "range": "Concept", "access": "pub", "def": "Whether the claim is consensual, lineage-specific, or contested. Range: iroko:AssertionStatusScheme."}, {"uri": "iroko:assertionSubject", "label": "assertion subject", "type": "obj", "range": "—", "access": "pub", "def": "The entity that is the subject of the claim. Named assertionSubject (not subject) to avoid shadowing rdf:subject."}, {"uri": "iroko:authorizedBy", "label": "authorized by", "type": "obj", "range": "Ritual Authority", "access": "pub", "def": "Links an Assertion to the RitualAuthority that authorizes it. An assertion without this property is undeclared as to authority — it may still carry other provenance (fieldwork event, epistemic type)."}, {"uri": "iroko:contestsAuthority", "label": "contests authority", "type": "obj", "range": "Contested Authority", "access": "comm", "def": "Links a RitualAuthority, SacredEntity, or Assertion to a ContestedAuthority instance it generates or references. A RitualAuthority contests another when it challenges the legitimacy or historical continuity of that authority's claims. A SacredEntity may have its governing authority contested across lineages. An Assertion may formally contest an authority's basis."}, {"uri": "iroko:recordedInEvent", "label": "recorded in event", "type": "obj", "range": "Fieldwork Event", "access": "pub", "def": "Links an Assertion to the FieldworkEvent during which it was captured."}, {"uri": "iroko:recordedOn", "label": "recorded on", "type": "data", "range": "date", "access": "pub", "def": "Date on which the assertion was captured or recorded."}], "incoming": [{"uri": "iroko:supportsAssertion", "label": "supports assertion", "type": "obj", "access": "pub", "def": "Links a NarrativeVariant to iroko:Assertion nodes it supports or motivates. The narrative is the evidentiary basis for the assertion.", "domain": "NarrativeVariant", "from": "iroko:NarrativeVariant", "fromLabel": "NarrativeVariant", "module": "Narrative Module", "stem": "iroko-narrative"}], "cross": [{"name": "Narrative Module", "dotCls": "dot-narrative", "via": "iroko:supportsAssertion", "dir": "referenced by"}]}, "Commentary": {"uri": "iroko:Commentary", "label": "Commentary", "definition": "A commentary, gloss, or interpretive note attached to any resource in the framework — a narrative, an assertion, a sacred entity, a text segment. Keeps interpretive voice distinct from primary narrative content.", "outgoing": [{"uri": "iroko:commentaryOn", "label": "commentary on", "type": "obj", "range": "—", "access": "pub", "def": "Links a Commentary to the resource it annotates. Range is intentionally open — commentary may attach to a Narrative, NarrativeVariant, TextSegment, Assertion, SacredEntity, or any other resource."}], "incoming": [], "cross": []}, "ContestedAuthority": {"uri": "iroko:ContestedAuthority", "label": "Contested Authority", "definition": "An authority (religious title, position, or role) whose legitimacy or historical continuity is disputed across lineages. Example: Iyanifa (women Ifa priests) — some lineages affirm historical continuity, others claim modern innovation.", "outgoing": [{"uri": "iroko:contestedAuthorityOf", "label": "contested authority of", "type": "obj", "range": "Ritual Authority", "access": "comm", "def": "Links a ContestedAuthority back to the RitualAuthority whose legitimacy is in question. Inverse of iroko:contestsAuthority. Enables bidirectional traversal: from the contesting party to the ContestedAuthority record, and from the ContestedAuthority record back to the authority being contested."}], "incoming": [{"uri": "iroko:contestsAuthority", "label": "contests authority", "type": "obj", "access": "comm", "def": "Links a RitualAuthority, SacredEntity, or Assertion to a ContestedAuthority instance it generates or references. A RitualAuthority contests another when it challenges the legitimacy or historical continuity of that authority's claims. A SacredEntity may have its governing authority contested across lineages. An Assertion may formally contest an authority's basis.", "domain": "RitualAuthority | SacredEntity | Assertion", "from": "iroko:RitualAuthority | SacredEntity | Assertion", "fromLabel": "RitualAuthority | SacredEntity | Assertion", "module": "Core Vocabulary", "stem": "iroko-core"}], "cross": []}, "DocumentaryEvidence": {"uri": "iroko:DocumentaryEvidence", "label": "Documentary Evidence", "definition": "Umbrella class for archival materials (photographs, manuscripts, audio recordings, herbarium specimens) that document sacred knowledge practices. Maps to schema:CreativeWork in RDF serialization.", "outgoing": [{"uri": "iroko:depicts", "label": "depicts", "type": "obj", "range": "Sacred Entity", "access": "pub", "def": "Links archival materials to the entities they depict. Range: iroko:SacredEntity — covers plants, spirits, ceremonies, practitioners, instruments, and all other framework entities. Geographic locations not yet modeled as SacredEntity subclasses may be referenced via rdfs:label or external URI."}, {"uri": "iroko:documents", "label": "documents", "type": "obj", "range": "Sacred Entity", "access": "pub", "def": "Links archival materials to practices or events they document. Range: iroko:SacredEntity — covers ceremonies, ritual events, plants, spirits, lineages, and all other framework entities. Parallel treatment with iroko:depicts: both are documentary links from archival materials to framework entities."}, {"uri": "iroko:documentsSpecimen", "label": "documents specimen", "type": "obj", "range": "Sacred Specimen", "access": "pub", "def": "Links a DocumentaryEvidence record to a SacredSpecimen it documents. A photograph, manuscript, or archival record may document one or more sacred objects. The existence of documentation is public-unrestricted; the ritual details of the object are governed by iroko:sacredStatus on the SacredSpecimen instance."}], "incoming": [{"uri": "iroko:photographicVoucher", "label": "photographic voucher", "type": "obj", "access": "pub", "def": "Link to photographic documentation of this plant specimen. Aligns with dwc:associatedMedia (see iroko-align-dwc).", "domain": "Plant", "from": "iroko:Plant", "fromLabel": "Plant", "module": "Ewé Module", "stem": "iroko-ewe"}, {"uri": "iroko:verseSource", "label": "verse source", "type": "obj", "access": "comm", "def": "Provenance of this verse record: oral transmission, field recording, published collection. Range: iroko:DocumentaryEvidence.", "domain": "Divination Verse", "from": "iroko:Divination Verse", "fromLabel": "Divination Verse", "module": "Marca Module", "stem": "iroko-marca"}, {"uri": "iroko:evidentiarySources", "label": "evidentiary sources", "type": "obj", "access": "pub", "def": "The documentary, scholarly, or oral sources used as the basis for reconstruction. Range: iroko:DocumentaryEvidence.", "domain": "Reconstructed Practice", "from": "iroko:Reconstructed Practice", "fromLabel": "Reconstructed Practice", "module": "Sankofa Module", "stem": "iroko-sankofa"}], "cross": [{"name": "Ewé Module", "dotCls": "dot-botanical", "via": "iroko:photographicVoucher", "dir": "referenced by"}, {"name": "Marca Module", "dotCls": "dot-divination", "via": "iroko:verseSource", "dir": "referenced by"}, {"name": "Sankofa Module", "dotCls": "dot-other", "via": "iroko:evidentiarySources", "dir": "referenced by"}]}, "FieldworkEvent": {"uri": "iroko:FieldworkEvent", "label": "Fieldwork Event", "definition": "A bounded fieldwork session or interview event during which assertions, narratives, or recordings were captured. Connects knowledge claims to their fieldwork provenance. rdfs:subClassOf prov:Activity asserted in iroko-align-prov.ttl.", "outgoing": [{"uri": "iroko:eventDate", "label": "event date", "type": "data", "range": "date", "access": "pub", "def": "Date or date range of the fieldwork event."}, {"uri": "iroko:eventLocation", "label": "event location", "type": "data", "range": "langString", "access": "pub", "def": "Location where the fieldwork event took place. Language-tagged string; may be general (city/country) for access-controlled records."}, {"uri": "iroko:eventProtocol", "label": "event protocol", "type": "data", "range": "langString", "access": "comm", "def": "Notes on consent, permissions, recording protocols, and any community authorization obtained for this fieldwork event."}, {"uri": "iroko:fieldworker", "label": "fieldworker", "type": "obj", "range": "Person", "access": "comm", "def": "Person who conducted the fieldwork. Range: foaf:Person or prov:Agent."}, {"uri": "iroko:specimenEncounteredIn", "label": "specimen encountered in", "type": "obj", "range": "Sacred Specimen", "access": "init", "def": "Links a FieldworkEvent to a SacredSpecimen encountered or documented during that session. Access: initiated-only — the association between a fieldwork event and a specific sacred object record discloses custody, location, and lineage information appropriate only for initiated practitioners."}], "incoming": [{"uri": "iroko:recordedInEvent", "label": "recorded in event", "type": "obj", "access": "pub", "def": "Links an Assertion to the FieldworkEvent during which it was captured.", "domain": "Assertion", "from": "iroko:Assertion", "fromLabel": "Assertion", "module": "Core Vocabulary", "stem": "iroko-core"}, {"uri": "iroko:variantEvent", "label": "variant event", "type": "obj", "access": "pub", "def": "The FieldworkEvent or ritual event that captured or generated this narrative variant.", "domain": "NarrativeVariant", "from": "iroko:NarrativeVariant", "fromLabel": "NarrativeVariant", "module": "Narrative Module", "stem": "iroko-narrative"}], "cross": [{"name": "Narrative Module", "dotCls": "dot-narrative", "via": "iroko:variantEvent", "dir": "referenced by"}]}, "LineageKnowledgeGraph": {"uri": "iroko:LineageKnowledgeGraph", "label": "Lineage Knowledge Graph", "definition": "A named graph representing one lineage's perspective on contested knowledge. Enables multiple community-endorsed positions to coexist without requiring resolution. Core mechanism for postcustodial knowledge governance.", "outgoing": [], "incoming": [], "cross": []}, "Narrative": {"uri": "iroko:Narrative", "label": "Narrative", "definition": "A narrative cluster that may have multiple variants across place, time, authority, and lineage. First-class in Core so any domain module (Marca for odu essays, Ngoma for lyric traditions, Ékpè for origin stories) can attach narratives without importing the full narrative module.", "outgoing": [{"uri": "iroko:hasVariant", "label": "has variant", "type": "obj", "range": "Narrative Variant", "access": "pub", "def": "Links a Narrative to one of its NarrativeVariants."}], "incoming": [], "cross": []}, "NarrativeVariant": {"uri": "iroko:NarrativeVariant", "label": "Narrative Variant", "definition": "A specific telling, transcript, or rendering of a narrative within a particular context, lineage, or temporal frame. The unit that carries text, language tag, authority scope, and access control.", "outgoing": [], "incoming": [{"uri": "iroko:hasVariant", "label": "has variant", "type": "obj", "access": "pub", "def": "Links a Narrative to one of its NarrativeVariants.", "domain": "Narrative", "from": "iroko:Narrative", "fromLabel": "Narrative", "module": "Core Vocabulary", "stem": "iroko-core"}, {"uri": "iroko:variantRelation", "label": "variant relation", "type": "obj", "access": "pub", "def": "Typed relationship between two NarrativeVariants. Range: iroko:VariantRelationTypeScheme concepts.", "domain": "NarrativeVariant", "from": "iroko:NarrativeVariant", "fromLabel": "NarrativeVariant", "module": "Narrative Module", "stem": "iroko-narrative"}], "cross": [{"name": "Narrative Module", "dotCls": "dot-narrative", "via": "iroko:variantRelation", "dir": "referenced by"}]}, "RelationshipAssertion": {"uri": "iroko:RelationshipAssertion", "label": "Relationship Assertion", "definition": "A structured reification node recording a claimed relationship between two entities. Extends iroko:Assertion with relationship-specific slots: relationType, assertionScope, assertionLineage. Inherits governance properties (authorizedBy, recordedInEvent, assertionStatus, accessLevel) from the Assertion superclass.", "outgoing": [{"uri": "iroko:assertionLineage", "label": "assertion lineage", "type": "data", "range": "langString", "access": "pub", "def": "The specific lineage, house, or community within which this assertion holds."}, {"uri": "iroko:assertionScope", "label": "assertion scope", "type": "data", "range": "langString", "access": "comm", "def": "Restricts the claim to a specific camino, aspect, or manifestation."}, {"uri": "iroko:relationType", "label": "relation type", "type": "obj", "range": "Concept", "access": "pub", "def": "The semantic type of relationship being asserted."}], "incoming": [{"uri": "iroko:hasRelationshipAssertion", "label": "has relationship assertion", "type": "obj", "access": "pub", "def": "hasRelationshipAssertion", "domain": "Sacred Entity", "from": "iroko:Sacred Entity", "fromLabel": "Sacred Entity", "module": "Core Vocabulary", "stem": "iroko-core"}], "cross": []}, "RitualAuthority": {"uri": "iroko:RitualAuthority", "label": "Ritual Authority", "definition": "A governance entity capable of authorizing assertion-level claims. May represent a lineage, cabildo, religious house, elder council, or individual office-holder. This is the minimal Core stub — full modeling of jurisdiction, basis, and recognition is in iroko-authority.ttl. Distinguished from ile:ReligiousOffice, which models the specific title instance held by an individual practitioner.", "outgoing": [{"uri": "iroko:contestsAuthority", "label": "contests authority", "type": "obj", "range": "Contested Authority", "access": "comm", "def": "Links a RitualAuthority, SacredEntity, or Assertion to a ContestedAuthority instance it generates or references. A RitualAuthority contests another when it challenges the legitimacy or historical continuity of that authority's claims. A SacredEntity may have its governing authority contested across lineages. An Assertion may formally contest an authority's basis."}], "incoming": [{"uri": "iroko:authorizedBy", "label": "authorized by", "type": "obj", "access": "pub", "def": "Links an Assertion to the RitualAuthority that authorizes it. An assertion without this property is undeclared as to authority — it may still carry other provenance (fieldwork event, epistemic type).", "domain": "Assertion", "from": "iroko:Assertion", "fromLabel": "Assertion", "module": "Core Vocabulary", "stem": "iroko-core"}, {"uri": "iroko:contestedAuthorityOf", "label": "contested authority of", "type": "obj", "access": "comm", "def": "Links a ContestedAuthority back to the RitualAuthority whose legitimacy is in question. Inverse of iroko:contestsAuthority. Enables bidirectional traversal: from the contesting party to the ContestedAuthority record, and from the ContestedAuthority record back to the authority being contested.", "domain": "Contested Authority", "from": "iroko:Contested Authority", "fromLabel": "Contested Authority", "module": "Core Vocabulary", "stem": "iroko-core"}, {"uri": "iroko:constraintSanctionedBy", "label": "constraint sanctioned by", "type": "obj", "access": "pub", "def": "Links a SanctionedDisclosure to the iroko:Authority that must sanction the disclosure.", "domain": "Sanctioned Disclosure", "from": "iroko:Sanctioned Disclosure", "fromLabel": "Sanctioned Disclosure", "module": "Epistemic Module", "stem": "iroko-epistemic"}, {"uri": "iroko:variantAuthority", "label": "variant authority", "type": "obj", "access": "comm", "def": "The Authority context recognized for this variant. Which lineage or house endorses this telling as authoritative.", "domain": "NarrativeVariant", "from": "iroko:NarrativeVariant", "fromLabel": "NarrativeVariant", "module": "Narrative Module", "stem": "iroko-narrative"}], "cross": [{"name": "Epistemic Module", "dotCls": "dot-epistemic", "via": "iroko:constraintSanctionedBy", "dir": "referenced by"}, {"name": "Narrative Module", "dotCls": "dot-narrative", "via": "iroko:variantAuthority", "dir": "referenced by"}]}, "SacredEntity": {"uri": "iroko:SacredEntity", "label": "Sacred Entity", "definition": "Top-level class for any tradition-specific concept within the Iroko Framework. All module-specific classes (Plant, SpiritualEntity, RitualProcess, etc.) are subclasses of this.", "outgoing": [{"uri": "iroko:communityEndorsement", "label": "community endorsement", "type": "obj", "range": "Concept", "access": "pub", "def": "Status of community review and approval. Values from iroko:CommunityEndorsementScheme. Flips institutional authority model by centering community validation."}, {"uri": "iroko:competingClaim", "label": "competing claim", "type": "obj", "range": "Entity", "access": "comm", "def": "Links to a prov:Entity representing an alternative position on this contested knowledge."}, {"uri": "iroko:contestsAuthority", "label": "contests authority", "type": "obj", "range": "Contested Authority", "access": "comm", "def": "Links a RitualAuthority, SacredEntity, or Assertion to a ContestedAuthority instance it generates or references. A RitualAuthority contests another when it challenges the legitimacy or historical continuity of that authority's claims. A SacredEntity may have its governing authority contested across lineages. An Assertion may formally contest an authority's basis."}, {"uri": "iroko:fieldworkProvenance", "label": "fieldwork provenance", "type": "data", "range": "string", "access": "comm", "def": "Details of fieldwork context if this knowledge derives from direct ethnographic observation."}, {"uri": "iroko:hasRelationshipAssertion", "label": "has relationship assertion", "type": "obj", "range": "Relationship Assertion", "access": "pub", "def": "hasRelationshipAssertion"}, {"uri": "iroko:oralTransmissionChain", "label": "oral transmission chain", "type": "data", "range": "string", "access": "comm", "def": "Documented chain of oral transmission for this knowledge. Example: Elder A (Havana) to Elder B (Matanzas) to Informant C (2018)."}, {"uri": "iroko:tradition", "label": "tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic tradition to which this entity belongs. Values from controlled vocabulary: iroko:tradition-lucumi, iroko:tradition-candomble-ketu, iroko:tradition-vodou-rada, etc."}], "incoming": [{"uri": "iroko:hasOutcome", "label": "has outcome", "type": "obj", "access": "pub", "def": "Links an event or action to an outcome entity — a RelationshipAssertion, RitualConsequence, RefusalEvent, AccessPolicy, or other outcome record. Range: iroko:SacredEntity — all current and anticipated outcome types (Assertion, RitualConsequence, RefusalEvent) are subclasses of SacredEntity, enabling traversal without locking in a union declaration.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Agency Module", "stem": "iroko-agency"}, {"uri": "iroko:depicts", "label": "depicts", "type": "obj", "access": "pub", "def": "Links archival materials to the entities they depict. Range: iroko:SacredEntity — covers plants, spirits, ceremonies, practitioners, instruments, and all other framework entities. Geographic locations not yet modeled as SacredEntity subclasses may be referenced via rdfs:label or external URI.", "domain": "Documentary Evidence", "from": "iroko:Documentary Evidence", "fromLabel": "Documentary Evidence", "module": "Core Vocabulary", "stem": "iroko-core"}, {"uri": "iroko:documents", "label": "documents", "type": "obj", "access": "pub", "def": "Links archival materials to practices or events they document. Range: iroko:SacredEntity — covers ceremonies, ritual events, plants, spirits, lineages, and all other framework entities. Parallel treatment with iroko:depicts: both are documentary links from archival materials to framework entities.", "domain": "Documentary Evidence", "from": "iroko:Documentary Evidence", "fromLabel": "Documentary Evidence", "module": "Core Vocabulary", "stem": "iroko-core"}, {"uri": "iroko:entityCrowned", "label": "entity crowned", "type": "obj", "access": "init", "def": "For head initiations: the orisha/entity seated on the initiate's head. Range: nkisi:SpiritualEntity.", "domain": "Initiation Event", "from": "iroko:Initiation Event", "fromLabel": "Initiation Event", "module": "Ilé Module", "stem": "iroko-ile"}, {"uri": "iroko:aboutEntity", "label": "about entity", "type": "obj", "access": "pub", "def": "Links a narrative or variant to entities it concerns — a spirit, plant, place, ritual, person, or any other resource. Range: iroko:SacredEntity — the top-level class for all tradition-specific concepts in the framework.", "domain": "NarrativeVariant", "from": "iroko:NarrativeVariant", "fromLabel": "NarrativeVariant", "module": "Narrative Module", "stem": "iroko-narrative"}, {"uri": "iroko:secretNameHolder", "label": "name holder", "type": "obj", "access": "none", "def": "The entity (spiritual or human) who holds this secret name. Range: iroko:SpiritualEntity or foaf:Person. No-access.", "domain": "Secret Name", "from": "iroko:Secret Name", "fromLabel": "Secret Name", "module": "Qal Module", "stem": "iroko-qal"}], "cross": [{"name": "Agency Module", "dotCls": "dot-agency", "via": "iroko:hasOutcome", "dir": "referenced by"}, {"name": "Ilé Module", "dotCls": "dot-lineage", "via": "iroko:entityCrowned", "dir": "referenced by"}, {"name": "Narrative Module", "dotCls": "dot-narrative", "via": "iroko:aboutEntity", "dir": "referenced by"}, {"name": "Qal Module", "dotCls": "dot-language", "via": "iroko:secretNameHolder", "dir": "referenced by"}]}, "SacredMedia": {"uri": "iroko:SacredMedia", "label": "Sacred Media", "definition": "Audio, photographic, or video records of sacred knowledge, ceremonies, instruments, or practitioners. Extends DocumentaryEvidence with media-specific metadata including format, instrumentation, consent status, and depicted entities.", "outgoing": [{"uri": "iroko:communityReleaseApproval", "label": "community release approval", "type": "data", "range": "boolean", "access": "comm", "def": "communityReleaseApproval"}, {"uri": "iroko:depictedCeremony", "label": "depicted ceremony", "type": "obj", "range": "RitualProcess", "access": "comm", "def": "depictedCeremony"}, {"uri": "iroko:depictedEntity", "label": "depicted entity", "type": "obj", "range": "—", "access": "pub", "def": "depictedEntity"}, {"uri": "iroko:mediaDuration", "label": "duration", "type": "data", "range": "duration", "access": "pub", "def": "mediaDuration"}, {"uri": "iroko:instrumentation", "label": "instrumentation", "type": "data", "range": "langString", "access": "pub", "def": "instrumentation"}, {"uri": "iroko:languageOfPerformance", "label": "language of performance", "type": "data", "range": "string", "access": "pub", "def": "languageOfPerformance"}, {"uri": "iroko:mediaFormat", "label": "media format", "type": "data", "range": "string", "access": "pub", "def": "Technical format of the file. Example: FLAC, WAV, TIFF, JPEG, MP4."}, {"uri": "iroko:mediaType", "label": "media type", "type": "obj", "range": "Concept", "access": "pub", "def": "mediaType"}, {"uri": "iroko:recordingContext", "label": "recording context", "type": "obj", "range": "Concept", "access": "pub", "def": "recordingContext"}, {"uri": "iroko:recordingDate", "label": "recording date", "type": "data", "range": "date", "access": "pub", "def": "recordingDate"}, {"uri": "iroko:recordingLocation", "label": "recording location", "type": "data", "range": "langString", "access": "comm", "def": "recordingLocation"}, {"uri": "iroko:recordist", "label": "recordist", "type": "data", "range": "langString", "access": "comm", "def": "recordist"}, {"uri": "iroko:subjectConsentStatus", "label": "subject consent status", "type": "obj", "range": "Concept", "access": "comm", "def": "subjectConsentStatus"}], "incoming": [{"uri": "iroko:documentationRecord", "label": "documentation record", "type": "obj", "access": "comm", "def": "Photographic, rubbing, or tracing record of this sign instance. Range: iroko:SacredMedia. Community-restricted: documentation should not enable replication.", "domain": "Sign Instance", "from": "iroko:Sign Instance", "fromLabel": "Sign Instance", "module": "Vèvè Module", "stem": "iroko-veve"}], "cross": [{"name": "Vèvè Module", "dotCls": "dot-graphic", "via": "iroko:documentationRecord", "dir": "referenced by"}]}, "SacredSpecimen": {"uri": "iroko:SacredSpecimen", "label": "Sacred Specimen", "definition": "Distinguishes objects that maintain active sacred status (consecrated, in ritual use) from decommissioned objects or museum specimens. Used to track the ritual life cycle of material culture.", "outgoing": [{"uri": "iroko:custodialRelationship", "label": "custodial relationship", "type": "obj", "range": "Concept", "access": "pub", "def": "Nature of custody for sacred objects. Values from iroko:CustodialRelationshipScheme."}, {"uri": "iroko:sacredStatus", "label": "sacred status", "type": "obj", "range": "Concept", "access": "pub", "def": "Current ritual status of an object. Values from iroko:SacredStatusScheme."}], "incoming": [{"uri": "iroko:documentsSpecimen", "label": "documents specimen", "type": "obj", "access": "pub", "def": "Links a DocumentaryEvidence record to a SacredSpecimen it documents. A photograph, manuscript, or archival record may document one or more sacred objects. The existence of documentation is public-unrestricted; the ritual details of the object are governed by iroko:sacredStatus on the SacredSpecimen instance.", "domain": "Documentary Evidence", "from": "iroko:Documentary Evidence", "fromLabel": "Documentary Evidence", "module": "Core Vocabulary", "stem": "iroko-core"}, {"uri": "iroko:specimenEncounteredIn", "label": "specimen encountered in", "type": "obj", "access": "init", "def": "Links a FieldworkEvent to a SacredSpecimen encountered or documented during that session. Access: initiated-only — the association between a fieldwork event and a specific sacred object record discloses custody, location, and lineage information appropriate only for initiated practitioners.", "domain": "Fieldwork Event", "from": "iroko:Fieldwork Event", "fromLabel": "Fieldwork Event", "module": "Core Vocabulary", "stem": "iroko-core"}], "cross": []}, "Sign": {"uri": "iroko:Sign", "label": "Sign", "definition": "A named unit within a sacred sign system — divination sign, graphic symbol, rhythmic pattern identifier, or similar structured signifier. Superclass of tradition-specific sign types such as marca:DivinationSign and veve:GraphicSign.", "outgoing": [{"uri": "iroko:signAlternateName", "label": "sign alternate name", "type": "data", "range": "—", "access": "comm", "def": "Alternative or regional names for this sign across traditions or lineage variants. Language-tagged."}, {"uri": "iroko:signCount", "label": "sign count", "type": "data", "range": "—", "access": "pub", "def": "The number of discrete signs in the system. Example: Ifá 256, Dilogún 16 principal odù."}, {"uri": "iroko:signName", "label": "sign name", "type": "data", "range": "—", "access": "comm", "def": "The canonical name of the sign in the tradition's liturgical language. Language-tagged. Examples: Ogbe Meji (Ifá), Ogún vèvè (Vodou)."}, {"uri": "iroko:signSystem", "label": "sign system", "type": "obj", "range": "—", "access": "pub", "def": "The sacred sign system to which this sign belongs — divination, graphic, rhythmic, or other."}, {"uri": "iroko:systemType", "label": "system type", "type": "obj", "range": "—", "access": "pub", "def": "Typological classification of the sign system. Range is tradition-specific concept scheme in marca or veve modules."}], "incoming": [], "cross": []}, "TemporalVariation": {"uri": "iroko:TemporalVariation", "label": "Temporal Variation", "definition": "A named temporal regime, calendar cycle, or context that conditions how a property, assertion, or policy applies. Covers: ritual calendar seasons, festival-bound periods, pre/post-initiation thresholds, gender regime cycles, and any other time-bounded condition affecting sacred knowledge governance. TemporalVariation instances are named nodes shared across modules — define once, reference everywhere. Examples: iroko:TemporalVariation/egungun-festival-period, iroko:TemporalVariation/post-kariocha-year.", "outgoing": [{"uri": "iroko:variationCondition", "label": "variation condition", "type": "data", "range": "langString", "access": "comm", "def": "Text description of the condition that activates this temporal variation. Example: 'Applies during the 40-day post-kariocha seclusion period'."}, {"uri": "iroko:variationContext", "label": "variation context", "type": "obj", "range": "—", "access": "pub", "def": "Links a TemporalVariation to the context that activates it — a ceremony, liturgical calendar event, fieldwork session, or other conditioning context. Range is intentionally untyped: activating contexts are heterogeneous (RitualProcess, FieldworkEvent, calendar concept, geographic context) and constraining the range now would create fragility. Revisit when TemporalVariation has sufficient data to determine the realistic range."}, {"uri": "iroko:variationLabel", "label": "variation label", "type": "data", "range": "langString", "access": "pub", "def": "Human-readable name for the temporal regime or cycle."}], "incoming": [{"uri": "iroko:hasTemporalVariation", "label": "has temporal variation", "type": "obj", "access": "pub", "def": "Cross-cutting qualifier linking any resource — assertion, policy, property value, access rule, narrative — to a TemporalVariation node. Defined once in Core and referenced across all modules. Do not redefine per-module.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Core Vocabulary", "stem": "iroko-core"}], "cross": []}, "TextSegment": {"uri": "iroko:TextSegment", "label": "Text Segment", "definition": "An addressable, orderable segment within a narrative or narrative variant. Used for verse-level segmentation of odu essays, chant lines, prayers, and other structured oral or textual corpora.", "outgoing": [{"uri": "iroko:segmentOrder", "label": "segment order", "type": "data", "range": "integer", "access": "pub", "def": "Integer position of this TextSegment within its containing narrative or variant. Used to reconstruct canonical ordering."}, {"uri": "iroko:segmentText", "label": "segment text", "type": "data", "range": "langString", "access": "comm", "def": "The text content of this segment. Language-tagged. Use iroko:accessLevel on the TextSegment instance to govern disclosure."}], "incoming": [{"uri": "iroko:hasSegment", "label": "has segment", "type": "obj", "access": "pub", "def": "Links a Narrative or NarrativeVariant to a constituent TextSegment.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Core Vocabulary", "stem": "iroko-core"}], "cross": []}};
+const MODULE_CROSS = [{"name": "Narrative Module", "dotCls": "dot-narrative", "via": "iroko:supportsAssertion", "dir": "referenced by"}, {"name": "Ewé Module", "dotCls": "dot-botanical", "via": "iroko:photographicVoucher", "dir": "referenced by"}, {"name": "Marca Module", "dotCls": "dot-divination", "via": "iroko:verseSource", "dir": "referenced by"}, {"name": "Sankofa Module", "dotCls": "dot-other", "via": "iroko:evidentiarySources", "dir": "referenced by"}, {"name": "Epistemic Module", "dotCls": "dot-epistemic", "via": "iroko:constraintSanctionedBy", "dir": "referenced by"}, {"name": "Agency Module", "dotCls": "dot-agency", "via": "iroko:hasOutcome", "dir": "referenced by"}, {"name": "Ilé Module", "dotCls": "dot-lineage", "via": "iroko:entityCrowned", "dir": "referenced by"}, {"name": "Qal Module", "dotCls": "dot-language", "via": "iroko:secretNameHolder", "dir": "referenced by"}, {"name": "Vèvè Module", "dotCls": "dot-graphic", "via": "iroko:documentationRecord", "dir": "referenced by"}];
+const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Core Vocabulary (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-core.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Core Vocabulary</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-core.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_core_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Core Vocabulary}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-core.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Core Vocabulary\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-core.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
+
+// ── Access badge ─────────────────────────────────────────────────────────────
+function accessBadge(a) {
+  if (a==='pub')  return '<span class="ab ab-pub">Public</span>';
+  if (a==='comm') return '<span class="ab ab-comm">Community</span>';
+  if (a==='init') return '<span class="ab ab-init">Initiated</span>';
+  return '';
+}
+function typeBadge(t) {
+  if (t==='obj')  return '<span class="pr-type pr-type-obj">Object</span>';
+  if (t==='data') return '<span class="pr-type pr-type-data">Datatype</span>';
+  if (t==='ann')  return '<span class="pr-type pr-type-ann">Annotation</span>';
+  return '';
+}
+
+// ── Render property item ──────────────────────────────────────────────────────
+function renderProp(p, isIncoming) {
+  const meta = isIncoming
+    ? `<div class="pr-source">from ${p.from} · ${p.module}</div>`
+    : `<div class="pr-meta">${p.range||''}</div>`;
+  return `<div class="pr-item">
+    <div class="pr-top">
+      <span class="pr-uri">${p.uri}</span>
+      ${isIncoming ? '' : typeBadge(p.type)}
+      ${isIncoming ? '' : accessBadge(p.access)}
+    </div>
+    <div class="pr-label">${p.label}</div>
+    ${meta}
+    <div class="pr-def">${p.def||''}</div>
+  </div>`;
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let activeClass = null;
+let activeCiteFormat = 'plain';
+
+function activateClass(key) {
+  if (activeClass === key) { closePanel(); return; }
+  activeClass = key;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('card-'+key)?.classList.add('active');
+  const d = CLASSES[key];
+  if (!d) return;
+  document.getElementById('prop-placeholder').classList.add('hidden');
+  document.getElementById('z2-hint').textContent = 'Click class again to close';
+  document.getElementById('pp-uri').textContent  = d.uri;
+  document.getElementById('pp-label').textContent = d.label;
+  document.getElementById('pp-def').textContent   = d.definition||'';
+  const inEl  = document.getElementById('pp-incoming');
+  inEl.innerHTML = d.incoming && d.incoming.length
+    ? d.incoming.map(p=>renderProp(p,true)).join('')
+    : '<p class="no-props">No incoming connections detected in this module.</p>';
+  const outEl = document.getElementById('pp-outgoing');
+  outEl.innerHTML = d.outgoing && d.outgoing.length
+    ? d.outgoing.map(p=>renderProp(p,false)).join('')
+    : '<p class="no-props">No outgoing properties.</p>';
+  document.getElementById('pp-cite-text').textContent =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  document.getElementById('pp-cite-btn').dataset.uri  =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  const panel = document.getElementById('prop-panel');
+  panel.classList.remove('visible');
+  void panel.offsetWidth;
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  updateSidebar(key, d);
+}
+
+function closePanel() {
+  activeClass = null;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('prop-placeholder').classList.remove('hidden');
+  document.getElementById('prop-panel').classList.remove('visible');
+  document.getElementById('z2-hint').textContent = 'Click a class card above';
+  resetSidebar();
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+function updateSidebar(key, d) {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'External links';
+    document.getElementById('sb-active-uri').style.display = 'block';
+    document.getElementById('sb-active-uri').textContent = d.uri;
+    document.getElementById('sb-module-view').style.display = 'none';
+    document.getElementById('sb-class-view').style.display  = 'block';
+    document.getElementById('sb-active-card').innerHTML =
+      `<div class="active-class-card"><span class="acc-uri">${d.uri}</span><span class="acc-label">${d.label}</span></div>`;
+    const conns = (d.cross||[]);
+    const connsEl = document.getElementById('sb-class-conns');
+    connsEl.innerHTML = conns.length
+      ? conns.map(c=>`<div class="conn-card">
+          <div class="cc-row"><span class="cc-dot ${c.dotCls}"></span><span class="cc-name">${c.name}</span><span class="cc-dir" style="margin-left:auto;">${c.dir}</span></div>
+          <span class="cc-via">${c.via}</span>
+        </div>`).join('')
+      : '<p class="no-props">No cross-module connections for this class.</p>';
+    body.classList.remove('fading');
+  },120);
+}
+
+function resetSidebar() {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'Connected Modules';
+    document.getElementById('sb-active-uri').style.display = 'none';
+    document.getElementById('sb-module-view').style.display = 'block';
+    document.getElementById('sb-class-view').style.display  = 'none';
+    body.classList.remove('fading');
+  },120);
+}
+
+// ── Citation ──────────────────────────────────────────────────────────────────
+function setCiteFormat(fmt, btn) {
+  activeCiteFormat = fmt;
+  document.querySelectorAll('.cite-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const display = document.getElementById('cite-display');
+  if (fmt==='plain') {
+    display.innerHTML = CITE_FORMATS.plainHTML;
+  } else {
+    display.innerHTML = `<pre>${CITE_FORMATS[fmt].replace(/</g,'&lt;')}</pre>`;
+  }
+}
+
+function copyModuleCite() {
+  const text = activeCiteFormat==='plain' ? CITE_FORMATS.plain : CITE_FORMATS[activeCiteFormat];
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('module-cite-btn');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy Citation';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyCite() {
+  const btn = document.getElementById('pp-cite-btn');
+  navigator.clipboard.writeText(btn.dataset.uri).then(()=>{
+    btn.textContent='✓ Copied'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy URI';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    btn.classList.add('copied');
+    btn.lastChild.textContent='Copied';
+    setTimeout(()=>{btn.classList.remove('copied');btn.lastChild.textContent='Copy Link';},2000);
+  });
+}
+
+// ── Fragment URI auto-open ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  const hash = window.location.hash.replace('#','');
+  if (hash && CLASSES[hash]) {
+    activateClass(hash);
+    document.getElementById('card-'+hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+});
+
+</script>
 </body>
 </html>

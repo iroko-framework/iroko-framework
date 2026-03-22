@@ -6,21 +6,215 @@
   <title>PROV-O Alignment — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    /* ── Module page layout ──────────────────────────────────────── */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+    .module-main { min-width: 0; }
+    .zone-head {
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--rule-strong);
+      padding-bottom: .4rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .zone-hint { font-size: .68rem; letter-spacing: 0; text-transform: none;
+      color: var(--ink-soft); font-family: var(--serif); font-style: italic; opacity: .7; }
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
+    /* Zone 1 */
+    .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: .5rem; margin-bottom: 2rem; }
+    .cls-card { border: 1px solid var(--rule-strong); border-radius: 3px; padding: .75rem 1rem;
+      background: var(--paper); cursor: pointer;
+      transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
+    .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
+    .cls-card.active { border-color: var(--green); background: var(--green-light);
+      box-shadow: 0 2px 8px rgba(46,74,30,.12); }
+    .cls-card.active::after { content:''; position:absolute; bottom:-1px; left:50%;
+      transform:translateX(-50%); width:0; height:0;
+      border-left:7px solid transparent; border-right:7px solid transparent;
+      border-bottom:7px solid var(--paper-warm); }
+    .cls-uri { font-family: var(--mono); font-size: .7rem; color: var(--green-mid);
+      display: block; margin-bottom: .2rem; }
+    .cls-label { font-family: var(--serif); font-size: .95rem; font-weight: 600;
+      color: var(--ink); display: block; line-height: 1.2; }
+    .cls-hint { font-size: .67rem; color: var(--ink-soft); margin-top: .2rem;
+      display: block; font-style: italic; }
+
+    /* Zone 2 */
+    .prop-placeholder { background: var(--paper-warm); border: 1px dashed var(--rule-strong);
+      border-radius: 3px; padding: 1.25rem 1.5rem; color: var(--ink-soft); font-size: .84rem;
+      font-style: italic; margin-bottom: 2rem; display: flex; align-items: center; gap: .75rem; }
+    .prop-placeholder.hidden { display: none; }
+    .prop-panel { display: none; border: 1px solid var(--rule-strong); border-radius: 3px;
+      margin-bottom: 2rem; overflow: hidden; animation: panelIn 160ms ease forwards; }
+    .prop-panel.visible { display: block; }
+    @keyframes panelIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+    .pp-head { background: var(--green); color:#fff; padding:.9rem 1.25rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .pp-uri { font-family: var(--mono); font-size: .72rem; color: rgba(255,255,255,.65); }
+    .pp-label { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: #fff; }
+    .pp-close { background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer;
+      font-size:1.1rem; line-height:1; padding:.1rem; transition:color .15s;
+      margin-left:auto; flex-shrink:0; }
+    .pp-close:hover { color:#fff; }
+    .pp-def { padding:.85rem 1.25rem; font-size:.85rem; color:var(--ink-mid); line-height:1.6;
+      border-bottom:1px solid var(--rule); background:var(--paper-warm); }
+    .pp-cols { display:grid; grid-template-columns:1fr 1fr; background:var(--paper); }
+    .pp-col { padding:1.1rem 1.25rem; }
+    .pp-col:first-child { border-right:1px solid var(--rule); }
+    .pp-col-label { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.75rem;
+      display:flex; align-items:center; gap:.35rem; }
+    .dir-arrow { color: var(--green-mid); }
+    .pr-item { padding:.6rem .8rem; border:1px solid var(--rule); border-radius:3px;
+      background:var(--paper); margin-bottom:.4rem; }
+    .pr-top { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+    .pr-uri { font-family:var(--mono); font-size:.72rem; color:var(--green-mid); flex:1; }
+    .pr-type { font-family:var(--mono); font-size:.55rem; letter-spacing:.04em;
+      padding:.1em .4em; border-radius:2px; flex-shrink:0; }
+    .pr-type-obj  { background:#e8e0f0; color:#5c3d8f; }
+    .pr-type-data { background:#e0ecf8; color:#1a4a5e; }
+    .pr-type-ann  { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .pr-label { font-size:.8rem; color:var(--ink-soft); margin-top:.1rem; }
+    .pr-meta { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.3rem; }
+    .pr-def { font-size:.78rem; color:var(--ink-mid); margin-top:.35rem; line-height:1.45; }
+    .pr-source { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); font-style:italic; margin-top:.2rem; }
+    .no-props { font-size:.8rem; color:var(--ink-soft); font-style:italic; }
+    .ab { display:inline-block; font-family:var(--mono); font-size:.55rem; letter-spacing:.05em; padding:.1em .45em; border-radius:2px; }
+    .ab-pub  { background:var(--green-light); color:var(--green); }
+    .ab-comm { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .ab-init { background:#fde8e0; color:var(--terracotta,#8b3a1a); }
+    .pp-cite { padding:.85rem 1.25rem; border-top:1px solid var(--rule);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:1rem; flex-wrap:wrap; background:var(--paper-warm); }
+    .pp-cite-text { font-family:var(--mono); font-size:.7rem; color:var(--ink-soft);
+      flex:1; min-width:200px; }
+    .btn-copy-sm { font-family:var(--mono); font-size:.68rem; letter-spacing:.08em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.4em 1em; cursor:pointer; transition:background .15s;
+      flex-shrink:0; white-space:nowrap; }
+    .btn-copy-sm:hover { background:var(--ink); }
+    .btn-copy-sm.copied { background:var(--green-mid); }
+
+    /* Zone 3 */
+    .scheme-block { margin-bottom: 1.5rem; }
+    .scheme-head { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px 3px 0 0; padding:.6rem 1rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .sh-uri { font-family:var(--mono); font-size:.75rem; color:var(--green-mid); }
+    .sh-label { font-family:var(--serif); font-size:.92rem; font-weight:600; color:var(--ink); }
+    .sh-count { font-family:var(--mono); font-size:.62rem; color:var(--ink-soft); white-space:nowrap; }
+    .concept-chips { border:1px solid var(--rule-strong); border-top:none;
+      border-radius:0 0 3px 3px; display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
+    .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+    .chip:hover { background:var(--paper-warm); }
+    .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
+    .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+
+    /* Sidebar */
+    .module-sidebar { position:sticky; top:2rem; }
+    .sidebar-panel { border:1px solid var(--rule-strong); border-radius:3px; overflow:hidden; margin-bottom:1.25rem; }
+    .sp-head { background:var(--paper-warm); border-bottom:1px solid var(--rule-strong);
+      padding:.6rem 1rem; display:flex; justify-content:space-between; align-items:center; }
+    .sp-title { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); }
+    .sp-active-uri { font-family:var(--mono); font-size:.67rem; color:var(--green); display:none; }
+    .sp-body { padding:.75rem 1rem; }
+    .conn-card { border:1px solid var(--rule); border-radius:3px; padding:.55rem .75rem;
+      margin-bottom:.4rem; background:var(--paper); text-decoration:none; display:block;
+      transition:border-color .15s, background .15s; }
+    .conn-card:hover { border-color:var(--green-mid); background:var(--paper-warm); }
+    .cc-row { display:flex; align-items:center; gap:.4rem; }
+    .cc-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .dot-core        { background:var(--green); }
+    .dot-agency      { background:#6b3a10; }
+    .dot-authority   { background:#3a4a5e; }
+    .dot-epistemic   { background:#1a4a40; }
+    .dot-narrative   { background:#5e3a2a; }
+    .dot-manifestation { background:#5c3d8f; }
+    .dot-botanical   { background:#3a5e28; }
+    .dot-entities    { background:#5c3d8f; }
+    .dot-ritual      { background:var(--terracotta,#8b3a1a); }
+    .dot-lineage     { background:#4a3010; }
+    .dot-divination  { background:#1a4a5e; }
+    .dot-societies   { background:#5e1a3a; }
+    .dot-graphic     { background:#3a3a1a; }
+    .dot-music       { background:#1a3a5e; }
+    .dot-language    { background:#2a1a5e; }
+    .dot-other       { background:var(--ink-soft); }
+    .cc-name { font-family:var(--serif); font-size:.88rem; font-weight:600; color:var(--ink); }
+    .cc-via { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.15rem; display:block; }
+    .cc-dir { font-size:.68rem; color:var(--ink-soft); font-style:italic; }
+    .share-row { display:flex; gap:.4rem; margin-bottom:1.25rem; }
+    .share-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:.25rem;
+      padding:.5rem .25rem; background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; cursor:pointer; font-family:var(--mono); font-size:.6rem;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); text-decoration:none;
+      transition:border-color .15s, background .15s, color .15s; }
+    .share-btn:hover { background:var(--green-light); border-color:var(--green-mid); color:var(--green); }
+    .share-btn.copied { background:var(--green-light); border-color:var(--green); color:var(--green); }
+    .share-btn svg { width:16px; height:16px; }
+    .sidebar-cite { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; padding:.85rem 1rem; }
+    .cite-head { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.5rem; }
+    .cite-tabs { display:flex; gap:0; margin-bottom:.6rem; border:1px solid var(--rule-strong);
+      border-radius:3px; overflow:hidden; }
+    .cite-tab { flex:1; font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; padding:.35em 0; background:var(--paper); border:none;
+      border-right:1px solid var(--rule-strong); color:var(--ink-soft);
+      cursor:pointer; transition:background .15s, color .15s; }
+    .cite-tab:last-child { border-right:none; }
+    .cite-tab:hover { background:var(--paper-warm); color:var(--ink); }
+    .cite-tab.active { background:var(--green-light); color:var(--green); font-weight:500; }
+    .cite-text { font-family:var(--mono); font-size:.7rem; line-height:1.55;
+      color:var(--ink-mid); font-style:italic; margin-bottom:.65rem; }
+    .cite-text pre { font-family:var(--mono); font-size:.68rem; line-height:1.55;
+      white-space:pre-wrap; word-break:break-all; margin:0; font-style:normal; }
+    .btn-cite-copy { width:100%; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.45em 0; cursor:pointer; transition:background .15s; }
+    .btn-cite-copy:hover { background:var(--ink); }
+    .btn-cite-copy.copied { background:var(--green-mid); }
+    .format-links { margin-top:.65rem; display:flex; flex-direction:column; gap:.25rem; }
+    .fmt-link { display:flex; justify-content:space-between; align-items:center;
+      font-family:var(--mono); font-size:.7rem; padding:.35rem .6rem;
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper);
+      color:var(--green-mid); text-decoration:none; transition:background .15s, border-color .15s; }
+    .fmt-link:hover { background:var(--paper-warm); border-color:var(--rule-strong); color:var(--green); }
+    .fmt-arrow { color:var(--ink-soft); }
+    .sidebar-dynamic { transition:opacity 120ms ease; }
+    .sidebar-dynamic.fading { opacity:0; pointer-events:none; }
+    .active-class-card { background:var(--green-light); border:1px solid var(--green-mid);
+      border-radius:3px; padding:.6rem .75rem; margin-bottom:.65rem; }
+    .acc-uri { font-family:var(--mono); font-size:.67rem; color:var(--green-mid); display:block; margin-bottom:.1rem; }
+    .acc-label { font-family:var(--serif); font-size:.9rem; font-weight:600; color:var(--ink); }
+    @media (max-width:900px) {
+      .module-layout { grid-template-columns:1fr; }
+      .module-sidebar { position:static; }
+      .pp-cols { grid-template-columns:1fr; }
+      .pp-col:first-child { border-right:none; border-bottom:1px solid var(--rule); }
+    }
+
   </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.2.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.3.0</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -46,32 +240,131 @@
     <div>
       <span class="module-tag tag-core">Alignment</span>
       <h1>PROV-O Alignment</h1>
-      <p class="subtitle">Alignment of Iroko Framework classes and properties to W3C PROV-O</p>
+      <p class="subtitle">Alignment of Iroko Framework agency and event classes to W3C PROV-O</p>
       <div class="header-meta">
-        <span class="meta-pill">iroko:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-align-prov#</span>
-        <span class="meta-pill">v1.2.0</span>
+        <span class="meta-pill">iroko:&nbsp; https://ontology.irokosociety.org/iroko-align-prov#</span>
+        <span class="meta-pill">v1.3.0</span>
         <span class="meta-pill"><a href="iroko-align-prov.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
       </div>
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Reference-only subclass alignment to PROV-O. Declares that Iroko agents, events, entities, and policies are specializations of PROV classes to support interoperability. Does not use owl:imports or owl:equivalentClass — Iroko classes remain semantically sovereign.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="module-stats" style="margin-top:1.5rem;">
+    <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Classes</span></div>
+    <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Properties</span></div>
+    <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Schemes</span></div>
+    <div class="stat-cell"><span class="stat-n">0</span><span class="stat-label">Concepts</span></div>
   </div>
+
+  <div class="module-layout">
+    <main class="module-main">
+
+      <!-- ZONE 1: Classes -->
+      <div class="zone-head">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+      </div>
+
+      <!-- ZONE 2: Property panel -->
+      <div class="zone-head" style="margin-top:0;">
+        Properties
+        <span class="zone-hint" id="z2-hint">Click a class card above</span>
+      </div>
+      <div class="prop-placeholder" id="prop-placeholder">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        No class selected. Click any class card above to see incoming and outgoing properties.
+      </div>
+      <div class="prop-panel" id="prop-panel">
+        <div class="pp-head">
+          <div>
+            <div class="pp-uri" id="pp-uri"></div>
+            <div class="pp-label" id="pp-label"></div>
+          </div>
+          <button class="pp-close" onclick="closePanel()" title="Close">&#x2715;</button>
+        </div>
+        <div class="pp-def" id="pp-def"></div>
+        <div class="pp-cols">
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8592;</span> Incoming <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(range = this class)</span></div>
+            <div id="pp-incoming"></div>
+          </div>
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8594;</span> Outgoing <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(domain = this class)</span></div>
+            <div id="pp-outgoing"></div>
+          </div>
+        </div>
+        <div class="pp-cite">
+          <span class="pp-cite-text" id="pp-cite-text"></span>
+          <button class="btn-copy-sm" id="pp-cite-btn" onclick="copyCite()">Copy URI</button>
+        </div>
+      </div>
+
+    </main><!-- /module-main -->
+
+    <!-- SIDEBAR -->
+    <aside class="module-sidebar">
+
+      <div class="share-row">
+        <a class="share-btn" href="mailto:?subject=Iroko%20Framework%20%E2%80%94%20PROV-O%20Alignment&amp;body=https://ontology.irokosociety.org/vocab/iroko-align-prov.html" title="Share via email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          Email
+        </a>
+        <button class="share-btn" onclick="window.print()" title="Print">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/></svg>
+          Print
+        </button>
+        <button class="share-btn" id="link-btn" onclick="copyLink(this)" title="Copy link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Copy Link
+        </button>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="sp-head">
+          <span class="sp-title" id="sb-title">Connected Modules</span>
+          <span class="sp-active-uri" id="sb-active-uri"></span>
+        </div>
+        <div class="sp-body sidebar-dynamic" id="sb-body">
+          <div id="sb-module-view">
+<p class="no-props" style="font-size:.8rem;color:var(--ink-soft);font-style:italic;">No external connections detected.</p>
+          </div>
+          <div id="sb-class-view" style="display:none;">
+            <div id="sb-active-card"></div>
+            <div id="sb-class-conns"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-cite">
+        <div class="cite-head">Cite the PROV-O Alignment</div>
+        <div class="cite-tabs">
+          <button class="cite-tab active" onclick="setCiteFormat('plain',this)">Plain</button>
+          <button class="cite-tab" onclick="setCiteFormat('bibtex',this)">BibTeX</button>
+          <button class="cite-tab" onclick="setCiteFormat('ris',this)">RIS</button>
+        </div>
+        <div class="cite-text" id="cite-display">
+          Iroko Historical Society. (2026). <em>Iroko Framework: PROV-O Alignment</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-align-prov.html. CC0 1.0 Universal.
+        </div>
+        <button class="btn-cite-copy" id="module-cite-btn" onclick="copyModuleCite()">Copy Citation</button>
+        <div class="format-links">
+          <a class="fmt-link" href="iroko-align-prov.ttl">Turtle (.ttl) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-align-prov.jsonld">JSON-LD (.jsonld) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-align-prov.rdf">RDF/XML (.rdf) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-align-prov.nt">N-Triples (.nt) <span class="fmt-arrow">&#8595;</span></a>
+        </div>
+      </div>
+
+    </aside>
+  </div><!-- /module-layout -->
 
   <footer class="site-footer">
     <div class="footer-left">
       Iroko Historical Society<br>
       Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      Issued 2026-02-23 · Revised 2026-03-07<br>
-      License: CC0 1.0 Universal (Public Domain)
+      Issued 2026-02-23 · Revised 2026-03-07<br>License: CC0 1.0 Universal (Public Domain)
     </div>
     <div class="footer-links">
       <a href="https://www.irokosociety.org">irokosociety.org</a>
@@ -80,6 +373,177 @@
     </div>
   </footer>
 
-</div>
+</div><!-- /page-wrap -->
+
+<script>
+
+// ── JS data injected by generator ──────────────────────────────────────────
+const MODULE_STEM = "iroko-align-prov";
+const MOD_TITLE_SHORT = "PROV-O Alignment";
+const CLASSES = {};
+const MODULE_CROSS = [];
+const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). PROV-O Alignment (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-align-prov.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: PROV-O Alignment</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-align-prov.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_align_prov_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: PROV-O Alignment}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-align-prov.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: PROV-O Alignment\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-align-prov.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
+
+// ── Access badge ─────────────────────────────────────────────────────────────
+function accessBadge(a) {
+  if (a==='pub')  return '<span class="ab ab-pub">Public</span>';
+  if (a==='comm') return '<span class="ab ab-comm">Community</span>';
+  if (a==='init') return '<span class="ab ab-init">Initiated</span>';
+  return '';
+}
+function typeBadge(t) {
+  if (t==='obj')  return '<span class="pr-type pr-type-obj">Object</span>';
+  if (t==='data') return '<span class="pr-type pr-type-data">Datatype</span>';
+  if (t==='ann')  return '<span class="pr-type pr-type-ann">Annotation</span>';
+  return '';
+}
+
+// ── Render property item ──────────────────────────────────────────────────────
+function renderProp(p, isIncoming) {
+  const meta = isIncoming
+    ? `<div class="pr-source">from ${p.from} · ${p.module}</div>`
+    : `<div class="pr-meta">${p.range||''}</div>`;
+  return `<div class="pr-item">
+    <div class="pr-top">
+      <span class="pr-uri">${p.uri}</span>
+      ${isIncoming ? '' : typeBadge(p.type)}
+      ${isIncoming ? '' : accessBadge(p.access)}
+    </div>
+    <div class="pr-label">${p.label}</div>
+    ${meta}
+    <div class="pr-def">${p.def||''}</div>
+  </div>`;
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let activeClass = null;
+let activeCiteFormat = 'plain';
+
+function activateClass(key) {
+  if (activeClass === key) { closePanel(); return; }
+  activeClass = key;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('card-'+key)?.classList.add('active');
+  const d = CLASSES[key];
+  if (!d) return;
+  document.getElementById('prop-placeholder').classList.add('hidden');
+  document.getElementById('z2-hint').textContent = 'Click class again to close';
+  document.getElementById('pp-uri').textContent  = d.uri;
+  document.getElementById('pp-label').textContent = d.label;
+  document.getElementById('pp-def').textContent   = d.definition||'';
+  const inEl  = document.getElementById('pp-incoming');
+  inEl.innerHTML = d.incoming && d.incoming.length
+    ? d.incoming.map(p=>renderProp(p,true)).join('')
+    : '<p class="no-props">No incoming connections detected in this module.</p>';
+  const outEl = document.getElementById('pp-outgoing');
+  outEl.innerHTML = d.outgoing && d.outgoing.length
+    ? d.outgoing.map(p=>renderProp(p,false)).join('')
+    : '<p class="no-props">No outgoing properties.</p>';
+  document.getElementById('pp-cite-text').textContent =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  document.getElementById('pp-cite-btn').dataset.uri  =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  const panel = document.getElementById('prop-panel');
+  panel.classList.remove('visible');
+  void panel.offsetWidth;
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  updateSidebar(key, d);
+}
+
+function closePanel() {
+  activeClass = null;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('prop-placeholder').classList.remove('hidden');
+  document.getElementById('prop-panel').classList.remove('visible');
+  document.getElementById('z2-hint').textContent = 'Click a class card above';
+  resetSidebar();
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+function updateSidebar(key, d) {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'External links';
+    document.getElementById('sb-active-uri').style.display = 'block';
+    document.getElementById('sb-active-uri').textContent = d.uri;
+    document.getElementById('sb-module-view').style.display = 'none';
+    document.getElementById('sb-class-view').style.display  = 'block';
+    document.getElementById('sb-active-card').innerHTML =
+      `<div class="active-class-card"><span class="acc-uri">${d.uri}</span><span class="acc-label">${d.label}</span></div>`;
+    const conns = (d.cross||[]);
+    const connsEl = document.getElementById('sb-class-conns');
+    connsEl.innerHTML = conns.length
+      ? conns.map(c=>`<div class="conn-card">
+          <div class="cc-row"><span class="cc-dot ${c.dotCls}"></span><span class="cc-name">${c.name}</span><span class="cc-dir" style="margin-left:auto;">${c.dir}</span></div>
+          <span class="cc-via">${c.via}</span>
+        </div>`).join('')
+      : '<p class="no-props">No cross-module connections for this class.</p>';
+    body.classList.remove('fading');
+  },120);
+}
+
+function resetSidebar() {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'Connected Modules';
+    document.getElementById('sb-active-uri').style.display = 'none';
+    document.getElementById('sb-module-view').style.display = 'block';
+    document.getElementById('sb-class-view').style.display  = 'none';
+    body.classList.remove('fading');
+  },120);
+}
+
+// ── Citation ──────────────────────────────────────────────────────────────────
+function setCiteFormat(fmt, btn) {
+  activeCiteFormat = fmt;
+  document.querySelectorAll('.cite-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const display = document.getElementById('cite-display');
+  if (fmt==='plain') {
+    display.innerHTML = CITE_FORMATS.plainHTML;
+  } else {
+    display.innerHTML = `<pre>${CITE_FORMATS[fmt].replace(/</g,'&lt;')}</pre>`;
+  }
+}
+
+function copyModuleCite() {
+  const text = activeCiteFormat==='plain' ? CITE_FORMATS.plain : CITE_FORMATS[activeCiteFormat];
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('module-cite-btn');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy Citation';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyCite() {
+  const btn = document.getElementById('pp-cite-btn');
+  navigator.clipboard.writeText(btn.dataset.uri).then(()=>{
+    btn.textContent='✓ Copied'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy URI';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    btn.classList.add('copied');
+    btn.lastChild.textContent='Copied';
+    setTimeout(()=>{btn.classList.remove('copied');btn.lastChild.textContent='Copy Link';},2000);
+  });
+}
+
+// ── Fragment URI auto-open ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  const hash = window.location.hash.replace('#','');
+  if (hash && CLASSES[hash]) {
+    activateClass(hash);
+    document.getElementById('card-'+hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+});
+
+</script>
 </body>
 </html>

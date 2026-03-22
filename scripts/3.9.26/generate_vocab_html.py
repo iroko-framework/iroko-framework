@@ -256,7 +256,7 @@ def get_meta(g):
     return {
         "uri":      str(uri),
         "desc":     description_en(g, uri),
-        "version":  str(g.value(uri, OWL.versionInfo) or "1.2.0"),
+        "version":  str(g.value(uri, OWL.versionInfo) or "1.3.0"),
         "issued":   str(g.value(uri, DCTERMS.issued)   or ""),
         "modified": str(g.value(uri, DCTERMS.modified) or ""),
     }
@@ -335,7 +335,7 @@ def generate_html(ttl_path, output_path, cfg):
 
     ns_uri   = meta.get("uri", "")
     ns_pfx   = ns_uri + "#" if ns_uri and not ns_uri.endswith("#") else ns_uri
-    version  = meta.get("version", "1.2.0")
+    version  = meta.get("version", "1.3.0")
     title    = cfg["title"]
     subtitle = cfg["subtitle"]
     tag_cls  = cfg["tag_cls"]

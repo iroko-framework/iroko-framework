@@ -212,6 +212,152 @@ def set_ihs_metric(html: str, label: str, value: int) -> str:
     return new_html
 
 
+# ---------------------------------------------------------------------------
+# ARCHITECTURE.md patching
+# ---------------------------------------------------------------------------
+
+def _fmt(value: int, zero_dash: bool = True) -> str:
+    """Return value as string; return em-dash for zero if zero_dash is True."""
+    return "\u2014" if (zero_dash and value == 0) else str(value)
+
+
+def patch_architecture_md(md_path, module_counts, totals, total_terms, dry_run=False):
+    """Patch the stats table and totals sentence in ARCHITECTURE.md."""
+    if not md_path.exists():
+        print(f"  \u26a0 Not found, skipping: {md_path.name}")
+        return False
+
+    original = md_path.read_text(encoding="utf-8")
+    patched  = original
+
+    for stem, c in module_counts.items():
+        pattern = (
+            r"(\| " + re.escape(stem) + r" \| )"
+            r"[\d\u2014]+( \| )[\d\u2014]+( \| )[\d\u2014]+( \| )[\d\u2014]+( \|)"
+        )
+        replacement = (
+            r"\g<1>" + _fmt(c["classes"], False)
+            + r"\g<2>" + _fmt(c["props"],   False)
+            + r"\g<3>" + _fmt(c["schemes"],  True)
+            + r"\g<4>" + _fmt(c["concepts"], True)
+            + r"\g<5>"
+        )
+        patched, n = re.subn(pattern, replacement, patched)
+        if n == 0:
+            print(f"  WARNING: ARCHITECTURE.md row not found for {stem}")
+
+    # Total row
+    total_pattern = (
+        r"(\| \*\*Total\*\* \| \*\*)" + r"\d+" +
+        r"(\*\* \| \*\*)" + r"\d+" +
+        r"(\*\* \| \*\*)" + r"\d+" +
+        r"(\*\* \| \*\*)" + r"\d+" + r"(\*\* \|)"
+    )
+    total_replacement = (
+        r"\g<1>" + str(totals["classes"]) +
+        r"\g<2>" + str(totals["props"]) +
+        r"\g<3>" + str(totals["schemes"]) +
+        r"\g<4>" + str(totals["concepts"]) +
+        r"\g<5>"
+    )
+    patched, n = re.subn(total_pattern, total_replacement, patched)
+    if n == 0:
+        print("  WARNING: ARCHITECTURE.md Total row not found")
+
+    # Properties sentence
+    patched = re.sub(
+        r"All \d+ properties across all \d+ modules carry",
+        "All " + str(totals["props"]) + " properties across all "
+        + str(len(MODULES)) + " modules carry",
+        patched
+    )
+
+    if patched == original:
+        print(f"  \u2014 {md_path.name}: no changes needed")
+    elif dry_run:
+        print(f"  ~ {md_path.name}: would update stats table")
+    else:
+        md_path.write_text(patched, encoding="utf-8")
+        print(f"  \u2713 {md_path.name}: stats table updated")
+    return patched != original
+
+
+# ---------------------------------------------------------------------------
+# ARCHITECTURE.html patching
+# ---------------------------------------------------------------------------
+
+def patch_architecture_html(html_path, module_counts, totals, total_terms, dry_run=False):
+    """Patch the stats table in ARCHITECTURE.html using full-row regex splicing."""
+    if not html_path.exists():
+        print(f"  \u26a0 Not found, skipping: {html_path.name}")
+        return False
+
+    original = html_path.read_text(encoding="utf-8")
+    patched  = original
+    NL  = "\n"
+    TDS = '<td style="text-align: right;">'
+
+    # Per-module rows — match full row atomically, no window arithmetic
+    for stem, c in module_counts.items():
+        pat = (
+            r"<td>" + re.escape(stem) + r"</td>"
+            r"\s*<td[^>]*>(?:\d+|\u2014)</td>"
+            r"\s*<td[^>]*>(?:\d+|\u2014)</td>"
+            r"\s*<td[^>]*>(?:\d+|\u2014)</td>"
+            r"\s*<td[^>]*>(?:\d+|\u2014)</td>"
+        )
+        m = re.search(pat, patched)
+        if not m:
+            print(f"  WARNING: ARCHITECTURE.html row not found for {stem}")
+            continue
+        repl = (
+            "<td>" + stem + "</td>" + NL
+            + TDS + _fmt(c["classes"], False) + "</td>" + NL
+            + TDS + _fmt(c["props"],   False) + "</td>" + NL
+            + TDS + _fmt(c["schemes"], True)  + "</td>" + NL
+            + TDS + _fmt(c["concepts"],True)  + "</td>"
+        )
+        patched = patched[:m.start()] + repl + patched[m.end():]
+
+    # Total row
+    tot_pat = (
+        r"<td><strong>Total</strong></td>"
+        r"\s*<td[^>]*><strong>(?:\d+)</strong></td>"
+        r"\s*<td[^>]*><strong>(?:\d+)</strong></td>"
+        r"\s*<td[^>]*><strong>(?:\d+)</strong></td>"
+        r"\s*<td[^>]*><strong>(?:\d+)</strong></td>"
+    )
+    m = re.search(tot_pat, patched)
+    if m:
+        repl = (
+            "<td><strong>Total</strong></td>" + NL
+            + TDS + "<strong>" + str(totals["classes"])  + "</strong></td>" + NL
+            + TDS + "<strong>" + str(totals["props"])    + "</strong></td>" + NL
+            + TDS + "<strong>" + str(totals["schemes"])  + "</strong></td>" + NL
+            + TDS + "<strong>" + str(totals["concepts"]) + "</strong></td>"
+        )
+        patched = patched[:m.start()] + repl + patched[m.end():]
+    else:
+        print("  WARNING: ARCHITECTURE.html Total row not found")
+
+    # Properties sentence
+    patched = re.sub(
+        r"All \d+ properties across all \d+ modules carry",
+        "All " + str(totals["props"]) + " properties across all "
+        + str(len(MODULES)) + " modules carry",
+        patched
+    )
+
+    if patched == original:
+        print(f"  \u2014 {html_path.name}: no changes needed")
+    elif dry_run:
+        print(f"  ~ {html_path.name}: would update stats table")
+    else:
+        html_path.write_text(patched, encoding="utf-8")
+        print(f"  \u2713 {html_path.name}: stats table updated")
+    return patched != original
+
+
 def build_parser():
     p = argparse.ArgumentParser(
         description="Sync term counts in index.html, vocab/index.html, and iroko-termlist.html."
@@ -220,6 +366,8 @@ def build_parser():
     p.add_argument("--root",  metavar="DIR", help="Repo root (where main index.html lives)")
     p.add_argument("--ihs", metavar="PATH",
                    help="Path to IHS site index.html (irokosociety.org)")
+    p.add_argument("--docs", metavar="DIR",
+                   help="Path to docs/ directory (for ARCHITECTURE.md and .html)")
     p.add_argument("--dry-run", action="store_true",
                    help="Print what would change without writing files")
     return p
@@ -231,6 +379,7 @@ def main():
 
     vocab_dir    = find_vocab_dir(script_dir, args.vocab)
     root_dir     = find_root_dir(vocab_dir, script_dir, args.root)
+    docs_dir     = Path(args.docs) if args.docs else root_dir / "docs"
 
     main_index_path  = root_dir / "index.html"
     vocab_index_path = vocab_dir / "index.html"
@@ -240,6 +389,10 @@ def main():
     print(f"Main index:        {main_index_path}")
     print(f"Vocab index:       {vocab_index_path}")
     print(f"Termlist:          {termlist_path}")
+    arch_md   = docs_dir / "ARCHITECTURE.md"
+    arch_html = docs_dir / "ARCHITECTURE.html"
+    print(f"Architecture MD:   {arch_md}")
+    print(f"Architecture HTML: {arch_html}")
     print()
 
     # ── Count all modules ────────────────────────────────────────────────
@@ -349,6 +502,24 @@ def main():
 
         termlist_path.write_text(html, encoding="utf-8")
         print(f"  ✓ Updated {termlist_path.name}")
+
+    # ── 4. ARCHITECTURE.md ─────────────────────────────────────
+    print()
+    print("Patching ARCHITECTURE.md \u2026")
+    patch_architecture_md(
+        docs_dir / "ARCHITECTURE.md",
+        module_counts, totals, total_terms,
+        dry_run=args.dry_run
+    )
+
+    # ── 5. ARCHITECTURE.html ────────────────────────────────────
+    print()
+    print("Patching ARCHITECTURE.html \u2026")
+    patch_architecture_html(
+        docs_dir / "ARCHITECTURE.html",
+        module_counts, totals, total_terms,
+        dry_run=args.dry_run
+    )
 
     print()
     print("Done.")

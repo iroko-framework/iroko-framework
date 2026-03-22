@@ -6,21 +6,215 @@
   <title>Qal Module — Sacred Lexicons — Iroko Framework Vocabularies</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
-    /* ── Logo size toggle ─────────────────────────────────────────────
-       Change --logo-size to resize the logo on all vocab browse pages.
-       Options tried: 60px · 72px · 88px · 100px · 120px
-    ─────────────────────────────────────────────────────────────────── */
-    :root { --logo-size: 256px; }
+    /* ── Module page layout ──────────────────────────────────────── */
+    .module-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 3rem;
+      align-items: start;
+      margin-top: 2.5rem;
+    }
+    .module-main { min-width: 0; }
+    .zone-head {
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--rule-strong);
+      padding-bottom: .4rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .zone-hint { font-size: .68rem; letter-spacing: 0; text-transform: none;
+      color: var(--ink-soft); font-family: var(--serif); font-style: italic; opacity: .7; }
 
-    .vocab-header         { align-items: flex-start; }
-    .vocab-header-logo    { padding-top: .2rem; flex-shrink: 0; }
-    .vocab-header-logo img { width: var(--logo-size); height: auto; display: block; }
+    /* Zone 1 */
+    .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: .5rem; margin-bottom: 2rem; }
+    .cls-card { border: 1px solid var(--rule-strong); border-radius: 3px; padding: .75rem 1rem;
+      background: var(--paper); cursor: pointer;
+      transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
+    .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
+    .cls-card.active { border-color: var(--green); background: var(--green-light);
+      box-shadow: 0 2px 8px rgba(46,74,30,.12); }
+    .cls-card.active::after { content:''; position:absolute; bottom:-1px; left:50%;
+      transform:translateX(-50%); width:0; height:0;
+      border-left:7px solid transparent; border-right:7px solid transparent;
+      border-bottom:7px solid var(--paper-warm); }
+    .cls-uri { font-family: var(--mono); font-size: .7rem; color: var(--green-mid);
+      display: block; margin-bottom: .2rem; }
+    .cls-label { font-family: var(--serif); font-size: .95rem; font-weight: 600;
+      color: var(--ink); display: block; line-height: 1.2; }
+    .cls-hint { font-size: .67rem; color: var(--ink-soft); margin-top: .2rem;
+      display: block; font-style: italic; }
+
+    /* Zone 2 */
+    .prop-placeholder { background: var(--paper-warm); border: 1px dashed var(--rule-strong);
+      border-radius: 3px; padding: 1.25rem 1.5rem; color: var(--ink-soft); font-size: .84rem;
+      font-style: italic; margin-bottom: 2rem; display: flex; align-items: center; gap: .75rem; }
+    .prop-placeholder.hidden { display: none; }
+    .prop-panel { display: none; border: 1px solid var(--rule-strong); border-radius: 3px;
+      margin-bottom: 2rem; overflow: hidden; animation: panelIn 160ms ease forwards; }
+    .prop-panel.visible { display: block; }
+    @keyframes panelIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+    .pp-head { background: var(--green); color:#fff; padding:.9rem 1.25rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .pp-uri { font-family: var(--mono); font-size: .72rem; color: rgba(255,255,255,.65); }
+    .pp-label { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: #fff; }
+    .pp-close { background:none; border:none; color:rgba(255,255,255,.5); cursor:pointer;
+      font-size:1.1rem; line-height:1; padding:.1rem; transition:color .15s;
+      margin-left:auto; flex-shrink:0; }
+    .pp-close:hover { color:#fff; }
+    .pp-def { padding:.85rem 1.25rem; font-size:.85rem; color:var(--ink-mid); line-height:1.6;
+      border-bottom:1px solid var(--rule); background:var(--paper-warm); }
+    .pp-cols { display:grid; grid-template-columns:1fr 1fr; background:var(--paper); }
+    .pp-col { padding:1.1rem 1.25rem; }
+    .pp-col:first-child { border-right:1px solid var(--rule); }
+    .pp-col-label { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.75rem;
+      display:flex; align-items:center; gap:.35rem; }
+    .dir-arrow { color: var(--green-mid); }
+    .pr-item { padding:.6rem .8rem; border:1px solid var(--rule); border-radius:3px;
+      background:var(--paper); margin-bottom:.4rem; }
+    .pr-top { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+    .pr-uri { font-family:var(--mono); font-size:.72rem; color:var(--green-mid); flex:1; }
+    .pr-type { font-family:var(--mono); font-size:.55rem; letter-spacing:.04em;
+      padding:.1em .4em; border-radius:2px; flex-shrink:0; }
+    .pr-type-obj  { background:#e8e0f0; color:#5c3d8f; }
+    .pr-type-data { background:#e0ecf8; color:#1a4a5e; }
+    .pr-type-ann  { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .pr-label { font-size:.8rem; color:var(--ink-soft); margin-top:.1rem; }
+    .pr-meta { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.3rem; }
+    .pr-def { font-size:.78rem; color:var(--ink-mid); margin-top:.35rem; line-height:1.45; }
+    .pr-source { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); font-style:italic; margin-top:.2rem; }
+    .no-props { font-size:.8rem; color:var(--ink-soft); font-style:italic; }
+    .ab { display:inline-block; font-family:var(--mono); font-size:.55rem; letter-spacing:.05em; padding:.1em .45em; border-radius:2px; }
+    .ab-pub  { background:var(--green-light); color:var(--green); }
+    .ab-comm { background:var(--gold-light,#f5edd8); color:var(--gold,#a07830); }
+    .ab-init { background:#fde8e0; color:var(--terracotta,#8b3a1a); }
+    .pp-cite { padding:.85rem 1.25rem; border-top:1px solid var(--rule);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:1rem; flex-wrap:wrap; background:var(--paper-warm); }
+    .pp-cite-text { font-family:var(--mono); font-size:.7rem; color:var(--ink-soft);
+      flex:1; min-width:200px; }
+    .btn-copy-sm { font-family:var(--mono); font-size:.68rem; letter-spacing:.08em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.4em 1em; cursor:pointer; transition:background .15s;
+      flex-shrink:0; white-space:nowrap; }
+    .btn-copy-sm:hover { background:var(--ink); }
+    .btn-copy-sm.copied { background:var(--green-mid); }
+
+    /* Zone 3 */
+    .scheme-block { margin-bottom: 1.5rem; }
+    .scheme-head { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px 3px 0 0; padding:.6rem 1rem;
+      display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+    .sh-uri { font-family:var(--mono); font-size:.75rem; color:var(--green-mid); }
+    .sh-label { font-family:var(--serif); font-size:.92rem; font-weight:600; color:var(--ink); }
+    .sh-count { font-family:var(--mono); font-size:.62rem; color:var(--ink-soft); white-space:nowrap; }
+    .concept-chips { border:1px solid var(--rule-strong); border-top:none;
+      border-radius:0 0 3px 3px; display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
+    .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+    .chip:hover { background:var(--paper-warm); }
+    .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
+    .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+
+    /* Sidebar */
+    .module-sidebar { position:sticky; top:2rem; }
+    .sidebar-panel { border:1px solid var(--rule-strong); border-radius:3px; overflow:hidden; margin-bottom:1.25rem; }
+    .sp-head { background:var(--paper-warm); border-bottom:1px solid var(--rule-strong);
+      padding:.6rem 1rem; display:flex; justify-content:space-between; align-items:center; }
+    .sp-title { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); }
+    .sp-active-uri { font-family:var(--mono); font-size:.67rem; color:var(--green); display:none; }
+    .sp-body { padding:.75rem 1rem; }
+    .conn-card { border:1px solid var(--rule); border-radius:3px; padding:.55rem .75rem;
+      margin-bottom:.4rem; background:var(--paper); text-decoration:none; display:block;
+      transition:border-color .15s, background .15s; }
+    .conn-card:hover { border-color:var(--green-mid); background:var(--paper-warm); }
+    .cc-row { display:flex; align-items:center; gap:.4rem; }
+    .cc-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .dot-core        { background:var(--green); }
+    .dot-agency      { background:#6b3a10; }
+    .dot-authority   { background:#3a4a5e; }
+    .dot-epistemic   { background:#1a4a40; }
+    .dot-narrative   { background:#5e3a2a; }
+    .dot-manifestation { background:#5c3d8f; }
+    .dot-botanical   { background:#3a5e28; }
+    .dot-entities    { background:#5c3d8f; }
+    .dot-ritual      { background:var(--terracotta,#8b3a1a); }
+    .dot-lineage     { background:#4a3010; }
+    .dot-divination  { background:#1a4a5e; }
+    .dot-societies   { background:#5e1a3a; }
+    .dot-graphic     { background:#3a3a1a; }
+    .dot-music       { background:#1a3a5e; }
+    .dot-language    { background:#2a1a5e; }
+    .dot-other       { background:var(--ink-soft); }
+    .cc-name { font-family:var(--serif); font-size:.88rem; font-weight:600; color:var(--ink); }
+    .cc-via { font-family:var(--mono); font-size:.65rem; color:var(--ink-soft); margin-top:.15rem; display:block; }
+    .cc-dir { font-size:.68rem; color:var(--ink-soft); font-style:italic; }
+    .share-row { display:flex; gap:.4rem; margin-bottom:1.25rem; }
+    .share-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:.25rem;
+      padding:.5rem .25rem; background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; cursor:pointer; font-family:var(--mono); font-size:.6rem;
+      letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); text-decoration:none;
+      transition:border-color .15s, background .15s, color .15s; }
+    .share-btn:hover { background:var(--green-light); border-color:var(--green-mid); color:var(--green); }
+    .share-btn.copied { background:var(--green-light); border-color:var(--green); color:var(--green); }
+    .share-btn svg { width:16px; height:16px; }
+    .sidebar-cite { background:var(--paper-warm); border:1px solid var(--rule-strong);
+      border-radius:3px; padding:.85rem 1rem; }
+    .cite-head { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.5rem; }
+    .cite-tabs { display:flex; gap:0; margin-bottom:.6rem; border:1px solid var(--rule-strong);
+      border-radius:3px; overflow:hidden; }
+    .cite-tab { flex:1; font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+      text-transform:uppercase; padding:.35em 0; background:var(--paper); border:none;
+      border-right:1px solid var(--rule-strong); color:var(--ink-soft);
+      cursor:pointer; transition:background .15s, color .15s; }
+    .cite-tab:last-child { border-right:none; }
+    .cite-tab:hover { background:var(--paper-warm); color:var(--ink); }
+    .cite-tab.active { background:var(--green-light); color:var(--green); font-weight:500; }
+    .cite-text { font-family:var(--mono); font-size:.7rem; line-height:1.55;
+      color:var(--ink-mid); font-style:italic; margin-bottom:.65rem; }
+    .cite-text pre { font-family:var(--mono); font-size:.68rem; line-height:1.55;
+      white-space:pre-wrap; word-break:break-all; margin:0; font-style:normal; }
+    .btn-cite-copy { width:100%; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
+      text-transform:uppercase; background:var(--green); color:#fff; border:none;
+      border-radius:2px; padding:.45em 0; cursor:pointer; transition:background .15s; }
+    .btn-cite-copy:hover { background:var(--ink); }
+    .btn-cite-copy.copied { background:var(--green-mid); }
+    .format-links { margin-top:.65rem; display:flex; flex-direction:column; gap:.25rem; }
+    .fmt-link { display:flex; justify-content:space-between; align-items:center;
+      font-family:var(--mono); font-size:.7rem; padding:.35rem .6rem;
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper);
+      color:var(--green-mid); text-decoration:none; transition:background .15s, border-color .15s; }
+    .fmt-link:hover { background:var(--paper-warm); border-color:var(--rule-strong); color:var(--green); }
+    .fmt-arrow { color:var(--ink-soft); }
+    .sidebar-dynamic { transition:opacity 120ms ease; }
+    .sidebar-dynamic.fading { opacity:0; pointer-events:none; }
+    .active-class-card { background:var(--green-light); border:1px solid var(--green-mid);
+      border-radius:3px; padding:.6rem .75rem; margin-bottom:.65rem; }
+    .acc-uri { font-family:var(--mono); font-size:.67rem; color:var(--green-mid); display:block; margin-bottom:.1rem; }
+    .acc-label { font-family:var(--serif); font-size:.9rem; font-weight:600; color:var(--ink); }
+    @media (max-width:900px) {
+      .module-layout { grid-template-columns:1fr; }
+      .module-sidebar { position:static; }
+      .pp-cols { grid-template-columns:1fr; }
+      .pp-col:first-child { border-right:none; border-bottom:1px solid var(--rule); }
+    }
+
   </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.2.0</span>
+  <span class="top-bar-id">Iroko Historical Society · Iroko Framework v1.3.0</span>
   <nav class="top-bar-links">
     <a href="../index.html">Home</a>
     <a href="index.html">Vocabularies</a>
@@ -46,514 +240,363 @@
     <div>
       <span class="module-tag tag-language">Language</span>
       <h1>Qal Module — Sacred Lexicons</h1>
-      <p class="subtitle">Liturgical language and esoteric terminology</p>
+      <p class="subtitle">Liturgical language, esoteric terminology, and sacred lexicography</p>
       <div class="header-meta">
-        <span class="meta-pill">qal:&nbsp;&nbsp;https://ontology.irokosociety.org/iroko-qal#</span>
-        <span class="meta-pill">v1.2.0</span>
+        <span class="meta-pill">qal:&nbsp; https://ontology.irokosociety.org/iroko-qal#</span>
+        <span class="meta-pill">v1.3.0</span>
         <span class="meta-pill"><a href="iroko-qal.ttl" style="color:inherit;">Download TTL ↓</a></span>
         <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework" style="color:inherit;">GitHub ↗</a></span>
       </div>
     </div>
   </header>
 
-  <div style="margin-top:1.5rem;">
-    <p class="module-desc" style="max-width:80ch;margin-top:1.5rem;">Domain module. Vocabulary for documenting sacred lexicons, liturgical languages, and esoteric terminology across Afro-Atlantic and related African sacred traditions. Qal (ቃል) — Ge&#x27;ez for &#x27;word.&#x27; Covers liturgical Yorùbá (Lucumí), Kikongo (Palo), Haitian Kreyòl sacred register, Fon/Ewe, and Ge&#x27;ez. Integrates with the OntoLex-Lemon Ontology for Lexicography for multilingual lexical data. Access control distinguishes public knowledge (language names, general vocabulary) from restricted esoteric terminology and secret names. Use with iroko-epistemic to model secret name and esoteric term disclosure constraints; iroko-narrative for liturgical phrase transmission chains and praise poetry provenance.</p>
-    <div class="module-stats" style="margin-top:1rem;">
-      <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
-      <div class="stat-cell"><span class="stat-n">27</span><span class="stat-label">Properties</span></div>
-      <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
-      <div class="stat-cell"><span class="stat-n">37</span><span class="stat-label">Concepts</span></div>
-    </div>
+  <div class="module-stats" style="margin-top:1.5rem;">
+    <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
+    <div class="stat-cell"><span class="stat-n">26</span><span class="stat-label">Properties</span></div>
+    <div class="stat-cell"><span class="stat-n">5</span><span class="stat-label">Schemes</span></div>
+    <div class="stat-cell"><span class="stat-n">37</span><span class="stat-label">Concepts</span></div>
   </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Classes</span>
-      <span class="term-section-count">6 classes</span>
-    </div>
-    <div class="class-card" id="cls-LexicalEntry">
-      <div class="class-name">LexicalEntry</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Lexical Entry</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">LexicalEntry</span>, <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A word, term, or morpheme in a sacred language with its liturgical or ritual meaning documented. Subclass of ontolex:LexicalEntry for integration with multilingual lexicographic infrastructure. A single lexical entry may have multiple senses (iroko:LexicalSense), including restricted senses whose esoteric meaning is not disclosed publicly. The existence of a term is community-restricted; its esoteric sense is initiated-only.</p>
-    </div>
-    <div class="class-card" id="cls-LexicalSense">
-      <div class="class-name">LexicalSense</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Lexical Sense</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">LexicalSense</span>, <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A specific meaning of a lexical entry, which may carry different access levels than the entry itself. An Orisha&#x27;s name (entry) may be public, while a path-specific epithet (restricted sense) is community-restricted, and a secret name (esoteric sense) is no-access. Multiple senses of the same term are documented as separate LexicalSense instances with appropriate access levels.</p>
-    </div>
-    <div class="class-card" id="cls-LiturgicalPhrase">
-      <div class="class-name">LiturgicalPhrase</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Liturgical Phrase</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A multi-word expression, formula, invocation, or greeting used in Afro-Atlantic sacred contexts. Examples: Yorùbá greeting formulas specific to Orisha (mojuba formulas); Palo Kikongo invocations; Vodou salutation phrases for specific lwa. Phrases are documented with their tradition, ceremony context, and speaker authority requirements. General greetings are community-restricted; ceremonial invocations are initiated-only.</p>
-    </div>
-    <div class="class-card" id="cls-SacredLanguage">
-      <div class="class-name">SacredLanguage</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Language</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A language, language register, or language variety used as a liturgical or ritual medium in Afro-Atlantic or related African sacred practice. Includes fully distinct languages (Yorùbá in Lucumí/Candomblé; Kikongo in Palo Monte; Fon in Haitian Vodou), sacred registers of creole languages (Haitian Kreyòl ceremonial register), specialized vocabularies (Lucumí as Afro-Atlantic-adapted liturgical Yorùbá), and graphic-lexical systems (Nsibidi as both script and vocabulary system). Also includes African Christian liturgical languages: Ge&#x27;ez (Ethiopian/Eritrean Orthodox), Coptic (Egyptian Coptic Church).</p>
-    </div>
-    <div class="class-card" id="cls-SacredSpeechAct">
-      <div class="class-name">SacredSpeechAct</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Sacred Speech Act</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">A formally defined speech act type within a tradition&#x27;s ceremonial protocol: oath-taking, naming, cursing, blessing, consecration, authorization. Distinct from a specific utterance: a SacredSpeechAct is the category (e.g., &#x27;Ifá greeting formula&#x27;) while a LiturgicalPhrase is a specific instance. The existence of a speech act type is community-restricted; its specific form and context are initiated-only to elder-only.</p>
-    </div>
-    <div class="class-card" id="cls-SecretName">
-      <div class="class-name">SecretName</div>
-      <div style="font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--ink);margin-top:.1rem;">Secret Name</div>
-      <div class="class-hierarchy">Subclass of: <span style="color:var(--green-mid)">SacredEntity</span></div>
-      <p class="class-def">An esoteric or restricted name for a spiritual entity, practitioner, or sacred object known only to initiated members at a specific grade or above. Examples: the secret name of an Orisha camino revealed in itá; a Palo Tata&#x27;s nkisi name; an Abakuá ecobio name. The existence of secret name conventions within a tradition is public; the names themselves are no-access.</p>
-    </div>
-  </div>
+  <div class="module-layout">
+    <main class="module-main">
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Properties</span>
-      <span class="term-section-count">27 properties</span>
-    </div>
-    <table class="prop-table">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Type</th>
-          <th>Domain → Range</th>
-          <th>Access</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr id="prop-languageISO">
-          <td><span class="prop-name">languageISO</span><br><span style="font-size:.75rem;color:var(--ink-soft);">ISO 639 code</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Language → language</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The ISO 639-3 code for the base language, where applicable (e.g., &#x27;yor&#x27; for Yorùbá, &#x27;kng&#x27; for Kikongo, &#x27;hat&#x27; for Haitian Kreyòl, &#x27;gez&#x27; for Ge&#x27;ez).</td>
-        </tr>
-        <tr id="prop-authorityRequired">
-          <td><span class="prop-name">authorityRequired</span><br><span style="font-size:.75rem;color:var(--ink-soft);">authority required</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Liturgical Phrase → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The initiation level or title required to speak this phrase in ceremony. Range: iroko:AccessLevelScheme concept.</td>
-        </tr>
-        <tr id="prop-cognateTerms">
-          <td><span class="prop-name">cognateTerms</span><br><span style="font-size:.75rem;color:var(--ink-soft);">cognate terms</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Lexical Entry → Lexical Entry</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Terms in related languages that are etymologically cognate or semantically parallel. Used to document cross-tradition vocabulary relationships (e.g., Yorùbá &#x27;Egúngún&#x27; → Lucumí &#x27;Eggun&#x27;; Fon &#x27;Legba&#x27; → Haitian &#x27;Legba&#x27;).</td>
-        </tr>
-        <tr id="prop-communityDefinition">
-          <td><span class="prop-name">communityDefinition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">community definition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Lexical Sense → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">A definition appropriate for community members and practitioners, including cultural context not meant for general publication. Language-tagged.</td>
-        </tr>
-        <tr id="prop-entityReference">
-          <td><span class="prop-name">entityReference</span><br><span style="font-size:.75rem;color:var(--ink-soft);">entity reference</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Lexical Sense → SpiritualEntity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The spiritual entity denoted by this sense, where applicable. Range: iroko:SpiritualEntity.</td>
-        </tr>
-        <tr id="prop-esotericDefinition">
-          <td><span class="prop-name">esotericDefinition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">esoteric definition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Lexical Sense → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The initiated or esoteric meaning of this sense, disclosed only to qualified practitioners. Initiated-only.</td>
-        </tr>
-        <tr id="prop-geographicBase">
-          <td><span class="prop-name">geographicBase</span><br><span style="font-size:.75rem;color:var(--ink-soft);">geographic base</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Language → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The geographic region(s) where this language is primarily used. Free-text.</td>
-        </tr>
-        <tr id="prop-hasEntry">
-          <td><span class="prop-name">hasEntry</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has entry</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Language → Lexical Entry</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing.</td>
-        </tr>
-        <tr id="prop-hasPhrase">
-          <td><span class="prop-name">hasPhrase</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has phrase</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Language → Liturgical Phrase</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves.</td>
-        </tr>
-        <tr id="prop-hasSecretName">
-          <td><span class="prop-name">hasSecretName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has secret name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">SacredEntity → Secret Name</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Links a SacredEntity to a SecretName it holds. Inverse of iroko:secretNameHolder. Scoped to SacredEntity rather than SpiritualEntity alone because initiated practitioners also hold secret names (oruko awo and analogous esoteric designations). The existence of a secret name relationship is itself restricted; the name text is governed at no-access on iroko:secretNameText and is never exported to RDF — it is stored internally only. Access: initiated-only.</td>
-        </tr>
-        <tr id="prop-hasSense">
-          <td><span class="prop-name">hasSense</span><br><span style="font-size:.75rem;color:var(--ink-soft);">has sense</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Lexical Entry → Lexical Sense</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance.</td>
-        </tr>
-        <tr id="prop-inLanguage">
-          <td><span class="prop-name">inLanguage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">in language</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Lexical Entry → Sacred Language</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The sacred language to which this lexical entry belongs. Range: iroko:SacredLanguage.</td>
-        </tr>
-        <tr id="prop-languageName">
-          <td><span class="prop-name">languageName</span><br><span style="font-size:.75rem;color:var(--ink-soft);">language name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Sacred Language → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The name of the sacred language or register. Language-tagged.</td>
-        </tr>
-        <tr id="prop-languageType">
-          <td><span class="prop-name">languageType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">language type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Language → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">Classification of this sacred language. Range: iroko:SacredLanguageTypeScheme.</td>
-        </tr>
-        <tr id="prop-nameConvention">
-          <td><span class="prop-name">nameConvention</span><br><span style="font-size:.75rem;color:var(--ink-soft);">name convention</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Secret Name → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The type of secret name convention this follows. Range: iroko:SecretNameConventionScheme. Community-restricted.</td>
-        </tr>
-        <tr id="prop-secretNameHolder">
-          <td><span class="prop-name">secretNameHolder</span><br><span style="font-size:.75rem;color:var(--ink-soft);">name holder</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Secret Name → SacredEntity</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
-          <td class="prop-desc">The entity (spiritual or human) who holds this secret name. Range: iroko:SpiritualEntity or foaf:Person. No-access.</td>
-        </tr>
-        <tr id="prop-orthographicVariants">
-          <td><span class="prop-name">orthographicVariants</span><br><span style="font-size:.75rem;color:var(--ink-soft);">orthographic variants</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Lexical Entry → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Alternative spellings in use across lineages or transcription traditions. Language-tagged.</td>
-        </tr>
-        <tr id="prop-partOfSpeech">
-          <td><span class="prop-name">partOfSpeech</span><br><span style="font-size:.75rem;color:var(--ink-soft);">part of speech</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Lexical Entry → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Grammatical category of this term. Range: iroko:PartOfSpeechScheme.</td>
-        </tr>
-        <tr id="prop-phraseFunction">
-          <td><span class="prop-name">phraseFunction</span><br><span style="font-size:.75rem;color:var(--ink-soft);">phrase function</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Liturgical Phrase → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The ceremonial function of this phrase. Range: iroko:SpeechActTypeScheme.</td>
-        </tr>
-        <tr id="prop-phraseLanguage">
-          <td><span class="prop-name">phraseLanguage</span><br><span style="font-size:.75rem;color:var(--ink-soft);">phrase language</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Liturgical Phrase → Sacred Language</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The sacred language in which this phrase is spoken. Range: iroko:SacredLanguage.</td>
-        </tr>
-        <tr id="prop-phraseText">
-          <td><span class="prop-name">phraseText</span><br><span style="font-size:.75rem;color:var(--ink-soft);">phrase text</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Liturgical Phrase → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">The text of the liturgical phrase in its original language. Language-tagged. Initiated-only.</td>
-        </tr>
-        <tr id="prop-phraseTranslation">
-          <td><span class="prop-name">phraseTranslation</span><br><span style="font-size:.75rem;color:var(--ink-soft);">phrase translation</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Liturgical Phrase → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-initiated">Initiated Only</span></td>
-          <td class="prop-desc">Translation of the phrase into a non-liturgical language. Initiated-only.</td>
-        </tr>
-        <tr id="prop-publicDefinition">
-          <td><span class="prop-name">publicDefinition</span><br><span style="font-size:.75rem;color:var(--ink-soft);">public definition</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Lexical Sense → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">A general, publicly accessible definition of this sense: what a general reader can know. Language-tagged.</td>
-        </tr>
-        <tr id="prop-scriptSystem">
-          <td><span class="prop-name">scriptSystem</span><br><span style="font-size:.75rem;color:var(--ink-soft);">script system</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Sacred Language → Concept</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-public">Public</span></td>
-          <td class="prop-desc">The writing system used for this language, where applicable. Range: iroko:ScriptSystemScheme.</td>
-        </tr>
-        <tr id="prop-secretNameText">
-          <td><span class="prop-name">secretNameText</span><br><span style="font-size:.75rem;color:var(--ink-soft);">secret name</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Secret Name → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-none">No Access</span></td>
-          <td class="prop-desc">The secret name itself. No-access: never exported to RDF, stored internally for provenance only.</td>
-        </tr>
-        <tr id="prop-speechActType">
-          <td><span class="prop-name">speechActType</span><br><span style="font-size:.75rem;color:var(--ink-soft);">speech act type</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-obj">Object</span></td>
-          <td class="prop-domain-range">Liturgical Phrase → Sacred Speech Act</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only.</td>
-        </tr>
-        <tr id="prop-writtenForm">
-          <td><span class="prop-name">writtenForm</span><br><span style="font-size:.75rem;color:var(--ink-soft);">written form</span></td>
-          <td style="white-space:nowrap;"><span class="prop-type-badge prop-type-data">Datatype</span></td>
-          <td class="prop-domain-range">Lexical Entry → langString</td>
-          <td style="white-space:nowrap;"><span class="access-badge access-community">Community Only</span></td>
-          <td class="prop-desc">The conventional written form of this term in the liturgical language. Language-tagged. Community-restricted.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <!-- ZONE 1: Classes -->
+      <div class="zone-head">
+        Classes
+        <span class="zone-hint">Select a class to explore its properties</span>
+      </div>
+      <div class="class-grid">
+        <div class="cls-card" id="card-LexicalEntry" onclick="activateClass('LexicalEntry')">
+          <span class="cls-uri">iroko:LexicalEntry</span>
+          <span class="cls-label">Lexical Entry</span>
+          <span class="cls-hint">subClassOf LexicalEntry · subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-LexicalSense" onclick="activateClass('LexicalSense')">
+          <span class="cls-uri">iroko:LexicalSense</span>
+          <span class="cls-label">Lexical Sense</span>
+          <span class="cls-hint">subClassOf LexicalSense · subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-LiturgicalPhrase" onclick="activateClass('LiturgicalPhrase')">
+          <span class="cls-uri">iroko:LiturgicalPhrase</span>
+          <span class="cls-label">Liturgical Phrase</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-SacredLanguage" onclick="activateClass('SacredLanguage')">
+          <span class="cls-uri">iroko:SacredLanguage</span>
+          <span class="cls-label">Sacred Language</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-SacredSpeechAct" onclick="activateClass('SacredSpeechAct')">
+          <span class="cls-uri">iroko:SacredSpeechAct</span>
+          <span class="cls-label">Sacred Speech Act</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+        <div class="cls-card" id="card-SecretName" onclick="activateClass('SecretName')">
+          <span class="cls-uri">iroko:SecretName</span>
+          <span class="cls-label">Secret Name</span>
+          <span class="cls-hint">subClassOf SacredEntity</span>
+        </div>
+      </div>
 
-  <div class="term-section">
-    <div class="term-section-header">
-      <span class="term-section-title">Concept Schemes</span>
-      <span class="term-section-count">5 schemes</span>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Parts of Speech</span>
-        <span class="scheme-count">7 concepts</span>
+      <!-- ZONE 2: Property panel -->
+      <div class="zone-head" style="margin-top:0;">
+        Properties
+        <span class="zone-hint" id="z2-hint">Click a class card above</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">PartOfSpeechScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-pos-adjective">
-          <div class="concept-label">Adjective</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">pos-adjective</div>
-          <p class="concept-def">A modifier (epithets, descriptive terms for entities).</p>
+      <div class="prop-placeholder" id="prop-placeholder">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        No class selected. Click any class card above to see incoming and outgoing properties.
+      </div>
+      <div class="prop-panel" id="prop-panel">
+        <div class="pp-head">
+          <div>
+            <div class="pp-uri" id="pp-uri"></div>
+            <div class="pp-label" id="pp-label"></div>
+          </div>
+          <button class="pp-close" onclick="closePanel()" title="Close">&#x2715;</button>
         </div>
-        <div class="concept-item" id="concept-pos-adverb">
-          <div class="concept-label">Adverb</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">pos-adverb</div>
-          <p class="concept-def">An adverbial modifier.</p>
+        <div class="pp-def" id="pp-def"></div>
+        <div class="pp-cols">
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8592;</span> Incoming <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(range = this class)</span></div>
+            <div id="pp-incoming"></div>
+          </div>
+          <div class="pp-col">
+            <div class="pp-col-label"><span class="dir-arrow">&#8594;</span> Outgoing <span style="font-style:italic;text-transform:none;letter-spacing:0;font-weight:400;">(domain = this class)</span></div>
+            <div id="pp-outgoing"></div>
+          </div>
         </div>
-        <div class="concept-item" id="concept-pos-formula">
-          <div class="concept-label">Fixed formula</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">pos-formula</div>
-          <p class="concept-def">A multi-word fixed expression that functions as a unit in ceremonial contexts.</p>
-        </div>
-        <div class="concept-item" id="concept-pos-interjection">
-          <div class="concept-label">Interjection / exclamation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">pos-interjection</div>
-          <p class="concept-def">A standalone ceremonial exclamation or ritual call-and-response marker.</p>
-        </div>
-        <div class="concept-item" id="concept-pos-noun">
-          <div class="concept-label">Noun</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">pos-noun</div>
-          <p class="concept-def">A noun or noun phrase (entity names, place names, object names).</p>
-        </div>
-        <div class="concept-item" id="concept-pos-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">pos-other</div>
-          <p class="concept-def">Part of speech not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-pos-verb">
-          <div class="concept-label">Verb</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">pos-verb</div>
-          <p class="concept-def">A verb or verb phrase (ceremonial actions, states).</p>
+        <div class="pp-cite">
+          <span class="pp-cite-text" id="pp-cite-text"></span>
+          <button class="btn-copy-sm" id="pp-cite-btn" onclick="copyCite()">Copy URI</button>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Sacred Language Types</span>
-        <span class="scheme-count">6 concepts</span>
+
+      <!-- ZONE 3: Concept Schemes -->
+      <div class="zone-head" style="margin-top:1rem;">
+        Concept Schemes
+        <span class="zone-hint">37 concepts across 5 schemes</span>
       </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">SacredLanguageTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-lang-african-christian">
-          <div class="concept-label">African Christian liturgical language</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">lang-african-christian</div>
-          <p class="concept-def">Languages of African origin used in pre-colonial or early-colonial African Christian traditions. Ge&#x27;ez (Ethiopian Orthodox, Eritrean Orthodox), Coptic (Egyptian Coptic Church). Included here because of their continuity with African sacred language traditions and their presence in Afro-Atlantic communities.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:PartOfSpeechScheme</span>
+            <span class="sh-label">Parts of Speech</span>
+          </div>
+          <span class="sh-count">7 concepts</span>
         </div>
-        <div class="concept-item" id="concept-lang-afro-atlantic">
-          <div class="concept-label">Afro-Atlantic liturgical language</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">lang-afro-atlantic</div>
-          <p class="concept-def">A source language preserved in Afro-Atlantic in a fossilized or adapted form, used for liturgical purposes but no longer a community vernacular. Examples: Lucumí (Afro-Atlantic Yorùbá in Cuba); Kikongo as used in Cuban Palo Monte; liturgical Fon in Haitian Vodou.</p>
-        </div>
-        <div class="concept-item" id="concept-lang-full-liturgical">
-          <div class="concept-label">Full liturgical language</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">lang-full-liturgical</div>
-          <p class="concept-def">A language used in its complete grammatical form as the primary medium of sacred communication. Examples: Yorùbá in continental Yorùbá religion; Fon in Beninese Vodun; Ge&#x27;ez in Ethiopian Orthodox liturgy.</p>
-        </div>
-        <div class="concept-item" id="concept-lang-graphic-lexical">
-          <div class="concept-label">Graphic-lexical system</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">lang-graphic-lexical</div>
-          <p class="concept-def">A system in which graphic signs function as lexical or semiotic units, functioning analogously to writing. Examples: Nsibidi (Ejagham) as a graphic communication system; Anaforuana signs with lexical referents. Linked to iroko-veve for the graphic dimension.</p>
-        </div>
-        <div class="concept-item" id="concept-lang-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">lang-other</div>
-          <p class="concept-def">Sacred language type not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-lang-sacred-register">
-          <div class="concept-label">Sacred register of a vernacular</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">lang-sacred-register</div>
-          <p class="concept-def">A specialized ceremonial register of a vernacular language, with vocabulary and formulas specific to sacred contexts. Examples: the Vodou ceremonial register of Haitian Kreyòl; the ceremonial Jamaican Patois of Kumina.</p>
-        </div>
-      </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Script Systems</span>
-        <span class="scheme-count">8 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">ScriptSystemScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-script-adinkra">
-          <div class="concept-label">Adinkra symbols (Akan)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">script-adinkra</div>
-          <p class="concept-def">Akan visual symbols functioning as a lexical and semiotic system. Cross-listed with iroko-veve; included here for semantic documentation of individual symbol meanings.</p>
-        </div>
-        <div class="concept-item" id="concept-script-anaforuana">
-          <div class="concept-label">Anaforuana (Abakuá)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">script-anaforuana</div>
-          <p class="concept-def">The Abakuá graphic script with lexical and communicative functions. Cross-listed with iroko-veve; included here for documentation of the semiotic/communicative dimension.</p>
-        </div>
-        <div class="concept-item" id="concept-script-arabic">
-          <div class="concept-label">Arabic script (Ajami)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">script-arabic</div>
-          <p class="concept-def">Arabic script used to write African languages in religious contexts, particularly in Ajami traditions (Fulfulde, Hausa, Wolof in Arabic script). Relevant in West African Islamic contexts that intersect with Afro-Atlantic traditions.</p>
-        </div>
-        <div class="concept-item" id="concept-script-geez">
-          <div class="concept-label">Ge&#x27;ez / Ethiopic script</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">script-geez</div>
-          <p class="concept-def">The Ethiopic abugida used to write Ge&#x27;ez, Amharic, Tigrinya, and other Ethiopian and Eritrean languages. The sacred script of Ethiopian and Eritrean Orthodox liturgy.</p>
-        </div>
-        <div class="concept-item" id="concept-script-latin">
-          <div class="concept-label">Latin script</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">script-latin</div>
-          <p class="concept-def">Latin alphabet as used to transcribe liturgical Yorùbá, Lucumí, Kikongo, Haitian Kreyòl, and most documented Afro-Atlantic liturgical languages.</p>
-        </div>
-        <div class="concept-item" id="concept-script-nsibidi">
-          <div class="concept-label">Nsibidi (Ejagham)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">script-nsibidi</div>
-          <p class="concept-def">The Ejagham ideographic writing system, functioning as both script and graphic sign system. Cross-listed with iroko-veve for its graphic dimension; listed here for its lexical and communicative dimension.</p>
-        </div>
-        <div class="concept-item" id="concept-script-oral-only">
-          <div class="concept-label">Oral tradition (no script)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">script-oral-only</div>
-          <p class="concept-def">Language transmitted exclusively orally without a writing system. The majority of Afro-Atlantic liturgical languages fall here historically; Latin transcription is secondary.</p>
-        </div>
-        <div class="concept-item" id="concept-script-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">script-other</div>
-          <p class="concept-def">Script system not covered by existing concepts.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Adjective</span>
+            <span class="chip-id">iroko:pos-adjective</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Adverb</span>
+            <span class="chip-id">iroko:pos-adverb</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Fixed formula</span>
+            <span class="chip-id">iroko:pos-formula</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Interjection / exclamation</span>
+            <span class="chip-id">iroko:pos-interjection</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Noun</span>
+            <span class="chip-id">iroko:pos-noun</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:pos-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Verb</span>
+            <span class="chip-id">iroko:pos-verb</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Secret Name Conventions</span>
-        <span class="scheme-count">6 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">SecretNameConventionScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-naming-ecobio-abakua">
-          <div class="concept-label">Ecobio name (Abakuá)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">naming-ecobio-abakua</div>
-          <p class="concept-def">The initiatory name given to an Abakuá member at their juramento. No-access.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:SacredLanguageTypeScheme</span>
+            <span class="sh-label">Sacred Language Types</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
         </div>
-        <div class="concept-item" id="concept-naming-initiate-ita">
-          <div class="concept-label">Initiate name (from itá)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">naming-initiate-ita</div>
-          <p class="concept-def">A name or identifier given to an initiate in their itá (life reading). Typically held as private to the initiate and their elders.</p>
-        </div>
-        <div class="concept-item" id="concept-naming-lwa-vodou">
-          <div class="concept-label">Lwa secret name (Vodou)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">naming-lwa-vodou</div>
-          <p class="concept-def">A restricted name of a specific lwa, known only to initiates at a specific grade.</p>
-        </div>
-        <div class="concept-item" id="concept-naming-nkisi-palo">
-          <div class="concept-label">Nkisi name (Palo)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">naming-nkisi-palo</div>
-          <p class="concept-def">The secret name of a specific Nganga/nkisi in Palo Monte, given at preparation. Known to the Tata and their lineage.</p>
-        </div>
-        <div class="concept-item" id="concept-naming-orisha-camino">
-          <div class="concept-label">Orisha camino (path name)</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">naming-orisha-camino</div>
-          <p class="concept-def">The secret name of a specific camino (path) of an Orisha, revealed in divination. Community-restricted in general; the specific name is initiated-elder only.</p>
-        </div>
-        <div class="concept-item" id="concept-naming-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">naming-other</div>
-          <p class="concept-def">Secret name convention not covered by existing concepts.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">African Christian liturgical language</span>
+            <span class="chip-id">iroko:lang-african-christian</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Afro-Atlantic liturgical language</span>
+            <span class="chip-id">iroko:lang-afro-atlantic</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Full liturgical language</span>
+            <span class="chip-id">iroko:lang-full-liturgical</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Graphic-lexical system</span>
+            <span class="chip-id">iroko:lang-graphic-lexical</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:lang-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Sacred register of a vernacular</span>
+            <span class="chip-id">iroko:lang-sacred-register</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="scheme-block">
-      <div class="scheme-header">
-        <span class="scheme-name">Speech Act Types</span>
-        <span class="scheme-count">10 concepts</span>
-      </div>
-      <p style="padding:.6rem 1.2rem;font-size:.82rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);">SpeechActTypeScheme</p>
-      <div class="concept-list">
-        <div class="concept-item" id="concept-act-blessing">
-          <div class="concept-label">Blessing</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-blessing</div>
-          <p class="concept-def">A formally authorized speech act conferring spiritual benefit, protection, or grace. Requires recognized authority to perform.</p>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:ScriptSystemScheme</span>
+            <span class="sh-label">Script Systems</span>
+          </div>
+          <span class="sh-count">8 concepts</span>
         </div>
-        <div class="concept-item" id="concept-act-consecration">
-          <div class="concept-label">Consecration</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-consecration</div>
-          <p class="concept-def">Speech that transforms an object, person, or space from secular to sacred status. Among the most restricted speech acts.</p>
-        </div>
-        <div class="concept-item" id="concept-act-farewell">
-          <div class="concept-label">Farewell / closing</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-farewell</div>
-          <p class="concept-def">Formal speech acts that close a ceremony or take leave of a spiritual entity.</p>
-        </div>
-        <div class="concept-item" id="concept-act-invocation">
-          <div class="concept-label">Invocation</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-invocation</div>
-          <p class="concept-def">Speech that calls or invites a spiritual entity. Typically more restricted than salutation in terms of who may perform it.</p>
-        </div>
-        <div class="concept-item" id="concept-act-naming">
-          <div class="concept-label">Naming</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-naming</div>
-          <p class="concept-def">The formal conferral of a sacred or initiatory name on a person, object, or entity.</p>
-        </div>
-        <div class="concept-item" id="concept-act-oath">
-          <div class="concept-label">Oath / juramento</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-oath</div>
-          <p class="concept-def">A sworn commitment made in the presence of spiritual witnesses, binding on the speaker. Examples: Abakuá juramento; Palo Monte pact formulas. Initiated-only.</p>
-        </div>
-        <div class="concept-item" id="concept-act-other">
-          <div class="concept-label">Other</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-other</div>
-          <p class="concept-def">Speech act type not covered by existing concepts.</p>
-        </div>
-        <div class="concept-item" id="concept-act-praise">
-          <div class="concept-label">Praise / oriki</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-praise</div>
-          <p class="concept-def">Formal praise speech honoring an entity, ancestor, or lineage. Oriki in Yorùbá-derived traditions; analogous forms in other traditions.</p>
-        </div>
-        <div class="concept-item" id="concept-act-prohibition">
-          <div class="concept-label">Prohibition / taboo declaration</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-prohibition</div>
-          <p class="concept-def">Speech acts that declare or reinforce a taboo, restriction, or prohibition.</p>
-        </div>
-        <div class="concept-item" id="concept-act-salutation">
-          <div class="concept-label">Salutation / greeting</div>
-          <div style="font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:.1rem;">act-salutation</div>
-          <p class="concept-def">Formal greetings addressed to an entity, elder, or ceremonial space. Examples: Orisha salutation formulas (Mojuba); Vodou bonjou to specific lwa.</p>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Adinkra symbols (Akan)</span>
+            <span class="chip-id">iroko:script-adinkra</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Anaforuana (Abakuá)</span>
+            <span class="chip-id">iroko:script-anaforuana</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Arabic script (Ajami)</span>
+            <span class="chip-id">iroko:script-arabic</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Ge&#x27;ez / Ethiopic script</span>
+            <span class="chip-id">iroko:script-geez</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Latin script</span>
+            <span class="chip-id">iroko:script-latin</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Nsibidi (Ejagham)</span>
+            <span class="chip-id">iroko:script-nsibidi</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Oral tradition (no script)</span>
+            <span class="chip-id">iroko:script-oral-only</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:script-other</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:SecretNameConventionScheme</span>
+            <span class="sh-label">Secret Name Conventions</span>
+          </div>
+          <span class="sh-count">6 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Ecobio name (Abakuá)</span>
+            <span class="chip-id">iroko:naming-ecobio-abakua</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Initiate name (from itá)</span>
+            <span class="chip-id">iroko:naming-initiate-ita</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Lwa secret name (Vodou)</span>
+            <span class="chip-id">iroko:naming-lwa-vodou</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Nkisi name (Palo)</span>
+            <span class="chip-id">iroko:naming-nkisi-palo</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Orisha camino (path name)</span>
+            <span class="chip-id">iroko:naming-orisha-camino</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:naming-other</span>
+          </div>
+        </div>
+      </div>
+      <div class="scheme-block">
+        <div class="scheme-head">
+          <div>
+            <span class="sh-uri">iroko:SpeechActTypeScheme</span>
+            <span class="sh-label">Speech Act Types</span>
+          </div>
+          <span class="sh-count">10 concepts</span>
+        </div>
+        <div class="concept-chips">
+          <div class="chip">
+            <span class="chip-label">Blessing</span>
+            <span class="chip-id">iroko:act-blessing</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Consecration</span>
+            <span class="chip-id">iroko:act-consecration</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Farewell / closing</span>
+            <span class="chip-id">iroko:act-farewell</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Invocation</span>
+            <span class="chip-id">iroko:act-invocation</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Naming</span>
+            <span class="chip-id">iroko:act-naming</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Oath / juramento</span>
+            <span class="chip-id">iroko:act-oath</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Other</span>
+            <span class="chip-id">iroko:act-other</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Praise / oriki</span>
+            <span class="chip-id">iroko:act-praise</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Prohibition / taboo declaration</span>
+            <span class="chip-id">iroko:act-prohibition</span>
+          </div>
+          <div class="chip">
+            <span class="chip-label">Salutation / greeting</span>
+            <span class="chip-id">iroko:act-salutation</span>
+          </div>
+        </div>
+      </div>
+    </main><!-- /module-main -->
+
+    <!-- SIDEBAR -->
+    <aside class="module-sidebar">
+
+      <div class="share-row">
+        <a class="share-btn" href="mailto:?subject=Iroko%20Framework%20%E2%80%94%20Qal%20Module&amp;body=https://ontology.irokosociety.org/vocab/iroko-qal.html" title="Share via email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          Email
+        </a>
+        <button class="share-btn" onclick="window.print()" title="Print">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/></svg>
+          Print
+        </button>
+        <button class="share-btn" id="link-btn" onclick="copyLink(this)" title="Copy link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Copy Link
+        </button>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="sp-head">
+          <span class="sp-title" id="sb-title">Connected Modules</span>
+          <span class="sp-active-uri" id="sb-active-uri"></span>
+        </div>
+        <div class="sp-body sidebar-dynamic" id="sb-body">
+          <div id="sb-module-view">
+<p class="no-props" style="font-size:.8rem;color:var(--ink-soft);font-style:italic;">No external connections detected.</p>
+          </div>
+          <div id="sb-class-view" style="display:none;">
+            <div id="sb-active-card"></div>
+            <div id="sb-class-conns"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-cite">
+        <div class="cite-head">Cite the Qal Module</div>
+        <div class="cite-tabs">
+          <button class="cite-tab active" onclick="setCiteFormat('plain',this)">Plain</button>
+          <button class="cite-tab" onclick="setCiteFormat('bibtex',this)">BibTeX</button>
+          <button class="cite-tab" onclick="setCiteFormat('ris',this)">RIS</button>
+        </div>
+        <div class="cite-text" id="cite-display">
+          Iroko Historical Society. (2026). <em>Iroko Framework: Qal Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-qal.html. CC0 1.0 Universal.
+        </div>
+        <button class="btn-cite-copy" id="module-cite-btn" onclick="copyModuleCite()">Copy Citation</button>
+        <div class="format-links">
+          <a class="fmt-link" href="iroko-qal.ttl">Turtle (.ttl) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-qal.jsonld">JSON-LD (.jsonld) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-qal.rdf">RDF/XML (.rdf) <span class="fmt-arrow">&#8595;</span></a>
+          <a class="fmt-link" href="iroko-qal.nt">N-Triples (.nt) <span class="fmt-arrow">&#8595;</span></a>
+        </div>
+      </div>
+
+    </aside>
+  </div><!-- /module-layout -->
 
   <footer class="site-footer">
     <div class="footer-left">
@@ -568,6 +611,177 @@
     </div>
   </footer>
 
-</div>
+</div><!-- /page-wrap -->
+
+<script>
+
+// ── JS data injected by generator ──────────────────────────────────────────
+const MODULE_STEM = "iroko-qal";
+const MOD_TITLE_SHORT = "Qal Module";
+const CLASSES = {"LexicalEntry": {"uri": "iroko:LexicalEntry", "label": "Lexical Entry", "definition": "A word, term, or morpheme in a sacred language with its liturgical or ritual meaning documented. Subclass of ontolex:LexicalEntry for integration with multilingual lexicographic infrastructure. A single lexical entry may have multiple senses (iroko:LexicalSense), including restricted senses whose esoteric meaning is not disclosed publicly. The existence of a term is community-restricted; its esoteric sense is initiated-only.", "outgoing": [{"uri": "iroko:cognateTerms", "label": "cognate terms", "type": "obj", "range": "Lexical Entry", "access": "comm", "def": "Terms in related languages that are etymologically cognate or semantically parallel. Used to document cross-tradition vocabulary relationships (e.g., Yorùbá 'Egúngún' → Lucumí 'Eggun'; Fon 'Legba' → Haitian 'Legba')."}, {"uri": "iroko:hasSense", "label": "has sense", "type": "obj", "range": "Lexical Sense", "access": "comm", "def": "Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance."}, {"uri": "iroko:inLanguage", "label": "in language", "type": "obj", "range": "Sacred Language", "access": "pub", "def": "The sacred language to which this lexical entry belongs. Range: iroko:SacredLanguage."}, {"uri": "iroko:orthographicVariants", "label": "orthographic variants", "type": "data", "range": "langString", "access": "comm", "def": "Alternative spellings in use across lineages or transcription traditions. Language-tagged."}, {"uri": "iroko:partOfSpeech", "label": "part of speech", "type": "obj", "range": "Concept", "access": "comm", "def": "Grammatical category of this term. Range: iroko:PartOfSpeechScheme."}, {"uri": "iroko:writtenForm", "label": "written form", "type": "data", "range": "langString", "access": "comm", "def": "The conventional written form of this term in the liturgical language. Language-tagged. Community-restricted."}], "incoming": [{"uri": "iroko:cognateTerms", "label": "cognate terms", "type": "obj", "access": "comm", "def": "Terms in related languages that are etymologically cognate or semantically parallel. Used to document cross-tradition vocabulary relationships (e.g., Yorùbá 'Egúngún' → Lucumí 'Eggun'; Fon 'Legba' → Haitian 'Legba').", "domain": "Lexical Entry", "from": "iroko:Lexical Entry", "fromLabel": "Lexical Entry", "module": "Qal Module", "stem": "iroko-qal"}, {"uri": "iroko:hasEntry", "label": "has entry", "type": "obj", "access": "comm", "def": "Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing.", "domain": "Sacred Language", "from": "iroko:Sacred Language", "fromLabel": "Sacred Language", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "LexicalSense": {"uri": "iroko:LexicalSense", "label": "Lexical Sense", "definition": "A specific meaning of a lexical entry, which may carry different access levels than the entry itself. An Orisha's name (entry) may be public, while a path-specific epithet (restricted sense) is community-restricted, and a secret name (esoteric sense) is no-access. Multiple senses of the same term are documented as separate LexicalSense instances with appropriate access levels.", "outgoing": [{"uri": "iroko:communityDefinition", "label": "community definition", "type": "data", "range": "langString", "access": "comm", "def": "A definition appropriate for community members and practitioners, including cultural context not meant for general publication. Language-tagged."}, {"uri": "iroko:entityReference", "label": "entity reference", "type": "obj", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity denoted by this sense, where applicable. Range: iroko:SpiritualEntity."}, {"uri": "iroko:esotericDefinition", "label": "esoteric definition", "type": "data", "range": "langString", "access": "init", "def": "The initiated or esoteric meaning of this sense, disclosed only to qualified practitioners. Initiated-only."}, {"uri": "iroko:publicDefinition", "label": "public definition", "type": "data", "range": "langString", "access": "pub", "def": "A general, publicly accessible definition of this sense: what a general reader can know. Language-tagged."}], "incoming": [{"uri": "iroko:hasSense", "label": "has sense", "type": "obj", "access": "comm", "def": "Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance.", "domain": "Lexical Entry", "from": "iroko:Lexical Entry", "fromLabel": "Lexical Entry", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "LiturgicalPhrase": {"uri": "iroko:LiturgicalPhrase", "label": "Liturgical Phrase", "definition": "A multi-word expression, formula, invocation, or greeting used in Afro-Atlantic sacred contexts. Examples: Yorùbá greeting formulas specific to Orisha (mojuba formulas); Palo Kikongo invocations; Vodou salutation phrases for specific lwa. Phrases are documented with their tradition, ceremony context, and speaker authority requirements. General greetings are community-restricted; ceremonial invocations are initiated-only.", "outgoing": [{"uri": "iroko:authorityRequired", "label": "authority required", "type": "obj", "range": "Concept", "access": "comm", "def": "The initiation level or title required to speak this phrase in ceremony. Range: iroko:AccessLevelScheme concept."}, {"uri": "iroko:phraseFunction", "label": "phrase function", "type": "obj", "range": "Concept", "access": "comm", "def": "The ceremonial function of this phrase. Range: iroko:SpeechActTypeScheme."}, {"uri": "iroko:phraseLanguage", "label": "phrase language", "type": "obj", "range": "Sacred Language", "access": "comm", "def": "The sacred language in which this phrase is spoken. Range: iroko:SacredLanguage."}, {"uri": "iroko:phraseText", "label": "phrase text", "type": "data", "range": "langString", "access": "init", "def": "The text of the liturgical phrase in its original language. Language-tagged. Initiated-only."}, {"uri": "iroko:phraseTranslation", "label": "phrase translation", "type": "data", "range": "langString", "access": "init", "def": "Translation of the phrase into a non-liturgical language. Initiated-only."}, {"uri": "iroko:speechActType", "label": "speech act type", "type": "obj", "range": "Sacred Speech Act", "access": "comm", "def": "Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only."}], "incoming": [{"uri": "iroko:hasPhrase", "label": "has phrase", "type": "obj", "access": "comm", "def": "Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves.", "domain": "Sacred Language", "from": "iroko:Sacred Language", "fromLabel": "Sacred Language", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "SacredLanguage": {"uri": "iroko:SacredLanguage", "label": "Sacred Language", "definition": "A language, language register, or language variety used as a liturgical or ritual medium in Afro-Atlantic or related African sacred practice. Includes fully distinct languages (Yorùbá in Lucumí/Candomblé; Kikongo in Palo Monte; Fon in Haitian Vodou), sacred registers of creole languages (Haitian Kreyòl ceremonial register), specialized vocabularies (Lucumí as Afro-Atlantic-adapted liturgical Yorùbá), and graphic-lexical systems (Nsibidi as both script and vocabulary system). Also includes African Christian liturgical languages: Ge'ez (Ethiopian/Eritrean Orthodox), Coptic (Egyptian Coptic Church).", "outgoing": [{"uri": "iroko:languageISO", "label": "ISO 639 code", "type": "data", "range": "language", "access": "pub", "def": "The ISO 639-3 code for the base language, where applicable (e.g., 'yor' for Yorùbá, 'kng' for Kikongo, 'hat' for Haitian Kreyòl, 'gez' for Ge'ez)."}, {"uri": "iroko:geographicBase", "label": "geographic base", "type": "data", "range": "langString", "access": "pub", "def": "The geographic region(s) where this language is primarily used. Free-text."}, {"uri": "iroko:hasEntry", "label": "has entry", "type": "obj", "range": "Lexical Entry", "access": "comm", "def": "Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing."}, {"uri": "iroko:hasPhrase", "label": "has phrase", "type": "obj", "range": "Liturgical Phrase", "access": "comm", "def": "Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves."}, {"uri": "iroko:languageName", "label": "language name", "type": "data", "range": "langString", "access": "pub", "def": "The name of the sacred language or register. Language-tagged."}, {"uri": "iroko:languageType", "label": "language type", "type": "obj", "range": "Concept", "access": "pub", "def": "Classification of this sacred language. Range: iroko:SacredLanguageTypeScheme."}, {"uri": "iroko:scriptSystem", "label": "script system", "type": "obj", "range": "Concept", "access": "pub", "def": "The writing system used for this language, where applicable. Range: iroko:ScriptSystemScheme."}], "incoming": [{"uri": "iroko:inLanguage", "label": "in language", "type": "obj", "access": "pub", "def": "The sacred language to which this lexical entry belongs. Range: iroko:SacredLanguage.", "domain": "Lexical Entry", "from": "iroko:Lexical Entry", "fromLabel": "Lexical Entry", "module": "Qal Module", "stem": "iroko-qal"}, {"uri": "iroko:phraseLanguage", "label": "phrase language", "type": "obj", "access": "comm", "def": "The sacred language in which this phrase is spoken. Range: iroko:SacredLanguage.", "domain": "Liturgical Phrase", "from": "iroko:Liturgical Phrase", "fromLabel": "Liturgical Phrase", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "SacredSpeechAct": {"uri": "iroko:SacredSpeechAct", "label": "Sacred Speech Act", "definition": "A formally defined speech act type within a tradition's ceremonial protocol: oath-taking, naming, cursing, blessing, consecration, authorization. Distinct from a specific utterance: a SacredSpeechAct is the category (e.g., 'Ifá greeting formula') while a LiturgicalPhrase is a specific instance. The existence of a speech act type is community-restricted; its specific form and context are initiated-only to elder-only.", "outgoing": [], "incoming": [{"uri": "iroko:speechActType", "label": "speech act type", "type": "obj", "access": "comm", "def": "Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only.", "domain": "Liturgical Phrase", "from": "iroko:Liturgical Phrase", "fromLabel": "Liturgical Phrase", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "SecretName": {"uri": "iroko:SecretName", "label": "Secret Name", "definition": "An esoteric or restricted name for a spiritual entity, practitioner, or sacred object known only to initiated members at a specific grade or above. Examples: the secret name of an Orisha camino revealed in itá; a Palo Tata's nkisi name; an Abakuá ecobio name. The existence of secret name conventions within a tradition is public; the names themselves are no-access.", "outgoing": [{"uri": "iroko:nameConvention", "label": "name convention", "type": "obj", "range": "Concept", "access": "comm", "def": "The type of secret name convention this follows. Range: iroko:SecretNameConventionScheme. Community-restricted."}, {"uri": "iroko:secretNameHolder", "label": "name holder", "type": "obj", "range": "SacredEntity", "access": "none", "def": "The entity (spiritual or human) who holds this secret name. Range: iroko:SpiritualEntity or foaf:Person. No-access."}, {"uri": "iroko:secretNameText", "label": "secret name", "type": "data", "range": "langString", "access": "none", "def": "The secret name itself. No-access: never exported to RDF, stored internally for provenance only."}], "incoming": [{"uri": "iroko:hasSecretName", "label": "has secret name", "type": "obj", "access": "init", "def": "Links a SacredEntity to a SecretName it holds. Inverse of iroko:secretNameHolder. Scoped to SacredEntity rather than SpiritualEntity alone because initiated practitioners also hold secret names (oruko awo and analogous esoteric designations). The existence of a secret name relationship is itself restricted; the name text is governed at no-access on iroko:secretNameText and is never exported to RDF — it is stored internally only. Access: initiated-only.", "domain": "SacredEntity", "from": "iroko:SacredEntity", "fromLabel": "SacredEntity", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}};
+const MODULE_CROSS = [];
+const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Qal Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-qal.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Qal Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-qal.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_qal_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Qal Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-qal.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Qal Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-qal.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
+
+// ── Access badge ─────────────────────────────────────────────────────────────
+function accessBadge(a) {
+  if (a==='pub')  return '<span class="ab ab-pub">Public</span>';
+  if (a==='comm') return '<span class="ab ab-comm">Community</span>';
+  if (a==='init') return '<span class="ab ab-init">Initiated</span>';
+  return '';
+}
+function typeBadge(t) {
+  if (t==='obj')  return '<span class="pr-type pr-type-obj">Object</span>';
+  if (t==='data') return '<span class="pr-type pr-type-data">Datatype</span>';
+  if (t==='ann')  return '<span class="pr-type pr-type-ann">Annotation</span>';
+  return '';
+}
+
+// ── Render property item ──────────────────────────────────────────────────────
+function renderProp(p, isIncoming) {
+  const meta = isIncoming
+    ? `<div class="pr-source">from ${p.from} · ${p.module}</div>`
+    : `<div class="pr-meta">${p.range||''}</div>`;
+  return `<div class="pr-item">
+    <div class="pr-top">
+      <span class="pr-uri">${p.uri}</span>
+      ${isIncoming ? '' : typeBadge(p.type)}
+      ${isIncoming ? '' : accessBadge(p.access)}
+    </div>
+    <div class="pr-label">${p.label}</div>
+    ${meta}
+    <div class="pr-def">${p.def||''}</div>
+  </div>`;
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let activeClass = null;
+let activeCiteFormat = 'plain';
+
+function activateClass(key) {
+  if (activeClass === key) { closePanel(); return; }
+  activeClass = key;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('card-'+key)?.classList.add('active');
+  const d = CLASSES[key];
+  if (!d) return;
+  document.getElementById('prop-placeholder').classList.add('hidden');
+  document.getElementById('z2-hint').textContent = 'Click class again to close';
+  document.getElementById('pp-uri').textContent  = d.uri;
+  document.getElementById('pp-label').textContent = d.label;
+  document.getElementById('pp-def').textContent   = d.definition||'';
+  const inEl  = document.getElementById('pp-incoming');
+  inEl.innerHTML = d.incoming && d.incoming.length
+    ? d.incoming.map(p=>renderProp(p,true)).join('')
+    : '<p class="no-props">No incoming connections detected in this module.</p>';
+  const outEl = document.getElementById('pp-outgoing');
+  outEl.innerHTML = d.outgoing && d.outgoing.length
+    ? d.outgoing.map(p=>renderProp(p,false)).join('')
+    : '<p class="no-props">No outgoing properties.</p>';
+  document.getElementById('pp-cite-text').textContent =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  document.getElementById('pp-cite-btn').dataset.uri  =
+    'https://ontology.irokosociety.org/iroko#'+key;
+  const panel = document.getElementById('prop-panel');
+  panel.classList.remove('visible');
+  void panel.offsetWidth;
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  updateSidebar(key, d);
+}
+
+function closePanel() {
+  activeClass = null;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('prop-placeholder').classList.remove('hidden');
+  document.getElementById('prop-panel').classList.remove('visible');
+  document.getElementById('z2-hint').textContent = 'Click a class card above';
+  resetSidebar();
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+function updateSidebar(key, d) {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'External links';
+    document.getElementById('sb-active-uri').style.display = 'block';
+    document.getElementById('sb-active-uri').textContent = d.uri;
+    document.getElementById('sb-module-view').style.display = 'none';
+    document.getElementById('sb-class-view').style.display  = 'block';
+    document.getElementById('sb-active-card').innerHTML =
+      `<div class="active-class-card"><span class="acc-uri">${d.uri}</span><span class="acc-label">${d.label}</span></div>`;
+    const conns = (d.cross||[]);
+    const connsEl = document.getElementById('sb-class-conns');
+    connsEl.innerHTML = conns.length
+      ? conns.map(c=>`<div class="conn-card">
+          <div class="cc-row"><span class="cc-dot ${c.dotCls}"></span><span class="cc-name">${c.name}</span><span class="cc-dir" style="margin-left:auto;">${c.dir}</span></div>
+          <span class="cc-via">${c.via}</span>
+        </div>`).join('')
+      : '<p class="no-props">No cross-module connections for this class.</p>';
+    body.classList.remove('fading');
+  },120);
+}
+
+function resetSidebar() {
+  const body = document.getElementById('sb-body');
+  body.classList.add('fading');
+  setTimeout(()=>{
+    document.getElementById('sb-title').textContent = 'Connected Modules';
+    document.getElementById('sb-active-uri').style.display = 'none';
+    document.getElementById('sb-module-view').style.display = 'block';
+    document.getElementById('sb-class-view').style.display  = 'none';
+    body.classList.remove('fading');
+  },120);
+}
+
+// ── Citation ──────────────────────────────────────────────────────────────────
+function setCiteFormat(fmt, btn) {
+  activeCiteFormat = fmt;
+  document.querySelectorAll('.cite-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const display = document.getElementById('cite-display');
+  if (fmt==='plain') {
+    display.innerHTML = CITE_FORMATS.plainHTML;
+  } else {
+    display.innerHTML = `<pre>${CITE_FORMATS[fmt].replace(/</g,'&lt;')}</pre>`;
+  }
+}
+
+function copyModuleCite() {
+  const text = activeCiteFormat==='plain' ? CITE_FORMATS.plain : CITE_FORMATS[activeCiteFormat];
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('module-cite-btn');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy Citation';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyCite() {
+  const btn = document.getElementById('pp-cite-btn');
+  navigator.clipboard.writeText(btn.dataset.uri).then(()=>{
+    btn.textContent='✓ Copied'; btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy URI';btn.classList.remove('copied');},2000);
+  });
+}
+
+function copyLink(btn) {
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    btn.classList.add('copied');
+    btn.lastChild.textContent='Copied';
+    setTimeout(()=>{btn.classList.remove('copied');btn.lastChild.textContent='Copy Link';},2000);
+  });
+}
+
+// ── Fragment URI auto-open ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  const hash = window.location.hash.replace('#','');
+  if (hash && CLASSES[hash]) {
+    activateClass(hash);
+    document.getElementById('card-'+hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+});
+
+</script>
 </body>
 </html>
