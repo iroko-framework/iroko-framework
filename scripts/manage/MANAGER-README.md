@@ -9,7 +9,7 @@ in `vocab/` directly. Does not touch any public-facing HTML.
 
 ```bash
 # From the repo root:
-cd "scripts/manage"
+cd "C:\Users\Dele Fatbemi\Documents\github active\iroko-framework\scripts\manage"
 pip install flask rdflib          # one-time; rdflib already installed for build scripts
 python app.py
 ```
