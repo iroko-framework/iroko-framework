@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Iroko Manager{% endblock %} — Iroko Framework</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='manager.css') }}">
+</head>
+<body>
+
+<nav class="mgr-nav">
+  <a class="mgr-brand" href="{{ url_for('dashboard') }}">
+    <span class="mgr-brand-icon">◆</span>
+    Iroko Manager
+  </a>
+  <div class="mgr-nav-links">
+    <a href="{{ url_for('dashboard') }}" {% if request.endpoint == 'dashboard' %}class="active"{% endif %}>Modules</a>
+    <a href="{{ url_for('term_move') }}" {% if request.endpoint == 'term_move' %}class="active"{% endif %}>Move Term</a>
+    <a href="{{ url_for('module_new') }}" {% if request.endpoint == 'module_new' %}class="active"{% endif %}>New Module</a>
+    <a href="{{ url_for('build_page') }}" {% if request.endpoint == 'build_page' %}class="active"{% endif %}>Run Build</a>
+  </div>
+</nav>
+
+<main class="mgr-main">
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-stack">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="mgr-footer">
+  Iroko Framework Manager · local tool · edits vocab/ TTL files directly
+</footer>
+
+</body>
+</html>

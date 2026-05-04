@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}New Module{% endblock %}
+
+{% block content %}
+<div class="mgr-page-head">
+  <div>
+    <div class="mgr-breadcrumb"><a href="{{ url_for('dashboard') }}">Modules</a> / New Module</div>
+    <h1 class="mgr-h1">Create New Module</h1>
+    <p class="mgr-subtitle">Scaffolds a new TTL file with ontology metadata. You must also add the module to <code>iroko_config.py</code> to include it in builds.</p>
+  </div>
+</div>
+
+<div class="mgr-form-wrap">
+  <form method="post" class="mgr-form">
+
+    <div class="mgr-field">
+      <label class="mgr-label" for="stem">
+        Module Stem <span class="mgr-required">*</span>
+        <span class="mgr-label-hint">must start with <code>iroko-</code>, e.g. <code>iroko-botanical</code></span>
+      </label>
+      <input class="mgr-input" type="text" id="stem" name="stem" required
+             pattern="iroko-[a-z][a-z0-9\-]*"
+             placeholder="iroko-mymodule">
+    </div>
+
+    <div class="mgr-field">
+      <label class="mgr-label" for="title">Title <span class="mgr-required">*</span></label>
+      <input class="mgr-input" type="text" id="title" name="title" required
+             placeholder="Botanical Module — Sacred Plant Knowledge">
+    </div>
+
+    <div class="mgr-field">
+      <label class="mgr-label" for="description">Description</label>
+      <textarea class="mgr-textarea" id="description" name="description" rows="3"
+                placeholder="What this module covers and how it fits into the framework."></textarea>
+    </div>
+
+    <div class="mgr-field-row">
+      <div class="mgr-field">
+        <label class="mgr-label" for="layer">Layer</label>
+        <select class="mgr-select" id="layer" name="layer">
+          {% for l in layer_options %}
+          <option value="{{ l }}" {% if l == 'Domain' %}selected{% endif %}>{{ l }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mgr-field">
+        <label class="mgr-label" for="prefix">
+          Prefix
+          <span class="mgr-label-hint">e.g. <code>bot:</code></span>
+        </label>
+        <input class="mgr-input" type="text" id="prefix" name="prefix"
+               value="iroko:" placeholder="iroko:">
+      </div>
+      <div class="mgr-field">
+        <label class="mgr-label" for="tag_text">Tag Label</label>
+        <input class="mgr-input" type="text" id="tag_text" name="tag_text"
+               placeholder="Botanical">
+      </div>
+    </div>
+
+    <div class="mgr-info-box">
+      After creation, open <code>scripts/iroko_config.py</code> and add an entry to both
+      <code>MODULES</code> and <code>MODULE_CONFIG</code> so the build pipeline picks it up.
+    </div>
+
+    <div class="mgr-form-actions">
+      <button type="submit" class="mgr-btn-primary">Create Module</button>
+      <a href="{{ url_for('dashboard') }}" class="mgr-btn-ghost">Cancel</a>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

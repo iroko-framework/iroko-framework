@@ -15,9 +15,13 @@ The output page links at the bottom of index.html under "Full Vocabulary Index."
 """
 
 import argparse
+import html as _html
 import re
 import sys
 from pathlib import Path
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 try:
     from rdflib import Graph, RDF, OWL, SKOS, Namespace
@@ -26,34 +30,13 @@ except ImportError:
     print("ERROR: rdflib not found. Install with: pip install rdflib --break-system-packages")
     sys.exit(1)
 
-# ---------------------------------------------------------------------------
-# Module registry
-# ---------------------------------------------------------------------------
+from iroko_config import MODULES, IROKO_NS
 
-IROKO = Namespace("https://ontology.irokosociety.org/iroko#")
+IROKO = Namespace(IROKO_NS)
 
-MODULES = [
-    # (display_name, tier, tag_label, ns, ttl_stem)
-    ("Core",          "Foundation",     "Core",          "https://ontology.irokosociety.org/iroko#",          "iroko-core"),
-    ("Agency",        "Governance",     "Agency",        "https://ontology.irokosociety.org/iroko#",        "iroko-agency"),
-    ("Authority",     "Governance",     "Authority",     "https://ontology.irokosociety.org/iroko#",     "iroko-authority"),
-    ("Epistemic",     "Governance",     "Epistemic",     "https://ontology.irokosociety.org/iroko#",     "iroko-epistemic"),
-    ("Narrative",     "Governance",     "Narrative",     "https://ontology.irokosociety.org/iroko#",     "iroko-narrative"),
-    ("Manifestation", "Governance",     "Manifestation", "https://ontology.irokosociety.org/iroko#", "iroko-manifestation"),
-    ("Ewé",           "Domain",         "Botanical",     "https://ontology.irokosociety.org/iroko#",           "iroko-ewe"),
-    ("Nkisi",         "Domain",         "Entities",      "https://ontology.irokosociety.org/iroko#",         "iroko-nkisi"),
-    ("Travay",        "Domain",         "Ritual",        "https://ontology.irokosociety.org/iroko#",        "iroko-travay"),
-    ("Ilé",           "Domain",         "Lineage",       "https://ontology.irokosociety.org/iroko#",           "iroko-ile"),
-    ("Marca",         "Domain",         "Divination",    "https://ontology.irokosociety.org/iroko#",         "iroko-marca"),
-    ("Ékpè",          "Domain",         "Societies",     "https://ontology.irokosociety.org/iroko#",          "iroko-ekpe"),
-    ("Vèvè",          "Domain",         "Graphic",       "https://ontology.irokosociety.org/iroko#",          "iroko-veve"),
-    ("Ngoma",         "Domain",         "Music",         "https://ontology.irokosociety.org/iroko#",         "iroko-ngoma"),
-    ("Sankofa",       "Domain",         "Movements",     "https://ontology.irokosociety.org/iroko#",       "iroko-sankofa"),
-    ("Qal",           "Domain",         "Language",      "https://ontology.irokosociety.org/iroko#",           "iroko-qal"),
-
-    # Uncomment to include PROV-O alignment terms in the index
-    # ("PROV-O Alignment", "Foundation", "Alignment", "https://ontology.irokosociety.org/iroko#", "iroko-align-prov"),
-]
+# MODULES is imported from iroko_config: (display_name, tier, tag_label, ns_uri, ttl_stem)
+# Alignment modules are included there but excluded from the term index by default.
+MODULES = [m for m in MODULES if "Alignment" not in m[2]]
 
 # ---------------------------------------------------------------------------
 # Extraction helpers
@@ -490,11 +473,7 @@ ROW_TEMPLATE = """\
 
 
 def html_escape(text: str) -> str:
-    return (text
-            .replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace('"', "&quot;"))
+    return _html.escape(str(text), quote=True)
 
 
 def build_rows(all_terms: list[dict], mod_browse_urls: dict) -> str:

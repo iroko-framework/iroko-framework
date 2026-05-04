@@ -27,154 +27,13 @@ from rdflib.namespace import DCTERMS
 from pathlib import Path
 import sys, json, html as _html, re, argparse
 
-IROKO_NS = "https://ontology.irokosociety.org/iroko#"
-IROKO    = Namespace(IROKO_NS)
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-# ---------------------------------------------------------------------------
-# MODULE CONFIG  (title, subtitle, tag, prefix, dot-class for sidebar dots)
-# ---------------------------------------------------------------------------
-MODULE_CONFIG = {
-    "iroko-core": {
-        "title":    "Core Vocabulary",
-        "subtitle": "Cross-module governance infrastructure: access control, assertions, provenance, concept schemes",
-        "tag_cls":  "tag-core", "tag_text": "Core",
-        "prefix":   "iroko:", "dot_cls": "dot-core",
-        "layer":    "Foundation",
-    },
-    "iroko-agency": {
-        "title":    "Agency Module — Sacred Agents & Events",
-        "subtitle": "Sovereignty-aligned agency model: spirits, ritual events, authorization chains",
-        "tag_cls":  "tag-agency", "tag_text": "Agency",
-        "prefix":   "ag:", "dot_cls": "dot-agency",
-        "layer":    "Governance",
-    },
-    "iroko-authority": {
-        "title":    "Authority Module — Ritual Governance",
-        "subtitle": "Authority types, jurisdictions, basis, and recognition networks",
-        "tag_cls":  "tag-authority", "tag_text": "Authority",
-        "prefix":   "auth:", "dot_cls": "dot-authority",
-        "layer":    "Governance",
-    },
-    "iroko-epistemic": {
-        "title":    "Epistemic Module — Knowledge Gating",
-        "subtitle": "Disclosure constraints, permissions, and epistemic governance",
-        "tag_cls":  "tag-epistemic", "tag_text": "Epistemic",
-        "prefix":   "ep:", "dot_cls": "dot-epistemic",
-        "layer":    "Governance",
-    },
-    "iroko-narrative": {
-        "title":    "Narrative Module — Sacred Story Systems",
-        "subtitle": "Transmission chains, variant relations, kinship claims, interpretive stances",
-        "tag_cls":  "tag-narrative", "tag_text": "Narrative",
-        "prefix":   "narr:", "dot_cls": "dot-narrative",
-        "layer":    "Governance",
-    },
-    "iroko-manifestation": {
-        "title":    "Manifestation Module — Sacred Agent Modes",
-        "subtitle": "Manifestation modes and media: possession, dream, divination, symbolic presence",
-        "tag_cls":  "tag-manifestation", "tag_text": "Manifestation",
-        "prefix":   "mani:", "dot_cls": "dot-manifestation",
-        "layer":    "Governance",
-    },
-    "iroko-ewe": {
-        "title":    "Ewé Module — Sacred Plant Knowledge",
-        "subtitle": "Ritual, medicinal, and access governance over botanical data. Darwin Core integration via iroko-align-dwc.",
-        "tag_cls":  "tag-botanical", "tag_text": "Botanical",
-        "prefix":   "ewe:", "dot_cls": "dot-botanical",
-        "layer":    "Domain",
-    },
-    "iroko-nkisi": {
-        "title":    "Nkisi Module — Spiritual Entities",
-        "subtitle": "Spiritual entities, orisa, lwa, mpungo, and cross-tradition kinship",
-        "tag_cls":  "tag-entities", "tag_text": "Entities",
-        "prefix":   "nkisi:", "dot_cls": "dot-entities",
-        "layer":    "Domain",
-    },
-    "iroko-travay": {
-        "title":    "Travay Module — Ritual Processes",
-        "subtitle": "Ritual processes, ceremonies, initiatory rites, and sequential protocol",
-        "tag_cls":  "tag-ritual", "tag_text": "Ritual",
-        "prefix":   "travay:", "dot_cls": "dot-ritual",
-        "layer":    "Domain",
-    },
-    "iroko-ile": {
-        "title":    "Ilé Module — Houses, Lineage & Religious Office",
-        "subtitle": "Religious institutions, initiation genealogy, and office transmission",
-        "tag_cls":  "tag-lineage", "tag_text": "Lineage",
-        "prefix":   "ile:", "dot_cls": "dot-lineage",
-        "layer":    "Domain",
-    },
-    "iroko-marca": {
-        "title":    "Marca Module — Divination Systems",
-        "subtitle": "Sacred signs, reading records, and verse corpora",
-        "tag_cls":  "tag-divination", "tag_text": "Divination",
-        "prefix":   "marca:", "dot_cls": "dot-divination",
-        "layer":    "Domain",
-    },
-    "iroko-ekpe": {
-        "title":    "Ékpè Module — Initiatory Societies",
-        "subtitle": "Graded societies, esoteric governance, society status, and masquerade traditions",
-        "tag_cls":  "tag-societies", "tag_text": "Societies",
-        "prefix":   "ekpe:", "dot_cls": "dot-societies",
-        "layer":    "Domain",
-    },
-    "iroko-veve": {
-        "title":    "Vèvè Module — Graphic Sign Systems",
-        "subtitle": "Sacred diagrams, signs, and esoteric scripts",
-        "tag_cls":  "tag-graphic", "tag_text": "Graphic",
-        "prefix":   "veve:", "dot_cls": "dot-graphic",
-        "layer":    "Domain",
-    },
-    "iroko-ngoma": {
-        "title":    "Ngoma Module — Sacred Music",
-        "subtitle": "Rhythms, songs, instruments, musician lineages, and possession triggers",
-        "tag_cls":  "tag-music", "tag_text": "Music",
-        "prefix":   "ngoma:", "dot_cls": "dot-music",
-        "layer":    "Domain",
-    },
-    "iroko-sankofa": {
-        "title":    "Sankofa Module — Reclamation Movements",
-        "subtitle": "Diaspora returns, reconstructed practice, and reclamation networks",
-        "tag_cls":  "tag-upcoming", "tag_text": "Movements",
-        "prefix":   "sankofa:", "dot_cls": "dot-other",
-        "layer":    "Domain",
-    },
-    "iroko-qal": {
-        "title":    "Qal Module — Sacred Lexicons",
-        "subtitle": "Liturgical language, esoteric terminology, and sacred lexicography",
-        "tag_cls":  "tag-language", "tag_text": "Language",
-        "prefix":   "qal:", "dot_cls": "dot-language",
-        "layer":    "Domain",
-    },
-    "iroko-align-prov": {
-        "title":    "PROV-O Alignment",
-        "subtitle": "Alignment of Iroko Framework agency and event classes to W3C PROV-O",
-        "tag_cls":  "tag-core", "tag_text": "Alignment",
-        "prefix":   "iroko:", "dot_cls": "dot-core",
-        "layer":    "Alignment",
-    },
-    "iroko-align-dwc": {
-        "title":    "Darwin Core Alignment",
-        "subtitle": "Alignment of Iroko Framework plant classes and properties to Darwin Core",
-        "tag_cls":  "tag-core", "tag_text": "Alignment",
-        "prefix":   "iroko:", "dot_cls": "dot-core",
-        "layer":    "Alignment",
-    },
-}
+# Shared config: module registry, access map, version strings
+from iroko_config import MODULE_CONFIG, ACCESS_MAP, KNOWN_SKIPS, FRAMEWORK_VERSION, IROKO_NS
 
-ACCESS_MAP = {
-    "access-public-unrestricted":     ("pub",  "Public"),
-    "access-public-no-amplification": ("pub",  "Public · No Amplification"),
-    "access-public-attributed":       ("pub",  "Public · Attributed"),
-    "access-community-only":          ("comm", "Community"),
-    "access-initiated-only":          ("init", "Initiated"),
-    "access-initiated-elder":         ("init", "Initiated Elder"),
-    "access-no-access":               ("none", "No Access"),
-}
-
-FRAMEWORK_VERSION = "1.3.0"  # Used in top-bar; TTL versionInfo is module-level
-KNOWN_SKIPS = {"iroko-nkisi-patch", "ewe-plants-v0_2_1", "iroko-vocab-v0_2_1",
-               "iroko-core-v2", "iroko-ile-v2"}
+IROKO = Namespace(IROKO_NS)
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -205,25 +64,8 @@ def dcterms_desc(g, s):
         elif fb is None: fb = str(o)
     return en or fb or ""
 
-def resolve_range(g, uri):
-    """Resolve range URI, handling owl:unionOf blank nodes."""
-    if uri is None: return "—"
-    if isinstance(uri, BNode):
-        # Try to extract union members
-        union = g.value(uri, OWL.unionOf)
-        if union:
-            members = []
-            rest = union
-            while rest and str(rest) != str(RDF.nil):
-                first = g.value(rest, RDF.first)
-                if first: members.append(local(str(first)))
-                rest = g.value(rest, RDF.rest)
-            if members: return " | ".join(members)
-        return "—"
-    lab = g.value(uri, RDFS.label) or g.value(uri, SKOS.prefLabel)
-    return str(lab) if lab else local(str(uri))
-
-def resolve_domain(g, uri):
+def resolve_node(g, uri):
+    """Resolve a domain or range URI to a readable string, handling owl:unionOf blank nodes."""
     if uri is None: return "—"
     if isinstance(uri, BNode):
         union = g.value(uri, OWL.unionOf)
@@ -294,9 +136,9 @@ def build_cross_module_index(all_ttl_paths):
                     "type":   prop_type_key(ptype),
                     "access": acc_key,
                     "def":    comment_en(g, prop),
-                    "domain": resolve_domain(g, g.value(prop, RDFS.domain)),
-                    "from":   "iroko:" + resolve_domain(g, g.value(prop, RDFS.domain)),
-                    "fromLabel": resolve_domain(g, g.value(prop, RDFS.domain)),
+                    "domain": resolve_node(g, g.value(prop, RDFS.domain)),
+                    "from":   "iroko:" + resolve_node(g, g.value(prop, RDFS.domain)),
+                    "fromLabel": resolve_node(g, g.value(prop, RDFS.domain)),
                     "module": mod_title,
                     "stem":   stem,
                 }
@@ -364,7 +206,7 @@ def get_outgoing(g, cls_local):
                 "uri":    "iroko:" + local(str(prop)),
                 "label":  label_rdf(g, prop),
                 "type":   prop_type_key(ptype),
-                "range":  resolve_range(g, rng),
+                "range":  resolve_node(g, rng),
                 "access": acc_k,
                 "def":    comment_en(g, prop),
             })

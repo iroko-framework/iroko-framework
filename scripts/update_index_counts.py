@@ -20,35 +20,19 @@ import re
 import sys
 from pathlib import Path
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 try:
     from rdflib import Graph, RDF, OWL, SKOS, Namespace
 except ImportError:
     print("ERROR: rdflib not found. Install with: pip install rdflib --break-system-packages")
     sys.exit(1)
 
-IROKO_NS = "https://ontology.irokosociety.org/iroko#"
+from iroko_config import IROKO_NS, MODULES as _MODULES_FULL
 
-MODULES = [
-    "iroko-core",
-    "iroko-agency",
-    "iroko-authority",
-    "iroko-epistemic",
-    "iroko-narrative",
-    "iroko-manifestation",
-    "iroko-ewe",
-    "iroko-nkisi",
-    "iroko-travay",
-    "iroko-ile",
-    "iroko-marca",
-    "iroko-ekpe",
-    "iroko-veve",
-    "iroko-ngoma",
-    "iroko-sankofa",
-    "iroko-qal",
-
-    # Uncomment to include PROV-O alignment in counts
-    # "iroko-align-prov",
-]
+# Count only core vocabulary modules (not alignment modules)
+MODULES = [stem for _name, _tier, tag, _ns, stem in _MODULES_FULL if tag != "Alignment"]
 
 # ---------------------------------------------------------------------------
 # Counting

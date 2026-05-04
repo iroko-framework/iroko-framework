@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Run Build{% endblock %}
+
+{% block content %}
+<div class="mgr-page-head">
+  <div>
+    <div class="mgr-breadcrumb"><a href="{{ url_for('dashboard') }}">Modules</a> / Build</div>
+    <h1 class="mgr-h1">Run Build Pipeline</h1>
+    <p class="mgr-subtitle">Runs <code>build_all.py</code> — regenerates all HTML, term list, counts, and serializations.</p>
+  </div>
+</div>
+
+<div class="build-wrap">
+  <div class="build-controls">
+    <button id="run-btn" class="mgr-btn-primary" onclick="startBuild()">Run Build</button>
+    <span id="build-status" class="build-status-label"></span>
+  </div>
+
+  <div class="build-log-wrap">
+    <div class="build-log-head">
+      <span>Build Output</span>
+      <button class="mgr-btn-ghost" onclick="clearLog()" style="font-size:.75rem;">Clear</button>
+    </div>
+    <pre id="build-log" class="build-log">Click "Run Build" to start.</pre>
+  </div>
+</div>
+
+<script>
+let evtSource = null;
+
+function startBuild() {
+  const btn    = document.getElementById('run-btn');
+  const log    = document.getElementById('build-log');
+  const status = document.getElementById('build-status');
+
+  btn.disabled = true;
+  btn.textContent = 'Building…';
+  status.textContent = '';
+  log.textContent = '';
+
+  fetch('/build/run', { method: 'POST' })
+    .then(response => {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      function read() {
+        reader.read().then(({ done, value }) => {
+          if (done) {
+            btn.disabled = false;
+            btn.textContent = 'Run Build';
+            return;
+          }
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n\n');
+          buffer = lines.pop();
+          lines.forEach(block => {
+            const match = block.match(/^data: (.*)$/m);
+            if (!match) return;
+            const line = match[1];
+            if (line === '__DONE__') {
+              btn.disabled = false;
+              btn.textContent = 'Run Build Again';
+              return;
+            }
+            log.textContent += line + '\n';
+            log.scrollTop = log.scrollHeight;
+            if (line.includes('complete')) {
+              status.textContent = '✓ Done';
+              status.className = 'build-status-label status-ok';
+            } else if (line.includes('error') || line.includes('failed')) {
+              status.textContent = '✗ Errors';
+              status.className = 'build-status-label status-err';
+            }
+          });
+          read();
+        });
+      }
+      read();
+    })
+    .catch(err => {
+      log.textContent += '\nFetch error: ' + err;
+      btn.disabled = false;
+      btn.textContent = 'Run Build';
+    });
+}
+
+function clearLog() {
+  document.getElementById('build-log').textContent = '';
+  document.getElementById('build-status').textContent = '';
+}
+</script>
+{% endblock %}

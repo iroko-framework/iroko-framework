@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Move Term{% endblock %}
+
+{% block content %}
+<div class="mgr-page-head">
+  <div>
+    <div class="mgr-breadcrumb"><a href="{{ url_for('dashboard') }}">Modules</a> / Move Term</div>
+    <h1 class="mgr-h1">Move Term Between Modules</h1>
+    <p class="mgr-subtitle">Moves all RDF triples about a term from one TTL file to another.</p>
+  </div>
+</div>
+
+<div class="mgr-form-wrap">
+  <form method="post" class="mgr-form">
+
+    <div class="mgr-field">
+      <label class="mgr-label" for="local_id">
+        Term Local ID <span class="mgr-required">*</span>
+        <span class="mgr-label-hint">e.g. <code>tradition-orisha</code> (without the iroko: prefix)</span>
+      </label>
+      <input class="mgr-input" type="text" id="local_id" name="local_id"
+             value="{{ prefill.get('local_id', '') }}" required placeholder="tradition-orisha">
+    </div>
+
+    <div class="mgr-field-row">
+      <div class="mgr-field">
+        <label class="mgr-label" for="from_stem">From Module <span class="mgr-required">*</span></label>
+        <select class="mgr-select" id="from_stem" name="from_stem">
+          <option value="">— select source —</option>
+          {% for stem in all_stems %}
+          <option value="{{ stem }}" {% if prefill.get('from_stem') == stem %}selected{% endif %}>{{ stem }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="mgr-field">
+        <label class="mgr-label" for="to_stem">To Module <span class="mgr-required">*</span></label>
+        <select class="mgr-select" id="to_stem" name="to_stem">
+          <option value="">— select destination —</option>
+          {% for stem in all_stems %}
+          <option value="{{ stem }}">{{ stem }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="mgr-info-box">
+      <strong>What gets moved:</strong> all triples where the term is the subject or object.
+      The term is removed from the source TTL and inserted into the destination TTL.
+      Both files are saved atomically. Run Build afterward to regenerate the HTML.
+    </div>
+
+    <div class="mgr-form-actions">
+      <button type="submit" class="mgr-btn-primary">Move Term</button>
+      <a href="{{ url_for('dashboard') }}" class="mgr-btn-ghost">Cancel</a>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

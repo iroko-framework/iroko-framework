@@ -28,11 +28,13 @@ import subprocess
 import sys
 from pathlib import Path
 
-SCRIPT_DIR = Path(__file__).resolve().parent
+# Ensure Unicode characters (✓ ✗ ── etc.) render on Windows terminals
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-# Current release info — update these two lines each release
-VERSION    = "1.3.0"
-MONTH_YEAR = "March 2026"
+from iroko_config import FRAMEWORK_VERSION as VERSION, MONTH_YEAR
+
+SCRIPT_DIR = Path(__file__).resolve().parent
 
 
 # ---------------------------------------------------------------------------
@@ -194,8 +196,7 @@ def main():
         extra = []
         if args.vocab: extra += ["--vocab", str(vocab_dir)]
         if args.root:  extra += ["--root",  str(root_dir)]
-        if args.docs:  extra += ["--docs",  str(docs_dir)]
-        else:          extra += ["--docs",  str(docs_dir)]
+        extra += ["--docs", str(docs_dir)]
         if args.dry_run: extra += ["--dry-run"]
         rc = run_script("update_index_counts.py", extra)
         if rc != 0:

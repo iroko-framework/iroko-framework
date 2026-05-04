@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}{{ cfg.title }}{% endblock %}
+
+{% block content %}
+<div class="mgr-page-head">
+  <div>
+    <div class="mgr-breadcrumb">
+      <a href="{{ url_for('dashboard') }}">Modules</a> / {{ stem }}
+    </div>
+    <h1 class="mgr-h1">
+      <span class="mgr-tag {{ cfg.tag_cls }}">{{ cfg.tag_text }}</span>
+      {{ cfg.title }}
+    </h1>
+    <p class="mgr-subtitle">{{ cfg.get('subtitle', '') }}</p>
+  </div>
+  <div class="mgr-head-actions">
+    <a href="{{ url_for('build_page') }}" class="mgr-btn-outline">Run Build</a>
+  </div>
+</div>
+
+<div class="mgr-counts-bar">
+  <span class="mgr-count-chip"><strong>{{ classes|length }}</strong> Classes</span>
+  <span class="mgr-count-chip"><strong>{{ props|length }}</strong> Properties</span>
+  <span class="mgr-count-chip"><strong>{{ schemes|length }}</strong> Schemes</span>
+  <span class="mgr-count-chip"><strong>{{ concepts|length }}</strong> Concepts</span>
+</div>
+
+<!-- ── Classes ─────────────────────────────────────────────────── -->
+<section class="mgr-section" id="classes">
+  <div class="mgr-section-label">
+    Classes
+    <a href="{{ url_for('class_new', stem=stem) }}" class="mgr-add-link">+ Add Class</a>
+  </div>
+
+  {% if classes %}
+  <div class="mgr-term-table">
+    <div class="mgr-table-head">
+      <span>ID</span>
+      <span>Label</span>
+      <span>Superclasses</span>
+      <span>Access</span>
+      <span></span>
+    </div>
+    {% for cls in classes %}
+    <div class="mgr-table-row">
+      <span class="term-id">iroko:{{ cls.local_id }}</span>
+      <span class="term-label">{{ cls.label }}</span>
+      <span class="term-meta">{{ cls.superclasses | join(', ') or '—' }}</span>
+      <span class="term-access access-badge {{ cls.access }}">{{ cls.access.replace('access-','').replace('-',' ') }}</span>
+      <div class="col-actions">
+        <a href="{{ url_for('class_edit', stem=stem, local_id=cls.local_id) }}" class="mgr-link-btn">Edit</a>
+        <form method="post" action="{{ url_for('class_delete', stem=stem, local_id=cls.local_id) }}"
+              onsubmit="return confirm('Delete iroko:{{ cls.local_id }}?')" style="display:inline;">
+          <button class="mgr-link-btn mgr-link-danger">Delete</button>
+        </form>
+        <a href="{{ url_for('term_move') }}?local_id={{ cls.local_id }}&from_stem={{ stem }}" class="mgr-link-btn">Move</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="mgr-empty">No classes defined in this module.</p>
+  {% endif %}
+</section>
+
+<!-- ── Properties ──────────────────────────────────────────────── -->
+<section class="mgr-section" id="properties">
+  <div class="mgr-section-label">
+    Properties
+    <a href="{{ url_for('property_new', stem=stem) }}" class="mgr-add-link">+ Add Property</a>
+  </div>
+
+  {% if props %}
+  <div class="mgr-term-table">
+    <div class="mgr-table-head">
+      <span>ID</span>
+      <span>Label</span>
+      <span>Type</span>
+      <span>Domain → Range</span>
+      <span>Access</span>
+      <span></span>
+    </div>
+    {% for p in props %}
+    <div class="mgr-table-row">
+      <span class="term-id">iroko:{{ p.local_id }}</span>
+      <span class="term-label">{{ p.label or '—' }}</span>
+      <span class="prop-type-badge prop-type-{{ p.prop_type[:3]|lower }}">{{ p.prop_type.replace('Property','') }}</span>
+      <span class="term-meta">{{ p.domain or '—' }} → {{ p.range or '—' }}</span>
+      <span class="term-access access-badge {{ p.access }}">{{ p.access.replace('access-','').replace('-',' ') }}</span>
+      <div class="col-actions">
+        <a href="{{ url_for('property_edit', stem=stem, local_id=p.local_id) }}" class="mgr-link-btn">Edit</a>
+        <form method="post" action="{{ url_for('property_delete', stem=stem, local_id=p.local_id) }}"
+              onsubmit="return confirm('Delete iroko:{{ p.local_id }}?')" style="display:inline;">
+          <button class="mgr-link-btn mgr-link-danger">Delete</button>
+        </form>
+        <a href="{{ url_for('term_move') }}?local_id={{ p.local_id }}&from_stem={{ stem }}" class="mgr-link-btn">Move</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="mgr-empty">No properties defined in this module.</p>
+  {% endif %}
+</section>
+
+<!-- ── Concepts ─────────────────────────────────────────────────── -->
+<section class="mgr-section" id="concepts">
+  <div class="mgr-section-label">
+    Concepts
+    <a href="{{ url_for('concept_new', stem=stem) }}" class="mgr-add-link">+ Add Concept</a>
+  </div>
+
+  {% if concepts %}
+    {% set current_scheme = namespace(id='') %}
+    {% for c in concepts %}
+      {% if c.scheme_id != current_scheme.id %}
+        {% if not loop.first %}</div>{% endif %}
+        {% set current_scheme.id = c.scheme_id %}
+        <div class="mgr-scheme-block">
+        <div class="mgr-scheme-head">{{ c.scheme_label or c.scheme_id or 'No scheme' }}</div>
+      {% endif %}
+      <div class="mgr-concept-row">
+        <div class="concept-info">
+          <span class="term-id">iroko:{{ c.local_id }}</span>
+          <span class="concept-label">{{ c.label }}</span>
+          {% if c.definition %}<span class="concept-def">{{ c.definition[:120] }}{% if c.definition|length > 120 %}…{% endif %}</span>{% endif %}
+        </div>
+        <div class="col-actions">
+          <a href="{{ url_for('concept_edit', stem=stem, local_id=c.local_id) }}" class="mgr-link-btn">Edit</a>
+          <form method="post" action="{{ url_for('concept_delete', stem=stem, local_id=c.local_id) }}"
+                onsubmit="return confirm('Delete iroko:{{ c.local_id }}?')" style="display:inline;">
+            <button class="mgr-link-btn mgr-link-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  {% else %}
+  <p class="mgr-empty">No concepts defined in this module.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

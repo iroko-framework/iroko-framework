@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}{{ mode|title }} {{ term_type|title }} — {{ stem }}{% endblock %}
+
+{% block content %}
+<div class="mgr-page-head">
+  <div>
+    <div class="mgr-breadcrumb">
+      <a href="{{ url_for('dashboard') }}">Modules</a> /
+      <a href="{{ url_for('module_view', stem=stem) }}">{{ stem }}</a> /
+      {{ mode|title }} {{ term_type }}
+    </div>
+    <h1 class="mgr-h1">
+      {{ mode|title }} {{ term_type|title }}
+      {% if mode == 'edit' and data.local_id %}
+        <span class="mgr-term-id-display">iroko:{{ data.local_id }}</span>
+      {% endif %}
+    </h1>
+  </div>
+</div>
+
+<div class="mgr-form-wrap">
+  <form method="post" class="mgr-form">
+
+    <!-- ── Local ID (new only) ───────────────────────────────────── -->
+    {% if mode == 'new' %}
+    <div class="mgr-field">
+      <label class="mgr-label" for="local_id">
+        Local ID <span class="mgr-required">*</span>
+        <span class="mgr-label-hint">e.g. <code>tradition-orisha</code> — becomes <code>iroko:tradition-orisha</code></span>
+      </label>
+      <input class="mgr-input" type="text" id="local_id" name="local_id"
+             value="{{ data.local_id or '' }}" required
+             pattern="[a-zA-Z][a-zA-Z0-9\-_]*"
+             placeholder="use-kebab-case">
+    </div>
+    {% endif %}
+
+    <!-- ── Term type (properties only) ──────────────────────────── -->
+    {% if term_type == 'property' %}
+    <div class="mgr-field">
+      <label class="mgr-label" for="prop_type">Property Type</label>
+      <select class="mgr-select" id="prop_type" name="prop_type">
+        {% for pt in prop_type_options %}
+        <option value="{{ pt }}" {% if data.get('prop_type') == pt %}selected{% endif %}>{{ pt }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+
+    <!-- ── Label ────────────────────────────────────────────────── -->
+    <div class="mgr-field">
+      <label class="mgr-label" for="label">
+        {% if term_type == 'concept' %}Preferred Label{% else %}Label{% endif %}
+      </label>
+      <input class="mgr-input" type="text" id="label" name="label"
+             value="{{ data.get('label', '') }}" placeholder="Human-readable label">
+    </div>
+
+    <!-- ── Definition / comment ──────────────────────────────────── -->
+    <div class="mgr-field">
+      <label class="mgr-label" for="definition">
+        {% if term_type == 'concept' %}Definition (skos:definition){% else %}Description (rdfs:comment){% endif %}
+      </label>
+      <textarea class="mgr-textarea" id="definition" name="definition"
+                rows="4" placeholder="Full definition or description">{{ data.get('definition', '') }}</textarea>
+    </div>
+
+    <!-- ── Scope note (concepts only) ────────────────────────────── -->
+    {% if term_type == 'concept' %}
+    <div class="mgr-field">
+      <label class="mgr-label" for="scope_note">Scope Note (skos:scopeNote)</label>
+      <textarea class="mgr-textarea" id="scope_note" name="scope_note"
+                rows="2" placeholder="Optional usage guidance">{{ data.get('scope_note', '') }}</textarea>
+    </div>
+    {% endif %}
+
+    <!-- ── Concept scheme (concepts only) ────────────────────────── -->
+    {% if term_type == 'concept' %}
+    <div class="mgr-field">
+      <label class="mgr-label" for="scheme_id">Concept Scheme</label>
+      <select class="mgr-select" id="scheme_id" name="scheme_id">
+        <option value="">— none —</option>
+        {% for sid, slabel in schemes %}
+        <option value="{{ sid }}" {% if data.get('scheme_id') == sid %}selected{% endif %}>
+          {{ slabel }} (iroko:{{ sid }})
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mgr-field">
+      <label class="mgr-label" for="broader">Broader Concept (skos:broader)</label>
+      <input class="mgr-input" type="text" id="broader" name="broader"
+             value="{{ data.get('broader', '') }}"
+             placeholder="local ID of broader concept, e.g. tradition-base">
+    </div>
+    {% endif %}
+
+    <!-- ── Superclasses (classes only) ────────────────────────────── -->
+    {% if term_type == 'class' %}
+    <div class="mgr-field">
+      <label class="mgr-label" for="superclasses">
+        Superclasses (rdfs:subClassOf)
+        <span class="mgr-label-hint">comma-separated local IDs, e.g. <code>SacredEntity, RitualAuthority</code></span>
+      </label>
+      <input class="mgr-input" type="text" id="superclasses" name="superclasses"
+             value="{{ data.get('superclasses', []) | join(', ') }}"
+             placeholder="SacredEntity, RitualAuthority">
+      {% if class_options %}
+      <div class="mgr-field-hint">
+        Available in this module:
+        {% for cid, clabel in class_options %}
+          <code>{{ cid }}</code>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- ── Domain / Range (properties only) ─────────────────────── -->
+    {% if term_type == 'property' %}
+    <div class="mgr-field-row">
+      <div class="mgr-field">
+        <label class="mgr-label" for="domain">Domain (rdfs:domain)</label>
+        <input class="mgr-input" type="text" id="domain" name="domain"
+               value="{{ data.get('domain', '') }}"
+               placeholder="local ID, e.g. SacredAgent">
+      </div>
+      <div class="mgr-field">
+        <label class="mgr-label" for="range">Range (rdfs:range)</label>
+        <input class="mgr-input" type="text" id="range" name="range"
+               value="{{ data.get('range', '') }}"
+               placeholder="local ID or xsd:string">
+      </div>
+    </div>
+    {% if class_options %}
+    <div class="mgr-field-hint" style="margin-top:-.5rem; margin-bottom:1rem;">
+      Classes in this module:
+      {% for cid, clabel in class_options %}
+        <code>{{ cid }}</code>{% if not loop.last %}, {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- ── Access level ───────────────────────────────────────────── -->
+    <div class="mgr-field">
+      <label class="mgr-label" for="access">Minimum Access Level (iroko:minimumAccessLevel)</label>
+      <select class="mgr-select" id="access" name="access">
+        {% for val, label in access_options %}
+        <option value="{{ val }}" {% if data.get('access', 'access-public-unrestricted') == val %}selected{% endif %}>
+          {{ label }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- ── Actions ────────────────────────────────────────────────── -->
+    <div class="mgr-form-actions">
+      <button type="submit" class="mgr-btn-primary">
+        {% if mode == 'new' %}Create {{ term_type|title }}{% else %}Save Changes{% endif %}
+      </button>
+      <a href="{{ url_for('module_view', stem=stem) }}" class="mgr-btn-ghost">Cancel</a>
+    </div>
+
+  </form>
+</div>
+{% endblock %}
