@@ -10,6 +10,171 @@
   },
   "@graph": [
     {
+      "@id": "iroko:transmissionDate",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Date or date range of this transmission event."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:StoryLineage"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "transmission date"
+      },
+      "rdfs:range": {
+        "@id": "xsd:date"
+      }
+    },
+    {
+      "@id": "iroko:segType-prayer",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:SegmentTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Prayer"
+      }
+    },
+    {
+      "@id": "iroko:claimSubject",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The entity about whom the kinship claim is made."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:KinshipClaim"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "claim subject"
+      }
+    },
+    {
+      "@id": "iroko:segType-gloss",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "An explanatory note or translation embedded within the narrative."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:SegmentTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Gloss"
+      }
+    },
+    {
+      "@id": "iroko:hasStoryLineage",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links a Narrative or NarrativeVariant to a StoryLineage node documenting its transmission chain."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "has story lineage"
+      },
+      "rdfs:range": {
+        "@id": "iroko:StoryLineage"
+      }
+    },
+    {
+      "@id": "iroko:role-researcher",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Ethnographer, archivist, or scholar whose authorship must be distinguished from community voice."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:NarrativeRoleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Researcher"
+      }
+    },
+    {
+      "@id": "iroko:role-narrator",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Primary teller or transmitter of the narrative."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:NarrativeRoleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Narrator"
+      }
+    },
+    {
+      "@id": "iroko:stance-literal",
+      "@type": "iroko:InterpretiveStance",
+      "skos:inScheme": {
+        "@id": "iroko:InterpretiveStanceScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Literal"
+      }
+    },
+    {
+      "@id": "iroko:InterpretiveStanceScheme",
+      "@type": "skos:ConceptScheme",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Hermeneutic approaches to reading or transmitting a narrative."
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Interpretive Stances"
+      },
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:stance-allegorical"
+        },
+        {
+          "@id": "iroko:stance-analytic"
+        },
+        {
+          "@id": "iroko:stance-diagnostic"
+        },
+        {
+          "@id": "iroko:stance-initiatory"
+        },
+        {
+          "@id": "iroko:stance-literal"
+        },
+        {
+          "@id": "iroko:stance-polemic"
+        }
+      ]
+    },
+    {
       "@id": "iroko:kinship-brother",
       "@type": "skos:Concept",
       "skos:inScheme": {
@@ -25,30 +190,6 @@
           "@value": "hermano"
         }
       ]
-    },
-    {
-      "@id": "iroko:generatesKinship",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links an InitiationEvent to the KinshipClaim it creates. Covers initiation-based human kinship bonds: godfather/godson (padrino/ahijado), initiator/initiate, elder/junior lineage member. Unlike assertsKinship, this bond is generated by a documented event of record rather than narrated — the initiation created the bond. Access: initiated-only — initiation genealogy and godparent lineage are internal community records not appropriate for public or community-tier disclosure."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:InitiationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "generates kinship"
-      },
-      "rdfs:range": {
-        "@id": "iroko:KinshipClaim"
-      }
     },
     {
       "@id": "iroko:claimObject",
@@ -72,80 +213,402 @@
       }
     },
     {
-      "@id": "iroko:varRel-lineage-bound",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A variant that applies only within a specific lineage — not a deviation, but a legitimate lineage-specific telling."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:VariantRelationTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Lineage-Bound"
-      }
-    },
-    {
-      "@id": "iroko:segType-chant-line",
+      "@id": "iroko:segType-verse",
       "@type": "skos:Concept",
       "skos:inScheme": {
         "@id": "iroko:SegmentTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Chant Line"
+        "@value": "Verse"
       }
     },
     {
-      "@id": "iroko:segType-praise-name",
-      "@type": "skos:Concept",
-      "skos:altLabel": {
-        "@language": "yo",
-        "@value": "Oriki"
-      },
-      "skos:inScheme": {
-        "@id": "iroko:SegmentTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Praise Name"
-      }
-    },
-    {
-      "@id": "iroko:varRel-derived",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "One variant clearly derives from or expands upon the other."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:VariantRelationTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Derived"
-      }
-    },
-    {
-      "@id": "iroko:narrativeRole",
+      "@id": "iroko:featuresSacredAgent",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "The role played by a participant in a narrative event — narrator, elder, witness, chorus, officiant, etc."
+        "@value": "Links a narrative or variant to a sacred agent (spirit, ancestor) who appears as an actor within the narrative content."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-narrative"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "narrative role"
+        "@value": "features sacred agent"
+      },
+      "rdfs:range": {
+        "@id": "iroko:SacredAgent"
+      }
+    },
+    {
+      "@id": "iroko:role-community",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Collective community voice or assembled participants."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:NarrativeRoleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Community"
+      }
+    },
+    {
+      "@id": "iroko:kinship-ancestor",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:KinshipTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "ancestor"
+        },
+        {
+          "@language": "es",
+          "@value": "ancestro"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:role-officiant",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Ritual officiant whose role shapes the telling."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:NarrativeRoleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Officiant"
+      }
+    },
+    {
+      "@id": "iroko:NarrativeRoleScheme",
+      "@type": "skos:ConceptScheme",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Roles of participants in narrative events."
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Narrative Roles"
+      },
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:role-chorus"
+        },
+        {
+          "@id": "iroko:role-community"
+        },
+        {
+          "@id": "iroko:role-narrator"
+        },
+        {
+          "@id": "iroko:role-officiant"
+        },
+        {
+          "@id": "iroko:role-researcher"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:variantRelationType",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Classifies the nature of a variant relationship — close variant, contested, derived, harmonized, lineage-bound."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "variant relation type"
       },
       "rdfs:range": {
         "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:variantEvent",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The FieldworkEvent or ritual event that captured or generated this narrative variant."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:NarrativeVariant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "variant event"
+      },
+      "rdfs:range": {
+        "@id": "iroko:FieldworkEvent"
+      }
+    },
+    {
+      "@id": "iroko:stance-polemic",
+      "@type": "iroko:InterpretiveStance",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Narrative produced or shaped by an argument about tradition, authority, or lineage legitimacy."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InterpretiveStanceScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Polemic"
+      }
+    },
+    {
+      "@id": "iroko:segType-rubric",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A heading, liturgical direction, or structural marker in the narrative."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:SegmentTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Rubric"
+      }
+    },
+    {
+      "@id": "iroko:varRel-harmonized",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A variant produced by reconciling two or more divergent tellings."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:VariantRelationTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Harmonized"
+      }
+    },
+    {
+      "@id": "iroko:aboutEntity",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links a narrative or variant to entities it concerns — a spirit, plant, place, ritual, person, or any other resource. Range: iroko:SacredEntity — the top-level class for all tradition-specific concepts in the framework."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:NarrativeVariant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "about entity"
+      },
+      "rdfs:range": {
+        "@id": "iroko:SacredEntity"
+      }
+    },
+    {
+      "@id": "iroko:varRel-translation",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A variant that is a translation into another language, which may introduce interpretive differences."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:VariantRelationTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Translation"
+      }
+    },
+    {
+      "@id": "iroko:narrativeLanguage",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "BCP 47 language tag of the language in which the variant is expressed."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:NarrativeVariant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "narrative language"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "iroko:Testimony",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A narrated account offered by a participant or witness. A Testimony is a NarrativeVariant with an identified speaker whose presence or role is itself the epistemic claim — the content derives its authority from the speaker's position."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Testimony"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:NarrativeVariant"
+      }
+    },
+    {
+      "@id": "iroko:relatedAs",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The type of kinship or relational bond asserted. Range: concepts from iroko:KinshipTypeScheme or tradition-specific kinship schemes."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:KinshipClaim"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "related as"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:variantPlace",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Place where the telling occurred or was recorded."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:NarrativeVariant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "variant place"
+      }
+    },
+    {
+      "@id": "iroko:variantRelation",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Typed relationship between two NarrativeVariants. Range: iroko:VariantRelationTypeScheme concepts."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:NarrativeVariant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "variant relation"
+      },
+      "rdfs:range": {
+        "@id": "iroko:NarrativeVariant"
+      }
+    },
+    {
+      "@id": "https://ontology.irokosociety.org/iroko-narrative",
+      "@type": "owl:Ontology",
+      "dcterms:creator": "Iroko Historical Society",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Governance Layer module. Full narrative modeling for Afro-Atlantic sacred knowledge systems. Covers story transmission chains, contested kinship claims, testimonies, fieldnotes, interpretive stances, and narrative variant relationships. Builds on the thin narrative spine in iroko-core v1.3.0. Researcher voice (Fieldnote) is kept structurally distinct from community voice (Testimony). Use with iroko-authority to govern who may assert transmission claims, iroko-agency to link sacred agents to narrative appearances, and iroko-epistemic to constrain access to sensitive narrative content."
+      },
+      "dcterms:isPartOf": {
+        "@id": "https://ontology.irokosociety.org/iroko-framework/"
+      },
+      "dcterms:issued": {
+        "@type": "xsd:date",
+        "@value": "2026-02-23"
+      },
+      "dcterms:license": {
+        "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "dcterms:modified": {
+        "@type": "xsd:date",
+        "@value": "2026-02-25"
+      },
+      "dcterms:references": [
+        {
+          "@id": "https://ontology.irokosociety.org/iroko-agency"
+        },
+        {
+          "@id": "https://ontology.irokosociety.org/iroko-authority"
+        },
+        {
+          "@id": "https://ontology.irokosociety.org/iroko-epistemic"
+        },
+        {
+          "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+        }
+      ],
+      "dcterms:requires": {
+        "@id": "https://ontology.irokosociety.org/iroko-core"
+      },
+      "dcterms:title": {
+        "@language": "en",
+        "@value": "Iroko Framework: Narrative Module"
+      },
+      "owl:versionIRI": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative/1.3.0"
+      },
+      "owl:versionInfo": "1.3.0",
+      "rdfs:seeAlso": {
+        "@id": "https://ontology.irokosociety.org/iroko-framework/"
       }
     },
     {
@@ -188,6 +651,127 @@
       }
     },
     {
+      "@id": "iroko:segType-prohibition",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A stated prohibition or interdiction within the narrative."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:SegmentTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Prohibition"
+      }
+    },
+    {
+      "@id": "iroko:narrativeText",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The text of this narrative variant. Language-tagged. Access governed by iroko:accessLevel on the variant instance."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:NarrativeVariant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "narrative text"
+      },
+      "rdfs:range": {
+        "@id": "rdf:langString"
+      }
+    },
+    {
+      "@id": "iroko:StoryLineage",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A transmission chain for a narrative — who transmitted the story to whom, in what context. Separate from biological kinship. Models oral transmission provenance."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Story Lineage"
+      }
+    },
+    {
+      "@id": "iroko:stance-allegorical",
+      "@type": "iroko:InterpretiveStance",
+      "skos:inScheme": {
+        "@id": "iroko:InterpretiveStanceScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Allegorical"
+      }
+    },
+    {
+      "@id": "iroko:stance-analytic",
+      "@type": "iroko:InterpretiveStance",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Researcher or scholarly reading, necessarily outside community interpretive authority."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InterpretiveStanceScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Analytic"
+      }
+    },
+    {
+      "@id": "iroko:kinship-father",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:KinshipTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "father"
+        },
+        {
+          "@language": "es",
+          "@value": "padre"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:transmissionTo",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The agent who received this story."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:StoryLineage"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "transmission to"
+      },
+      "rdfs:range": {
+        "@id": "http://www.w3.org/ns/prov#Agent"
+      }
+    },
+    {
       "@id": "iroko:kinship-road",
       "@type": "skos:Concept",
       "skos:altLabel": {
@@ -204,6 +788,371 @@
       "skos:prefLabel": {
         "@language": "en",
         "@value": "road/camino"
+      }
+    },
+    {
+      "@id": "iroko:transmissionNote",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Free-text note on context, mode, or conditions of transmission."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:StoryLineage"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "transmission note"
+      },
+      "rdfs:range": {
+        "@id": "rdf:langString"
+      }
+    },
+    {
+      "@id": "iroko:interpretiveStance",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Tags a NarrativeVariant or Commentary with an interpretive hermeneutic frame."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "interpretive stance"
+      },
+      "rdfs:range": {
+        "@id": "iroko:InterpretiveStance"
+      }
+    },
+    {
+      "@id": "iroko:varRel-derived",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "One variant clearly derives from or expands upon the other."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:VariantRelationTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Derived"
+      }
+    },
+    {
+      "@id": "iroko:role-chorus",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Collective voice responding to or accompanying the narrator."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:NarrativeRoleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Chorus"
+      }
+    },
+    {
+      "@id": "iroko:stance-initiatory",
+      "@type": "iroko:InterpretiveStance",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Reading reserved for or shaped by initiatory context."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InterpretiveStanceScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Initiatory"
+      }
+    },
+    {
+      "@id": "iroko:Fieldnote",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Researcher-authored note, observation, or analytic memo. Treated as a NarrativeVariant with explicit authorship and interpretive stance to keep researcher voice distinct from community voice."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Fieldnote"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:NarrativeVariant"
+      }
+    },
+    {
+      "@id": "iroko:segType-chant-line",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:SegmentTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Chant Line"
+      }
+    },
+    {
+      "@id": "iroko:varRel-lineage-bound",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A variant that applies only within a specific lineage — not a deviation, but a legitimate lineage-specific telling."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:VariantRelationTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Lineage-Bound"
+      }
+    },
+    {
+      "@id": "iroko:kinship-mother",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:KinshipTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "mother"
+        },
+        {
+          "@language": "es",
+          "@value": "madre"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:narrativeRole",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The role played by a participant in a narrative event — narrator, elder, witness, chorus, officiant, etc."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "narrative role"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:KinshipClaim",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A claim about relationships between entities (spirit-father, spirit-sibling, ancestor, etc.) that may be contested and authority-scoped. Implemented as an iroko:Assertion subtype so it inherits full assertion governance: authorizedBy, accessLevel, contestedStatus, assertionStatus."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Kinship Claim"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:Assertion"
+      }
+    },
+    {
+      "@id": "iroko:kinship-owner",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Describes the relationship between an orisha or lwa and the practitioner over whom they have primary claim."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:KinshipTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "owner/patron"
+      }
+    },
+    {
+      "@id": "iroko:transmissionFrom",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The agent who transmitted this story to the next link in the chain."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:StoryLineage"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "transmission from"
+      },
+      "rdfs:range": {
+        "@id": "http://www.w3.org/ns/prov#Agent"
+      }
+    },
+    {
+      "@id": "iroko:segType-episode",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:SegmentTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Episode"
+      }
+    },
+    {
+      "@id": "iroko:variantAuthority",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The Authority context recognized for this variant. Which lineage or house endorses this telling as authoritative."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:NarrativeVariant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "variant authority"
+      },
+      "rdfs:range": {
+        "@id": "iroko:RitualAuthority"
+      }
+    },
+    {
+      "@id": "iroko:segType-praise-name",
+      "@type": "skos:Concept",
+      "skos:altLabel": {
+        "@language": "yo",
+        "@value": "Oriki"
+      },
+      "skos:inScheme": {
+        "@id": "iroko:SegmentTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Praise Name"
+      }
+    },
+    {
+      "@id": "iroko:assertsKinship",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links a NarrativeVariant to a KinshipClaim it asserts. Used for spirit kinship — spirit-father, spirit-sibling, ancestral claims — where the bond is narrated or testified rather than generated by a documented event. The claim may be contested across lineages or traditions; iroko:KinshipClaim is a subclass of iroko:Assertion and inherits its contested-knowledge modeling. Access: community-only."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:NarrativeVariant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "asserts kinship"
+      },
+      "rdfs:range": {
+        "@id": "iroko:KinshipClaim"
+      }
+    },
+    {
+      "@id": "iroko:KinshipTypeScheme",
+      "@type": "skos:ConceptScheme",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Relational categories for kinship and lineage claims, particularly in sacred genealogies and spirit family assertions."
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Kinship Types"
+      },
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:kinship-ancestor"
+        },
+        {
+          "@id": "iroko:kinship-brother"
+        },
+        {
+          "@id": "iroko:kinship-child"
+        },
+        {
+          "@id": "iroko:kinship-father"
+        },
+        {
+          "@id": "iroko:kinship-mother"
+        },
+        {
+          "@id": "iroko:kinship-owner"
+        },
+        {
+          "@id": "iroko:kinship-road"
+        },
+        {
+          "@id": "iroko:kinship-sister"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:narratedBy",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The person or agent who narrated this variant. Range: foaf:Person or prov:Agent. For sovereignty-aligned archives: consider access governance on the identity of narrators."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:NarrativeVariant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "narrated by"
+      },
+      "rdfs:range": {
+        "@id": "http://www.w3.org/ns/prov#Agent"
       }
     },
     {
@@ -262,36 +1211,22 @@
       ]
     },
     {
-      "@id": "iroko:segType-gloss",
-      "@type": "skos:Concept",
-      "skos:definition": {
+      "@id": "iroko:InterpretiveStance",
+      "@type": "owl:Class",
+      "rdfs:comment": {
         "@language": "en",
-        "@value": "An explanatory note or translation embedded within the narrative."
+        "@value": "A hermeneutic or epistemological approach to reading a narrative or variant. Tags the reading frame rather than the content."
       },
-      "skos:inScheme": {
-        "@id": "iroko:SegmentTypeScheme"
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-narrative"
       },
-      "skos:prefLabel": {
+      "rdfs:label": {
         "@language": "en",
-        "@value": "Gloss"
+        "@value": "Interpretive Stance"
+      },
+      "rdfs:subClassOf": {
+        "@id": "skos:Concept"
       }
-    },
-    {
-      "@id": "iroko:kinship-father",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:KinshipTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "father"
-        },
-        {
-          "@language": "es",
-          "@value": "padre"
-        }
-      ]
     },
     {
       "@id": "iroko:kinship-child",
@@ -311,477 +1246,27 @@
       ]
     },
     {
-      "@id": "iroko:transmissionTo",
+      "@id": "iroko:generatesKinship",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
+        "@id": "iroko:access-initiated-only"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "The agent who received this story."
+        "@value": "Links an InitiationEvent to the KinshipClaim it creates. Covers initiation-based human kinship bonds: godfather/godson (padrino/ahijado), initiator/initiate, elder/junior lineage member. Unlike assertsKinship, this bond is generated by a documented event of record rather than narrated — the initiation created the bond. Access: initiated-only — initiation genealogy and godparent lineage are internal community records not appropriate for public or community-tier disclosure."
       },
       "rdfs:domain": {
-        "@id": "iroko:StoryLineage"
+        "@id": "iroko:InitiationEvent"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-narrative"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "transmission to"
+        "@value": "generates kinship"
       },
       "rdfs:range": {
-        "@id": "http://www.w3.org/ns/prov#Agent"
-      }
-    },
-    {
-      "@id": "iroko:stance-initiatory",
-      "@type": "iroko:InterpretiveStance",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Reading reserved for or shaped by initiatory context."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InterpretiveStanceScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Initiatory"
-      }
-    },
-    {
-      "@id": "iroko:stance-allegorical",
-      "@type": "iroko:InterpretiveStance",
-      "skos:inScheme": {
-        "@id": "iroko:InterpretiveStanceScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Allegorical"
-      }
-    },
-    {
-      "@id": "iroko:kinship-mother",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:KinshipTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "mother"
-        },
-        {
-          "@language": "es",
-          "@value": "madre"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:NarrativeRoleScheme",
-      "@type": "skos:ConceptScheme",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Roles of participants in narrative events."
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Narrative Roles"
-      },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:role-chorus"
-        },
-        {
-          "@id": "iroko:role-community"
-        },
-        {
-          "@id": "iroko:role-narrator"
-        },
-        {
-          "@id": "iroko:role-officiant"
-        },
-        {
-          "@id": "iroko:role-researcher"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:narrativeText",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The text of this narrative variant. Language-tagged. Access governed by iroko:accessLevel on the variant instance."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:NarrativeVariant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "narrative text"
-      },
-      "rdfs:range": {
-        "@id": "rdf:langString"
-      }
-    },
-    {
-      "@id": "iroko:interpretiveStance",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Tags a NarrativeVariant or Commentary with an interpretive hermeneutic frame."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "interpretive stance"
-      },
-      "rdfs:range": {
-        "@id": "iroko:InterpretiveStance"
-      }
-    },
-    {
-      "@id": "iroko:stance-diagnostic",
-      "@type": "iroko:InterpretiveStance",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Reading the narrative as a diagnostic tool — for divination, consultation, or situational assessment."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InterpretiveStanceScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Diagnostic"
-      }
-    },
-    {
-      "@id": "iroko:stance-polemic",
-      "@type": "iroko:InterpretiveStance",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Narrative produced or shaped by an argument about tradition, authority, or lineage legitimacy."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InterpretiveStanceScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Polemic"
-      }
-    },
-    {
-      "@id": "iroko:hasStoryLineage",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links a Narrative or NarrativeVariant to a StoryLineage node documenting its transmission chain."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "has story lineage"
-      },
-      "rdfs:range": {
-        "@id": "iroko:StoryLineage"
-      }
-    },
-    {
-      "@id": "iroko:role-officiant",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Ritual officiant whose role shapes the telling."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:NarrativeRoleScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Officiant"
-      }
-    },
-    {
-      "@id": "iroko:variantPlace",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Place where the telling occurred or was recorded."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:NarrativeVariant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "variant place"
-      }
-    },
-    {
-      "@id": "iroko:claimSubject",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The entity about whom the kinship claim is made."
-      },
-      "rdfs:domain": {
         "@id": "iroko:KinshipClaim"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "claim subject"
-      }
-    },
-    {
-      "@id": "iroko:narratedBy",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The person or agent who narrated this variant. Range: foaf:Person or prov:Agent. For sovereignty-aligned archives: consider access governance on the identity of narrators."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:NarrativeVariant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "narrated by"
-      },
-      "rdfs:range": {
-        "@id": "http://www.w3.org/ns/prov#Agent"
-      }
-    },
-    {
-      "@id": "iroko:KinshipTypeScheme",
-      "@type": "skos:ConceptScheme",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Relational categories for kinship and lineage claims, particularly in sacred genealogies and spirit family assertions."
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Kinship Types"
-      },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:kinship-ancestor"
-        },
-        {
-          "@id": "iroko:kinship-brother"
-        },
-        {
-          "@id": "iroko:kinship-child"
-        },
-        {
-          "@id": "iroko:kinship-father"
-        },
-        {
-          "@id": "iroko:kinship-mother"
-        },
-        {
-          "@id": "iroko:kinship-owner"
-        },
-        {
-          "@id": "iroko:kinship-road"
-        },
-        {
-          "@id": "iroko:kinship-sister"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:Fieldnote",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Researcher-authored note, observation, or analytic memo. Treated as a NarrativeVariant with explicit authorship and interpretive stance to keep researcher voice distinct from community voice."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Fieldnote"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:NarrativeVariant"
-      }
-    },
-    {
-      "@id": "iroko:InterpretiveStanceScheme",
-      "@type": "skos:ConceptScheme",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Hermeneutic approaches to reading or transmitting a narrative."
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Interpretive Stances"
-      },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:stance-allegorical"
-        },
-        {
-          "@id": "iroko:stance-analytic"
-        },
-        {
-          "@id": "iroko:stance-diagnostic"
-        },
-        {
-          "@id": "iroko:stance-initiatory"
-        },
-        {
-          "@id": "iroko:stance-literal"
-        },
-        {
-          "@id": "iroko:stance-polemic"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:kinship-ancestor",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:KinshipTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "ancestor"
-        },
-        {
-          "@language": "es",
-          "@value": "ancestro"
-        }
-      ]
-    },
-    {
-      "@id": "https://ontology.irokosociety.org/iroko-narrative",
-      "@type": "owl:Ontology",
-      "dcterms:creator": "Iroko Historical Society",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Governance Layer module. Full narrative modeling for Afro-Atlantic sacred knowledge systems. Covers story transmission chains, contested kinship claims, testimonies, fieldnotes, interpretive stances, and narrative variant relationships. Builds on the thin narrative spine in iroko-core v1.3.0. Researcher voice (Fieldnote) is kept structurally distinct from community voice (Testimony). Use with iroko-authority to govern who may assert transmission claims, iroko-agency to link sacred agents to narrative appearances, and iroko-epistemic to constrain access to sensitive narrative content."
-      },
-      "dcterms:isPartOf": {
-        "@id": "https://ontology.irokosociety.org/iroko-framework/"
-      },
-      "dcterms:issued": {
-        "@type": "xsd:date",
-        "@value": "2026-02-23"
-      },
-      "dcterms:license": {
-        "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
-      },
-      "dcterms:modified": {
-        "@type": "xsd:date",
-        "@value": "2026-02-25"
-      },
-      "dcterms:references": [
-        {
-          "@id": "https://ontology.irokosociety.org/iroko-agency"
-        },
-        {
-          "@id": "https://ontology.irokosociety.org/iroko-authority"
-        },
-        {
-          "@id": "https://ontology.irokosociety.org/iroko-epistemic"
-        },
-        {
-          "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-        }
-      ],
-      "dcterms:requires": {
-        "@id": "https://ontology.irokosociety.org/iroko-core"
-      },
-      "dcterms:title": {
-        "@language": "en",
-        "@value": "Iroko Framework: Narrative Module"
-      },
-      "owl:versionIRI": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative/1.3.0"
-      },
-      "owl:versionInfo": "1.3.0",
-      "rdfs:seeAlso": {
-        "@id": "https://ontology.irokosociety.org/iroko-framework/"
-      }
-    },
-    {
-      "@id": "iroko:variantRelationType",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Classifies the nature of a variant relationship — close variant, contested, derived, harmonized, lineage-bound."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "variant relation type"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:transmissionNote",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Free-text note on context, mode, or conditions of transmission."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:StoryLineage"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "transmission note"
-      },
-      "rdfs:range": {
-        "@id": "rdf:langString"
       }
     },
     {
@@ -817,202 +1302,18 @@
       ]
     },
     {
-      "@id": "iroko:segType-prohibition",
-      "@type": "skos:Concept",
+      "@id": "iroko:stance-diagnostic",
+      "@type": "iroko:InterpretiveStance",
       "skos:definition": {
         "@language": "en",
-        "@value": "A stated prohibition or interdiction within the narrative."
+        "@value": "Reading the narrative as a diagnostic tool — for divination, consultation, or situational assessment."
       },
       "skos:inScheme": {
-        "@id": "iroko:SegmentTypeScheme"
+        "@id": "iroko:InterpretiveStanceScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Prohibition"
-      }
-    },
-    {
-      "@id": "iroko:StoryLineage",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A transmission chain for a narrative — who transmitted the story to whom, in what context. Separate from biological kinship. Models oral transmission provenance."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Story Lineage"
-      }
-    },
-    {
-      "@id": "iroko:segType-prayer",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:SegmentTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Prayer"
-      }
-    },
-    {
-      "@id": "iroko:variantEvent",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The FieldworkEvent or ritual event that captured or generated this narrative variant."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:NarrativeVariant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "variant event"
-      },
-      "rdfs:range": {
-        "@id": "iroko:FieldworkEvent"
-      }
-    },
-    {
-      "@id": "iroko:InterpretiveStance",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A hermeneutic or epistemological approach to reading a narrative or variant. Tags the reading frame rather than the content."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Interpretive Stance"
-      },
-      "rdfs:subClassOf": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:segType-episode",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:SegmentTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Episode"
-      }
-    },
-    {
-      "@id": "iroko:assertsKinship",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links a NarrativeVariant to a KinshipClaim it asserts. Used for spirit kinship — spirit-father, spirit-sibling, ancestral claims — where the bond is narrated or testified rather than generated by a documented event. The claim may be contested across lineages or traditions; iroko:KinshipClaim is a subclass of iroko:Assertion and inherits its contested-knowledge modeling. Access: community-only."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:NarrativeVariant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "asserts kinship"
-      },
-      "rdfs:range": {
-        "@id": "iroko:KinshipClaim"
-      }
-    },
-    {
-      "@id": "iroko:transmissionFrom",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The agent who transmitted this story to the next link in the chain."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:StoryLineage"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "transmission from"
-      },
-      "rdfs:range": {
-        "@id": "http://www.w3.org/ns/prov#Agent"
-      }
-    },
-    {
-      "@id": "iroko:relatedAs",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The type of kinship or relational bond asserted. Range: concepts from iroko:KinshipTypeScheme or tradition-specific kinship schemes."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:KinshipClaim"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "related as"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:segType-rubric",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A heading, liturgical direction, or structural marker in the narrative."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:SegmentTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Rubric"
-      }
-    },
-    {
-      "@id": "iroko:Testimony",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A narrated account offered by a participant or witness. A Testimony is a NarrativeVariant with an identified speaker whose presence or role is itself the epistemic claim — the content derives its authority from the speaker's position."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Testimony"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:NarrativeVariant"
+        "@value": "Diagnostic"
       }
     },
     {
@@ -1040,239 +1341,6 @@
       }
     },
     {
-      "@id": "iroko:varRel-harmonized",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A variant produced by reconciling two or more divergent tellings."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:VariantRelationTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Harmonized"
-      }
-    },
-    {
-      "@id": "iroko:featuresSacredAgent",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links a narrative or variant to a sacred agent (spirit, ancestor) who appears as an actor within the narrative content."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "features sacred agent"
-      },
-      "rdfs:range": {
-        "@id": "iroko:SacredAgent"
-      }
-    },
-    {
-      "@id": "iroko:transmissionDate",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Date or date range of this transmission event."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:StoryLineage"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "transmission date"
-      },
-      "rdfs:range": {
-        "@id": "xsd:date"
-      }
-    },
-    {
-      "@id": "iroko:role-community",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Collective community voice or assembled participants."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:NarrativeRoleScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Community"
-      }
-    },
-    {
-      "@id": "iroko:variantAuthority",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The Authority context recognized for this variant. Which lineage or house endorses this telling as authoritative."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:NarrativeVariant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "variant authority"
-      },
-      "rdfs:range": {
-        "@id": "iroko:RitualAuthority"
-      }
-    },
-    {
-      "@id": "iroko:stance-literal",
-      "@type": "iroko:InterpretiveStance",
-      "skos:inScheme": {
-        "@id": "iroko:InterpretiveStanceScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Literal"
-      }
-    },
-    {
-      "@id": "iroko:variantRelation",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Typed relationship between two NarrativeVariants. Range: iroko:VariantRelationTypeScheme concepts."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:NarrativeVariant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "variant relation"
-      },
-      "rdfs:range": {
-        "@id": "iroko:NarrativeVariant"
-      }
-    },
-    {
-      "@id": "iroko:varRel-translation",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A variant that is a translation into another language, which may introduce interpretive differences."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:VariantRelationTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Translation"
-      }
-    },
-    {
-      "@id": "iroko:narrativeLanguage",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "BCP 47 language tag of the language in which the variant is expressed."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:NarrativeVariant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "narrative language"
-      },
-      "rdfs:range": {
-        "@id": "xsd:string"
-      }
-    },
-    {
-      "@id": "iroko:role-researcher",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Ethnographer, archivist, or scholar whose authorship must be distinguished from community voice."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:NarrativeRoleScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Researcher"
-      }
-    },
-    {
-      "@id": "iroko:stance-analytic",
-      "@type": "iroko:InterpretiveStance",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Researcher or scholarly reading, necessarily outside community interpretive authority."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InterpretiveStanceScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Analytic"
-      }
-    },
-    {
-      "@id": "iroko:kinship-owner",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Describes the relationship between an orisha or lwa and the practitioner over whom they have primary claim."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:KinshipTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "owner/patron"
-      }
-    },
-    {
-      "@id": "iroko:role-narrator",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Primary teller or transmitter of the narrative."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:NarrativeRoleScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Narrator"
-      }
-    },
-    {
       "@id": "iroko:varRel-close",
       "@type": "skos:Concept",
       "skos:definition": {
@@ -1285,74 +1353,6 @@
       "skos:prefLabel": {
         "@language": "en",
         "@value": "Close Variant"
-      }
-    },
-    {
-      "@id": "iroko:KinshipClaim",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A claim about relationships between entities (spirit-father, spirit-sibling, ancestor, etc.) that may be contested and authority-scoped. Implemented as an iroko:Assertion subtype so it inherits full assertion governance: authorizedBy, accessLevel, contestedStatus, assertionStatus."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Kinship Claim"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:Assertion"
-      }
-    },
-    {
-      "@id": "iroko:segType-verse",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:SegmentTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Verse"
-      }
-    },
-    {
-      "@id": "iroko:aboutEntity",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links a narrative or variant to entities it concerns — a spirit, plant, place, ritual, person, or any other resource. Range: iroko:SacredEntity — the top-level class for all tradition-specific concepts in the framework."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:NarrativeVariant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-narrative"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "about entity"
-      },
-      "rdfs:range": {
-        "@id": "iroko:SacredEntity"
-      }
-    },
-    {
-      "@id": "iroko:role-chorus",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Collective voice responding to or accompanying the narrator."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:NarrativeRoleScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Chorus"
       }
     }
   ]
