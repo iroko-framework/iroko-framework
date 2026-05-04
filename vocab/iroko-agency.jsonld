@@ -31,96 +31,106 @@
       }
     },
     {
-      "@id": "https://ontology.irokosociety.org/iroko-agency",
-      "@type": "owl:Ontology",
-      "dcterms:creator": "Iroko Historical Society",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Governance Layer module. Sovereignty-aligned agency model for sacred systems. Defines sacred agents, spirits, ritual events, authorization and refusal events, stewardship mandates, and authorization chains. Designed to degrade gracefully: minimal use requires only iroko:SacredAgent, iroko:Spirit, and iroko:RitualEvent. Use with iroko-authority for full authorization governance."
-      },
-      "dcterms:isPartOf": {
-        "@id": "https://ontology.irokosociety.org/iroko-framework/"
-      },
-      "dcterms:issued": {
-        "@type": "xsd:date",
-        "@value": "2026-02-23"
-      },
-      "dcterms:license": {
-        "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
-      },
-      "dcterms:modified": {
-        "@type": "xsd:date",
-        "@value": "2026-03-07"
-      },
-      "dcterms:references": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "dcterms:requires": {
-        "@id": "https://ontology.irokosociety.org/iroko-core"
-      },
-      "dcterms:title": {
-        "@language": "en",
-        "@value": "Iroko Framework: Agency Module"
-      },
-      "owl:versionIRI": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency/1.3.0"
-      },
-      "owl:versionInfo": "1.3.0",
-      "rdfs:seeAlso": {
-        "@id": "https://ontology.irokosociety.org/iroko-framework/"
-      }
-    },
-    {
-      "@id": "iroko:RefusalEvent",
+      "@id": "iroko:Spirit",
       "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "A ritual event in which a sacred agent is asserted to refuse participation, disclosure, access, or a requested action. Enables modeling of sacred refusal as a positive, governance-significant act rather than merely an absence."
+        "@value": "A sacred agent recognized as a spirit within a cultural and ritual framework. Specific typologies (orisha, lwa, nkisi, egun, etc.) modeled via subclasses or concept schemes in domain modules."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-agency"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Refusal Event"
+        "@value": "Spirit"
       },
       "rdfs:subClassOf": {
-        "@id": "iroko:RitualEvent"
+        "@id": "iroko:SacredAgent"
       }
     },
     {
-      "@id": "iroko:RitualConsequence",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "An outcome category describing asserted consequences of ritual actions or events. Descriptive and claim-bearing — does not assert causal certainty. Access governance applies."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Ritual Consequence"
-      }
-    },
-    {
-      "@id": "iroko:RitualPractitioner",
-      "@type": "owl:Class",
+      "@id": "iroko:generatesRefusal",
+      "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-community-only"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "A human agent recognized as exercising sacred capacity within a ritual system — performing ceremonies, transmitting knowledge, authorizing or refusing actions, or operating with sacred materials. Subclass of iroko:SacredAgent. Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures (Bokor, independent operators). Legitimacy and jurisdiction, where applicable, are modeled separately via iroko:Authority in iroko-authority. A practitioner may be linked to an Authority record but the two are independent assertions."
+        "@value": "Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding."
+      },
+      "rdfs:domain": {
+        "@id": "_:n5eabaafdaabe4992bc3131c93dadea32b1"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-agency"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Ritual Practitioner"
+        "@value": "generates refusal"
       },
-      "rdfs:subClassOf": {
+      "rdfs:range": {
+        "@id": "iroko:RefusalEvent"
+      }
+    },
+    {
+      "@id": "_:n5eabaafdaabe4992bc3131c93dadea32b1",
+      "@type": "owl:Class",
+      "owl:unionOf": {
+        "@list": [
+          {
+            "@id": "iroko:RitualEvent"
+          },
+          {
+            "@id": "iroko:SacredAgent"
+          },
+          {
+            "@id": "iroko:StewardshipMandate"
+          }
+        ]
+      }
+    },
+    {
+      "@id": "iroko:includesAction",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links a RitualEvent to a constituent RitualAction. Use when finer-grained action typing within an event is required — for example, to distinguish the invocation action from the offering action within a single ceremony. A RitualEvent may include multiple RitualActions. Access: community-only."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:RitualEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "includes action"
+      },
+      "rdfs:range": {
+        "@id": "iroko:RitualAction"
+      }
+    },
+    {
+      "@id": "iroko:involvesAgent",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links an event, action, or assertion node to an agent involved. Complements prov:wasAssociatedWith in instance data without requiring PROV import."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "involves agent"
+      },
+      "rdfs:range": {
         "@id": "iroko:SacredAgent"
       }
     },
@@ -164,6 +174,30 @@
       }
     },
     {
+      "@id": "iroko:mandateScope",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Free-text description of the scope of a StewardshipMandate — what materials, processes, or knowledge types it covers."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:StewardshipMandate"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "mandate scope"
+      },
+      "rdfs:range": {
+        "@id": "rdf:langString"
+      }
+    },
+    {
       "@id": "iroko:includesEvent",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
@@ -188,24 +222,75 @@
       }
     },
     {
-      "@id": "iroko:hasMandate",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
+      "@id": "iroko:AuthorizationChain",
+      "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Associates an agent, event, or policy with a StewardshipMandate."
+        "@value": "A structured representation of delegated or layered authority across agents, mandates, and conditions. Models succession of authorization from one agent or office to another within a ritual governance system."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-agency"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "has mandate"
+        "@value": "Authorization Chain"
+      }
+    },
+    {
+      "@id": "iroko:chainLink",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
       },
-      "rdfs:range": {
-        "@id": "iroko:StewardshipMandate"
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links one node in an AuthorizationChain to the next — the agent, event, or mandate that follows in the delegation sequence."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:AuthorizationChain"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "chain link"
+      }
+    },
+    {
+      "@id": "iroko:SacredAgent",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "An entity recognized within a ritual system as capable of intentional action — authorization, refusal, protection, sanctioning, or manifestation. Defined without metaphysical claims. Enables structured modeling of agency in sovereignty-aware archives. Subclass of prov:Agent via iroko-align-prov.ttl."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Sacred Agent"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:SacredEntity"
+      }
+    },
+    {
+      "@id": "iroko:AuthorizationEvent",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A ritual event in which authorization is asserted, delegated, conditioned, or revoked. Supports sovereignty modeling for access, disclosure, and stewardship mandates."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Authorization Event"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:RitualEvent"
       }
     },
     {
@@ -224,21 +309,18 @@
       }
     },
     {
-      "@id": "iroko:Spirit",
+      "@id": "iroko:StewardshipMandate",
       "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "A sacred agent recognized as a spirit within a cultural and ritual framework. Specific typologies (orisha, lwa, nkisi, egun, etc.) modeled via subclasses or concept schemes in domain modules."
+        "@value": "A mandate asserted to govern stewardship, custody, disclosure, or use of materials. May be associated with agents, events, and access policies. Can condition iroko:AccessPolicy instances."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-agency"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Spirit"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:SacredAgent"
+        "@value": "Stewardship Mandate"
       }
     },
     {
@@ -266,6 +348,46 @@
       }
     },
     {
+      "@id": "https://ontology.irokosociety.org/iroko-agency",
+      "@type": "owl:Ontology",
+      "dcterms:creator": "Iroko Historical Society",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Governance Layer module. Sovereignty-aligned agency model for sacred systems. Defines sacred agents, spirits, ritual events, authorization and refusal events, stewardship mandates, and authorization chains. Designed to degrade gracefully: minimal use requires only iroko:SacredAgent, iroko:Spirit, and iroko:RitualEvent. Use with iroko-authority for full authorization governance."
+      },
+      "dcterms:isPartOf": {
+        "@id": "https://ontology.irokosociety.org/iroko-framework/"
+      },
+      "dcterms:issued": {
+        "@type": "xsd:date",
+        "@value": "2026-02-23"
+      },
+      "dcterms:license": {
+        "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "dcterms:modified": {
+        "@type": "xsd:date",
+        "@value": "2026-03-07"
+      },
+      "dcterms:references": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
+      },
+      "dcterms:requires": {
+        "@id": "https://ontology.irokosociety.org/iroko-core"
+      },
+      "dcterms:title": {
+        "@language": "en",
+        "@value": "Iroko Framework: Agency Module"
+      },
+      "owl:versionIRI": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency/1.3.0"
+      },
+      "owl:versionInfo": "1.3.0",
+      "rdfs:seeAlso": {
+        "@id": "https://ontology.irokosociety.org/iroko-framework/"
+      }
+    },
+    {
       "@id": "iroko:hasAuthorizationChain",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
@@ -287,44 +409,57 @@
       }
     },
     {
-      "@id": "iroko:generatesRefusal",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
+      "@id": "iroko:RefusalEvent",
+      "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding."
-      },
-      "rdfs:domain": {
-        "@id": "_:n693faa7275c14b328577e089282593abb1"
+        "@value": "A ritual event in which a sacred agent is asserted to refuse participation, disclosure, access, or a requested action. Enables modeling of sacred refusal as a positive, governance-significant act rather than merely an absence."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-agency"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "generates refusal"
+        "@value": "Refusal Event"
       },
-      "rdfs:range": {
-        "@id": "iroko:RefusalEvent"
+      "rdfs:subClassOf": {
+        "@id": "iroko:RitualEvent"
       }
     },
     {
-      "@id": "_:n693faa7275c14b328577e089282593abb1",
+      "@id": "iroko:RitualConsequence",
       "@type": "owl:Class",
-      "owl:unionOf": {
-        "@list": [
-          {
-            "@id": "iroko:RitualEvent"
-          },
-          {
-            "@id": "iroko:SacredAgent"
-          },
-          {
-            "@id": "iroko:StewardshipMandate"
-          }
-        ]
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "An outcome category describing asserted consequences of ritual actions or events. Descriptive and claim-bearing — does not assert causal certainty. Access governance applies."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Ritual Consequence"
+      }
+    },
+    {
+      "@id": "iroko:hasMandate",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Associates an agent, event, or policy with a StewardshipMandate."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "has mandate"
+      },
+      "rdfs:range": {
+        "@id": "iroko:StewardshipMandate"
       }
     },
     {
@@ -343,159 +478,32 @@
       }
     },
     {
-      "@id": "iroko:includesAction",
-      "@type": "owl:ObjectProperty",
+      "@id": "iroko:RitualPractitioner",
+      "@type": "owl:Class",
+      "dcterms:issued": {
+        "@type": "xsd:date",
+        "@value": "2026-03-07"
+      },
+      "dcterms:modified": {
+        "@type": "xsd:date",
+        "@value": "2026-03-21"
+      },
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-community-only"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Links a RitualEvent to a constituent RitualAction. Use when finer-grained action typing within an event is required — for example, to distinguish the invocation action from the offering action within a single ceremony. A RitualEvent may include multiple RitualActions. Access: community-only."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:RitualEvent"
+        "@value": "A human agent recognized as exercising sacred capacity within a ritual system — performing ceremonies, transmitting knowledge, authorizing or refusing actions, or operating with sacred materials. Subclass of iroko:SacredAgent. Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures (Bokor, independent operators). Legitimacy and jurisdiction, where applicable, are modeled separately via iroko:Authority in iroko-authority. A practitioner may be linked to an Authority record but the two are independent assertions."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-agency"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "includes action"
-      },
-      "rdfs:range": {
-        "@id": "iroko:RitualAction"
-      }
-    },
-    {
-      "@id": "iroko:chainLink",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links one node in an AuthorizationChain to the next — the agent, event, or mandate that follows in the delegation sequence."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:AuthorizationChain"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "chain link"
-      }
-    },
-    {
-      "@id": "iroko:AuthorizationEvent",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A ritual event in which authorization is asserted, delegated, conditioned, or revoked. Supports sovereignty modeling for access, disclosure, and stewardship mandates."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Authorization Event"
+        "@value": "Ritual Practitioner"
       },
       "rdfs:subClassOf": {
-        "@id": "iroko:RitualEvent"
-      }
-    },
-    {
-      "@id": "iroko:StewardshipMandate",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A mandate asserted to govern stewardship, custody, disclosure, or use of materials. May be associated with agents, events, and access policies. Can condition iroko:AccessPolicy instances."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Stewardship Mandate"
-      }
-    },
-    {
-      "@id": "iroko:involvesAgent",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links an event, action, or assertion node to an agent involved. Complements prov:wasAssociatedWith in instance data without requiring PROV import."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "involves agent"
-      },
-      "rdfs:range": {
         "@id": "iroko:SacredAgent"
-      }
-    },
-    {
-      "@id": "iroko:mandateScope",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Free-text description of the scope of a StewardshipMandate — what materials, processes, or knowledge types it covers."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:StewardshipMandate"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "mandate scope"
-      },
-      "rdfs:range": {
-        "@id": "rdf:langString"
-      }
-    },
-    {
-      "@id": "iroko:SacredAgent",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "An entity recognized within a ritual system as capable of intentional action — authorization, refusal, protection, sanctioning, or manifestation. Defined without metaphysical claims. Enables structured modeling of agency in sovereignty-aware archives. Subclass of prov:Agent via iroko-align-prov.ttl."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Sacred Agent"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:SacredEntity"
-      }
-    },
-    {
-      "@id": "iroko:AuthorizationChain",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A structured representation of delegated or layered authority across agents, mandates, and conditions. Models succession of authorization from one agent or office to another within a ritual governance system."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Authorization Chain"
       }
     }
   ]

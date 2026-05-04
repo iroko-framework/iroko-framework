@@ -8,17 +8,19 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-iroko:ContestedAuthority a owl:Class ;
-    rdfs:label "Contested Authority"@en ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:comment "An authority (religious title, position, or role) whose legitimacy or historical continuity is disputed across lineages. Example: Iyanifa (women Ifa priests) — some lineages affirm historical continuity, others claim modern innovation."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
-
 iroko:LineageKnowledgeGraph a owl:Class ;
     rdfs:label "Lineage Knowledge Graph"@en ;
     rdfs:comment "A named graph representing one lineage's perspective on contested knowledge. Enables multiple community-endorsed positions to coexist without requiring resolution. Core mechanism for postcustodial knowledge governance."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     rdfs:subClassOf prov:Entity .
+
+iroko:Santeria a skos:Concept ;
+    rdfs:label "Santeria"@en ;
+    skos:broader iroko:tradition-yoruba-derived ;
+    skos:definition "Yoruba-derived tradition with strong syncretisms with Catholicism and some folk traditions.  Can be synonymous with Lucumí.  Can also have a pejorative meaning, depending on context."@en ;
+    skos:inScheme iroko:TraditionScheme ;
+    skos:prefLabel "Santeria"@en ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:accessLevel a owl:ObjectProperty ;
     rdfs:label "access level"@en ;
@@ -97,8 +99,8 @@ iroko:authorizedBy a owl:ObjectProperty ;
 iroko:ceremonyContext a owl:ObjectProperty ;
     rdfs:label "ceremony context"@en ;
     rdfs:comment "The ritual process in which this entity — sign, rhythm, plant use, or artifact — is employed. Range: travay:RitualProcess."@en ;
-    rdfs:range iroko:RitualProcess ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range iroko:RitualProcess ;
     iroko:minimumAccessLevel iroko:access-initiated-only .
 
 iroko:commentaryOn a owl:ObjectProperty ;
@@ -131,6 +133,15 @@ iroko:competingClaim a owl:ObjectProperty ;
     rdfs:range prov:Entity ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
+iroko:contestedAuthorityOf a owl:ObjectProperty ;
+    rdfs:label "contested authority of"@en ;
+    rdfs:comment "Links a ContestedAuthority back to the RitualAuthority whose legitimacy is in question. Inverse of iroko:contestsAuthority. Enables bidirectional traversal: from the contesting party to the ContestedAuthority record, and from the ContestedAuthority record back to the authority being contested."@en ;
+    rdfs:domain iroko:ContestedAuthority ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range iroko:RitualAuthority ;
+    owl:inverseOf iroko:contestsAuthority ;
+    iroko:minimumAccessLevel iroko:access-community-only .
+
 iroko:contestedNotes a owl:DatatypeProperty ;
     rdfs:label "contested notes"@en ;
     rdfs:comment "Free-text description of the nature of contestation."@en ;
@@ -156,8 +167,8 @@ iroko:custodialRelationship a owl:ObjectProperty ;
 iroko:depictedCeremony a owl:ObjectProperty ;
     rdfs:label "depicted ceremony"@en ;
     rdfs:domain iroko:SacredMedia ;
-    rdfs:range iroko:RitualProcess ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range iroko:RitualProcess ;
     iroko:minimumAccessLevel iroko:access-community-only .
 
 iroko:depictedEntity a owl:ObjectProperty ;
@@ -170,16 +181,24 @@ iroko:depicts a owl:ObjectProperty ;
     rdfs:label "depicts"@en ;
     rdfs:comment "Links archival materials to the entities they depict. Range: iroko:SacredEntity — covers plants, spirits, ceremonies, practitioners, instruments, and all other framework entities. Geographic locations not yet modeled as SacredEntity subclasses may be referenced via rdfs:label or external URI."@en ;
     rdfs:domain iroko:DocumentaryEvidence ;
-    rdfs:range iroko:SacredEntity ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range iroko:SacredEntity ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:documents a owl:ObjectProperty ;
     rdfs:label "documents"@en ;
     rdfs:comment "Links archival materials to practices or events they document. Range: iroko:SacredEntity — covers ceremonies, ritual events, plants, spirits, lineages, and all other framework entities. Parallel treatment with iroko:depicts: both are documentary links from archival materials to framework entities."@en ;
     rdfs:domain iroko:DocumentaryEvidence ;
-    rdfs:range iroko:SacredEntity ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range iroko:SacredEntity ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:documentsSpecimen a owl:ObjectProperty ;
+    rdfs:label "documents specimen"@en ;
+    rdfs:comment "Links a DocumentaryEvidence record to a SacredSpecimen it documents. A photograph, manuscript, or archival record may document one or more sacred objects. The existence of documentation is public-unrestricted; the ritual details of the object are governed by iroko:sacredStatus on the SacredSpecimen instance."@en ;
+    rdfs:domain iroko:DocumentaryEvidence ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range iroko:SacredSpecimen ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:epistemicType a owl:ObjectProperty ;
@@ -513,6 +532,14 @@ iroko:sourceRelationship a owl:ObjectProperty ;
     rdfs:range skos:Concept ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
+iroko:specimenEncounteredIn a owl:ObjectProperty ;
+    rdfs:label "specimen encountered in"@en ;
+    rdfs:comment "Links a FieldworkEvent to a SacredSpecimen encountered or documented during that session. Access: initiated-only — the association between a fieldwork event and a specific sacred object record discloses custody, location, and lineage information appropriate only for initiated practitioners."@en ;
+    rdfs:domain iroko:FieldworkEvent ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range iroko:SacredSpecimen ;
+    iroko:minimumAccessLevel iroko:access-initiated-only .
+
 iroko:subjectConsentStatus a owl:ObjectProperty ;
     rdfs:label "subject consent status"@en ;
     rdfs:domain iroko:SacredMedia ;
@@ -622,12 +649,12 @@ iroko:tradition-kumina a skos:Concept ;
     skos:prefLabel "Kumina"@en .
 
 iroko:tradition-lucumi a skos:Concept ;
-    skos:altLabel "Regla de Ocha"@en,
-        "Santeria"@en ;
+    rdfs:label "Lucumí"@en ;
     skos:broader iroko:tradition-yoruba-derived ;
-    skos:definition "Yoruba-derived tradition in Cuba."@en ;
+    skos:definition "Yoruba-derived tradition with much less syncretism with Catholicism.  Can be synonymous with Santeria."@en ;
     skos:inScheme iroko:TraditionScheme ;
-    skos:prefLabel "Lucumi"@en .
+    skos:prefLabel "Lucumí"@en ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
 
 iroko:tradition-oyotunji a skos:Concept ;
     skos:broader iroko:tradition-yoruba-derived ;
@@ -724,26 +751,21 @@ iroko:variationLabel a owl:DatatypeProperty ;
 
 iroko:Commentary a owl:Class ;
     rdfs:label "Commentary"@en ;
-    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "A commentary, gloss, or interpretive note attached to any resource in the framework — a narrative, an assertion, a sacred entity, a text segment. Keeps interpretive voice distinct from primary narrative content."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
 iroko:Narrative a owl:Class ;
     rdfs:label "Narrative"@en ;
-    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "A narrative cluster that may have multiple variants across place, time, authority, and lineage. First-class in Core so any domain module (Marca for odu essays, Ngoma for lyric traditions, Ékpè for origin stories) can attach narratives without importing the full narrative module."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
 iroko:NarrativeVariant a owl:Class ;
     rdfs:label "Narrative Variant"@en ;
-    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "A specific telling, transcript, or rendering of a narrative within a particular context, lineage, or temporal frame. The unit that carries text, language tag, authority scope, and access control."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
-
-iroko:RitualAuthority a owl:Class ;
-    rdfs:label "Ritual Authority"@en ;
-    rdfs:comment "A governance entity capable of authorizing assertion-level claims. May represent a lineage, cabildo, religious house, elder council, or individual office-holder. This is the minimal Core stub — full modeling of jurisdiction, basis, and recognition is in iroko-authority.ttl. Distinguished from ile:ReligiousOffice, which models the specific title instance held by an individual practitioner."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
 iroko:access-initiated-elder a skos:Concept ;
     skos:definition "Requires elder designation within tradition — recognized by community as having authority to access lineage-specific teachings."@en ;
@@ -804,6 +826,15 @@ iroko:consent-unknown a skos:Concept ;
 iroko:consent-verbal-undocumented a skos:Concept ;
     skos:inScheme iroko:ConsentStatusScheme ;
     skos:prefLabel "Verbal (Undocumented)"@en .
+
+iroko:contestsAuthority a owl:ObjectProperty ;
+    rdfs:label "contests authority"@en ;
+    rdfs:comment "Links a RitualAuthority, SacredEntity, or Assertion to a ContestedAuthority instance it generates or references. A RitualAuthority contests another when it challenges the legitimacy or historical continuity of that authority's claims. A SacredEntity may have its governing authority contested across lineages. An Assertion may formally contest an authority's basis."@en ;
+    rdfs:domain [ a owl:Class ;
+            owl:unionOf ( iroko:RitualAuthority iroko:SacredEntity iroko:Assertion ) ] ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range iroko:ContestedAuthority ;
+    iroko:minimumAccessLevel iroko:access-community-only .
 
 iroko:custodial-community-held a skos:Concept ;
     skos:inScheme iroko:CustodialRelationshipScheme ;
@@ -1013,17 +1044,11 @@ iroko:tradition-obeah a skos:Concept ;
     skos:prefLabel "Obeah"@en ;
     skos:scopeNote "Obeah's criminalization history means archival materials are often court records or colonial surveillance documents. Access governance and provenance tracking are especially important."@en .
 
-iroko:SacredSpecimen a owl:Class ;
-    rdfs:label "Sacred Specimen"@en ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:comment "Distinguishes objects that maintain active sacred status (consecrated, in ritual use) from decommissioned objects or museum specimens. Used to track the ritual life cycle of material culture."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
-
-iroko:access-initiated-only a skos:Concept ;
-    skos:definition "Accessible only to initiated practitioners whose initiation has been verified."@en ;
-    skos:inScheme iroko:AccessLevelScheme ;
-    skos:notation 4 ;
-    skos:prefLabel "Initiated Only"@en .
+iroko:ContestedAuthority a owl:Class ;
+    rdfs:label "Contested Authority"@en ;
+    rdfs:comment "An authority (religious title, position, or role) whose legitimacy or historical continuity is disputed across lineages. Example: Iyanifa (women Ifa priests) — some lineages affirm historical continuity, others claim modern innovation."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
 iroko:tradition-pan-african a skos:Concept ;
     skos:definition "Traditions that integrate African religious identity with political liberation frameworks."@en ;
@@ -1047,17 +1072,22 @@ iroko:AssertionStatusScheme a skos:ConceptScheme ;
         "Status de afirmação"@pt,
         "Ipo ìtẹnumọ́"@yo .
 
-iroko:DocumentaryEvidence a owl:Class ;
-    rdfs:label "Documentary Evidence"@en ;
-    rdfs:subClassOf iroko:SacredEntity ;
-    rdfs:comment "Umbrella class for archival materials (photographs, manuscripts, audio recordings, herbarium specimens) that document sacred knowledge practices. Maps to schema:CreativeWork in RDF serialization."@en ;
+iroko:RitualAuthority a owl:Class ;
+    rdfs:label "Ritual Authority"@en ;
+    rdfs:comment "A governance entity capable of authorizing assertion-level claims. May represent a lineage, cabildo, religious house, elder council, or individual office-holder. This is the minimal Core stub — full modeling of jurisdiction, basis, and recognition is in iroko-authority.ttl. Distinguished from ile:ReligiousOffice, which models the specific title instance held by an individual practitioner."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
 iroko:TextSegment a owl:Class ;
     rdfs:label "Text Segment"@en ;
-    rdfs:subClassOf iroko:SacredEntity ;
     rdfs:comment "An addressable, orderable segment within a narrative or narrative variant. Used for verse-level segmentation of odu essays, chant lines, prayers, and other structured oral or textual corpora."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:subClassOf iroko:SacredEntity .
+
+iroko:access-initiated-only a skos:Concept ;
+    skos:definition "Accessible only to initiated practitioners whose initiation has been verified."@en ;
+    skos:inScheme iroko:AccessLevelScheme ;
+    skos:notation 4 ;
+    skos:prefLabel "Initiated Only"@en .
 
 iroko:access-no-access a skos:Concept ;
     skos:definition "Operational or internal use only. Never exported to RDF."@en ;
@@ -1090,6 +1120,12 @@ iroko:tradition-kemetic a skos:Concept ;
     skos:inScheme iroko:TraditionScheme ;
     skos:prefLabel "Kemetic/Revivalist"@en .
 
+iroko:DocumentaryEvidence a owl:Class ;
+    rdfs:label "Documentary Evidence"@en ;
+    rdfs:comment "Umbrella class for archival materials (photographs, manuscripts, audio recordings, herbarium specimens) that document sacred knowledge practices. Maps to schema:CreativeWork in RDF serialization."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:subClassOf iroko:SacredEntity .
+
 iroko:RecordingContextScheme a skos:ConceptScheme ;
     rdfs:label "Recording Context"@en ;
     skos:hasTopConcept iroko:recordingContext-archival-transfer,
@@ -1103,6 +1139,12 @@ iroko:RelationshipAssertion a owl:Class ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     rdfs:subClassOf iroko:Assertion,
         iroko:SacredEntity .
+
+iroko:SacredSpecimen a owl:Class ;
+    rdfs:label "Sacred Specimen"@en ;
+    rdfs:comment "Distinguishes objects that maintain active sacred status (consecrated, in ritual use) from decommissioned objects or museum specimens. Used to track the ritual life cycle of material culture."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:subClassOf iroko:SacredEntity .
 
 iroko:TemporalVariation a owl:Class ;
     rdfs:label "Temporal Variation"@en ;
@@ -1121,11 +1163,6 @@ iroko:ConsentStatusScheme a skos:ConceptScheme ;
         iroko:consent-not-obtained,
         iroko:consent-unknown,
         iroko:consent-verbal-undocumented .
-
-iroko:FieldworkEvent a owl:Class ;
-    rdfs:label "Fieldwork Event"@en ;
-    rdfs:comment "A bounded fieldwork session or interview event during which assertions, narratives, or recordings were captured. Connects knowledge claims to their fieldwork provenance. rdfs:subClassOf prov:Activity asserted in iroko-align-prov.ttl."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
 iroko:MediaTypeScheme a skos:ConceptScheme ;
     rdfs:label "Media Type"@en ;
@@ -1165,6 +1202,11 @@ iroko:CommunityEndorsementScheme a skos:ConceptScheme ;
         iroko:endorsement-unreviewed,
         iroko:endorsement-withdrawn .
 
+iroko:FieldworkEvent a owl:Class ;
+    rdfs:label "Fieldwork Event"@en ;
+    rdfs:comment "A bounded fieldwork session or interview event during which assertions, narratives, or recordings were captured. Connects knowledge claims to their fieldwork provenance. rdfs:subClassOf prov:Activity asserted in iroko-align-prov.ttl."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
 iroko:tradition-bantu-derived a skos:Concept ;
     skos:definition "Traditions with primary roots in Bantu and Kongo religious culture."@en ;
     skos:inScheme iroko:TraditionScheme ;
@@ -1174,16 +1216,6 @@ iroko:tradition-yoruba-derived a skos:Concept ;
     skos:definition "Traditions with primary roots in Yoruba religious culture."@en ;
     skos:inScheme iroko:TraditionScheme ;
     skos:prefLabel "Yoruba-Derived"@en .
-
-iroko:SacredEntity a owl:Class ;
-    rdfs:label "Sacred Entity"@en ;
-    rdfs:comment "Top-level class for any tradition-specific concept within the Iroko Framework. All module-specific classes (Plant, SpiritualEntity, RitualProcess, etc.) are subclasses of this."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
-
-iroko:Assertion a owl:Class ;
-    rdfs:label "Assertion"@en ;
-    rdfs:comment "A first-class statement node representing a single claim about any subject in the framework. Attach authority, access level, epistemic type, contested status, and fieldwork provenance at the property level. iroko:RelationshipAssertion is a subclass for relationship-specific claims. All Assertion instances are semantically governed — they do not imply factual truth, only documented assertion."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
 iroko:CustodialRelationshipScheme a skos:ConceptScheme ;
     rdfs:label "Custodial Relationship"@en ;
@@ -1209,6 +1241,11 @@ iroko:SacredStatusScheme a skos:ConceptScheme ;
         iroko:sacredStatus-replica-teaching,
         iroko:sacredStatus-unknown .
 
+iroko:Assertion a owl:Class ;
+    rdfs:label "Assertion"@en ;
+    rdfs:comment "A first-class statement node representing a single claim about any subject in the framework. Attach authority, access level, epistemic type, contested status, and fieldwork provenance at the property level. iroko:RelationshipAssertion is a subclass for relationship-specific claims. All Assertion instances are semantically governed — they do not imply factual truth, only documented assertion."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
 iroko:EpistemicTypeScheme a skos:ConceptScheme ;
     rdfs:label "Epistemic Source Type"@en ;
     dcterms:description "Classification of knowledge sources for epistemological transparency."@en ;
@@ -1228,6 +1265,11 @@ iroko:SacredMedia a owl:Class ;
     rdfs:comment "Audio, photographic, or video records of sacred knowledge, ceremonies, instruments, or practitioners. Extends DocumentaryEvidence with media-specific metadata including format, instrumentation, consent status, and depicted entities."@en ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     rdfs:subClassOf iroko:DocumentaryEvidence .
+
+iroko:SacredEntity a owl:Class ;
+    rdfs:label "Sacred Entity"@en ;
+    rdfs:comment "Top-level class for any tradition-specific concept within the Iroko Framework. All module-specific classes (Plant, SpiritualEntity, RitualProcess, etc.) are subclasses of this."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
 
 iroko:access-community-only a skos:Concept ;
     skos:definition "Accessible to verified community members. Requires authentication."@en ;
@@ -1271,38 +1313,3 @@ iroko:access-public-unrestricted a skos:Concept ;
     owl:versionIRI <https://ontology.irokosociety.org/iroko-core/1.3.0> ;
     owl:versionInfo "1.3.0" .
 
-
-# ── Patch: SacredSpecimen and ContestedAuthority inbound arcs (v1.2.0 → retained) ───────
-
-iroko:documentsSpecimen a owl:ObjectProperty ;
-    rdfs:label "documents specimen"@en ;
-    rdfs:comment "Links a DocumentaryEvidence record to a SacredSpecimen it documents. A photograph, manuscript, or archival record may document one or more sacred objects. The existence of documentation is public-unrestricted; the ritual details of the object are governed by iroko:sacredStatus on the SacredSpecimen instance."@en ;
-    rdfs:domain iroko:DocumentaryEvidence ;
-    rdfs:range iroko:SacredSpecimen ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted .
-
-iroko:specimenEncounteredIn a owl:ObjectProperty ;
-    rdfs:label "specimen encountered in"@en ;
-    rdfs:comment "Links a FieldworkEvent to a SacredSpecimen encountered or documented during that session. Access: initiated-only — the association between a fieldwork event and a specific sacred object record discloses custody, location, and lineage information appropriate only for initiated practitioners."@en ;
-    rdfs:domain iroko:FieldworkEvent ;
-    rdfs:range iroko:SacredSpecimen ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
-    iroko:minimumAccessLevel iroko:access-initiated-only .
-
-iroko:contestsAuthority a owl:ObjectProperty ;
-    rdfs:label "contests authority"@en ;
-    rdfs:comment "Links a RitualAuthority, SacredEntity, or Assertion to a ContestedAuthority instance it generates or references. A RitualAuthority contests another when it challenges the legitimacy or historical continuity of that authority's claims. A SacredEntity may have its governing authority contested across lineages. An Assertion may formally contest an authority's basis."@en ;
-    rdfs:domain [ a owl:Class ; owl:unionOf ( iroko:RitualAuthority iroko:SacredEntity iroko:Assertion ) ] ;
-    rdfs:range iroko:ContestedAuthority ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
-    iroko:minimumAccessLevel iroko:access-community-only .
-
-iroko:contestedAuthorityOf a owl:ObjectProperty ;
-    rdfs:label "contested authority of"@en ;
-    rdfs:comment "Links a ContestedAuthority back to the RitualAuthority whose legitimacy is in question. Inverse of iroko:contestsAuthority. Enables bidirectional traversal: from the contesting party to the ContestedAuthority record, and from the ContestedAuthority record back to the authority being contested."@en ;
-    rdfs:domain iroko:ContestedAuthority ;
-    rdfs:range iroko:RitualAuthority ;
-    owl:inverseOf iroko:contestsAuthority ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
-    iroko:minimumAccessLevel iroko:access-community-only .

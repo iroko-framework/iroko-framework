@@ -10,57 +10,218 @@
   },
   "@graph": [
     {
-      "@id": "iroko:specimenNumber",
-      "@type": "owl:DatatypeProperty",
+      "@id": "iroko:plantPart",
+      "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Herbarium catalog number or specimen identifier. Aligns with dwc:catalogNumber (see iroko-align-dwc)."
+        "@value": "Which part of the plant is used. Values: iroko:part-leaf, iroko:part-root, iroko:part-bark, etc."
       },
       "rdfs:domain": {
-        "@id": "iroko:HerbariumSheet"
+        "@id": "iroko:Plant"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-ewe"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "specimen number"
+        "@value": "plant part"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:harvest-plant-spirit-offering",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Offering (water, coins, tobacco) must be left at plant base."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HarvestProtocolScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Requires Offering to Plant Spirit"
+      }
+    },
+    {
+      "@id": "iroko:PreparationMethodScheme",
+      "@type": "skos:ConceptScheme",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Methods for preparing plant materials."
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Preparation Method Classification"
+      },
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:prep-bath"
+        },
+        {
+          "@id": "iroko:prep-decoction"
+        },
+        {
+          "@id": "iroko:prep-dried-bundle"
+        },
+        {
+          "@id": "iroko:prep-fumigation"
+        },
+        {
+          "@id": "iroko:prep-incantation-only"
+        },
+        {
+          "@id": "iroko:prep-infusion"
+        },
+        {
+          "@id": "iroko:prep-ingestion"
+        },
+        {
+          "@id": "iroko:prep-maceration"
+        },
+        {
+          "@id": "iroko:prep-poultice"
+        },
+        {
+          "@id": "iroko:prep-powder"
+        },
+        {
+          "@id": "iroko:prep-tincture"
+        },
+        {
+          "@id": "iroko:prep-topical"
+        },
+        {
+          "@id": "iroko:prep-wash"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:collisionNotes",
+      "@type": "owl:DatatypeProperty",
+      "owl:deprecated": true,
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Deprecated plural form. Use iroko:collisionNote instead."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "collision notes (deprecated)"
+      },
+      "rdfs:seeAlso": {
+        "@id": "iroko:collisionNote"
+      }
+    },
+    {
+      "@id": "iroko:signReference",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Divination sign that prescribes this plant. Links to Marca module."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Plant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "sign reference"
+      },
+      "rdfs:range": {
+        "@id": "iroko:DivinationSign"
+      }
+    },
+    {
+      "@id": "iroko:part-seed",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:PlantPartScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Seed"
+      }
+    },
+    {
+      "@id": "iroko:preparationMethodDetailed",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Exact preparation instructions including timing, quantities, and critical steps."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Plant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "preparation method (detailed)"
       },
       "rdfs:range": {
         "@id": "xsd:string"
       }
     },
     {
-      "@id": "iroko:prep-incantation-only",
+      "@id": "iroko:part-whole-plant",
       "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Used ritually with words or prayers but not physically prepared."
-      },
       "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
+        "@id": "iroko:PlantPartScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Incantation-Only"
+        "@value": "Whole Plant"
       }
     },
     {
-      "@id": "iroko:prep-wash",
+      "@id": "iroko:ritualNotes",
+      "@type": "owl:AnnotationProperty",
+      "owl:deprecated": true,
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Deprecated plural form. Use iroko:ritualNote instead."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "ritual notes (deprecated)"
+      },
+      "rdfs:seeAlso": {
+        "@id": "iroko:ritualNote"
+      }
+    },
+    {
+      "@id": "iroko:medicinal-respiratory-support",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Prepared as liquid wash for ritual bathing or anointing."
+        "@value": "Supports respiratory system, cough relief, asthma."
       },
       "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
+        "@id": "iroko:MedicinalUseScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Wash (Omiero/Lavage)"
+        "@value": "Respiratory Support"
       }
     },
     {
@@ -76,36 +237,6 @@
       "skos:prefLabel": {
         "@language": "en",
         "@value": "Pain Relief"
-      }
-    },
-    {
-      "@id": "iroko:prep-tincture",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Extracted in alcohol or spirits."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Tincture/Alcohol"
-      }
-    },
-    {
-      "@id": "iroko:prep-infusion",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Steeped in hot water like tea."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Infusion (Hot Water)"
       }
     },
     {
@@ -159,18 +290,72 @@
       ]
     },
     {
-      "@id": "iroko:medicinal-maternal-postpartum",
+      "@id": "iroko:ritual-divination-enhancement",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Postpartum recovery and maternal health."
+        "@value": "Enhances divinatory abilities and spiritual sight."
       },
       "skos:inScheme": {
-        "@id": "iroko:MedicinalUseScheme"
+        "@id": "iroko:RitualUseScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Maternal/Postpartum"
+        "@value": "Divination Enhancement"
+      }
+    },
+    {
+      "@id": "iroko:prep-topical",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Applied directly to skin or affected area."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Topical Application"
+      }
+    },
+    {
+      "@id": "iroko:prep-poultice",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Applied topically as paste or compress."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Poultice/Compress"
+      }
+    },
+    {
+      "@id": "iroko:constituentQuantity",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Quantity of a constituent plant in a preparation. Free-text to accommodate ritual number conventions (e.g. '21 leaves', '7 roots', 'a handful'). Attach to the PlantPreparation node, not to the Plant node directly."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:PlantPreparation"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "constituent quantity"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
       }
     },
     {
@@ -198,51 +383,141 @@
       }
     },
     {
-      "@id": "iroko:part-sap",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:PlantPartScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Sap"
-      }
-    },
-    {
-      "@id": "iroko:ritual-road-opening",
+      "@id": "iroko:prep-dried-bundle",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Opens paths, removes obstacles, facilitates opportunities."
+        "@value": "Dried and bundled for hanging or storage."
       },
       "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
+        "@id": "iroko:PreparationMethodScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Road Opening"
+        "@value": "Dried Bundle"
       }
     },
     {
-      "@id": "iroko:part-whole-plant",
+      "@id": "iroko:nameCollision",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Boolean indicating if the same vernacular name refers to multiple distinct species."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Plant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "name collision"
+      },
+      "rdfs:range": {
+        "@id": "xsd:boolean"
+      }
+    },
+    {
+      "@id": "iroko:part-bark",
       "@type": "skos:Concept",
       "skos:inScheme": {
         "@id": "iroko:PlantPartScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Whole Plant"
+        "@value": "Bark"
       }
     },
     {
-      "@id": "iroko:part-seed",
+      "@id": "iroko:contraindication",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Safety warnings: allergic reactions, pregnancy contraindications, toxic if ingested, etc."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Plant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "contraindication"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "iroko:EwePlantRecord",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "An archival record documenting a sacred plant within the Iroko Historical Society dataset. Subclass of Plant. Use this class for dataset instances; use iroko:Plant for abstract botanical entities and cross-module joins."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Ewe Plant Record"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:Plant"
+      }
+    },
+    {
+      "@id": "iroko:part-pollen",
       "@type": "skos:Concept",
       "skos:inScheme": {
         "@id": "iroko:PlantPartScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Seed"
+        "@value": "Pollen"
+      }
+    },
+    {
+      "@id": "iroko:part-resin",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:PlantPartScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Resin"
+      }
+    },
+    {
+      "@id": "iroko:ritualContext",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Textual description of ceremonial use context."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Plant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "ritual context"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
       }
     },
     {
@@ -284,53 +559,27 @@
       ]
     },
     {
-      "@id": "iroko:ritual-protection-boundary",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Creates protective boundaries, shields from harm."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Protection/Boundary"
-      }
-    },
-    {
-      "@id": "iroko:part-resin",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:PlantPartScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Resin"
-      }
-    },
-    {
-      "@id": "iroko:preparationInstructions",
-      "@type": "owl:DatatypeProperty",
+      "@id": "iroko:photographicVoucher",
+      "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
+        "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Complete instructions for assembling the PlantPreparation: order of addition, timing, incantations, quantities, and critical steps. Governed at initiated-only minimum; elder-initiated for consecrated preparations such as Omiero."
+        "@value": "Link to photographic documentation of this plant specimen. Aligns with dwc:associatedMedia (see iroko-align-dwc)."
       },
       "rdfs:domain": {
-        "@id": "iroko:PlantPreparation"
+        "@id": "iroko:Plant"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-ewe"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "preparation instructions"
+        "@value": "photographic voucher"
       },
       "rdfs:range": {
-        "@id": "xsd:string"
+        "@id": "iroko:DocumentaryEvidence"
       }
     },
     {
@@ -345,199 +594,184 @@
       }
     },
     {
-      "@id": "iroko:collisionNote",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Explanation of name collision: which plants share the name, how to distinguish, regional variations. Canonical singular form — use iroko:collisionNote, not iroko:collisionNotes."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:EwePlantRecord"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "collision note"
-      },
-      "rdfs:range": {
-        "@id": "xsd:string"
-      }
-    },
-    {
-      "@id": "iroko:ritualNote",
-      "@type": "owl:AnnotationProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Free-text annotation on ritual or linguistic context not captured by controlled vocabulary. Includes etymology, geographic distribution notes, and cross-tradition observations. Canonical singular form — use iroko:ritualNote, not iroko:ritualNotes."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:EwePlantRecord"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "ritual note"
-      },
-      "rdfs:range": {
-        "@id": "xsd:string"
-      }
-    },
-    {
-      "@id": "iroko:harvestProtocolDetailed",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Detailed harvest instructions: exact timing (dawn, dusk), direction (face east), quantities (3, 7, 9, 21), offerings required."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "harvest protocol (detailed)"
-      },
-      "rdfs:range": {
-        "@id": "xsd:string"
-      }
-    },
-    {
-      "@id": "iroko:preparationMethod",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "General preparation method. Values: iroko:prep-infusion, iroko:prep-decoction, iroko:prep-bath, etc."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "preparation method"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:medicinal-spiritual-psychosomatic",
+      "@id": "iroko:medicinal-pediatric",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Addresses spiritual and emotional dimensions of illness."
+        "@value": "Safe for children, pediatric applications."
       },
       "skos:inScheme": {
         "@id": "iroko:MedicinalUseScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Spiritual/Psychosomatic"
+        "@value": "Pediatric"
       }
     },
     {
-      "@id": "iroko:part-flower",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:PlantPartScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Flower"
-      }
-    },
-    {
-      "@id": "iroko:part-bulb",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:PlantPartScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Bulb"
-      }
-    },
-    {
-      "@id": "iroko:part-root",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:PlantPartScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Root"
-      }
-    },
-    {
-      "@id": "iroko:part-fruit",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:PlantPartScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Fruit"
-      }
-    },
-    {
-      "@id": "iroko:medicinal-skin-topical",
+      "@id": "iroko:prep-maceration",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Applied to skin for rashes, irritation, wounds."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MedicinalUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Skin/Topical"
-      }
-    },
-    {
-      "@id": "iroko:prep-decoction",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Boiled to extract properties from harder plant parts."
+        "@value": "Soaked in cold water or oil for an extended period."
       },
       "skos:inScheme": {
         "@id": "iroko:PreparationMethodScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Decoction (Boiled)"
+        "@value": "Maceration (Cold Soak)"
       }
     },
     {
-      "@id": "iroko:entityAssociation",
+      "@id": "iroko:prep-powder",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Dried and ground into powder."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Powder (Afoche)"
+      }
+    },
+    {
+      "@id": "iroko:medicinal-reproductive-fertility",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Supports reproductive health and fertility."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MedicinalUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Reproductive/Fertility"
+      }
+    },
+    {
+      "@id": "iroko:medicinal-digestive-support",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Supports digestive system, relieves stomach issues."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MedicinalUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Digestive Support"
+      }
+    },
+    {
+      "@id": "iroko:harvest-wildcrafted",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Harvested from wild without specific ritual protocol."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HarvestProtocolScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Wildcrafted (No Ritual)"
+      }
+    },
+    {
+      "@id": "iroko:prep-fumigation",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Burned as incense or smoke for cleansing."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Fumigation (Sahumerio)"
+      }
+    },
+    {
+      "@id": "iroko:ritual-consecration",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Consecrates objects, spaces, and persons."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Consecration"
+      }
+    },
+    {
+      "@id": "iroko:PlantPartScheme",
+      "@type": "skos:ConceptScheme",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Which part of the plant is used."
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Plant Part Classification"
+      },
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:part-bark"
+        },
+        {
+          "@id": "iroko:part-bulb"
+        },
+        {
+          "@id": "iroko:part-flower"
+        },
+        {
+          "@id": "iroko:part-fruit"
+        },
+        {
+          "@id": "iroko:part-leaf"
+        },
+        {
+          "@id": "iroko:part-pollen"
+        },
+        {
+          "@id": "iroko:part-resin"
+        },
+        {
+          "@id": "iroko:part-root"
+        },
+        {
+          "@id": "iroko:part-sap"
+        },
+        {
+          "@id": "iroko:part-seed"
+        },
+        {
+          "@id": "iroko:part-stem"
+        },
+        {
+          "@id": "iroko:part-whole-plant"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:ritualUse",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module."
+        "@value": "Ceremonial or spiritual application of this plant. Values: iroko:ritual-purification-cleansing, iroko:ritual-protection-boundary, etc."
       },
       "rdfs:domain": {
         "@id": "iroko:Plant"
@@ -547,10 +781,49 @@
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "entity association"
+        "@value": "ritual use"
       },
       "rdfs:range": {
-        "@id": "iroko:SpiritualEntity"
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:medicinal-wound-healing",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Promotes wound healing, tissue repair."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MedicinalUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Wound Healing"
+      }
+    },
+    {
+      "@id": "iroko:medicinalUse",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Medicinal or healing application of this plant. Values from controlled vocabulary: iroko:medicinal-fever-reduction, iroko:medicinal-digestive-support, etc."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Plant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "medicinal use"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
       }
     },
     {
@@ -619,122 +892,94 @@
       ]
     },
     {
-      "@id": "iroko:prep-maceration",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Soaked in cold water or oil for an extended period."
+      "@id": "iroko:ritualNote",
+      "@type": "owl:AnnotationProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
       },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Maceration (Cold Soak)"
-      }
-    },
-    {
-      "@id": "iroko:ritual-offering-devotion",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Offered to spirits as devotion or tribute."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Offering/Devotion"
-      }
-    },
-    {
-      "@id": "iroko:ritual-death-rites",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Funeral ceremonies and death transitions."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Death Rites"
-      }
-    },
-    {
-      "@id": "iroko:ritual-prosperity-abundance",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Attracts wealth, prosperity, and abundance."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Prosperity/Abundance"
-      }
-    },
-    {
-      "@id": "iroko:ritual-ancestor-veneration",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Honors ancestors, facilitates ancestral connection."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Ancestor Veneration"
-      }
-    },
-    {
-      "@id": "iroko:HerbariumSheet",
-      "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Physical plant specimen preserved for documentation. Links botanical voucher to a plant record and archival photograph via iroko:documentsPlant and iroko:photographicVoucher. Darwin Core alignment: iroko:specimenNumber skos:exactMatch dwc:catalogNumber (declared in iroko-align-dwc)."
+        "@value": "Free-text annotation on ritual or linguistic context not captured by controlled vocabulary. Includes etymology, geographic distribution notes, and cross-tradition observations. Canonical singular form — use iroko:ritualNote, not iroko:ritualNotes."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:EwePlantRecord"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-ewe"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Herbarium Sheet"
+        "@value": "ritual note"
       },
-      "rdfs:subClassOf": {
-        "@id": "iroko:DocumentaryEvidence"
+      "rdfs:range": {
+        "@id": "xsd:string"
       }
     },
     {
-      "@id": "iroko:ritual-house-blessing",
+      "@id": "iroko:ritual-domination-binding",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Blesses homes, workplaces, and sacred spaces."
+        "@value": "Binds, controls, or dominates situations or people."
       },
       "skos:inScheme": {
         "@id": "iroko:RitualUseScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "House/Space Blessing"
+        "@value": "Domination/Binding"
       }
     },
     {
-      "@id": "iroko:part-bark",
+      "@id": "iroko:medicinal-skin-topical",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Applied to skin for rashes, irritation, wounds."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MedicinalUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Skin/Topical"
+      }
+    },
+    {
+      "@id": "iroko:harvest-cultivated",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Grown intentionally in gardens or farms."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HarvestProtocolScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Cultivated"
+      }
+    },
+    {
+      "@id": "iroko:part-bulb",
       "@type": "skos:Concept",
       "skos:inScheme": {
         "@id": "iroko:PlantPartScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Bark"
+        "@value": "Bulb"
+      }
+    },
+    {
+      "@id": "iroko:part-sap",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:PlantPartScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Sap"
       }
     },
     {
@@ -750,6 +995,21 @@
       "skos:prefLabel": {
         "@language": "en",
         "@value": "Legal/Justice"
+      }
+    },
+    {
+      "@id": "iroko:harvest-lunar-phase-required",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Must be harvested during a specific moon phase."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HarvestProtocolScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Requires Lunar Phase"
       }
     },
     {
@@ -777,266 +1037,14 @@
       }
     },
     {
-      "@id": "iroko:ritual-purification-cleansing",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Spiritual cleansing, removal of negative influences."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Purification/Cleansing"
-      }
-    },
-    {
-      "@id": "iroko:ritual-invocation-communication",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Facilitates communication with spirits and invocation."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Invocation/Communication"
-      }
-    },
-    {
-      "@id": "iroko:ritual-rites-of-transition",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Used in initiation, birth, death, and marriage ceremonies."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Rites of Transition"
-      }
-    },
-    {
-      "@id": "iroko:harvest-commercial-market",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Purchased from commercial sources or markets."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HarvestProtocolScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Commercial/Market"
-      }
-    },
-    {
-      "@id": "iroko:harvest-lunar-phase-required",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Must be harvested during a specific moon phase."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HarvestProtocolScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Requires Lunar Phase"
-      }
-    },
-    {
-      "@id": "iroko:prep-poultice",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Applied topically as paste or compress."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Poultice/Compress"
-      }
-    },
-    {
-      "@id": "iroko:ritualUse",
+      "@id": "iroko:harvestProtocol",
       "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Ceremonial or spiritual application of this plant. Values: iroko:ritual-purification-cleansing, iroko:ritual-protection-boundary, etc."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "ritual use"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:signReference",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Divination sign that prescribes this plant. Links to Marca module."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "sign reference"
-      },
-      "rdfs:range": {
-        "@id": "iroko:DivinationSign"
-      }
-    },
-    {
-      "@id": "iroko:constituentQuantity",
-      "@type": "owl:DatatypeProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-community-only"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Quantity of a constituent plant in a preparation. Free-text to accommodate ritual number conventions (e.g. '21 leaves', '7 roots', 'a handful'). Attach to the PlantPreparation node, not to the Plant node directly."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:PlantPreparation"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "constituent quantity"
-      },
-      "rdfs:range": {
-        "@id": "xsd:string"
-      }
-    },
-    {
-      "@id": "iroko:medicinal-fever-reduction",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Reduces fever, antipyretic properties."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MedicinalUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Fever Reduction"
-      }
-    },
-    {
-      "@id": "iroko:prep-topical",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Applied directly to skin or affected area."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Topical Application"
-      }
-    },
-    {
-      "@id": "iroko:ritual-love-attraction",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Attracts love and enhances relationships."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Love/Attraction"
-      }
-    },
-    {
-      "@id": "iroko:prep-bath",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Prepared as spiritual bath for immersion or washing."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Bath (Bano/Bain)"
-      }
-    },
-    {
-      "@id": "iroko:collisionNotes",
-      "@type": "owl:DatatypeProperty",
-      "owl:deprecated": true,
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Deprecated plural form. Use iroko:collisionNote instead."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "collision notes (deprecated)"
-      },
-      "rdfs:seeAlso": {
-        "@id": "iroko:collisionNote"
-      }
-    },
-    {
-      "@id": "iroko:part-stem",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:PlantPartScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Stem"
-      }
-    },
-    {
-      "@id": "iroko:plantPart",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Which part of the plant is used. Values: iroko:part-leaf, iroko:part-root, iroko:part-bark, etc."
+        "@value": "Method of harvesting: ritual vs. commercial, timing, offerings required. Values: iroko:harvest-ritual-offering-required, iroko:harvest-wildcrafted, iroko:harvest-cultivated, etc."
       },
       "rdfs:domain": {
         "@id": "iroko:Plant"
@@ -1046,7 +1054,7 @@
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "plant part"
+        "@value": "harvest protocol"
       },
       "rdfs:range": {
         "@id": "skos:Concept"
@@ -1068,29 +1076,29 @@
       }
     },
     {
-      "@id": "iroko:ritual-divination-enhancement",
+      "@id": "iroko:ritual-purification-cleansing",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Enhances divinatory abilities and spiritual sight."
+        "@value": "Spiritual cleansing, removal of negative influences."
       },
       "skos:inScheme": {
         "@id": "iroko:RitualUseScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Divination Enhancement"
+        "@value": "Purification/Cleansing"
       }
     },
     {
-      "@id": "iroko:contraindication",
+      "@id": "iroko:harvestProtocolDetailed",
       "@type": "owl:DatatypeProperty",
       "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
+        "@id": "iroko:access-community-only"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Safety warnings: allergic reactions, pregnancy contraindications, toxic if ingested, etc."
+        "@value": "Detailed harvest instructions: exact timing (dawn, dusk), direction (face east), quantities (3, 7, 9, 21), offerings required."
       },
       "rdfs:domain": {
         "@id": "iroko:Plant"
@@ -1100,10 +1108,423 @@
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "contraindication"
+        "@value": "harvest protocol (detailed)"
       },
       "rdfs:range": {
         "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "iroko:part-flower",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:PlantPartScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Flower"
+      }
+    },
+    {
+      "@id": "iroko:collisionNote",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Explanation of name collision: which plants share the name, how to distinguish, regional variations. Canonical singular form — use iroko:collisionNote, not iroko:collisionNotes."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:EwePlantRecord"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "collision note"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "iroko:PlantPreparation",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A prepared spiritual material combining specific plants with defined quantities and methods. Example: Omiero for Obatala (bath with 21 leaves of Akoko, Prodigiosa, Albahaca blanca). Constituent plants are linked via iroko:hasConstituent; quantities via iroko:constituentQuantity; full instructions via iroko:preparationInstructions (initiated-only)."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Plant Preparation"
+      }
+    },
+    {
+      "@id": "iroko:prep-tincture",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Extracted in alcohol or spirits."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Tincture/Alcohol"
+      }
+    },
+    {
+      "@id": "iroko:preparationInstructions",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Complete instructions for assembling the PlantPreparation: order of addition, timing, incantations, quantities, and critical steps. Governed at initiated-only minimum; elder-initiated for consecrated preparations such as Omiero."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:PlantPreparation"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "preparation instructions"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "iroko:HerbariumSheet",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Physical plant specimen preserved for documentation. Links botanical voucher to a plant record and archival photograph via iroko:documentsPlant and iroko:photographicVoucher. Darwin Core alignment: iroko:specimenNumber skos:exactMatch dwc:catalogNumber (declared in iroko-align-dwc)."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Herbarium Sheet"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:DocumentaryEvidence"
+      }
+    },
+    {
+      "@id": "iroko:medicinal-general-tonic",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Overall health tonic, vitality support."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MedicinalUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "General Tonic"
+      }
+    },
+    {
+      "@id": "iroko:prep-incantation-only",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Used ritually with words or prayers but not physically prepared."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Incantation-Only"
+      }
+    },
+    {
+      "@id": "iroko:part-root",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:PlantPartScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Root"
+      }
+    },
+    {
+      "@id": "iroko:part-fruit",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:PlantPartScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Fruit"
+      }
+    },
+    {
+      "@id": "iroko:ritual-healing-restoration",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Spiritual healing, restoration of balance."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Healing/Restoration"
+      }
+    },
+    {
+      "@id": "iroko:preparationMethod",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "General preparation method. Values: iroko:prep-infusion, iroko:prep-decoction, iroko:prep-bath, etc."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Plant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "preparation method"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:ritual-cosmological-symbolic",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Represents cosmological principles and symbolic meaning."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Cosmological/Symbolic"
+      }
+    },
+    {
+      "@id": "iroko:ritual-prosperity-abundance",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Attracts wealth, prosperity, and abundance."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Prosperity/Abundance"
+      }
+    },
+    {
+      "@id": "iroko:harvest-specific-practitioner",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Must be harvested by a practitioner with specific initiation."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HarvestProtocolScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Requires Specific Practitioner"
+      }
+    },
+    {
+      "@id": "iroko:ritual-invocation-communication",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Facilitates communication with spirits and invocation."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Invocation/Communication"
+      }
+    },
+    {
+      "@id": "iroko:ritual-house-blessing",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Blesses homes, workplaces, and sacred spaces."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "House/Space Blessing"
+      }
+    },
+    {
+      "@id": "iroko:part-stem",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:PlantPartScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Stem"
+      }
+    },
+    {
+      "@id": "iroko:prep-decoction",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Boiled to extract properties from harder plant parts."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Decoction (Boiled)"
+      }
+    },
+    {
+      "@id": "iroko:hasConstituent",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links a PlantPreparation to each constituent Plant. A preparation may have multiple constituents. Use with iroko:constituentQuantity to record the quantity of each constituent."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:PlantPreparation"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "has constituent"
+      },
+      "rdfs:range": {
+        "@id": "iroko:Plant"
+      }
+    },
+    {
+      "@id": "iroko:ritual-rites-of-transition",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Used in initiation, birth, death, and marriage ceremonies."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Rites of Transition"
+      }
+    },
+    {
+      "@id": "iroko:ritual-death-rites",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Funeral ceremonies and death transitions."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Death Rites"
+      }
+    },
+    {
+      "@id": "iroko:medicinal-maternal-postpartum",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Postpartum recovery and maternal health."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MedicinalUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Maternal/Postpartum"
+      }
+    },
+    {
+      "@id": "iroko:medicinal-anti-inflammatory",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Reduces inflammation and swelling."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MedicinalUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Anti-Inflammatory"
+      }
+    },
+    {
+      "@id": "iroko:ritual-protection-boundary",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Creates protective boundaries, shields from harm."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Protection/Boundary"
+      }
+    },
+    {
+      "@id": "iroko:medicinal-spiritual-psychosomatic",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Addresses spiritual and emotional dimensions of illness."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MedicinalUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Spiritual/Psychosomatic"
       }
     },
     {
@@ -1125,33 +1546,156 @@
       }
     },
     {
-      "@id": "iroko:medicinal-anti-inflammatory",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Reduces inflammation and swelling."
+      "@id": "iroko:entityAssociation",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
       },
-      "skos:inScheme": {
-        "@id": "iroko:MedicinalUseScheme"
-      },
-      "skos:prefLabel": {
+      "rdfs:comment": {
         "@language": "en",
-        "@value": "Anti-Inflammatory"
+        "@value": "Spiritual entity (orisa, lwa, mpungu) associated with this plant. Links to Nkisi module."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Plant"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "entity association"
+      },
+      "rdfs:range": {
+        "@id": "iroko:SpiritualEntity"
       }
     },
     {
-      "@id": "iroko:medicinal-wound-healing",
+      "@id": "iroko:prep-wash",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Promotes wound healing, tissue repair."
+        "@value": "Prepared as liquid wash for ritual bathing or anointing."
       },
       "skos:inScheme": {
-        "@id": "iroko:MedicinalUseScheme"
+        "@id": "iroko:PreparationMethodScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Wound Healing"
+        "@value": "Wash (Omiero/Lavage)"
+      }
+    },
+    {
+      "@id": "iroko:prep-bath",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Prepared as spiritual bath for immersion or washing."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Bath (Bano/Bain)"
+      }
+    },
+    {
+      "@id": "iroko:ritual-road-opening",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Opens paths, removes obstacles, facilitates opportunities."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Road Opening"
+      }
+    },
+    {
+      "@id": "iroko:harvest-commercial-market",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Purchased from commercial sources or markets."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HarvestProtocolScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Commercial/Market"
+      }
+    },
+    {
+      "@id": "iroko:ritual-ancestor-veneration",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Honors ancestors, facilitates ancestral connection."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Ancestor Veneration"
+      }
+    },
+    {
+      "@id": "iroko:prep-infusion",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Steeped in hot water like tea."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Infusion (Hot Water)"
+      }
+    },
+    {
+      "@id": "iroko:specimenNumber",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Herbarium catalog number or specimen identifier. Aligns with dwc:catalogNumber (see iroko-align-dwc)."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:HerbariumSheet"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ewe"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "specimen number"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "iroko:prep-ingestion",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Consumed internally as tea, tonic, or food."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PreparationMethodScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Ingestion (Tea/Food)"
       }
     },
     {
@@ -1200,511 +1744,6 @@
       }
     },
     {
-      "@id": "iroko:part-pollen",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:PlantPartScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Pollen"
-      }
-    },
-    {
-      "@id": "iroko:medicinal-general-tonic",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Overall health tonic, vitality support."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MedicinalUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "General Tonic"
-      }
-    },
-    {
-      "@id": "iroko:medicinalUse",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Medicinal or healing application of this plant. Values from controlled vocabulary: iroko:medicinal-fever-reduction, iroko:medicinal-digestive-support, etc."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "medicinal use"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:ritual-domination-binding",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Binds, controls, or dominates situations or people."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Domination/Binding"
-      }
-    },
-    {
-      "@id": "iroko:prep-fumigation",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Burned as incense or smoke for cleansing."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Fumigation (Sahumerio)"
-      }
-    },
-    {
-      "@id": "iroko:PlantPreparation",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A prepared spiritual material combining specific plants with defined quantities and methods. Example: Omiero for Obatala (bath with 21 leaves of Akoko, Prodigiosa, Albahaca blanca). Constituent plants are linked via iroko:hasConstituent; quantities via iroko:constituentQuantity; full instructions via iroko:preparationInstructions (initiated-only)."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Plant Preparation"
-      }
-    },
-    {
-      "@id": "iroko:prep-dried-bundle",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Dried and bundled for hanging or storage."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Dried Bundle"
-      }
-    },
-    {
-      "@id": "iroko:medicinal-pediatric",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Safe for children, pediatric applications."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MedicinalUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Pediatric"
-      }
-    },
-    {
-      "@id": "iroko:EwePlantRecord",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "An archival record documenting a sacred plant within the Iroko Historical Society dataset. Subclass of Plant. Use this class for dataset instances; use iroko:Plant for abstract botanical entities and cross-module joins."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Ewe Plant Record"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:Plant"
-      }
-    },
-    {
-      "@id": "iroko:nameCollision",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Boolean indicating if the same vernacular name refers to multiple distinct species."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "name collision"
-      },
-      "rdfs:range": {
-        "@id": "xsd:boolean"
-      }
-    },
-    {
-      "@id": "iroko:harvestProtocol",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Method of harvesting: ritual vs. commercial, timing, offerings required. Values: iroko:harvest-ritual-offering-required, iroko:harvest-wildcrafted, iroko:harvest-cultivated, etc."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "harvest protocol"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:ritualContext",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Textual description of ceremonial use context."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "ritual context"
-      },
-      "rdfs:range": {
-        "@id": "xsd:string"
-      }
-    },
-    {
-      "@id": "iroko:ritual-healing-restoration",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Spiritual healing, restoration of balance."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Healing/Restoration"
-      }
-    },
-    {
-      "@id": "iroko:preparationMethodDetailed",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Exact preparation instructions including timing, quantities, and critical steps."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "preparation method (detailed)"
-      },
-      "rdfs:range": {
-        "@id": "xsd:string"
-      }
-    },
-    {
-      "@id": "iroko:harvest-plant-spirit-offering",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Offering (water, coins, tobacco) must be left at plant base."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HarvestProtocolScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Requires Offering to Plant Spirit"
-      }
-    },
-    {
-      "@id": "iroko:harvest-specific-practitioner",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Must be harvested by a practitioner with specific initiation."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HarvestProtocolScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Requires Specific Practitioner"
-      }
-    },
-    {
-      "@id": "iroko:ritual-consecration",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Consecrates objects, spaces, and persons."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:RitualUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Consecration"
-      }
-    },
-    {
-      "@id": "iroko:prep-ingestion",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Consumed internally as tea, tonic, or food."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Ingestion (Tea/Food)"
-      }
-    },
-    {
-      "@id": "iroko:ritualNotes",
-      "@type": "owl:AnnotationProperty",
-      "owl:deprecated": true,
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Deprecated plural form. Use iroko:ritualNote instead."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "ritual notes (deprecated)"
-      },
-      "rdfs:seeAlso": {
-        "@id": "iroko:ritualNote"
-      }
-    },
-    {
-      "@id": "iroko:medicinal-digestive-support",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Supports digestive system, relieves stomach issues."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MedicinalUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Digestive Support"
-      }
-    },
-    {
-      "@id": "iroko:medicinal-respiratory-support",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Supports respiratory system, cough relief, asthma."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MedicinalUseScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Respiratory Support"
-      }
-    },
-    {
-      "@id": "iroko:PreparationMethodScheme",
-      "@type": "skos:ConceptScheme",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Methods for preparing plant materials."
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Preparation Method Classification"
-      },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:prep-bath"
-        },
-        {
-          "@id": "iroko:prep-decoction"
-        },
-        {
-          "@id": "iroko:prep-dried-bundle"
-        },
-        {
-          "@id": "iroko:prep-fumigation"
-        },
-        {
-          "@id": "iroko:prep-incantation-only"
-        },
-        {
-          "@id": "iroko:prep-infusion"
-        },
-        {
-          "@id": "iroko:prep-ingestion"
-        },
-        {
-          "@id": "iroko:prep-maceration"
-        },
-        {
-          "@id": "iroko:prep-poultice"
-        },
-        {
-          "@id": "iroko:prep-powder"
-        },
-        {
-          "@id": "iroko:prep-tincture"
-        },
-        {
-          "@id": "iroko:prep-topical"
-        },
-        {
-          "@id": "iroko:prep-wash"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:harvest-wildcrafted",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Harvested from wild without specific ritual protocol."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HarvestProtocolScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Wildcrafted (No Ritual)"
-      }
-    },
-    {
-      "@id": "iroko:PlantPartScheme",
-      "@type": "skos:ConceptScheme",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Which part of the plant is used."
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Plant Part Classification"
-      },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:part-bark"
-        },
-        {
-          "@id": "iroko:part-bulb"
-        },
-        {
-          "@id": "iroko:part-flower"
-        },
-        {
-          "@id": "iroko:part-fruit"
-        },
-        {
-          "@id": "iroko:part-leaf"
-        },
-        {
-          "@id": "iroko:part-pollen"
-        },
-        {
-          "@id": "iroko:part-resin"
-        },
-        {
-          "@id": "iroko:part-root"
-        },
-        {
-          "@id": "iroko:part-sap"
-        },
-        {
-          "@id": "iroko:part-seed"
-        },
-        {
-          "@id": "iroko:part-stem"
-        },
-        {
-          "@id": "iroko:part-whole-plant"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:hasConstituent",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links a PlantPreparation to each constituent Plant. A preparation may have multiple constituents. Use with iroko:constituentQuantity to record the quantity of each constituent."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:PlantPreparation"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "has constituent"
-      },
-      "rdfs:range": {
-        "@id": "iroko:Plant"
-      }
-    },
-    {
       "@id": "iroko:harvest-ritual-offering-required",
       "@type": "skos:Concept",
       "skos:definition": {
@@ -1720,87 +1759,48 @@
       }
     },
     {
-      "@id": "iroko:harvest-cultivated",
+      "@id": "iroko:ritual-love-attraction",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Grown intentionally in gardens or farms."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HarvestProtocolScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Cultivated"
-      }
-    },
-    {
-      "@id": "iroko:photographicVoucher",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Link to photographic documentation of this plant specimen. Aligns with dwc:associatedMedia (see iroko-align-dwc)."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Plant"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ewe"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "photographic voucher"
-      },
-      "rdfs:range": {
-        "@id": "iroko:DocumentaryEvidence"
-      }
-    },
-    {
-      "@id": "iroko:ritual-cosmological-symbolic",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Represents cosmological principles and symbolic meaning."
+        "@value": "Attracts love and enhances relationships."
       },
       "skos:inScheme": {
         "@id": "iroko:RitualUseScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Cosmological/Symbolic"
+        "@value": "Love/Attraction"
       }
     },
     {
-      "@id": "iroko:medicinal-reproductive-fertility",
+      "@id": "iroko:ritual-offering-devotion",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Supports reproductive health and fertility."
+        "@value": "Offered to spirits as devotion or tribute."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualUseScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Offering/Devotion"
+      }
+    },
+    {
+      "@id": "iroko:medicinal-fever-reduction",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Reduces fever, antipyretic properties."
       },
       "skos:inScheme": {
         "@id": "iroko:MedicinalUseScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Reproductive/Fertility"
-      }
-    },
-    {
-      "@id": "iroko:prep-powder",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Dried and ground into powder."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PreparationMethodScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Powder (Afoche)"
+        "@value": "Fever Reduction"
       }
     }
   ]
