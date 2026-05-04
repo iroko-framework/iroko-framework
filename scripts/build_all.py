@@ -17,6 +17,7 @@ Steps:
     2  generate_vocab_index.py        — vocab/iroko-termlist.html
     3  update_index_counts.py         — sync counts in all index files
     4  generate_serializations.py     — JSON-LD, RDF/XML, N-Triples from each TTL
+    5  generate_tradition_vocab.py    — vocab/tradition-vocab.json (catalog lookup)
     +  update_docs_html()             — patch version/date in docs HTML
 
 All scripts are located in the same directory as build_all.py.
@@ -134,8 +135,8 @@ def build_parser():
     p.add_argument("--docs",   metavar="DIR", help="Path to docs/ directory")
     p.add_argument("--dry-run", action="store_true",
                    help="Print what would change without writing")
-    p.add_argument("--step", type=int, choices=[1, 2, 3, 4],
-                   help="Run only this step (1, 2, 3, or 4)")
+    p.add_argument("--step", type=int, choices=[1, 2, 3, 4, 5],
+                   help="Run only this step (1–5)")
     return p
 
 
@@ -216,6 +217,18 @@ def main():
             errors += 1
         elif not args.dry_run:
             print("  \u2713 JSON-LD, RDF/XML, N-Triples written")
+        print()
+
+    # ── Step 5: Tradition vocabulary JSON ─────────────────────────────
+    if only is None or only == 5:
+        print("── Step 5: Generating tradition-vocab.json ────────────────────")
+        extra = ["--vocab", str(vocab_dir)]
+        if args.dry_run:
+            extra += ["--check"]
+        rc = run_script("generate_tradition_vocab.py", extra)
+        if rc != 0:
+            print(f"  ✗ generate_tradition_vocab.py failed (exit {rc})")
+            errors += 1
         print()
 
     # ── Docs HTML: version + date strings ─────────────────────────────────────
