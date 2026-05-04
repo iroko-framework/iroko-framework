@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Edit Aliases — {{ concept.label }}{% endblock %}
+
+{% block content %}
+<div class="mgr-page-head">
+  <div>
+    <div class="mgr-breadcrumb">
+      <a href="{{ url_for('dashboard') }}">Modules</a> /
+      <a href="{{ url_for('traditions') }}">Traditions</a> /
+      {{ concept.label }}
+    </div>
+    <h1 class="mgr-h1">Edit Aliases — {{ concept.label }}</h1>
+    <p class="mgr-subtitle">
+      One alias per line. Each alias is a Zotero tag variant that will resolve to this tradition
+      in the Per Medjat catalog. The preferred label (<strong>{{ concept.label }}</strong>) always
+      matches automatically — aliases are for alternate spellings, accented forms, and legacy names.
+    </p>
+  </div>
+</div>
+
+<div class="mgr-form-wrap">
+  <div class="mgr-meta-block">
+    <div class="mgr-meta-row">
+      <span class="mgr-meta-key">Local ID</span>
+      <span class="mgr-mono">{{ concept.local_id }}</span>
+    </div>
+    <div class="mgr-meta-row">
+      <span class="mgr-meta-key">Preferred label</span>
+      <span>{{ concept.label }}</span>
+    </div>
+    {% if concept.broader %}
+    <div class="mgr-meta-row">
+      <span class="mgr-meta-key">Broader</span>
+      <span class="mgr-mono">{{ concept.broader }}</span>
+    </div>
+    {% endif %}
+    {% if concept.definition %}
+    <div class="mgr-meta-row">
+      <span class="mgr-meta-key">Definition</span>
+      <span>{{ concept.definition }}</span>
+    </div>
+    {% endif %}
+  </div>
+
+  <form method="POST">
+    <div class="mgr-field">
+      <label class="mgr-label" for="alt_labels">
+        Aliases
+        <span class="mgr-label-hint">one per line · case-insensitive when matching</span>
+      </label>
+      <textarea id="alt_labels" name="alt_labels" class="mgr-input mgr-textarea"
+                rows="8" placeholder="e.g.&#10;Abakuá&#10;Ñáñigo">{{ concept.alt_labels | join('\n') }}</textarea>
+    </div>
+
+    <div class="mgr-actions">
+      <button type="submit" class="mgr-btn-primary">Save Aliases</button>
+      <a href="{{ url_for('traditions') }}" class="mgr-btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

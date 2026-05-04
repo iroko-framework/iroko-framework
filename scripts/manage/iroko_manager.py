@@ -170,10 +170,12 @@ def get_concept(g: Graph, local_id: str) -> Optional[dict]:
         return None
     scheme_uri = g.value(uri, SKOS.inScheme)
     broader_uri = g.value(uri, SKOS.broader)
+    alt_labels = sorted({str(o) for o in g.objects(uri, SKOS.altLabel)})
     return {
         "uri":        str(uri),
         "local_id":   local_id,
         "label":      pref_label(g, uri),
+        "alt_labels": alt_labels,
         "definition": definition(g, uri),
         "scope_note": scope_note(g, uri),
         "scheme_id":  local(str(scheme_uri)) if scheme_uri else "",
@@ -193,7 +195,10 @@ def get_all_schemes(g: Graph) -> list[dict]:
     return sorted(schemes, key=lambda x: x["label"])
 
 def upsert_concept(g: Graph, data: dict) -> None:
-    """Add or update a SKOS Concept. data keys: local_id, label, definition, scope_note, scheme_id, access, broader."""
+    """Add or update a SKOS Concept.
+    data keys: local_id, label, alt_labels (list), definition, scope_note,
+               scheme_id, access, broader.
+    """
     uri = iroko_uri(data["local_id"])
 
     # Remove existing triples about this URI so we start clean
@@ -205,6 +210,10 @@ def upsert_concept(g: Graph, data: dict) -> None:
     if data.get("label"):
         g.add((uri, SKOS.prefLabel, Literal(data["label"], lang="en")))
         g.add((uri, RDFS.label, Literal(data["label"], lang="en")))
+
+    for alt in data.get("alt_labels") or []:
+        if alt:
+            g.add((uri, SKOS.altLabel, Literal(alt, lang="en")))
 
     if data.get("definition"):
         g.add((uri, SKOS.definition, Literal(data["definition"], lang="en")))
@@ -220,6 +229,39 @@ def upsert_concept(g: Graph, data: dict) -> None:
 
     if data.get("access"):
         g.add((uri, IROKO.minimumAccessLevel, iroko_uri(data["access"])))
+
+
+def set_alt_labels(g: Graph, local_id: str, alt_labels: list[str]) -> bool:
+    """Replace all skos:altLabel values on a concept. Returns False if concept not found."""
+    uri = iroko_uri(local_id)
+    if (uri, RDF.type, SKOS.Concept) not in g:
+        return False
+    for o in list(g.objects(uri, SKOS.altLabel)):
+        g.remove((uri, SKOS.altLabel, o))
+    for alt in alt_labels:
+        if alt.strip():
+            g.add((uri, SKOS.altLabel, Literal(alt.strip(), lang="en")))
+    return True
+
+
+def get_tradition_concepts(g: Graph) -> list[dict]:
+    """Return all TraditionScheme concepts with labels and altLabels, sorted by prefLabel."""
+    tradition_scheme = iroko_uri("TraditionScheme")
+    concepts = []
+    for c in g.subjects(SKOS.inScheme, tradition_scheme):
+        if not str(c).startswith(IROKO_NS):
+            continue
+        broader_uri = g.value(c, SKOS.broader)
+        alt_labels = sorted({str(o) for o in g.objects(c, SKOS.altLabel)})
+        concepts.append({
+            "local_id":   local(str(c)),
+            "label":      pref_label(g, c),
+            "alt_labels": alt_labels,
+            "broader":    local(str(broader_uri)) if broader_uri else "",
+            "definition": definition(g, c),
+        })
+    return sorted(concepts, key=lambda x: x["label"])
+
 
 # ---------------------------------------------------------------------------
 # Classes

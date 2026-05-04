@@ -353,6 +353,35 @@ def module_new():
     return render_template("module_new.html", layer_options=LAYER_OPTIONS)
 
 # ---------------------------------------------------------------------------
+# Tradition aliases
+# ---------------------------------------------------------------------------
+
+@app.route("/traditions")
+def traditions():
+    g = mgr.load_module("iroko-core")
+    concepts = mgr.get_tradition_concepts(g)
+    return render_template("traditions.html", concepts=concepts)
+
+@app.route("/traditions/<local_id>/aliases", methods=["GET", "POST"])
+def tradition_aliases(local_id):
+    g = mgr.load_module("iroko-core")
+    concept = mgr.get_concept(g, local_id)
+    if concept is None:
+        flash(f"Tradition concept '{local_id}' not found in iroko-core.", "error")
+        return redirect(url_for("traditions"))
+
+    if request.method == "POST":
+        raw = request.form.get("alt_labels", "")
+        new_alts = [a.strip() for a in raw.split("\n") if a.strip()]
+        mgr.set_alt_labels(g, local_id, new_alts)
+        mgr.save_module("iroko-core", g)
+        flash(f"Aliases for {concept['label']} updated ({len(new_alts)} alias(es)).", "success")
+        return redirect(url_for("traditions"))
+
+    return render_template("tradition_aliases.html", concept=concept)
+
+
+# ---------------------------------------------------------------------------
 # Build
 # ---------------------------------------------------------------------------
 

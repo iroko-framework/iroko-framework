@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Tradition Aliases{% endblock %}
+
+{% block content %}
+<div class="mgr-page-head">
+  <div>
+    <div class="mgr-breadcrumb"><a href="{{ url_for('dashboard') }}">Modules</a> / Traditions</div>
+    <h1 class="mgr-h1">Tradition Aliases</h1>
+    <p class="mgr-subtitle">
+      Aliases control which Zotero tags map to tradition badges in the Per Medjat catalog.
+      Any tag matching a <strong>Preferred Label</strong> or <strong>Alias</strong> (case-insensitive)
+      will resolve as that tradition. After editing, run the build to regenerate
+      <code>tradition-vocab.json</code>.
+    </p>
+  </div>
+</div>
+
+<table class="mgr-table">
+  <thead>
+    <tr>
+      <th>Preferred Label</th>
+      <th>Local ID</th>
+      <th>Broader</th>
+      <th>Aliases (Zotero tag variants)</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in concepts %}
+    <tr>
+      <td><strong>{{ c.label }}</strong></td>
+      <td class="mgr-mono">{{ c.local_id }}</td>
+      <td class="mgr-mono">{{ c.broader or '—' }}</td>
+      <td>
+        {% if c.alt_labels %}
+          {% for a in c.alt_labels %}
+            <span class="mgr-alias-chip">{{ a }}</span>
+          {% endfor %}
+        {% else %}
+          <span class="mgr-muted">none</span>
+        {% endif %}
+      </td>
+      <td>
+        <a class="mgr-btn-ghost mgr-btn-sm"
+           href="{{ url_for('tradition_aliases', local_id=c.local_id) }}">Edit aliases</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p class="mgr-hint" style="margin-top:1.5rem;">
+  {{ concepts | length }} tradition concept(s) in TraditionScheme.
+  To add or remove a tradition concept, use the
+  <a href="{{ url_for('module_view', stem='iroko-core') }}#concepts">iroko-core concept editor</a>.
+</p>
+{% endblock %}

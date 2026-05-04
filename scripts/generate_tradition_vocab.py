@@ -17,6 +17,9 @@ import json
 import sys
 from pathlib import Path
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 from rdflib import Graph, Namespace, SKOS, RDFS
 
 IROKO_NS  = "https://ontology.irokosociety.org/iroko#"
