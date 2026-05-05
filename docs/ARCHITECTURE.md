@@ -280,7 +280,7 @@ The PROV-O alignment file (`iroko-align-prov.ttl`) is provided as a reference-on
 
 | Module | Classes | Properties | Schemes | Concepts |
 |---|---:|---:|---:|---:|
-| iroko-core | 17 | 75 | 10 | 99 |
+| iroko-core | 17 | 75 | 10 | 100 |
 | iroko-agency | 11 | 11 | — | — |
 | iroko-authority | 5 | 11 | 3 | 17 |
 | iroko-epistemic | 5 | 5 | 1 | 8 |
@@ -296,7 +296,7 @@ The PROV-O alignment file (`iroko-align-prov.ttl`) is provided as a reference-on
 | iroko-ngoma | 5 | 27 | 4 | 31 |
 | iroko-sankofa | 4 | 23 | 5 | 32 |
 | iroko-qal | 6 | 27 | 5 | 37 |
-| **Total** | **95** | **393** | **70** | **596** |
+| **Total** | **95** | **393** | **70** | **597** |
 
 All 393 properties across all 16 modules carry `iroko:minimumAccessLevel` annotations.
 
