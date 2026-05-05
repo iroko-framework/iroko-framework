@@ -7,6 +7,151 @@
    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
 >
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#ManifestationModeScheme">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <rdfs:label xml:lang="en">Manifestation Modes</rdfs:label>
+    <dcterms:description xml:lang="en">Controlled terms for how sacred agents are asserted to manifest. Tradition-reported descriptive categories. Multiple modes may apply to a single event.</dcterms:description>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-auditory"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-divination"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-dream"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-embodied"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-possession"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-symbolic"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-territorial"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-unknown"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-text">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">A text, inscription, vèvè, firma, or graphic document serves as the medium.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Text</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-possession">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">Manifestation asserted to occur through mounting or possession of a medium person. The agent speaks and acts through the medium during the event.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
+    <skos:prefLabel xml:lang="en">Possession</skos:prefLabel>
+    <skos:scopeNote xml:lang="en">Distinguish from embodied: possession involves a medium person who is temporarily occupied; embodied involves a distinct physical presence.</skos:scopeNote>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasManifestationMode">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has manifestation mode</rdfs:label>
+    <rdfs:comment xml:lang="en">Associates a ManifestationEvent or assertion node with a ManifestationMode concept from iroko:ManifestationModeScheme. Multiple modes may be asserted for a single event.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationEvent"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#MediumType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Medium Type</rdfs:label>
+    <rdfs:comment xml:lang="en">A SKOS concept categorizing the kind of medium involved in a manifestation assertion: person, object, place, text, instrument, or unknown.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasMediumType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has medium type</rdfs:label>
+    <rdfs:comment xml:lang="en">Associates a Medium with a MediumType concept from iroko:MediumTypeScheme.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#Medium"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#manifestsThroughMedium">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">manifests through medium</rdfs:label>
+    <rdfs:comment xml:lang="en">Associates a ManifestationEvent with a Medium through which manifestation is asserted to occur. The identity of the medium (e.g., a specific person) may carry its own access level if the medium is a community member.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationEvent"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#Medium"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-symbolic">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">Manifestation asserted to occur through symbols, signs, graphic marks, or indirect representation. Vèvè, firmas, and anaforuana are common vehicles.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
+    <skos:prefLabel xml:lang="en">Symbolic</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-person">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">A human person serves as the medium, as in possession or mounted manifestation.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Person</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-dream">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">Manifestation asserted to occur through dreams, dream visitation, or hypnagogic contact.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
+    <skos:prefLabel xml:lang="en">Dream</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#MediumTypeScheme">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <rdfs:label xml:lang="en">Medium Types</rdfs:label>
+    <dcterms:description xml:lang="en">Controlled terms for the kind of medium through which manifestation is asserted to occur.</dcterms:description>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-instrument"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-object"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-person"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-place"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-text"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-unknown"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-unknown">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">Medium type not recorded or not known.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Unknown</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-embodied">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">Manifestation asserted to occur in a physically embodied form distinct from possession — the agent is present as a body, not occupying another's.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
+    <skos:prefLabel xml:lang="en">Embodied</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#ManifestationMode">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Manifestation Mode</rdfs:label>
+    <rdfs:comment xml:lang="en">A SKOS concept describing how a sacred agent is asserted to manifest. Modes include embodied, possession, dream, divination, symbolic, territorial, auditory, and unknown. These categories are descriptive and tradition-reported; they record what a community asserts, not what an archive adjudicates. A single ManifestationEvent may reference multiple modes. Modes may vary by temporal regime — use iroko:TemporalVariation to document seasonal or initiatory shifts.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-place">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">A place, site, crossroads, or territory serves as the medium.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Place</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-unknown">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">Manifestation mode not recorded or not known.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
+    <skos:prefLabel xml:lang="en">Unknown</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-divination">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">Manifestation asserted to occur through divination, oracle, or the interpretive reading of divinatory instruments.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
+    <skos:prefLabel xml:lang="en">Divination</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-territorial">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
+    <skos:definition xml:lang="en">Manifestation asserted to be bound to or expressed through a place, crossroads, body of water, forest, or territory.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
+    <skos:prefLabel xml:lang="en">Territorial</skos:prefLabel>
+  </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko-manifestation">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
     <rdfs:label xml:lang="en">Iroko Framework: Manifestation Module (Sacred Agent Manifestation Modes &amp; Media)</rdfs:label>
@@ -24,149 +169,12 @@
     <owl:versionIRI rdf:resource="https://ontology.irokosociety.org/iroko-manifestation/1.3.0"/>
     <owl:versionInfo>1.3.0</owl:versionInfo>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-embodied">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">Manifestation asserted to occur in a physically embodied form distinct from possession — the agent is present as a body, not occupying another's.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
-    <skos:prefLabel xml:lang="en">Embodied</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-territorial">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">Manifestation asserted to be bound to or expressed through a place, crossroads, body of water, forest, or territory.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
-    <skos:prefLabel xml:lang="en">Territorial</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasMediumType">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">has medium type</rdfs:label>
-    <rdfs:comment xml:lang="en">Associates a Medium with a MediumType concept from iroko:MediumTypeScheme.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#Medium"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-person">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">A human person serves as the medium, as in possession or mounted manifestation.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Person</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-place">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">A place, site, crossroads, or territory serves as the medium.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Place</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-unknown">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">Medium type not recorded or not known.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Unknown</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-divination">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">Manifestation asserted to occur through divination, oracle, or the interpretive reading of divinatory instruments.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
-    <skos:prefLabel xml:lang="en">Divination</skos:prefLabel>
-  </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-instrument">
     <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
     <skos:definition xml:lang="en">A musical, divinatory, or ritual instrument serves as the medium — a consecrated bàtá drum, divining chain, or bell.</skos:definition>
     <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
     <skos:prefLabel xml:lang="en">Instrument</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#MediumTypeScheme">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
-    <rdfs:label xml:lang="en">Medium Types</rdfs:label>
-    <dcterms:description xml:lang="en">Controlled terms for the kind of medium through which manifestation is asserted to occur.</dcterms:description>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-instrument"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-object"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-person"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-place"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-text"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#medium-unknown"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-unknown">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">Manifestation mode not recorded or not known.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
-    <skos:prefLabel xml:lang="en">Unknown</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-text">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">A text, inscription, vèvè, firma, or graphic document serves as the medium.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Text</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasManifestationMode">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">has manifestation mode</rdfs:label>
-    <rdfs:comment xml:lang="en">Associates a ManifestationEvent or assertion node with a ManifestationMode concept from iroko:ManifestationModeScheme. Multiple modes may be asserted for a single event.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationEvent"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-object">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">A material object serves as the medium — a consecrated vessel, nganga, otán, or ritual artifact.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Object</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-symbolic">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">Manifestation asserted to occur through symbols, signs, graphic marks, or indirect representation. Vèvè, firmas, and anaforuana are common vehicles.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
-    <skos:prefLabel xml:lang="en">Symbolic</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#ManifestationMode">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label xml:lang="en">Manifestation Mode</rdfs:label>
-    <rdfs:comment xml:lang="en">A SKOS concept describing how a sacred agent is asserted to manifest. Modes include embodied, possession, dream, divination, symbolic, territorial, auditory, and unknown. These categories are descriptive and tradition-reported; they record what a community asserts, not what an archive adjudicates. A single ManifestationEvent may reference multiple modes. Modes may vary by temporal regime — use iroko:TemporalVariation to document seasonal or initiatory shifts.</rdfs:comment>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#manifestsThroughMedium">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">manifests through medium</rdfs:label>
-    <rdfs:comment xml:lang="en">Associates a ManifestationEvent with a Medium through which manifestation is asserted to occur. The identity of the medium (e.g., a specific person) may carry its own access level if the medium is a community member.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationEvent"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#Medium"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#Medium">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label xml:lang="en">Medium</rdfs:label>
-    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
-    <rdfs:comment xml:lang="en">A medium through which manifestation is asserted to occur — a person, object, place, text, or instrument. A Medium is the vehicle, not the agent; the sacred agent is modeled in iroko-nkisi or iroko-agency. One ManifestationEvent may involve multiple media.</rdfs:comment>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#ManifestationModeScheme">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
-    <rdfs:label xml:lang="en">Manifestation Modes</rdfs:label>
-    <dcterms:description xml:lang="en">Controlled terms for how sacred agents are asserted to manifest. Tradition-reported descriptive categories. Multiple modes may apply to a single event.</dcterms:description>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-auditory"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-divination"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-dream"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-embodied"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-possession"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-symbolic"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-territorial"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#mode-unknown"/>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-auditory">
     <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
@@ -175,26 +183,18 @@
     <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
     <skos:prefLabel xml:lang="en">Auditory</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#MediumType">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#Medium">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label xml:lang="en">Medium Type</rdfs:label>
-    <rdfs:comment xml:lang="en">A SKOS concept categorizing the kind of medium involved in a manifestation assertion: person, object, place, text, instrument, or unknown.</rdfs:comment>
+    <rdfs:label xml:lang="en">Medium</rdfs:label>
+    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
+    <rdfs:comment xml:lang="en">A medium through which manifestation is asserted to occur — a person, object, place, text, or instrument. A Medium is the vehicle, not the agent; the sacred agent is modeled in iroko-nkisi or iroko-agency. One ManifestationEvent may involve multiple media.</rdfs:comment>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-dream">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#medium-object">
+    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#MediumType"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">Manifestation asserted to occur through dreams, dream visitation, or hypnagogic contact.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
-    <skos:prefLabel xml:lang="en">Dream</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#mode-possession">
-    <rdf:type rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationMode"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-manifestation"/>
-    <skos:definition xml:lang="en">Manifestation asserted to occur through mounting or possession of a medium person. The agent speaks and acts through the medium during the event.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ManifestationModeScheme"/>
-    <skos:prefLabel xml:lang="en">Possession</skos:prefLabel>
-    <skos:scopeNote xml:lang="en">Distinguish from embodied: possession involves a medium person who is temporarily occupied; embodied involves a distinct physical presence.</skos:scopeNote>
+    <skos:definition xml:lang="en">A material object serves as the medium — a consecrated vessel, nganga, otán, or ritual artifact.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#MediumTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Object</skos:prefLabel>
   </rdf:Description>
 </rdf:RDF>

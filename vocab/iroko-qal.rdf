@@ -7,45 +7,83 @@
    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
 >
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-arabic">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Arabic script used to write African languages in religious contexts, particularly in Ajami traditions (Fulfulde, Hausa, Wolof in Arabic script). Relevant in West African Islamic contexts that intersect with Afro-Atlantic traditions.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
-    <skos:prefLabel xml:lang="en">Arabic script (Ajami)</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-oath">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A sworn commitment made in the presence of spiritual witnesses, binding on the speaker. Examples: Abakuá juramento; Palo Monte pact formulas. Initiated-only.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Oath / juramento</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasPhrase">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasSecretName">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">has phrase</rdfs:label>
-    <rdfs:comment xml:lang="en">Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
-    <owl:inverseOf rdf:resource="https://ontology.irokosociety.org/iroko#phraseLanguage"/>
+    <rdfs:label xml:lang="en">has secret name</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a SacredEntity to a SecretName it holds. Inverse of iroko:secretNameHolder. Scoped to SacredEntity rather than SpiritualEntity alone because initiated practitioners also hold secret names (oruko awo and analogous esoteric designations). The existence of a secret name relationship is itself restricted; the name text is governed at no-access on iroko:secretNameText and is never exported to RDF — it is stored internally only. Access: initiated-only.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SecretName"/>
+    <owl:inverseOf rdf:resource="https://ontology.irokosociety.org/iroko#secretNameHolder"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-initiated-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasSense">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has sense</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#LexicalSense"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/ns/lemon/ontolex#sense"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-adverb">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">An adverbial modifier.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
-    <skos:prefLabel xml:lang="en">Adverb</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-african-christian">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Languages of African origin used in pre-colonial or early-colonial African Christian traditions. Ge'ez (Ethiopian Orthodox, Eritrean Orthodox), Coptic (Egyptian Coptic Church). Included here because of their continuity with African sacred language traditions and their presence in Afro-Atlantic communities.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
-    <skos:prefLabel xml:lang="en">African Christian liturgical language</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#publicDefinition">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#languageName">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="en">public definition</rdfs:label>
-    <rdfs:comment xml:lang="en">A general, publicly accessible definition of this sense: what a general reader can know. Language-tagged.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalSense"/>
+    <rdfs:label xml:lang="en">language name</rdfs:label>
+    <rdfs:comment xml:lang="en">The name of the sacred language or register. Language-tagged.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#speechActType">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">speech act type</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SacredSpeechAct"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#authorityRequired">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">authority required</rdfs:label>
+    <rdfs:comment xml:lang="en">The initiation level or title required to speak this phrase in ceremony. Range: iroko:AccessLevelScheme concept.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#secretNameText">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">secret name</rdfs:label>
+    <rdfs:comment xml:lang="en">The secret name itself. No-access: never exported to RDF, stored internally for provenance only.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SecretName"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-no-access"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <rdfs:label xml:lang="en">Parts of Speech</rdfs:label>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-adjective"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-adverb"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-formula"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-interjection"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-noun"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-other"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-verb"/>
+    <skos:prefLabel xml:lang="en">Parts of Speech</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Partes de la oración</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Parties du discours</skos:prefLabel>
+    <skos:prefLabel xml:lang="pt">Partes do discurso</skos:prefLabel>
+    <skos:prefLabel xml:lang="yo">Àwọn ìpín ọ̀rọ̀</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#geographicBase">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">geographic base</rdfs:label>
+    <rdfs:comment xml:lang="en">The geographic region(s) where this language is primarily used. Free-text.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
     <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
@@ -59,27 +97,66 @@
     <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SacredSpeechAct">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#phraseFunction">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">phrase function</rdfs:label>
+    <rdfs:comment xml:lang="en">The ceremonial function of this phrase. Range: iroko:SpeechActTypeScheme.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#writtenForm">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">written form</rdfs:label>
+    <rdfs:comment xml:lang="en">The conventional written form of this term in the liturgical language. Language-tagged. Community-restricted.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-full-liturgical">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">A language used in its complete grammatical form as the primary medium of sacred communication. Examples: Yorùbá in continental Yorùbá religion; Fon in Beninese Vodun; Ge'ez in Ethiopian Orthodox liturgy.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Full liturgical language</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-noun">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">A noun or noun phrase (entity names, place names, object names).</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
+    <skos:prefLabel xml:lang="en">Noun</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#ScriptSystemScheme">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <rdfs:label xml:lang="en">Script Systems</rdfs:label>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-adinkra"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-anaforuana"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-arabic"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-geez"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-latin"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-nsibidi"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-oral-only"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-other"/>
+    <skos:prefLabel xml:lang="en">Script Systems</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Sistemas de escritura sagrada</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Systèmes d'écriture sacrée</skos:prefLabel>
+    <skos:prefLabel xml:lang="pt">Sistemas de escrita sagrada</skos:prefLabel>
+    <skos:prefLabel xml:lang="yo">Àwọn ètò ìkọ̀wé mímọ́</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SecretName">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label xml:lang="en">Sacred Speech Act</rdfs:label>
-    <rdfs:comment xml:lang="en">A formally defined speech act type within a tradition's ceremonial protocol: oath-taking, naming, cursing, blessing, consecration, authorization. Distinct from a specific utterance: a SacredSpeechAct is the category (e.g., 'Ifá greeting formula') while a LiturgicalPhrase is a specific instance. The existence of a speech act type is community-restricted; its specific form and context are initiated-only to elder-only.</rdfs:comment>
+    <rdfs:label xml:lang="en">Secret Name</rdfs:label>
+    <rdfs:comment xml:lang="en">An esoteric or restricted name for a spiritual entity, practitioner, or sacred object known only to initiated members at a specific grade or above. Examples: the secret name of an Orisha camino revealed in itá; a Palo Tata's nkisi name; an Abakuá ecobio name. The existence of secret name conventions within a tradition is public; the names themselves are no-access.</rdfs:comment>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
     <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-other">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-initiate-ita">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Speech act type not covered by existing concepts.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Other</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#secretNameText">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="en">secret name</rdfs:label>
-    <rdfs:comment xml:lang="en">The secret name itself. No-access: never exported to RDF, stored internally for provenance only.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SecretName"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-no-access"/>
+    <skos:definition xml:lang="en">A name or identifier given to an initiate in their itá (life reading). Typically held as private to the initiate and their elders.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
+    <skos:prefLabel xml:lang="en">Initiate name (from itá)</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Nombre de itá</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
@@ -96,32 +173,53 @@
     <skos:prefLabel xml:lang="pt">Convenções de nomes secretos</skos:prefLabel>
     <skos:prefLabel xml:lang="yo">Àwọn ìlànà orúkọ àṣírí</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#geographicBase">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="en">geographic base</rdfs:label>
-    <rdfs:comment xml:lang="en">The geographic region(s) where this language is primarily used. Free-text.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#inLanguage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">in language</rdfs:label>
+    <rdfs:comment xml:lang="en">The sacred language to which this lexical entry belongs. Range: iroko:SacredLanguage.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-farewell">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-african-christian">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Formal speech acts that close a ceremony or take leave of a spiritual entity.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Farewell / closing</skos:prefLabel>
+    <skos:definition xml:lang="en">Languages of African origin used in pre-colonial or early-colonial African Christian traditions. Ge'ez (Ethiopian Orthodox, Eritrean Orthodox), Coptic (Egyptian Coptic Church). Included here because of their continuity with African sacred language traditions and their presence in Afro-Atlantic communities.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
+    <skos:prefLabel xml:lang="en">African Christian liturgical language</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-adinkra">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-interjection">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Akan visual symbols functioning as a lexical and semiotic system. Cross-listed with iroko-veve; included here for semantic documentation of individual symbol meanings.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
-    <skos:prefLabel xml:lang="en">Adinkra symbols (Akan)</skos:prefLabel>
+    <skos:definition xml:lang="en">A standalone ceremonial exclamation or ritual call-and-response marker.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
+    <skos:prefLabel xml:lang="en">Interjection / exclamation</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-latin">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-verb">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Latin alphabet as used to transcribe liturgical Yorùbá, Lucumí, Kikongo, Haitian Kreyòl, and most documented Afro-Atlantic liturgical languages.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
-    <skos:prefLabel xml:lang="en">Latin script</skos:prefLabel>
+    <skos:definition xml:lang="en">A verb or verb phrase (ceremonial actions, states).</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
+    <skos:prefLabel xml:lang="en">Verb</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#LexicalSense">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Lexical Sense</rdfs:label>
+    <rdfs:comment xml:lang="en">A specific meaning of a lexical entry, which may carry different access levels than the entry itself. An Orisha's name (entry) may be public, while a path-specific epithet (restricted sense) is community-restricted, and a secret name (esoteric sense) is no-access. Multiple senses of the same term are documented as separate LexicalSense instances with appropriate access levels.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/lemon/ontolex#LexicalSense"/>
+    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-other">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Part of speech not covered by existing concepts.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
+    <skos:prefLabel xml:lang="en">Other</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-lwa-vodou">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">A restricted name of a specific lwa, known only to initiates at a specific grade.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
+    <skos:prefLabel xml:lang="en">Lwa secret name (Vodou)</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Nom secret du lwa</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#esotericDefinition">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
@@ -132,41 +230,17 @@
     <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-initiated-only"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-afro-atlantic">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-arabic">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A source language preserved in Afro-Atlantic in a fossilized or adapted form, used for liturgical purposes but no longer a community vernacular. Examples: Lucumí (Afro-Atlantic Yorùbá in Cuba); Kikongo as used in Cuban Palo Monte; liturgical Fon in Haitian Vodou.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Afro-Atlantic liturgical language</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-geez">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">The Ethiopic abugida used to write Ge'ez, Amharic, Tigrinya, and other Ethiopian and Eritrean languages. The sacred script of Ethiopian and Eritrean Orthodox liturgy.</skos:definition>
+    <skos:definition xml:lang="en">Arabic script used to write African languages in religious contexts, particularly in Ajami traditions (Fulfulde, Hausa, Wolof in Arabic script). Relevant in West African Islamic contexts that intersect with Afro-Atlantic traditions.</skos:definition>
     <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
-    <skos:prefLabel xml:lang="am">ፊደል (Fidel)</skos:prefLabel>
-    <skos:prefLabel xml:lang="en">Ge'ez / Ethiopic script</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Arabic script (Ajami)</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-initiate-ita">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-adverb">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A name or identifier given to an initiate in their itá (life reading). Typically held as private to the initiate and their elders.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
-    <skos:prefLabel xml:lang="en">Initiate name (from itá)</skos:prefLabel>
-    <skos:prefLabel xml:lang="es">Nombre de itá</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasSecretName">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">has secret name</rdfs:label>
-    <rdfs:comment xml:lang="en">Links a SacredEntity to a SecretName it holds. Inverse of iroko:secretNameHolder. Scoped to SacredEntity rather than SpiritualEntity alone because initiated practitioners also hold secret names (oruko awo and analogous esoteric designations). The existence of a secret name relationship is itself restricted; the name text is governed at no-access on iroko:secretNameText and is never exported to RDF — it is stored internally only. Access: initiated-only.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SecretName"/>
-    <owl:inverseOf rdf:resource="https://ontology.irokosociety.org/iroko#secretNameHolder"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-initiated-only"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-anaforuana">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">The Abakuá graphic script with lexical and communicative functions. Cross-listed with iroko-veve; included here for documentation of the semiotic/communicative dimension.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
-    <skos:prefLabel xml:lang="en">Anaforuana (Abakuá)</skos:prefLabel>
+    <skos:definition xml:lang="en">An adverbial modifier.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
+    <skos:prefLabel xml:lang="en">Adverb</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#languageISO">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
@@ -177,37 +251,41 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#language"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
-    <rdfs:label xml:lang="en">Sacred Language Types</rdfs:label>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-african-christian"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-afro-atlantic"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-full-liturgical"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-graphic-lexical"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-other"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-sacred-register"/>
-    <skos:prefLabel xml:lang="en">Sacred Language Types</skos:prefLabel>
-    <skos:prefLabel xml:lang="es">Tipos de lengua sagrada</skos:prefLabel>
-    <skos:prefLabel xml:lang="fr">Types de langue sacrée</skos:prefLabel>
-    <skos:prefLabel xml:lang="pt">Tipos de língua sagrada</skos:prefLabel>
-    <skos:prefLabel xml:lang="yo">Àwọn ìrú èdè mímọ́</skos:prefLabel>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SacredLanguage">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Sacred Language</rdfs:label>
+    <rdfs:comment xml:lang="en">A language, language register, or language variety used as a liturgical or ritual medium in Afro-Atlantic or related African sacred practice. Includes fully distinct languages (Yorùbá in Lucumí/Candomblé; Kikongo in Palo Monte; Fon in Haitian Vodou), sacred registers of creole languages (Haitian Kreyòl ceremonial register), specialized vocabularies (Lucumí as Afro-Atlantic-adapted liturgical Yorùbá), and graphic-lexical systems (Nsibidi as both script and vocabulary system). Also includes African Christian liturgical languages: Ge'ez (Ethiopian/Eritrean Orthodox), Coptic (Egyptian Coptic Church).</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#communityDefinition">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#publicDefinition">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="en">community definition</rdfs:label>
-    <rdfs:comment xml:lang="en">A definition appropriate for community members and practitioners, including cultural context not meant for general publication. Language-tagged.</rdfs:comment>
+    <rdfs:label xml:lang="en">public definition</rdfs:label>
+    <rdfs:comment xml:lang="en">A general, publicly accessible definition of this sense: what a general reader can know. Language-tagged.</rdfs:comment>
     <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalSense"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
     <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#LexicalEntry">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-ecobio-abakua">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">The initiatory name given to an Abakuá member at their juramento. No-access.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
+    <skos:prefLabel xml:lang="en">Ecobio name (Abakuá)</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Nombre de ecobio</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#LiturgicalPhrase">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label xml:lang="en">Lexical Entry</rdfs:label>
-    <rdfs:comment xml:lang="en">A word, term, or morpheme in a sacred language with its liturgical or ritual meaning documented. Subclass of ontolex:LexicalEntry for integration with multilingual lexicographic infrastructure. A single lexical entry may have multiple senses (iroko:LexicalSense), including restricted senses whose esoteric meaning is not disclosed publicly. The existence of a term is community-restricted; its esoteric sense is initiated-only.</rdfs:comment>
+    <rdfs:label xml:lang="en">Liturgical Phrase</rdfs:label>
+    <rdfs:comment xml:lang="en">A multi-word expression, formula, invocation, or greeting used in Afro-Atlantic sacred contexts. Examples: Yorùbá greeting formulas specific to Orisha (mojuba formulas); Palo Kikongo invocations; Vodou salutation phrases for specific lwa. Phrases are documented with their tradition, ceremony context, and speaker authority requirements. General greetings are community-restricted; ceremonial invocations are initiated-only.</rdfs:comment>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/lemon/ontolex#LexicalEntry"/>
     <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-praise">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Formal praise speech honoring an entity, ancestor, or lineage. Oriki in Yorùbá-derived traditions; analogous forms in other traditions.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Praise / oriki</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
@@ -228,74 +306,40 @@
     <skos:prefLabel xml:lang="pt">Tipos de ato de fala sagrado</skos:prefLabel>
     <skos:prefLabel xml:lang="yo">Àwọn ìrú ọ̀rọ̀ mímọ́</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#speechActType">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">speech act type</rdfs:label>
-    <rdfs:comment xml:lang="en">Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SacredSpeechAct"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-blessing">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A formally authorized speech act conferring spiritual benefit, protection, or grace. Requires recognized authority to perform.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Blessing</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#languageName">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#communityDefinition">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="en">language name</rdfs:label>
-    <rdfs:comment xml:lang="en">The name of the sacred language or register. Language-tagged.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
+    <rdfs:label xml:lang="en">community definition</rdfs:label>
+    <rdfs:comment xml:lang="en">A definition appropriate for community members and practitioners, including cultural context not meant for general publication. Language-tagged.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalSense"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
     <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#nameConvention">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">name convention</rdfs:label>
-    <rdfs:comment xml:lang="en">The type of secret name convention this follows. Range: iroko:SecretNameConventionScheme. Community-restricted.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SecretName"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
-    <rdfs:label xml:lang="en">Parts of Speech</rdfs:label>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-adjective"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-adverb"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-formula"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-interjection"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-noun"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-other"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#pos-verb"/>
-    <skos:prefLabel xml:lang="en">Parts of Speech</skos:prefLabel>
-    <skos:prefLabel xml:lang="es">Partes de la oración</skos:prefLabel>
-    <skos:prefLabel xml:lang="fr">Parties du discours</skos:prefLabel>
-    <skos:prefLabel xml:lang="pt">Partes do discurso</skos:prefLabel>
-    <skos:prefLabel xml:lang="yo">Àwọn ìpín ọ̀rọ̀</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-noun">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A noun or noun phrase (entity names, place names, object names).</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
-    <skos:prefLabel xml:lang="en">Noun</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-naming">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">The formal conferral of a sacred or initiatory name on a person, object, or entity.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Naming</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#cognateTerms">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">cognate terms</rdfs:label>
-    <rdfs:comment xml:lang="en">Terms in related languages that are etymologically cognate or semantically parallel. Used to document cross-tradition vocabulary relationships (e.g., Yorùbá 'Egúngún' → Lucumí 'Eggun'; Fon 'Legba' → Haitian 'Legba').</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#phraseTranslation">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">phrase translation</rdfs:label>
+    <rdfs:comment xml:lang="en">Translation of the phrase into a non-liturgical language. Initiated-only.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-initiated-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#LexicalEntry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Lexical Entry</rdfs:label>
+    <rdfs:comment xml:lang="en">A word, term, or morpheme in a sacred language with its liturgical or ritual meaning documented. Subclass of ontolex:LexicalEntry for integration with multilingual lexicographic infrastructure. A single lexical entry may have multiple senses (iroko:LexicalSense), including restricted senses whose esoteric meaning is not disclosed publicly. The existence of a term is community-restricted; its esoteric sense is initiated-only.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/lemon/ontolex#LexicalEntry"/>
+    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasEntry">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has entry</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
     <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
+    <owl:inverseOf rdf:resource="https://ontology.irokosociety.org/iroko#inLanguage"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko-qal">
@@ -314,115 +358,60 @@
     <owl:versionIRI rdf:resource="https://ontology.irokosociety.org/iroko-qal/1.3.0"/>
     <owl:versionInfo>1.3.0</owl:versionInfo>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-nsibidi">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">The Ejagham ideographic writing system, functioning as both script and graphic sign system. Cross-listed with iroko-veve for its graphic dimension; listed here for its lexical and communicative dimension.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
-    <skos:prefLabel xml:lang="en">Nsibidi (Ejagham)</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-other">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Sacred language type not covered by existing concepts.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Other</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-other">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Part of speech not covered by existing concepts.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
-    <skos:prefLabel xml:lang="en">Other</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-other">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Script system not covered by existing concepts.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
-    <skos:prefLabel xml:lang="en">Other</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#LiturgicalPhrase">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label xml:lang="en">Liturgical Phrase</rdfs:label>
-    <rdfs:comment xml:lang="en">A multi-word expression, formula, invocation, or greeting used in Afro-Atlantic sacred contexts. Examples: Yorùbá greeting formulas specific to Orisha (mojuba formulas); Palo Kikongo invocations; Vodou salutation phrases for specific lwa. Phrases are documented with their tradition, ceremony context, and speaker authority requirements. General greetings are community-restricted; ceremonial invocations are initiated-only.</rdfs:comment>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#ScriptSystemScheme">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
-    <rdfs:label xml:lang="en">Script Systems</rdfs:label>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-adinkra"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-anaforuana"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-arabic"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-geez"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-latin"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-nsibidi"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-oral-only"/>
-    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#script-other"/>
-    <skos:prefLabel xml:lang="en">Script Systems</skos:prefLabel>
-    <skos:prefLabel xml:lang="es">Sistemas de escritura sagrada</skos:prefLabel>
-    <skos:prefLabel xml:lang="fr">Systèmes d'écriture sacrée</skos:prefLabel>
-    <skos:prefLabel xml:lang="pt">Sistemas de escrita sagrada</skos:prefLabel>
-    <skos:prefLabel xml:lang="yo">Àwọn ètò ìkọ̀wé mímọ́</skos:prefLabel>
+    <rdfs:label xml:lang="en">Sacred Language Types</rdfs:label>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-african-christian"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-afro-atlantic"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-full-liturgical"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-graphic-lexical"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-other"/>
+    <skos:hasTopConcept rdf:resource="https://ontology.irokosociety.org/iroko#lang-sacred-register"/>
+    <skos:prefLabel xml:lang="en">Sacred Language Types</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Tipos de lengua sagrada</skos:prefLabel>
+    <skos:prefLabel xml:lang="fr">Types de langue sacrée</skos:prefLabel>
+    <skos:prefLabel xml:lang="pt">Tipos de língua sagrada</skos:prefLabel>
+    <skos:prefLabel xml:lang="yo">Àwọn ìrú èdè mímọ́</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-sacred-register">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-adjective">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A specialized ceremonial register of a vernacular language, with vocabulary and formulas specific to sacred contexts. Examples: the Vodou ceremonial register of Haitian Kreyòl; the ceremonial Jamaican Patois of Kumina.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Sacred register of a vernacular</skos:prefLabel>
+    <skos:definition xml:lang="en">A modifier (epithets, descriptive terms for entities).</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
+    <skos:prefLabel xml:lang="en">Adjective</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasSense">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#languageType">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">has sense</rdfs:label>
-    <rdfs:comment xml:lang="en">Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#LexicalSense"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/ns/lemon/ontolex#sense"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-full-liturgical">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A language used in its complete grammatical form as the primary medium of sacred communication. Examples: Yorùbá in continental Yorùbá religion; Fon in Beninese Vodun; Ge'ez in Ethiopian Orthodox liturgy.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Full liturgical language</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-orisha-camino">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">The secret name of a specific camino (path) of an Orisha, revealed in divination. Community-restricted in general; the specific name is initiated-elder only.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
-    <skos:prefLabel xml:lang="en">Orisha camino (path name)</skos:prefLabel>
-    <skos:prefLabel xml:lang="es">Nombre del camino del Orisha</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-nkisi-palo">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">The secret name of a specific Nganga/nkisi in Palo Monte, given at preparation. Known to the Tata and their lineage.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
-    <skos:prefLabel xml:lang="en">Nkisi name (Palo)</skos:prefLabel>
-    <skos:prefLabel xml:lang="es">Nombre del nkisi</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#phraseFunction">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">phrase function</rdfs:label>
-    <rdfs:comment xml:lang="en">The ceremonial function of this phrase. Range: iroko:SpeechActTypeScheme.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
+    <rdfs:label xml:lang="en">language type</rdfs:label>
+    <rdfs:comment xml:lang="en">Classification of this sacred language. Range: iroko:SacredLanguageTypeScheme.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
     <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-lwa-vodou">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A restricted name of a specific lwa, known only to initiates at a specific grade.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
-    <skos:prefLabel xml:lang="en">Lwa secret name (Vodou)</skos:prefLabel>
-    <skos:prefLabel xml:lang="fr">Nom secret du lwa</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasEntry">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#secretNameHolder">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">has entry</rdfs:label>
-    <rdfs:comment xml:lang="en">Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing.</rdfs:comment>
+    <rdfs:label xml:lang="en">name holder</rdfs:label>
+    <rdfs:comment xml:lang="en">The entity (spiritual or human) who holds this secret name. Range: iroko:SpiritualEntity or foaf:Person. No-access.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SecretName"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-no-access"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#hasPhrase">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">has phrase</rdfs:label>
+    <rdfs:comment xml:lang="en">Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves.</rdfs:comment>
     <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
-    <owl:inverseOf rdf:resource="https://ontology.irokosociety.org/iroko#inLanguage"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
+    <owl:inverseOf rdf:resource="https://ontology.irokosociety.org/iroko#phraseLanguage"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-other">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Speech act type not covered by existing concepts.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Other</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-other">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
@@ -430,45 +419,37 @@
     <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
     <skos:prefLabel xml:lang="en">Other</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#writtenForm">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="en">written form</rdfs:label>
-    <rdfs:comment xml:lang="en">The conventional written form of this term in the liturgical language. Language-tagged. Community-restricted.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#LexicalSense">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label xml:lang="en">Lexical Sense</rdfs:label>
-    <rdfs:comment xml:lang="en">A specific meaning of a lexical entry, which may carry different access levels than the entry itself. An Orisha's name (entry) may be public, while a path-specific epithet (restricted sense) is community-restricted, and a secret name (esoteric sense) is no-access. Multiple senses of the same term are documented as separate LexicalSense instances with appropriate access levels.</rdfs:comment>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/lemon/ontolex#LexicalSense"/>
-    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#inLanguage">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">in language</rdfs:label>
-    <rdfs:comment xml:lang="en">The sacred language to which this lexical entry belongs. Range: iroko:SacredLanguage.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-consecration">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-anaforuana">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Speech that transforms an object, person, or space from secular to sacred status. Among the most restricted speech acts.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Consecration</skos:prefLabel>
+    <skos:definition xml:lang="en">The Abakuá graphic script with lexical and communicative functions. Cross-listed with iroko-veve; included here for documentation of the semiotic/communicative dimension.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
+    <skos:prefLabel xml:lang="en">Anaforuana (Abakuá)</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#authorityRequired">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-salutation">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Formal greetings addressed to an entity, elder, or ceremonial space. Examples: Orisha salutation formulas (Mojuba); Vodou bonjou to specific lwa.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Salutation / greeting</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-blessing">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">A formally authorized speech act conferring spiritual benefit, protection, or grace. Requires recognized authority to perform.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Blessing</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-naming">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">The formal conferral of a sacred or initiatory name on a person, object, or entity.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Naming</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#cognateTerms">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">authority required</rdfs:label>
-    <rdfs:comment xml:lang="en">The initiation level or title required to speak this phrase in ceremony. Range: iroko:AccessLevelScheme concept.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
+    <rdfs:label xml:lang="en">cognate terms</rdfs:label>
+    <rdfs:comment xml:lang="en">Terms in related languages that are etymologically cognate or semantically parallel. Used to document cross-tradition vocabulary relationships (e.g., Yorùbá 'Egúngún' → Lucumí 'Eggun'; Fon 'Legba' → Haitian 'Legba').</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#partOfSpeech">
@@ -480,53 +461,32 @@
     <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#phraseText">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="en">phrase text</rdfs:label>
-    <rdfs:comment xml:lang="en">The text of the liturgical phrase in its original language. Language-tagged. Initiated-only.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-initiated-only"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-interjection">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-geez">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A standalone ceremonial exclamation or ritual call-and-response marker.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
-    <skos:prefLabel xml:lang="en">Interjection / exclamation</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#orthographicVariants">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="en">orthographic variants</rdfs:label>
-    <rdfs:comment xml:lang="en">Alternative spellings in use across lineages or transcription traditions. Language-tagged.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-praise">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Formal praise speech honoring an entity, ancestor, or lineage. Oriki in Yorùbá-derived traditions; analogous forms in other traditions.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Praise / oriki</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-verb">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A verb or verb phrase (ceremonial actions, states).</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
-    <skos:prefLabel xml:lang="en">Verb</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-oral-only">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Language transmitted exclusively orally without a writing system. The majority of Afro-Atlantic liturgical languages fall here historically; Latin transcription is secondary.</skos:definition>
+    <skos:definition xml:lang="en">The Ethiopic abugida used to write Ge'ez, Amharic, Tigrinya, and other Ethiopian and Eritrean languages. The sacred script of Ethiopian and Eritrean Orthodox liturgy.</skos:definition>
     <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
-    <skos:prefLabel xml:lang="en">Oral tradition (no script)</skos:prefLabel>
+    <skos:prefLabel xml:lang="am">ፊደል (Fidel)</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Ge'ez / Ethiopic script</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-nkisi-palo">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">The secret name of a specific Nganga/nkisi in Palo Monte, given at preparation. Known to the Tata and their lineage.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
+    <skos:prefLabel xml:lang="en">Nkisi name (Palo)</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Nombre del nkisi</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-graphic-lexical">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:definition xml:lang="en">A system in which graphic signs function as lexical or semiotic units, functioning analogously to writing. Examples: Nsibidi (Ejagham) as a graphic communication system; Anaforuana signs with lexical referents. Linked to iroko-veve for the graphic dimension.</skos:definition>
     <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
     <skos:prefLabel xml:lang="en">Graphic-lexical system</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-orisha-camino">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">The secret name of a specific camino (path) of an Orisha, revealed in divination. Community-restricted in general; the specific name is initiated-elder only.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
+    <skos:prefLabel xml:lang="en">Orisha camino (path name)</skos:prefLabel>
+    <skos:prefLabel xml:lang="es">Nombre del camino del Orisha</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#entityReference">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
@@ -537,14 +497,93 @@
     <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SpiritualEntity"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#phraseTranslation">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-afro-atlantic">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">A source language preserved in Afro-Atlantic in a fossilized or adapted form, used for liturgical purposes but no longer a community vernacular. Examples: Lucumí (Afro-Atlantic Yorùbá in Cuba); Kikongo as used in Cuban Palo Monte; liturgical Fon in Haitian Vodou.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Afro-Atlantic liturgical language</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-farewell">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Formal speech acts that close a ceremony or take leave of a spiritual entity.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Farewell / closing</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SacredSpeechAct">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label xml:lang="en">Sacred Speech Act</rdfs:label>
+    <rdfs:comment xml:lang="en">A formally defined speech act type within a tradition's ceremonial protocol: oath-taking, naming, cursing, blessing, consecration, authorization. Distinct from a specific utterance: a SacredSpeechAct is the category (e.g., 'Ifá greeting formula') while a LiturgicalPhrase is a specific instance. The existence of a speech act type is community-restricted; its specific form and context are initiated-only to elder-only.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-other">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Script system not covered by existing concepts.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
+    <skos:prefLabel xml:lang="en">Other</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-latin">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Latin alphabet as used to transcribe liturgical Yorùbá, Lucumí, Kikongo, Haitian Kreyòl, and most documented Afro-Atlantic liturgical languages.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
+    <skos:prefLabel xml:lang="en">Latin script</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-sacred-register">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">A specialized ceremonial register of a vernacular language, with vocabulary and formulas specific to sacred contexts. Examples: the Vodou ceremonial register of Haitian Kreyòl; the ceremonial Jamaican Patois of Kumina.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Sacred register of a vernacular</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-adinkra">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Akan visual symbols functioning as a lexical and semiotic system. Cross-listed with iroko-veve; included here for semantic documentation of individual symbol meanings.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
+    <skos:prefLabel xml:lang="en">Adinkra symbols (Akan)</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#orthographicVariants">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="en">phrase translation</rdfs:label>
-    <rdfs:comment xml:lang="en">Translation of the phrase into a non-liturgical language. Initiated-only.</rdfs:comment>
+    <rdfs:label xml:lang="en">orthographic variants</rdfs:label>
+    <rdfs:comment xml:lang="en">Alternative spellings in use across lineages or transcription traditions. Language-tagged.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LexicalEntry"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#nameConvention">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:label xml:lang="en">name convention</rdfs:label>
+    <rdfs:comment xml:lang="en">The type of secret name convention this follows. Range: iroko:SecretNameConventionScheme. Community-restricted.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SecretName"/>
+    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-community-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#lang-other">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Sacred language type not covered by existing concepts.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguageTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Other</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#phraseText">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:label xml:lang="en">phrase text</rdfs:label>
+    <rdfs:comment xml:lang="en">The text of the liturgical phrase in its original language. Language-tagged. Initiated-only.</rdfs:comment>
     <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#LiturgicalPhrase"/>
     <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
     <rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-initiated-only"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-invocation">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Speech that calls or invites a spiritual entity. Typically more restricted than salutation in terms of who may perform it.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Invocation</skos:prefLabel>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-nsibidi">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">The Ejagham ideographic writing system, functioning as both script and graphic sign system. Cross-listed with iroko-veve for its graphic dimension; listed here for its lexical and communicative dimension.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
+    <skos:prefLabel xml:lang="en">Nsibidi (Ejagham)</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-prohibition">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
@@ -552,18 +591,11 @@
     <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
     <skos:prefLabel xml:lang="en">Prohibition / taboo declaration</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SecretName">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label xml:lang="en">Secret Name</rdfs:label>
-    <rdfs:comment xml:lang="en">An esoteric or restricted name for a spiritual entity, practitioner, or sacred object known only to initiated members at a specific grade or above. Examples: the secret name of an Orisha camino revealed in itá; a Palo Tata's nkisi name; an Abakuá ecobio name. The existence of secret name conventions within a tradition is public; the names themselves are no-access.</rdfs:comment>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-adjective">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-consecration">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">A modifier (epithets, descriptive terms for entities).</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
-    <skos:prefLabel xml:lang="en">Adjective</skos:prefLabel>
+    <skos:definition xml:lang="en">Speech that transforms an object, person, or space from secular to sacred status. Among the most restricted speech acts.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
+    <skos:prefLabel xml:lang="en">Consecration</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#scriptSystem">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
@@ -574,54 +606,22 @@
     <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#naming-ecobio-abakua">
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-oath">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">The initiatory name given to an Abakuá member at their juramento. No-access.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SecretNameConventionScheme"/>
-    <skos:prefLabel xml:lang="en">Ecobio name (Abakuá)</skos:prefLabel>
-    <skos:prefLabel xml:lang="es">Nombre de ecobio</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#languageType">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">language type</rdfs:label>
-    <rdfs:comment xml:lang="en">Classification of this sacred language. Range: iroko:SacredLanguageTypeScheme.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SacredLanguage"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-public-unrestricted"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-salutation">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Formal greetings addressed to an entity, elder, or ceremonial space. Examples: Orisha salutation formulas (Mojuba); Vodou bonjou to specific lwa.</skos:definition>
+    <skos:definition xml:lang="en">A sworn commitment made in the presence of spiritual witnesses, binding on the speaker. Examples: Abakuá juramento; Palo Monte pact formulas. Initiated-only.</skos:definition>
     <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Salutation / greeting</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Oath / juramento</skos:prefLabel>
   </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#SacredLanguage">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:label xml:lang="en">Sacred Language</rdfs:label>
-    <rdfs:comment xml:lang="en">A language, language register, or language variety used as a liturgical or ritual medium in Afro-Atlantic or related African sacred practice. Includes fully distinct languages (Yorùbá in Lucumí/Candomblé; Kikongo in Palo Monte; Fon in Haitian Vodou), sacred registers of creole languages (Haitian Kreyòl ceremonial register), specialized vocabularies (Lucumí as Afro-Atlantic-adapted liturgical Yorùbá), and graphic-lexical systems (Nsibidi as both script and vocabulary system). Also includes African Christian liturgical languages: Ge'ez (Ethiopian/Eritrean Orthodox), Coptic (Egyptian Coptic Church).</rdfs:comment>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:subClassOf rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
+  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#script-oral-only">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <skos:definition xml:lang="en">Language transmitted exclusively orally without a writing system. The majority of Afro-Atlantic liturgical languages fall here historically; Latin transcription is secondary.</skos:definition>
+    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#ScriptSystemScheme"/>
+    <skos:prefLabel xml:lang="en">Oral tradition (no script)</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#pos-formula">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <skos:definition xml:lang="en">A multi-word fixed expression that functions as a unit in ceremonial contexts.</skos:definition>
     <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#PartOfSpeechScheme"/>
     <skos:prefLabel xml:lang="en">Fixed formula</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#act-invocation">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <skos:definition xml:lang="en">Speech that calls or invites a spiritual entity. Typically more restricted than salutation in terms of who may perform it.</skos:definition>
-    <skos:inScheme rdf:resource="https://ontology.irokosociety.org/iroko#SpeechActTypeScheme"/>
-    <skos:prefLabel xml:lang="en">Invocation</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://ontology.irokosociety.org/iroko#secretNameHolder">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:label xml:lang="en">name holder</rdfs:label>
-    <rdfs:comment xml:lang="en">The entity (spiritual or human) who holds this secret name. Range: iroko:SpiritualEntity or foaf:Person. No-access.</rdfs:comment>
-    <rdfs:domain rdf:resource="https://ontology.irokosociety.org/iroko#SecretName"/>
-    <rdfs:isDefinedBy rdf:resource="https://ontology.irokosociety.org/iroko-qal"/>
-    <rdfs:range rdf:resource="https://ontology.irokosociety.org/iroko#SacredEntity"/>
-    <iroko:minimumAccessLevel rdf:resource="https://ontology.irokosociety.org/iroko#access-no-access"/>
   </rdf:Description>
 </rdf:RDF>

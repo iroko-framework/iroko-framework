@@ -10,49 +10,62 @@
   },
   "@graph": [
     {
-      "@id": "iroko:authorityTitle",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
+      "@id": "iroko:initiation-ifa",
+      "@type": "skos:Concept",
+      "skos:altLabel": {
+        "@language": "en",
+        "@value": "Itefa"
       },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Full initiation into the Ifá corpus, conferring the title of Babaláwo."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InitiationTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Ifá Initiation"
+      }
+    },
+    {
+      "@id": "iroko:houseType-cabildo",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Cuban colonial mutual aid and religious society organized by African ethnic identity. Use iroko:Cabildo subclass for records of this type."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HouseTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Cabildo"
+        },
+        {
+          "@language": "es",
+          "@value": "Cabildo"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:ReligiousOffice",
+      "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "The formal title held. Range: iroko:AuthorityTitleScheme."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:ReligiousOffice"
+        "@value": "A religious title or position held by a practitioner, authorizing specific ritual functions within a tradition. Linked to the person (foaf:Person), the house, and the authority figure who conferred it. Distinct from iroko:ContestedAuthority in core, which models disputed titles at the category level — iroko:ReligiousOffice models specific individual instances."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-ile"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "authority title"
+        "@value": "Religious Office"
       },
-      "rdfs:range": {
-        "@id": "skos:Concept"
+      "rdfs:subClassOf": {
+        "@id": "iroko:SacredEntity"
       }
-    },
-    {
-      "@id": "iroko:initiation-egbe",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Initiation into an Egbé society or association."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Egbé Initiation"
-        },
-        {
-          "@language": "es",
-          "@value": "Inisiación de Egbé"
-        }
-      ]
     },
     {
       "@id": "iroko:title-alagba",
@@ -76,75 +89,88 @@
       ]
     },
     {
-      "@id": "iroko:transmission-embodied",
+      "@id": "iroko:houseGovernanceModel",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "How authority and decision-making are structured within the house. Range: iroko:GovernanceModelScheme."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:House"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "house governance model"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:title-babalawo",
+      "@type": "skos:Concept",
+      "iroko:tradition": {
+        "@id": "iroko:tradition-lucumi"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Initiated Ifá priest. Authorized to perform Ifá divination and related ceremonies."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Babaláwo"
+        },
+        {
+          "@language": "yo",
+          "@value": "Babaláwo"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:governance-gender-divided",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Knowledge transmitted through physical ceremony, practice, and direct experiential transmission. Cannot be fully conveyed through text."
+        "@value": "Male and female authorities govern separate domains within the same institution."
       },
       "skos:inScheme": {
-        "@id": "iroko:TransmissionTypeScheme"
+        "@id": "iroko:GovernanceModelScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Embodied"
+        "@value": "Gender-Divided Authority"
       }
     },
     {
-      "@id": "iroko:houseType-other",
+      "@id": "iroko:houseType-sosyete",
       "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Haitian Vodou society, often with named lineage and territorial identity."
+      },
       "skos:inScheme": {
         "@id": "iroko:HouseTypeScheme"
       },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Other"
-      }
-    },
-    {
-      "@id": "https://ontology.irokosociety.org/iroko-ile",
-      "@type": "owl:Ontology",
-      "dcterms:created": {
-        "@type": "xsd:date",
-        "@value": "2026-02-21"
-      },
-      "dcterms:creator": "Iroko Historical Society",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Domain module. Vocabulary for documenting Afro-Atlantic religious houses, lineage structures, initiation genealogy, authority transmission, and schism events. Extends schema:Organization and FOAF with tradition-specific governance and lineage modeling. Covers ilé, terreiro, hounfò, cabildo, and analogous institutions. Use with iroko-authority to model the authority titles and governance structures held by specific individuals; iroko-epistemic to constrain disclosure of initiation details and membership records."
-      },
-      "dcterms:isPartOf": {
-        "@id": "https://ontology.irokosociety.org/iroko-framework/"
-      },
-      "dcterms:license": {
-        "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
-      },
-      "dcterms:modified": {
-        "@type": "xsd:date",
-        "@value": "2026-02-25"
-      },
-      "dcterms:references": [
+      "skos:prefLabel": [
         {
-          "@id": "https://ontology.irokosociety.org/iroko-authority"
+          "@language": "en",
+          "@value": "Sosyete"
         },
         {
-          "@id": "https://ontology.irokosociety.org/iroko-epistemic"
+          "@language": "fr",
+          "@value": "Sosyete"
         }
-      ],
-      "dcterms:title": {
-        "@language": "en",
-        "@value": "Iroko Framework: Ilé Module (Lineage, Houses, and Religious Office)"
-      },
-      "owl:imports": {
-        "@id": "https://ontology.irokosociety.org/iroko-core"
-      },
-      "owl:versionIRI": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile/1.3.0"
-      },
-      "owl:versionInfo": "1.3.0",
-      "rdfs:seeAlso": {
-        "@id": "https://ontology.irokosociety.org/iroko-framework/"
-      }
+      ]
     },
     {
       "@id": "iroko:recognizedOffice",
@@ -174,153 +200,11 @@
       }
     },
     {
-      "@id": "iroko:Cabildo",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A Cuban colonial-era mutual aid and religious society organized by African ethnic identity. Cabildos were the institutional vessels for Lucumí, Arará, Kongo, and other traditions in Cuba. Distinct from contemporary houses in legal form and historical structure. May have successor houses linked via iroko:successorHouse."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Cabildo"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:House"
-      }
-    },
-    {
-      "@id": "iroko:transmission-oral",
+      "@id": "iroko:title-mambo",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Transmitted through speech, song, proverb, and oral recitation."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:TransmissionTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Oral"
-      }
-    },
-    {
-      "@id": "iroko:initiatedPerson",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-no-access"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The person who received initiation. Range: foaf:Person. Highly sensitive — access no-access by default except to the individual and their house."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:InitiationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "initiated person"
-      },
-      "rdfs:range": {
-        "@id": "http://xmlns.com/foaf/0.1/Person"
-      }
-    },
-    {
-      "@id": "iroko:itaPerformed",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "True if a life reading (itá) was conducted as part of this initiation."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:InitiationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "itá performed"
-      },
-      "rdfs:range": {
-        "@id": "xsd:boolean"
-      }
-    },
-    {
-      "@id": "iroko:houseType-ile-ifa",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "House organized primarily around Ifá divination practice and Babaláwo lineage."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HouseTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Ilé Ifá"
-      }
-    },
-    {
-      "@id": "iroko:houseType-egbe",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Association or society organized around a specific orisha or shared ritual purpose."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HouseTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Egbé"
-        },
-        {
-          "@language": "yo",
-          "@value": "Egbé"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:title-iyalosha",
-      "@type": "skos:Concept",
-      "skos:altLabel": [
-        {
-          "@language": "en",
-          "@value": "Iyalorisha"
-        },
-        {
-          "@language": "es",
-          "@value": "Madrina"
-        }
-      ],
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Senior female Orisha priest with the authority to initiate others."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Iyalosha"
-      }
-    },
-    {
-      "@id": "iroko:title-araba",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Chief Babaláwo in a Yoruba community or lineage. Highest recognized Ifá authority."
+        "@value": "Female Haitian Vodou priest."
       },
       "skos:inScheme": {
         "@id": "iroko:AuthorityTitleScheme"
@@ -328,313 +212,59 @@
       "skos:prefLabel": [
         {
           "@language": "en",
-          "@value": "Araba"
-        },
-        {
-          "@language": "yo",
-          "@value": "Araba"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:initiation-rayisman",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Haitian Vodou ceremony of recognition and elevation within a sosyete."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Rayisman"
+          "@value": "Mambo"
         },
         {
           "@language": "ht",
-          "@value": "Rayisman"
+          "@value": "Manbo"
         }
       ]
     },
     {
-      "@id": "iroko:publicPresence",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "True if the house maintains a publicly known identity (website, social media, public events). False does not imply the house is secret — many houses simply operate privately."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:House"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "public presence"
-      },
-      "rdfs:range": {
-        "@id": "xsd:boolean"
-      }
-    },
-    {
-      "@id": "iroko:GovernanceModelScheme",
-      "@type": "skos:ConceptScheme",
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Governance Models"
-      },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:governance-age-grade"
-        },
-        {
-          "@id": "iroko:governance-democratic"
-        },
-        {
-          "@id": "iroko:governance-elder-council"
-        },
-        {
-          "@id": "iroko:governance-gender-divided"
-        },
-        {
-          "@id": "iroko:governance-hereditary"
-        },
-        {
-          "@id": "iroko:governance-lineage-federation"
-        },
-        {
-          "@id": "iroko:governance-other"
-        },
-        {
-          "@id": "iroko:governance-single-elder"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:governance-other",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:GovernanceModelScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Other"
-      }
-    },
-    {
-      "@id": "iroko:governance-elder-council",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Collective of recognized elders sharing governance authority."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:GovernanceModelScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Elder Council"
-      }
-    },
-    {
-      "@id": "iroko:schismDate",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:domain": {
-        "@id": "iroko:SchismEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "schism date"
-      },
-      "rdfs:range": {
-        "@id": "xsd:date"
-      }
-    },
-    {
-      "@id": "iroko:houseType-study-group",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "An informal group organized for learning, not yet constituted as a full house."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HouseTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Study / Learning Group"
-      }
-    },
-    {
-      "@id": "iroko:houseGovernanceModel",
+      "@id": "iroko:initiationType",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "How authority and decision-making are structured within the house. Range: iroko:GovernanceModelScheme."
+        "@value": "Type of initiation ceremony. Range: iroko:InitiationTypeScheme."
       },
       "rdfs:domain": {
-        "@id": "iroko:House"
+        "@id": "iroko:InitiationEvent"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-ile"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "house governance model"
+        "@value": "initiation type"
       },
       "rdfs:range": {
         "@id": "skos:Concept"
       }
     },
     {
-      "@id": "iroko:title-olu-iroko",
+      "@id": "iroko:governance-lineage-federation",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Consecration to the Iroko tree spirit. Rare; received through specific lineage authorization."
+        "@value": "Federated structure of affiliated houses under loose shared authority."
       },
       "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Olu-Iroko"
-        },
-        {
-          "@language": "yo",
-          "@value": "Olu-Iròkò"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:initiator",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The authority figure who performed the initiation. Range: iroko:ReligiousOffice."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:InitiationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "initiator"
-      },
-      "rdfs:range": {
-        "@id": "iroko:ReligiousOffice"
-      },
-      "rdfs:subPropertyOf": {
-        "@id": "http://www.w3.org/ns/prov#wasAttributedTo"
-      }
-    },
-    {
-      "@id": "iroko:houseType-ile-orisha",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Lucumí/Candomblé Ketu house organized around Orisha worship."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HouseTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Ilé Orisha"
-        },
-        {
-          "@language": "es",
-          "@value": "Ilé Orisha"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:eventHouse",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The house in which the initiation took place."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:InitiationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "event house"
-      },
-      "rdfs:range": {
-        "@id": "iroko:House"
-      }
-    },
-    {
-      "@id": "iroko:title-omo-orisha",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Initiated child of an orisha. General term for those who have completed kariosha/asiento."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Omo Orisha"
-        },
-        {
-          "@language": "yo",
-          "@value": "Omo Orisha"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:transmission-combined",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Transmission involves both embodied/oral and written components."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:TransmissionTypeScheme"
+        "@id": "iroko:GovernanceModelScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Combined"
+        "@value": "Lineage Federation"
       }
     },
     {
-      "@id": "iroko:houseType-palero-house",
+      "@id": "iroko:houseType-terreiro",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "House organized around Palo Monte/Mayombe practice and nganga custody."
+        "@value": "Brazilian ritual space for Candomblé, Umbanda, or Quimbanda practice."
       },
       "skos:inScheme": {
         "@id": "iroko:HouseTypeScheme"
@@ -642,13 +272,37 @@
       "skos:prefLabel": [
         {
           "@language": "en",
-          "@value": "Palo House"
+          "@value": "Terreiro"
         },
         {
-          "@language": "es",
-          "@value": "Casa de Palo"
+          "@language": "pt",
+          "@value": "Terreiro"
         }
       ]
+    },
+    {
+      "@id": "iroko:lineageCharacteristics",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Description of what distinguishes this rama: liturgical variations, oriki, priestly protocols, founding relationships, regional practices."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Lineage"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "lineage characteristics"
+      },
+      "rdfs:range": {
+        "@id": "rdf:langString"
+      }
     },
     {
       "@id": "iroko:InitiationTypeScheme",
@@ -700,130 +354,54 @@
       ]
     },
     {
-      "@id": "iroko:schismCause",
-      "@type": "owl:DatatypeProperty",
+      "@id": "iroko:founder",
+      "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
+        "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Documented reason for the lineage split. Often contested; use iroko:contestedNotes alongside."
+        "@value": "The founding practitioner of the house. Range: foaf:Person."
       },
       "rdfs:domain": {
-        "@id": "iroko:SchismEvent"
+        "@id": "iroko:House"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-ile"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "schism cause"
+        "@value": "founder"
       },
       "rdfs:range": {
-        "@id": "rdf:langString"
+        "@id": "http://xmlns.com/foaf/0.1/Person"
+      },
+      "rdfs:subPropertyOf": {
+        "@id": "https://schema.org/founder"
       }
     },
     {
-      "@id": "iroko:governance-democratic",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Decisions made by member consensus or elected leadership."
+      "@id": "iroko:houseType",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
       },
-      "skos:inScheme": {
-        "@id": "iroko:GovernanceModelScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Democratic / Consensus"
-      }
-    },
-    {
-      "@id": "iroko:initiation-warriors",
-      "@type": "skos:Concept",
-      "skos:altLabel": {
-        "@language": "es",
-        "@value": "Los Guerreros"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Reception of the warrior orishas: Elegua, Ogun, Ochosi, and Osun."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Warriors"
-      }
-    },
-    {
-      "@id": "iroko:title-olorisha",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Initiated Orisha priest of any gender. General term covering Iyalosha and Babalosha."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Olorisha"
-      }
-    },
-    {
-      "@id": "iroko:ReligiousOffice",
-      "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "A religious title or position held by a practitioner, authorizing specific ritual functions within a tradition. Linked to the person (foaf:Person), the house, and the authority figure who conferred it. Distinct from iroko:ContestedAuthority in core, which models disputed titles at the category level — iroko:ReligiousOffice models specific individual instances."
+        "@value": "Institutional form of the house. Range: iroko:HouseTypeScheme."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:House"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-ile"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Religious Office"
+        "@value": "house type"
       },
-      "rdfs:subClassOf": {
-        "@id": "iroko:SacredEntity"
-      }
-    },
-    {
-      "@id": "iroko:title-abakua-member",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Initiated member of an Abakuá potencia."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Abakuá Member"
-        },
-        {
-          "@language": "es",
-          "@value": "Abakuá"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:transmission-written",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Transmitted through notebooks, libreta, manuscripts, or printed texts."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:TransmissionTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Written"
+      "rdfs:range": {
+        "@id": "skos:Concept"
       }
     },
     {
@@ -848,133 +426,6 @@
       ]
     },
     {
-      "@id": "iroko:title-tata-nkisi",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Male initiated priest in Palo Monte with authority over an nganga."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Tata Nkisi"
-        },
-        {
-          "@language": "es",
-          "@value": "Tata Nkisi"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:houseType-espiritismo-centre",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Centre for Kardecist or Afro-influenced Espiritismo practice."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HouseTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Espiritismo Centre"
-        },
-        {
-          "@language": "es",
-          "@value": "Centro de Espiritismo"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:houseType-hounfo",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Haitian Vodou temple and its associated community."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HouseTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Hounfò"
-        },
-        {
-          "@language": "fr",
-          "@value": "Hounfò"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:houseType-terreiro",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Brazilian ritual space for Candomblé, Umbanda, or Quimbanda practice."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HouseTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Terreiro"
-        },
-        {
-          "@language": "pt",
-          "@value": "Terreiro"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:lineageCharacteristics",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Description of what distinguishes this rama: liturgical variations, oriki, priestly protocols, founding relationships, regional practices."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Lineage"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "lineage characteristics"
-      },
-      "rdfs:range": {
-        "@id": "rdf:langString"
-      }
-    },
-    {
-      "@id": "iroko:initiation-palo-rayamiento",
-      "@type": "skos:Concept",
-      "skos:altLabel": {
-        "@language": "en",
-        "@value": "Palo Initiation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Palo Monte/Mayombe initiation ceremony marking entry into a munanso."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "es",
-        "@value": "Rayamiento"
-      }
-    },
-    {
       "@id": "iroko:transmission-divination-prescribed",
       "@type": "skos:Concept",
       "skos:definition": {
@@ -987,135 +438,6 @@
       "skos:prefLabel": {
         "@language": "en",
         "@value": "Divination-Prescribed"
-      }
-    },
-    {
-      "@id": "iroko:initiation-olofin",
-      "@type": "skos:Concept",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Reception of the Olofin mysteries. Among the highest grades in Lucumí practice."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Olofin Initiation"
-      }
-    },
-    {
-      "@id": "iroko:houseType-abakua-potencia",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "An Abakuá lodge (potencia). Abakuá is a Cuban secret society of Calabari/Cross River origin."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HouseTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Abakuá Potencia"
-        },
-        {
-          "@language": "es",
-          "@value": "Potencia Abakuá"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:authorityHolder",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The person holding this title. Range: foaf:Person."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:ReligiousOffice"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "authority holder"
-      },
-      "rdfs:range": {
-        "@id": "http://xmlns.com/foaf/0.1/Person"
-      }
-    },
-    {
-      "@id": "iroko:successorHouse",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "For historical cabildos: the contemporary house that descends from or claims continuity with this institution."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Cabildo"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "successor house"
-      },
-      "rdfs:range": {
-        "@id": "iroko:House"
-      }
-    },
-    {
-      "@id": "iroko:affiliatedHouse",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A house with recognized but non-hierarchical affiliation: alliance, shared lineage recognition, or ongoing ceremonial cooperation."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:House"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "affiliated house"
-      },
-      "rdfs:range": {
-        "@id": "iroko:House"
-      }
-    },
-    {
-      "@id": "iroko:InitiationEvent",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A specific ceremony creating a formal genealogical link between initiator and initiate. The primary mechanism by which lineage is transmitted and authority is conferred. Access to records is typically initiated-only; existence of the event may be public."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Initiation Event"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:SacredEntity"
       }
     },
     {
@@ -1144,18 +466,59 @@
       }
     },
     {
-      "@id": "iroko:governance-lineage-federation",
+      "@id": "iroko:initiation-other",
       "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Federated structure of affiliated houses under loose shared authority."
-      },
       "skos:inScheme": {
-        "@id": "iroko:GovernanceModelScheme"
+        "@id": "iroko:InitiationTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Lineage Federation"
+        "@value": "Other"
+      }
+    },
+    {
+      "@id": "iroko:title-iyalosha",
+      "@type": "skos:Concept",
+      "skos:altLabel": [
+        {
+          "@language": "en",
+          "@value": "Iyalorisha"
+        },
+        {
+          "@language": "es",
+          "@value": "Madrina"
+        }
+      ],
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Senior female Orisha priest with the authority to initiate others."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Iyalosha"
+      }
+    },
+    {
+      "@id": "iroko:schismParentHouse",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:domain": {
+        "@id": "iroko:SchismEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "schism parent house"
+      },
+      "rdfs:range": {
+        "@id": "iroko:House"
       }
     },
     {
@@ -1179,11 +542,59 @@
       }
     },
     {
-      "@id": "iroko:title-mae-de-santo",
+      "@id": "iroko:entityCrowned",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "For head initiations: the orisha/entity seated on the initiate's head. Range: nkisi:SpiritualEntity."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:InitiationEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "entity crowned"
+      },
+      "rdfs:range": {
+        "@id": "iroko:SacredEntity"
+      }
+    },
+    {
+      "@id": "iroko:schismParty",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Persons involved in the schism. Range: foaf:Person. Sensitive."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:SchismEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "schism party"
+      },
+      "rdfs:range": {
+        "@id": "http://xmlns.com/foaf/0.1/Person"
+      }
+    },
+    {
+      "@id": "iroko:title-abakua-member",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Female head of a Brazilian terreiro."
+        "@value": "Initiated member of an Abakuá potencia."
       },
       "skos:inScheme": {
         "@id": "iroko:AuthorityTitleScheme"
@@ -1191,65 +602,325 @@
       "skos:prefLabel": [
         {
           "@language": "en",
-          "@value": "Mãe de Santo"
+          "@value": "Abakuá Member"
         },
         {
-          "@language": "pt",
-          "@value": "Mãe de Santo"
+          "@language": "es",
+          "@value": "Abakuá"
         }
       ]
     },
     {
-      "@id": "iroko:title-olofista",
+      "@id": "iroko:initiation-rayisman",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Priest initiated into the Olofin mysteries. Among the highest initiatory grades in Lucumí."
+        "@value": "Haitian Vodou ceremony of recognition and elevation within a sosyete."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InitiationTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Rayisman"
+        },
+        {
+          "@language": "ht",
+          "@value": "Rayisman"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:authorityScope",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "What ritual functions this title authorizes."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:ReligiousOffice"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "authority scope"
+      },
+      "rdfs:range": {
+        "@id": "rdf:langString"
+      }
+    },
+    {
+      "@id": "https://ontology.irokosociety.org/iroko-ile",
+      "@type": "owl:Ontology",
+      "dcterms:created": {
+        "@type": "xsd:date",
+        "@value": "2026-02-21"
+      },
+      "dcterms:creator": "Iroko Historical Society",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Domain module. Vocabulary for documenting Afro-Atlantic religious houses, lineage structures, initiation genealogy, authority transmission, and schism events. Extends schema:Organization and FOAF with tradition-specific governance and lineage modeling. Covers ilé, terreiro, hounfò, cabildo, and analogous institutions. Use with iroko-authority to model the authority titles and governance structures held by specific individuals; iroko-epistemic to constrain disclosure of initiation details and membership records."
+      },
+      "dcterms:isPartOf": {
+        "@id": "https://ontology.irokosociety.org/iroko-framework/"
+      },
+      "dcterms:license": {
+        "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "dcterms:modified": {
+        "@type": "xsd:date",
+        "@value": "2026-02-25"
+      },
+      "dcterms:references": [
+        {
+          "@id": "https://ontology.irokosociety.org/iroko-authority"
+        },
+        {
+          "@id": "https://ontology.irokosociety.org/iroko-epistemic"
+        }
+      ],
+      "dcterms:title": {
+        "@language": "en",
+        "@value": "Iroko Framework: Ilé Module (Lineage, Houses, and Religious Office)"
+      },
+      "owl:imports": {
+        "@id": "https://ontology.irokosociety.org/iroko-core"
+      },
+      "owl:versionIRI": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile/1.3.0"
+      },
+      "owl:versionInfo": "1.3.0",
+      "rdfs:seeAlso": {
+        "@id": "https://ontology.irokosociety.org/iroko-framework/"
+      }
+    },
+    {
+      "@id": "iroko:Cabildo",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A Cuban colonial-era mutual aid and religious society organized by African ethnic identity. Cabildos were the institutional vessels for Lucumí, Arará, Kongo, and other traditions in Cuba. Distinct from contemporary houses in legal form and historical structure. May have successor houses linked via iroko:successorHouse."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Cabildo"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:House"
+      }
+    },
+    {
+      "@id": "iroko:itaPerformed",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "True if a life reading (itá) was conducted as part of this initiation."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:InitiationEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "itá performed"
+      },
+      "rdfs:range": {
+        "@id": "xsd:boolean"
+      }
+    },
+    {
+      "@id": "iroko:schismDate",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:domain": {
+        "@id": "iroko:SchismEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "schism date"
+      },
+      "rdfs:range": {
+        "@id": "xsd:date"
+      }
+    },
+    {
+      "@id": "iroko:conferralDate",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:domain": {
+        "@id": "iroko:ReligiousOffice"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "conferral date"
+      },
+      "rdfs:range": {
+        "@id": "xsd:date"
+      }
+    },
+    {
+      "@id": "iroko:title-tata-nkisi",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Male initiated priest in Palo Monte with authority over an nganga."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Tata Nkisi"
+        },
+        {
+          "@language": "es",
+          "@value": "Tata Nkisi"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:houseType-palero-house",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "House organized around Palo Monte/Mayombe practice and nganga custody."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HouseTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Palo House"
+        },
+        {
+          "@language": "es",
+          "@value": "Casa de Palo"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:governance-age-grade",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Authority structured by seniority within initiation grade rather than individual title."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:GovernanceModelScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Age-Grade"
+      }
+    },
+    {
+      "@id": "iroko:foundingHouse",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The house from which this lineage (rama/branch) originates."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Lineage"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "founding house"
+      },
+      "rdfs:range": {
+        "@id": "iroko:House"
+      }
+    },
+    {
+      "@id": "iroko:title-ekpe-member",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Initiated member of the Ekpe leopard society (Cross River / Calabari tradition)."
       },
       "skos:inScheme": {
         "@id": "iroko:AuthorityTitleScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Olofista"
+        "@value": "Ekpe Member"
       }
     },
     {
-      "@id": "iroko:initiation-mano-orula",
+      "@id": "iroko:governance-democratic",
       "@type": "skos:Concept",
-      "skos:altLabel": {
-        "@language": "en",
-        "@value": "Awofakan / Ikofa"
-      },
       "skos:definition": {
         "@language": "en",
-        "@value": "Reception of Orula's hand. First level of Ifá initiation, open to non-Babaláwo."
+        "@value": "Decisions made by member consensus or elected leadership."
       },
       "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
+        "@id": "iroko:GovernanceModelScheme"
       },
       "skos:prefLabel": {
-        "@language": "es",
-        "@value": "Mano de Orula"
+        "@language": "en",
+        "@value": "Democratic / Consensus"
       }
     },
     {
-      "@id": "iroko:initiation-ifa",
+      "@id": "iroko:title-yaya-nkisi",
       "@type": "skos:Concept",
-      "skos:altLabel": {
-        "@language": "en",
-        "@value": "Itefa"
-      },
       "skos:definition": {
         "@language": "en",
-        "@value": "Full initiation into the Ifá corpus, conferring the title of Babaláwo."
+        "@value": "Female initiated priest in Palo Monte with authority over an nganga."
       },
       "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
+        "@id": "iroko:AuthorityTitleScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Ifá Initiation"
+        "@value": "Yaya Nkisi"
+      }
+    },
+    {
+      "@id": "iroko:houseType-study-group",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "An informal group organized for learning, not yet constituted as a full house."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HouseTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Study / Learning Group"
       }
     },
     {
@@ -1278,262 +949,40 @@
       }
     },
     {
-      "@id": "iroko:conferralDate",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:domain": {
-        "@id": "iroko:ReligiousOffice"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "conferral date"
-      },
-      "rdfs:range": {
-        "@id": "xsd:date"
-      }
-    },
-    {
-      "@id": "iroko:governance-age-grade",
+      "@id": "iroko:initiation-olofin",
       "@type": "skos:Concept",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
+      },
       "skos:definition": {
         "@language": "en",
-        "@value": "Authority structured by seniority within initiation grade rather than individual title."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:GovernanceModelScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Age-Grade"
-      }
-    },
-    {
-      "@id": "iroko:initiation-other",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Other"
-      }
-    },
-    {
-      "@id": "iroko:holdsOffice",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "owl:inverseOf": {
-        "@id": "iroko:authorityHolder"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A religious office currently or historically held by this person. Inverse of iroko:authorityHolder. Multiple offices may be held simultaneously or sequentially; each is a separate ReligiousOffice instance with its own iroko:conferralDate. This property does not distinguish current from historical — that distinction is carried by the office record. Access: community-only — office holding within a house is internal governance information not appropriate for public disclosure."
-      },
-      "rdfs:domain": {
-        "@id": "http://xmlns.com/foaf/0.1/Person"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "holds office"
-      },
-      "rdfs:range": {
-        "@id": "iroko:ReligiousOffice"
-      }
-    },
-    {
-      "@id": "iroko:grantedBy",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The authority figure who conferred this title. Range: iroko:ReligiousOffice."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:ReligiousOffice"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "granted by"
-      },
-      "rdfs:range": {
-        "@id": "iroko:ReligiousOffice"
-      },
-      "rdfs:subPropertyOf": {
-        "@id": "http://www.w3.org/ns/prov#wasAttributedTo"
-      }
-    },
-    {
-      "@id": "iroko:initiation-kariosha",
-      "@type": "skos:Concept",
-      "skos:altLabel": [
-        {
-          "@language": "en",
-          "@value": "Making Ocha"
-        },
-        {
-          "@language": "es",
-          "@value": "Asiento"
-        }
-      ],
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Full head initiation in Lucumí/Candomblé Ketu. An orisha is seated on the initiate's head."
+        "@value": "Reception of the Olofin mysteries. Among the highest grades in Lucumí practice."
       },
       "skos:inScheme": {
         "@id": "iroko:InitiationTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Kariosha"
+        "@value": "Olofin Initiation"
       }
     },
     {
-      "@id": "iroko:authorityTradition",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:domain": {
-        "@id": "iroko:ReligiousOffice"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "authority tradition"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:founder",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The founding practitioner of the house. Range: foaf:Person."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:House"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "founder"
-      },
-      "rdfs:range": {
-        "@id": "http://xmlns.com/foaf/0.1/Person"
-      },
-      "rdfs:subPropertyOf": {
-        "@id": "https://schema.org/founder"
-      }
-    },
-    {
-      "@id": "iroko:initiation-necklaces",
+      "@id": "iroko:initiation-mano-orula",
       "@type": "skos:Concept",
-      "skos:altLabel": [
-        {
-          "@language": "en",
-          "@value": "Elekes"
-        },
-        {
-          "@language": "es",
-          "@value": "Collares"
-        }
-      ],
+      "skos:altLabel": {
+        "@language": "en",
+        "@value": "Awofakan / Ikofa"
+      },
       "skos:definition": {
         "@language": "en",
-        "@value": "Reception of the five sacred beaded necklaces. Often the first formal initiation in Lucumí."
+        "@value": "Reception of Orula's hand. First level of Ifá initiation, open to non-Babaláwo."
       },
       "skos:inScheme": {
         "@id": "iroko:InitiationTypeScheme"
       },
       "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Necklaces"
-      }
-    },
-    {
-      "@id": "iroko:traditionPracticed",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Tradition(s) practiced in this house. Range: iroko:TraditionScheme in core."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:House"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "tradition practiced"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:House",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A religious house, temple, or community organized around a lineage and founding elder. Encompasses ilé (Lucumí/Candomblé), terreiro (Candomblé/Umbanda), hounfò (Vodou), ile orisha, and analogous institutions. Subclass of schema:Organization for interoperability with external directories."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "House"
-      },
-      "rdfs:subClassOf": [
-        {
-          "@id": "https://schema.org/Organization"
-        },
-        {
-          "@id": "iroko:SacredEntity"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:initiation-kanzo",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Haitian Vodou initiation ceremony. Levels include Sur Pwen, Hounsi Kanzo, Si Pwen, and Asogwe."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Kanzo"
+        "@language": "es",
+        "@value": "Mano de Orula"
       }
     },
     {
@@ -1561,111 +1010,18 @@
       }
     },
     {
-      "@id": "iroko:schismParentHouse",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:domain": {
-        "@id": "iroko:SchismEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "schism parent house"
-      },
-      "rdfs:range": {
-        "@id": "iroko:House"
-      }
-    },
-    {
-      "@id": "iroko:initiation-couche",
+      "@id": "iroko:transmission-combined",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "The lying-in period component of Vodou kanzo initiation."
+        "@value": "Transmission involves both embodied/oral and written components."
       },
       "skos:inScheme": {
-        "@id": "iroko:InitiationTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Couche"
-        },
-        {
-          "@language": "ht",
-          "@value": "Kouche"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:entityCrowned",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "For head initiations: the orisha/entity seated on the initiate's head. Range: nkisi:SpiritualEntity."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:InitiationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "entity crowned"
-      },
-      "rdfs:range": {
-        "@id": "iroko:SacredEntity"
-      }
-    },
-    {
-      "@id": "iroko:multiTradition",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "True if the house actively practices more than one distinct tradition."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:House"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "multi-tradition"
-      },
-      "rdfs:range": {
-        "@id": "xsd:boolean"
-      }
-    },
-    {
-      "@id": "iroko:title-osugbo",
-      "@type": "skos:Concept",
-      "skos:altLabel": {
-        "@language": "yo",
-        "@value": "Ogboni"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Member of the Osugbo/Ogboni earth society, holding judicial and spiritual authority."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
+        "@id": "iroko:TransmissionTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Osugbo Member"
+        "@value": "Combined"
       }
     },
     {
@@ -1696,97 +1052,48 @@
       }
     },
     {
-      "@id": "iroko:lineageTradition",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Lineage"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "lineage tradition"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:initiationWitness",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-no-access"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Witnesses present at the initiation. Range: foaf:Person. Sensitive; access no-access by default."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:InitiationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "initiation witness"
-      },
-      "rdfs:range": {
-        "@id": "http://xmlns.com/foaf/0.1/Person"
-      }
-    },
-    {
-      "@id": "iroko:governance-single-elder",
+      "@id": "iroko:transmission-embodied",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "One recognized head (Iyalosha, Babalosha, Mambo, etc.) with primary authority."
+        "@value": "Knowledge transmitted through physical ceremony, practice, and direct experiential transmission. Cannot be fully conveyed through text."
       },
       "skos:inScheme": {
-        "@id": "iroko:GovernanceModelScheme"
+        "@id": "iroko:TransmissionTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Single Elder Authority"
+        "@value": "Embodied"
       }
     },
     {
-      "@id": "iroko:schismParty",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-initiated-only"
+      "@id": "iroko:initiation-warriors",
+      "@type": "skos:Concept",
+      "skos:altLabel": {
+        "@language": "es",
+        "@value": "Los Guerreros"
       },
-      "rdfs:comment": {
+      "skos:definition": {
         "@language": "en",
-        "@value": "Persons involved in the schism. Range: foaf:Person. Sensitive."
+        "@value": "Reception of the warrior orishas: Elegua, Ogun, Ochosi, and Osun."
       },
-      "rdfs:domain": {
-        "@id": "iroko:SchismEvent"
+      "skos:inScheme": {
+        "@id": "iroko:InitiationTypeScheme"
       },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
+      "skos:prefLabel": {
         "@language": "en",
-        "@value": "schism party"
-      },
-      "rdfs:range": {
-        "@id": "http://xmlns.com/foaf/0.1/Person"
+        "@value": "Warriors"
       }
     },
     {
-      "@id": "iroko:hasLineage",
+      "@id": "iroko:lineageParent",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Links a house to a formal Lineage record documenting its rama characteristics."
+        "@value": "The house from which this house descends through initiation. Equivalent to godparent-house in common practice."
       },
       "rdfs:domain": {
         "@id": "iroko:House"
@@ -1796,18 +1103,21 @@
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "has lineage"
+        "@value": "lineage parent"
       },
       "rdfs:range": {
-        "@id": "iroko:Lineage"
+        "@id": "iroko:House"
+      },
+      "rdfs:subPropertyOf": {
+        "@id": "http://www.w3.org/ns/prov#wasDerivedFrom"
       }
     },
     {
-      "@id": "iroko:houseType-cabildo",
+      "@id": "iroko:houseType-hounfo",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Cuban colonial mutual aid and religious society organized by African ethnic identity. Use iroko:Cabildo subclass for records of this type."
+        "@value": "Haitian Vodou temple and its associated community."
       },
       "skos:inScheme": {
         "@id": "iroko:HouseTypeScheme"
@@ -1815,191 +1125,11 @@
       "skos:prefLabel": [
         {
           "@language": "en",
-          "@value": "Cabildo"
-        },
-        {
-          "@language": "es",
-          "@value": "Cabildo"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:title-pai-de-santo",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Male head of a Brazilian terreiro."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Pai de Santo"
-        },
-        {
-          "@language": "pt",
-          "@value": "Pai de Santo"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:authorityHouse",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The house within which this authority is recognized."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:ReligiousOffice"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "authority house"
-      },
-      "rdfs:range": {
-        "@id": "iroko:House"
-      }
-    },
-    {
-      "@id": "iroko:foundingHouse",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The house from which this lineage (rama/branch) originates."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Lineage"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "founding house"
-      },
-      "rdfs:range": {
-        "@id": "iroko:House"
-      }
-    },
-    {
-      "@id": "iroko:houseType",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Institutional form of the house. Range: iroko:HouseTypeScheme."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:House"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "house type"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:houseType-sosyete",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Haitian Vodou society, often with named lineage and territorial identity."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:HouseTypeScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Sosyete"
+          "@value": "Hounfò"
         },
         {
           "@language": "fr",
-          "@value": "Sosyete"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:SchismEvent",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A documented lineage split creating a new house from an existing one. Records the parent house, child house, date, cause, and parties involved. Often sensitive; access level is typically community-restricted or initiated-only."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Schism Event"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:SacredEntity"
-      }
-    },
-    {
-      "@id": "iroko:transmissionMethod",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "How the authority or knowledge was transmitted. Range: iroko:TransmissionTypeScheme."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:InitiationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "transmission method"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:title-babalawo",
-      "@type": "skos:Concept",
-      "iroko:tradition": {
-        "@id": "iroko:tradition-lucumi"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Initiated Ifá priest. Authorized to perform Ifá divination and related ceremonies."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Babaláwo"
-        },
-        {
-          "@language": "yo",
-          "@value": "Babaláwo"
+          "@value": "Hounfò"
         }
       ]
     },
@@ -2072,25 +1202,28 @@
       ]
     },
     {
-      "@id": "iroko:title-mambo",
-      "@type": "skos:Concept",
-      "skos:definition": {
+      "@id": "iroko:affiliatedHouse",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
         "@language": "en",
-        "@value": "Female Haitian Vodou priest."
+        "@value": "A house with recognized but non-hierarchical affiliation: alliance, shared lineage recognition, or ongoing ceremonial cooperation."
       },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
+      "rdfs:domain": {
+        "@id": "iroko:House"
       },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Mambo"
-        },
-        {
-          "@language": "ht",
-          "@value": "Manbo"
-        }
-      ]
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "affiliated house"
+      },
+      "rdfs:range": {
+        "@id": "iroko:House"
+      }
     },
     {
       "@id": "iroko:membershipEstimate",
@@ -2120,77 +1253,14 @@
       }
     },
     {
-      "@id": "iroko:initiationType",
+      "@id": "iroko:authorityHouse",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Type of initiation ceremony. Range: iroko:InitiationTypeScheme."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:InitiationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "initiation type"
-      },
-      "rdfs:range": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:title-houngan",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Male Haitian Vodou priest."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": [
-        {
-          "@language": "en",
-          "@value": "Houngan"
-        },
-        {
-          "@language": "ht",
-          "@value": "Oungan"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:Lineage",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A rama, branch, or transmission line descending from a founding house or practitioner. Represents what makes a specific lineage distinct from others within the same tradition: liturgical variations, oriki, priestly protocols, or founding relationships."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-ile"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Lineage"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:SacredEntity"
-      }
-    },
-    {
-      "@id": "iroko:authorityScope",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "What ritual functions this title authorizes."
+        "@value": "The house within which this authority is recognized."
       },
       "rdfs:domain": {
         "@id": "iroko:ReligiousOffice"
@@ -2200,36 +1270,267 @@
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "authority scope"
+        "@value": "authority house"
       },
       "rdfs:range": {
-        "@id": "rdf:langString"
+        "@id": "iroko:House"
       }
     },
     {
-      "@id": "iroko:governance-gender-divided",
+      "@id": "iroko:authorityTitle",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The formal title held. Range: iroko:AuthorityTitleScheme."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:ReligiousOffice"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "authority title"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:SchismEvent",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A documented lineage split creating a new house from an existing one. Records the parent house, child house, date, cause, and parties involved. Often sensitive; access level is typically community-restricted or initiated-only."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Schism Event"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:SacredEntity"
+      }
+    },
+    {
+      "@id": "iroko:GovernanceModelScheme",
+      "@type": "skos:ConceptScheme",
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Governance Models"
+      },
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:governance-age-grade"
+        },
+        {
+          "@id": "iroko:governance-democratic"
+        },
+        {
+          "@id": "iroko:governance-elder-council"
+        },
+        {
+          "@id": "iroko:governance-gender-divided"
+        },
+        {
+          "@id": "iroko:governance-hereditary"
+        },
+        {
+          "@id": "iroko:governance-lineage-federation"
+        },
+        {
+          "@id": "iroko:governance-other"
+        },
+        {
+          "@id": "iroko:governance-single-elder"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:authorityTradition",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:domain": {
+        "@id": "iroko:ReligiousOffice"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "authority tradition"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:transmissionMethod",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "How the authority or knowledge was transmitted. Range: iroko:TransmissionTypeScheme."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:InitiationEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "transmission method"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:initiationWitness",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-no-access"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Witnesses present at the initiation. Range: foaf:Person. Sensitive; access no-access by default."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:InitiationEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "initiation witness"
+      },
+      "rdfs:range": {
+        "@id": "http://xmlns.com/foaf/0.1/Person"
+      }
+    },
+    {
+      "@id": "iroko:houseType-egbe",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Male and female authorities govern separate domains within the same institution."
+        "@value": "Association or society organized around a specific orisha or shared ritual purpose."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HouseTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Egbé"
+        },
+        {
+          "@language": "yo",
+          "@value": "Egbé"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:initiation-egbe",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Initiation into an Egbé society or association."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InitiationTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Egbé Initiation"
+        },
+        {
+          "@language": "es",
+          "@value": "Inisiación de Egbé"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:hasLineage",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links a house to a formal Lineage record documenting its rama characteristics."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:House"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "has lineage"
+      },
+      "rdfs:range": {
+        "@id": "iroko:Lineage"
+      }
+    },
+    {
+      "@id": "iroko:title-mae-de-santo",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Female head of a Brazilian terreiro."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Mãe de Santo"
+        },
+        {
+          "@language": "pt",
+          "@value": "Mãe de Santo"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:houseType-other",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:HouseTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Other"
+      }
+    },
+    {
+      "@id": "iroko:governance-single-elder",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "One recognized head (Iyalosha, Babalosha, Mambo, etc.) with primary authority."
       },
       "skos:inScheme": {
         "@id": "iroko:GovernanceModelScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Gender-Divided Authority"
-      }
-    },
-    {
-      "@id": "iroko:title-other",
-      "@type": "skos:Concept",
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Other"
+        "@value": "Single Elder Authority"
       }
     },
     {
@@ -2338,29 +1639,90 @@
       ]
     },
     {
-      "@id": "iroko:title-yaya-nkisi",
-      "@type": "skos:Concept",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Female initiated priest in Palo Monte with authority over an nganga."
+      "@id": "iroko:initiator",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
       },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
-      },
-      "skos:prefLabel": {
+      "rdfs:comment": {
         "@language": "en",
-        "@value": "Yaya Nkisi"
+        "@value": "The authority figure who performed the initiation. Range: iroko:ReligiousOffice."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:InitiationEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "initiator"
+      },
+      "rdfs:range": {
+        "@id": "iroko:ReligiousOffice"
+      },
+      "rdfs:subPropertyOf": {
+        "@id": "http://www.w3.org/ns/prov#wasAttributedTo"
       }
     },
     {
-      "@id": "iroko:lineageParent",
+      "@id": "iroko:initiatedPerson",
       "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-no-access"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The person who received initiation. Range: foaf:Person. Highly sensitive — access no-access by default except to the individual and their house."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:InitiationEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "initiated person"
+      },
+      "rdfs:range": {
+        "@id": "http://xmlns.com/foaf/0.1/Person"
+      }
+    },
+    {
+      "@id": "iroko:initiation-kariosha",
+      "@type": "skos:Concept",
+      "skos:altLabel": [
+        {
+          "@language": "en",
+          "@value": "Making Ocha"
+        },
+        {
+          "@language": "es",
+          "@value": "Asiento"
+        }
+      ],
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Full head initiation in Lucumí/Candomblé Ketu. An orisha is seated on the initiate's head."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InitiationTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Kariosha"
+      }
+    },
+    {
+      "@id": "iroko:multiTradition",
+      "@type": "owl:DatatypeProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "The house from which this house descends through initiation. Equivalent to godparent-house in common practice."
+        "@value": "True if the house actively practices more than one distinct tradition."
       },
       "rdfs:domain": {
         "@id": "iroko:House"
@@ -2370,28 +1732,93 @@
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "lineage parent"
+        "@value": "multi-tradition"
       },
       "rdfs:range": {
-        "@id": "iroko:House"
-      },
-      "rdfs:subPropertyOf": {
-        "@id": "http://www.w3.org/ns/prov#wasDerivedFrom"
+        "@id": "xsd:boolean"
       }
     },
     {
-      "@id": "iroko:title-ekpe-member",
+      "@id": "iroko:authorityHolder",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The person holding this title. Range: foaf:Person."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:ReligiousOffice"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "authority holder"
+      },
+      "rdfs:range": {
+        "@id": "http://xmlns.com/foaf/0.1/Person"
+      }
+    },
+    {
+      "@id": "iroko:lineageTradition",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Lineage"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "lineage tradition"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:schismCause",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Documented reason for the lineage split. Often contested; use iroko:contestedNotes alongside."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:SchismEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "schism cause"
+      },
+      "rdfs:range": {
+        "@id": "rdf:langString"
+      }
+    },
+    {
+      "@id": "iroko:transmission-written",
       "@type": "skos:Concept",
       "skos:definition": {
         "@language": "en",
-        "@value": "Initiated member of the Ekpe leopard society (Cross River / Calabari tradition)."
+        "@value": "Transmitted through notebooks, libreta, manuscripts, or printed texts."
       },
       "skos:inScheme": {
-        "@id": "iroko:AuthorityTitleScheme"
+        "@id": "iroko:TransmissionTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Ekpe Member"
+        "@value": "Written"
       }
     },
     {
@@ -2408,6 +1835,579 @@
         "@language": "en",
         "@value": "Hereditary"
       }
+    },
+    {
+      "@id": "iroko:transmission-oral",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Transmitted through speech, song, proverb, and oral recitation."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:TransmissionTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Oral"
+      }
+    },
+    {
+      "@id": "iroko:title-houngan",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Male Haitian Vodou priest."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Houngan"
+        },
+        {
+          "@language": "ht",
+          "@value": "Oungan"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:initiation-couche",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "The lying-in period component of Vodou kanzo initiation."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InitiationTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Couche"
+        },
+        {
+          "@language": "ht",
+          "@value": "Kouche"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:houseType-ile-ifa",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "House organized primarily around Ifá divination practice and Babaláwo lineage."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HouseTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Ilé Ifá"
+      }
+    },
+    {
+      "@id": "iroko:title-pai-de-santo",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Male head of a Brazilian terreiro."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Pai de Santo"
+        },
+        {
+          "@language": "pt",
+          "@value": "Pai de Santo"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:initiation-necklaces",
+      "@type": "skos:Concept",
+      "skos:altLabel": [
+        {
+          "@language": "en",
+          "@value": "Elekes"
+        },
+        {
+          "@language": "es",
+          "@value": "Collares"
+        }
+      ],
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Reception of the five sacred beaded necklaces. Often the first formal initiation in Lucumí."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InitiationTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Necklaces"
+      }
+    },
+    {
+      "@id": "iroko:houseType-abakua-potencia",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "An Abakuá lodge (potencia). Abakuá is a Cuban secret society of Calabari/Cross River origin."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HouseTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Abakuá Potencia"
+        },
+        {
+          "@language": "es",
+          "@value": "Potencia Abakuá"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:houseType-espiritismo-centre",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Centre for Kardecist or Afro-influenced Espiritismo practice."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HouseTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Espiritismo Centre"
+        },
+        {
+          "@language": "es",
+          "@value": "Centro de Espiritismo"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:Lineage",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A rama, branch, or transmission line descending from a founding house or practitioner. Represents what makes a specific lineage distinct from others within the same tradition: liturgical variations, oriki, priestly protocols, or founding relationships."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Lineage"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:SacredEntity"
+      }
+    },
+    {
+      "@id": "iroko:title-other",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Other"
+      }
+    },
+    {
+      "@id": "iroko:publicPresence",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "True if the house maintains a publicly known identity (website, social media, public events). False does not imply the house is secret — many houses simply operate privately."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:House"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "public presence"
+      },
+      "rdfs:range": {
+        "@id": "xsd:boolean"
+      }
+    },
+    {
+      "@id": "iroko:title-araba",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Chief Babaláwo in a Yoruba community or lineage. Highest recognized Ifá authority."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Araba"
+        },
+        {
+          "@language": "yo",
+          "@value": "Araba"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:InitiationEvent",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A specific ceremony creating a formal genealogical link between initiator and initiate. The primary mechanism by which lineage is transmitted and authority is conferred. Access to records is typically initiated-only; existence of the event may be public."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Initiation Event"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:SacredEntity"
+      }
+    },
+    {
+      "@id": "iroko:title-olorisha",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Initiated Orisha priest of any gender. General term covering Iyalosha and Babalosha."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Olorisha"
+      }
+    },
+    {
+      "@id": "iroko:governance-elder-council",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Collective of recognized elders sharing governance authority."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:GovernanceModelScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Elder Council"
+      }
+    },
+    {
+      "@id": "iroko:governance-other",
+      "@type": "skos:Concept",
+      "skos:inScheme": {
+        "@id": "iroko:GovernanceModelScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Other"
+      }
+    },
+    {
+      "@id": "iroko:eventHouse",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-initiated-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The house in which the initiation took place."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:InitiationEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "event house"
+      },
+      "rdfs:range": {
+        "@id": "iroko:House"
+      }
+    },
+    {
+      "@id": "iroko:title-omo-orisha",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Initiated child of an orisha. General term for those who have completed kariosha/asiento."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Omo Orisha"
+        },
+        {
+          "@language": "yo",
+          "@value": "Omo Orisha"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:holdsOffice",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "owl:inverseOf": {
+        "@id": "iroko:authorityHolder"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A religious office currently or historically held by this person. Inverse of iroko:authorityHolder. Multiple offices may be held simultaneously or sequentially; each is a separate ReligiousOffice instance with its own iroko:conferralDate. This property does not distinguish current from historical — that distinction is carried by the office record. Access: community-only — office holding within a house is internal governance information not appropriate for public disclosure."
+      },
+      "rdfs:domain": {
+        "@id": "http://xmlns.com/foaf/0.1/Person"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "holds office"
+      },
+      "rdfs:range": {
+        "@id": "iroko:ReligiousOffice"
+      }
+    },
+    {
+      "@id": "iroko:initiation-palo-rayamiento",
+      "@type": "skos:Concept",
+      "skos:altLabel": {
+        "@language": "en",
+        "@value": "Palo Initiation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Palo Monte/Mayombe initiation ceremony marking entry into a munanso."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InitiationTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "es",
+        "@value": "Rayamiento"
+      }
+    },
+    {
+      "@id": "iroko:title-olofista",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Priest initiated into the Olofin mysteries. Among the highest initiatory grades in Lucumí."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Olofista"
+      }
+    },
+    {
+      "@id": "iroko:initiation-kanzo",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Haitian Vodou initiation ceremony. Levels include Sur Pwen, Hounsi Kanzo, Si Pwen, and Asogwe."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:InitiationTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Kanzo"
+      }
+    },
+    {
+      "@id": "iroko:title-olu-iroko",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Consecration to the Iroko tree spirit. Rare; received through specific lineage authorization."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Olu-Iroko"
+        },
+        {
+          "@language": "yo",
+          "@value": "Olu-Iròkò"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:House",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A religious house, temple, or community organized around a lineage and founding elder. Encompasses ilé (Lucumí/Candomblé), terreiro (Candomblé/Umbanda), hounfò (Vodou), ile orisha, and analogous institutions. Subclass of schema:Organization for interoperability with external directories."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "House"
+      },
+      "rdfs:subClassOf": [
+        {
+          "@id": "https://schema.org/Organization"
+        },
+        {
+          "@id": "iroko:SacredEntity"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:traditionPracticed",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Tradition(s) practiced in this house. Range: iroko:TraditionScheme in core."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:House"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "tradition practiced"
+      },
+      "rdfs:range": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:grantedBy",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The authority figure who conferred this title. Range: iroko:ReligiousOffice."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:ReligiousOffice"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "granted by"
+      },
+      "rdfs:range": {
+        "@id": "iroko:ReligiousOffice"
+      },
+      "rdfs:subPropertyOf": {
+        "@id": "http://www.w3.org/ns/prov#wasAttributedTo"
+      }
+    },
+    {
+      "@id": "iroko:title-osugbo",
+      "@type": "skos:Concept",
+      "skos:altLabel": {
+        "@language": "yo",
+        "@value": "Ogboni"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Member of the Osugbo/Ogboni earth society, holding judicial and spiritual authority."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTitleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Osugbo Member"
+      }
+    },
+    {
+      "@id": "iroko:successorHouse",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "For historical cabildos: the contemporary house that descends from or claims continuity with this institution."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Cabildo"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-ile"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "successor house"
+      },
+      "rdfs:range": {
+        "@id": "iroko:House"
+      }
+    },
+    {
+      "@id": "iroko:houseType-ile-orisha",
+      "@type": "skos:Concept",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Lucumí/Candomblé Ketu house organized around Orisha worship."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:HouseTypeScheme"
+      },
+      "skos:prefLabel": [
+        {
+          "@language": "en",
+          "@value": "Ilé Orisha"
+        },
+        {
+          "@language": "es",
+          "@value": "Ilé Orisha"
+        }
+      ]
     }
   ]
 }
