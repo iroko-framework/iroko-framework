@@ -10,45 +10,115 @@
   },
   "@graph": [
     {
-      "@id": "iroko:mode-territorial",
+      "@id": "iroko:medium-unknown",
+      "@type": "iroko:MediumType",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Medium type not recorded or not known."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MediumTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Unknown"
+      }
+    },
+    {
+      "@id": "iroko:mode-auditory",
       "@type": "iroko:ManifestationMode",
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "skos:definition": {
         "@language": "en",
-        "@value": "Manifestation asserted to be bound to or expressed through a place, crossroads, body of water, forest, or territory."
+        "@value": "Manifestation asserted to occur through sound, voice, drumming, or hearing — including traditions where specific rhythms summon or identify a spirit."
       },
       "skos:inScheme": {
         "@id": "iroko:ManifestationModeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Territorial"
+        "@value": "Auditory"
       }
     },
     {
-      "@id": "iroko:hasManifestationMode",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
+      "@id": "iroko:Medium",
+      "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Associates a ManifestationEvent or assertion node with a ManifestationMode concept from iroko:ManifestationModeScheme. Multiple modes may be asserted for a single event."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:ManifestationEvent"
+        "@value": "A medium through which manifestation is asserted to occur — a person, object, place, text, or instrument. A Medium is the vehicle, not the agent; the sacred agent is modeled in iroko-nkisi or iroko-agency. One ManifestationEvent may involve multiple media."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "has manifestation mode"
+        "@value": "Medium"
       },
-      "rdfs:range": {
-        "@id": "iroko:ManifestationMode"
+      "rdfs:subClassOf": {
+        "@id": "iroko:SacredEntity"
+      }
+    },
+    {
+      "@id": "iroko:mode-possession",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation asserted to occur through mounting or possession of a medium person. The agent speaks and acts through the medium during the event."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Possession"
+      },
+      "skos:scopeNote": {
+        "@language": "en",
+        "@value": "Distinguish from embodied: possession involves a medium person who is temporarily occupied; embodied involves a distinct physical presence."
+      }
+    },
+    {
+      "@id": "iroko:mode-dream",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation asserted to occur through dreams, dream visitation, or hypnagogic contact."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Dream"
+      }
+    },
+    {
+      "@id": "iroko:mode-unknown",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation mode not recorded or not known."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Unknown"
       }
     },
     {
@@ -101,6 +171,60 @@
       }
     },
     {
+      "@id": "iroko:mode-symbolic",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation asserted to occur through symbols, signs, graphic marks, or indirect representation. Vèvè, firmas, and anaforuana are common vehicles."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Symbolic"
+      }
+    },
+    {
+      "@id": "iroko:ManifestationMode",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A SKOS concept describing how a sacred agent is asserted to manifest. Modes include embodied, possession, dream, divination, symbolic, territorial, auditory, and unknown. These categories are descriptive and tradition-reported; they record what a community asserts, not what an archive adjudicates. A single ManifestationEvent may reference multiple modes. Modes may vary by temporal regime — use iroko:TemporalVariation to document seasonal or initiatory shifts."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Manifestation Mode"
+      },
+      "rdfs:subClassOf": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:medium-object",
+      "@type": "iroko:MediumType",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A material object serves as the medium — a consecrated vessel, nganga, otán, or ritual artifact."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MediumTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Object"
+      }
+    },
+    {
       "@id": "iroko:medium-place",
       "@type": "iroko:MediumType",
       "rdfs:isDefinedBy": {
@@ -119,39 +243,64 @@
       }
     },
     {
-      "@id": "iroko:MediumTypeScheme",
-      "@type": "skos:ConceptScheme",
-      "dcterms:description": {
+      "@id": "iroko:hasMediumType",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
         "@language": "en",
-        "@value": "Controlled terms for the kind of medium through which manifestation is asserted to occur."
+        "@value": "Associates a Medium with a MediumType concept from iroko:MediumTypeScheme."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Medium"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Medium Types"
+        "@value": "has medium type"
       },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:medium-instrument"
-        },
-        {
-          "@id": "iroko:medium-object"
-        },
-        {
-          "@id": "iroko:medium-person"
-        },
-        {
-          "@id": "iroko:medium-place"
-        },
-        {
-          "@id": "iroko:medium-text"
-        },
-        {
-          "@id": "iroko:medium-unknown"
-        }
-      ]
+      "rdfs:range": {
+        "@id": "iroko:MediumType"
+      }
+    },
+    {
+      "@id": "iroko:medium-instrument",
+      "@type": "iroko:MediumType",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A musical, divinatory, or ritual instrument serves as the medium — a consecrated bàtá drum, divining chain, or bell."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MediumTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Instrument"
+      }
+    },
+    {
+      "@id": "iroko:mode-divination",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation asserted to occur through divination, oracle, or the interpretive reading of divinatory instruments."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Divination"
+      }
     },
     {
       "@id": "iroko:ManifestationModeScheme",
@@ -195,60 +344,6 @@
       ]
     },
     {
-      "@id": "iroko:mode-divination",
-      "@type": "iroko:ManifestationMode",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Manifestation asserted to occur through divination, oracle, or the interpretive reading of divinatory instruments."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Divination"
-      }
-    },
-    {
-      "@id": "iroko:ManifestationMode",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A SKOS concept describing how a sacred agent is asserted to manifest. Modes include embodied, possession, dream, divination, symbolic, territorial, auditory, and unknown. These categories are descriptive and tradition-reported; they record what a community asserts, not what an archive adjudicates. A single ManifestationEvent may reference multiple modes. Modes may vary by temporal regime — use iroko:TemporalVariation to document seasonal or initiatory shifts."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Manifestation Mode"
-      },
-      "rdfs:subClassOf": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:MediumType",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A SKOS concept categorizing the kind of medium involved in a manifestation assertion: person, object, place, text, instrument, or unknown."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Medium Type"
-      },
-      "rdfs:subClassOf": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
       "@id": "iroko:medium-text",
       "@type": "iroko:MediumType",
       "rdfs:isDefinedBy": {
@@ -267,93 +362,45 @@
       }
     },
     {
-      "@id": "iroko:mode-dream",
+      "@id": "iroko:hasManifestationMode",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Associates a ManifestationEvent or assertion node with a ManifestationMode concept from iroko:ManifestationModeScheme. Multiple modes may be asserted for a single event."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:ManifestationEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "has manifestation mode"
+      },
+      "rdfs:range": {
+        "@id": "iroko:ManifestationMode"
+      }
+    },
+    {
+      "@id": "iroko:mode-territorial",
       "@type": "iroko:ManifestationMode",
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "skos:definition": {
         "@language": "en",
-        "@value": "Manifestation asserted to occur through dreams, dream visitation, or hypnagogic contact."
+        "@value": "Manifestation asserted to be bound to or expressed through a place, crossroads, body of water, forest, or territory."
       },
       "skos:inScheme": {
         "@id": "iroko:ManifestationModeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Dream"
-      }
-    },
-    {
-      "@id": "iroko:mode-symbolic",
-      "@type": "iroko:ManifestationMode",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Manifestation asserted to occur through symbols, signs, graphic marks, or indirect representation. Vèvè, firmas, and anaforuana are common vehicles."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Symbolic"
-      }
-    },
-    {
-      "@id": "iroko:medium-unknown",
-      "@type": "iroko:MediumType",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Medium type not recorded or not known."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MediumTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Unknown"
-      }
-    },
-    {
-      "@id": "iroko:mode-auditory",
-      "@type": "iroko:ManifestationMode",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Manifestation asserted to occur through sound, voice, drumming, or hearing — including traditions where specific rhythms summon or identify a spirit."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Auditory"
-      }
-    },
-    {
-      "@id": "iroko:medium-instrument",
-      "@type": "iroko:MediumType",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A musical, divinatory, or ritual instrument serves as the medium — a consecrated bàtá drum, divining chain, or bell."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MediumTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Instrument"
+        "@value": "Territorial"
       }
     },
     {
@@ -375,81 +422,39 @@
       }
     },
     {
-      "@id": "iroko:medium-object",
+      "@id": "iroko:MediumType",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A SKOS concept categorizing the kind of medium involved in a manifestation assertion: person, object, place, text, instrument, or unknown."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Medium Type"
+      },
+      "rdfs:subClassOf": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:medium-person",
       "@type": "iroko:MediumType",
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "skos:definition": {
         "@language": "en",
-        "@value": "A material object serves as the medium — a consecrated vessel, nganga, otán, or ritual artifact."
+        "@value": "A human person serves as the medium, as in possession or mounted manifestation."
       },
       "skos:inScheme": {
         "@id": "iroko:MediumTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Object"
-      }
-    },
-    {
-      "@id": "iroko:mode-unknown",
-      "@type": "iroko:ManifestationMode",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Manifestation mode not recorded or not known."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Unknown"
-      }
-    },
-    {
-      "@id": "iroko:hasMediumType",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Associates a Medium with a MediumType concept from iroko:MediumTypeScheme."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Medium"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "has medium type"
-      },
-      "rdfs:range": {
-        "@id": "iroko:MediumType"
-      }
-    },
-    {
-      "@id": "iroko:Medium",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A medium through which manifestation is asserted to occur — a person, object, place, text, or instrument. A Medium is the vehicle, not the agent; the sacred agent is modeled in iroko-nkisi or iroko-agency. One ManifestationEvent may involve multiple media."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Medium"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:SacredEntity"
+        "@value": "Person"
       }
     },
     {
@@ -477,44 +482,39 @@
       }
     },
     {
-      "@id": "iroko:mode-possession",
-      "@type": "iroko:ManifestationMode",
+      "@id": "iroko:MediumTypeScheme",
+      "@type": "skos:ConceptScheme",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Controlled terms for the kind of medium through which manifestation is asserted to occur."
+      },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
-      "skos:definition": {
+      "rdfs:label": {
         "@language": "en",
-        "@value": "Manifestation asserted to occur through mounting or possession of a medium person. The agent speaks and acts through the medium during the event."
+        "@value": "Medium Types"
       },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Possession"
-      },
-      "skos:scopeNote": {
-        "@language": "en",
-        "@value": "Distinguish from embodied: possession involves a medium person who is temporarily occupied; embodied involves a distinct physical presence."
-      }
-    },
-    {
-      "@id": "iroko:medium-person",
-      "@type": "iroko:MediumType",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A human person serves as the medium, as in possession or mounted manifestation."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MediumTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Person"
-      }
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:medium-instrument"
+        },
+        {
+          "@id": "iroko:medium-object"
+        },
+        {
+          "@id": "iroko:medium-person"
+        },
+        {
+          "@id": "iroko:medium-place"
+        },
+        {
+          "@id": "iroko:medium-text"
+        },
+        {
+          "@id": "iroko:medium-unknown"
+        }
+      ]
     }
   ]
 }
