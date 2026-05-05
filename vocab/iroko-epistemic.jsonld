@@ -25,24 +25,6 @@
       }
     },
     {
-      "@id": "iroko:ConstraintBasis",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A SKOS concept describing the basis for an epistemic constraint: initiation, lineage, community mandate, ritual condition, safety, or unknown."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-epistemic"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Constraint Basis"
-      },
-      "rdfs:subClassOf": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
       "@id": "iroko:SanctionedDisclosure",
       "@type": "owl:Class",
       "rdfs:comment": {
@@ -58,6 +40,134 @@
       },
       "rdfs:subClassOf": {
         "@id": "iroko:EpistemicConstraint"
+      }
+    },
+    {
+      "@id": "iroko:basis-lineage",
+      "@type": "iroko:ConstraintBasis",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Constraint basis asserted as lineage affiliation. Knowledge belongs to a specific transmission line."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ConstraintBasisScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Lineage"
+      }
+    },
+    {
+      "@id": "iroko:basis-unknown",
+      "@type": "iroko:ConstraintBasis",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Constraint basis not known or not recorded."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ConstraintBasisScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Unknown"
+      }
+    },
+    {
+      "@id": "iroko:constraintNote",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Free-text description of the epistemic constraint — what it restricts or permits and why."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:EpistemicConstraint"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-epistemic"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "constraint note"
+      },
+      "rdfs:range": {
+        "@id": "rdf:langString"
+      }
+    },
+    {
+      "@id": "iroko:ConstraintBasisScheme",
+      "@type": "skos:ConceptScheme",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Controlled terms describing the foundation for epistemic constraints on sacred knowledge."
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Constraint Bases"
+      },
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:basis-initiation"
+        },
+        {
+          "@id": "iroko:basis-lineage"
+        },
+        {
+          "@id": "iroko:basis-gender-regime"
+        },
+        {
+          "@id": "iroko:basis-community-mandate"
+        },
+        {
+          "@id": "iroko:basis-ritual-condition"
+        },
+        {
+          "@id": "iroko:basis-safety"
+        },
+        {
+          "@id": "iroko:basis-temporal"
+        },
+        {
+          "@id": "iroko:basis-unknown"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:hasEpistemicConstraint",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Associates a record, assertion, access policy, or any resource with an EpistemicConstraint. The constraint governs what may be known about the resource, not merely who may access it — these are related but distinct."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-epistemic"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "has epistemic constraint"
+      },
+      "rdfs:range": {
+        "@id": "iroko:EpistemicConstraint"
+      }
+    },
+    {
+      "@id": "iroko:basis-community-mandate",
+      "@type": "iroko:ConstraintBasis",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Constraint basis asserted as a community mandate or collective governance decision."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ConstraintBasisScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Community Mandate"
       }
     },
     {
@@ -101,30 +211,6 @@
       }
     },
     {
-      "@id": "iroko:constraintSanctionedBy",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links a SanctionedDisclosure to the iroko:Authority that must sanction the disclosure."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:SanctionedDisclosure"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-epistemic"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "constraint sanctioned by"
-      },
-      "rdfs:range": {
-        "@id": "iroko:RitualAuthority"
-      }
-    },
-    {
       "@id": "iroko:EpistemicConstraint",
       "@type": "owl:Class",
       "rdfs:comment": {
@@ -140,27 +226,21 @@
       }
     },
     {
-      "@id": "iroko:constraintNote",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
+      "@id": "iroko:ConstraintBasis",
+      "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Free-text description of the epistemic constraint — what it restricts or permits and why."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:EpistemicConstraint"
+        "@value": "A SKOS concept describing the basis for an epistemic constraint: initiation, lineage, community mandate, ritual condition, safety, or unknown."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-epistemic"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "constraint note"
+        "@value": "Constraint Basis"
       },
-      "rdfs:range": {
-        "@id": "rdf:langString"
+      "rdfs:subClassOf": {
+        "@id": "skos:Concept"
       }
     },
     {
@@ -180,57 +260,6 @@
       "skos:scopeNote": {
         "@language": "en",
         "@value": "Gender-based constraints vary significantly across lineages and are often the subject of active debate. Record the constraint as asserted; use iroko:contestedStatus and iroko:assertionStatus to represent disputed cases."
-      }
-    },
-    {
-      "@id": "iroko:hasEpistemicConstraint",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Associates a record, assertion, access policy, or any resource with an EpistemicConstraint. The constraint governs what may be known about the resource, not merely who may access it — these are related but distinct."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-epistemic"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "has epistemic constraint"
-      },
-      "rdfs:range": {
-        "@id": "iroko:EpistemicConstraint"
-      }
-    },
-    {
-      "@id": "iroko:basis-ritual-condition",
-      "@type": "iroko:ConstraintBasis",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Constraint basis asserted as a ritual state or condition — mourning period, ritual preparation, post-initiation obligation, etc."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ConstraintBasisScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Ritual Condition"
-      }
-    },
-    {
-      "@id": "iroko:basis-initiation",
-      "@type": "iroko:ConstraintBasis",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Constraint basis asserted as initiation level or initiatory boundary. Knowledge may not cross to the uninitiated."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ConstraintBasisScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Initiation"
       }
     },
     {
@@ -258,66 +287,75 @@
       }
     },
     {
-      "@id": "iroko:DisclosurePermission",
+      "@id": "iroko:DisclosureRestriction",
       "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "An epistemic constraint asserting that disclosure is permitted under specified conditions. The conditions may be temporal, initiatory, lineage-bound, or community-mandated."
+        "@value": "An epistemic constraint asserting that disclosure is restricted, limited, or prohibited under specified conditions."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-epistemic"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Disclosure Permission"
+        "@value": "Disclosure Restriction"
       },
       "rdfs:subClassOf": {
         "@id": "iroko:EpistemicConstraint"
       }
     },
     {
-      "@id": "iroko:basis-lineage",
-      "@type": "iroko:ConstraintBasis",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Constraint basis asserted as lineage affiliation. Knowledge belongs to a specific transmission line."
+      "@id": "iroko:constraintSanctionedBy",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
       },
-      "skos:inScheme": {
-        "@id": "iroko:ConstraintBasisScheme"
-      },
-      "skos:prefLabel": {
+      "rdfs:comment": {
         "@language": "en",
-        "@value": "Lineage"
+        "@value": "Links a SanctionedDisclosure to the iroko:Authority that must sanction the disclosure."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:SanctionedDisclosure"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-epistemic"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "constraint sanctioned by"
+      },
+      "rdfs:range": {
+        "@id": "iroko:RitualAuthority"
       }
     },
     {
-      "@id": "iroko:basis-community-mandate",
+      "@id": "iroko:basis-initiation",
       "@type": "iroko:ConstraintBasis",
       "skos:definition": {
         "@language": "en",
-        "@value": "Constraint basis asserted as a community mandate or collective governance decision."
+        "@value": "Constraint basis asserted as initiation level or initiatory boundary. Knowledge may not cross to the uninitiated."
       },
       "skos:inScheme": {
         "@id": "iroko:ConstraintBasisScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Community Mandate"
+        "@value": "Initiation"
       }
     },
     {
-      "@id": "iroko:basis-unknown",
+      "@id": "iroko:basis-temporal",
       "@type": "iroko:ConstraintBasis",
       "skos:definition": {
         "@language": "en",
-        "@value": "Constraint basis not known or not recorded."
+        "@value": "Constraint basis asserted as time-bound — a festival period, mourning cycle, ritual season, or other temporal regime. Use with iroko:hasTemporalVariation for structured modeling."
       },
       "skos:inScheme": {
         "@id": "iroko:ConstraintBasisScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Unknown"
+        "@value": "Temporal"
       }
     },
     {
@@ -345,75 +383,37 @@
       }
     },
     {
-      "@id": "iroko:DisclosureRestriction",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "An epistemic constraint asserting that disclosure is restricted, limited, or prohibited under specified conditions."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-epistemic"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Disclosure Restriction"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:EpistemicConstraint"
-      }
-    },
-    {
-      "@id": "iroko:basis-temporal",
+      "@id": "iroko:basis-ritual-condition",
       "@type": "iroko:ConstraintBasis",
       "skos:definition": {
         "@language": "en",
-        "@value": "Constraint basis asserted as time-bound — a festival period, mourning cycle, ritual season, or other temporal regime. Use with iroko:hasTemporalVariation for structured modeling."
+        "@value": "Constraint basis asserted as a ritual state or condition — mourning period, ritual preparation, post-initiation obligation, etc."
       },
       "skos:inScheme": {
         "@id": "iroko:ConstraintBasisScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Temporal"
+        "@value": "Ritual Condition"
       }
     },
     {
-      "@id": "iroko:ConstraintBasisScheme",
-      "@type": "skos:ConceptScheme",
-      "dcterms:description": {
+      "@id": "iroko:DisclosurePermission",
+      "@type": "owl:Class",
+      "rdfs:comment": {
         "@language": "en",
-        "@value": "Controlled terms describing the foundation for epistemic constraints on sacred knowledge."
+        "@value": "An epistemic constraint asserting that disclosure is permitted under specified conditions. The conditions may be temporal, initiatory, lineage-bound, or community-mandated."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-epistemic"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Constraint Bases"
+        "@value": "Disclosure Permission"
       },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:basis-initiation"
-        },
-        {
-          "@id": "iroko:basis-lineage"
-        },
-        {
-          "@id": "iroko:basis-gender-regime"
-        },
-        {
-          "@id": "iroko:basis-community-mandate"
-        },
-        {
-          "@id": "iroko:basis-ritual-condition"
-        },
-        {
-          "@id": "iroko:basis-safety"
-        },
-        {
-          "@id": "iroko:basis-temporal"
-        },
-        {
-          "@id": "iroko:basis-unknown"
-        }
-      ]
+      "rdfs:subClassOf": {
+        "@id": "iroko:EpistemicConstraint"
+      }
     }
   ]
 }

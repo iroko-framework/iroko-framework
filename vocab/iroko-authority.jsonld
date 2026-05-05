@@ -10,53 +10,29 @@
   },
   "@graph": [
     {
-      "@id": "iroko:validUntil",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Date until which the authority's governance standing is recognized. Absence of this property does not imply perpetual validity — use iroko:contestedStatus where appropriate."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Authority"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "valid until"
-      },
-      "rdfs:range": {
-        "@id": "xsd:date"
-      }
-    },
-    {
-      "@id": "iroko:basis-consecration",
+      "@id": "iroko:basis-contested",
       "@type": "iroko:AuthorityBasis",
       "skos:definition": {
         "@language": "en",
-        "@value": "Authority derives from a ritual consecration event."
+        "@value": "The basis of the authority is itself disputed across lineages or houses."
       },
       "skos:inScheme": {
         "@id": "iroko:AuthorityBasisScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Consecration"
+        "@value": "Contested Basis"
       }
     },
     {
-      "@id": "iroko:validFrom",
-      "@type": "owl:DatatypeProperty",
+      "@id": "iroko:authorityBasis",
+      "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Date from which the authority's governance standing is recognized or effective."
+        "@value": "What the authority rests on — the epistemic or social foundation for its recognition."
       },
       "rdfs:domain": {
         "@id": "iroko:Authority"
@@ -66,10 +42,49 @@
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "valid from"
+        "@value": "authority basis"
       },
       "rdfs:range": {
-        "@id": "xsd:date"
+        "@id": "iroko:AuthorityBasis"
+      }
+    },
+    {
+      "@id": "iroko:hasJurisdiction",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links an authority to the domain(s) where it is recognized."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Authority"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "has jurisdiction"
+      },
+      "rdfs:range": {
+        "@id": "iroko:Jurisdiction"
+      }
+    },
+    {
+      "@id": "iroko:basis-community-recognition",
+      "@type": "iroko:AuthorityBasis",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Authority derives from informal but sustained community acknowledgment."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityBasisScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Community Recognition"
       }
     },
     {
@@ -105,38 +120,32 @@
       ]
     },
     {
-      "@id": "iroko:jurisdictionType",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
+      "@id": "iroko:AuthorityType",
+      "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Short classifer for the jurisdiction type: 'geographic', 'genealogical', 'institutional', 'diasporic', etc."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Jurisdiction"
+        "@value": "Classifies the structural form of an authority — lineage, house, cabildo, council, individual elder, etc."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-authority"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "jurisdiction type"
+        "@value": "Authority Type"
       },
-      "rdfs:range": {
-        "@id": "xsd:string"
+      "rdfs:subClassOf": {
+        "@id": "skos:Concept"
       }
     },
     {
-      "@id": "iroko:hasJurisdiction",
+      "@id": "iroko:ritualRole",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
         "@id": "iroko:access-public-unrestricted"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Links an authority to the domain(s) where it is recognized."
+        "@value": "The functional governance role this authority occupies."
       },
       "rdfs:domain": {
         "@id": "iroko:Authority"
@@ -146,10 +155,75 @@
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "has jurisdiction"
+        "@value": "ritual role"
       },
       "rdfs:range": {
-        "@id": "iroko:Jurisdiction"
+        "@id": "iroko:RitualRole"
+      }
+    },
+    {
+      "@id": "iroko:authorityNote",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-community-only"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Free-text note on the nature, history, or contested aspects of this authority's standing."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Authority"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "authority note"
+      },
+      "rdfs:range": {
+        "@id": "rdf:langString"
+      }
+    },
+    {
+      "@id": "iroko:role-priest",
+      "@type": "iroko:RitualRole",
+      "skos:inScheme": {
+        "@id": "iroko:RitualRoleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Priest"
+      }
+    },
+    {
+      "@id": "iroko:basis-hereditary",
+      "@type": "iroko:AuthorityBasis",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Authority derives from family lineage independent of formal consecration or appointment."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityBasisScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Hereditary"
+      }
+    },
+    {
+      "@id": "iroko:authorityType-individual-elder",
+      "@type": "iroko:AuthorityType",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Authority vested in a recognized individual elder acting in their own governance capacity."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Individual Elder Authority"
       }
     },
     {
@@ -188,67 +262,78 @@
       ]
     },
     {
-      "@id": "iroko:authorityType-cabildo",
-      "@type": "iroko:AuthorityType",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Authority vested in a cabildo or mutual aid association with ritual governance functions."
+      "@id": "iroko:validUntil",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
       },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Cabildo Authority"
-      }
-    },
-    {
-      "@id": "iroko:authorityType-council",
-      "@type": "iroko:AuthorityType",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Authority vested in a collective governing council of elders or priests."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Council Authority"
-      }
-    },
-    {
-      "@id": "iroko:authorityType-house",
-      "@type": "iroko:AuthorityType",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Authority vested in a religious house (ile, sosyete, cabildo house, etc.)."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "House Authority"
-      }
-    },
-    {
-      "@id": "iroko:RitualRole",
-      "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "The functional role an authority occupies within a ritual governance system — elder, priest, archivist-steward, witness, etc. Distinct from ile:ReligiousOffice (specific held title) — RitualRole is a classification concept."
+        "@value": "Date until which the authority's governance standing is recognized. Absence of this property does not imply perpetual validity — use iroko:contestedStatus where appropriate."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Authority"
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-authority"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Ritual Role"
+        "@value": "valid until"
       },
-      "rdfs:subClassOf": {
-        "@id": "skos:Concept"
+      "rdfs:range": {
+        "@id": "xsd:date"
       }
+    },
+    {
+      "@id": "iroko:RitualRoleScheme",
+      "@type": "skos:ConceptScheme",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Functional roles within ritual governance systems."
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Ritual Roles"
+      },
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:role-archivist-steward"
+        },
+        {
+          "@id": "iroko:role-community-delegate"
+        },
+        {
+          "@id": "iroko:role-diviner"
+        },
+        {
+          "@id": "iroko:role-priest"
+        }
+      ]
+    },
+    {
+      "@id": "iroko:basis-divinatory-selection",
+      "@type": "iroko:AuthorityBasis",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Authority derives from selection through divination (Ifa, oracle, sortition, etc.)."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityBasisScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Divinatory Selection"
+      }
+    },
+    {
+      "@id": "iroko:jurisdiction-matanzas",
+      "@type": "iroko:Jurisdiction",
+      "iroko:jurisdictionLabel": {
+        "@language": "en",
+        "@value": "Matanzas"
+      },
+      "iroko:jurisdictionType": "geographic"
     },
     {
       "@id": "iroko:culturalFrame",
@@ -275,78 +360,18 @@
       }
     },
     {
-      "@id": "iroko:AuthorityType",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Classifies the structural form of an authority — lineage, house, cabildo, council, individual elder, etc."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Authority Type"
-      },
-      "rdfs:subClassOf": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:jurisdiction-salvador-bahia",
-      "@type": "iroko:Jurisdiction",
-      "iroko:jurisdictionLabel": [
-        {
-          "@language": "en",
-          "@value": "Salvador, Bahia"
-        },
-        {
-          "@language": "pt",
-          "@value": "Salvador, Bahia"
-        }
-      ],
-      "iroko:jurisdictionType": "geographic"
-    },
-    {
-      "@id": "iroko:role-archivist-steward",
-      "@type": "iroko:RitualRole",
+      "@id": "iroko:basis-succession",
+      "@type": "iroko:AuthorityBasis",
       "skos:definition": {
         "@language": "en",
-        "@value": "Recognized steward of archival materials within a tradition or house."
+        "@value": "Authority derives from recognized succession in a transmission line."
       },
       "skos:inScheme": {
-        "@id": "iroko:RitualRoleScheme"
+        "@id": "iroko:AuthorityBasisScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Archivist-Steward"
-      }
-    },
-    {
-      "@id": "iroko:jurisdiction-matanzas",
-      "@type": "iroko:Jurisdiction",
-      "iroko:jurisdictionLabel": {
-        "@language": "en",
-        "@value": "Matanzas"
-      },
-      "iroko:jurisdictionType": "geographic"
-    },
-    {
-      "@id": "iroko:AuthorityBasis",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "What the authority rests on: lineage succession, consecration, appointment, community recognition, divinatory selection, or other basis."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Authority Basis"
-      },
-      "rdfs:subClassOf": {
-        "@id": "skos:Concept"
+        "@value": "Lineage Succession"
       }
     },
     {
@@ -365,170 +390,21 @@
       }
     },
     {
-      "@id": "iroko:authorityBasis",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "What the authority rests on — the epistemic or social foundation for its recognition."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Authority"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "authority basis"
-      },
-      "rdfs:range": {
-        "@id": "iroko:AuthorityBasis"
-      }
-    },
-    {
-      "@id": "iroko:basis-contested",
-      "@type": "iroko:AuthorityBasis",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "The basis of the authority is itself disputed across lineages or houses."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityBasisScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Contested Basis"
-      }
-    },
-    {
-      "@id": "iroko:jurisdiction-port-au-prince",
-      "@type": "iroko:Jurisdiction",
-      "iroko:jurisdictionLabel": {
-        "@language": "fr",
-        "@value": "Port-au-Prince"
-      },
-      "iroko:jurisdictionType": "geographic"
-    },
-    {
-      "@id": "iroko:basis-divinatory-selection",
-      "@type": "iroko:AuthorityBasis",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Authority derives from selection through divination (Ifa, oracle, sortition, etc.)."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityBasisScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Divinatory Selection"
-      }
-    },
-    {
-      "@id": "iroko:authorityType",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Classifies an Authority instance by its structural form."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Authority"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "authority type"
-      },
-      "rdfs:range": {
-        "@id": "iroko:AuthorityType"
-      }
-    },
-    {
-      "@id": "iroko:authorityType-individual-elder",
-      "@type": "iroko:AuthorityType",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Authority vested in a recognized individual elder acting in their own governance capacity."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Individual Elder Authority"
-      }
-    },
-    {
-      "@id": "iroko:role-diviner",
-      "@type": "iroko:RitualRole",
-      "skos:inScheme": {
-        "@id": "iroko:RitualRoleScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Diviner"
-      }
-    },
-    {
-      "@id": "iroko:basis-succession",
-      "@type": "iroko:AuthorityBasis",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Authority derives from recognized succession in a transmission line."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityBasisScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Lineage Succession"
-      }
-    },
-    {
-      "@id": "iroko:recognizedBy",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Authority"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "recognized by"
-      },
-      "rdfs:range": {
-        "@id": "iroko:Authority"
-      }
-    },
-    {
-      "@id": "iroko:Jurisdiction",
+      "@id": "iroko:AuthorityBasis",
       "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "A place, house, cabildo, lineage territory, nation, or other bounded domain in which an authority is recognized. May be geographic, genealogical, or institutional."
+        "@value": "What the authority rests on: lineage succession, consecration, appointment, community recognition, divinatory selection, or other basis."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-authority"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Jurisdiction"
+        "@value": "Authority Basis"
+      },
+      "rdfs:subClassOf": {
+        "@id": "skos:Concept"
       }
     },
     {
@@ -577,45 +453,82 @@
       }
     },
     {
-      "@id": "iroko:RitualRoleScheme",
-      "@type": "skos:ConceptScheme",
-      "dcterms:description": {
+      "@id": "iroko:authorityType-lineage",
+      "@type": "iroko:AuthorityType",
+      "skos:definition": {
         "@language": "en",
-        "@value": "Functional roles within ritual governance systems."
+        "@value": "Authority vested in a descent line or transmission chain."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Lineage Authority"
+      }
+    },
+    {
+      "@id": "iroko:validFrom",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Date from which the authority's governance standing is recognized or effective."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Authority"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Ritual Roles"
+        "@value": "valid from"
       },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:role-archivist-steward"
-        },
-        {
-          "@id": "iroko:role-community-delegate"
-        },
-        {
-          "@id": "iroko:role-diviner"
-        },
-        {
-          "@id": "iroko:role-priest"
-        }
-      ]
+      "rdfs:range": {
+        "@id": "xsd:date"
+      }
     },
     {
-      "@id": "iroko:jurisdiction-havana",
-      "@type": "iroko:Jurisdiction",
-      "iroko:jurisdictionLabel": [
-        {
-          "@language": "en",
-          "@value": "Havana"
-        },
-        {
-          "@language": "es",
-          "@value": "La Habana"
-        }
-      ],
-      "iroko:jurisdictionType": "geographic"
+      "@id": "iroko:recognizedBy",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Authority"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "recognized by"
+      },
+      "rdfs:range": {
+        "@id": "iroko:Authority"
+      }
+    },
+    {
+      "@id": "iroko:role-archivist-steward",
+      "@type": "iroko:RitualRole",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Recognized steward of archival materials within a tradition or house."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:RitualRoleScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Archivist-Steward"
+      }
     },
     {
       "@id": "iroko:authorityType-divinatory-office",
@@ -633,70 +546,28 @@
       }
     },
     {
-      "@id": "iroko:ritualRole",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
+      "@id": "iroko:authorityType-cabildo",
+      "@type": "iroko:AuthorityType",
+      "skos:definition": {
         "@language": "en",
-        "@value": "The functional governance role this authority occupies."
+        "@value": "Authority vested in a cabildo or mutual aid association with ritual governance functions."
       },
-      "rdfs:domain": {
-        "@id": "iroko:Authority"
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTypeScheme"
       },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "rdfs:label": {
+      "skos:prefLabel": {
         "@language": "en",
-        "@value": "ritual role"
-      },
-      "rdfs:range": {
-        "@id": "iroko:RitualRole"
+        "@value": "Cabildo Authority"
       }
     },
     {
-      "@id": "iroko:Authority",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A jurisdictional authority capable of authorizing assertion-level claims and governance decisions. May represent a lineage, cabildo, religious house, elder council, or recognized individual in a governance role. Extends the iroko:RitualAuthority stub in Core. For the individual's held credential (title, office), see ile:ReligiousOffice."
+      "@id": "iroko:jurisdiction-port-au-prince",
+      "@type": "iroko:Jurisdiction",
+      "iroko:jurisdictionLabel": {
+        "@language": "fr",
+        "@value": "Port-au-Prince"
       },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Authority"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:RitualAuthority"
-      }
-    },
-    {
-      "@id": "iroko:authorityNote",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Free-text note on the nature, history, or contested aspects of this authority's standing."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Authority"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-authority"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "authority note"
-      },
-      "rdfs:range": {
-        "@id": "rdf:langString"
-      }
+      "iroko:jurisdictionType": "geographic"
     },
     {
       "@id": "iroko:jurisdictionLabel",
@@ -723,60 +594,84 @@
       }
     },
     {
-      "@id": "iroko:jurisdiction-cap-haitien",
-      "@type": "iroko:Jurisdiction",
-      "iroko:jurisdictionLabel": [
-        {
-          "@language": "en",
-          "@value": "Cap-Haitien"
-        },
-        {
-          "@language": "fr",
-          "@value": "Cap-Haïtien"
-        }
-      ],
-      "iroko:jurisdictionType": "geographic"
-    },
-    {
-      "@id": "iroko:role-priest",
+      "@id": "iroko:role-diviner",
       "@type": "iroko:RitualRole",
       "skos:inScheme": {
         "@id": "iroko:RitualRoleScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Priest"
+        "@value": "Diviner"
       }
     },
     {
-      "@id": "iroko:basis-hereditary",
+      "@id": "iroko:jurisdictionType",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Short classifer for the jurisdiction type: 'geographic', 'genealogical', 'institutional', 'diasporic', etc."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Jurisdiction"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "jurisdiction type"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "iroko:jurisdiction-salvador-bahia",
+      "@type": "iroko:Jurisdiction",
+      "iroko:jurisdictionLabel": [
+        {
+          "@language": "en",
+          "@value": "Salvador, Bahia"
+        },
+        {
+          "@language": "pt",
+          "@value": "Salvador, Bahia"
+        }
+      ],
+      "iroko:jurisdictionType": "geographic"
+    },
+    {
+      "@id": "iroko:basis-consecration",
       "@type": "iroko:AuthorityBasis",
       "skos:definition": {
         "@language": "en",
-        "@value": "Authority derives from family lineage independent of formal consecration or appointment."
+        "@value": "Authority derives from a ritual consecration event."
       },
       "skos:inScheme": {
         "@id": "iroko:AuthorityBasisScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Hereditary"
+        "@value": "Consecration"
       }
     },
     {
-      "@id": "iroko:authorityType-lineage",
-      "@type": "iroko:AuthorityType",
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Authority vested in a descent line or transmission chain."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:AuthorityTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Lineage Authority"
-      }
+      "@id": "iroko:jurisdiction-havana",
+      "@type": "iroko:Jurisdiction",
+      "iroko:jurisdictionLabel": [
+        {
+          "@language": "en",
+          "@value": "Havana"
+        },
+        {
+          "@language": "es",
+          "@value": "La Habana"
+        }
+      ],
+      "iroko:jurisdictionType": "geographic"
     },
     {
       "@id": "iroko:basis-appointment",
@@ -794,18 +689,123 @@
       }
     },
     {
-      "@id": "iroko:basis-community-recognition",
-      "@type": "iroko:AuthorityBasis",
+      "@id": "iroko:authorityType-council",
+      "@type": "iroko:AuthorityType",
       "skos:definition": {
         "@language": "en",
-        "@value": "Authority derives from informal but sustained community acknowledgment."
+        "@value": "Authority vested in a collective governing council of elders or priests."
       },
       "skos:inScheme": {
-        "@id": "iroko:AuthorityBasisScheme"
+        "@id": "iroko:AuthorityTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Community Recognition"
+        "@value": "Council Authority"
+      }
+    },
+    {
+      "@id": "iroko:authorityType-house",
+      "@type": "iroko:AuthorityType",
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Authority vested in a religious house (ile, sosyete, cabildo house, etc.)."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:AuthorityTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "House Authority"
+      }
+    },
+    {
+      "@id": "iroko:Jurisdiction",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A place, house, cabildo, lineage territory, nation, or other bounded domain in which an authority is recognized. May be geographic, genealogical, or institutional."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Jurisdiction"
+      }
+    },
+    {
+      "@id": "iroko:jurisdiction-cap-haitien",
+      "@type": "iroko:Jurisdiction",
+      "iroko:jurisdictionLabel": [
+        {
+          "@language": "en",
+          "@value": "Cap-Haitien"
+        },
+        {
+          "@language": "fr",
+          "@value": "Cap-Haïtien"
+        }
+      ],
+      "iroko:jurisdictionType": "geographic"
+    },
+    {
+      "@id": "iroko:authorityType",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Classifies an Authority instance by its structural form."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Authority"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "authority type"
+      },
+      "rdfs:range": {
+        "@id": "iroko:AuthorityType"
+      }
+    },
+    {
+      "@id": "iroko:RitualRole",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The functional role an authority occupies within a ritual governance system — elder, priest, archivist-steward, witness, etc. Distinct from ile:ReligiousOffice (specific held title) — RitualRole is a classification concept."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Ritual Role"
+      },
+      "rdfs:subClassOf": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:Authority",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A jurisdictional authority capable of authorizing assertion-level claims and governance decisions. May represent a lineage, cabildo, religious house, elder council, or recognized individual in a governance role. Extends the iroko:RitualAuthority stub in Core. For the individual's held credential (title, office), see ile:ReligiousOffice."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-authority"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Authority"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:RitualAuthority"
       }
     }
   ]
