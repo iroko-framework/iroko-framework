@@ -556,7 +556,7 @@ iroko:systemType a owl:ObjectProperty ;
 
 iroko:tradition a owl:ObjectProperty ;
     rdfs:label "tradition"@en ;
-    rdfs:comment "The Afro-Atlantic tradition to which this entity belongs. Values from controlled vocabulary: iroko:tradition-lucumi, iroko:tradition-candomble-ketu, iroko:tradition-vodou-rada, etc."@en ;
+    rdfs:comment "The tradition to which this entity belongs. Values from iroko:TraditionScheme. May be a specific named tradition (e.g., iroko:tradition-lucumi, iroko:tradition-candomble-ketu, iroko:tradition-vodou-rada), a cultural-linguistic family (e.g., iroko:tradition-yoruba-derived, iroko:tradition-bantu-derived), or a geographic region (e.g., iroko:region-west-african, iroko:region-nile-valley). Scope is pan-African as of v1.4.0; not limited to Afro-Atlantic traditions."@en ;
     rdfs:domain iroko:SacredEntity ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     rdfs:range skos:Concept ;
@@ -1140,21 +1140,25 @@ iroko:access-no-access a skos:Concept ;
 
 iroko:tradition-akan-derived a skos:Concept ;
     skos:definition "Traditions with primary roots in Akan religious culture."@en ;
+    skos:broader iroko:region-west-african ;
     skos:inScheme iroko:TraditionScheme ;
     skos:prefLabel "Akan-Derived"@en .
 
 iroko:tradition-calabari a skos:Concept ;
     skos:definition "Traditions rooted in Efik, Ejagham, and Cross River peoples."@en ;
+    skos:broader iroko:region-west-african ;
     skos:inScheme iroko:TraditionScheme ;
     skos:prefLabel "Calabari/Cross River"@en .
 
 iroko:tradition-fon-ewe-derived a skos:Concept ;
     skos:definition "Traditions with primary roots in Fon and Ewe religious culture from Dahomey."@en ;
+    skos:broader iroko:region-west-african ;
     skos:inScheme iroko:TraditionScheme ;
     skos:prefLabel "Fon/Ewe-Derived"@en .
 
 iroko:tradition-kemetic a skos:Concept ;
     skos:definition "Traditions reconstructing or reviving Ancient Egyptian (Kemetic) religious practice."@en ;
+    skos:broader iroko:region-north-african ;
     skos:inScheme iroko:TraditionScheme ;
     skos:prefLabel "Kemetic/Revivalist"@en .
 
@@ -1222,9 +1226,11 @@ iroko:tradition-afro-indigenous a skos:Concept ;
     skos:prefLabel "Afro-Indigenous"@en .
 
 iroko:tradition-bantu-derived a skos:Concept ;
-    skos:definition "Traditions with primary roots in Bantu and Kongo religious culture."@en ;
+    skos:definition "Traditions with primary roots in Bantu and Kongo religious culture. Bantu as a linguistic and cultural family spans Central, East, and Southern Africa; this concept primarily covers the Kongo-rooted Central African traditions most prominent in Afro-Atlantic contexts. For traditions specifically rooted in Southern or East African Bantu cultures, use or add appropriate region-specific concepts under iroko:region-central-african, iroko:region-east-african, or iroko:region-southern-african."@en ;
+    skos:broader iroko:region-central-african ;
     skos:inScheme iroko:TraditionScheme ;
-    skos:prefLabel "Bantu-Derived"@en .
+    skos:prefLabel "Bantu-Derived"@en ;
+    skos:scopeNote "Bantu spans multiple geographic regions. This concept is anchored to Central Africa / Kongo-derived Atlantic traditions. See region-east-african and region-southern-african for other Bantu-rooted traditions."@en .
 
 iroko:tradition-haitian-vodou a skos:Concept ;
     skos:altLabel "Vodou Ghede"@en,
@@ -1260,6 +1266,7 @@ iroko:FieldworkEvent a owl:Class ;
 
 iroko:tradition-yoruba-derived a skos:Concept ;
     skos:definition "Traditions with primary roots in Yoruba religious culture."@en ;
+    skos:broader iroko:region-west-african ;
     skos:inScheme iroko:TraditionScheme ;
     skos:prefLabel "Yoruba-Derived"@en .
 
@@ -1312,10 +1319,16 @@ iroko:SacredMedia a owl:Class ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
     rdfs:subClassOf iroko:DocumentaryEvidence .
 
+iroko:Entity a owl:Class ;
+    rdfs:label "Entity"@en ;
+    rdfs:comment "Root class of the Iroko Framework. Represents any resource that can be described, governed, or linked within the framework — whether tradition-specific, archival, documentary, or institutional. iroko:SacredEntity is the primary subclass for tradition-specific sacred knowledge concepts. iroko:ArchivalPerson is the subclass for documented historical persons. Classes defined outside the SacredEntity hierarchy (such as those representing purely archival or infrastructural resources) are direct subclasses of this root."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
 iroko:SacredEntity a owl:Class ;
     rdfs:label "Sacred Entity"@en ;
-    rdfs:comment "Top-level class for any tradition-specific concept within the Iroko Framework. All module-specific classes (Plant, SpiritualEntity, RitualProcess, etc.) are subclasses of this."@en ;
-    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+    rdfs:comment "Class for any tradition-specific concept within the Iroko Framework. All module-specific classes (Plant, SpiritualEntity, RitualProcess, etc.) are subclasses of this. Subclass of iroko:Entity."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:subClassOf iroko:Entity .
 
 iroko:access-community-only a skos:Concept ;
     skos:definition "Accessible to verified community members. Requires authentication."@en ;
@@ -1325,19 +1338,20 @@ iroko:access-community-only a skos:Concept ;
 
 iroko:TraditionScheme a skos:ConceptScheme ;
     rdfs:label "Tradition Classification"@en ;
-    dcterms:description "Controlled vocabulary of Afro-Atlantic tradition classifications."@en ;
-    skos:hasTopConcept iroko:tradition-afro-indigenous,
-        iroko:tradition-akan-derived,
-        iroko:tradition-bantu-derived,
-        iroko:tradition-calabari,
-        iroko:tradition-fon-ewe-derived,
+    dcterms:description "Controlled vocabulary of tradition classifications spanning continental African regional traditions and Afro-Atlantic derived traditions. Three tiers: (1) geographic region concepts (iroko:region-*) as the broadest level for continental African traditions; (2) cultural-linguistic family concepts (iroko:tradition-*-derived, iroko:tradition-calabari, iroko:tradition-kemetic) as mid-level groupings; (3) specific named traditions as leaves. Afro-Atlantic creole and syncretic traditions (iroko:tradition-haitian-vodou, iroko:tradition-syncretic, iroko:tradition-afro-indigenous, iroko:tradition-pan-african, iroko:tradition-new-orleans-voodoo, iroko:tradition-obeah) are top-level concepts not subordinated to the geographic hierarchy, because their origins are plural or their character is specifically New World or political. Expanded to pan-African scope in v1.4.0."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    skos:hasTopConcept iroko:region-west-african,
+        iroko:region-central-african,
+        iroko:region-east-african,
+        iroko:region-southern-african,
+        iroko:region-north-african,
+        iroko:region-nile-valley,
+        iroko:tradition-afro-indigenous,
         iroko:tradition-haitian-vodou,
-        iroko:tradition-kemetic,
         iroko:tradition-new-orleans-voodoo,
         iroko:tradition-obeah,
         iroko:tradition-pan-african,
-        iroko:tradition-syncretic,
-        iroko:tradition-yoruba-derived .
+        iroko:tradition-syncretic .
 
 iroko:access-public-unrestricted a skos:Concept ;
     skos:definition "Freely accessible to anyone. No authentication required."@en ;
@@ -1345,17 +1359,139 @@ iroko:access-public-unrestricted a skos:Concept ;
     skos:notation 1 ;
     skos:prefLabel "Public - Unrestricted"@en .
 
+# ── v1.4.0: Geographic tradition region hierarchy ─────────────────────────────
+
+iroko:region-west-african a skos:Concept ;
+    skos:prefLabel "West African traditions"@en ;
+    skos:definition "Traditions with primary roots in the peoples and cultures of the West African coastal and Sahel zones, spanning the area from Senegambia through the Gulf of Guinea. Includes but is not limited to Yoruba, Akan, Ewe-Fon/Gbe, Igbo, Hausa-Fulani, Mande, and Cross River/Efik communities. The geographic region from which the largest share of Afro-Atlantic religious traditions originate."@en ;
+    skos:inScheme iroko:TraditionScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:region-central-african a skos:Concept ;
+    skos:prefLabel "Central African traditions"@en ;
+    skos:definition "Traditions with primary roots in the Bantu and Equatorial communities of Central Africa, including the Kongo kingdom and its successor traditions, Luba, Mbundu, Chokwe, and related cultures of the Congo River basin and its watersheds."@en ;
+    skos:inScheme iroko:TraditionScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:region-east-african a skos:Concept ;
+    skos:prefLabel "East African traditions"@en ;
+    skos:definition "Traditions with primary roots in the Swahili coast, Great Lakes region, and Horn of Africa, including Swahili-speaking coastal communities, Cushitic-speaking peoples (Somali, Oromo, Afar), Great Lakes Bantu communities (Ganda, Nyoro, Haya), and the diverse cultures of the East African interior."@en ;
+    skos:inScheme iroko:TraditionScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:region-southern-african a skos:Concept ;
+    skos:prefLabel "Southern African traditions"@en ;
+    skos:definition "Traditions with primary roots in the southern African plateau and coastal zones, including Nguni-speaking peoples (Zulu, Xhosa, Swati, Ndebele), Sotho-Tswana communities, Venda, Shona, San/Khoisan hunter-gatherer traditions, and the diverse cultures of southern Africa."@en ;
+    skos:inScheme iroko:TraditionScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:region-north-african a skos:Concept ;
+    skos:prefLabel "North African traditions"@en ;
+    skos:definition "Traditions with primary roots in the Maghreb and Mediterranean African zones, including Amazigh/Berber communities, North African Arab traditions, and Coptic Christian communities of Egypt. Also covers ancient Egyptian religious traditions (Kemetic) and their modern revivals."@en ;
+    skos:inScheme iroko:TraditionScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:region-nile-valley a skos:Concept ;
+    skos:prefLabel "Nile Valley and Northeast African traditions"@en ;
+    skos:definition "Traditions with primary roots in the Middle Nile Valley, Upper Nile, Ethiopian highlands, and Eritrean plateau. Covers Christian Nubian civilization (Nobadia, Makuria, Alodia), Sudanic traditions, Ethiopian Orthodox and indigenous Ethiopian communities, and Ge'ez-language manuscript cultures. The geographic scope of materials in the Database of Medieval Nubian Texts (DBMNT, University of Warsaw) and the Hill Museum and Manuscript Library Northeast African collections."@en ;
+    skos:inScheme iroko:TraditionScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+# ── v1.4.0 additions ──────────────────────────────────────────────────────────
+
+iroko:ArchivalPerson a owl:Class ;
+    rdfs:label "Archival Person"@en ;
+    rdfs:comment "A person documented in archival records within the framework. Distinct from foaf:Person and prov:Agent in being specifically a person-as-archived — defined by their documentary trace rather than by personal attributes. Intended for persons appearing in historical records, colonial documents, notarial instruments, plantation registers, ecclesiastical records, and similar materials across any geographic or temporal scope. A single iroko:ArchivalPerson instance may carry multiple documentary references pointing to the same individual across different archival sources. Subclass of iroko:Entity; not a subclass of iroko:SacredEntity, since archival persons are not necessarily tradition-specific sacred knowledge subjects."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:subClassOf iroko:Entity ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:publicTitleType a owl:AnnotationProperty ;
+    rdfs:label "public title type"@en ;
+    rdfs:comment "Indicates the nature of dc:title when the title does not carry the entity's own name or the name by which the described person or community identifies themselves. A colonial notarial record may carry only an archival call number; a plantation register may assign an imposed name; a museum catalog may apply an institutional label coined decades after the object's creation. This property signals that dc:title is a surrogate identifier and characterizes the source of that surrogate. Planned in v1.3.0; implemented in v1.4.0. Values from iroko:PublicTitleTypeScheme."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:PublicTitleTypeScheme a skos:ConceptScheme ;
+    rdfs:label "Public Title Type"@en ;
+    dcterms:description "Classification of dc:title values indicating whether a title represents the entity's own name or a surrogate assigned by custodians, administrators, or institutions."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    skos:hasTopConcept iroko:titleType-archival-callnumber,
+        iroko:titleType-colonial-designation,
+        iroko:titleType-community-name,
+        iroko:titleType-institutional-label,
+        iroko:titleType-unknown .
+
+iroko:titleType-archival-callnumber a skos:Concept ;
+    skos:prefLabel "Archival call number"@en ;
+    skos:definition "The dc:title is an archival identifier or call number assigned by a repository for cataloging purposes. Not a name recognized by the described person or community."@en ;
+    skos:inScheme iroko:PublicTitleTypeScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:titleType-colonial-designation a skos:Concept ;
+    skos:prefLabel "Colonial designation"@en ;
+    skos:definition "The dc:title is a name or label assigned by colonial administrators, slaveholders, mission authorities, or overseers. Not the person or community's own name. This value should trigger elevated scrutiny of access governance and provenance documentation."@en ;
+    skos:inScheme iroko:PublicTitleTypeScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:titleType-community-name a skos:Concept ;
+    skos:prefLabel "Community name"@en ;
+    skos:definition "The dc:title is a name recognized and used by the described person or community. This is the authentic designation, not a surrogate — no displacement has occurred."@en ;
+    skos:inScheme iroko:PublicTitleTypeScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:titleType-institutional-label a skos:Concept ;
+    skos:prefLabel "Institutional label"@en ;
+    skos:definition "The dc:title is a label assigned by a collecting institution (museum, archive, library) for cataloging or display purposes. May or may not correspond to any name recognized by the described community; institutional provenance should be documented."@en ;
+    skos:inScheme iroko:PublicTitleTypeScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:titleType-unknown a skos:Concept ;
+    skos:prefLabel "Unknown"@en ;
+    skos:definition "The nature of the dc:title designation has not been assessed or is not known. Flag for review."@en ;
+    skos:inScheme iroko:PublicTitleTypeScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> .
+
+iroko:datePrecision a owl:DatatypeProperty ;
+    rdfs:label "date precision"@en ;
+    rdfs:comment "Indicates the level of confidence and granularity for an associated date value. Expected string values: 'exact', 'approximate', 'decade', 'century', 'unknown'. Use alongside xsd:date, xsd:gYear, or iroko:dateCentury to communicate certainty without losing the date value. When precision is 'century', prefer iroko:dateCentury over xsd:date. When precision is 'approximate' or unknown, set iroko:dateUncertain true."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range xsd:string ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:dateCentury a owl:DatatypeProperty ;
+    rdfs:label "date century"@en ;
+    rdfs:comment "The century in which an event occurred or a document was produced, expressed as an integer representing the century number (e.g., 13 for the thirteenth century, 6 for the sixth century). Use when only century-level precision is available — characteristic of medieval and ancient materials from corpora such as the Database of Medieval Nubian Texts and the Hill Museum and Manuscript Library. Pair with iroko:dateUncertain to flag where even the century assignment is provisional. Does not replace xsd:date — both may be asserted on the same instance when the exact date is also known."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range xsd:integer ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:dateUncertain a owl:DatatypeProperty ;
+    rdfs:label "date uncertain"@en ;
+    rdfs:comment "Boolean flag indicating that the associated date or century value is uncertain or provisional. Use in combination with any date property — xsd:date, xsd:gYear, iroko:dateCentury — to distinguish estimated dates from established ones. When true, the associated date should be interpreted as a scholarly estimate subject to revision pending additional evidence. Absence of this property does not imply certainty; treat undeclared dating status as requiring review."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range xsd:boolean ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:nativeDateExpression a owl:DatatypeProperty ;
+    rdfs:label "native date expression"@en ;
+    rdfs:comment "The date as expressed in the source document, without conversion to the Gregorian calendar. Preserves original dating systems as recorded: Alexandrian calendar, Era of Diocletian, Era of the Martyrs, Era of the Saracens, Ethiopian year, Hijri calendar, indiction (Constantinopolitan or Egyptian), regnal year, liturgical calendar, or any other indigenous system. Language-tagged string. Do not collapse to a Gregorian xsd:date when the source uses a non-Gregorian system; record the source expression in this field and the Gregorian equivalent separately. Example: '6 Pashons, year 743 of Diocletian'@cop for a Coptic-dated Nubian document."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-core> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
 <https://ontology.irokosociety.org/iroko-core> a owl:Ontology ;
     dcterms:created "2026-02-17"^^xsd:date ;
     dcterms:creator "Iroko Historical Society" ;
-    dcterms:description "Cross-module infrastructure for governance and semantic integration of Afro-Atlantic sacred knowledge systems. Provides access control, provenance tracking, contested knowledge modeling, assertion governance, temporal variation, fieldwork capture, and thin narrative primitives."@en ;
+    dcterms:description "Cross-module infrastructure for governance and semantic integration of African and Afro-Atlantic sacred knowledge systems. Provides access control, provenance tracking, contested knowledge modeling, assertion governance, temporal variation, fieldwork capture, thin narrative primitives, archival person representation, and date precision modeling. Scope expanded to pan-African in v1.4.0."@en ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    dcterms:modified "2026-03-21"^^xsd:date ;
+    dcterms:modified "2026-05-21"^^xsd:date ;
     dcterms:replaces <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core> ;
     dcterms:title "Iroko Framework Core Vocabulary"@en ;
-    rdfs:comment "This vocabulary provides the shared infrastructure for all Iroko Framework modules. It does not duplicate existing standards (Dublin Core, Schema.org, PROV-O) but adds governance mechanisms specific to sacred knowledge systems."@en ;
+    rdfs:comment "This vocabulary provides the shared infrastructure for all Iroko Framework modules. It does not duplicate existing standards (Dublin Core, Schema.org, PROV-O) but adds governance mechanisms specific to sacred knowledge systems, with pan-African geographic scope as of v1.4.0."@en ;
     rdfs:seeAlso <https://ontology.irokosociety.org/iroko-framework/> ;
-    owl:priorVersion <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core/1.0.0> ;
-    owl:versionIRI <https://ontology.irokosociety.org/iroko-core/1.3.0> ;
-    owl:versionInfo "1.3.0" .
+    owl:priorVersion <https://ontology.irokosociety.org/iroko-core/1.3.0> ;
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-core/1.4.0> ;
+    owl:versionInfo "1.4.0" .
 

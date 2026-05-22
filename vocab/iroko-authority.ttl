@@ -258,18 +258,137 @@ iroko:Authority a owl:Class ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> ;
     rdfs:subClassOf iroko:RitualAuthority .
 
+# ── v1.4.0: Contributor role vocabulary ───────────────────────────────────────
+
+iroko:ContributorRole a owl:Class ;
+    rdfs:label "Contributor Role"@en ;
+    rdfs:comment "A SKOS concept describing the function of a person in the production, transmission, or dissemination of a manuscript, archival object, or text. Covers roles from physical production (scribe, artist) through institutional and financial relationships (patron, commissioner) to textual transformation (translator, compiler, editor). Derived from the vHMML contributor role taxonomy (CC BY 4.0, Hill Museum and Manuscript Library) and extended for Iroko Framework use. Role concepts reside in iroko:ContributorRoleScheme."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> ;
+    rdfs:subClassOf skos:Concept .
+
+iroko:hasContributorRole a owl:ObjectProperty ;
+    rdfs:label "has contributor role"@en ;
+    rdfs:comment "Links a person in a specific manuscript or textual production context to their functional role. Range: iroko:ContributorRoleScheme concept. Because the role is context-dependent (the same person may be a patron for one manuscript and a recipient for another), this property is best used within a reification node or named graph associating the person, the role, and the specific object. When used directly on an iroko:ArchivalPerson instance, it asserts a general characterization rather than a context-specific one."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> ;
+    rdfs:range iroko:ContributorRole ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:ContributorRoleScheme a skos:ConceptScheme ;
+    rdfs:label "Contributor Roles"@en ;
+    dcterms:description "Controlled terms for the roles of persons contributing to the production, transmission, or dissemination of a manuscript or archival object. Adopted from the vHMML contributor role taxonomy (CC BY 4.0, Hill Museum and Manuscript Library) with additions for Iroko Framework use cases including colonial notarial records and Afro-Atlantic archival genres."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> ;
+    skos:hasTopConcept iroko:role-contrib-scribe,
+        iroko:role-contrib-patron,
+        iroko:role-contrib-commissioner,
+        iroko:role-contrib-translator,
+        iroko:role-contrib-compiler,
+        iroko:role-contrib-artist,
+        iroko:role-contrib-notary,
+        iroko:role-contrib-editor,
+        iroko:role-contrib-dedicatee,
+        iroko:role-contrib-recipient,
+        iroko:role-contrib-bookseller,
+        iroko:role-contrib-publisher,
+        iroko:role-contrib-unspecified,
+        iroko:role-contrib-attributed .
+
+iroko:role-contrib-scribe a iroko:ContributorRole ;
+    skos:prefLabel "Scribe"@en ;
+    skos:definition "The person who physically copied or wrote the text. Distinguished from the intellectual author (originator of the content) and from the translator. In manuscript traditions, the scribe is often the most directly documented contributor."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-patron a iroko:ContributorRole ;
+    skos:prefLabel "Patron"@en ;
+    skos:definition "A person who provided financial, political, or institutional support enabling the production or survival of the manuscript or the transmission of the tradition. The patron may or may not have directly commissioned the work — patronage may be ongoing rather than project-specific."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-commissioner a iroko:ContributorRole ;
+    skos:prefLabel "Commissioner"@en ;
+    skos:definition "A person who formally ordered or commissioned the production of this specific manuscript or the performance of this specific ceremony or text. Distinguished from patron by the directness and specificity of the commissioning relationship."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-translator a iroko:ContributorRole ;
+    skos:prefLabel "Translator"@en ;
+    skos:definition "The person who rendered the text from one language into another. The source and target languages should be recorded on the associated iroko:TextContent instance using iroko:textLanguage."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-compiler a iroko:ContributorRole ;
+    skos:prefLabel "Compiler"@en ;
+    skos:definition "A person who assembled a text from multiple sources without being the originating author of those sources. Relevant for anthologies, florilegia, and composite manuscripts bringing together materials from different traditions."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-artist a iroko:ContributorRole ;
+    skos:prefLabel "Artist / Illuminator"@en ;
+    skos:definition "The person responsible for illustrations, illuminations, diagrams, decorative elements, or graphic components of the manuscript. In Ethiopian and Nubian manuscript traditions, the artist may be documented separately from the scribe."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-notary a iroko:ContributorRole ;
+    skos:prefLabel "Notary"@en ;
+    skos:definition "A person with official legal standing who authenticated, witnessed, or recorded the document in a formal legal capacity. Critical for colonial notarial records, manumission documents, legal instruments, and formal attestations in Afro-Atlantic archival contexts. The notarial function is administrative and legal; the notary may not be the scribe or author."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-editor a iroko:ContributorRole ;
+    skos:prefLabel "Editor"@en ;
+    skos:definition "A person who prepared the text for transmission or publication, including revisions, additions, corrections, or redactions. Distinguished from compiler (who assembles source material) and from translator (who changes language)."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-dedicatee a iroko:ContributorRole ;
+    skos:prefLabel "Dedicatee"@en ;
+    skos:definition "The person to whom the work is formally dedicated. The dedication relationship often carries political, patronage, or devotional significance that may illuminate the context of production."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-recipient a iroko:ContributorRole ;
+    skos:prefLabel "Recipient"@en ;
+    skos:definition "The person for whom the manuscript was produced, as distinct from the dedicatee or commissioner. Common in gift manuscripts, royal commissions, and personal correspondence. The recipient is the intended reader or owner of this specific copy."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-bookseller a iroko:ContributorRole ;
+    skos:prefLabel "Bookseller"@en ;
+    skos:definition "A person involved in the commercial sale or distribution of the manuscript or printed work. Documents the commercial networks through which manuscripts traveled."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-publisher a iroko:ContributorRole ;
+    skos:prefLabel "Publisher"@en ;
+    skos:definition "A person or institution responsible for the formal publication or release of the work. Applies primarily to printed materials; for manuscripts, use commissioner or patron."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-unspecified a iroko:ContributorRole ;
+    skos:prefLabel "Contributor (role unspecified)"@en ;
+    skos:definition "A person whose contribution to the manuscript is documented but whose specific function is not known or not recorded in the source. Use when a name appears in a colophon, marginal note, or catalog entry without a role designation."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
+iroko:role-contrib-attributed a iroko:ContributorRole ;
+    skos:prefLabel "Attributed"@en ;
+    skos:definition "A person to whom a role is attributed by tradition, later inscription, or scholarly inference, without direct documentation in the manuscript itself. Attribution is a scholarly or community claim — record the basis and asserter of the attribution separately. Distinct from all other roles, which are documented rather than inferred."@en ;
+    skos:inScheme iroko:ContributorRoleScheme ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-authority> .
+
 <https://ontology.irokosociety.org/iroko-authority> a owl:Ontology ;
     dcterms:creator "Iroko Historical Society" ;
     dcterms:description "Governance Layer module. Full governance model for ritual authority, jurisdiction, and authorization basis. Extends the iroko:RitualAuthority stub in Core with jurisdiction modeling, authority type and basis classification, ritual roles, recognition networks, and temporal validity. Used to authorize assertion-level claims across all modules. Commonly paired with iroko-epistemic for constraint-aware archives."@en ;
     dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
     dcterms:issued "2026-02-23"^^xsd:date ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    dcterms:modified "2026-02-25"^^xsd:date ;
+    dcterms:modified "2026-05-21"^^xsd:date ;
     dcterms:references <https://ontology.irokosociety.org/iroko-agency>,
         <https://ontology.irokosociety.org/iroko-epistemic> ;
     dcterms:requires <https://ontology.irokosociety.org/iroko-core> ;
     dcterms:title "Iroko Framework: Authority Module"@en ;
     rdfs:seeAlso <https://ontology.irokosociety.org/iroko-framework/> ;
-    owl:versionIRI <https://ontology.irokosociety.org/iroko-authority/1.3.0> ;
-    owl:versionInfo "1.3.0" .
+    owl:priorVersion <https://ontology.irokosociety.org/iroko-authority/1.3.0> ;
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-authority/1.4.0> ;
+    owl:versionInfo "1.4.0" .
 
