@@ -195,4 +195,7 @@ ACCESS_MAP = {
 KNOWN_SKIPS = {
     "iroko-nkisi-patch",
     "ewe-plants-v0_2_1",
-    "iroko-vocab-
+    "iroko-vocab-v0_2_1",
+    "iroko-core-v2",
+    "iroko-ile-v2",
+}
