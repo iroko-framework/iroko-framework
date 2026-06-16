@@ -465,19 +465,18 @@ iroko:geographicLocus a owl:DatatypeProperty ;
 <https://ontology.irokosociety.org/iroko-sankofa> a owl:Ontology ;
     dcterms:created "2026-02-22"^^xsd:date ;
     dcterms:creator "Iroko Historical Society" ;
-    dcterms:description "Domain module. Vocabulary for documenting revitalization and reclamation movements, Trans-Afro-Atlantic returns to African source communities, reconstructed traditions, and heritage relationships. Models semantic relationships between Afro-Atlantic practice and African source traditions without adjudicating authenticity. All heritage relationship claims are modeled as iroko:RelationshipAssertion to reflect their contested and negotiated character. The classes and properties in this module are descriptive instruments — they document what movements call themselves and what they claim to do. The use of terms such as 'return', 'diaspora', and 'reclamation' reflects the self-description of the movements documented here, not a normative position of the Iroko Framework on questions of African identity or belonging. Use with iroko-authority to document who may authorize heritage relationship claims and recognition; iroko-narrative for movement histories, oral transmission chains, and contested origin accounts."@en ;
+    dcterms:description "Domain module. Vocabulary for the full Afro-Atlantic arc: the forced-departure side, documenting the colonial legal instruments that constituted and contested ownership over enslaved persons (iroko:SlavePaper and the SlavePaper type, function, and period schemes); and the return side, documenting revitalization movements, Trans-Afro-Atlantic returns, reconstructed traditions, and heritage relationships. The module name follows the Akan sankofa principle — to go back and fetch what was taken — a structure that encompasses both what was taken (documented in slave paper) and the subsequent return to claim it. Models semantic relationships between Afro-Atlantic practice and African source traditions without adjudicating authenticity. All heritage relationship claims are modeled as iroko:RelationshipAssertion to reflect their contested and negotiated character. The classes and properties in this module are descriptive instruments — they document what movements call themselves and what they claim to do. The use of terms such as 'return', 'diaspora', and 'reclamation' reflects the self-description of the movements documented here, not a normative position of the Iroko Framework on questions of African identity or belonging. Use with iroko-authority to document who may authorize heritage relationship claims and recognition, and for contributor roles (notary, scribe, commissioner) associated with slave paper production; iroko-narrative for movement histories, oral transmission chains, and contested origin accounts."@en ;
     dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
-    dcterms:modified "2026-02-25"^^xsd:date ;
+    dcterms:modified "2026-06-16"^^xsd:date ;
     dcterms:references <https://ontology.irokosociety.org/iroko-authority>,
         <https://ontology.irokosociety.org/iroko-narrative> ;
-    dcterms:title "Iroko Framework: Sankofa Module (Reclamation Movements and Trans-Afro-Atlantic Returns)"@en ;
+    dcterms:title "Iroko Framework: Sankofa Module (Documentary Apparatus, Reclamation Movements, and Trans-Afro-Atlantic Returns)"@en ;
     rdfs:seeAlso <https://ontology.irokosociety.org/iroko-framework/> ;
     owl:imports <https://ontology.irokosociety.org/iroko-core> ;
-    dcterms:modified "2026-05-21"^^xsd:date ;
-    owl:priorVersion <https://ontology.irokosociety.org/iroko-sankofa/1.3.0> ;
-    owl:versionIRI <https://ontology.irokosociety.org/iroko-sankofa/1.4.0> ;
-    owl:versionInfo "1.4.0" .
+    owl:priorVersion <https://ontology.irokosociety.org/iroko-sankofa/1.4.0> ;
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-sankofa/1.4.1> ;
+    owl:versionInfo "1.4.1" .
 
 
 # ── Patch: HeritageRelationship inbound arc (v1.3.0) ────────────────────────
@@ -489,3 +488,182 @@ iroko:groundedIn a owl:ObjectProperty ;
     rdfs:range iroko:HeritageRelationship ;
     rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-sankofa> ;
     iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+# ── v1.4.1: SlavePaper expansion (TiSP) ─────────────────────────────────────
+
+iroko:SlavePaper a owl:Class ;
+    rdfs:label "Slave Paper"@en ;
+    rdfs:comment "A colonial legal document — sale record, ship manifest, customs certification, baptismal register entry, judicial filing, manumission instrument, or freedom petition — that constituted, maintained, challenged, or forged an ownership claim over an enslaved person in the Atlantic world. The class name follows the TiSP (Trafficking in Slave Paper) project terminology, which foregrounds the documentary nature of the legal mechanism: slave paper was not merely a record of completed transactions but an active legal instrument through which status, ownership, and identity were continuously made and contested. Slave paper required perpetual renewal through notarial, customs, ecclesiastical, or judicial systems; the gap or absence in that chain was itself a legal event. SlavePaper instances may serve as iroko:evidentiarySources for iroko:ReconstructedPractice and populate iroko:evidenceBase on iroko:HeritageRelationship where the enslaved person's cultural or religious identity can be traced. Contributor roles for producers of slave paper (notary, scribe, commissioner) are modeled in iroko-authority.ttl via iroko:ContributorRoleScheme."@en ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-sankofa> ;
+    rdfs:subClassOf iroko:DocumentaryEvidence .
+
+iroko:slavePaperType a owl:ObjectProperty ;
+    rdfs:label "slave paper type"@en ;
+    rdfs:comment "The document type classification for this slave paper instance. Range: iroko:SlavePaperTypeScheme."@en ;
+    rdfs:domain iroko:SlavePaper ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-sankofa> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:paperFunction a owl:ObjectProperty ;
+    rdfs:label "paper function"@en ;
+    rdfs:comment "The legal or institutional function this slave paper instance served within the ownership claim chain. Range: iroko:SlavePaperFunctionScheme."@en ;
+    rdfs:domain iroko:SlavePaper ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-sankofa> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:tradePeriod a owl:ObjectProperty ;
+    rdfs:label "trade period"@en ;
+    rdfs:comment "The Atlantic slave trade chronological period in which this slave paper was produced or to which it belongs. Range: iroko:SlavePaperPeriodScheme. The three TiSP periods reflect distinct legal regimes: pre-1808 (open Atlantic trade), 1808-1820 (nominal suppression, ongoing trade), post-1820 (intensified illegal trade requiring more elaborate documentary apparatus)."@en ;
+    rdfs:domain iroko:SlavePaper ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-sankofa> ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:corridorJurisdiction a owl:ObjectProperty ;
+    rdfs:label "corridor jurisdiction"@en ;
+    rdfs:comment "The Atlantic trade corridor node at which this slave paper was issued, recorded, or enforced. Range: iroko:Jurisdiction (from iroko-authority.ttl). Use to link slave paper to specific port cities and colonial administrative territories in the TiSP corridor."@en ;
+    rdfs:domain iroko:SlavePaper ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-sankofa> ;
+    rdfs:range iroko:Jurisdiction ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:archivalRepository a owl:DatatypeProperty ;
+    rdfs:label "archival repository"@en ;
+    rdfs:comment "The name and location of the physical archive or collection holding this slave paper or the document series from which it is drawn. Language-tagged string. Examples: 'Archivo General de la Nación, Mexico City'@es; 'Archivo Histórico del Estado de Veracruz'@es."@en ;
+    rdfs:domain iroko:SlavePaper ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-sankofa> ;
+    rdfs:range rdf:langString ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:evidencesHeritage a owl:ObjectProperty ;
+    rdfs:label "evidences heritage"@en ;
+    rdfs:comment "Links a SlavePaper instance to the HeritageRelationship it evidences — typically because the document records the name, origin, or cultural identity of an enslaved person whose tradition can be traced. This is the ontological connection between the forced-departure documentation and the reclamation arc: the slave record that proves a transmission chain is the evidentiary link between forced removal and the heritage claim."@en ;
+    rdfs:domain iroko:SlavePaper ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-sankofa> ;
+    rdfs:range iroko:HeritageRelationship ;
+    iroko:minimumAccessLevel iroko:access-public-unrestricted .
+
+iroko:SlavePaperTypeScheme a skos:ConceptScheme ;
+    rdfs:label "Slave Paper Types"@en ;
+    dcterms:description "Document type classification for colonial legal instruments that constituted or contested ownership claims over enslaved persons in the Atlantic world."@en ;
+    skos:hasTopConcept iroko:paper-type-baptismal-register,
+        iroko:paper-type-customs-certification,
+        iroko:paper-type-freedom-petition,
+        iroko:paper-type-irregular-forged,
+        iroko:paper-type-judicial-filing,
+        iroko:paper-type-manumission-instrument,
+        iroko:paper-type-official-correspondence,
+        iroko:paper-type-sale-record,
+        iroko:paper-type-ship-manifest .
+
+iroko:paper-type-baptismal-register a skos:Concept ;
+    skos:prefLabel "Baptismal Register Entry"@en,
+        "Registro de bautismo"@es ;
+    skos:definition "An ecclesiastical record of an enslaved person's baptism. Critical for identity and status: in colonial Catholic systems, baptism established a Christian name and was often the first record of an enslaved person by name in the local documentary apparatus."@en ;
+    skos:inScheme iroko:SlavePaperTypeScheme .
+
+iroko:paper-type-customs-certification a skos:Concept ;
+    skos:prefLabel "Customs Certification"@en,
+        "Certificación aduanera"@es ;
+    skos:definition "A document issued by colonial customs or port authorities certifying the legal introduction of enslaved persons into a jurisdiction. Particularly significant in the post-1808 period when trade illegality required fraudulent backdating or re-certification."@en ;
+    skos:inScheme iroko:SlavePaperTypeScheme .
+
+iroko:paper-type-freedom-petition a skos:Concept ;
+    skos:prefLabel "Freedom Petition"@en,
+        "Petición de libertad"@es ;
+    skos:definition "A legal petition filed by or on behalf of an enslaved person seeking recognition of free status, disputing ownership, or claiming coartación rights. Freedom petitions are the primary site of enslaved legal agency within the colonial documentary apparatus."@en ;
+    skos:inScheme iroko:SlavePaperTypeScheme .
+
+iroko:paper-type-irregular-forged a skos:Concept ;
+    skos:prefLabel "Irregular or Forged Paper"@en,
+        "Documento irregular o falsificado"@es ;
+    skos:definition "A document in the slave paper chain that was fraudulently produced, backdated, altered, or otherwise irregular. Analytically essential for the post-1820 period of illegal trade: the prevalence of forged documentation reveals the legal requirements of the official system and the networks that circumvented them."@en ;
+    skos:inScheme iroko:SlavePaperTypeScheme .
+
+iroko:paper-type-judicial-filing a skos:Concept ;
+    skos:prefLabel "Judicial Filing"@en,
+        "Expediente judicial"@es ;
+    skos:definition "A court record — complaint, testimony, judgment, or order — pertaining to the status, ownership, or freedom of an enslaved person. Judicial filings constitute the primary site where ownership claims were actively contested."@en ;
+    skos:inScheme iroko:SlavePaperTypeScheme .
+
+iroko:paper-type-manumission-instrument a skos:Concept ;
+    skos:prefLabel "Manumission Instrument"@en,
+        "Carta de libertad"@es ;
+    skos:definition "A legal instrument by which an enslaved person was formally freed by their enslaver. Coartación documents, cartas de libertad, and similar instruments. Manumission could be conditional, partial, or purchased (coartación) — the instrument type records the terms."@en ;
+    skos:inScheme iroko:SlavePaperTypeScheme .
+
+iroko:paper-type-official-correspondence a skos:Concept ;
+    skos:prefLabel "Official Correspondence"@en,
+        "Correspondencia oficial"@es ;
+    skos:definition "Letters, reports, or memoranda between colonial administrators, customs officials, port authorities, or clergy concerning the movement, legal status, or trade of enslaved persons. Includes instructions on trade suppression enforcement in the post-1808 period."@en ;
+    skos:inScheme iroko:SlavePaperTypeScheme .
+
+iroko:paper-type-sale-record a skos:Concept ;
+    skos:prefLabel "Sale Record"@en,
+        "Escritura de venta"@es ;
+    skos:definition "A notarized instrument documenting the sale or transfer of an enslaved person between owners. Core document in the Atlantic ownership chain; required notarial authentication in most colonial legal systems."@en ;
+    skos:inScheme iroko:SlavePaperTypeScheme .
+
+iroko:paper-type-ship-manifest a skos:Concept ;
+    skos:prefLabel "Ship Manifest"@en,
+        "Manifiesto de carga"@es ;
+    skos:definition "A customs or port document listing enslaved persons as cargo aboard a vessel. Required for transatlantic and coastal trade; used to collect duties and establish initial entry into the colonial documentary record."@en ;
+    skos:inScheme iroko:SlavePaperTypeScheme .
+
+iroko:SlavePaperFunctionScheme a skos:ConceptScheme ;
+    rdfs:label "Slave Paper Functions"@en ;
+    dcterms:description "The legal or institutional function served by a slave paper document within the Atlantic ownership claim apparatus."@en ;
+    skos:hasTopConcept iroko:paper-function-chain-of-title,
+        iroko:paper-function-freedom-basis,
+        iroko:paper-function-identity-document,
+        iroko:paper-function-ownership-challenge,
+        iroko:paper-function-ownership-claim .
+
+iroko:paper-function-chain-of-title a skos:Concept ;
+    skos:prefLabel "Chain-of-Title Link"@en ;
+    skos:definition "Document serves as a link in the chain of ownership title — establishing the legal sequence of transfers by which the current owner's claim derives from the original sale or entry."@en ;
+    skos:inScheme iroko:SlavePaperFunctionScheme .
+
+iroko:paper-function-freedom-basis a skos:Concept ;
+    skos:prefLabel "Freedom Basis"@en ;
+    skos:definition "Document constitutes or supports the legal basis for an enslaved person's free status — manumission instruments, freedom petitions, and successful court rulings."@en ;
+    skos:inScheme iroko:SlavePaperFunctionScheme .
+
+iroko:paper-function-identity-document a skos:Concept ;
+    skos:prefLabel "Identity Documentation"@en ;
+    skos:definition "Document establishes or records the name, origin, or identity of an enslaved person within the colonial bureaucratic system."@en ;
+    skos:inScheme iroko:SlavePaperFunctionScheme .
+
+iroko:paper-function-ownership-challenge a skos:Concept ;
+    skos:prefLabel "Ownership Challenge"@en ;
+    skos:definition "Document contests or disrupts a claimed ownership right — through judicial petition, contested manumission, coartación claim, or challenge to the legality of original enslavement."@en ;
+    skos:inScheme iroko:SlavePaperFunctionScheme .
+
+iroko:paper-function-ownership-claim a skos:Concept ;
+    skos:prefLabel "Ownership Claim"@en ;
+    skos:definition "Document asserts or transfers a legal ownership claim over an enslaved person."@en ;
+    skos:inScheme iroko:SlavePaperFunctionScheme .
+
+iroko:SlavePaperPeriodScheme a skos:ConceptScheme ;
+    rdfs:label "Atlantic Trade Periods (TiSP)"@en ;
+    dcterms:description "Chronological periods reflecting distinct legal regimes in the Atlantic slave trade, as defined in the TiSP (Trafficking in Slave Paper) project framework."@en ;
+    skos:hasTopConcept iroko:period-1808-1820,
+        iroko:period-post-1820,
+        iroko:period-pre-1808 .
+
+iroko:period-1808-1820 a skos:Concept ;
+    skos:prefLabel "1808–1820"@en ;
+    skos:definition "Nominal suppression period: the Atlantic trade was illegal under U.S. and British law but continued with reduced official documentation, irregular certifications, and increased reliance on existing ownership chains to obscure recent imports."@en ;
+    skos:inScheme iroko:SlavePaperPeriodScheme .
+
+iroko:period-post-1820 a skos:Concept ;
+    skos:prefLabel "Post-1820"@en ;
+    skos:definition "Intensified illegal trade period: with active suppression efforts underway, documentary fraud became systematic. Forged backdated papers, fraudulent customs certifications, and irregular manumission documents are characteristic of this period's archival record."@en ;
+    skos:inScheme iroko:SlavePaperPeriodScheme .
+
+iroko:period-pre-1808 a skos:Concept ;
+    skos:prefLabel "Pre-1808"@en ;
+    skos:definition "The period before U.S. and British abolition of the Atlantic slave trade (1807–1808). The trade was legal, openly documented, and subject to established customs and notarial protocols in colonial ports."@en ;
+    skos:inScheme iroko:SlavePaperPeriodScheme .
