@@ -243,27 +243,4 @@ def main():
     print("── Done " + ("(dry run)" if args.dry_run else "") + " " + "─" * 30)
     if errors:
         print(f"  {errors} step(s) failed — check output above")
-        sys.exit(1)
-
-    print(f"  All steps completed successfully")
-
-    if steps is None:
-        print()
-        print("  ── This script does NOT handle ─────────────────────────────────")
-        print("     For each modified TTL, also update by hand:")
-        print("       scripts/iroko_config.py  — title and subtitle")
-        print("       index.html               — module-subtitle, module-version, module-desc")
-        print("       vocab/index.html         — same three fields")
-        print("     Then rebuild that module's browse page:")
-        print("       python scripts/generate_vocab_html.py iroko-<stem>")
-        print()
-        print("     Step 5 naming warnings (region-* / Palo / Vodou altLabels)")
-        print("     are pre-existing data issues — fix via the Iroko Manager.")
-        print()
-        print("  ── Commit (PowerShell: two separate commands) ──────────────────")
-        print("       git add -A")
-        print(f"      git commit -m 'build: v{VERSION} full rebuild + serializations'")
-
-
-if __name__ == "__main__":
-    main()
+        sys.exit(1)

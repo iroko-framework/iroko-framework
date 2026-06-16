@@ -24,7 +24,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 try:
-    from rdflib import Graph, RDF, OWL, SKOS, Namespace
+    from rdflib import Graph, RDF, OWL, SKOS, RDFS, Namespace
+    from rdflib.namespace import DCTERMS
 except ImportError:
     print("ERROR: rdflib not found. Install with: pip install rdflib --break-system-packages")
     sys.exit(1)
@@ -46,10 +47,11 @@ def count_module(ttl_path: Path) -> dict | None:
         print(f"  WARNING: Could not parse {ttl_path.name}: {e}")
         return None
 
-    classes = sum(
-        1 for uri in g.subjects(RDF.type, OWL.Class)
+    class_uris = [
+        uri for uri in g.subjects(RDF.type, OWL.Class)
         if str(uri).startswith(IROKO_NS)
-    )
+    ]
+    classes = len(class_uris)
     props = sum(
         1 for ptype in (OWL.ObjectProperty, OWL.DatatypeProperty, OWL.AnnotationProperty)
         for uri in g.subjects(RDF.type, ptype)
@@ -63,7 +65,26 @@ def count_module(ttl_path: Path) -> dict | None:
         1 for uri in g.subjects(SKOS.inScheme, None)
         if str(uri).startswith(IROKO_NS)
     )
-    return {"classes": classes, "props": props, "schemes": schemes, "concepts": concepts}
+
+    # Class names (local part, alphabetically sorted)
+    class_names = sorted(str(u).split("#")[-1] for u in class_uris)
+
+    # Module description from dcterms:description @en on the Ontology node
+    ont = next(g.subjects(RDF.type, OWL.Ontology), None)
+    desc = ""
+    if ont:
+        for o in g.objects(ont, DCTERMS.description):
+            lang = getattr(o, "language", None)
+            if lang == "en":
+                desc = str(o)
+                break
+            if not desc:
+                desc = str(o)
+
+    return {
+        "classes": classes, "props": props, "schemes": schemes, "concepts": concepts,
+        "class_names": class_names, "desc": desc,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -143,6 +164,63 @@ def set_module_stat(html: str, stem: str, label: str, value, href_prefix: str = 
 
     print(f"  WARNING: stat '{label}' not found in {stem} card")
     return html
+
+
+def _desc_to_html(desc: str) -> str:
+    """Plain-text TTL description → safe HTML: escape entities, wrap iroko:Terms in <code>."""
+    desc = desc.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    desc = re.sub(r"(iroko:[A-Za-z]\w+)", r"<code>\1</code>", desc)
+    return desc
+
+
+def set_module_desc(html: str, stem: str, desc: str, href_prefix: str = "") -> str:
+    """
+    Replace <p class="module-desc">…</p> in the module card with the TTL description.
+    Skips silently if desc is empty (preserves whatever is in the HTML).
+    """
+    if not desc:
+        return html
+    anchor_str = f"{href_prefix}{stem}.html"
+    anchor_match = re.search(re.escape(anchor_str), html)
+    if not anchor_match:
+        return html  # warning already emitted by set_module_stat
+    start = anchor_match.start()
+    window_end = min(start + 3500, len(html))
+    window = html[start:window_end]
+    html_desc = _desc_to_html(desc)
+    pattern = r'(<p class="module-desc">)[\s\S]*?(</p>)'
+    new_window, n = re.subn(pattern, rf"\g<1>{html_desc}\g<2>", window, count=1)
+    if n == 0:
+        print(f"  WARNING: module-desc not found in {stem} card")
+        return html
+    return html[:start] + new_window + html[window_end:]
+
+
+def set_module_class_list(html: str, stem: str, class_names: list, href_prefix: str = "") -> str:
+    """
+    Replace the <span class="contents-val"> in the Classes row of the module card.
+    Skips silently if class_names is empty.
+    """
+    if not class_names:
+        return html
+    anchor_str = f"{href_prefix}{stem}.html"
+    anchor_match = re.search(re.escape(anchor_str), html)
+    if not anchor_match:
+        return html
+    start = anchor_match.start()
+    window_end = min(start + 3500, len(html))
+    window = html[start:window_end]
+    pattern = (
+        r'(<span class="contents-key">Classes</span>\s*'
+        r'<span class="contents-val">)[^<]*(</span>)'
+    )
+    new_window, n = re.subn(
+        pattern, rf"\g<1>{', '.join(class_names)}\g<2>", window, count=1
+    )
+    if n == 0:
+        print(f"  WARNING: contents-val (Classes) not found in {stem} card")
+        return html
+    return html[:start] + new_window + html[window_end:]
 
 
 # ---------------------------------------------------------------------------
@@ -445,18 +523,20 @@ def main():
             html = set_module_stat(html, stem, "Properties", c["props"],    href_prefix="vocab/")
             html = set_module_stat(html, stem, "Schemes",    c["schemes"],  href_prefix="vocab/")
             html = set_module_stat(html, stem, "Concepts",   c["concepts"], href_prefix="vocab/")
+            html = set_module_desc(html, stem, c.get("desc", ""),           href_prefix="vocab/")
+            html = set_module_class_list(html, stem, c.get("class_names", []), href_prefix="vocab/")
 
         html = set_terms_across(html, total_terms)
         main_index_path.write_text(html, encoding="utf-8")
-        print(f"  ✓ Updated {main_index_path.name}")
+        print(f"  \u2713 Updated {main_index_path.name}")
 
-    # ── 2. vocab/index.html ──────────────────────────────────────────────
+    # \u2500\u2500 2. vocab/index.html \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
     if not vocab_index_path.exists():
-        print(f"WARNING: {vocab_index_path} not found — skipping")
+        print(f"WARNING: {vocab_index_path} not found \u2014 skipping")
     else:
         html = vocab_index_path.read_text(encoding="utf-8")
 
-        # Combined meta-pill: "NNN Classes · NNN Properties · NNN Concepts"
+        # Combined meta-pill: "NNN Classes \u00b7 NNN Properties \u00b7 NNN Concepts"
         html = set_combined_meta_pill(html, totals["classes"], totals["props"], totals["concepts"])
 
         html = set_terms_across(html, total_terms)
@@ -469,13 +549,15 @@ def main():
             html = set_module_stat(html, stem, "Properties", c["props"],    href_prefix="")
             html = set_module_stat(html, stem, "Schemes",    c["schemes"],  href_prefix="")
             html = set_module_stat(html, stem, "Concepts",   c["concepts"], href_prefix="")
+            html = set_module_desc(html, stem, c.get("desc", ""),           href_prefix="")
+            html = set_module_class_list(html, stem, c.get("class_names", []), href_prefix="")
 
         vocab_index_path.write_text(html, encoding="utf-8")
-        print(f"  ✓ Updated {vocab_index_path.name} (in vocab/)")
+        print(f"  \u2713 Updated {vocab_index_path.name} (in vocab/)")
 
-    # ── 3. iroko-termlist.html ───────────────────────────────────────────
+    # \u2500\u2500 3. iroko-termlist.html \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
     if not termlist_path.exists():
-        print(f"WARNING: {termlist_path} not found — skipping (run generate_vocab_index.py first)")
+        print(f"WARNING: {termlist_path} not found \u2014 skipping (run generate_vocab_index.py first)")
     else:
         html = termlist_path.read_text(encoding="utf-8")
 
@@ -485,9 +567,9 @@ def main():
         html = set_termlist_total(html, total_terms)
 
         termlist_path.write_text(html, encoding="utf-8")
-        print(f"  ✓ Updated {termlist_path.name}")
+        print(f"  \u2713 Updated {termlist_path.name}")
 
-    # ── 4. ARCHITECTURE.md ─────────────────────────────────────
+    # \u2500\u2500 4. ARCHITECTURE.md \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
     print()
     print("Patching ARCHITECTURE.md \u2026")
     patch_architecture_md(
@@ -496,7 +578,7 @@ def main():
         dry_run=args.dry_run
     )
 
-    # ── 5. ARCHITECTURE.html ────────────────────────────────────
+    # \u2500\u2500 5. ARCHITECTURE.html \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
     print()
     print("Patching ARCHITECTURE.html \u2026")
     patch_architecture_html(
