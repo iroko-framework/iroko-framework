@@ -6,11 +6,12 @@ Runs all three generation scripts in sequence, then patches docs HTML
 files for version and date strings.
 
 Usage:
-    python build_all.py                          # auto-detect paths
+    python build_all.py                          # auto-detect paths, all steps
     python build_all.py --vocab DIR              # explicit vocab/ dir
     python build_all.py --root DIR               # explicit repo root
     python build_all.py --dry-run                # show what would change
     python build_all.py --step 3                 # run only step 3
+    python build_all.py --step 2 --step 3        # run steps 2 and 3
 
 Steps:
     1  generate_vocab_html.py         — v8 interactive module pages (iroko-*.html)
@@ -136,7 +137,8 @@ def build_parser():
     p.add_argument("--dry-run", action="store_true",
                    help="Print what would change without writing")
     p.add_argument("--step", type=int, choices=[1, 2, 3, 4, 5],
-                   help="Run only this step (1–5)")
+                   action="append", dest="steps", metavar="N",
+                   help="Run only step N (1–5); repeat to run multiple, e.g. --step 2 --step 3")
     return p
 
 
@@ -158,11 +160,11 @@ def main():
         print("  Mode:      DRY RUN")
     print()
 
-    only = args.step
+    steps = set(args.steps) if args.steps else None
     errors = 0
 
     # ── Step 1: Vocab browse pages ─────────────────────────────────────
-    if only is None or only == 1:
+    if steps is None or 1 in steps:
         print("── Step 1: Generating vocab browse pages ──────────────────────")
         extra = ["--vocab", str(vocab_dir)] if args.vocab else []
         if args.dry_run:
@@ -177,7 +179,7 @@ def main():
         print()
 
     # ── Step 2: Vocab term list ────────────────────────────────────────
-    if only is None or only == 2:
+    if steps is None or 2 in steps:
         print("── Step 2: Generating vocab term list ─────────────────────────")
         extra = ["--ttl-dir", str(vocab_dir)] if args.vocab else []
         if args.dry_run:
@@ -192,7 +194,7 @@ def main():
         print()
 
     # ── Step 3: Sync index counts + ARCHITECTURE patches ─────────────
-    if only is None or only == 3:
+    if steps is None or 3 in steps:
         print("── Step 3: Syncing index counts + ARCHITECTURE ─────────────────")
         extra = []
         if args.vocab: extra += ["--vocab", str(vocab_dir)]
@@ -206,7 +208,7 @@ def main():
         print()
 
     # ── Step 4: Alternate serializations ──────────────────────────────
-    if only is None or only == 4:
+    if steps is None or 4 in steps:
         print("── Step 4: Generating alternate serializations ────────────────")
         extra = ["--vocab", str(vocab_dir)]
         if args.dry_run:
@@ -220,7 +222,7 @@ def main():
         print()
 
     # ── Step 5: Tradition vocabulary JSON ─────────────────────────────
-    if only is None or only == 5:
+    if steps is None or 5 in steps:
         print("── Step 5: Generating tradition-vocab.json ────────────────────")
         extra = ["--vocab", str(vocab_dir)]
         if args.dry_run:
@@ -232,20 +234,35 @@ def main():
         print()
 
     # ── Docs HTML: version + date strings ─────────────────────────────────────
-    if only is None:
+    if steps is None:
         print("── Docs HTML: patching version and date strings ───────────────")
         patch_docs_html(docs_dir, root_dir, dry_run=args.dry_run)
         print()
 
     # ── Summary ────────────────────────────────────────────────────────
-    print("── Done " + ("(dry run)" if args.dry_run else "") + " ─" * 30)
+    print("── Done " + ("(dry run)" if args.dry_run else "") + " " + "─" * 30)
     if errors:
         print(f"  {errors} step(s) failed — check output above")
         sys.exit(1)
-    else:
-        print(f"  All steps completed successfully")
+
+    print(f"  All steps completed successfully")
+
+    if steps is None:
         print()
-        print(f"  Next: git add -A && git commit -m 'build: v{VERSION} full HTML rebuild + serializations'")
+        print("  ── This script does NOT handle ─────────────────────────────────")
+        print("     For each modified TTL, also update by hand:")
+        print("       scripts/iroko_config.py  — title and subtitle")
+        print("       index.html               — module-subtitle, module-version, module-desc")
+        print("       vocab/index.html         — same three fields")
+        print("     Then rebuild that module's browse page:")
+        print("       python scripts/generate_vocab_html.py iroko-<stem>")
+        print()
+        print("     Step 5 naming warnings (region-* / Palo / Vodou altLabels)")
+        print("     are pre-existing data issues — fix via the Iroko Manager.")
+        print()
+        print("  ── Commit (PowerShell: two separate commands) ──────────────────")
+        print("       git add -A")
+        print(f"      git commit -m 'build: v{VERSION} full rebuild + serializations'")
 
 
 if __name__ == "__main__":

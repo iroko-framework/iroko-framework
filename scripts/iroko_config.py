@@ -148,8 +148,8 @@ MODULE_CONFIG = {
         "layer":    "Domain",
     },
     "iroko-sankofa": {
-        "title":    "Sankofa Module — Reclamation Movements",
-        "subtitle": "Diaspora returns, reconstructed practice, and reclamation networks",
+        "title":    "Sankofa Module — Documentary Apparatus &amp; Reclamation Movements",
+        "subtitle": "Colonial slave paper, diaspora returns, reconstructed practice, and heritage relationships",
         "tag_cls":  "tag-upcoming", "tag_text": "Movements",
         "prefix":   "sankofa:", "dot_cls": "dot-other",
         "layer":    "Domain",
