@@ -10,32 +10,14 @@
   },
   "@graph": [
     {
-      "@id": "iroko:medium-person",
-      "@type": "iroko:MediumType",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A human person serves as the medium, as in possession or mounted manifestation."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MediumTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Person"
-      }
-    },
-    {
-      "@id": "iroko:hasManifestationMode",
+      "@id": "iroko:manifestsThroughMedium",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
+        "@id": "iroko:access-community-only"
       },
       "rdfs:comment": {
         "@language": "en",
-        "@value": "Associates a ManifestationEvent or assertion node with a ManifestationMode concept from iroko:ManifestationModeScheme. Multiple modes may be asserted for a single event."
+        "@value": "Associates a ManifestationEvent with a Medium through which manifestation is asserted to occur. The identity of the medium (e.g., a specific person) may carry its own access level if the medium is a community member."
       },
       "rdfs:domain": {
         "@id": "iroko:ManifestationEvent"
@@ -45,241 +27,28 @@
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "has manifestation mode"
+        "@value": "manifests through medium"
       },
       "rdfs:range": {
-        "@id": "iroko:ManifestationMode"
+        "@id": "iroko:Medium"
       }
     },
     {
-      "@id": "iroko:textLanguage",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The language or languages of the text content. Express as a BCP 47 language tag where a standard code exists (e.g., 'ar' for Arabic, 'gez' for Ge'ez). For languages without standard BCP 47 codes, use a descriptive string: 'Old Nubian', 'Coptic', 'Middle Nubian'. Multiple values permitted for polyglot texts or texts in more than one language. Do not conflate language and script — record both separately."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:TextContent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "text language"
-      },
-      "rdfs:range": {
-        "@id": "xsd:string"
-      }
-    },
-    {
-      "@id": "iroko:mode-territorial",
+      "@id": "iroko:mode-symbolic",
       "@type": "iroko:ManifestationMode",
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "skos:definition": {
         "@language": "en",
-        "@value": "Manifestation asserted to be bound to or expressed through a place, crossroads, body of water, forest, or territory."
+        "@value": "Manifestation asserted to occur through symbols, signs, graphic marks, or indirect representation. Vèvè, firmas, and anaforuana are common vehicles."
       },
       "skos:inScheme": {
         "@id": "iroko:ManifestationModeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Territorial"
-      }
-    },
-    {
-      "@id": "iroko:medium-unknown",
-      "@type": "iroko:MediumType",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Medium type not recorded or not known."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MediumTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Unknown"
-      }
-    },
-    {
-      "@id": "iroko:ManifestationMode",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A SKOS concept describing how a sacred agent is asserted to manifest. Modes include embodied, possession, dream, divination, symbolic, territorial, auditory, and unknown. These categories are descriptive and tradition-reported; they record what a community asserts, not what an archive adjudicates. A single ManifestationEvent may reference multiple modes. Modes may vary by temporal regime — use iroko:TemporalVariation to document seasonal or initiatory shifts."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Manifestation Mode"
-      },
-      "rdfs:subClassOf": {
-        "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:hasMediumType",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Associates a Medium with a MediumType concept from iroko:MediumTypeScheme."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:Medium"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "has medium type"
-      },
-      "rdfs:range": {
-        "@id": "iroko:MediumType"
-      }
-    },
-    {
-      "@id": "https://ontology.irokosociety.org/iroko-manifestation",
-      "@type": "owl:Ontology",
-      "dcterms:created": {
-        "@type": "xsd:date",
-        "@value": "2026-02-22"
-      },
-      "dcterms:creator": "Iroko Historical Society",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Governance Layer module. Vocabulary for modeling how sacred agents are asserted to manifest — through embodied presence, possession, dream, divination, symbolic representation, territorial claim, or auditory sign. Plugs into iroko:ManifestationEvent and supports iroko:TemporalVariation where manifestation modes shift by ritual calendar or initiation cycle. These are descriptive, not metaphysical — they record what a tradition asserts, not what is metaphysically true."
-      },
-      "dcterms:isPartOf": {
-        "@id": "https://ontology.irokosociety.org/iroko-framework/"
-      },
-      "dcterms:license": {
-        "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
-      },
-      "dcterms:modified": {
-        "@type": "xsd:date",
-        "@value": "2026-06-16"
-      },
-      "dcterms:references": {
-        "@id": "https://ontology.irokosociety.org/iroko-agency"
-      },
-      "dcterms:requires": {
-        "@id": "https://ontology.irokosociety.org/iroko-core"
-      },
-      "owl:priorVersion": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation/1.3.0"
-      },
-      "owl:versionIRI": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation/1.3.1"
-      },
-      "owl:versionInfo": "1.3.1",
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Iroko Framework: Manifestation Module (Sacred Agent Manifestation Modes & Media)"
-      },
-      "rdfs:seeAlso": {
-        "@id": "https://ontology.irokosociety.org/iroko-framework/"
-      }
-    },
-    {
-      "@id": "iroko:textScript",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The script or writing system of the text content. Examples: Latin, Arabic, Ge'ez (Ethiopic), Greek, Old Nubian (Coptic-based), Hebrew, Syriac. Use ISO 15924 four-letter script codes where available. Multiple scripts may be present in a single text; record all."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:TextContent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "text script"
-      },
-      "rdfs:range": {
-        "@id": "xsd:string"
-      }
-    },
-    {
-      "@id": "iroko:ManifestationModeScheme",
-      "@type": "skos:ConceptScheme",
-      "dcterms:description": {
-        "@language": "en",
-        "@value": "Controlled terms for how sacred agents are asserted to manifest. Tradition-reported descriptive categories. Multiple modes may apply to a single event."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Manifestation Modes"
-      },
-      "skos:hasTopConcept": [
-        {
-          "@id": "iroko:mode-auditory"
-        },
-        {
-          "@id": "iroko:mode-divination"
-        },
-        {
-          "@id": "iroko:mode-dream"
-        },
-        {
-          "@id": "iroko:mode-embodied"
-        },
-        {
-          "@id": "iroko:mode-possession"
-        },
-        {
-          "@id": "iroko:mode-symbolic"
-        },
-        {
-          "@id": "iroko:mode-territorial"
-        },
-        {
-          "@id": "iroko:mode-unknown"
-        }
-      ]
-    },
-    {
-      "@id": "iroko:ManuscriptObject",
-      "@type": "owl:Class",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A physical manuscript or archival object — codex, scroll, single leaf, inscribed stone, ostracon, stela, or similar carrier. Models the physical vehicle as distinct from the intellectual content it carries. Structurally equivalent to the Object level in the vHMML three-tier hierarchy (Object / Part / Contents). A ManuscriptObject may carry one or more iroko:TextContent instances. The physical and intellectual levels are modeled separately so that a single text can be located across multiple physical carriers, and a single object can carry multiple texts. Subclass of iroko:DocumentaryEvidence, which is itself a subclass of iroko:SacredEntity."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Manuscript Object"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:DocumentaryEvidence"
+        "@value": "Symbolic"
       }
     },
     {
@@ -354,6 +123,418 @@
       ]
     },
     {
+      "@id": "iroko:medium-place",
+      "@type": "iroko:MediumType",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A place, site, crossroads, or territory serves as the medium."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MediumTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Place"
+      }
+    },
+    {
+      "@id": "https://ontology.irokosociety.org/iroko-manifestation",
+      "@type": "owl:Ontology",
+      "dcterms:created": {
+        "@type": "xsd:date",
+        "@value": "2026-02-22"
+      },
+      "dcterms:creator": "Iroko Historical Society",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Governance Layer module. Vocabulary for modeling how sacred agents are asserted to manifest — through embodied presence, possession, dream, divination, symbolic representation, territorial claim, or auditory sign. Plugs into iroko:ManifestationEvent and supports iroko:TemporalVariation where manifestation modes shift by ritual calendar or initiation cycle. These are descriptive, not metaphysical — they record what a tradition asserts, not what is metaphysically true."
+      },
+      "dcterms:isPartOf": {
+        "@id": "https://ontology.irokosociety.org/iroko-framework/"
+      },
+      "dcterms:license": {
+        "@id": "https://creativecommons.org/publicdomain/zero/1.0/"
+      },
+      "dcterms:modified": {
+        "@type": "xsd:date",
+        "@value": "2026-06-16"
+      },
+      "dcterms:references": {
+        "@id": "https://ontology.irokosociety.org/iroko-agency"
+      },
+      "dcterms:requires": {
+        "@id": "https://ontology.irokosociety.org/iroko-core"
+      },
+      "owl:priorVersion": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation/1.3.0"
+      },
+      "owl:versionIRI": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation/1.3.1"
+      },
+      "owl:versionInfo": "1.3.1",
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Iroko Framework: Manifestation Module (Sacred Agent Manifestation Modes & Media)"
+      },
+      "rdfs:seeAlso": {
+        "@id": "https://ontology.irokosociety.org/iroko-framework/"
+      }
+    },
+    {
+      "@id": "iroko:support-wood",
+      "@type": "skos:Concept",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Wooden boards, tablets, or surfaces used for writing or carving."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PhysicalSupportScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Wood"
+      }
+    },
+    {
+      "@id": "iroko:support-parchment",
+      "@type": "skos:Concept",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Animal skin prepared as a writing surface. Used extensively in Ethiopian, Nubian, and European medieval manuscript traditions."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PhysicalSupportScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Parchment"
+      }
+    },
+    {
+      "@id": "iroko:medium-text",
+      "@type": "iroko:MediumType",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A text, inscription, vèvè, firma, or graphic document serves as the medium."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MediumTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Text"
+      }
+    },
+    {
+      "@id": "iroko:textScript",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The script or writing system of the text content. Examples: Latin, Arabic, Ge'ez (Ethiopic), Greek, Old Nubian (Coptic-based), Hebrew, Syriac. Use ISO 15924 four-letter script codes where available. Multiple scripts may be present in a single text; record all."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:TextContent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "text script"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "iroko:support-metal",
+      "@type": "skos:Concept",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Metal tablets, plaques, or coins bearing inscribed text."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PhysicalSupportScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Metal"
+      }
+    },
+    {
+      "@id": "iroko:mode-auditory",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation asserted to occur through sound, voice, drumming, or hearing — including traditions where specific rhythms summon or identify a spirit."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Auditory"
+      }
+    },
+    {
+      "@id": "iroko:support-ostracon",
+      "@type": "skos:Concept",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A pottery sherd or stone flake used as an informal writing surface for short texts, school exercises, receipts, or personal notes. Common in Nubian and Egyptian archaeological contexts; many DBMNT texts are ostraca."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PhysicalSupportScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Ostracon"
+      }
+    },
+    {
+      "@id": "iroko:TextContent",
+      "@type": "owl:Class",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "An abstract intellectual work — a text as a specific composition, title, or discrete textual unit — independent of its physical carrier. Equivalent to the FRBR Work level and to the Contents level in the vHMML three-tier hierarchy. Distinct from iroko:ManuscriptObject (the physical carrier) and from iroko:NarrativeVariant (a specific transcribed or performed telling). A single iroko:TextContent may be carried by multiple ManuscriptObjects across different repositories or copies. Properties cover language, script, genre, and uniform title. Subclass of iroko:SacredEntity."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Text Content"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:SacredEntity"
+      }
+    },
+    {
+      "@id": "iroko:mode-territorial",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation asserted to be bound to or expressed through a place, crossroads, body of water, forest, or territory."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Territorial"
+      }
+    },
+    {
+      "@id": "iroko:ManuscriptObject",
+      "@type": "owl:Class",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A physical manuscript or archival object — codex, scroll, single leaf, inscribed stone, ostracon, stela, or similar carrier. Models the physical vehicle as distinct from the intellectual content it carries. Structurally equivalent to the Object level in the vHMML three-tier hierarchy (Object / Part / Contents). A ManuscriptObject may carry one or more iroko:TextContent instances. The physical and intellectual levels are modeled separately so that a single text can be located across multiple physical carriers, and a single object can carry multiple texts. Subclass of iroko:DocumentaryEvidence, which is itself a subclass of iroko:SacredEntity."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Manuscript Object"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:DocumentaryEvidence"
+      }
+    },
+    {
+      "@id": "iroko:support-paper",
+      "@type": "skos:Concept",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Paper writing surface, including both handmade and machine-made paper."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PhysicalSupportScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Paper"
+      }
+    },
+    {
+      "@id": "iroko:carriedBy",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "owl:inverseOf": {
+        "@id": "iroko:carriersText"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Links a TextContent to a ManuscriptObject that carries it. One TextContent may appear in multiple ManuscriptObjects. Inverse of iroko:carriersText."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:TextContent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "carried by"
+      },
+      "rdfs:range": {
+        "@id": "iroko:ManuscriptObject"
+      }
+    },
+    {
+      "@id": "iroko:support-clay",
+      "@type": "skos:Concept",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Fired or unfired clay tablets bearing inscribed or impressed text."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PhysicalSupportScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Clay"
+      }
+    },
+    {
+      "@id": "iroko:mode-embodied",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation asserted to occur in a physically embodied form distinct from possession — the agent is present as a body, not occupying another's."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Embodied"
+      }
+    },
+    {
+      "@id": "iroko:textLanguage",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The language or languages of the text content. Express as a BCP 47 language tag where a standard code exists (e.g., 'ar' for Arabic, 'gez' for Ge'ez). For languages without standard BCP 47 codes, use a descriptive string: 'Old Nubian', 'Coptic', 'Middle Nubian'. Multiple values permitted for polyglot texts or texts in more than one language. Do not conflate language and script — record both separately."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:TextContent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "text language"
+      },
+      "rdfs:range": {
+        "@id": "xsd:string"
+      }
+    },
+    {
+      "@id": "iroko:MediumType",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A SKOS concept categorizing the kind of medium involved in a manifestation assertion: person, object, place, text, instrument, or unknown."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Medium Type"
+      },
+      "rdfs:subClassOf": {
+        "@id": "skos:Concept"
+      }
+    },
+    {
+      "@id": "iroko:mode-divination",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation asserted to occur through divination, oracle, or the interpretive reading of divinatory instruments."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Divination"
+      }
+    },
+    {
+      "@id": "iroko:medium-object",
+      "@type": "iroko:MediumType",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "A material object serves as the medium — a consecrated vessel, nganga, otán, or ritual artifact."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:MediumTypeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Object"
+      }
+    },
+    {
       "@id": "iroko:carriersText",
       "@type": "owl:ObjectProperty",
       "iroko:minimumAccessLevel": {
@@ -378,176 +559,62 @@
       }
     },
     {
-      "@id": "iroko:MediumTypeScheme",
+      "@id": "iroko:ManifestationModeScheme",
       "@type": "skos:ConceptScheme",
       "dcterms:description": {
         "@language": "en",
-        "@value": "Controlled terms for the kind of medium through which manifestation is asserted to occur."
+        "@value": "Controlled terms for how sacred agents are asserted to manifest. Tradition-reported descriptive categories. Multiple modes may apply to a single event."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Medium Types"
+        "@value": "Manifestation Modes"
       },
       "skos:hasTopConcept": [
         {
-          "@id": "iroko:medium-instrument"
+          "@id": "iroko:mode-auditory"
         },
         {
-          "@id": "iroko:medium-object"
+          "@id": "iroko:mode-divination"
         },
         {
-          "@id": "iroko:medium-person"
+          "@id": "iroko:mode-dream"
         },
         {
-          "@id": "iroko:medium-place"
+          "@id": "iroko:mode-embodied"
         },
         {
-          "@id": "iroko:medium-text"
+          "@id": "iroko:mode-possession"
         },
         {
-          "@id": "iroko:medium-unknown"
+          "@id": "iroko:mode-symbolic"
+        },
+        {
+          "@id": "iroko:mode-territorial"
+        },
+        {
+          "@id": "iroko:mode-unknown"
         }
       ]
     },
     {
-      "@id": "iroko:uniformTitle",
-      "@type": "owl:DatatypeProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "The standardized title for this intellectual work, independent of how the title may appear on any specific manuscript or in any particular catalog. Use the form established by the relevant authority file: LCNAF, HAF (HMML Authority File), DBMNT, or community convention. Language-tagged. A single work may have multiple uniform title assertions in different languages or from different authority sources."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:TextContent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "uniform title"
-      },
-      "rdfs:range": {
-        "@id": "rdf:langString"
-      }
-    },
-    {
-      "@id": "iroko:Medium",
+      "@id": "iroko:ManifestationMode",
       "@type": "owl:Class",
       "rdfs:comment": {
         "@language": "en",
-        "@value": "A medium through which manifestation is asserted to occur — a person, object, place, text, or instrument. A Medium is the vehicle, not the agent; the sacred agent is modeled in iroko-nkisi or iroko-agency. One ManifestationEvent may involve multiple media."
+        "@value": "A SKOS concept describing how a sacred agent is asserted to manifest. Modes include embodied, possession, dream, divination, symbolic, territorial, auditory, and unknown. These categories are descriptive and tradition-reported; they record what a community asserts, not what an archive adjudicates. A single ManifestationEvent may reference multiple modes. Modes may vary by temporal regime — use iroko:TemporalVariation to document seasonal or initiatory shifts."
       },
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "rdfs:label": {
         "@language": "en",
-        "@value": "Medium"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:SacredEntity"
-      }
-    },
-    {
-      "@id": "iroko:MediumType",
-      "@type": "owl:Class",
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "A SKOS concept categorizing the kind of medium involved in a manifestation assertion: person, object, place, text, instrument, or unknown."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Medium Type"
+        "@value": "Manifestation Mode"
       },
       "rdfs:subClassOf": {
         "@id": "skos:Concept"
-      }
-    },
-    {
-      "@id": "iroko:mode-unknown",
-      "@type": "iroko:ManifestationMode",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Manifestation mode not recorded or not known."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Unknown"
-      }
-    },
-    {
-      "@id": "iroko:manifestsThroughMedium",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-community-only"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Associates a ManifestationEvent with a Medium through which manifestation is asserted to occur. The identity of the medium (e.g., a specific person) may carry its own access level if the medium is a community member."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:ManifestationEvent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "manifests through medium"
-      },
-      "rdfs:range": {
-        "@id": "iroko:Medium"
-      }
-    },
-    {
-      "@id": "iroko:support-papyrus",
-      "@type": "skos:Concept",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Writing surface made from papyrus plant stems. Primary medium for ancient Egyptian and early Christian Egyptian documentation."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PhysicalSupportScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Papyrus"
-      }
-    },
-    {
-      "@id": "iroko:medium-object",
-      "@type": "iroko:MediumType",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A material object serves as the medium — a consecrated vessel, nganga, otán, or ritual artifact."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MediumTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Object"
       }
     },
     {
@@ -569,75 +636,57 @@
       }
     },
     {
-      "@id": "iroko:medium-text",
+      "@id": "iroko:Medium",
+      "@type": "owl:Class",
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "A medium through which manifestation is asserted to occur — a person, object, place, text, or instrument. A Medium is the vehicle, not the agent; the sacred agent is modeled in iroko-nkisi or iroko-agency. One ManifestationEvent may involve multiple media."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Medium"
+      },
+      "rdfs:subClassOf": {
+        "@id": "iroko:SacredEntity"
+      }
+    },
+    {
+      "@id": "iroko:medium-person",
       "@type": "iroko:MediumType",
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "skos:definition": {
         "@language": "en",
-        "@value": "A text, inscription, vèvè, firma, or graphic document serves as the medium."
+        "@value": "A human person serves as the medium, as in possession or mounted manifestation."
       },
       "skos:inScheme": {
         "@id": "iroko:MediumTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Text"
+        "@value": "Person"
       }
     },
     {
-      "@id": "iroko:support-textile",
-      "@type": "skos:Concept",
+      "@id": "iroko:medium-unknown",
+      "@type": "iroko:MediumType",
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "skos:definition": {
         "@language": "en",
-        "@value": "Cloth, leather, or textile-based writing or inscription surface."
+        "@value": "Medium type not recorded or not known."
       },
       "skos:inScheme": {
-        "@id": "iroko:PhysicalSupportScheme"
+        "@id": "iroko:MediumTypeScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Textile"
-      }
-    },
-    {
-      "@id": "iroko:support-metal",
-      "@type": "skos:Concept",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Metal tablets, plaques, or coins bearing inscribed text."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PhysicalSupportScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Metal"
-      }
-    },
-    {
-      "@id": "iroko:mode-embodied",
-      "@type": "iroko:ManifestationMode",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Manifestation asserted to occur in a physically embodied form distinct from possession — the agent is present as a body, not occupying another's."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Embodied"
+        "@value": "Unknown"
       }
     },
     {
@@ -681,195 +730,21 @@
       }
     },
     {
-      "@id": "iroko:carriedBy",
-      "@type": "owl:ObjectProperty",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "owl:inverseOf": {
-        "@id": "iroko:carriersText"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "Links a TextContent to a ManuscriptObject that carries it. One TextContent may appear in multiple ManuscriptObjects. Inverse of iroko:carriersText."
-      },
-      "rdfs:domain": {
-        "@id": "iroko:TextContent"
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "carried by"
-      },
-      "rdfs:range": {
-        "@id": "iroko:ManuscriptObject"
-      }
-    },
-    {
-      "@id": "iroko:support-paper",
+      "@id": "iroko:support-papyrus",
       "@type": "skos:Concept",
       "rdfs:isDefinedBy": {
         "@id": "https://ontology.irokosociety.org/iroko-manifestation"
       },
       "skos:definition": {
         "@language": "en",
-        "@value": "Paper writing surface, including both handmade and machine-made paper."
+        "@value": "Writing surface made from papyrus plant stems. Primary medium for ancient Egyptian and early Christian Egyptian documentation."
       },
       "skos:inScheme": {
         "@id": "iroko:PhysicalSupportScheme"
       },
       "skos:prefLabel": {
         "@language": "en",
-        "@value": "Paper"
-      }
-    },
-    {
-      "@id": "iroko:mode-symbolic",
-      "@type": "iroko:ManifestationMode",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Manifestation asserted to occur through symbols, signs, graphic marks, or indirect representation. Vèvè, firmas, and anaforuana are common vehicles."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Symbolic"
-      }
-    },
-    {
-      "@id": "iroko:mode-divination",
-      "@type": "iroko:ManifestationMode",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Manifestation asserted to occur through divination, oracle, or the interpretive reading of divinatory instruments."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Divination"
-      }
-    },
-    {
-      "@id": "iroko:mode-auditory",
-      "@type": "iroko:ManifestationMode",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Manifestation asserted to occur through sound, voice, drumming, or hearing — including traditions where specific rhythms summon or identify a spirit."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:ManifestationModeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Auditory"
-      }
-    },
-    {
-      "@id": "iroko:support-parchment",
-      "@type": "skos:Concept",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Animal skin prepared as a writing surface. Used extensively in Ethiopian, Nubian, and European medieval manuscript traditions."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PhysicalSupportScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Parchment"
-      }
-    },
-    {
-      "@id": "iroko:TextContent",
-      "@type": "owl:Class",
-      "iroko:minimumAccessLevel": {
-        "@id": "iroko:access-public-unrestricted"
-      },
-      "rdfs:comment": {
-        "@language": "en",
-        "@value": "An abstract intellectual work — a text as a specific composition, title, or discrete textual unit — independent of its physical carrier. Equivalent to the FRBR Work level and to the Contents level in the vHMML three-tier hierarchy. Distinct from iroko:ManuscriptObject (the physical carrier) and from iroko:NarrativeVariant (a specific transcribed or performed telling). A single iroko:TextContent may be carried by multiple ManuscriptObjects across different repositories or copies. Properties cover language, script, genre, and uniform title. Subclass of iroko:SacredEntity."
-      },
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "rdfs:label": {
-        "@language": "en",
-        "@value": "Text Content"
-      },
-      "rdfs:subClassOf": {
-        "@id": "iroko:SacredEntity"
-      }
-    },
-    {
-      "@id": "iroko:support-ostracon",
-      "@type": "skos:Concept",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A pottery sherd or stone flake used as an informal writing surface for short texts, school exercises, receipts, or personal notes. Common in Nubian and Egyptian archaeological contexts; many DBMNT texts are ostraca."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PhysicalSupportScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Ostracon"
-      }
-    },
-    {
-      "@id": "iroko:medium-place",
-      "@type": "iroko:MediumType",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "A place, site, crossroads, or territory serves as the medium."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:MediumTypeScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Place"
-      }
-    },
-    {
-      "@id": "iroko:support-wood",
-      "@type": "skos:Concept",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Wooden boards, tablets, or surfaces used for writing or carving."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PhysicalSupportScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Wood"
+        "@value": "Papyrus"
       }
     },
     {
@@ -891,6 +766,149 @@
       }
     },
     {
+      "@id": "iroko:hasManifestationMode",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Associates a ManifestationEvent or assertion node with a ManifestationMode concept from iroko:ManifestationModeScheme. Multiple modes may be asserted for a single event."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:ManifestationEvent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "has manifestation mode"
+      },
+      "rdfs:range": {
+        "@id": "iroko:ManifestationMode"
+      }
+    },
+    {
+      "@id": "iroko:support-textile",
+      "@type": "skos:Concept",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Cloth, leather, or textile-based writing or inscription surface."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:PhysicalSupportScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Textile"
+      }
+    },
+    {
+      "@id": "iroko:uniformTitle",
+      "@type": "owl:DatatypeProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "The standardized title for this intellectual work, independent of how the title may appear on any specific manuscript or in any particular catalog. Use the form established by the relevant authority file: LCNAF, HAF (HMML Authority File), DBMNT, or community convention. Language-tagged. A single work may have multiple uniform title assertions in different languages or from different authority sources."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:TextContent"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "uniform title"
+      },
+      "rdfs:range": {
+        "@id": "rdf:langString"
+      }
+    },
+    {
+      "@id": "iroko:hasMediumType",
+      "@type": "owl:ObjectProperty",
+      "iroko:minimumAccessLevel": {
+        "@id": "iroko:access-public-unrestricted"
+      },
+      "rdfs:comment": {
+        "@language": "en",
+        "@value": "Associates a Medium with a MediumType concept from iroko:MediumTypeScheme."
+      },
+      "rdfs:domain": {
+        "@id": "iroko:Medium"
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "has medium type"
+      },
+      "rdfs:range": {
+        "@id": "iroko:MediumType"
+      }
+    },
+    {
+      "@id": "iroko:mode-unknown",
+      "@type": "iroko:ManifestationMode",
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "skos:definition": {
+        "@language": "en",
+        "@value": "Manifestation mode not recorded or not known."
+      },
+      "skos:inScheme": {
+        "@id": "iroko:ManifestationModeScheme"
+      },
+      "skos:prefLabel": {
+        "@language": "en",
+        "@value": "Unknown"
+      }
+    },
+    {
+      "@id": "iroko:MediumTypeScheme",
+      "@type": "skos:ConceptScheme",
+      "dcterms:description": {
+        "@language": "en",
+        "@value": "Controlled terms for the kind of medium through which manifestation is asserted to occur."
+      },
+      "rdfs:isDefinedBy": {
+        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
+      },
+      "rdfs:label": {
+        "@language": "en",
+        "@value": "Medium Types"
+      },
+      "skos:hasTopConcept": [
+        {
+          "@id": "iroko:medium-instrument"
+        },
+        {
+          "@id": "iroko:medium-object"
+        },
+        {
+          "@id": "iroko:medium-person"
+        },
+        {
+          "@id": "iroko:medium-place"
+        },
+        {
+          "@id": "iroko:medium-text"
+        },
+        {
+          "@id": "iroko:medium-unknown"
+        }
+      ]
+    },
+    {
       "@id": "iroko:support-stone",
       "@type": "skos:Concept",
       "rdfs:isDefinedBy": {
@@ -906,24 +924,6 @@
       "skos:prefLabel": {
         "@language": "en",
         "@value": "Stone"
-      }
-    },
-    {
-      "@id": "iroko:support-clay",
-      "@type": "skos:Concept",
-      "rdfs:isDefinedBy": {
-        "@id": "https://ontology.irokosociety.org/iroko-manifestation"
-      },
-      "skos:definition": {
-        "@language": "en",
-        "@value": "Fired or unfired clay tablets bearing inscribed or impressed text."
-      },
-      "skos:inScheme": {
-        "@id": "iroko:PhysicalSupportScheme"
-      },
-      "skos:prefLabel": {
-        "@language": "en",
-        "@value": "Clay"
       }
     }
   ]
