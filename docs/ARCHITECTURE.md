@@ -276,7 +276,7 @@ The PROV-O alignment file (`iroko-align-prov.ttl`) is provided as a reference-on
 
 ---
 
-## Vocabulary Statistics (v1.3.0)
+## Vocabulary Statistics (v1.4.0)
 
 | Module | Classes | Properties | Schemes | Concepts |
 |---|---:|---:|---:|---:|
@@ -304,7 +304,7 @@ All 413 properties across all 16 modules carry `iroko:minimumAccessLevel` annota
 
 ## Release Notes
 
-### v1.3.0 (March 2026)
+### v1.4.0 (March 2026)
 
 - **iroko-agency** — ...
 - **iroko-ekpe** — ...
@@ -312,7 +312,7 @@ All 413 properties across all 16 modules carry `iroko:minimumAccessLevel` annota
 - **All modules** — ...
 - Zenodo deposit: [10.5281/zenodo.19157678](https://doi.org/10.5281/zenodo.19157678)
 
-### v1.3.0 (March 2026)
+### v1.4.0 (March 2026)
 
 - **iroko-agency** — Added `iroko:RitualPractitioner` class (subclass of `iroko:SacredAgent`). Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures. Legitimacy and jurisdiction modeled separately via `iroko:Authority`. Corrected pre-existing `owl:versionInfo` error (was `"2.0.0"`, now `"1.3.0"`).
 - **iroko-ekpe** — Added `iroko:ForcedDissolution` class for structured documentation of state suppression of sacred institutions. Added `iroko:societyStatus` property on `iroko:InitiatorySociety` with controlled vocabulary `iroko:SocietyStatusScheme` (four concepts: active, historical, reformed, forcibly-dissolved). Added supporting properties `iroko:dissolutionEvent`, `iroko:dissolutionAuthority`, `iroko:dissolutionDate`. Governance principle: forced dissolution by an external authority does not transfer custodial rights over sacred materials to the suppressing state or to the public. Primary case study: Machado-era suppression of Abakuá potencias in Cuba (1923).
@@ -347,4 +347,4 @@ Postcustodial Digital Archives for Afro-Atlantic Cultural Materials
 [www.irokosociety.org](https://www.irokosociety.org)
 
 **Citation:**  
-Iroko Historical Society. (2026). *Iroko Framework: Semantic Vocabularies for Afro-Atlantic Sacred Knowledge Systems* (v1.3.0). https://www.irokosociety.org/iroko-framework. CC0 1.0 Universal.
+Iroko Historical Society. (2026). *Iroko Framework: Semantic Vocabularies for Afro-Atlantic Sacred Knowledge Systems* (v1.4.0). https://www.irokosociety.org/iroko-framework. CC0 1.0 Universal.

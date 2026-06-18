@@ -216,7 +216,7 @@ HTML_TEMPLATE = """\
     {toc_html}
 
     <div class="doc-content">
-      <p class="doc-meta">Iroko Framework v1.3.0 · {today}</p>
+      <p class="doc-meta">Iroko Framework v1.4.0 · {today}</p>
       {content_html}
     </div>
 
