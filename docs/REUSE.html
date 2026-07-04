@@ -3,224 +3,291 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Terms of reuse for the Iroko Framework's CC0 vocabulary modules.">
-  <title>Vocabulary Reuse Guide — Iroko Framework</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/IHS-Logo.svg">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Iroko Historical Society">
-  <meta property="og:title" content="Vocabulary Reuse Guide — Iroko Framework">
-  <meta property="og:description" content="Terms of reuse for the Iroko Framework's CC0 vocabulary modules.">
-  <meta property="og:url" content="https://ontology.irokosociety.org/docs/REUSE.html">
-  <meta property="og:image" content="https://ontology.irokosociety.org/assets/og-onto-reuse.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Vocabulary Reuse Guide — Iroko Framework">
-  <meta name="twitter:description" content="Terms of reuse for the Iroko Framework's CC0 vocabulary modules.">
-  <meta name="twitter:image" content="https://ontology.irokosociety.org/assets/og-onto-reuse.png">
+  <title>Using the Iroko Framework Vocabulary — Iroko Framework</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
-    .doc-body { max-width: 72ch; }
-    .doc-body h2 {
-      font-family: var(--serif);
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: var(--green);
-      margin: 2rem 0 .75rem;
+    /* ── Doc page layout ──────────────────────────────────────────── */
+    .doc-wrap {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3rem;
+      align-items: start;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    @media (max-width: 768px) {
+      .doc-wrap { grid-template-columns: 1fr; }
+      .doc-toc  { display: none; }
+    }
+
+    /* ── TOC sidebar ──────────────────────────────────────────────── */
+    .doc-toc {
+      position: sticky;
+      top: 2rem;
+      font-size: .8rem;
+      line-height: 1.6;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding-right: .5rem;
+    }
+    .doc-toc .toctitle {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: .5rem;
+    }
+    .doc-toc ul  { list-style: none; margin: 0; padding: 0; }
+    .doc-toc li  { margin: .2rem 0; }
+    .doc-toc a   { color: var(--ink-soft); text-decoration: none; }
+    .doc-toc a:hover { color: var(--accent); }
+    .doc-toc ul ul { padding-left: .9rem; }
+
+    /* ── Doc content ──────────────────────────────────────────────── */
+    .doc-content h1 { font-size: 1.8rem; margin-bottom: .25rem; }
+    .doc-content h2 {
+      font-size: 1.1rem;
+      margin-top: 2.5rem;
       padding-bottom: .4rem;
-      border-bottom: 1px solid var(--rule);
+      border-bottom: 1px solid var(--border);
     }
-    .doc-body h3 {
-      font-family: var(--sans);
-      font-size: .88rem;
-      font-weight: 500;
-      color: var(--ink);
-      margin: 1.25rem 0 .4rem;
-      letter-spacing: .02em;
-    }
-    .doc-body p {
-      font-size: .88rem;
-      color: var(--ink-mid);
-      line-height: 1.7;
-      margin-bottom: .75rem;
-    }
-    .doc-body ul, .doc-body ol {
-      margin: .5rem 0 .75rem 1.5rem;
-    }
-    .doc-body li {
-      font-size: .86rem;
-      color: var(--ink-mid);
-      line-height: 1.65;
-      margin-bottom: .25rem;
-    }
-    .doc-body code {
+    .doc-content h3 { font-size: .95rem; margin-top: 1.75rem; }
+    .doc-content p  { max-width: 72ch; line-height: 1.7; }
+    .doc-content code {
       font-family: var(--mono);
-      font-size: .8em;
-      background: var(--paper-warm);
-      border: 1px solid var(--rule);
-      padding: .1em .35em;
-      border-radius: 2px;
-      color: var(--green-mid);
-    }
-    .doc-body pre {
-      font-family: var(--mono);
-      font-size: .76rem;
-      line-height: 1.65;
-      background: var(--paper-warm);
-      border: 1px solid var(--rule-strong);
+      font-size: .82em;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 3px;
-      padding: 1rem 1.2rem;
-      overflow-x: auto;
-      margin: .75rem 0 1rem;
-      color: var(--ink-mid);
+      padding: .1em .35em;
     }
-    .doc-body pre code {
+    .doc-content pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      font-size: .78rem;
+      line-height: 1.55;
+    }
+    .doc-content pre code {
       background: none;
       border: none;
       padding: 0;
       font-size: inherit;
     }
-    .doc-body strong { font-weight: 500; color: var(--ink); }
-    .doc-body a { color: var(--green); }
-    .doc-body a:hover { color: var(--terracotta); }
-    .doc-nav {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
+    .doc-content table {
+      border-collapse: collapse;
+      font-size: .82rem;
+      margin: 1.25rem 0;
+      width: 100%;
+    }
+    .doc-content th {
+      background: var(--surface);
+      font-weight: 600;
+      text-align: left;
+      padding: .45rem .75rem;
+      border: 1px solid var(--border);
+    }
+    .doc-content td {
+      padding: .4rem .75rem;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .doc-content td:first-child { white-space: nowrap; }
+    .doc-content tr:nth-child(even) td { background: var(--surface); }
+    .doc-content ul, .doc-content ol {
+      padding-left: 1.4rem;
+      line-height: 1.7;
+    }
+    .doc-content li { margin: .25rem 0; }
+    .doc-content blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 1rem 0;
+      padding: .5rem 1rem;
+      color: var(--ink-soft);
+      background: var(--surface);
+      border-radius: 0 4px 4px 0;
+    }
+    .toc-anchor {
+      font-size: .65em;
+      margin-left: .4rem;
+      opacity: 0;
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+    h2:hover .toc-anchor,
+    h3:hover .toc-anchor { opacity: 1; }
+    .doc-meta {
+      font-size: .78rem;
+      color: var(--ink-soft);
+      margin-bottom: 2rem;
     }
   </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <span class="top-bar-id">
-    <img class="top-bar-logo" src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
-    Iroko Historical Society · Iroko Framework
-  </span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="https://www.irokosociety.org/" target="_blank" rel="noopener">IHS ↗</a>
-    <a href="https://medjat.irokosociety.org/">Per Medjat</a>
-    <a href="../whitepaper/">White Paper</a>
-    <a href="../docs/">Docs</a>
-    <a href="https://github.com/iroko-framework/iroko-framework" target="_blank" rel="noopener">GitHub ↗</a>
-  </nav>
-</div>
-
-<div class="page-wrap">
-
-  <p class="breadcrumb">
+  <nav class="breadcrumb page-wrap">
     <a href="../index.html">Iroko Framework</a>
     <span>/</span>
-    <a href="index.html">Documentation</a>
+    <a href="../docs/">Documentation</a>
     <span>/</span>
-    Vocabulary Reuse Guide
-  </p>
+    Using the Iroko Framework Vocabulary
+  </nav>
 
-  <header class="vocab-header">
-    <div class="vocab-header-logo">
-      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
+  <div class="doc-wrap">
+
+    <nav class="doc-toc">
+  <div class="toctitle">Contents</div>
+  <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#using-the-iroko-framework-vocabulary">Using the Iroko Framework Vocabulary</a><ul>
+<li><a href="#our-approach-conservative">Our Approach (Conservative)</a></li>
+<li><a href="#your-approach-your-choice">Your Approach (Your Choice)</a><ul>
+<li><a href="#option-1-more-liberal-university-archive">Option 1: More Liberal (University Archive)</a></li>
+<li><a href="#option-2-more-conservative-temple-archive">Option 2: More Conservative (Temple Archive)</a></li>
+<li><a href="#option-3-hybrid-museum-collection">Option 3: Hybrid (Museum Collection)</a></li>
+</ul>
+</li>
+<li><a href="#benefits-of-shared-vocabulary">Benefits of Shared Vocabulary</a><ul>
+<li><a href="#1-semantic-interoperability">1. Semantic Interoperability</a></li>
+<li><a href="#2-respect-different-access-policies">2. Respect Different Access Policies</a></li>
+<li><a href="#3-community-choice">3. Community Choice</a></li>
+</ul>
+</li>
+<li><a href="#how-to-adopt">How to Adopt</a><ul>
+<li><a href="#step-1-import-vocabulary">Step 1: Import Vocabulary</a></li>
+<li><a href="#step-2-classify-your-data">Step 2: Classify Your Data</a></li>
+<li><a href="#step-3-make-your-access-decisions">Step 3: Make Your Access Decisions</a></li>
+</ul>
+</li>
+<li><a href="#questions">Questions?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+</nav>
+
+
+    <div class="doc-content">
+      <p class="doc-meta">Iroko Framework v1.4.0 · May 2026</p>
+      <h1 id="using-the-iroko-framework-vocabulary">Using the Iroko Framework Vocabulary<a class="toc-anchor" href="#using-the-iroko-framework-vocabulary" title="Permanent link">&para;</a></h1>
+<p>The Iroko Framework vocabulary is designed for <strong>reuse</strong> by other projects documenting Afro-Atlantic sacred knowledge.</p>
+<h2 id="our-approach-conservative">Our Approach (Conservative)<a class="toc-anchor" href="#our-approach-conservative" title="Permanent link">&para;</a></h2>
+<p>Iroko Historical Society publishes:
+- ✅ <strong>Full vocabulary</strong> (all classes, properties, concepts)
+- ✅ <strong>Minimal public data</strong> (scientific names, vernacular names only)
+- ❌ <strong>Detailed knowledge</strong> (kept private, accessed via authenticated API)</p>
+<h2 id="your-approach-your-choice">Your Approach (Your Choice)<a class="toc-anchor" href="#your-approach-your-choice" title="Permanent link">&para;</a></h2>
+<p>You can use the Iroko vocabulary with different access policies:</p>
+<h3 id="option-1-more-liberal-university-archive">Option 1: More Liberal (University Archive)<a class="toc-anchor" href="#option-1-more-liberal-university-archive" title="Permanent link">&para;</a></h3>
+<pre><code class="language-turtle"># Example: University digitizing published ethnographies
+&lt;http://university.edu/plants/basil-001&gt;
+    a iroko:Plant ;
+    dwc:scientificName &quot;Ocimum basilicum&quot; ;
+    iroko:ritualUse iroko:ritual-purification ;  # YOU publish this
+    iroko:medicinalUse iroko:medicinal-digestive-support ;  # We keep private
+    dcterms:source &lt;http://university.edu/sources/cabrera-1954&gt; .
+</code></pre>
+<p><strong>Rationale:</strong> Published ethnographies are already public. University making them findable.</p>
+<hr />
+<h3 id="option-2-more-conservative-temple-archive">Option 2: More Conservative (Temple Archive)<a class="toc-anchor" href="#option-2-more-conservative-temple-archive" title="Permanent link">&para;</a></h3>
+<pre><code class="language-turtle"># Example: Temple documenting internal lineage knowledge
+&lt;http://temple.org/plants/secret-leaf-001&gt;
+    a iroko:Plant ;
+    # Only publish existence, NO details
+    iroko:accessLevel iroko:access-no-access ;
+    rdfs:comment &quot;Detailed information restricted to initiated members only.&quot; .
+</code></pre>
+<p><strong>Rationale:</strong> Active practice, living tradition, maximum protection.</p>
+<hr />
+<h3 id="option-3-hybrid-museum-collection">Option 3: Hybrid (Museum Collection)<a class="toc-anchor" href="#option-3-hybrid-museum-collection" title="Permanent link">&para;</a></h3>
+<pre><code class="language-turtle"># Example: Museum with both public and restricted items
+&lt;http://museum.org/plants/exhibit-001&gt;
+    a iroko:Plant ;
+    dwc:scientificName &quot;Newbouldia laevis&quot; ;
+    iroko:ritualUse iroko:ritual-purification ;  # From published sources
+    iroko:custodialRelationship iroko:custodial-community-held ;
+    dcterms:provenance &quot;Donated by Ilé Obatalá with access conditions&quot; ;
+    # Detailed preparation methods: private, per donor agreement
+    rdfs:seeAlso &lt;http://museum.org/access-request&gt; .
+</code></pre>
+<p><strong>Rationale:</strong> Respect donor wishes, show what you can, protect what you must.</p>
+<hr />
+<h2 id="benefits-of-shared-vocabulary">Benefits of Shared Vocabulary<a class="toc-anchor" href="#benefits-of-shared-vocabulary" title="Permanent link">&para;</a></h2>
+<h3 id="1-semantic-interoperability">1. Semantic Interoperability<a class="toc-anchor" href="#1-semantic-interoperability" title="Permanent link">&para;</a></h3>
+<p>Different archives can link to same concepts:</p>
+<pre><code class="language-turtle"># IHS says:
+&lt;https://iroko.org/plants/akoko-001&gt; iroko:ritualUse iroko:ritual-purification .
+
+# University says:
+&lt;http://university.edu/plants/akoko-002&gt; iroko:ritualUse iroko:ritual-purification .
+
+# Same concept URI: iroko:ritual-purification
+# Now machines can find all plants for purification across archives
+</code></pre>
+<h3 id="2-respect-different-access-policies">2. Respect Different Access Policies<a class="toc-anchor" href="#2-respect-different-access-policies" title="Permanent link">&para;</a></h3>
+<pre><code class="language-turtle"># IHS: keeps private
+&lt;https://iroko.org/plants/akoko-001&gt;
+    iroko:ritualUse iroko:ritual-purification ;
+    # preparation method: not published
+
+# University: publishes from Verger book (already public)
+&lt;http://university.edu/plants/akoko-002&gt;
+    iroko:ritualUse iroko:ritual-purification ;
+    iroko:preparationMethod iroko:prep-bath ;  # They publish this
+    dcterms:source &lt;http://worldcat.org/verger-1995&gt; .
+
+# Both valid uses of same vocabulary
+</code></pre>
+<h3 id="3-community-choice">3. Community Choice<a class="toc-anchor" href="#3-community-choice" title="Permanent link">&para;</a></h3>
+<p>Each community decides:
+- What to publish publicly
+- What to keep private
+- What requires authentication
+- What requires initiation</p>
+<p><strong>The vocabulary supports all these choices.</strong></p>
+<hr />
+<h2 id="how-to-adopt">How to Adopt<a class="toc-anchor" href="#how-to-adopt" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-import-vocabulary">Step 1: Import Vocabulary<a class="toc-anchor" href="#step-1-import-vocabulary" title="Permanent link">&para;</a></h3>
+<pre><code class="language-turtle">@prefix iroko: &lt;https://ontology.irokosociety.org/iroko#&gt; .
+</code></pre>
+<h3 id="step-2-classify-your-data">Step 2: Classify Your Data<a class="toc-anchor" href="#step-2-classify-your-data" title="Permanent link">&para;</a></h3>
+<pre><code class="language-turtle">&lt;http://your-archive.org/plants/001&gt;
+    a iroko:Plant ;
+    # Use properties from vocab
+    iroko:ritualUse iroko:ritual-purification ;
+    # Use access levels from vocab
+    iroko:accessLevel iroko:access-community-only .
+</code></pre>
+<h3 id="step-3-make-your-access-decisions">Step 3: Make Your Access Decisions<a class="toc-anchor" href="#step-3-make-your-access-decisions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Publish what your community approves</li>
+<li>Keep private what your community requests</li>
+<li>Use access level vocabulary to document policies</li>
+</ul>
+<hr />
+<h2 id="questions">Questions?<a class="toc-anchor" href="#questions" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Technical: https://github.com/iroko-framework/iroko-framework/issues</li>
+<li>Community: info@iroko.org</li>
+</ul>
     </div>
-    <div>
-      <span class="module-tag tag-core">Adopters</span>
-      <h1>Vocabulary Reuse Guide</h1>
-      <p class="subtitle">Adopting the Iroko Framework for your institution</p>
-      <div class="header-meta">
-        <span class="meta-pill">v1.4.0</span>
-        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/REUSE.md" style="color:inherit;">View on GitHub ↗</a></span>
-      </div>
-    </div>
-  </header>
 
-  <div class="doc-body" style="margin-top:2rem;">
+  </div><!-- /doc-wrap -->
 
-    <h2>Overview</h2>
-    <p>The Iroko Framework vocabularies are released under CC0 (public domain) and designed for adoption by any institution documenting Afro-Atlantic cultural materials. This guide explains how to incorporate the vocabulary into your system and calibrate the access control model to your institutional context.</p>
-
-    <h2>Understanding the Vocabulary Structure</h2>
-    <p>The framework consists of five published modules plus a shared CSS/generator infrastructure:</p>
-    <ul>
-      <li><strong>iroko-core</strong> — Cross-cutting governance: access control, epistemic types, provenance, contested knowledge, relationship assertions, sacred media</li>
-      <li><strong>iroko-ewe</strong> — Sacred plant knowledge, layered over Darwin Core</li>
-      <li><strong>iroko-nkisi</strong> — Spiritual entities (orisa, lwa, mpungo, etc.) with path/camino modeling</li>
-      <li><strong>iroko-travay</strong> — Ritual processes with property-level access control</li>
-      <li><strong>iroko-ile</strong> — Religious houses, lineage, initiation genealogy, and authority</li>
-    </ul>
-    <p>The Core module is a dependency for all others. You can adopt individual modules without adopting the full framework.</p>
-
-    <h2>Choosing Your Access Policy</h2>
-    <p>Every property in the Iroko vocabulary carries an <code>iroko:minimumAccessLevel</code> annotation. This is the <em>recommended</em> minimum — your institution sets its own thresholds based on your relationship with the communities whose knowledge you hold.</p>
-    <ul>
-      <li><strong>Universities</strong> drawing from published ethnographies may expose more fields publicly</li>
-      <li><strong>Temple archives</strong> holding active ceremonial records should restrict more aggressively</li>
-      <li><strong>Museums</strong> with mixed holdings (public exhibits + restricted donor records) can apply per-record or per-collection policies</li>
-      <li><strong>Researchers</strong> should apply community authorization requirements before publishing field data</li>
-    </ul>
-
-    <h2>RDF/TTL Usage Examples</h2>
-    <h3>Prefix declarations</h3>
-    <pre><code>@prefix iroko:  &lt;https://www.irokosociety.org/iroko-framework/core#&gt; .
-@prefix ewe:    &lt;https://www.irokosociety.org/iroko-framework/ewe#&gt; .
-@prefix nkisi:  &lt;https://www.irokosociety.org/iroko-framework/nkisi#&gt; .
-@prefix travay: &lt;https://www.irokosociety.org/iroko-framework/travay#&gt; .
-@prefix ile:    &lt;https://www.irokosociety.org/iroko-framework/ile#&gt; .</code></pre>
-    <h3>Describing a plant record</h3>
-    <pre><code>ex:Plant0001 a ewe:Plant ;
-    dcterms:title "Iroko"@en ;
-    skos:prefLabel "Ìròkò"@yo, "Iroko"@en, "Iroko"@es ;
-    dwc:scientificName "Milicia excelsa" ;
-    ewe:ritualUse ewe:ritual-cosmological ;
-    ewe:medicinalUse ewe:medicinal-general-tonic ;
-    iroko:minimumAccessLevel iroko:access-public-unrestricted ;
-    ewe:harvestProtocol ewe:harvest-offering-required ;
-    iroko:minimumAccessLevel iroko:access-initiated-only .</code></pre>
-    <h3>Applying access control in queries</h3>
-    <pre><code># SPARQL: retrieve only public-unrestricted properties
-SELECT ?property ?value WHERE {
-  ex:Plant0001 ?property ?value .
-  ?property iroko:minimumAccessLevel iroko:access-public-unrestricted .
-}</code></pre>
-
-    <h2>Integration with Existing Systems</h2>
-    <h3>Darwin Core (botanical records)</h3>
-    <p>The Ewé module is designed to layer over Darwin Core. Use Darwin Core properties for standard botanical fields (<code>dwc:scientificName</code>, <code>dwc:vernacularName</code>, etc.) and Iroko properties for ritual and sacred knowledge fields. The Iroko <code>ewe:Plant</code> class is a subclass of <code>iroko:SacredEntity</code>, which is compatible with Darwin Core occurrence records via <code>dwc:Occurrence</code>.</p>
-    <h3>SKOS thesauri</h3>
-    <p>All Iroko concept schemes are valid SKOS and can be imported into any SKOS-compatible thesaurus management system. The framework uses <code>skos:inScheme</code>, <code>skos:hasTopConcept</code>, <code>skos:prefLabel</code>, and <code>skos:definition</code> throughout.</p>
-    <h3>Dublin Core</h3>
-    <p>Use <code>dcterms:bibliographicCitation</code> for source references, <code>dcterms:created</code> for record creation dates, and <code>dcterms:description</code> for general descriptions. The Iroko vocabulary does not duplicate these.</p>
-
-    <h2>SPARQL Patterns</h2>
-    <h3>Find all entities with contested status</h3>
-    <pre><code>SELECT ?entity ?notes WHERE {
-  ?entity iroko:contestedStatus true ;
-          iroko:contestedNotes ?notes .
-}</code></pre>
-    <h3>Find all initiation events for a specific house</h3>
-    <pre><code>SELECT ?event ?type ?date WHERE {
-  ?event a ile:InitiationEvent ;
-         ile:eventHouse ex:MyHouse ;
-         ile:initiationType ?type ;
-         ile:eventDate ?date .
-}</code></pre>
-
-    <h2>Getting Help</h2>
-    <p>Open an issue on the <a href="https://github.com/iroko-framework/iroko-framework">GitHub repository</a> or contact <a href="/cdn-cgi/l/email-protection#274e494148674e55484c485448444e42535e09485540"><span class="__cf_email__" data-cfemail="9ef7f0f8f1def7ecf1f5f1edf1fdf7fbeae7b0f1ecf9">[email&#160;protected]</span></a> with questions about adoption or integration.</p>
-
-  </div>
-
-  <div class="doc-nav">
-    <a class="action-primary" href="index.html">← All Documentation</a>
-    <a class="action-secondary" href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/REUSE.md">View Markdown on GitHub ↗</a>
-  </div>
-
-  <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      License: CC0 1.0 Universal (Public Domain)
-      <div class="footer-iao">Ilé Añá Olofí, Inc. 501(c)(3) · <a href="https://ileanaolofi.org" target="_blank" rel="noopener">ileanaolofi.org</a></div>
+  <footer class="site-footer page-wrap">
+    <div class="footer-copy">
+      © 2026 Iroko Historical Society · CC0 1.0 Universal (Public Domain)
     </div>
     <div class="footer-links">
-      <a href="https://www.irokosociety.org">irokosociety.org</
+      <a href="https://www.irokosociety.org">irokosociety.org</a>
+      <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
+      <a href="../vocab/">Vocabularies</a>
+    </div>
+  </footer>
+
+</body>
+</html>

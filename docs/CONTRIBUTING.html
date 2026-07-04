@@ -3,269 +3,361 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="How to propose changes to the Iroko Framework vocabulary.">
-  <title>Contributing Guide — Iroko Framework</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/IHS-Logo.svg">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Iroko Historical Society">
-  <meta property="og:title" content="Contributing Guide — Iroko Framework">
-  <meta property="og:description" content="How to propose changes to the Iroko Framework vocabulary.">
-  <meta property="og:url" content="https://ontology.irokosociety.org/docs/CONTRIBUTING.html">
-  <meta property="og:image" content="https://ontology.irokosociety.org/assets/og-onto-contributing.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Contributing Guide — Iroko Framework">
-  <meta name="twitter:description" content="How to propose changes to the Iroko Framework vocabulary.">
-  <meta name="twitter:image" content="https://ontology.irokosociety.org/assets/og-onto-contributing.png">
+  <title>Contributing to Iroko Framework — Iroko Framework</title>
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
-    .doc-body { max-width: 72ch; }
-    .doc-body h2 {
-      font-family: var(--serif);
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: var(--green);
-      margin: 2rem 0 .75rem;
+    /* ── Doc page layout ──────────────────────────────────────────── */
+    .doc-wrap {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3rem;
+      align-items: start;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    @media (max-width: 768px) {
+      .doc-wrap { grid-template-columns: 1fr; }
+      .doc-toc  { display: none; }
+    }
+
+    /* ── TOC sidebar ──────────────────────────────────────────────── */
+    .doc-toc {
+      position: sticky;
+      top: 2rem;
+      font-size: .8rem;
+      line-height: 1.6;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding-right: .5rem;
+    }
+    .doc-toc .toctitle {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: .5rem;
+    }
+    .doc-toc ul  { list-style: none; margin: 0; padding: 0; }
+    .doc-toc li  { margin: .2rem 0; }
+    .doc-toc a   { color: var(--ink-soft); text-decoration: none; }
+    .doc-toc a:hover { color: var(--accent); }
+    .doc-toc ul ul { padding-left: .9rem; }
+
+    /* ── Doc content ──────────────────────────────────────────────── */
+    .doc-content h1 { font-size: 1.8rem; margin-bottom: .25rem; }
+    .doc-content h2 {
+      font-size: 1.1rem;
+      margin-top: 2.5rem;
       padding-bottom: .4rem;
-      border-bottom: 1px solid var(--rule);
+      border-bottom: 1px solid var(--border);
     }
-    .doc-body h3 {
-      font-family: var(--sans);
-      font-size: .88rem;
-      font-weight: 500;
-      color: var(--ink);
-      margin: 1.25rem 0 .4rem;
-      letter-spacing: .02em;
-    }
-    .doc-body p {
-      font-size: .88rem;
-      color: var(--ink-mid);
-      line-height: 1.7;
-      margin-bottom: .75rem;
-    }
-    .doc-body ul, .doc-body ol {
-      margin: .5rem 0 .75rem 1.5rem;
-    }
-    .doc-body li {
-      font-size: .86rem;
-      color: var(--ink-mid);
-      line-height: 1.65;
-      margin-bottom: .25rem;
-    }
-    .doc-body code {
+    .doc-content h3 { font-size: .95rem; margin-top: 1.75rem; }
+    .doc-content p  { max-width: 72ch; line-height: 1.7; }
+    .doc-content code {
       font-family: var(--mono);
-      font-size: .8em;
-      background: var(--paper-warm);
-      border: 1px solid var(--rule);
-      padding: .1em .35em;
-      border-radius: 2px;
-      color: var(--green-mid);
-    }
-    .doc-body pre {
-      font-family: var(--mono);
-      font-size: .76rem;
-      line-height: 1.65;
-      background: var(--paper-warm);
-      border: 1px solid var(--rule-strong);
+      font-size: .82em;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 3px;
-      padding: 1rem 1.2rem;
-      overflow-x: auto;
-      margin: .75rem 0 1rem;
-      color: var(--ink-mid);
+      padding: .1em .35em;
     }
-    .doc-body pre code {
+    .doc-content pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      font-size: .78rem;
+      line-height: 1.55;
+    }
+    .doc-content pre code {
       background: none;
       border: none;
       padding: 0;
       font-size: inherit;
     }
-    .doc-body strong { font-weight: 500; color: var(--ink); }
-    .doc-body a { color: var(--green); }
-    .doc-body a:hover { color: var(--terracotta); }
-    .doc-nav {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
+    .doc-content table {
+      border-collapse: collapse;
+      font-size: .82rem;
+      margin: 1.25rem 0;
+      width: 100%;
+    }
+    .doc-content th {
+      background: var(--surface);
+      font-weight: 600;
+      text-align: left;
+      padding: .45rem .75rem;
+      border: 1px solid var(--border);
+    }
+    .doc-content td {
+      padding: .4rem .75rem;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .doc-content td:first-child { white-space: nowrap; }
+    .doc-content tr:nth-child(even) td { background: var(--surface); }
+    .doc-content ul, .doc-content ol {
+      padding-left: 1.4rem;
+      line-height: 1.7;
+    }
+    .doc-content li { margin: .25rem 0; }
+    .doc-content blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 1rem 0;
+      padding: .5rem 1rem;
+      color: var(--ink-soft);
+      background: var(--surface);
+      border-radius: 0 4px 4px 0;
+    }
+    .toc-anchor {
+      font-size: .65em;
+      margin-left: .4rem;
+      opacity: 0;
+      color: var(--ink-soft);
+      text-decoration: none;
+    }
+    h2:hover .toc-anchor,
+    h3:hover .toc-anchor { opacity: 1; }
+    .doc-meta {
+      font-size: .78rem;
+      color: var(--ink-soft);
+      margin-bottom: 2rem;
     }
   </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <span class="top-bar-id">
-    <img class="top-bar-logo" src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
-    Iroko Historical Society · Iroko Framework
-  </span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="https://www.irokosociety.org/" target="_blank" rel="noopener">IHS ↗</a>
-    <a href="https://medjat.irokosociety.org/">Per Medjat</a>
-    <a href="../whitepaper/">White Paper</a>
-    <a href="../docs/">Docs</a>
-    <a href="https://github.com/iroko-framework/iroko-framework" target="_blank" rel="noopener">GitHub ↗</a>
-  </nav>
-</div>
-
-<div class="page-wrap">
-
-  <p class="breadcrumb">
+  <nav class="breadcrumb page-wrap">
     <a href="../index.html">Iroko Framework</a>
     <span>/</span>
-    <a href="index.html">Documentation</a>
+    <a href="../docs/">Documentation</a>
     <span>/</span>
-    Contributing Guide
-  </p>
+    Contributing to Iroko Framework
+  </nav>
 
-  <header class="vocab-header">
-    <div class="vocab-header-logo">
-      <img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
+  <div class="doc-wrap">
+
+    <nav class="doc-toc">
+  <div class="toctitle">Contents</div>
+  <div class="toc"><span class="toctitle">Contents</span><ul>
+<li><a href="#contributing-to-iroko-framework">Contributing to Iroko Framework</a><ul>
+<li><a href="#development-setup">Development Setup</a><ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#installation">Installation</a></li>
+</ul>
+</li>
+<li><a href="#workflow">Workflow</a><ul>
+<li><a href="#1-edit-vocabulary-files">1. Edit Vocabulary Files</a></li>
+<li><a href="#2-validate-changes">2. Validate Changes</a></li>
+<li><a href="#3-generate-html-documentation">3. Generate HTML Documentation</a></li>
+<li><a href="#4-review-changes">4. Review Changes</a></li>
+<li><a href="#5-deploy">5. Deploy</a></li>
+</ul>
+</li>
+<li><a href="#adding-new-terms">Adding New Terms</a><ul>
+<li><a href="#adding-a-class">Adding a Class</a></li>
+<li><a href="#adding-a-property">Adding a Property</a></li>
+<li><a href="#adding-a-concept">Adding a Concept</a></li>
+</ul>
+</li>
+<li><a href="#code-style">Code Style</a><ul>
+<li><a href="#turtle-formatting">Turtle Formatting</a></li>
+<li><a href="#namespace-prefixes">Namespace Prefixes</a></li>
+</ul>
+</li>
+<li><a href="#testing">Testing</a><ul>
+<li><a href="#validate-rdf-syntax">Validate RDF Syntax</a></li>
+<li><a href="#test-html-generation">Test HTML Generation</a></li>
+<li><a href="#check-links">Check Links</a></li>
+</ul>
+</li>
+<li><a href="#versioning">Versioning</a></li>
+<li><a href="#pull-request-guidelines">Pull Request Guidelines</a></li>
+<li><a href="#questions">Questions?</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+</nav>
+
+
+    <div class="doc-content">
+      <p class="doc-meta">Iroko Framework v1.4.0 · May 2026</p>
+      <h1 id="contributing-to-iroko-framework">Contributing to Iroko Framework<a class="toc-anchor" href="#contributing-to-iroko-framework" title="Permanent link">&para;</a></h1>
+<p>Thank you for your interest in contributing to the Iroko Framework vocabularies!</p>
+<h2 id="development-setup">Development Setup<a class="toc-anchor" href="#development-setup" title="Permanent link">&para;</a></h2>
+<h3 id="prerequisites">Prerequisites<a class="toc-anchor" href="#prerequisites" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Python 3.8+</strong> (for HTML generation)</li>
+<li><strong>Rapper</strong> (for TTL validation)</li>
+<li><strong>Git</strong></li>
+</ul>
+<h3 id="installation">Installation<a class="toc-anchor" href="#installation" title="Permanent link">&para;</a></h3>
+<h4 id="1-clone-the-repository">1. Clone the Repository<a class="toc-anchor" href="#1-clone-the-repository" title="Permanent link">&para;</a></h4>
+<pre><code class="language-bash">git clone https://github.com/iroko-framework/iroko-framework.git
+cd iroko-framework
+</code></pre>
+<h4 id="2-install-dependencies">2. Install Dependencies<a class="toc-anchor" href="#2-install-dependencies" title="Permanent link">&para;</a></h4>
+<p><strong>Python dependencies:</strong></p>
+<pre><code class="language-bash">pip install -r requirements.txt
+</code></pre>
+<p><strong>Rapper (RDF validator):</strong></p>
+<p>Ubuntu/Debian:</p>
+<pre><code class="language-bash">sudo apt-get install raptor2-utils
+</code></pre>
+<p>macOS:</p>
+<pre><code class="language-bash">brew install raptor
+</code></pre>
+<h4 id="3-make-scripts-executable">3. Make Scripts Executable<a class="toc-anchor" href="#3-make-scripts-executable" title="Permanent link">&para;</a></h4>
+<pre><code class="language-bash">chmod +x scripts/*.sh
+chmod +x scripts/*.py
+</code></pre>
+<h4 id="4-verify-installation">4. Verify Installation<a class="toc-anchor" href="#4-verify-installation" title="Permanent link">&para;</a></h4>
+<pre><code class="language-bash"># Validate vocabularies
+bash scripts/validate_ttl.sh
+
+# Generate HTML documentation
+python scripts/build_all.py
+</code></pre>
+<p>You should see:</p>
+<pre><code>✓ iroko-core.ttl valid
+✓ iroko-ewe.ttl valid
+</code></pre>
+<h2 id="workflow">Workflow<a class="toc-anchor" href="#workflow" title="Permanent link">&para;</a></h2>
+<h3 id="1-edit-vocabulary-files">1. Edit Vocabulary Files<a class="toc-anchor" href="#1-edit-vocabulary-files" title="Permanent link">&para;</a></h3>
+<p>Edit TTL files in <code>vocab/</code> directory:
+- <code>vocab/iroko-core.ttl</code> - Core vocabulary
+- <code>vocab/iroko-ewe.ttl</code> - Ewé module</p>
+<h3 id="2-validate-changes">2. Validate Changes<a class="toc-anchor" href="#2-validate-changes" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">bash scripts/validate_ttl.sh
+</code></pre>
+<p>Fix any syntax errors before proceeding.</p>
+<h3 id="3-generate-html-documentation">3. Generate HTML Documentation<a class="toc-anchor" href="#3-generate-html-documentation" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">python scripts/build_all.py
+</code></pre>
+<p>This auto-generates:
+- <code>vocab/iroko-core.html</code>
+- <code>vocab/iroko-ewe.html</code></p>
+<h3 id="4-review-changes">4. Review Changes<a class="toc-anchor" href="#4-review-changes" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">git status
+git diff vocab/
+</code></pre>
+<h3 id="5-deploy">5. Deploy<a class="toc-anchor" href="#5-deploy" title="Permanent link">&para;</a></h3>
+<p><strong>Option A: Automated deployment script</strong></p>
+<pre><code class="language-bash">bash scripts/deploy.sh
+</code></pre>
+<p>This will:
+1. Validate TTL files
+2. Generate HTML
+3. Commit changes
+4. Push to GitHub</p>
+<p><strong>Option B: Manual deployment</strong></p>
+<pre><code class="language-bash">git add index.html docs/*.html docs/*.md vocab/*.ttl vocab/*.html vocab/*.jsonld vocab/*.rdf vocab/*.nt vocab/tradition-vocab.json iroko.html iroko-*.html iroko-framework/index.html
+git commit -m &quot;Update vocabulary: [describe changes]&quot;
+git push origin main
+</code></pre>
+<p>Changes will be live at https://ontology.irokosociety.org/ within a few minutes.</p>
+<h2 id="adding-new-terms">Adding New Terms<a class="toc-anchor" href="#adding-new-terms" title="Permanent link">&para;</a></h2>
+<h3 id="adding-a-class">Adding a Class<a class="toc-anchor" href="#adding-a-class" title="Permanent link">&para;</a></h3>
+<pre><code class="language-turtle">iroko:NewClass 
+    a owl:Class ;
+    rdfs:subClassOf iroko:SacredEntity ;
+    rdfs:label &quot;New Class&quot;@en ;
+    rdfs:comment &quot;Description of the new class.&quot;@en ;
+    rdfs:isDefinedBy &lt;https://ontology.irokosociety.org/iroko-ewe&gt; .
+</code></pre>
+<h3 id="adding-a-property">Adding a Property<a class="toc-anchor" href="#adding-a-property" title="Permanent link">&para;</a></h3>
+<pre><code class="language-turtle">iroko:newProperty 
+    a owl:ObjectProperty ;
+    rdfs:label &quot;new property&quot;@en ;
+    rdfs:comment &quot;Description of the property.&quot;@en ;
+    rdfs:domain iroko:Plant ;
+    rdfs:range skos:Concept ;
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy &lt;https://ontology.irokosociety.org/iroko-ewe&gt; .
+</code></pre>
+<h3 id="adding-a-concept">Adding a Concept<a class="toc-anchor" href="#adding-a-concept" title="Permanent link">&para;</a></h3>
+<pre><code class="language-turtle">iroko:ritual-new-use 
+    a skos:Concept ;
+    skos:inScheme iroko:RitualUseScheme ;
+    skos:prefLabel &quot;New Ritual Use&quot;@en ;
+    skos:definition &quot;Description of this ritual use.&quot;@en .
+</code></pre>
+<h2 id="code-style">Code Style<a class="toc-anchor" href="#code-style" title="Permanent link">&para;</a></h2>
+<h3 id="turtle-formatting">Turtle Formatting<a class="toc-anchor" href="#turtle-formatting" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Indent with 4 spaces</strong> (not tabs)</li>
+<li><strong>Use blank lines</strong> to separate major sections</li>
+<li><strong>Comment sections</strong> with <code># ===== SECTION NAME =====</code></li>
+<li><strong>Alphabetize concepts</strong> within schemes</li>
+</ul>
+<h3 id="namespace-prefixes">Namespace Prefixes<a class="toc-anchor" href="#namespace-prefixes" title="Permanent link">&para;</a></h3>
+<p>Always declare at top of file:</p>
+<pre><code class="language-turtle">@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt; .
+@prefix dcterms: &lt;http://purl.org/dc/terms/&gt; .
+@prefix iroko: &lt;https://ontology.irokosociety.org/iroko#&gt; .
+</code></pre>
+<h2 id="testing">Testing<a class="toc-anchor" href="#testing" title="Permanent link">&para;</a></h2>
+<h3 id="validate-rdf-syntax">Validate RDF Syntax<a class="toc-anchor" href="#validate-rdf-syntax" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">bash scripts/validate_ttl.sh
+</code></pre>
+<h3 id="test-html-generation">Test HTML Generation<a class="toc-anchor" href="#test-html-generation" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">python scripts/build_all.py
+</code></pre>
+<p>Then open <code>vocab/iroko-core.html</code> in a browser.</p>
+<h3 id="check-links">Check Links<a class="toc-anchor" href="#check-links" title="Permanent link">&para;</a></h3>
+<p>All internal links in HTML should work:
+- Table of contents anchors
+- Cross-references between terms</p>
+<h2 id="versioning">Versioning<a class="toc-anchor" href="#versioning" title="Permanent link">&para;</a></h2>
+<p>We use semantic versioning: <code>MAJOR.MINOR.PATCH</code></p>
+<ul>
+<li><strong>MAJOR:</strong> Breaking changes (incompatible with previous version)</li>
+<li><strong>MINOR:</strong> New terms added (backward compatible)</li>
+<li><strong>PATCH:</strong> Bug fixes, documentation improvements</li>
+</ul>
+<p>Update <code>owl:versionInfo</code> in the ontology declaration:</p>
+<pre><code class="language-turtle">&lt;https://ontology.irokosociety.org/iroko-core&gt; 
+    a owl:Ontology ;
+    owl:versionInfo &quot;1.1.0&quot; ;  # Update this
+    dcterms:modified &quot;2026-02-18&quot;^^xsd:date ;  # Update this
+</code></pre>
+<h2 id="pull-request-guidelines">Pull Request Guidelines<a class="toc-anchor" href="#pull-request-guidelines" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Create a branch</strong> for your changes</li>
+<li><strong>Write clear commit messages</strong></li>
+<li><strong>Validate before submitting</strong> (<code>bash scripts/validate_ttl.sh</code>)</li>
+<li><strong>Update version info</strong> if adding new terms</li>
+<li><strong>Describe changes</strong> in PR description</li>
+</ol>
+<h2 id="questions">Questions?<a class="toc-anchor" href="#questions" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Issues:</strong> <a href="https://github.com/iroko-framework/iroko-framework/issues">GitHub Issues</a></li>
+<li><strong>Email:</strong> info@iroko.org</li>
+</ul>
+<h2 id="license">License<a class="toc-anchor" href="#license" title="Permanent link">&para;</a></h2>
+<p>By contributing, you agree to release your contributions under CC0 1.0 Universal (Public Domain).</p>
     </div>
-    <div>
-      <span class="module-tag tag-divination">Developers</span>
-      <h1>Contributing Guide</h1>
-      <p class="subtitle">Development setup, TTL editing, validation, and deployment workflow</p>
-      <div class="header-meta">
-        <span class="meta-pill">v1.4.0</span>
-        <span class="meta-pill"><a href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/CONTRIBUTING.md" style="color:inherit;">View on GitHub ↗</a></span>
-      </div>
-    </div>
-  </header>
 
-  <div class="doc-body" style="margin-top:2rem;">
+  </div><!-- /doc-wrap -->
 
-    <h2>Overview</h2>
-    <p>This guide covers the full workflow for contributing to the Iroko Framework vocabulary — from setting up your local environment through validation, HTML generation, and deployment. The vocabulary files are RDF/Turtle (<code>.ttl</code>); the HTML documentation pages are generated from them programmatically.</p>
-
-    <h2>Development Setup</h2>
-    <h3>Prerequisites</h3>
-    <ul>
-      <li>Python 3.10 or later</li>
-      <li>Git (with write access to the repository)</li>
-      <li>A text editor with Turtle syntax support (VS Code with the Stardog RDF Grammars extension is recommended)</li>
-    </ul>
-    <h3>Install dependencies</h3>
-    <pre><code>pip install rdflib</code></pre>
-    <h3>Clone the repository</h3>
-    <pre><code>git clone https://github.com/iroko-framework/iroko-framework.git
-cd iroko-framework</code></pre>
-
-    <h2>Repository Structure</h2>
-    <pre><code>iroko-framework/
-  index.html                 # Homepage
-  assets/
-    IHS-Logo.jpg
-    iroko-style.css          # Shared stylesheet
-  vocab/
-    index.html               # Vocabulary index
-    iroko-core.ttl           # Core module (source of truth)
-    iroko-core.html          # Generated — do not edit directly
-    iroko-ewe.ttl
-    iroko-ewe.html
-    iroko-nkisi.ttl
-    iroko-nkisi.html
-    iroko-travay.ttl
-    iroko-travay.html
-    iroko-ile.ttl
-    iroko-ile.html
-  docs/
-    index.html               # This documentation index
-    CONTRIBUTING.html
-    REUSE.html
-    ARCHITECTURE.html
-  generate_browse_pages.py   # HTML generator script</code></pre>
-
-    <h2>Editing Vocabulary Files</h2>
-    <h3>Turtle syntax conventions</h3>
-    <ul>
-      <li>Use 2-space indentation throughout</li>
-      <li>One triple per line for readability; use semicolons for same-subject continuation</li>
-      <li>Prefix declarations at the top; alphabetize after <code>@base</code></li>
-      <li>All <code>rdfs:label</code> values in English (<code>@en</code>); add <code>skos:prefLabel</code> in additional languages for concept schemes</li>
-      <li>All <code>rdfs:comment</code> and <code>skos:definition</code> values in English only unless explicitly multilingual</li>
-    </ul>
-    <h3>Access levels</h3>
-    <p>Every property must carry <code>iroko:minimumAccessLevel</code> pointing to a concept in the Access Level Classification scheme. The six levels are:</p>
-    <ul>
-      <li><code>iroko:access-public-unrestricted</code> — visible to anyone</li>
-      <li><code>iroko:access-community-restricted</code> — visible to recognized community members</li>
-      <li><code>iroko:access-initiated-only</code> — visible to initiated practitioners</li>
-      <li><code>iroko:access-elder-only</code> — visible to recognized elders</li>
-      <li><code>iroko:access-no-access</code> — not exported; internal record only</li>
-    </ul>
-    <h3>Adding a new concept scheme</h3>
-    <ol>
-      <li>Declare the scheme as <code>a skos:ConceptScheme</code> with <code>rdfs:label</code>, <code>skos:prefLabel</code> (all five languages), and <code>skos:hasTopConcept</code> listing all top-level concepts</li>
-      <li>Declare each concept with <code>a skos:Concept</code>, <code>skos:inScheme</code>, <code>skos:prefLabel</code> (all five languages), and <code>skos:definition</code></li>
-      <li>Add <code>skos:scopeNote</code> for anything contested or requiring clarification</li>
-    </ol>
-
-    <h2>Validation</h2>
-    <h3>Parse check</h3>
-    <pre><code>python3 -c "
-from rdflib import Graph
-g = Graph()
-g.parse('vocab/iroko-core.ttl', format='turtle')
-print(f'OK - {len(g)} triples')
-"</code></pre>
-    <h3>Full validation script</h3>
-    <p>Run against all TTL files before committing:</p>
-    <pre><code>for f in vocab/*.ttl; do
-  python3 -c "
-from rdflib import Graph
-g = Graph()
-g.parse('$f', format='turtle')
-print(f'OK: $f — {len(g)} triples')
-"
-done</code></pre>
-
-    <h2>Generating HTML Documentation</h2>
-    <p>After editing any TTL file, regenerate the HTML browse pages:</p>
-    <pre><code>python3 generate_browse_pages.py</code></pre>
-    <p>This reads all TTL source files and overwrites the corresponding <code>.html</code> files. Commit both the TTL and the regenerated HTML together.</p>
-
-    <h2>Deployment Workflow</h2>
-    <ol>
-      <li>Edit the relevant <code>.ttl</code> file</li>
-      <li>Validate: <code>python3 -c "from rdflib import Graph; g = Graph(); g.parse('vocab/iroko-X.ttl'); print(len(g))"</code></li>
-      <li>Regenerate HTML: <code>python3 generate_browse_pages.py</code></li>
-      <li>Commit TTL + HTML together: <code>git add vocab/ && git commit -m "Update iroko-X: [describe change]"</code></li>
-      <li>Push: <code>git push origin main</code></li>
-      <li>GitHub Pages deploys automatically within ~60 seconds</li>
-    </ol>
-
-    <h2>Pull Request Guidelines</h2>
-    <ul>
-      <li>One logical change per PR — don't bundle unrelated vocabulary additions</li>
-      <li>Include a brief description of what changed and why</li>
-      <li>Always include the regenerated HTML — PRs with stale HTML will be rejected</li>
-      <li>Contested design decisions should be flagged with <code>skos:scopeNote</code> or <code>iroko:contestedNotes</code> in the TTL, not resolved silently</li>
-    </ul>
-
-  </div>
-
-  <div class="doc-nav">
-    <a class="action-primary" href="index.html">← All Documentation</a>
-    <a class="action-secondary" href="https://github.com/iroko-framework/iroko-framework/blob/main/docs/CONTRIBUTING.md">View Markdown on GitHub ↗</a>
-  </div>
-
-    <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      License: CC0 1.0 Universal (Public Domain)
-      <div class="footer-iao">Ilé Añá Olofí, Inc. 501(c)(3) · <a href="https://ileanaolofi.org" target="_blank" rel="noopener">ileanaolofi.org</a></div>
+  <footer class="site-footer page-wrap">
+    <div class="footer-copy">
+      © 2026 Iroko Historical Society · CC0 1.0 Universal (Public Domain)
     </div>
     <div class="footer-links">
-      <a href="https://www.irokosociety.org/" target="_blank" rel="noopener">IHS ↗</a>
-      <a href="../index.html">Home</a>
-      <a href="https://medjat.irokosociety.org/">Per Medjat</a>
+      <a href="https://www.irokosociety.org">irokosociety.org</a>
+      <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
       <a href="../vocab/">Vocabularies</a>
     </div>
   </footer>
 
-</div>
 </body>
 </html>

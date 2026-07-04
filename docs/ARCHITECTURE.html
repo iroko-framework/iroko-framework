@@ -3,22 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Module combination patterns and the access-level enforcement contract for the Iroko Framework.">
   <title>Iroko Framework — Technical Architecture — Iroko Framework</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/IHS-Logo.svg">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Iroko Historical Society">
-  <meta property="og:title" content="Technical Architecture — Iroko Framework">
-  <meta property="og:description" content="Module combination patterns and the access-level enforcement contract for the Iroko Framework.">
-  <meta property="og:url" content="https://ontology.irokosociety.org/docs/ARCHITECTURE.html">
-  <meta property="og:image" content="https://ontology.irokosociety.org/assets/og-onto-architecture.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Technical Architecture — Iroko Framework">
-  <meta name="twitter:description" content="Module combination patterns and the access-level enforcement contract for the Iroko Framework.">
-  <meta name="twitter:image" content="https://ontology.irokosociety.org/assets/og-onto-architecture.png">
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
     /* ── Doc page layout ──────────────────────────────────────────── */
@@ -143,21 +128,6 @@
   </style>
 </head>
 <body>
-<!-- Top bar -->
-<div class="top-bar">
-  <span class="top-bar-id">
-    <img class="top-bar-logo" src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society">
-    Iroko Historical Society · Iroko Framework
-  </span>
-  <nav class="top-bar-links">
-    <a href="../index.html">Home</a>
-    <a href="https://www.irokosociety.org/" target="_blank" rel="noopener">IHS ↗</a>
-    <a href="https://medjat.irokosociety.org/">Per Medjat</a>
-    <a href="../whitepaper/">White Paper</a>
-    <a href="../docs/">Docs</a>
-    <a href="https://github.com/iroko-framework/iroko-framework" target="_blank" rel="noopener">GitHub ↗</a>
-  </nav>
-</div>
 
   <nav class="breadcrumb page-wrap">
     <a href="../index.html">Iroko Framework</a>
@@ -166,10 +136,6 @@
     <span>/</span>
     Iroko Framework — Technical Architecture
   </nav>
-
-  <div style="max-width:1100px;margin:0 auto;padding:.5rem 1.5rem 1.5rem;">
-    <a href="../index.html"><img src="../assets/IHS-Logo.jpg" alt="Iroko Historical Society — Home" style="width:256px;height:auto;display:block;"></a>
-  </div>
 
   <div class="doc-wrap">
 
@@ -200,7 +166,13 @@
 </li>
 <li><a href="#namespace-prefixes">Namespace Prefixes</a></li>
 <li><a href="#external-vocabulary-alignments">External Vocabulary Alignments</a></li>
-<li><a href="#vocabulary-statistics-v200">Vocabulary Statistics (v1.4.0)</a></li>
+<li><a href="#vocabulary-statistics-v140">Vocabulary Statistics (v1.4.0)</a></li>
+<li><a href="#release-notes">Release Notes</a><ul>
+<li><a href="#v140-march-2026">v1.4.0 (March 2026)</a></li>
+<li><a href="#v140-march-2026_1">v1.4.0 (March 2026)</a></li>
+<li><a href="#v120-february-2026">v1.2.0 (February 2026)</a></li>
+</ul>
+</li>
 <li><a href="#design-principles">Design Principles</a></li>
 <li><a href="#contact-and-citation">Contact and Citation</a></li>
 </ul>
@@ -212,12 +184,13 @@
 
 
     <div class="doc-content">
-      <p class="doc-meta">Iroko Framework v1.4.0 · March 2026</p>
+      <p class="doc-meta">Iroko Framework v1.4.0 · May 2026</p>
       <h1 id="iroko-framework-technical-architecture">Iroko Framework — Technical Architecture<a class="toc-anchor" href="#iroko-framework-technical-architecture" title="Permanent link">&para;</a></h1>
-<p><strong>Version:</strong> 1.3.0<br />
-<strong>Date:</strong> March 2026<br />
+<p><strong>Version:</strong> 1.4.0<br />
+<strong>Date:</strong> May 2026<br />
 <strong>Maintainer:</strong> Iroko Historical Society<br />
-<strong>Base URI:</strong> <code>https://www.irokosociety.org/iroko-framework/</code></p>
+<strong>Term namespace:</strong> <code>https://ontology.irokosociety.org/iroko#</code>
+<strong>Namespace document:</strong> <code>https://ontology.irokosociety.org/iroko</code></p>
 <hr />
 <h2 id="overview">Overview<a class="toc-anchor" href="#overview" title="Permanent link">&para;</a></h2>
 <p>The Iroko Framework is a modular RDF/OWL vocabulary system for documenting sacred knowledge in Afro-Atlantic traditions. It implements a postcustodial archival architecture where communities maintain authority over their knowledge while enabling semantic interoperability with institutional repositories and linked data systems.</p>
@@ -329,20 +302,20 @@
 <h3 id="property-level-annotation">Property-level annotation<a class="toc-anchor" href="#property-level-annotation" title="Permanent link">&para;</a></h3>
 <p>Every property in every module carries <code>iroko:minimumAccessLevel</code>, which is declared as an <code>owl:AnnotationProperty</code> in Core. This annotation appears on the <strong>property definition itself</strong> in the vocabulary, not on data instances.</p>
 <pre><code class="language-turtle"># In iroko-narrative.ttl — property definition
-narr:transmissionNote
+iroko:transmissionNote
     a owl:DatatypeProperty ;
     rdfs:label &quot;transmission note&quot;@en ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy &lt;https://www.irokosociety.org/iroko-framework/narrative&gt; .
+    rdfs:isDefinedBy &lt;https://ontology.irokosociety.org/iroko-narrative&gt; .
 </code></pre>
 <p>At the data instance level, individual records carry <code>iroko:accessLevel</code> (an ObjectProperty defined in Core) on each instance:</p>
 <pre><code class="language-turtle"># In an archive's data graph — record instance
 :record-2024-HAV-007
     a iroko:SacredEntity ;
     iroko:accessLevel iroko:access-community-only ;
-    nkisi:syncreticIdentity :syncId-007 ;   # public property — OK
-    travay:operationalSequence &quot;...&quot; ;       # community-only property — filtered
+    iroko:syncreticIdentity :syncId-007 ;    # public property — OK
+    iroko:operationalSequence &quot;...&quot; ;        # community-only property — filtered
     ...
 </code></pre>
 <hr />
@@ -352,7 +325,7 @@ narr:transmissionNote
 <p>This is the correct architectural separation: the vocabulary defines what level each property requires; the archive or API decides what level the authenticated user holds; the application enforces the filter.</p>
 <h3 id="sparql-filter-pattern">SPARQL filter pattern<a class="toc-anchor" href="#sparql-filter-pattern" title="Permanent link">&para;</a></h3>
 <p>The following pattern shows how an application implementing the Iroko access model translates a user's access level into a query-time filter. The filter uses numeric notation values to exclude triples whose predicate requires a higher access level than the user holds.</p>
-<pre><code class="language-sparql">PREFIX iroko: &lt;https://www.irokosociety.org/iroko-framework/core#&gt;
+<pre><code class="language-sparql">PREFIX iroko: &lt;https://ontology.irokosociety.org/iroko#&gt;
 PREFIX skos:  &lt;http://www.w3.org/2004/02/skos/core#&gt;
 
 # Step 1: Retrieve the numeric notation for the user's access level.
@@ -367,7 +340,7 @@ WHERE {
   }
 
   # Vocabulary graph — look up the access requirement for each predicate
-  GRAPH &lt;https://www.irokosociety.org/iroko-framework/vocab/&gt; {
+  GRAPH &lt;https://ontology.irokosociety.org/vocab/&gt; {
     OPTIONAL {
       ?predicate iroko:minimumAccessLevel ?requiredLevel .
       ?requiredLevel skos:notation ?requiredNotation .
@@ -565,24 +538,10 @@ manifestation ──references──► narrative, authority
 <p>All five modules are aware of each other. Loading all five means each module's composition points are fully resolved. Loading a subset still works — unresolved references simply have no data.</p>
 <hr />
 <h2 id="namespace-prefixes">Namespace Prefixes<a class="toc-anchor" href="#namespace-prefixes" title="Permanent link">&para;</a></h2>
-<p>All namespaces follow the pattern <code>https://www.irokosociety.org/iroko-framework/{module}#</code>.</p>
-<pre><code class="language-turtle">@prefix iroko:   &lt;https://www.irokosociety.org/iroko-framework/core#&gt; .
-@prefix ag:      &lt;https://www.irokosociety.org/iroko-framework/agency#&gt; .
-@prefix auth:    &lt;https://www.irokosociety.org/iroko-framework/authority#&gt; .
-@prefix ep:      &lt;https://www.irokosociety.org/iroko-framework/epistemic#&gt; .
-@prefix narr:    &lt;https://www.irokosociety.org/iroko-framework/narrative#&gt; .
-@prefix mani:    &lt;https://www.irokosociety.org/iroko-framework/manifestation#&gt; .
-@prefix ewe:     &lt;https://www.irokosociety.org/iroko-framework/ewe#&gt; .
-@prefix nkisi:   &lt;https://www.irokosociety.org/iroko-framework/nkisi#&gt; .
-@prefix travay:  &lt;https://www.irokosociety.org/iroko-framework/travay#&gt; .
-@prefix ile:     &lt;https://www.irokosociety.org/iroko-framework/ile#&gt; .
-@prefix marca:   &lt;https://www.irokosociety.org/iroko-framework/marca#&gt; .
-@prefix ekpe:    &lt;https://www.irokosociety.org/iroko-framework/ekpe#&gt; .
-@prefix veve:    &lt;https://www.irokosociety.org/iroko-framework/veve#&gt; .
-@prefix ngoma:   &lt;https://www.irokosociety.org/iroko-framework/ngoma#&gt; .
-@prefix sankofa: &lt;https://www.irokosociety.org/iroko-framework/sankofa#&gt; .
-@prefix qal:     &lt;https://www.irokosociety.org/iroko-framework/qal#&gt; .
+<p>All RDF terms use the canonical Iroko hash namespace:</p>
+<pre><code class="language-turtle">@prefix iroko: &lt;https://ontology.irokosociety.org/iroko#&gt; .
 </code></pre>
+<p>The module names (<code>iroko-core</code>, <code>iroko-ewe</code>, <code>iroko-nkisi</code>, and so on) identify ontology documents and browse pages, not separate term namespaces. Public module IRIs such as <code>https://ontology.irokosociety.org/iroko-core</code> are kept dereferenceable through stable alias pages that point to the richer module browser under <code>https://ontology.irokosociety.org/vocab/</code>.</p>
 <hr />
 <h2 id="external-vocabulary-alignments">External Vocabulary Alignments<a class="toc-anchor" href="#external-vocabulary-alignments" title="Permanent link">&para;</a></h2>
 <p>The framework integrates with and extends the following external vocabularies:</p>
@@ -644,7 +603,7 @@ manifestation ──references──► narrative, authority
 </table>
 <p>The PROV-O alignment file (<code>iroko-align-prov.ttl</code>) is provided as a reference-only module mapping Iroko agency and event classes to PROV-O equivalents. Load it when interoperability with PROV-O-consuming systems is required.</p>
 <hr />
-<h2 id="vocabulary-statistics-v200">Vocabulary Statistics (v1.4.0)<a class="toc-anchor" href="#vocabulary-statistics-v200" title="Permanent link">&para;</a></h2>
+<h2 id="vocabulary-statistics-v140">Vocabulary Statistics (v1.4.0)<a class="toc-anchor" href="#vocabulary-statistics-v140" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -779,15 +738,23 @@ manifestation ──references──► narrative, authority
 </table>
 <p>All 413 properties across all 16 modules carry <code>iroko:minimumAccessLevel</code> annotations.</p>
 <hr />
-<h2 id="release-notes">Release Notes</h2>
-<h3 id="v130-march-2026">v1.4.0 (March 2026)</h3>
+<h2 id="release-notes">Release Notes<a class="toc-anchor" href="#release-notes" title="Permanent link">&para;</a></h2>
+<h3 id="v140-march-2026">v1.4.0 (March 2026)<a class="toc-anchor" href="#v140-march-2026" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>iroko-agency</strong> — Added <code>iroko:RitualPractitioner</code> class (subclass of <code>iroko:SacredAgent</code>). Covers the full range of practitioners regardless of institutional recognition. Corrected pre-existing <code>owl:versionInfo</code> error (was <code>"2.0.0"</code>, now <code>"1.3.0"</code>).</li>
-<li><strong>iroko-ekpe</strong> — Added <code>iroko:ForcedDissolution</code> class for structured documentation of state suppression of sacred institutions. Added <code>iroko:societyStatus</code> property with <code>iroko:SocietyStatusScheme</code> (active / historical / reformed / forcibly-dissolved). Added <code>iroko:dissolutionEvent</code>, <code>iroko:dissolutionAuthority</code>, <code>iroko:dissolutionDate</code>. Governance principle: forced dissolution does not transfer custodial rights to the suppressing state or the public. Primary case study: Machado-era suppression of Abakuá potencias in Cuba (1923).</li>
-<li><strong>iroko-ngoma</strong> — Broadened <code>iroko:possessionTrigger</code> domain to union of <code>iroko:SacredRhythm</code> and <code>iroko:SacredInstrument</code>.</li>
+<li><strong>iroko-agency</strong> — ...</li>
+<li><strong>iroko-ekpe</strong> — ...</li>
+<li><strong>iroko-ngoma</strong> — ...</li>
+<li><strong>All modules</strong> — ...</li>
+<li>Zenodo deposit: <a href="https://doi.org/10.5281/zenodo.19157678">10.5281/zenodo.19157678</a></li>
+</ul>
+<h3 id="v140-march-2026_1">v1.4.0 (March 2026)<a class="toc-anchor" href="#v140-march-2026_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>iroko-agency</strong> — Added <code>iroko:RitualPractitioner</code> class (subclass of <code>iroko:SacredAgent</code>). Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures. Legitimacy and jurisdiction modeled separately via <code>iroko:Authority</code>. Corrected pre-existing <code>owl:versionInfo</code> error (was <code>"2.0.0"</code>, now <code>"1.3.0"</code>).</li>
+<li><strong>iroko-ekpe</strong> — Added <code>iroko:ForcedDissolution</code> class for structured documentation of state suppression of sacred institutions. Added <code>iroko:societyStatus</code> property on <code>iroko:InitiatorySociety</code> with controlled vocabulary <code>iroko:SocietyStatusScheme</code> (four concepts: active, historical, reformed, forcibly-dissolved). Added supporting properties <code>iroko:dissolutionEvent</code>, <code>iroko:dissolutionAuthority</code>, <code>iroko:dissolutionDate</code>. Governance principle: forced dissolution by an external authority does not transfer custodial rights over sacred materials to the suppressing state or to the public. Primary case study: Machado-era suppression of Abakuá potencias in Cuba (1923).</li>
+<li><strong>iroko-ngoma</strong> — Broadened <code>iroko:possessionTrigger</code> domain from <code>iroko:SacredRhythm</code> only to <code>owl:unionOf (iroko:SacredRhythm iroko:SacredInstrument)</code>. A consecrated drum set or individual sacred instrument may trigger possession independently of the rhythm being played, as the instrument itself carries invocation capacity.</li>
 <li><strong>All modules</strong> — Version strings reconciled to <code>1.3.0</code>. <code>dcterms:modified</code> updated to <code>2026-03-21</code>.</li>
 </ul>
-<h3 id="v120-february-2026">v1.2.0 (February 2026)</h3>
+<h3 id="v120-february-2026">v1.2.0 (February 2026)<a class="toc-anchor" href="#v120-february-2026" title="Permanent link">&para;</a></h3>
 <ul>
 <li>93 classes, 379 properties, 69 schemes, 589 concepts. 1,068 total terms.</li>
 <li>Zenodo deposit: <a href="https://doi.org/10.5281/zenodo.18826673">10.5281/zenodo.18826673</a></li>
@@ -810,17 +777,13 @@ Iroko Historical Society. (2026). <em>Iroko Framework: Semantic Vocabularies for
 
   </div><!-- /doc-wrap -->
 
-    <footer class="site-footer">
-    <div class="footer-left">
-      Iroko Historical Society<br>
-      Postcustodial Digital Archives for Afro-Atlantic Cultural Materials<br>
-      License: CC0 1.0 Universal (Public Domain)
-      <div class="footer-iao">Ilé Añá Olofí, Inc. 501(c)(3) · <a href="https://ileanaolofi.org" target="_blank" rel="noopener">ileanaolofi.org</a></div>
+  <footer class="site-footer page-wrap">
+    <div class="footer-copy">
+      © 2026 Iroko Historical Society · CC0 1.0 Universal (Public Domain)
     </div>
     <div class="footer-links">
-      <a href="https://www.irokosociety.org/" target="_blank" rel="noopener">IHS ↗</a>
-      <a href="../index.html">Home</a>
-      <a href="https://medjat.irokosociety.org/">Per Medjat</a>
+      <a href="https://www.irokosociety.org">irokosociety.org</a>
+      <a href="https://github.com/iroko-framework/iroko-framework">GitHub</a>
       <a href="../vocab/">Vocabularies</a>
     </div>
   </footer>

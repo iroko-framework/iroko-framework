@@ -9,9 +9,9 @@ in `vocab/` directly. Does not touch any public-facing HTML.
 
 ```bash
 # From the repo root:
-cd "C:\Users\Dele Fatbemi\Documents\github active\iroko-framework\scripts\manage"
-pip install flask rdflib          # one-time; rdflib already installed for build scripts
-python app.py
+cd "C:\Users\Dele Fatbemi\Documents\github active\iroko-framework"
+pip install -r requirements.txt
+python scripts\manage\app.py
 ```
 
 Open **http://localhost:5050** in any browser.

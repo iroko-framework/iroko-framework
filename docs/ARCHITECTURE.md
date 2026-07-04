@@ -1,9 +1,10 @@
 # Iroko Framework — Technical Architecture
 
-**Version:** 1.3.0  
-**Date:** March 2026  
+**Version:** 1.4.0  
+**Date:** May 2026  
 **Maintainer:** Iroko Historical Society  
-**Base URI:** `https://www.irokosociety.org/iroko-framework/`
+**Term namespace:** `https://ontology.irokosociety.org/iroko#`
+**Namespace document:** `https://ontology.irokosociety.org/iroko`
 
 ---
 
@@ -95,12 +96,12 @@ Every property in every module carries `iroko:minimumAccessLevel`, which is decl
 
 ```turtle
 # In iroko-narrative.ttl — property definition
-narr:transmissionNote
+iroko:transmissionNote
     a owl:DatatypeProperty ;
     rdfs:label "transmission note"@en ;
     rdfs:range xsd:string ;
     iroko:minimumAccessLevel iroko:access-community-only ;
-    rdfs:isDefinedBy <https://www.irokosociety.org/iroko-framework/narrative> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-narrative> .
 ```
 
 At the data instance level, individual records carry `iroko:accessLevel` (an ObjectProperty defined in Core) on each instance:
@@ -110,8 +111,8 @@ At the data instance level, individual records carry `iroko:accessLevel` (an Obj
 :record-2024-HAV-007
     a iroko:SacredEntity ;
     iroko:accessLevel iroko:access-community-only ;
-    nkisi:syncreticIdentity :syncId-007 ;   # public property — OK
-    travay:operationalSequence "..." ;       # community-only property — filtered
+    iroko:syncreticIdentity :syncId-007 ;    # public property — OK
+    iroko:operationalSequence "..." ;        # community-only property — filtered
     ...
 ```
 
@@ -130,7 +131,7 @@ This is the correct architectural separation: the vocabulary defines what level 
 The following pattern shows how an application implementing the Iroko access model translates a user's access level into a query-time filter. The filter uses numeric notation values to exclude triples whose predicate requires a higher access level than the user holds.
 
 ```sparql
-PREFIX iroko: <https://www.irokosociety.org/iroko-framework/core#>
+PREFIX iroko: <https://ontology.irokosociety.org/iroko#>
 PREFIX skos:  <http://www.w3.org/2004/02/skos/core#>
 
 # Step 1: Retrieve the numeric notation for the user's access level.
@@ -145,7 +146,7 @@ WHERE {
   }
 
   # Vocabulary graph — look up the access requirement for each predicate
-  GRAPH <https://www.irokosociety.org/iroko-framework/vocab/> {
+  GRAPH <https://ontology.irokosociety.org/vocab/> {
     OPTIONAL {
       ?predicate iroko:minimumAccessLevel ?requiredLevel .
       ?requiredLevel skos:notation ?requiredNotation .
@@ -233,26 +234,13 @@ All five modules are aware of each other. Loading all five means each module's c
 
 ## Namespace Prefixes
 
-All namespaces follow the pattern `https://www.irokosociety.org/iroko-framework/{module}#`.
+All RDF terms use the canonical Iroko hash namespace:
 
 ```turtle
-@prefix iroko:   <https://www.irokosociety.org/iroko-framework/core#> .
-@prefix ag:      <https://www.irokosociety.org/iroko-framework/agency#> .
-@prefix auth:    <https://www.irokosociety.org/iroko-framework/authority#> .
-@prefix ep:      <https://www.irokosociety.org/iroko-framework/epistemic#> .
-@prefix narr:    <https://www.irokosociety.org/iroko-framework/narrative#> .
-@prefix mani:    <https://www.irokosociety.org/iroko-framework/manifestation#> .
-@prefix ewe:     <https://www.irokosociety.org/iroko-framework/ewe#> .
-@prefix nkisi:   <https://www.irokosociety.org/iroko-framework/nkisi#> .
-@prefix travay:  <https://www.irokosociety.org/iroko-framework/travay#> .
-@prefix ile:     <https://www.irokosociety.org/iroko-framework/ile#> .
-@prefix marca:   <https://www.irokosociety.org/iroko-framework/marca#> .
-@prefix ekpe:    <https://www.irokosociety.org/iroko-framework/ekpe#> .
-@prefix veve:    <https://www.irokosociety.org/iroko-framework/veve#> .
-@prefix ngoma:   <https://www.irokosociety.org/iroko-framework/ngoma#> .
-@prefix sankofa: <https://www.irokosociety.org/iroko-framework/sankofa#> .
-@prefix qal:     <https://www.irokosociety.org/iroko-framework/qal#> .
+@prefix iroko: <https://ontology.irokosociety.org/iroko#> .
 ```
+
+The module names (`iroko-core`, `iroko-ewe`, `iroko-nkisi`, and so on) identify ontology documents and browse pages, not separate term namespaces. Public module IRIs such as `https://ontology.irokosociety.org/iroko-core` are kept dereferenceable through stable alias pages that point to the richer module browser under `https://ontology.irokosociety.org/vocab/`.
 
 ---
 

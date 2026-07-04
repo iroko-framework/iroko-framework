@@ -22,7 +22,7 @@ cd iroko-framework
 
 **Python dependencies:**
 ```bash
-pip install rdflib
+pip install -r requirements.txt
 ```
 
 **Rapper (RDF validator):**
@@ -49,7 +49,7 @@ chmod +x scripts/*.py
 bash scripts/validate_ttl.sh
 
 # Generate HTML documentation
-python3 scripts/generate_vocab_html.py
+python scripts/build_all.py
 ```
 
 You should see:
@@ -75,7 +75,7 @@ Fix any syntax errors before proceeding.
 
 ### 3. Generate HTML Documentation
 ```bash
-python3 scripts/generate_vocab_html.py
+python scripts/build_all.py
 ```
 
 This auto-generates:
@@ -103,42 +103,42 @@ This will:
 
 **Option B: Manual deployment**
 ```bash
-git add vocab/*.ttl vocab/*.html
+git add index.html docs/*.html docs/*.md vocab/*.ttl vocab/*.html vocab/*.jsonld vocab/*.rdf vocab/*.nt vocab/tradition-vocab.json iroko.html iroko-*.html iroko-framework/index.html
 git commit -m "Update vocabulary: [describe changes]"
 git push origin main
 ```
 
-Changes will be live at https://iroko-framework.github.io/iroko-framework/ within a few minutes.
+Changes will be live at https://ontology.irokosociety.org/ within a few minutes.
 
 ## Adding New Terms
 
 ### Adding a Class
 ```turtle
-ewe:NewClass 
+iroko:NewClass 
     a owl:Class ;
     rdfs:subClassOf iroko:SacredEntity ;
     rdfs:label "New Class"@en ;
     rdfs:comment "Description of the new class."@en ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> .
 ```
 
 ### Adding a Property
 ```turtle
-ewe:newProperty 
+iroko:newProperty 
     a owl:ObjectProperty ;
     rdfs:label "new property"@en ;
     rdfs:comment "Description of the property."@en ;
-    rdfs:domain ewe:Plant ;
+    rdfs:domain iroko:Plant ;
     rdfs:range skos:Concept ;
-    iroko:minimumAccessLevel "community-only" ;
-    rdfs:isDefinedBy <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe> .
+    iroko:minimumAccessLevel iroko:access-community-only ;
+    rdfs:isDefinedBy <https://ontology.irokosociety.org/iroko-ewe> .
 ```
 
 ### Adding a Concept
 ```turtle
-ewe:ritual/new-use 
+iroko:ritual-new-use 
     a skos:Concept ;
-    skos:inScheme ewe:RitualUseScheme ;
+    skos:inScheme iroko:RitualUseScheme ;
     skos:prefLabel "New Ritual Use"@en ;
     skos:definition "Description of this ritual use."@en .
 ```
@@ -161,6 +161,7 @@ Always declare at top of file:
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix iroko: <https://ontology.irokosociety.org/iroko#> .
 ```
 
 ## Testing
@@ -172,7 +173,7 @@ bash scripts/validate_ttl.sh
 
 ### Test HTML Generation
 ```bash
-python3 scripts/generate_vocab_html.py
+python scripts/build_all.py
 ```
 
 Then open `vocab/iroko-core.html` in a browser.
@@ -193,7 +194,7 @@ We use semantic versioning: `MAJOR.MINOR.PATCH`
 
 Update `owl:versionInfo` in the ontology declaration:
 ```turtle
-<https://iroko-framework.github.io/iroko-framework/vocab/iroko-core> 
+<https://ontology.irokosociety.org/iroko-core> 
     a owl:Ontology ;
     owl:versionInfo "1.1.0" ;  # Update this
     dcterms:modified "2026-02-18"^^xsd:date ;  # Update this

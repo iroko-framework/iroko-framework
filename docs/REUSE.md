@@ -17,10 +17,10 @@ You can use the Iroko vocabulary with different access policies:
 ```turtle
 # Example: University digitizing published ethnographies
 <http://university.edu/plants/basil-001>
-    a ewe:Plant ;
+    a iroko:Plant ;
     dwc:scientificName "Ocimum basilicum" ;
-    ewe:ritualUse ewe:ritual/purification ;  ← YOU publish this
-    ewe:medicinalUse ewe:medicinal/digestive-support ;  ← We keep private
+    iroko:ritualUse iroko:ritual-purification ;  # YOU publish this
+    iroko:medicinalUse iroko:medicinal-digestive-support ;  # We keep private
     dcterms:source <http://university.edu/sources/cabrera-1954> .
 ```
 
@@ -32,9 +32,9 @@ You can use the Iroko vocabulary with different access policies:
 ```turtle
 # Example: Temple documenting internal lineage knowledge
 <http://temple.org/plants/secret-leaf-001>
-    a ewe:Plant ;
+    a iroko:Plant ;
     # Only publish existence, NO details
-    iroko:accessLevel iroko:access/no-access ;
+    iroko:accessLevel iroko:access-no-access ;
     rdfs:comment "Detailed information restricted to initiated members only." .
 ```
 
@@ -46,10 +46,10 @@ You can use the Iroko vocabulary with different access policies:
 ```turtle
 # Example: Museum with both public and restricted items
 <http://museum.org/plants/exhibit-001>
-    a ewe:Plant ;
+    a iroko:Plant ;
     dwc:scientificName "Newbouldia laevis" ;
-    ewe:ritualUse ewe:ritual/purification ;  ← From published sources
-    iroko:custodialRelationship iroko:custodial/community-held ;
+    iroko:ritualUse iroko:ritual-purification ;  # From published sources
+    iroko:custodialRelationship iroko:custodial-community-held ;
     dcterms:provenance "Donated by Ilé Obatalá with access conditions" ;
     # Detailed preparation methods: private, per donor agreement
     rdfs:seeAlso <http://museum.org/access-request> .
@@ -65,12 +65,12 @@ You can use the Iroko vocabulary with different access policies:
 Different archives can link to same concepts:
 ```turtle
 # IHS says:
-<https://iroko.org/plants/akoko-001> ewe:ritualUse ewe:ritual/purification .
+<https://iroko.org/plants/akoko-001> iroko:ritualUse iroko:ritual-purification .
 
 # University says:
-<http://university.edu/plants/akoko-002> ewe:ritualUse ewe:ritual/purification .
+<http://university.edu/plants/akoko-002> iroko:ritualUse iroko:ritual-purification .
 
-# Same concept URI: ewe:ritual/purification
+# Same concept URI: iroko:ritual-purification
 # Now machines can find all plants for purification across archives
 ```
 
@@ -78,13 +78,13 @@ Different archives can link to same concepts:
 ```turtle
 # IHS: keeps private
 <https://iroko.org/plants/akoko-001>
-    ewe:ritualUse ewe:ritual/purification ;
+    iroko:ritualUse iroko:ritual-purification ;
     # preparation method: not published
 
 # University: publishes from Verger book (already public)
 <http://university.edu/plants/akoko-002>
-    ewe:ritualUse ewe:ritual/purification ;
-    ewe:preparationMethod ewe:preparation/bath ;  ← They publish this
+    iroko:ritualUse iroko:ritual-purification ;
+    iroko:preparationMethod iroko:prep-bath ;  # They publish this
     dcterms:source <http://worldcat.org/verger-1995> .
 
 # Both valid uses of same vocabulary
@@ -105,18 +105,17 @@ Each community decides:
 
 ### Step 1: Import Vocabulary
 ```turtle
-@prefix ewe: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-ewe#> .
-@prefix iroko: <https://iroko-framework.github.io/iroko-framework/vocab/iroko-core#> .
+@prefix iroko: <https://ontology.irokosociety.org/iroko#> .
 ```
 
 ### Step 2: Classify Your Data
 ```turtle
 <http://your-archive.org/plants/001>
-    a ewe:Plant ;
+    a iroko:Plant ;
     # Use properties from vocab
-    ewe:ritualUse ewe:ritual/purification ;
+    iroko:ritualUse iroko:ritual-purification ;
     # Use access levels from vocab
-    iroko:accessLevel iroko:access/community-only .
+    iroko:accessLevel iroko:access-community-only .
 ```
 
 ### Step 3: Make Your Access Decisions

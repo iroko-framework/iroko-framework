@@ -476,6 +476,26 @@ def html_escape(text: str) -> str:
     return _html.escape(str(text), quote=True)
 
 
+def legacy_index_redirect(target_name: str) -> str:
+    """Redirect the old vocab/iroko-index.html URL to the current term list."""
+    target = html_escape(target_name)
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Vocabulary Index - Iroko Framework</title>
+  <link rel="canonical" href="{target}">
+  <meta http-equiv="refresh" content="0; url={target}">
+  <script>location.replace('{target}' + location.hash);</script>
+</head>
+<body>
+  <p><a href="{target}">Continue to the Full Vocabulary Index</a>.</p>
+</body>
+</html>
+"""
+
+
 def build_rows(all_terms: list[dict], mod_browse_urls: dict) -> str:
     lines = []
     for t in all_terms:
@@ -596,6 +616,10 @@ def main():
     )
 
     out_path.write_text(page, encoding="utf-8")
+    if out_path.name == "iroko-termlist.html":
+        legacy_path = out_path.with_name("iroko-index.html")
+        legacy_path.write_text(legacy_index_redirect(out_path.name), encoding="utf-8")
+        print(f"Legacy redirect: {legacy_path}")
     print(f"\nDone. {total:,} terms indexed ({n_classes} classes, {n_props} properties, {n_concepts} concepts).")
     print(f"Output: {out_path}")
 

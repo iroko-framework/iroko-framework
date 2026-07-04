@@ -33,16 +33,16 @@ jobs:
         python-version: '3.10'
     
     - name: Install Python dependencies
-      run: pip install rdflib
-    
-    - name: Generate HTML documentation
-      run: python3 scripts/generate_vocab_html.py
-    
-    - name: Commit generated HTML
+      run: pip install -r requirements.txt
+
+    - name: Generate site artifacts
+      run: python3 scripts/build_all.py
+
+    - name: Commit generated artifacts
       if: github.event_name == 'push'
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add vocab/*.html
-        git diff --quiet && git diff --staged --quiet || git commit -m "Auto-generate HTML documentation"
+        git add index.html docs/*.html docs/*.md vocab/*.html vocab/*.jsonld vocab/*.rdf vocab/*.nt vocab/tradition-vocab.json iroko.html iroko-*.html iroko-framework/index.html
+        git diff --quiet && git diff --staged --quiet || git commit -m "Auto-generate site artifacts"
         git push

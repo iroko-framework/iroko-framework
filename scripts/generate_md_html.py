@@ -32,6 +32,9 @@ from pathlib import Path
 from datetime import date
 import html as html_module
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 try:
     import markdown
     from markdown.extensions.toc import TocExtension

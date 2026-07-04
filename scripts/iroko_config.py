@@ -7,8 +7,8 @@ Import from this module rather than duplicating constants across scripts.
 # ---------------------------------------------------------------------------
 # Release info — update these two lines each release
 # ---------------------------------------------------------------------------
-FRAMEWORK_VERSION = "1.3.0"
-MONTH_YEAR        = "March 2026"
+FRAMEWORK_VERSION = "1.4.0"
+MONTH_YEAR        = "May 2026"
 
 # ---------------------------------------------------------------------------
 # Namespace

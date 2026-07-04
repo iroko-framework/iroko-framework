@@ -212,6 +212,32 @@ def get_outgoing(g, cls_local):
             })
     return sorted(out, key=lambda x: x["label"])
 
+
+def get_all_properties(g):
+    """Return every Iroko property in a module for direct property deep links."""
+    out = []
+    seen = set()
+    for ptype in (OWL.ObjectProperty, OWL.DatatypeProperty, OWL.AnnotationProperty):
+        for prop in g.subjects(RDF.type, ptype):
+            if not str(prop).startswith(IROKO_NS):
+                continue
+            key = str(prop)
+            if key in seen:
+                continue
+            seen.add(key)
+            acc_k, _ = access_key(g, prop)
+            out.append({
+                "uri":    "iroko:" + local(str(prop)),
+                "label":  label_rdf(g, prop),
+                "type":   prop_type_key(ptype),
+                "domain": resolve_node(g, g.value(prop, RDFS.domain)),
+                "range":  resolve_node(g, g.value(prop, RDFS.range)),
+                "access": acc_k,
+                "def":    comment_en(g, prop),
+            })
+    return sorted(out, key=lambda x: x["label"])
+
+
 def get_schemes(g):
     out = []
     for scheme in g.subjects(RDF.type, SKOS.ConceptScheme):
@@ -297,6 +323,7 @@ PAGE_CSS = """
     .cls-card { border: 1px solid var(--rule-strong); border-radius: 3px; padding: .75rem 1rem;
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
+    .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -475,6 +502,7 @@ PAGE_JS = r"""
 const MODULE_STEM = "{{STEM}}";
 const MOD_TITLE_SHORT = "{{MOD_TITLE_SHORT}}";
 const CLASSES = {{CLASSES_JSON}};
+const PROPERTIES = {{PROPERTIES_JSON}};
 const MODULE_CROSS = {{MODULE_CROSS_JSON}};
 const CITE_FORMATS = {{CITE_JSON}};
 
@@ -491,13 +519,19 @@ function typeBadge(t) {
   if (t==='ann')  return '<span class="pr-type pr-type-ann">Annotation</span>';
   return '';
 }
+function localName(uri) {
+  return (uri || '').split('#').pop().split('/').pop().split(':').pop();
+}
+function propAnchorId(p) {
+  return 'prop-' + localName(p.uri);
+}
 
 // ── Render property item ──────────────────────────────────────────────────────
 function renderProp(p, isIncoming) {
   const meta = isIncoming
     ? `<div class="pr-source">from ${p.from} · ${p.module}</div>`
     : `<div class="pr-meta">${p.range||''}</div>`;
-  return `<div class="pr-item">
+  return `<div class="pr-item" id="${propAnchorId(p)}">
     <div class="pr-top">
       <span class="pr-uri">${p.uri}</span>
       ${isIncoming ? '' : typeBadge(p.type)}
@@ -513,8 +547,8 @@ function renderProp(p, isIncoming) {
 let activeClass = null;
 let activeCiteFormat = 'plain';
 
-function activateClass(key) {
-  if (activeClass === key) { closePanel(); return; }
+function activateClass(key, opts = {}) {
+  if (activeClass === key && !opts.force) { closePanel(); return; }
   activeClass = key;
   document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
   document.getElementById('card-'+key)?.classList.add('active');
@@ -552,6 +586,62 @@ function closePanel() {
   document.getElementById('prop-panel').classList.remove('visible');
   document.getElementById('z2-hint').textContent = 'Click a class card above';
   resetSidebar();
+}
+
+function activateProperty(p) {
+  activeClass = null;
+  document.querySelectorAll('.cls-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('prop-placeholder').classList.add('hidden');
+  document.getElementById('z2-hint').textContent = 'Property deep link';
+  document.getElementById('pp-uri').textContent = p.uri;
+  document.getElementById('pp-label').textContent = p.label || localName(p.uri);
+  document.getElementById('pp-def').textContent = p.def || '';
+  document.getElementById('pp-incoming').innerHTML =
+    '<p class="no-props">No class context selected.</p>';
+  document.getElementById('pp-outgoing').innerHTML = renderProp(p, false);
+  const uri = 'https://ontology.irokosociety.org/iroko#' + localName(p.uri);
+  document.getElementById('pp-cite-text').textContent = uri;
+  document.getElementById('pp-cite-btn').dataset.uri = uri;
+  const panel = document.getElementById('prop-panel');
+  panel.classList.remove('visible');
+  void panel.offsetWidth;
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  resetSidebar();
+}
+
+function openFragmentTarget() {
+  const hash = window.location.hash.replace('#','');
+  if (!hash) return;
+
+  const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
+  if (CLASSES[classKey]) {
+    activateClass(classKey, {force:true});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+
+  if (hash.startsWith('prop-')) {
+    const propId = hash.slice(5);
+    for (const [key, d] of Object.entries(CLASSES)) {
+      const props = [...(d.outgoing || []), ...(d.incoming || [])];
+      if (props.some(p => localName(p.uri) === propId)) {
+        activateClass(key, {force:true});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        return;
+      }
+    }
+    const prop = PROPERTIES.find(p => localName(p.uri) === propId);
+    if (prop) {
+      activateProperty(prop);
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+  }
+
+  if (hash.startsWith('concept-')) {
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
 }
 
 // ── Sidebar ───────────────────────────────────────────────────────────────────
@@ -631,12 +721,9 @@ function copyLink(btn) {
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded',()=>{
-  const hash = window.location.hash.replace('#','');
-  if (hash && CLASSES[hash]) {
-    activateClass(hash);
-    document.getElementById('card-'+hash)?.scrollIntoView({behavior:'smooth',block:'center'});
-  }
+  openFragmentTarget();
 });
+window.addEventListener('hashchange', openFragmentTarget);
 """
 
 
@@ -658,6 +745,7 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
 
     meta    = get_meta(g)
     classes = get_classes(g)
+    properties = get_all_properties(g)
     schemes = get_schemes(g)
 
     version  = meta.get("version", "1.3.0")
@@ -670,7 +758,6 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     issued   = meta.get("issued",   "")
     modified = meta.get("modified", "")
     ns_uri   = meta.get("uri", "https://ontology.irokosociety.org/iroko-" + stem.replace("iroko-", ""))
-    n_props_total = 0
 
     # Short title for citation (e.g. "Ewé Module")
     mod_short = title.split(" — ")[0] if " — " in title else title
@@ -682,7 +769,6 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
         out  = get_outgoing(g, cid)
         inc  = incoming_index.get(cid, [])
         cross = get_cross_module_connections([cls], stem, incoming_index).get(cid, [])
-        n_props_total += len(out)
         classes_js[cid] = {
             "uri":        f"iroko:{cid}",
             "label":      cls["label"],
@@ -711,7 +797,7 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     n_classes  = len(classes)
     n_schemes  = len(schemes)
     n_concepts = sum(s["count"] for s in schemes)
-    n_props    = n_props_total
+    n_props    = len(properties)
 
     # Date line
     date_line = ""
@@ -752,6 +838,7 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     }, ensure_ascii=False)
 
     classes_json = json.dumps(classes_js, ensure_ascii=False)
+    properties_json = json.dumps(properties, ensure_ascii=False)
     module_cross_json = json.dumps(module_cross_list, ensure_ascii=False)
 
     # ── Build HTML ────────────────────────────────────────────────────────
@@ -850,7 +937,8 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
       </div>
       <div class="class-grid">""")
     for cls in classes:
-        A(f"""        <div class="cls-card" id="card-{h(cls['id'])}" onclick="activateClass('{h(cls['id'])}')">
+        A(f"""        <span class="term-anchor" id="cls-{h(cls['id'])}"></span>
+        <div class="cls-card" id="card-{h(cls['id'])}" onclick="activateClass('{h(cls['id'])}')">
           <span class="cls-uri">iroko:{h(cls['id'])}</span>
           <span class="cls-label">{h(cls['label'])}</span>
           {f'<span class="cls-hint">{h(cls["hint"])}</span>' if cls['hint'] else ''}
@@ -908,11 +996,11 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
             <span class="sh-uri">iroko:{h(scheme['id'])}</span>
             <span class="sh-label">{h(scheme['label'])}</span>
           </div>
-          <span class="sh-count">{scheme['count']} concept{'s' if scheme['count']!=1 else ''}</span>
+            <span class="sh-count">{scheme['count']} concept{'s' if scheme['count']!=1 else ''}</span>
         </div>
         <div class="concept-chips">""")
             for c in scheme["concepts"]:
-                A(f"""          <div class="chip">
+                A(f"""          <div class="chip" id="concept-{h(c['id'])}">
             <span class="chip-label">{h(c['label'])}</span>
             <span class="chip-id">iroko:{h(c['id'])}</span>
           </div>""")
@@ -1018,6 +1106,7 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     js = PAGE_JS.replace("{{STEM}}", stem)
     js = js.replace("{{MOD_TITLE_SHORT}}", mod_short.replace('"', '\\"'))
     js = js.replace("{{CLASSES_JSON}}", classes_json)
+    js = js.replace("{{PROPERTIES_JSON}}", properties_json)
     js = js.replace("{{MODULE_CROSS_JSON}}", module_cross_json)
     js = js.replace("{{CITE_JSON}}", cite_json)
     A(f"<script>\n{js}\n</script>\n</body>\n</html>")
