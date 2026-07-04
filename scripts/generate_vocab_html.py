@@ -758,12 +758,31 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     W = []
     A = W.append
 
+    og_title = f"{title} — Iroko Framework Vocabularies"
+    og_desc  = subtitle or f"Controlled vocabulary module of the Iroko Framework for Afro-Atlantic sacred knowledge systems: {mod_short}."
+    og_image = "https://ontology.irokosociety.org/assets/og-iroko-framework.png"
+
     A(f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{h(og_desc)}">
   <title>{h(title)} — Iroko Framework Vocabularies</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/IHS-Logo.svg">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Iroko Historical Society">
+  <meta property="og:title" content="{h(og_title)}">
+  <meta property="og:description" content="{h(og_desc)}">
+  <meta property="og:url" content="{h(page_url)}">
+  <meta property="og:image" content="{h(og_image)}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{h(og_title)}">
+  <meta name="twitter:description" content="{h(og_desc)}">
+  <meta name="twitter:image" content="{h(og_image)}">
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>{PAGE_CSS}
   </style>

@@ -11,14 +11,14 @@
   <meta property="og:title" content="Iroko Framework — Semantic Vocabularies for Afro-Atlantic Sacred Knowledge">
   <meta property="og:description" content="The Iroko Framework provides controlled vocabularies and access governance for documenting sacred knowledge in Afro-Atlantic traditions.">
   <meta property="og:url" content="https://ontology.irokosociety.org/">
-  <meta property="og:image" content="https://ontology.irokosociety.org/assets/og-iroko-framework.png">
+  <meta property="og:image" content="https://ontology.irokosociety.org/assets/og-onto-home.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:type" content="image/png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Iroko Framework — Semantic Vocabularies for Afro-Atlantic Sacred Knowledge">
   <meta name="twitter:description" content="The Iroko Framework provides controlled vocabularies and access governance for documenting sacred knowledge in Afro-Atlantic traditions.">
-  <meta name="twitter:image" content="https://ontology.irokosociety.org/assets/og-iroko-framework.png">
+  <meta name="twitter:image" content="https://ontology.irokosociety.org/assets/og-onto-home.png">
   <link rel="stylesheet" href="assets/iroko-style.css">
 
   <!-- Google tag (gtag.js) -->
@@ -83,7 +83,13 @@
 
       <button class="start-here__trigger" id="startHereTrigger" aria-expanded="false" aria-controls="startHereBody">
         <div class="start-here__teaser">
-          <span class="start-here__label">Start Here</span>
+          <span class="start-here__badge">
+            <svg class="start-here__badge-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M9 21h6M10 18v1M14 18v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <span class="start-here__label">What&rsquo;s an Ontology — Start Here</span>
+          </span>
           <span class="start-here__preview">You are looking at the vocabulary of a living tradition — an orientation to what the Iroko Framework is, why it was built, and who it is for.</span>
         </div>
         <span class="start-here__chevron" aria-hidden="true">
@@ -877,31 +883,57 @@ https://ontology.irokosociety.org</pre>
       align-items: center;
       justify-content: space-between;
       gap: 1.5rem;
-      padding: 1.1rem 0;
-      background: transparent;
+      padding: 1.1rem 1.25rem;
+      background: linear-gradient(90deg, var(--gold-light, #f5edd8) 0%, var(--paper-warm, #ede9df) 65%, transparent 100%);
       border: none;
       border-top: 2px solid var(--accent, #8B6914);
+      border-radius: 0 0 10px 10px;
       cursor: pointer;
       text-align: left;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 0 rgba(139, 105, 20, 0.08);
     }
 
-    .start-here__trigger:hover { opacity: 0.8; }
+    .start-here__trigger:hover { opacity: 0.88; }
 
     .start-here__teaser {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       gap: 1rem;
       flex: 1;
       min-width: 0;
     }
 
+    .start-here__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.42rem 0.85rem;
+      border-radius: 999px;
+      background: var(--accent, #8B6914);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+      flex-shrink: 0;
+      animation: sh-pulse 2.4s ease-out 2;
+    }
+
+    .start-here__badge-icon {
+      color: #fdf8ec;
+      flex-shrink: 0;
+    }
+
+    @keyframes sh-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(139, 105, 20, 0.45); }
+      70% { box-shadow: 0 0 0 8px rgba(139, 105, 20, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(139, 105, 20, 0); }
+    }
+
     .start-here__label {
-      font-size: 0.65rem;
+      font-family: var(--font-display, 'Cinzel'), serif;
+      font-size: 0.66rem;
       font-weight: 700;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--accent, #8B6914);
+      color: #fdf8ec;
       white-space: nowrap;
       flex-shrink: 0;
     }
@@ -1059,6 +1091,8 @@ https://ontology.irokosociety.org</pre>
       .start-here__preview { display: none; }
       .start-here__content { padding-left: 1rem; }
       .sh-modules { grid-template-columns: 1fr; }
+      .start-here__label { white-space: normal; letter-spacing: 0.06em; }
+      .start-here__trigger { padding: 1rem 0.85rem; }
     }
 
     /* ── RDF Download section ─────────────────────────────────────────── */
@@ -1123,5 +1157,42 @@ https://ontology.irokosociety.org</pre>
       /* Lower grid: stack */
       .lower-grid { grid-template-columns: 1fr !important; }
     }
+  </style>
 
-    @media (max-
+  <!-- ── Start Here Accordion Interaction ── -->
+  <script>
+    (function () {
+      var trigger  = document.getElementById('startHereTrigger');
+      var body     = document.getElementById('startHereBody');
+      var collapse = document.getElementById('startHereCollapse');
+      var section  = document.getElementById('start-here');
+      if (!trigger || !body) return;
+
+      function openPanel() {
+        trigger.setAttribute('aria-expanded', 'true');
+        body.setAttribute('aria-hidden', 'false');
+        body.classList.add('is-open');
+      }
+
+      function closePanel() {
+        trigger.setAttribute('aria-expanded', 'false');
+        body.setAttribute('aria-hidden', 'true');
+        body.classList.remove('is-open');
+      }
+
+      trigger.addEventListener('click', function () {
+        var isOpen = trigger.getAttribute('aria-expanded') === 'true';
+        if (isOpen) { closePanel(); } else { openPanel(); }
+      });
+
+      if (collapse) {
+        collapse.addEventListener('click', function () {
+          closePanel();
+          if (section) { section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
