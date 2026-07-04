@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -485,6 +515,7 @@ const MODULE_STEM = "iroko-agency";
 const MOD_TITLE_SHORT = "Agency Module";
 const CLASSES = {"AuthorizationChain": {"uri": "iroko:AuthorizationChain", "label": "Authorization Chain", "definition": "A structured representation of delegated or layered authority across agents, mandates, and conditions. Models succession of authorization from one agent or office to another within a ritual governance system.", "outgoing": [{"uri": "iroko:chainLink", "label": "chain link", "type": "obj", "range": "—", "access": "pub", "def": "Links one node in an AuthorizationChain to the next — the agent, event, or mandate that follows in the delegation sequence."}, {"uri": "iroko:includesEvent", "label": "includes event", "type": "obj", "range": "Authorization Event", "access": "comm", "def": "Links an AuthorizationChain to a constituent AuthorizationEvent. Separates chain membership from chain sequence: iroko:chainLink traverses the sequence of links; iroko:includesEvent identifies which AuthorizationEvents belong to the chain without requiring full sequence traversal. A chain may include multiple events at different points in the delegation hierarchy. Access: community-only."}], "incoming": [{"uri": "iroko:hasAuthorizationChain", "label": "has authorization chain", "type": "obj", "access": "pub", "def": "Associates a RitualEvent, policy, or mandate with an AuthorizationChain.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Agency Module", "stem": "iroko-agency"}], "cross": []}, "AuthorizationEvent": {"uri": "iroko:AuthorizationEvent", "label": "Authorization Event", "definition": "A ritual event in which authorization is asserted, delegated, conditioned, or revoked. Supports sovereignty modeling for access, disclosure, and stewardship mandates.", "outgoing": [], "incoming": [{"uri": "iroko:includesEvent", "label": "includes event", "type": "obj", "access": "comm", "def": "Links an AuthorizationChain to a constituent AuthorizationEvent. Separates chain membership from chain sequence: iroko:chainLink traverses the sequence of links; iroko:includesEvent identifies which AuthorizationEvents belong to the chain without requiring full sequence traversal. A chain may include multiple events at different points in the delegation hierarchy. Access: community-only.", "domain": "Authorization Chain", "from": "iroko:Authorization Chain", "fromLabel": "Authorization Chain", "module": "Agency Module", "stem": "iroko-agency"}], "cross": []}, "ManifestationEvent": {"uri": "iroko:ManifestationEvent", "label": "Manifestation Event", "definition": "A ritual event in which a sacred agent is asserted to manifest through a medium, place, dream, divination, or other mode. Connects to iroko-manifestation.ttl for mode and medium typing.", "outgoing": [], "incoming": [], "cross": []}, "RefusalEvent": {"uri": "iroko:RefusalEvent", "label": "Refusal Event", "definition": "A ritual event in which a sacred agent is asserted to refuse participation, disclosure, access, or a requested action. Enables modeling of sacred refusal as a positive, governance-significant act rather than merely an absence.", "outgoing": [], "incoming": [{"uri": "iroko:generatesRefusal", "label": "generates refusal", "type": "obj", "access": "comm", "def": "Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding.", "domain": "RitualEvent | SacredAgent | StewardshipMandate", "from": "iroko:RitualEvent | SacredAgent | StewardshipMandate", "fromLabel": "RitualEvent | SacredAgent | StewardshipMandate", "module": "Agency Module", "stem": "iroko-agency"}], "cross": []}, "RitualAction": {"uri": "iroko:RitualAction", "label": "Ritual Action", "definition": "A typed action asserted to be performed or effected within ritual practice. Use when finer granularity than RitualEvent is needed — for example, a sequence of actions within a ceremony.", "outgoing": [], "incoming": [{"uri": "iroko:includesAction", "label": "includes action", "type": "obj", "access": "comm", "def": "Links a RitualEvent to a constituent RitualAction. Use when finer-grained action typing within an event is required — for example, to distinguish the invocation action from the offering action within a single ceremony. A RitualEvent may include multiple RitualActions. Access: community-only.", "domain": "Ritual Event", "from": "iroko:Ritual Event", "fromLabel": "Ritual Event", "module": "Agency Module", "stem": "iroko-agency"}], "cross": []}, "RitualConsequence": {"uri": "iroko:RitualConsequence", "label": "Ritual Consequence", "definition": "An outcome category describing asserted consequences of ritual actions or events. Descriptive and claim-bearing — does not assert causal certainty. Access governance applies.", "outgoing": [], "incoming": [{"uri": "iroko:hasRitualConsequence", "label": "has ritual consequence", "type": "obj", "access": "pub", "def": "Associates a ritual event or action with a RitualConsequence category.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Agency Module", "stem": "iroko-agency"}], "cross": []}, "RitualEvent": {"uri": "iroko:RitualEvent", "label": "Ritual Event", "definition": "A time-bounded ritual activity in which agents participate. A ritual event may generate assertions, permissions, constraints, or records. For temporal calendar time on instances, use PROV-O time properties (prov:startedAtTime, prov:endedAtTime). Subclass of prov:Activity via iroko-align-prov.ttl.", "outgoing": [{"uri": "iroko:generatesRefusal", "label": "generates refusal", "type": "obj", "range": "Refusal Event", "access": "comm", "def": "Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding."}, {"uri": "iroko:includesAction", "label": "includes action", "type": "obj", "range": "Ritual Action", "access": "comm", "def": "Links a RitualEvent to a constituent RitualAction. Use when finer-grained action typing within an event is required — for example, to distinguish the invocation action from the offering action within a single ceremony. A RitualEvent may include multiple RitualActions. Access: community-only."}], "incoming": [], "cross": []}, "RitualPractitioner": {"uri": "iroko:RitualPractitioner", "label": "Ritual Practitioner", "definition": "A human agent recognized as exercising sacred capacity within a ritual system — performing ceremonies, transmitting knowledge, authorizing or refusing actions, or operating with sacred materials. Subclass of iroko:SacredAgent. Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures (Bokor, independent operators). Legitimacy and jurisdiction, where applicable, are modeled separately via iroko:Authority in iroko-authority. A practitioner may be linked to an Authority record but the two are independent assertions.", "outgoing": [], "incoming": [{"uri": "iroko:drawnBy", "label": "drawn by", "type": "obj", "access": "comm", "def": "The practitioner who drew this sign instance. Range: iroko:RitualPractitioner — a vèvè, anaforuana, or other sacred graphic sign is always drawn by a human agent exercising ritual capacity, not merely any person. Community-restricted.", "domain": "Sign Instance", "from": "iroko:Sign Instance", "fromLabel": "Sign Instance", "module": "Vèvè Module", "stem": "iroko-veve"}], "cross": [{"name": "Vèvè Module", "dotCls": "dot-graphic", "via": "iroko:drawnBy", "dir": "referenced by"}]}, "SacredAgent": {"uri": "iroko:SacredAgent", "label": "Sacred Agent", "definition": "An entity recognized within a ritual system as capable of intentional action — authorization, refusal, protection, sanctioning, or manifestation. Defined without metaphysical claims. Enables structured modeling of agency in sovereignty-aware archives. Subclass of prov:Agent via iroko-align-prov.ttl.", "outgoing": [{"uri": "iroko:generatesRefusal", "label": "generates refusal", "type": "obj", "range": "Refusal Event", "access": "comm", "def": "Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding."}], "incoming": [{"uri": "iroko:involvesAgent", "label": "involves agent", "type": "obj", "access": "pub", "def": "Links an event, action, or assertion node to an agent involved. Complements prov:wasAssociatedWith in instance data without requiring PROV import.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Agency Module", "stem": "iroko-agency"}, {"uri": "iroko:featuresSacredAgent", "label": "features sacred agent", "type": "obj", "access": "pub", "def": "Links a narrative or variant to a sacred agent (spirit, ancestor) who appears as an actor within the narrative content.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Narrative Module", "stem": "iroko-narrative"}], "cross": [{"name": "Narrative Module", "dotCls": "dot-narrative", "via": "iroko:featuresSacredAgent", "dir": "referenced by"}]}, "Spirit": {"uri": "iroko:Spirit", "label": "Spirit", "definition": "A sacred agent recognized as a spirit within a cultural and ritual framework. Specific typologies (orisha, lwa, nkisi, egun, etc.) modeled via subclasses or concept schemes in domain modules.", "outgoing": [], "incoming": [], "cross": []}, "StewardshipMandate": {"uri": "iroko:StewardshipMandate", "label": "Stewardship Mandate", "definition": "A mandate asserted to govern stewardship, custody, disclosure, or use of materials. May be associated with agents, events, and access policies. Can condition iroko:AccessPolicy instances.", "outgoing": [{"uri": "iroko:generatesRefusal", "label": "generates refusal", "type": "obj", "range": "Refusal Event", "access": "comm", "def": "Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding."}, {"uri": "iroko:mandateCondition", "label": "mandate condition", "type": "data", "range": "langString", "access": "comm", "def": "Text description of conditions activating or limiting this stewardship mandate."}, {"uri": "iroko:mandateScope", "label": "mandate scope", "type": "data", "range": "langString", "access": "comm", "def": "Free-text description of the scope of a StewardshipMandate — what materials, processes, or knowledge types it covers."}], "incoming": [{"uri": "iroko:hasMandate", "label": "has mandate", "type": "obj", "access": "pub", "def": "Associates an agent, event, or policy with a StewardshipMandate.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Agency Module", "stem": "iroko-agency"}], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:chainLink", "label": "chain link", "type": "obj", "domain": "Authorization Chain", "range": "—", "access": "pub", "def": "Links one node in an AuthorizationChain to the next — the agent, event, or mandate that follows in the delegation sequence."}, {"uri": "iroko:generatesRefusal", "label": "generates refusal", "type": "obj", "domain": "RitualEvent | SacredAgent | StewardshipMandate", "range": "Refusal Event", "access": "comm", "def": "Links a RitualEvent, SacredAgent, or StewardshipMandate to a RefusalEvent. A RitualEvent generates a RefusalEvent when a sacred agent refuses participation, disclosure, or authorization within that event. A SacredAgent generates a RefusalEvent when it is asserted to have refused an action or disclosure request. A StewardshipMandate generates a RefusalEvent when compliance with the mandate results in a documented refusal of access or authorization. The RefusalEvent is documented without adjudicating whether the refusal is theologically binding."}, {"uri": "iroko:hasAuthorizationChain", "label": "has authorization chain", "type": "obj", "domain": "—", "range": "Authorization Chain", "access": "pub", "def": "Associates a RitualEvent, policy, or mandate with an AuthorizationChain."}, {"uri": "iroko:hasMandate", "label": "has mandate", "type": "obj", "domain": "—", "range": "Stewardship Mandate", "access": "pub", "def": "Associates an agent, event, or policy with a StewardshipMandate."}, {"uri": "iroko:hasOutcome", "label": "has outcome", "type": "obj", "domain": "—", "range": "SacredEntity", "access": "pub", "def": "Links an event or action to an outcome entity — a RelationshipAssertion, RitualConsequence, RefusalEvent, AccessPolicy, or other outcome record. Range: iroko:SacredEntity — all current and anticipated outcome types (Assertion, RitualConsequence, RefusalEvent) are subclasses of SacredEntity, enabling traversal without locking in a union declaration."}, {"uri": "iroko:hasRitualConsequence", "label": "has ritual consequence", "type": "obj", "domain": "—", "range": "Ritual Consequence", "access": "pub", "def": "Associates a ritual event or action with a RitualConsequence category."}, {"uri": "iroko:includesAction", "label": "includes action", "type": "obj", "domain": "Ritual Event", "range": "Ritual Action", "access": "comm", "def": "Links a RitualEvent to a constituent RitualAction. Use when finer-grained action typing within an event is required — for example, to distinguish the invocation action from the offering action within a single ceremony. A RitualEvent may include multiple RitualActions. Access: community-only."}, {"uri": "iroko:includesEvent", "label": "includes event", "type": "obj", "domain": "Authorization Chain", "range": "Authorization Event", "access": "comm", "def": "Links an AuthorizationChain to a constituent AuthorizationEvent. Separates chain membership from chain sequence: iroko:chainLink traverses the sequence of links; iroko:includesEvent identifies which AuthorizationEvents belong to the chain without requiring full sequence traversal. A chain may include multiple events at different points in the delegation hierarchy. Access: community-only."}, {"uri": "iroko:involvesAgent", "label": "involves agent", "type": "obj", "domain": "—", "range": "Sacred Agent", "access": "pub", "def": "Links an event, action, or assertion node to an agent involved. Complements prov:wasAssociatedWith in instance data without requiring PROV import."}, {"uri": "iroko:mandateCondition", "label": "mandate condition", "type": "data", "domain": "Stewardship Mandate", "range": "langString", "access": "comm", "def": "Text description of conditions activating or limiting this stewardship mandate."}, {"uri": "iroko:mandateScope", "label": "mandate scope", "type": "data", "domain": "Stewardship Mandate", "range": "langString", "access": "comm", "def": "Free-text description of the scope of a StewardshipMandate — what materials, processes, or knowledge types it covers."}];
+const CONCEPTS = {};
 const MODULE_CROSS = [{"name": "Vèvè Module", "dotCls": "dot-graphic", "via": "iroko:drawnBy", "dir": "referenced by"}, {"name": "Narrative Module", "dotCls": "dot-narrative", "via": "iroko:featuresSacredAgent", "dir": "referenced by"}];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Agency Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-agency.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Agency Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-agency.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_agency_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Agency Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-agency.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Agency Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-agency.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -526,7 +557,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -592,9 +690,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -622,7 +763,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -702,10 +847,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>

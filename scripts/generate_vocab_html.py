@@ -52,10 +52,21 @@ def label_en(g, s, pred):
         elif fb is None: fb = str(o)
     return en or fb or local(str(s))
 
+def literal_en(g, s, pred):
+    if s is None: return ""
+    en = fb = None
+    for o in g.objects(s, pred):
+        lang = getattr(o, "language", None)
+        if lang == "en": en = str(o)
+        elif fb is None: fb = str(o)
+    return en or fb or ""
+
 def comment_en(g, s):  return label_en(g, s, RDFS.comment)  if s else ""
 def label_rdf(g, s):   return label_en(g, s, RDFS.label)    if s else ""
 def pref_label(g, s):  return label_en(g, s, SKOS.prefLabel) if s else ""
-def skos_def(g, s):    return label_en(g, s, SKOS.definition) if s else ""
+def comment_text(g, s): return literal_en(g, s, RDFS.comment) if s else ""
+def skos_def(g, s):    return literal_en(g, s, SKOS.definition) if s else ""
+def scope_note(g, s):  return literal_en(g, s, SKOS.scopeNote) if s else ""
 def dcterms_desc(g, s):
     en = fb = None
     for o in g.objects(s, DCTERMS.description):
@@ -91,6 +102,58 @@ def prop_type_key(ptype):
     if ptype == OWL.ObjectProperty: return "obj"
     if ptype == OWL.DatatypeProperty: return "data"
     return "ann"
+
+def literal_values(g, s, pred):
+    vals = []
+    for o in g.objects(s, pred):
+        if getattr(o, "language", None) not in (None, "en"):
+            continue
+        vals.append(str(o))
+    return sorted(dict.fromkeys(vals))
+
+def concept_ref(g, node):
+    return {
+        "id": local(str(node)),
+        "uri": "iroko:" + local(str(node)),
+        "label": pref_label(g, node) or label_rdf(g, node) or local(str(node)),
+    }
+
+def concept_refs(g, nodes):
+    refs = []
+    seen = set()
+    for node in nodes:
+        if not isinstance(node, URIRef) or not str(node).startswith(IROKO_NS):
+            continue
+        key = str(node)
+        if key in seen:
+            continue
+        seen.add(key)
+        refs.append(concept_ref(g, node))
+    return sorted(refs, key=lambda x: x["label"])
+
+def concept_usage_refs(g, concept, scheme):
+    skip_preds = {
+        RDF.type, SKOS.inScheme, SKOS.hasTopConcept, SKOS.broader, SKOS.narrower,
+        SKOS.related, SKOS.prefLabel, SKOS.altLabel, SKOS.definition, SKOS.scopeNote,
+    }
+    refs = []
+    seen = set()
+    for subj, pred, _ in g.triples((None, None, concept)):
+        if pred in skip_preds or subj == scheme:
+            continue
+        if not isinstance(subj, URIRef) or not str(subj).startswith(IROKO_NS):
+            continue
+        key = (str(subj), str(pred))
+        if key in seen:
+            continue
+        seen.add(key)
+        refs.append({
+            "id": local(str(subj)),
+            "uri": "iroko:" + local(str(subj)),
+            "label": label_rdf(g, subj) or pref_label(g, subj) or local(str(subj)),
+            "predicate": ("iroko:" if str(pred).startswith(IROKO_NS) else "") + local(str(pred)),
+        })
+    return sorted(refs, key=lambda x: (x["predicate"], x["label"]))
 
 # ---------------------------------------------------------------------------
 # Cross-module index
@@ -242,16 +305,33 @@ def get_schemes(g):
     out = []
     for scheme in g.subjects(RDF.type, SKOS.ConceptScheme):
         if not str(scheme).startswith(IROKO_NS): continue
+        scheme_id = local(str(scheme))
+        scheme_label = label_rdf(g, scheme) or pref_label(g, scheme)
         concepts = []
         for c in g.subjects(SKOS.inScheme, scheme):
             if not str(c).startswith(IROKO_NS): continue
+            cid = local(str(c))
+            narrower_nodes = list(g.objects(c, SKOS.narrower)) + list(g.subjects(SKOS.broader, c))
+            related_nodes = list(g.objects(c, SKOS.related)) + list(g.subjects(SKOS.related, c))
             concepts.append({
-                "id":    local(str(c)),
-                "label": pref_label(g, c) or label_rdf(g, c),
+                "id":        cid,
+                "uri":       "iroko:" + cid,
+                "label":     pref_label(g, c) or label_rdf(g, c),
+                "definition": skos_def(g, c) or comment_text(g, c),
+                "scope":     scope_note(g, c),
+                "notation":  str(g.value(c, SKOS.notation) or ""),
+                "altLabels": literal_values(g, c, SKOS.altLabel),
+                "broader":   concept_refs(g, g.objects(c, SKOS.broader)),
+                "narrower":  concept_refs(g, narrower_nodes),
+                "related":   concept_refs(g, related_nodes),
+                "usedBy":    concept_usage_refs(g, c, scheme),
+                "scheme":    "iroko:" + scheme_id,
+                "schemeId":  scheme_id,
+                "schemeLabel": scheme_label,
             })
         out.append({
-            "id":       local(str(scheme)),
-            "label":    label_rdf(g, scheme) or pref_label(g, scheme),
+            "id":       scheme_id,
+            "label":    scheme_label,
             "count":    len(concepts),
             "concepts": sorted(concepts, key=lambda x: x["label"]),
         })
@@ -407,10 +487,40 @@ PAGE_CSS = """
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -504,6 +614,7 @@ const MODULE_STEM = "{{STEM}}";
 const MOD_TITLE_SHORT = "{{MOD_TITLE_SHORT}}";
 const CLASSES = {{CLASSES_JSON}};
 const PROPERTIES = {{PROPERTIES_JSON}};
+const CONCEPTS = {{CONCEPTS_JSON}};
 const MODULE_CROSS = {{MODULE_CROSS_JSON}};
 const CITE_FORMATS = {{CITE_JSON}};
 
@@ -545,7 +656,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -611,9 +789,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -641,7 +862,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -721,10 +946,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 """
 
 
@@ -841,6 +1079,12 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     classes_json = json.dumps(classes_js, ensure_ascii=False)
     properties_json = json.dumps(properties, ensure_ascii=False)
     module_cross_json = json.dumps(module_cross_list, ensure_ascii=False)
+    concepts_js = {
+        c["id"]: c
+        for scheme in schemes
+        for c in scheme["concepts"]
+    }
+    concepts_json = json.dumps(concepts_js, ensure_ascii=False)
 
     # ── Build HTML ────────────────────────────────────────────────────────
     W = []
@@ -989,6 +1233,25 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
       <div class="zone-head" style="margin-top:1rem;">
         Concept Schemes
         <span class="zone-hint">""" + f"{n_concepts} concepts across {n_schemes} scheme{'s' if n_schemes!=1 else ''}" + """</span>
+      </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
       </div>""")
         for scheme in schemes:
             A(f"""      <div class="scheme-block">
@@ -1001,7 +1264,7 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
         </div>
         <div class="concept-chips">""")
             for c in scheme["concepts"]:
-                A(f"""          <div class="chip" id="concept-{h(c['id'])}">
+                A(f"""          <div class="chip" id="concept-{h(c['id'])}" role="button" tabindex="0" aria-label="View concept {h(c['label'])}" onclick="activateConcept('{h(c['id'])}', {{push:true}})" onkeydown="if(event.key==='Enter'||event.key===' '){{event.preventDefault();activateConcept('{h(c['id'])}', {{push:true}});}}">
             <span class="chip-label">{h(c['label'])}</span>
             <span class="chip-id">iroko:{h(c['id'])}</span>
           </div>""")
@@ -1108,6 +1371,7 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     js = js.replace("{{MOD_TITLE_SHORT}}", mod_short.replace('"', '\\"'))
     js = js.replace("{{CLASSES_JSON}}", classes_json)
     js = js.replace("{{PROPERTIES_JSON}}", properties_json)
+    js = js.replace("{{CONCEPTS_JSON}}", concepts_json)
     js = js.replace("{{MODULE_CROSS_JSON}}", module_cross_json)
     js = js.replace("{{CITE_JSON}}", cite_json)
     A(f"<script>\n{js}\n</script>\n</body>\n</html>")

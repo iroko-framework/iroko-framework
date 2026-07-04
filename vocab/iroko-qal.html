@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -365,6 +395,25 @@
         Concept Schemes
         <span class="zone-hint">37 concepts across 5 schemes</span>
       </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
+      </div>
       <div class="scheme-block">
         <div class="scheme-head">
           <div>
@@ -374,31 +423,31 @@
             <span class="sh-count">7 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-pos-adjective">
+          <div class="chip" id="concept-pos-adjective" role="button" tabindex="0" aria-label="View concept Adjective" onclick="activateConcept('pos-adjective', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('pos-adjective', {push:true});}">
             <span class="chip-label">Adjective</span>
             <span class="chip-id">iroko:pos-adjective</span>
           </div>
-          <div class="chip" id="concept-pos-adverb">
+          <div class="chip" id="concept-pos-adverb" role="button" tabindex="0" aria-label="View concept Adverb" onclick="activateConcept('pos-adverb', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('pos-adverb', {push:true});}">
             <span class="chip-label">Adverb</span>
             <span class="chip-id">iroko:pos-adverb</span>
           </div>
-          <div class="chip" id="concept-pos-formula">
+          <div class="chip" id="concept-pos-formula" role="button" tabindex="0" aria-label="View concept Fixed formula" onclick="activateConcept('pos-formula', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('pos-formula', {push:true});}">
             <span class="chip-label">Fixed formula</span>
             <span class="chip-id">iroko:pos-formula</span>
           </div>
-          <div class="chip" id="concept-pos-interjection">
+          <div class="chip" id="concept-pos-interjection" role="button" tabindex="0" aria-label="View concept Interjection / exclamation" onclick="activateConcept('pos-interjection', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('pos-interjection', {push:true});}">
             <span class="chip-label">Interjection / exclamation</span>
             <span class="chip-id">iroko:pos-interjection</span>
           </div>
-          <div class="chip" id="concept-pos-noun">
+          <div class="chip" id="concept-pos-noun" role="button" tabindex="0" aria-label="View concept Noun" onclick="activateConcept('pos-noun', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('pos-noun', {push:true});}">
             <span class="chip-label">Noun</span>
             <span class="chip-id">iroko:pos-noun</span>
           </div>
-          <div class="chip" id="concept-pos-other">
+          <div class="chip" id="concept-pos-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('pos-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('pos-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:pos-other</span>
           </div>
-          <div class="chip" id="concept-pos-verb">
+          <div class="chip" id="concept-pos-verb" role="button" tabindex="0" aria-label="View concept Verb" onclick="activateConcept('pos-verb', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('pos-verb', {push:true});}">
             <span class="chip-label">Verb</span>
             <span class="chip-id">iroko:pos-verb</span>
           </div>
@@ -413,27 +462,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-lang-african-christian">
+          <div class="chip" id="concept-lang-african-christian" role="button" tabindex="0" aria-label="View concept African Christian liturgical language" onclick="activateConcept('lang-african-christian', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('lang-african-christian', {push:true});}">
             <span class="chip-label">African Christian liturgical language</span>
             <span class="chip-id">iroko:lang-african-christian</span>
           </div>
-          <div class="chip" id="concept-lang-afro-atlantic">
+          <div class="chip" id="concept-lang-afro-atlantic" role="button" tabindex="0" aria-label="View concept Afro-Atlantic liturgical language" onclick="activateConcept('lang-afro-atlantic', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('lang-afro-atlantic', {push:true});}">
             <span class="chip-label">Afro-Atlantic liturgical language</span>
             <span class="chip-id">iroko:lang-afro-atlantic</span>
           </div>
-          <div class="chip" id="concept-lang-full-liturgical">
+          <div class="chip" id="concept-lang-full-liturgical" role="button" tabindex="0" aria-label="View concept Full liturgical language" onclick="activateConcept('lang-full-liturgical', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('lang-full-liturgical', {push:true});}">
             <span class="chip-label">Full liturgical language</span>
             <span class="chip-id">iroko:lang-full-liturgical</span>
           </div>
-          <div class="chip" id="concept-lang-graphic-lexical">
+          <div class="chip" id="concept-lang-graphic-lexical" role="button" tabindex="0" aria-label="View concept Graphic-lexical system" onclick="activateConcept('lang-graphic-lexical', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('lang-graphic-lexical', {push:true});}">
             <span class="chip-label">Graphic-lexical system</span>
             <span class="chip-id">iroko:lang-graphic-lexical</span>
           </div>
-          <div class="chip" id="concept-lang-other">
+          <div class="chip" id="concept-lang-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('lang-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('lang-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:lang-other</span>
           </div>
-          <div class="chip" id="concept-lang-sacred-register">
+          <div class="chip" id="concept-lang-sacred-register" role="button" tabindex="0" aria-label="View concept Sacred register of a vernacular" onclick="activateConcept('lang-sacred-register', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('lang-sacred-register', {push:true});}">
             <span class="chip-label">Sacred register of a vernacular</span>
             <span class="chip-id">iroko:lang-sacred-register</span>
           </div>
@@ -448,35 +497,35 @@
             <span class="sh-count">8 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-script-adinkra">
+          <div class="chip" id="concept-script-adinkra" role="button" tabindex="0" aria-label="View concept Adinkra symbols (Akan)" onclick="activateConcept('script-adinkra', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('script-adinkra', {push:true});}">
             <span class="chip-label">Adinkra symbols (Akan)</span>
             <span class="chip-id">iroko:script-adinkra</span>
           </div>
-          <div class="chip" id="concept-script-anaforuana">
+          <div class="chip" id="concept-script-anaforuana" role="button" tabindex="0" aria-label="View concept Anaforuana (Abakuá)" onclick="activateConcept('script-anaforuana', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('script-anaforuana', {push:true});}">
             <span class="chip-label">Anaforuana (Abakuá)</span>
             <span class="chip-id">iroko:script-anaforuana</span>
           </div>
-          <div class="chip" id="concept-script-arabic">
+          <div class="chip" id="concept-script-arabic" role="button" tabindex="0" aria-label="View concept Arabic script (Ajami)" onclick="activateConcept('script-arabic', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('script-arabic', {push:true});}">
             <span class="chip-label">Arabic script (Ajami)</span>
             <span class="chip-id">iroko:script-arabic</span>
           </div>
-          <div class="chip" id="concept-script-geez">
+          <div class="chip" id="concept-script-geez" role="button" tabindex="0" aria-label="View concept Ge&#x27;ez / Ethiopic script" onclick="activateConcept('script-geez', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('script-geez', {push:true});}">
             <span class="chip-label">Ge&#x27;ez / Ethiopic script</span>
             <span class="chip-id">iroko:script-geez</span>
           </div>
-          <div class="chip" id="concept-script-latin">
+          <div class="chip" id="concept-script-latin" role="button" tabindex="0" aria-label="View concept Latin script" onclick="activateConcept('script-latin', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('script-latin', {push:true});}">
             <span class="chip-label">Latin script</span>
             <span class="chip-id">iroko:script-latin</span>
           </div>
-          <div class="chip" id="concept-script-nsibidi">
+          <div class="chip" id="concept-script-nsibidi" role="button" tabindex="0" aria-label="View concept Nsibidi (Ejagham)" onclick="activateConcept('script-nsibidi', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('script-nsibidi', {push:true});}">
             <span class="chip-label">Nsibidi (Ejagham)</span>
             <span class="chip-id">iroko:script-nsibidi</span>
           </div>
-          <div class="chip" id="concept-script-oral-only">
+          <div class="chip" id="concept-script-oral-only" role="button" tabindex="0" aria-label="View concept Oral tradition (no script)" onclick="activateConcept('script-oral-only', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('script-oral-only', {push:true});}">
             <span class="chip-label">Oral tradition (no script)</span>
             <span class="chip-id">iroko:script-oral-only</span>
           </div>
-          <div class="chip" id="concept-script-other">
+          <div class="chip" id="concept-script-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('script-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('script-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:script-other</span>
           </div>
@@ -491,27 +540,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-naming-ecobio-abakua">
+          <div class="chip" id="concept-naming-ecobio-abakua" role="button" tabindex="0" aria-label="View concept Ecobio name (Abakuá)" onclick="activateConcept('naming-ecobio-abakua', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('naming-ecobio-abakua', {push:true});}">
             <span class="chip-label">Ecobio name (Abakuá)</span>
             <span class="chip-id">iroko:naming-ecobio-abakua</span>
           </div>
-          <div class="chip" id="concept-naming-initiate-ita">
+          <div class="chip" id="concept-naming-initiate-ita" role="button" tabindex="0" aria-label="View concept Initiate name (from itá)" onclick="activateConcept('naming-initiate-ita', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('naming-initiate-ita', {push:true});}">
             <span class="chip-label">Initiate name (from itá)</span>
             <span class="chip-id">iroko:naming-initiate-ita</span>
           </div>
-          <div class="chip" id="concept-naming-lwa-vodou">
+          <div class="chip" id="concept-naming-lwa-vodou" role="button" tabindex="0" aria-label="View concept Lwa secret name (Vodou)" onclick="activateConcept('naming-lwa-vodou', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('naming-lwa-vodou', {push:true});}">
             <span class="chip-label">Lwa secret name (Vodou)</span>
             <span class="chip-id">iroko:naming-lwa-vodou</span>
           </div>
-          <div class="chip" id="concept-naming-nkisi-palo">
+          <div class="chip" id="concept-naming-nkisi-palo" role="button" tabindex="0" aria-label="View concept Nkisi name (Palo)" onclick="activateConcept('naming-nkisi-palo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('naming-nkisi-palo', {push:true});}">
             <span class="chip-label">Nkisi name (Palo)</span>
             <span class="chip-id">iroko:naming-nkisi-palo</span>
           </div>
-          <div class="chip" id="concept-naming-orisha-camino">
+          <div class="chip" id="concept-naming-orisha-camino" role="button" tabindex="0" aria-label="View concept Orisha camino (path name)" onclick="activateConcept('naming-orisha-camino', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('naming-orisha-camino', {push:true});}">
             <span class="chip-label">Orisha camino (path name)</span>
             <span class="chip-id">iroko:naming-orisha-camino</span>
           </div>
-          <div class="chip" id="concept-naming-other">
+          <div class="chip" id="concept-naming-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('naming-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('naming-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:naming-other</span>
           </div>
@@ -526,43 +575,43 @@
             <span class="sh-count">10 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-act-blessing">
+          <div class="chip" id="concept-act-blessing" role="button" tabindex="0" aria-label="View concept Blessing" onclick="activateConcept('act-blessing', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-blessing', {push:true});}">
             <span class="chip-label">Blessing</span>
             <span class="chip-id">iroko:act-blessing</span>
           </div>
-          <div class="chip" id="concept-act-consecration">
+          <div class="chip" id="concept-act-consecration" role="button" tabindex="0" aria-label="View concept Consecration" onclick="activateConcept('act-consecration', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-consecration', {push:true});}">
             <span class="chip-label">Consecration</span>
             <span class="chip-id">iroko:act-consecration</span>
           </div>
-          <div class="chip" id="concept-act-farewell">
+          <div class="chip" id="concept-act-farewell" role="button" tabindex="0" aria-label="View concept Farewell / closing" onclick="activateConcept('act-farewell', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-farewell', {push:true});}">
             <span class="chip-label">Farewell / closing</span>
             <span class="chip-id">iroko:act-farewell</span>
           </div>
-          <div class="chip" id="concept-act-invocation">
+          <div class="chip" id="concept-act-invocation" role="button" tabindex="0" aria-label="View concept Invocation" onclick="activateConcept('act-invocation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-invocation', {push:true});}">
             <span class="chip-label">Invocation</span>
             <span class="chip-id">iroko:act-invocation</span>
           </div>
-          <div class="chip" id="concept-act-naming">
+          <div class="chip" id="concept-act-naming" role="button" tabindex="0" aria-label="View concept Naming" onclick="activateConcept('act-naming', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-naming', {push:true});}">
             <span class="chip-label">Naming</span>
             <span class="chip-id">iroko:act-naming</span>
           </div>
-          <div class="chip" id="concept-act-oath">
+          <div class="chip" id="concept-act-oath" role="button" tabindex="0" aria-label="View concept Oath / juramento" onclick="activateConcept('act-oath', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-oath', {push:true});}">
             <span class="chip-label">Oath / juramento</span>
             <span class="chip-id">iroko:act-oath</span>
           </div>
-          <div class="chip" id="concept-act-other">
+          <div class="chip" id="concept-act-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('act-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:act-other</span>
           </div>
-          <div class="chip" id="concept-act-praise">
+          <div class="chip" id="concept-act-praise" role="button" tabindex="0" aria-label="View concept Praise / oriki" onclick="activateConcept('act-praise', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-praise', {push:true});}">
             <span class="chip-label">Praise / oriki</span>
             <span class="chip-id">iroko:act-praise</span>
           </div>
-          <div class="chip" id="concept-act-prohibition">
+          <div class="chip" id="concept-act-prohibition" role="button" tabindex="0" aria-label="View concept Prohibition / taboo declaration" onclick="activateConcept('act-prohibition', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-prohibition', {push:true});}">
             <span class="chip-label">Prohibition / taboo declaration</span>
             <span class="chip-id">iroko:act-prohibition</span>
           </div>
-          <div class="chip" id="concept-act-salutation">
+          <div class="chip" id="concept-act-salutation" role="button" tabindex="0" aria-label="View concept Salutation / greeting" onclick="activateConcept('act-salutation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('act-salutation', {push:true});}">
             <span class="chip-label">Salutation / greeting</span>
             <span class="chip-id">iroko:act-salutation</span>
           </div>
@@ -650,6 +699,7 @@ const MODULE_STEM = "iroko-qal";
 const MOD_TITLE_SHORT = "Qal Module";
 const CLASSES = {"LexicalEntry": {"uri": "iroko:LexicalEntry", "label": "Lexical Entry", "definition": "A word, term, or morpheme in a sacred language with its liturgical or ritual meaning documented. Subclass of ontolex:LexicalEntry for integration with multilingual lexicographic infrastructure. A single lexical entry may have multiple senses (iroko:LexicalSense), including restricted senses whose esoteric meaning is not disclosed publicly. The existence of a term is community-restricted; its esoteric sense is initiated-only.", "outgoing": [{"uri": "iroko:cognateTerms", "label": "cognate terms", "type": "obj", "range": "Lexical Entry", "access": "comm", "def": "Terms in related languages that are etymologically cognate or semantically parallel. Used to document cross-tradition vocabulary relationships (e.g., Yorùbá 'Egúngún' → Lucumí 'Eggun'; Fon 'Legba' → Haitian 'Legba')."}, {"uri": "iroko:hasSense", "label": "has sense", "type": "obj", "range": "Lexical Sense", "access": "comm", "def": "Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance."}, {"uri": "iroko:inLanguage", "label": "in language", "type": "obj", "range": "Sacred Language", "access": "pub", "def": "The sacred language to which this lexical entry belongs. Range: iroko:SacredLanguage."}, {"uri": "iroko:orthographicVariants", "label": "orthographic variants", "type": "data", "range": "langString", "access": "comm", "def": "Alternative spellings in use across lineages or transcription traditions. Language-tagged."}, {"uri": "iroko:partOfSpeech", "label": "part of speech", "type": "obj", "range": "Concept", "access": "comm", "def": "Grammatical category of this term. Range: iroko:PartOfSpeechScheme."}, {"uri": "iroko:writtenForm", "label": "written form", "type": "data", "range": "langString", "access": "comm", "def": "The conventional written form of this term in the liturgical language. Language-tagged. Community-restricted."}], "incoming": [{"uri": "iroko:cognateTerms", "label": "cognate terms", "type": "obj", "access": "comm", "def": "Terms in related languages that are etymologically cognate or semantically parallel. Used to document cross-tradition vocabulary relationships (e.g., Yorùbá 'Egúngún' → Lucumí 'Eggun'; Fon 'Legba' → Haitian 'Legba').", "domain": "Lexical Entry", "from": "iroko:Lexical Entry", "fromLabel": "Lexical Entry", "module": "Qal Module", "stem": "iroko-qal"}, {"uri": "iroko:hasEntry", "label": "has entry", "type": "obj", "access": "comm", "def": "Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing.", "domain": "Sacred Language", "from": "iroko:Sacred Language", "fromLabel": "Sacred Language", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "LexicalSense": {"uri": "iroko:LexicalSense", "label": "Lexical Sense", "definition": "A specific meaning of a lexical entry, which may carry different access levels than the entry itself. An Orisha's name (entry) may be public, while a path-specific epithet (restricted sense) is community-restricted, and a secret name (esoteric sense) is no-access. Multiple senses of the same term are documented as separate LexicalSense instances with appropriate access levels.", "outgoing": [{"uri": "iroko:communityDefinition", "label": "community definition", "type": "data", "range": "langString", "access": "comm", "def": "A definition appropriate for community members and practitioners, including cultural context not meant for general publication. Language-tagged."}, {"uri": "iroko:entityReference", "label": "entity reference", "type": "obj", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity denoted by this sense, where applicable. Range: iroko:SpiritualEntity."}, {"uri": "iroko:esotericDefinition", "label": "esoteric definition", "type": "data", "range": "langString", "access": "init", "def": "The initiated or esoteric meaning of this sense, disclosed only to qualified practitioners. Initiated-only."}, {"uri": "iroko:publicDefinition", "label": "public definition", "type": "data", "range": "langString", "access": "pub", "def": "A general, publicly accessible definition of this sense: what a general reader can know. Language-tagged."}], "incoming": [{"uri": "iroko:hasSense", "label": "has sense", "type": "obj", "access": "comm", "def": "Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance.", "domain": "Lexical Entry", "from": "iroko:Lexical Entry", "fromLabel": "Lexical Entry", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "LiturgicalPhrase": {"uri": "iroko:LiturgicalPhrase", "label": "Liturgical Phrase", "definition": "A multi-word expression, formula, invocation, or greeting used in Afro-Atlantic sacred contexts. Examples: Yorùbá greeting formulas specific to Orisha (mojuba formulas); Palo Kikongo invocations; Vodou salutation phrases for specific lwa. Phrases are documented with their tradition, ceremony context, and speaker authority requirements. General greetings are community-restricted; ceremonial invocations are initiated-only.", "outgoing": [{"uri": "iroko:authorityRequired", "label": "authority required", "type": "obj", "range": "Concept", "access": "comm", "def": "The initiation level or title required to speak this phrase in ceremony. Range: iroko:AccessLevelScheme concept."}, {"uri": "iroko:phraseFunction", "label": "phrase function", "type": "obj", "range": "Concept", "access": "comm", "def": "The ceremonial function of this phrase. Range: iroko:SpeechActTypeScheme."}, {"uri": "iroko:phraseLanguage", "label": "phrase language", "type": "obj", "range": "Sacred Language", "access": "comm", "def": "The sacred language in which this phrase is spoken. Range: iroko:SacredLanguage."}, {"uri": "iroko:phraseText", "label": "phrase text", "type": "data", "range": "langString", "access": "init", "def": "The text of the liturgical phrase in its original language. Language-tagged. Initiated-only."}, {"uri": "iroko:phraseTranslation", "label": "phrase translation", "type": "data", "range": "langString", "access": "init", "def": "Translation of the phrase into a non-liturgical language. Initiated-only."}, {"uri": "iroko:speechActType", "label": "speech act type", "type": "obj", "range": "Sacred Speech Act", "access": "comm", "def": "Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only."}], "incoming": [{"uri": "iroko:hasPhrase", "label": "has phrase", "type": "obj", "access": "comm", "def": "Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves.", "domain": "Sacred Language", "from": "iroko:Sacred Language", "fromLabel": "Sacred Language", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "SacredLanguage": {"uri": "iroko:SacredLanguage", "label": "Sacred Language", "definition": "A language, language register, or language variety used as a liturgical or ritual medium in Afro-Atlantic or related African sacred practice. Includes fully distinct languages (Yorùbá in Lucumí/Candomblé; Kikongo in Palo Monte; Fon in Haitian Vodou), sacred registers of creole languages (Haitian Kreyòl ceremonial register), specialized vocabularies (Lucumí as Afro-Atlantic-adapted liturgical Yorùbá), and graphic-lexical systems (Nsibidi as both script and vocabulary system). Also includes African Christian liturgical languages: Ge'ez (Ethiopian/Eritrean Orthodox), Coptic (Egyptian Coptic Church).", "outgoing": [{"uri": "iroko:languageISO", "label": "ISO 639 code", "type": "data", "range": "language", "access": "pub", "def": "The ISO 639-3 code for the base language, where applicable (e.g., 'yor' for Yorùbá, 'kng' for Kikongo, 'hat' for Haitian Kreyòl, 'gez' for Ge'ez)."}, {"uri": "iroko:geographicBase", "label": "geographic base", "type": "data", "range": "langString", "access": "pub", "def": "The geographic region(s) where this language is primarily used. Free-text."}, {"uri": "iroko:hasEntry", "label": "has entry", "type": "obj", "range": "Lexical Entry", "access": "comm", "def": "Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing."}, {"uri": "iroko:hasPhrase", "label": "has phrase", "type": "obj", "range": "Liturgical Phrase", "access": "comm", "def": "Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves."}, {"uri": "iroko:languageName", "label": "language name", "type": "data", "range": "langString", "access": "pub", "def": "The name of the sacred language or register. Language-tagged."}, {"uri": "iroko:languageType", "label": "language type", "type": "obj", "range": "Concept", "access": "pub", "def": "Classification of this sacred language. Range: iroko:SacredLanguageTypeScheme."}, {"uri": "iroko:scriptSystem", "label": "script system", "type": "obj", "range": "Concept", "access": "pub", "def": "The writing system used for this language, where applicable. Range: iroko:ScriptSystemScheme."}], "incoming": [{"uri": "iroko:inLanguage", "label": "in language", "type": "obj", "access": "pub", "def": "The sacred language to which this lexical entry belongs. Range: iroko:SacredLanguage.", "domain": "Lexical Entry", "from": "iroko:Lexical Entry", "fromLabel": "Lexical Entry", "module": "Qal Module", "stem": "iroko-qal"}, {"uri": "iroko:phraseLanguage", "label": "phrase language", "type": "obj", "access": "comm", "def": "The sacred language in which this phrase is spoken. Range: iroko:SacredLanguage.", "domain": "Liturgical Phrase", "from": "iroko:Liturgical Phrase", "fromLabel": "Liturgical Phrase", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "SacredSpeechAct": {"uri": "iroko:SacredSpeechAct", "label": "Sacred Speech Act", "definition": "A formally defined speech act type within a tradition's ceremonial protocol: oath-taking, naming, cursing, blessing, consecration, authorization. Distinct from a specific utterance: a SacredSpeechAct is the category (e.g., 'Ifá greeting formula') while a LiturgicalPhrase is a specific instance. The existence of a speech act type is community-restricted; its specific form and context are initiated-only to elder-only.", "outgoing": [], "incoming": [{"uri": "iroko:speechActType", "label": "speech act type", "type": "obj", "access": "comm", "def": "Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only.", "domain": "Liturgical Phrase", "from": "iroko:Liturgical Phrase", "fromLabel": "Liturgical Phrase", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}, "SecretName": {"uri": "iroko:SecretName", "label": "Secret Name", "definition": "An esoteric or restricted name for a spiritual entity, practitioner, or sacred object known only to initiated members at a specific grade or above. Examples: the secret name of an Orisha camino revealed in itá; a Palo Tata's nkisi name; an Abakuá ecobio name. The existence of secret name conventions within a tradition is public; the names themselves are no-access.", "outgoing": [{"uri": "iroko:nameConvention", "label": "name convention", "type": "obj", "range": "Concept", "access": "comm", "def": "The type of secret name convention this follows. Range: iroko:SecretNameConventionScheme. Community-restricted."}, {"uri": "iroko:secretNameHolder", "label": "name holder", "type": "obj", "range": "SacredEntity", "access": "none", "def": "The entity (spiritual or human) who holds this secret name. Range: iroko:SpiritualEntity or foaf:Person. No-access."}, {"uri": "iroko:secretNameText", "label": "secret name", "type": "data", "range": "langString", "access": "none", "def": "The secret name itself. No-access: never exported to RDF, stored internally for provenance only."}], "incoming": [{"uri": "iroko:hasSecretName", "label": "has secret name", "type": "obj", "access": "init", "def": "Links a SacredEntity to a SecretName it holds. Inverse of iroko:secretNameHolder. Scoped to SacredEntity rather than SpiritualEntity alone because initiated practitioners also hold secret names (oruko awo and analogous esoteric designations). The existence of a secret name relationship is itself restricted; the name text is governed at no-access on iroko:secretNameText and is never exported to RDF — it is stored internally only. Access: initiated-only.", "domain": "SacredEntity", "from": "iroko:SacredEntity", "fromLabel": "SacredEntity", "module": "Qal Module", "stem": "iroko-qal"}], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:languageISO", "label": "ISO 639 code", "type": "data", "domain": "Sacred Language", "range": "language", "access": "pub", "def": "The ISO 639-3 code for the base language, where applicable (e.g., 'yor' for Yorùbá, 'kng' for Kikongo, 'hat' for Haitian Kreyòl, 'gez' for Ge'ez)."}, {"uri": "iroko:authorityRequired", "label": "authority required", "type": "obj", "domain": "Liturgical Phrase", "range": "Concept", "access": "comm", "def": "The initiation level or title required to speak this phrase in ceremony. Range: iroko:AccessLevelScheme concept."}, {"uri": "iroko:cognateTerms", "label": "cognate terms", "type": "obj", "domain": "Lexical Entry", "range": "Lexical Entry", "access": "comm", "def": "Terms in related languages that are etymologically cognate or semantically parallel. Used to document cross-tradition vocabulary relationships (e.g., Yorùbá 'Egúngún' → Lucumí 'Eggun'; Fon 'Legba' → Haitian 'Legba')."}, {"uri": "iroko:communityDefinition", "label": "community definition", "type": "data", "domain": "Lexical Sense", "range": "langString", "access": "comm", "def": "A definition appropriate for community members and practitioners, including cultural context not meant for general publication. Language-tagged."}, {"uri": "iroko:entityReference", "label": "entity reference", "type": "obj", "domain": "Lexical Sense", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity denoted by this sense, where applicable. Range: iroko:SpiritualEntity."}, {"uri": "iroko:esotericDefinition", "label": "esoteric definition", "type": "data", "domain": "Lexical Sense", "range": "langString", "access": "init", "def": "The initiated or esoteric meaning of this sense, disclosed only to qualified practitioners. Initiated-only."}, {"uri": "iroko:geographicBase", "label": "geographic base", "type": "data", "domain": "Sacred Language", "range": "langString", "access": "pub", "def": "The geographic region(s) where this language is primarily used. Free-text."}, {"uri": "iroko:hasEntry", "label": "has entry", "type": "obj", "domain": "Sacred Language", "range": "Lexical Entry", "access": "comm", "def": "Links a SacredLanguage to a LexicalEntry in that language. Inverse of iroko:inLanguage. Enables a researcher to start from a language and traverse its full lexical inventory. A SacredLanguage may have many entries; each entry belongs to exactly one SacredLanguage via inLanguage. Access: community-only — the lexical inventory of a sacred language is appropriate for practitioners and scholars with community standing."}, {"uri": "iroko:hasPhrase", "label": "has phrase", "type": "obj", "domain": "Sacred Language", "range": "Liturgical Phrase", "access": "comm", "def": "Links a SacredLanguage to a LiturgicalPhrase expressed in that language. Inverse of iroko:phraseLanguage. Enables a researcher to start from a language and traverse its attested liturgical formulas, invocations, greetings, and oaths. Access: community-only — attested liturgical phrases are appropriate for practitioners and qualified scholars; phrase translations and full texts are governed at initiated level on the LiturgicalPhrase instances themselves."}, {"uri": "iroko:hasSecretName", "label": "has secret name", "type": "obj", "domain": "SacredEntity", "range": "Secret Name", "access": "init", "def": "Links a SacredEntity to a SecretName it holds. Inverse of iroko:secretNameHolder. Scoped to SacredEntity rather than SpiritualEntity alone because initiated practitioners also hold secret names (oruko awo and analogous esoteric designations). The existence of a secret name relationship is itself restricted; the name text is governed at no-access on iroko:secretNameText and is never exported to RDF — it is stored internally only. Access: initiated-only."}, {"uri": "iroko:hasSense", "label": "has sense", "type": "obj", "domain": "Lexical Entry", "range": "Lexical Sense", "access": "comm", "def": "Links a LexicalEntry to one of its LexicalSenses. A single entry may carry multiple senses at different access levels — a public sense (general meaning), a community sense (practitioner usage), and an esoteric sense (initiated meaning). Each sense is a separate LexicalSense instance governed by its own access level. Declared as rdfs:subPropertyOf ontolex:sense to maintain OntoLex-Lemon alignment. Access: community-only at minimum; individual senses carry their own access governance."}, {"uri": "iroko:inLanguage", "label": "in language", "type": "obj", "domain": "Lexical Entry", "range": "Sacred Language", "access": "pub", "def": "The sacred language to which this lexical entry belongs. Range: iroko:SacredLanguage."}, {"uri": "iroko:languageName", "label": "language name", "type": "data", "domain": "Sacred Language", "range": "langString", "access": "pub", "def": "The name of the sacred language or register. Language-tagged."}, {"uri": "iroko:languageType", "label": "language type", "type": "obj", "domain": "Sacred Language", "range": "Concept", "access": "pub", "def": "Classification of this sacred language. Range: iroko:SacredLanguageTypeScheme."}, {"uri": "iroko:nameConvention", "label": "name convention", "type": "obj", "domain": "Secret Name", "range": "Concept", "access": "comm", "def": "The type of secret name convention this follows. Range: iroko:SecretNameConventionScheme. Community-restricted."}, {"uri": "iroko:secretNameHolder", "label": "name holder", "type": "obj", "domain": "Secret Name", "range": "SacredEntity", "access": "none", "def": "The entity (spiritual or human) who holds this secret name. Range: iroko:SpiritualEntity or foaf:Person. No-access."}, {"uri": "iroko:orthographicVariants", "label": "orthographic variants", "type": "data", "domain": "Lexical Entry", "range": "langString", "access": "comm", "def": "Alternative spellings in use across lineages or transcription traditions. Language-tagged."}, {"uri": "iroko:partOfSpeech", "label": "part of speech", "type": "obj", "domain": "Lexical Entry", "range": "Concept", "access": "comm", "def": "Grammatical category of this term. Range: iroko:PartOfSpeechScheme."}, {"uri": "iroko:phraseFunction", "label": "phrase function", "type": "obj", "domain": "Liturgical Phrase", "range": "Concept", "access": "comm", "def": "The ceremonial function of this phrase. Range: iroko:SpeechActTypeScheme."}, {"uri": "iroko:phraseLanguage", "label": "phrase language", "type": "obj", "domain": "Liturgical Phrase", "range": "Sacred Language", "access": "comm", "def": "The sacred language in which this phrase is spoken. Range: iroko:SacredLanguage."}, {"uri": "iroko:phraseText", "label": "phrase text", "type": "data", "domain": "Liturgical Phrase", "range": "langString", "access": "init", "def": "The text of the liturgical phrase in its original language. Language-tagged. Initiated-only."}, {"uri": "iroko:phraseTranslation", "label": "phrase translation", "type": "data", "domain": "Liturgical Phrase", "range": "langString", "access": "init", "def": "Translation of the phrase into a non-liturgical language. Initiated-only."}, {"uri": "iroko:publicDefinition", "label": "public definition", "type": "data", "domain": "Lexical Sense", "range": "langString", "access": "pub", "def": "A general, publicly accessible definition of this sense: what a general reader can know. Language-tagged."}, {"uri": "iroko:scriptSystem", "label": "script system", "type": "obj", "domain": "Sacred Language", "range": "Concept", "access": "pub", "def": "The writing system used for this language, where applicable. Range: iroko:ScriptSystemScheme."}, {"uri": "iroko:secretNameText", "label": "secret name", "type": "data", "domain": "Secret Name", "range": "langString", "access": "none", "def": "The secret name itself. No-access: never exported to RDF, stored internally for provenance only."}, {"uri": "iroko:speechActType", "label": "speech act type", "type": "obj", "domain": "Liturgical Phrase", "range": "Sacred Speech Act", "access": "comm", "def": "Links a LiturgicalPhrase to the SacredSpeechAct type it instantiates — oath, invocation, greeting, prohibition, praise, or similar. SacredSpeechAct is a classification of the ceremonial function a phrase performs within ritual protocol; this property tags the phrase with that type. A phrase may instantiate more than one speech act type. Access: community-only."}, {"uri": "iroko:writtenForm", "label": "written form", "type": "data", "domain": "Lexical Entry", "range": "langString", "access": "comm", "def": "The conventional written form of this term in the liturgical language. Language-tagged. Community-restricted."}];
+const CONCEPTS = {"pos-adjective": {"id": "pos-adjective", "uri": "iroko:pos-adjective", "label": "Adjective", "definition": "A modifier (epithets, descriptive terms for entities).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PartOfSpeechScheme", "schemeId": "PartOfSpeechScheme", "schemeLabel": "Parts of Speech"}, "pos-adverb": {"id": "pos-adverb", "uri": "iroko:pos-adverb", "label": "Adverb", "definition": "An adverbial modifier.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PartOfSpeechScheme", "schemeId": "PartOfSpeechScheme", "schemeLabel": "Parts of Speech"}, "pos-formula": {"id": "pos-formula", "uri": "iroko:pos-formula", "label": "Fixed formula", "definition": "A multi-word fixed expression that functions as a unit in ceremonial contexts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PartOfSpeechScheme", "schemeId": "PartOfSpeechScheme", "schemeLabel": "Parts of Speech"}, "pos-interjection": {"id": "pos-interjection", "uri": "iroko:pos-interjection", "label": "Interjection / exclamation", "definition": "A standalone ceremonial exclamation or ritual call-and-response marker.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PartOfSpeechScheme", "schemeId": "PartOfSpeechScheme", "schemeLabel": "Parts of Speech"}, "pos-noun": {"id": "pos-noun", "uri": "iroko:pos-noun", "label": "Noun", "definition": "A noun or noun phrase (entity names, place names, object names).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PartOfSpeechScheme", "schemeId": "PartOfSpeechScheme", "schemeLabel": "Parts of Speech"}, "pos-other": {"id": "pos-other", "uri": "iroko:pos-other", "label": "Other", "definition": "Part of speech not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PartOfSpeechScheme", "schemeId": "PartOfSpeechScheme", "schemeLabel": "Parts of Speech"}, "pos-verb": {"id": "pos-verb", "uri": "iroko:pos-verb", "label": "Verb", "definition": "A verb or verb phrase (ceremonial actions, states).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PartOfSpeechScheme", "schemeId": "PartOfSpeechScheme", "schemeLabel": "Parts of Speech"}, "lang-african-christian": {"id": "lang-african-christian", "uri": "iroko:lang-african-christian", "label": "African Christian liturgical language", "definition": "Languages of African origin used in pre-colonial or early-colonial African Christian traditions. Ge'ez (Ethiopian Orthodox, Eritrean Orthodox), Coptic (Egyptian Coptic Church). Included here because of their continuity with African sacred language traditions and their presence in Afro-Atlantic communities.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SacredLanguageTypeScheme", "schemeId": "SacredLanguageTypeScheme", "schemeLabel": "Sacred Language Types"}, "lang-afro-atlantic": {"id": "lang-afro-atlantic", "uri": "iroko:lang-afro-atlantic", "label": "Afro-Atlantic liturgical language", "definition": "A source language preserved in Afro-Atlantic in a fossilized or adapted form, used for liturgical purposes but no longer a community vernacular. Examples: Lucumí (Afro-Atlantic Yorùbá in Cuba); Kikongo as used in Cuban Palo Monte; liturgical Fon in Haitian Vodou.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SacredLanguageTypeScheme", "schemeId": "SacredLanguageTypeScheme", "schemeLabel": "Sacred Language Types"}, "lang-full-liturgical": {"id": "lang-full-liturgical", "uri": "iroko:lang-full-liturgical", "label": "Full liturgical language", "definition": "A language used in its complete grammatical form as the primary medium of sacred communication. Examples: Yorùbá in continental Yorùbá religion; Fon in Beninese Vodun; Ge'ez in Ethiopian Orthodox liturgy.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SacredLanguageTypeScheme", "schemeId": "SacredLanguageTypeScheme", "schemeLabel": "Sacred Language Types"}, "lang-graphic-lexical": {"id": "lang-graphic-lexical", "uri": "iroko:lang-graphic-lexical", "label": "Graphic-lexical system", "definition": "A system in which graphic signs function as lexical or semiotic units, functioning analogously to writing. Examples: Nsibidi (Ejagham) as a graphic communication system; Anaforuana signs with lexical referents. Linked to iroko-veve for the graphic dimension.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SacredLanguageTypeScheme", "schemeId": "SacredLanguageTypeScheme", "schemeLabel": "Sacred Language Types"}, "lang-other": {"id": "lang-other", "uri": "iroko:lang-other", "label": "Other", "definition": "Sacred language type not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SacredLanguageTypeScheme", "schemeId": "SacredLanguageTypeScheme", "schemeLabel": "Sacred Language Types"}, "lang-sacred-register": {"id": "lang-sacred-register", "uri": "iroko:lang-sacred-register", "label": "Sacred register of a vernacular", "definition": "A specialized ceremonial register of a vernacular language, with vocabulary and formulas specific to sacred contexts. Examples: the Vodou ceremonial register of Haitian Kreyòl; the ceremonial Jamaican Patois of Kumina.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SacredLanguageTypeScheme", "schemeId": "SacredLanguageTypeScheme", "schemeLabel": "Sacred Language Types"}, "script-adinkra": {"id": "script-adinkra", "uri": "iroko:script-adinkra", "label": "Adinkra symbols (Akan)", "definition": "Akan visual symbols functioning as a lexical and semiotic system. Cross-listed with iroko-veve; included here for semantic documentation of individual symbol meanings.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ScriptSystemScheme", "schemeId": "ScriptSystemScheme", "schemeLabel": "Script Systems"}, "script-anaforuana": {"id": "script-anaforuana", "uri": "iroko:script-anaforuana", "label": "Anaforuana (Abakuá)", "definition": "The Abakuá graphic script with lexical and communicative functions. Cross-listed with iroko-veve; included here for documentation of the semiotic/communicative dimension.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ScriptSystemScheme", "schemeId": "ScriptSystemScheme", "schemeLabel": "Script Systems"}, "script-arabic": {"id": "script-arabic", "uri": "iroko:script-arabic", "label": "Arabic script (Ajami)", "definition": "Arabic script used to write African languages in religious contexts, particularly in Ajami traditions (Fulfulde, Hausa, Wolof in Arabic script). Relevant in West African Islamic contexts that intersect with Afro-Atlantic traditions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ScriptSystemScheme", "schemeId": "ScriptSystemScheme", "schemeLabel": "Script Systems"}, "script-geez": {"id": "script-geez", "uri": "iroko:script-geez", "label": "Ge'ez / Ethiopic script", "definition": "The Ethiopic abugida used to write Ge'ez, Amharic, Tigrinya, and other Ethiopian and Eritrean languages. The sacred script of Ethiopian and Eritrean Orthodox liturgy.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ScriptSystemScheme", "schemeId": "ScriptSystemScheme", "schemeLabel": "Script Systems"}, "script-latin": {"id": "script-latin", "uri": "iroko:script-latin", "label": "Latin script", "definition": "Latin alphabet as used to transcribe liturgical Yorùbá, Lucumí, Kikongo, Haitian Kreyòl, and most documented Afro-Atlantic liturgical languages.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ScriptSystemScheme", "schemeId": "ScriptSystemScheme", "schemeLabel": "Script Systems"}, "script-nsibidi": {"id": "script-nsibidi", "uri": "iroko:script-nsibidi", "label": "Nsibidi (Ejagham)", "definition": "The Ejagham ideographic writing system, functioning as both script and graphic sign system. Cross-listed with iroko-veve for its graphic dimension; listed here for its lexical and communicative dimension.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ScriptSystemScheme", "schemeId": "ScriptSystemScheme", "schemeLabel": "Script Systems"}, "script-oral-only": {"id": "script-oral-only", "uri": "iroko:script-oral-only", "label": "Oral tradition (no script)", "definition": "Language transmitted exclusively orally without a writing system. The majority of Afro-Atlantic liturgical languages fall here historically; Latin transcription is secondary.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ScriptSystemScheme", "schemeId": "ScriptSystemScheme", "schemeLabel": "Script Systems"}, "script-other": {"id": "script-other", "uri": "iroko:script-other", "label": "Other", "definition": "Script system not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ScriptSystemScheme", "schemeId": "ScriptSystemScheme", "schemeLabel": "Script Systems"}, "naming-ecobio-abakua": {"id": "naming-ecobio-abakua", "uri": "iroko:naming-ecobio-abakua", "label": "Ecobio name (Abakuá)", "definition": "The initiatory name given to an Abakuá member at their juramento. No-access.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SecretNameConventionScheme", "schemeId": "SecretNameConventionScheme", "schemeLabel": "Secret Name Conventions"}, "naming-initiate-ita": {"id": "naming-initiate-ita", "uri": "iroko:naming-initiate-ita", "label": "Initiate name (from itá)", "definition": "A name or identifier given to an initiate in their itá (life reading). Typically held as private to the initiate and their elders.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SecretNameConventionScheme", "schemeId": "SecretNameConventionScheme", "schemeLabel": "Secret Name Conventions"}, "naming-lwa-vodou": {"id": "naming-lwa-vodou", "uri": "iroko:naming-lwa-vodou", "label": "Lwa secret name (Vodou)", "definition": "A restricted name of a specific lwa, known only to initiates at a specific grade.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SecretNameConventionScheme", "schemeId": "SecretNameConventionScheme", "schemeLabel": "Secret Name Conventions"}, "naming-nkisi-palo": {"id": "naming-nkisi-palo", "uri": "iroko:naming-nkisi-palo", "label": "Nkisi name (Palo)", "definition": "The secret name of a specific Nganga/nkisi in Palo Monte, given at preparation. Known to the Tata and their lineage.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SecretNameConventionScheme", "schemeId": "SecretNameConventionScheme", "schemeLabel": "Secret Name Conventions"}, "naming-orisha-camino": {"id": "naming-orisha-camino", "uri": "iroko:naming-orisha-camino", "label": "Orisha camino (path name)", "definition": "The secret name of a specific camino (path) of an Orisha, revealed in divination. Community-restricted in general; the specific name is initiated-elder only.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SecretNameConventionScheme", "schemeId": "SecretNameConventionScheme", "schemeLabel": "Secret Name Conventions"}, "naming-other": {"id": "naming-other", "uri": "iroko:naming-other", "label": "Other", "definition": "Secret name convention not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SecretNameConventionScheme", "schemeId": "SecretNameConventionScheme", "schemeLabel": "Secret Name Conventions"}, "act-blessing": {"id": "act-blessing", "uri": "iroko:act-blessing", "label": "Blessing", "definition": "A formally authorized speech act conferring spiritual benefit, protection, or grace. Requires recognized authority to perform.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}, "act-consecration": {"id": "act-consecration", "uri": "iroko:act-consecration", "label": "Consecration", "definition": "Speech that transforms an object, person, or space from secular to sacred status. Among the most restricted speech acts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}, "act-farewell": {"id": "act-farewell", "uri": "iroko:act-farewell", "label": "Farewell / closing", "definition": "Formal speech acts that close a ceremony or take leave of a spiritual entity.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}, "act-invocation": {"id": "act-invocation", "uri": "iroko:act-invocation", "label": "Invocation", "definition": "Speech that calls or invites a spiritual entity. Typically more restricted than salutation in terms of who may perform it.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}, "act-naming": {"id": "act-naming", "uri": "iroko:act-naming", "label": "Naming", "definition": "The formal conferral of a sacred or initiatory name on a person, object, or entity.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}, "act-oath": {"id": "act-oath", "uri": "iroko:act-oath", "label": "Oath / juramento", "definition": "A sworn commitment made in the presence of spiritual witnesses, binding on the speaker. Examples: Abakuá juramento; Palo Monte pact formulas. Initiated-only.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}, "act-other": {"id": "act-other", "uri": "iroko:act-other", "label": "Other", "definition": "Speech act type not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}, "act-praise": {"id": "act-praise", "uri": "iroko:act-praise", "label": "Praise / oriki", "definition": "Formal praise speech honoring an entity, ancestor, or lineage. Oriki in Yorùbá-derived traditions; analogous forms in other traditions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}, "act-prohibition": {"id": "act-prohibition", "uri": "iroko:act-prohibition", "label": "Prohibition / taboo declaration", "definition": "Speech acts that declare or reinforce a taboo, restriction, or prohibition.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}, "act-salutation": {"id": "act-salutation", "uri": "iroko:act-salutation", "label": "Salutation / greeting", "definition": "Formal greetings addressed to an entity, elder, or ceremonial space. Examples: Orisha salutation formulas (Mojuba); Vodou bonjou to specific lwa.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SpeechActTypeScheme", "schemeId": "SpeechActTypeScheme", "schemeLabel": "Speech Act Types"}};
 const MODULE_CROSS = [];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Qal Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-qal.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Qal Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-qal.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_qal_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Qal Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-qal.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Qal Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-qal.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -691,7 +741,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -757,9 +874,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -787,7 +947,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -867,10 +1031,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>

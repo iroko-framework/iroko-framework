@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -359,6 +389,25 @@
         Concept Schemes
         <span class="zone-hint">24 concepts across 3 schemes</span>
       </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
+      </div>
       <div class="scheme-block">
         <div class="scheme-head">
           <div>
@@ -368,35 +417,35 @@
             <span class="sh-count">8 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-mode-auditory">
+          <div class="chip" id="concept-mode-auditory" role="button" tabindex="0" aria-label="View concept Auditory" onclick="activateConcept('mode-auditory', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mode-auditory', {push:true});}">
             <span class="chip-label">Auditory</span>
             <span class="chip-id">iroko:mode-auditory</span>
           </div>
-          <div class="chip" id="concept-mode-divination">
+          <div class="chip" id="concept-mode-divination" role="button" tabindex="0" aria-label="View concept Divination" onclick="activateConcept('mode-divination', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mode-divination', {push:true});}">
             <span class="chip-label">Divination</span>
             <span class="chip-id">iroko:mode-divination</span>
           </div>
-          <div class="chip" id="concept-mode-dream">
+          <div class="chip" id="concept-mode-dream" role="button" tabindex="0" aria-label="View concept Dream" onclick="activateConcept('mode-dream', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mode-dream', {push:true});}">
             <span class="chip-label">Dream</span>
             <span class="chip-id">iroko:mode-dream</span>
           </div>
-          <div class="chip" id="concept-mode-embodied">
+          <div class="chip" id="concept-mode-embodied" role="button" tabindex="0" aria-label="View concept Embodied" onclick="activateConcept('mode-embodied', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mode-embodied', {push:true});}">
             <span class="chip-label">Embodied</span>
             <span class="chip-id">iroko:mode-embodied</span>
           </div>
-          <div class="chip" id="concept-mode-possession">
+          <div class="chip" id="concept-mode-possession" role="button" tabindex="0" aria-label="View concept Possession" onclick="activateConcept('mode-possession', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mode-possession', {push:true});}">
             <span class="chip-label">Possession</span>
             <span class="chip-id">iroko:mode-possession</span>
           </div>
-          <div class="chip" id="concept-mode-symbolic">
+          <div class="chip" id="concept-mode-symbolic" role="button" tabindex="0" aria-label="View concept Symbolic" onclick="activateConcept('mode-symbolic', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mode-symbolic', {push:true});}">
             <span class="chip-label">Symbolic</span>
             <span class="chip-id">iroko:mode-symbolic</span>
           </div>
-          <div class="chip" id="concept-mode-territorial">
+          <div class="chip" id="concept-mode-territorial" role="button" tabindex="0" aria-label="View concept Territorial" onclick="activateConcept('mode-territorial', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mode-territorial', {push:true});}">
             <span class="chip-label">Territorial</span>
             <span class="chip-id">iroko:mode-territorial</span>
           </div>
-          <div class="chip" id="concept-mode-unknown">
+          <div class="chip" id="concept-mode-unknown" role="button" tabindex="0" aria-label="View concept Unknown" onclick="activateConcept('mode-unknown', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mode-unknown', {push:true});}">
             <span class="chip-label">Unknown</span>
             <span class="chip-id">iroko:mode-unknown</span>
           </div>
@@ -411,27 +460,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-medium-instrument">
+          <div class="chip" id="concept-medium-instrument" role="button" tabindex="0" aria-label="View concept Instrument" onclick="activateConcept('medium-instrument', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-instrument', {push:true});}">
             <span class="chip-label">Instrument</span>
             <span class="chip-id">iroko:medium-instrument</span>
           </div>
-          <div class="chip" id="concept-medium-object">
+          <div class="chip" id="concept-medium-object" role="button" tabindex="0" aria-label="View concept Object" onclick="activateConcept('medium-object', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-object', {push:true});}">
             <span class="chip-label">Object</span>
             <span class="chip-id">iroko:medium-object</span>
           </div>
-          <div class="chip" id="concept-medium-person">
+          <div class="chip" id="concept-medium-person" role="button" tabindex="0" aria-label="View concept Person" onclick="activateConcept('medium-person', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-person', {push:true});}">
             <span class="chip-label">Person</span>
             <span class="chip-id">iroko:medium-person</span>
           </div>
-          <div class="chip" id="concept-medium-place">
+          <div class="chip" id="concept-medium-place" role="button" tabindex="0" aria-label="View concept Place" onclick="activateConcept('medium-place', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-place', {push:true});}">
             <span class="chip-label">Place</span>
             <span class="chip-id">iroko:medium-place</span>
           </div>
-          <div class="chip" id="concept-medium-text">
+          <div class="chip" id="concept-medium-text" role="button" tabindex="0" aria-label="View concept Text" onclick="activateConcept('medium-text', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-text', {push:true});}">
             <span class="chip-label">Text</span>
             <span class="chip-id">iroko:medium-text</span>
           </div>
-          <div class="chip" id="concept-medium-unknown">
+          <div class="chip" id="concept-medium-unknown" role="button" tabindex="0" aria-label="View concept Unknown" onclick="activateConcept('medium-unknown', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-unknown', {push:true});}">
             <span class="chip-label">Unknown</span>
             <span class="chip-id">iroko:medium-unknown</span>
           </div>
@@ -446,43 +495,43 @@
             <span class="sh-count">10 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-support-clay">
+          <div class="chip" id="concept-support-clay" role="button" tabindex="0" aria-label="View concept Clay" onclick="activateConcept('support-clay', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-clay', {push:true});}">
             <span class="chip-label">Clay</span>
             <span class="chip-id">iroko:support-clay</span>
           </div>
-          <div class="chip" id="concept-support-metal">
+          <div class="chip" id="concept-support-metal" role="button" tabindex="0" aria-label="View concept Metal" onclick="activateConcept('support-metal', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-metal', {push:true});}">
             <span class="chip-label">Metal</span>
             <span class="chip-id">iroko:support-metal</span>
           </div>
-          <div class="chip" id="concept-support-ostracon">
+          <div class="chip" id="concept-support-ostracon" role="button" tabindex="0" aria-label="View concept Ostracon" onclick="activateConcept('support-ostracon', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-ostracon', {push:true});}">
             <span class="chip-label">Ostracon</span>
             <span class="chip-id">iroko:support-ostracon</span>
           </div>
-          <div class="chip" id="concept-support-other">
+          <div class="chip" id="concept-support-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('support-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:support-other</span>
           </div>
-          <div class="chip" id="concept-support-paper">
+          <div class="chip" id="concept-support-paper" role="button" tabindex="0" aria-label="View concept Paper" onclick="activateConcept('support-paper', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-paper', {push:true});}">
             <span class="chip-label">Paper</span>
             <span class="chip-id">iroko:support-paper</span>
           </div>
-          <div class="chip" id="concept-support-papyrus">
+          <div class="chip" id="concept-support-papyrus" role="button" tabindex="0" aria-label="View concept Papyrus" onclick="activateConcept('support-papyrus', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-papyrus', {push:true});}">
             <span class="chip-label">Papyrus</span>
             <span class="chip-id">iroko:support-papyrus</span>
           </div>
-          <div class="chip" id="concept-support-parchment">
+          <div class="chip" id="concept-support-parchment" role="button" tabindex="0" aria-label="View concept Parchment" onclick="activateConcept('support-parchment', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-parchment', {push:true});}">
             <span class="chip-label">Parchment</span>
             <span class="chip-id">iroko:support-parchment</span>
           </div>
-          <div class="chip" id="concept-support-stone">
+          <div class="chip" id="concept-support-stone" role="button" tabindex="0" aria-label="View concept Stone" onclick="activateConcept('support-stone', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-stone', {push:true});}">
             <span class="chip-label">Stone</span>
             <span class="chip-id">iroko:support-stone</span>
           </div>
-          <div class="chip" id="concept-support-textile">
+          <div class="chip" id="concept-support-textile" role="button" tabindex="0" aria-label="View concept Textile" onclick="activateConcept('support-textile', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-textile', {push:true});}">
             <span class="chip-label">Textile</span>
             <span class="chip-id">iroko:support-textile</span>
           </div>
-          <div class="chip" id="concept-support-wood">
+          <div class="chip" id="concept-support-wood" role="button" tabindex="0" aria-label="View concept Wood" onclick="activateConcept('support-wood', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('support-wood', {push:true});}">
             <span class="chip-label">Wood</span>
             <span class="chip-id">iroko:support-wood</span>
           </div>
@@ -570,6 +619,7 @@ const MODULE_STEM = "iroko-manifestation";
 const MOD_TITLE_SHORT = "Manifestation Module";
 const CLASSES = {"ManifestationMode": {"uri": "iroko:ManifestationMode", "label": "Manifestation Mode", "definition": "A SKOS concept describing how a sacred agent is asserted to manifest. Modes include embodied, possession, dream, divination, symbolic, territorial, auditory, and unknown. These categories are descriptive and tradition-reported; they record what a community asserts, not what an archive adjudicates. A single ManifestationEvent may reference multiple modes. Modes may vary by temporal regime — use iroko:TemporalVariation to document seasonal or initiatory shifts.", "outgoing": [], "incoming": [{"uri": "iroko:hasManifestationMode", "label": "has manifestation mode", "type": "obj", "access": "pub", "def": "Associates a ManifestationEvent or assertion node with a ManifestationMode concept from iroko:ManifestationModeScheme. Multiple modes may be asserted for a single event.", "domain": "ManifestationEvent", "from": "iroko:ManifestationEvent", "fromLabel": "ManifestationEvent", "module": "Manifestation Module", "stem": "iroko-manifestation"}], "cross": []}, "ManuscriptObject": {"uri": "iroko:ManuscriptObject", "label": "Manuscript Object", "definition": "A physical manuscript or archival object — codex, scroll, single leaf, inscribed stone, ostracon, stela, or similar carrier. Models the physical vehicle as distinct from the intellectual content it carries. Structurally equivalent to the Object level in the vHMML three-tier hierarchy (Object / Part / Contents). A ManuscriptObject may carry one or more iroko:TextContent instances. The physical and intellectual levels are modeled separately so that a single text can be located across multiple physical carriers, and a single object can carry multiple texts. Subclass of iroko:DocumentaryEvidence, which is itself a subclass of iroko:SacredEntity.", "outgoing": [{"uri": "iroko:carriersText", "label": "carries text", "type": "obj", "range": "Text Content", "access": "pub", "def": "Links a ManuscriptObject to an iroko:TextContent it physically carries. One ManuscriptObject may carry multiple TextContent instances — a codex may contain several distinct works. Inverse of iroko:carriedBy."}, {"uri": "iroko:physicalSupport", "label": "physical support", "type": "obj", "range": "Concept", "access": "pub", "def": "The material substrate of the manuscript object. Range: iroko:PhysicalSupportScheme. Covers parchment, paper, papyrus, stone, ostracon, textile, metal, wood, clay, and other carriers. Values drawn from the controlled vocabulary used by vHMML and comparable manuscript cataloging projects."}], "incoming": [{"uri": "iroko:carriedBy", "label": "carried by", "type": "obj", "access": "pub", "def": "Links a TextContent to a ManuscriptObject that carries it. One TextContent may appear in multiple ManuscriptObjects. Inverse of iroko:carriersText.", "domain": "Text Content", "from": "iroko:Text Content", "fromLabel": "Text Content", "module": "Manifestation Module", "stem": "iroko-manifestation"}], "cross": []}, "Medium": {"uri": "iroko:Medium", "label": "Medium", "definition": "A medium through which manifestation is asserted to occur — a person, object, place, text, or instrument. A Medium is the vehicle, not the agent; the sacred agent is modeled in iroko-nkisi or iroko-agency. One ManifestationEvent may involve multiple media.", "outgoing": [{"uri": "iroko:hasMediumType", "label": "has medium type", "type": "obj", "range": "Medium Type", "access": "pub", "def": "Associates a Medium with a MediumType concept from iroko:MediumTypeScheme."}], "incoming": [{"uri": "iroko:manifestsThroughMedium", "label": "manifests through medium", "type": "obj", "access": "comm", "def": "Associates a ManifestationEvent with a Medium through which manifestation is asserted to occur. The identity of the medium (e.g., a specific person) may carry its own access level if the medium is a community member.", "domain": "ManifestationEvent", "from": "iroko:ManifestationEvent", "fromLabel": "ManifestationEvent", "module": "Manifestation Module", "stem": "iroko-manifestation"}], "cross": []}, "MediumType": {"uri": "iroko:MediumType", "label": "Medium Type", "definition": "A SKOS concept categorizing the kind of medium involved in a manifestation assertion: person, object, place, text, instrument, or unknown.", "outgoing": [], "incoming": [{"uri": "iroko:hasMediumType", "label": "has medium type", "type": "obj", "access": "pub", "def": "Associates a Medium with a MediumType concept from iroko:MediumTypeScheme.", "domain": "Medium", "from": "iroko:Medium", "fromLabel": "Medium", "module": "Manifestation Module", "stem": "iroko-manifestation"}], "cross": []}, "TextContent": {"uri": "iroko:TextContent", "label": "Text Content", "definition": "An abstract intellectual work — a text as a specific composition, title, or discrete textual unit — independent of its physical carrier. Equivalent to the FRBR Work level and to the Contents level in the vHMML three-tier hierarchy. Distinct from iroko:ManuscriptObject (the physical carrier) and from iroko:NarrativeVariant (a specific transcribed or performed telling). A single iroko:TextContent may be carried by multiple ManuscriptObjects across different repositories or copies. Properties cover language, script, genre, and uniform title. Subclass of iroko:SacredEntity.", "outgoing": [{"uri": "iroko:carriedBy", "label": "carried by", "type": "obj", "range": "Manuscript Object", "access": "pub", "def": "Links a TextContent to a ManuscriptObject that carries it. One TextContent may appear in multiple ManuscriptObjects. Inverse of iroko:carriersText."}, {"uri": "iroko:textLanguage", "label": "text language", "type": "data", "range": "string", "access": "pub", "def": "The language or languages of the text content. Express as a BCP 47 language tag where a standard code exists (e.g., 'ar' for Arabic, 'gez' for Ge'ez). For languages without standard BCP 47 codes, use a descriptive string: 'Old Nubian', 'Coptic', 'Middle Nubian'. Multiple values permitted for polyglot texts or texts in more than one language. Do not conflate language and script — record both separately."}, {"uri": "iroko:textScript", "label": "text script", "type": "data", "range": "string", "access": "pub", "def": "The script or writing system of the text content. Examples: Latin, Arabic, Ge'ez (Ethiopic), Greek, Old Nubian (Coptic-based), Hebrew, Syriac. Use ISO 15924 four-letter script codes where available. Multiple scripts may be present in a single text; record all."}, {"uri": "iroko:uniformTitle", "label": "uniform title", "type": "data", "range": "langString", "access": "pub", "def": "The standardized title for this intellectual work, independent of how the title may appear on any specific manuscript or in any particular catalog. Use the form established by the relevant authority file: LCNAF, HAF (HMML Authority File), DBMNT, or community convention. Language-tagged. A single work may have multiple uniform title assertions in different languages or from different authority sources."}], "incoming": [{"uri": "iroko:carriersText", "label": "carries text", "type": "obj", "access": "pub", "def": "Links a ManuscriptObject to an iroko:TextContent it physically carries. One ManuscriptObject may carry multiple TextContent instances — a codex may contain several distinct works. Inverse of iroko:carriedBy.", "domain": "Manuscript Object", "from": "iroko:Manuscript Object", "fromLabel": "Manuscript Object", "module": "Manifestation Module", "stem": "iroko-manifestation"}], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:carriedBy", "label": "carried by", "type": "obj", "domain": "Text Content", "range": "Manuscript Object", "access": "pub", "def": "Links a TextContent to a ManuscriptObject that carries it. One TextContent may appear in multiple ManuscriptObjects. Inverse of iroko:carriersText."}, {"uri": "iroko:carriersText", "label": "carries text", "type": "obj", "domain": "Manuscript Object", "range": "Text Content", "access": "pub", "def": "Links a ManuscriptObject to an iroko:TextContent it physically carries. One ManuscriptObject may carry multiple TextContent instances — a codex may contain several distinct works. Inverse of iroko:carriedBy."}, {"uri": "iroko:hasManifestationMode", "label": "has manifestation mode", "type": "obj", "domain": "ManifestationEvent", "range": "Manifestation Mode", "access": "pub", "def": "Associates a ManifestationEvent or assertion node with a ManifestationMode concept from iroko:ManifestationModeScheme. Multiple modes may be asserted for a single event."}, {"uri": "iroko:hasMediumType", "label": "has medium type", "type": "obj", "domain": "Medium", "range": "Medium Type", "access": "pub", "def": "Associates a Medium with a MediumType concept from iroko:MediumTypeScheme."}, {"uri": "iroko:manifestsThroughMedium", "label": "manifests through medium", "type": "obj", "domain": "ManifestationEvent", "range": "Medium", "access": "comm", "def": "Associates a ManifestationEvent with a Medium through which manifestation is asserted to occur. The identity of the medium (e.g., a specific person) may carry its own access level if the medium is a community member."}, {"uri": "iroko:physicalSupport", "label": "physical support", "type": "obj", "domain": "Manuscript Object", "range": "Concept", "access": "pub", "def": "The material substrate of the manuscript object. Range: iroko:PhysicalSupportScheme. Covers parchment, paper, papyrus, stone, ostracon, textile, metal, wood, clay, and other carriers. Values drawn from the controlled vocabulary used by vHMML and comparable manuscript cataloging projects."}, {"uri": "iroko:textLanguage", "label": "text language", "type": "data", "domain": "Text Content", "range": "string", "access": "pub", "def": "The language or languages of the text content. Express as a BCP 47 language tag where a standard code exists (e.g., 'ar' for Arabic, 'gez' for Ge'ez). For languages without standard BCP 47 codes, use a descriptive string: 'Old Nubian', 'Coptic', 'Middle Nubian'. Multiple values permitted for polyglot texts or texts in more than one language. Do not conflate language and script — record both separately."}, {"uri": "iroko:textScript", "label": "text script", "type": "data", "domain": "Text Content", "range": "string", "access": "pub", "def": "The script or writing system of the text content. Examples: Latin, Arabic, Ge'ez (Ethiopic), Greek, Old Nubian (Coptic-based), Hebrew, Syriac. Use ISO 15924 four-letter script codes where available. Multiple scripts may be present in a single text; record all."}, {"uri": "iroko:uniformTitle", "label": "uniform title", "type": "data", "domain": "Text Content", "range": "langString", "access": "pub", "def": "The standardized title for this intellectual work, independent of how the title may appear on any specific manuscript or in any particular catalog. Use the form established by the relevant authority file: LCNAF, HAF (HMML Authority File), DBMNT, or community convention. Language-tagged. A single work may have multiple uniform title assertions in different languages or from different authority sources."}];
+const CONCEPTS = {"mode-auditory": {"id": "mode-auditory", "uri": "iroko:mode-auditory", "label": "Auditory", "definition": "Manifestation asserted to occur through sound, voice, drumming, or hearing — including traditions where specific rhythms summon or identify a spirit.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ManifestationModeScheme", "schemeId": "ManifestationModeScheme", "schemeLabel": "Manifestation Modes"}, "mode-divination": {"id": "mode-divination", "uri": "iroko:mode-divination", "label": "Divination", "definition": "Manifestation asserted to occur through divination, oracle, or the interpretive reading of divinatory instruments.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ManifestationModeScheme", "schemeId": "ManifestationModeScheme", "schemeLabel": "Manifestation Modes"}, "mode-dream": {"id": "mode-dream", "uri": "iroko:mode-dream", "label": "Dream", "definition": "Manifestation asserted to occur through dreams, dream visitation, or hypnagogic contact.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ManifestationModeScheme", "schemeId": "ManifestationModeScheme", "schemeLabel": "Manifestation Modes"}, "mode-embodied": {"id": "mode-embodied", "uri": "iroko:mode-embodied", "label": "Embodied", "definition": "Manifestation asserted to occur in a physically embodied form distinct from possession — the agent is present as a body, not occupying another's.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ManifestationModeScheme", "schemeId": "ManifestationModeScheme", "schemeLabel": "Manifestation Modes"}, "mode-possession": {"id": "mode-possession", "uri": "iroko:mode-possession", "label": "Possession", "definition": "Manifestation asserted to occur through mounting or possession of a medium person. The agent speaks and acts through the medium during the event.", "scope": "Distinguish from embodied: possession involves a medium person who is temporarily occupied; embodied involves a distinct physical presence.", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ManifestationModeScheme", "schemeId": "ManifestationModeScheme", "schemeLabel": "Manifestation Modes"}, "mode-symbolic": {"id": "mode-symbolic", "uri": "iroko:mode-symbolic", "label": "Symbolic", "definition": "Manifestation asserted to occur through symbols, signs, graphic marks, or indirect representation. Vèvè, firmas, and anaforuana are common vehicles.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ManifestationModeScheme", "schemeId": "ManifestationModeScheme", "schemeLabel": "Manifestation Modes"}, "mode-territorial": {"id": "mode-territorial", "uri": "iroko:mode-territorial", "label": "Territorial", "definition": "Manifestation asserted to be bound to or expressed through a place, crossroads, body of water, forest, or territory.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ManifestationModeScheme", "schemeId": "ManifestationModeScheme", "schemeLabel": "Manifestation Modes"}, "mode-unknown": {"id": "mode-unknown", "uri": "iroko:mode-unknown", "label": "Unknown", "definition": "Manifestation mode not recorded or not known.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ManifestationModeScheme", "schemeId": "ManifestationModeScheme", "schemeLabel": "Manifestation Modes"}, "medium-instrument": {"id": "medium-instrument", "uri": "iroko:medium-instrument", "label": "Instrument", "definition": "A musical, divinatory, or ritual instrument serves as the medium — a consecrated bàtá drum, divining chain, or bell.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MediumTypeScheme", "schemeId": "MediumTypeScheme", "schemeLabel": "Medium Types"}, "medium-object": {"id": "medium-object", "uri": "iroko:medium-object", "label": "Object", "definition": "A material object serves as the medium — a consecrated vessel, nganga, otán, or ritual artifact.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MediumTypeScheme", "schemeId": "MediumTypeScheme", "schemeLabel": "Medium Types"}, "medium-person": {"id": "medium-person", "uri": "iroko:medium-person", "label": "Person", "definition": "A human person serves as the medium, as in possession or mounted manifestation.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MediumTypeScheme", "schemeId": "MediumTypeScheme", "schemeLabel": "Medium Types"}, "medium-place": {"id": "medium-place", "uri": "iroko:medium-place", "label": "Place", "definition": "A place, site, crossroads, or territory serves as the medium.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MediumTypeScheme", "schemeId": "MediumTypeScheme", "schemeLabel": "Medium Types"}, "medium-text": {"id": "medium-text", "uri": "iroko:medium-text", "label": "Text", "definition": "A text, inscription, vèvè, firma, or graphic document serves as the medium.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MediumTypeScheme", "schemeId": "MediumTypeScheme", "schemeLabel": "Medium Types"}, "medium-unknown": {"id": "medium-unknown", "uri": "iroko:medium-unknown", "label": "Unknown", "definition": "Medium type not recorded or not known.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MediumTypeScheme", "schemeId": "MediumTypeScheme", "schemeLabel": "Medium Types"}, "support-clay": {"id": "support-clay", "uri": "iroko:support-clay", "label": "Clay", "definition": "Fired or unfired clay tablets bearing inscribed or impressed text.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}, "support-metal": {"id": "support-metal", "uri": "iroko:support-metal", "label": "Metal", "definition": "Metal tablets, plaques, or coins bearing inscribed text.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}, "support-ostracon": {"id": "support-ostracon", "uri": "iroko:support-ostracon", "label": "Ostracon", "definition": "A pottery sherd or stone flake used as an informal writing surface for short texts, school exercises, receipts, or personal notes. Common in Nubian and Egyptian archaeological contexts; many DBMNT texts are ostraca.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}, "support-other": {"id": "support-other", "uri": "iroko:support-other", "label": "Other", "definition": "Physical support type not covered by existing concepts. Use skos:scopeNote on the instance to describe the specific material.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}, "support-paper": {"id": "support-paper", "uri": "iroko:support-paper", "label": "Paper", "definition": "Paper writing surface, including both handmade and machine-made paper.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}, "support-papyrus": {"id": "support-papyrus", "uri": "iroko:support-papyrus", "label": "Papyrus", "definition": "Writing surface made from papyrus plant stems. Primary medium for ancient Egyptian and early Christian Egyptian documentation.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}, "support-parchment": {"id": "support-parchment", "uri": "iroko:support-parchment", "label": "Parchment", "definition": "Animal skin prepared as a writing surface. Used extensively in Ethiopian, Nubian, and European medieval manuscript traditions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}, "support-stone": {"id": "support-stone", "uri": "iroko:support-stone", "label": "Stone", "definition": "Stone inscriptions, stelae, and rock surfaces used for monumental or votive texts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}, "support-textile": {"id": "support-textile", "uri": "iroko:support-textile", "label": "Textile", "definition": "Cloth, leather, or textile-based writing or inscription surface.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}, "support-wood": {"id": "support-wood", "uri": "iroko:support-wood", "label": "Wood", "definition": "Wooden boards, tablets, or surfaces used for writing or carving.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PhysicalSupportScheme", "schemeId": "PhysicalSupportScheme", "schemeLabel": "Physical Support Types"}};
 const MODULE_CROSS = [];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Manifestation Module (v1.3.1). https://ontology.irokosociety.org/vocab/iroko-manifestation.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Manifestation Module</em> (v1.3.1). https://ontology.irokosociety.org/vocab/iroko-manifestation.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_manifestation_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Manifestation Module}},\n  year      = {2026},\n  version   = {1.3.1},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-manifestation.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Manifestation Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-manifestation.html\nVL  - 1.3.1\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -611,7 +661,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -677,9 +794,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -707,7 +867,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -787,10 +951,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>

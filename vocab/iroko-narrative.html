@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -359,6 +389,25 @@
         Concept Schemes
         <span class="zone-hint">33 concepts across 5 schemes</span>
       </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
+      </div>
       <div class="scheme-block">
         <div class="scheme-head">
           <div>
@@ -368,27 +417,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-stance-allegorical">
+          <div class="chip" id="concept-stance-allegorical" role="button" tabindex="0" aria-label="View concept Allegorical" onclick="activateConcept('stance-allegorical', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('stance-allegorical', {push:true});}">
             <span class="chip-label">Allegorical</span>
             <span class="chip-id">iroko:stance-allegorical</span>
           </div>
-          <div class="chip" id="concept-stance-analytic">
+          <div class="chip" id="concept-stance-analytic" role="button" tabindex="0" aria-label="View concept Analytic" onclick="activateConcept('stance-analytic', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('stance-analytic', {push:true});}">
             <span class="chip-label">Analytic</span>
             <span class="chip-id">iroko:stance-analytic</span>
           </div>
-          <div class="chip" id="concept-stance-diagnostic">
+          <div class="chip" id="concept-stance-diagnostic" role="button" tabindex="0" aria-label="View concept Diagnostic" onclick="activateConcept('stance-diagnostic', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('stance-diagnostic', {push:true});}">
             <span class="chip-label">Diagnostic</span>
             <span class="chip-id">iroko:stance-diagnostic</span>
           </div>
-          <div class="chip" id="concept-stance-initiatory">
+          <div class="chip" id="concept-stance-initiatory" role="button" tabindex="0" aria-label="View concept Initiatory" onclick="activateConcept('stance-initiatory', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('stance-initiatory', {push:true});}">
             <span class="chip-label">Initiatory</span>
             <span class="chip-id">iroko:stance-initiatory</span>
           </div>
-          <div class="chip" id="concept-stance-literal">
+          <div class="chip" id="concept-stance-literal" role="button" tabindex="0" aria-label="View concept Literal" onclick="activateConcept('stance-literal', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('stance-literal', {push:true});}">
             <span class="chip-label">Literal</span>
             <span class="chip-id">iroko:stance-literal</span>
           </div>
-          <div class="chip" id="concept-stance-polemic">
+          <div class="chip" id="concept-stance-polemic" role="button" tabindex="0" aria-label="View concept Polemic" onclick="activateConcept('stance-polemic', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('stance-polemic', {push:true});}">
             <span class="chip-label">Polemic</span>
             <span class="chip-id">iroko:stance-polemic</span>
           </div>
@@ -403,35 +452,35 @@
             <span class="sh-count">8 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-kinship-ancestor">
+          <div class="chip" id="concept-kinship-ancestor" role="button" tabindex="0" aria-label="View concept ancestor" onclick="activateConcept('kinship-ancestor', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('kinship-ancestor', {push:true});}">
             <span class="chip-label">ancestor</span>
             <span class="chip-id">iroko:kinship-ancestor</span>
           </div>
-          <div class="chip" id="concept-kinship-brother">
+          <div class="chip" id="concept-kinship-brother" role="button" tabindex="0" aria-label="View concept brother" onclick="activateConcept('kinship-brother', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('kinship-brother', {push:true});}">
             <span class="chip-label">brother</span>
             <span class="chip-id">iroko:kinship-brother</span>
           </div>
-          <div class="chip" id="concept-kinship-child">
+          <div class="chip" id="concept-kinship-child" role="button" tabindex="0" aria-label="View concept child" onclick="activateConcept('kinship-child', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('kinship-child', {push:true});}">
             <span class="chip-label">child</span>
             <span class="chip-id">iroko:kinship-child</span>
           </div>
-          <div class="chip" id="concept-kinship-father">
+          <div class="chip" id="concept-kinship-father" role="button" tabindex="0" aria-label="View concept father" onclick="activateConcept('kinship-father', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('kinship-father', {push:true});}">
             <span class="chip-label">father</span>
             <span class="chip-id">iroko:kinship-father</span>
           </div>
-          <div class="chip" id="concept-kinship-mother">
+          <div class="chip" id="concept-kinship-mother" role="button" tabindex="0" aria-label="View concept mother" onclick="activateConcept('kinship-mother', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('kinship-mother', {push:true});}">
             <span class="chip-label">mother</span>
             <span class="chip-id">iroko:kinship-mother</span>
           </div>
-          <div class="chip" id="concept-kinship-owner">
+          <div class="chip" id="concept-kinship-owner" role="button" tabindex="0" aria-label="View concept owner/patron" onclick="activateConcept('kinship-owner', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('kinship-owner', {push:true});}">
             <span class="chip-label">owner/patron</span>
             <span class="chip-id">iroko:kinship-owner</span>
           </div>
-          <div class="chip" id="concept-kinship-road">
+          <div class="chip" id="concept-kinship-road" role="button" tabindex="0" aria-label="View concept road/camino" onclick="activateConcept('kinship-road', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('kinship-road', {push:true});}">
             <span class="chip-label">road/camino</span>
             <span class="chip-id">iroko:kinship-road</span>
           </div>
-          <div class="chip" id="concept-kinship-sister">
+          <div class="chip" id="concept-kinship-sister" role="button" tabindex="0" aria-label="View concept sister" onclick="activateConcept('kinship-sister', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('kinship-sister', {push:true});}">
             <span class="chip-label">sister</span>
             <span class="chip-id">iroko:kinship-sister</span>
           </div>
@@ -446,23 +495,23 @@
             <span class="sh-count">5 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-role-chorus">
+          <div class="chip" id="concept-role-chorus" role="button" tabindex="0" aria-label="View concept Chorus" onclick="activateConcept('role-chorus', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-chorus', {push:true});}">
             <span class="chip-label">Chorus</span>
             <span class="chip-id">iroko:role-chorus</span>
           </div>
-          <div class="chip" id="concept-role-community">
+          <div class="chip" id="concept-role-community" role="button" tabindex="0" aria-label="View concept Community" onclick="activateConcept('role-community', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-community', {push:true});}">
             <span class="chip-label">Community</span>
             <span class="chip-id">iroko:role-community</span>
           </div>
-          <div class="chip" id="concept-role-narrator">
+          <div class="chip" id="concept-role-narrator" role="button" tabindex="0" aria-label="View concept Narrator" onclick="activateConcept('role-narrator', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-narrator', {push:true});}">
             <span class="chip-label">Narrator</span>
             <span class="chip-id">iroko:role-narrator</span>
           </div>
-          <div class="chip" id="concept-role-officiant">
+          <div class="chip" id="concept-role-officiant" role="button" tabindex="0" aria-label="View concept Officiant" onclick="activateConcept('role-officiant', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-officiant', {push:true});}">
             <span class="chip-label">Officiant</span>
             <span class="chip-id">iroko:role-officiant</span>
           </div>
-          <div class="chip" id="concept-role-researcher">
+          <div class="chip" id="concept-role-researcher" role="button" tabindex="0" aria-label="View concept Researcher" onclick="activateConcept('role-researcher', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-researcher', {push:true});}">
             <span class="chip-label">Researcher</span>
             <span class="chip-id">iroko:role-researcher</span>
           </div>
@@ -477,35 +526,35 @@
             <span class="sh-count">8 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-segType-chant-line">
+          <div class="chip" id="concept-segType-chant-line" role="button" tabindex="0" aria-label="View concept Chant Line" onclick="activateConcept('segType-chant-line', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('segType-chant-line', {push:true});}">
             <span class="chip-label">Chant Line</span>
             <span class="chip-id">iroko:segType-chant-line</span>
           </div>
-          <div class="chip" id="concept-segType-episode">
+          <div class="chip" id="concept-segType-episode" role="button" tabindex="0" aria-label="View concept Episode" onclick="activateConcept('segType-episode', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('segType-episode', {push:true});}">
             <span class="chip-label">Episode</span>
             <span class="chip-id">iroko:segType-episode</span>
           </div>
-          <div class="chip" id="concept-segType-gloss">
+          <div class="chip" id="concept-segType-gloss" role="button" tabindex="0" aria-label="View concept Gloss" onclick="activateConcept('segType-gloss', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('segType-gloss', {push:true});}">
             <span class="chip-label">Gloss</span>
             <span class="chip-id">iroko:segType-gloss</span>
           </div>
-          <div class="chip" id="concept-segType-praise-name">
+          <div class="chip" id="concept-segType-praise-name" role="button" tabindex="0" aria-label="View concept Praise Name" onclick="activateConcept('segType-praise-name', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('segType-praise-name', {push:true});}">
             <span class="chip-label">Praise Name</span>
             <span class="chip-id">iroko:segType-praise-name</span>
           </div>
-          <div class="chip" id="concept-segType-prayer">
+          <div class="chip" id="concept-segType-prayer" role="button" tabindex="0" aria-label="View concept Prayer" onclick="activateConcept('segType-prayer', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('segType-prayer', {push:true});}">
             <span class="chip-label">Prayer</span>
             <span class="chip-id">iroko:segType-prayer</span>
           </div>
-          <div class="chip" id="concept-segType-prohibition">
+          <div class="chip" id="concept-segType-prohibition" role="button" tabindex="0" aria-label="View concept Prohibition" onclick="activateConcept('segType-prohibition', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('segType-prohibition', {push:true});}">
             <span class="chip-label">Prohibition</span>
             <span class="chip-id">iroko:segType-prohibition</span>
           </div>
-          <div class="chip" id="concept-segType-rubric">
+          <div class="chip" id="concept-segType-rubric" role="button" tabindex="0" aria-label="View concept Rubric" onclick="activateConcept('segType-rubric', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('segType-rubric', {push:true});}">
             <span class="chip-label">Rubric</span>
             <span class="chip-id">iroko:segType-rubric</span>
           </div>
-          <div class="chip" id="concept-segType-verse">
+          <div class="chip" id="concept-segType-verse" role="button" tabindex="0" aria-label="View concept Verse" onclick="activateConcept('segType-verse', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('segType-verse', {push:true});}">
             <span class="chip-label">Verse</span>
             <span class="chip-id">iroko:segType-verse</span>
           </div>
@@ -520,27 +569,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-varRel-close">
+          <div class="chip" id="concept-varRel-close" role="button" tabindex="0" aria-label="View concept Close Variant" onclick="activateConcept('varRel-close', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('varRel-close', {push:true});}">
             <span class="chip-label">Close Variant</span>
             <span class="chip-id">iroko:varRel-close</span>
           </div>
-          <div class="chip" id="concept-varRel-contested">
+          <div class="chip" id="concept-varRel-contested" role="button" tabindex="0" aria-label="View concept Contested" onclick="activateConcept('varRel-contested', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('varRel-contested', {push:true});}">
             <span class="chip-label">Contested</span>
             <span class="chip-id">iroko:varRel-contested</span>
           </div>
-          <div class="chip" id="concept-varRel-derived">
+          <div class="chip" id="concept-varRel-derived" role="button" tabindex="0" aria-label="View concept Derived" onclick="activateConcept('varRel-derived', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('varRel-derived', {push:true});}">
             <span class="chip-label">Derived</span>
             <span class="chip-id">iroko:varRel-derived</span>
           </div>
-          <div class="chip" id="concept-varRel-harmonized">
+          <div class="chip" id="concept-varRel-harmonized" role="button" tabindex="0" aria-label="View concept Harmonized" onclick="activateConcept('varRel-harmonized', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('varRel-harmonized', {push:true});}">
             <span class="chip-label">Harmonized</span>
             <span class="chip-id">iroko:varRel-harmonized</span>
           </div>
-          <div class="chip" id="concept-varRel-lineage-bound">
+          <div class="chip" id="concept-varRel-lineage-bound" role="button" tabindex="0" aria-label="View concept Lineage-Bound" onclick="activateConcept('varRel-lineage-bound', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('varRel-lineage-bound', {push:true});}">
             <span class="chip-label">Lineage-Bound</span>
             <span class="chip-id">iroko:varRel-lineage-bound</span>
           </div>
-          <div class="chip" id="concept-varRel-translation">
+          <div class="chip" id="concept-varRel-translation" role="button" tabindex="0" aria-label="View concept Translation" onclick="activateConcept('varRel-translation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('varRel-translation', {push:true});}">
             <span class="chip-label">Translation</span>
             <span class="chip-id">iroko:varRel-translation</span>
           </div>
@@ -628,6 +677,7 @@ const MODULE_STEM = "iroko-narrative";
 const MOD_TITLE_SHORT = "Narrative Module";
 const CLASSES = {"Fieldnote": {"uri": "iroko:Fieldnote", "label": "Fieldnote", "definition": "Researcher-authored note, observation, or analytic memo. Treated as a NarrativeVariant with explicit authorship and interpretive stance to keep researcher voice distinct from community voice.", "outgoing": [], "incoming": [], "cross": []}, "InterpretiveStance": {"uri": "iroko:InterpretiveStance", "label": "Interpretive Stance", "definition": "A hermeneutic or epistemological approach to reading a narrative or variant. Tags the reading frame rather than the content.", "outgoing": [], "incoming": [{"uri": "iroko:interpretiveStance", "label": "interpretive stance", "type": "obj", "access": "pub", "def": "Tags a NarrativeVariant or Commentary with an interpretive hermeneutic frame.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Narrative Module", "stem": "iroko-narrative"}], "cross": []}, "KinshipClaim": {"uri": "iroko:KinshipClaim", "label": "Kinship Claim", "definition": "A claim about relationships between entities (spirit-father, spirit-sibling, ancestor, etc.) that may be contested and authority-scoped. Implemented as an iroko:Assertion subtype so it inherits full assertion governance: authorizedBy, accessLevel, contestedStatus, assertionStatus.", "outgoing": [{"uri": "iroko:claimObject", "label": "claim object", "type": "obj", "range": "—", "access": "pub", "def": "The entity to whom the subject is related by this claim."}, {"uri": "iroko:claimSubject", "label": "claim subject", "type": "obj", "range": "—", "access": "pub", "def": "The entity about whom the kinship claim is made."}, {"uri": "iroko:relatedAs", "label": "related as", "type": "obj", "range": "Concept", "access": "pub", "def": "The type of kinship or relational bond asserted. Range: concepts from iroko:KinshipTypeScheme or tradition-specific kinship schemes."}], "incoming": [{"uri": "iroko:assertsKinship", "label": "asserts kinship", "type": "obj", "access": "comm", "def": "Links a NarrativeVariant to a KinshipClaim it asserts. Used for spirit kinship — spirit-father, spirit-sibling, ancestral claims — where the bond is narrated or testified rather than generated by a documented event. The claim may be contested across lineages or traditions; iroko:KinshipClaim is a subclass of iroko:Assertion and inherits its contested-knowledge modeling. Access: community-only.", "domain": "NarrativeVariant", "from": "iroko:NarrativeVariant", "fromLabel": "NarrativeVariant", "module": "Narrative Module", "stem": "iroko-narrative"}, {"uri": "iroko:generatesKinship", "label": "generates kinship", "type": "obj", "access": "init", "def": "Links an InitiationEvent to the KinshipClaim it creates. Covers initiation-based human kinship bonds: godfather/godson (padrino/ahijado), initiator/initiate, elder/junior lineage member. Unlike assertsKinship, this bond is generated by a documented event of record rather than narrated — the initiation created the bond. Access: initiated-only — initiation genealogy and godparent lineage are internal community records not appropriate for public or community-tier disclosure.", "domain": "InitiationEvent", "from": "iroko:InitiationEvent", "fromLabel": "InitiationEvent", "module": "Narrative Module", "stem": "iroko-narrative"}], "cross": []}, "StoryLineage": {"uri": "iroko:StoryLineage", "label": "Story Lineage", "definition": "A transmission chain for a narrative — who transmitted the story to whom, in what context. Separate from biological kinship. Models oral transmission provenance.", "outgoing": [{"uri": "iroko:transmissionDate", "label": "transmission date", "type": "data", "range": "date", "access": "comm", "def": "Date or date range of this transmission event."}, {"uri": "iroko:transmissionFrom", "label": "transmission from", "type": "obj", "range": "Agent", "access": "comm", "def": "The agent who transmitted this story to the next link in the chain."}, {"uri": "iroko:transmissionNote", "label": "transmission note", "type": "data", "range": "langString", "access": "comm", "def": "Free-text note on context, mode, or conditions of transmission."}, {"uri": "iroko:transmissionTo", "label": "transmission to", "type": "obj", "range": "Agent", "access": "comm", "def": "The agent who received this story."}], "incoming": [{"uri": "iroko:hasStoryLineage", "label": "has story lineage", "type": "obj", "access": "pub", "def": "Links a Narrative or NarrativeVariant to a StoryLineage node documenting its transmission chain.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Narrative Module", "stem": "iroko-narrative"}], "cross": []}, "Testimony": {"uri": "iroko:Testimony", "label": "Testimony", "definition": "A narrated account offered by a participant or witness. A Testimony is a NarrativeVariant with an identified speaker whose presence or role is itself the epistemic claim — the content derives its authority from the speaker's position.", "outgoing": [], "incoming": [], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:aboutEntity", "label": "about entity", "type": "obj", "domain": "NarrativeVariant", "range": "SacredEntity", "access": "pub", "def": "Links a narrative or variant to entities it concerns — a spirit, plant, place, ritual, person, or any other resource. Range: iroko:SacredEntity — the top-level class for all tradition-specific concepts in the framework."}, {"uri": "iroko:assertsKinship", "label": "asserts kinship", "type": "obj", "domain": "NarrativeVariant", "range": "Kinship Claim", "access": "comm", "def": "Links a NarrativeVariant to a KinshipClaim it asserts. Used for spirit kinship — spirit-father, spirit-sibling, ancestral claims — where the bond is narrated or testified rather than generated by a documented event. The claim may be contested across lineages or traditions; iroko:KinshipClaim is a subclass of iroko:Assertion and inherits its contested-knowledge modeling. Access: community-only."}, {"uri": "iroko:claimObject", "label": "claim object", "type": "obj", "domain": "Kinship Claim", "range": "—", "access": "pub", "def": "The entity to whom the subject is related by this claim."}, {"uri": "iroko:claimSubject", "label": "claim subject", "type": "obj", "domain": "Kinship Claim", "range": "—", "access": "pub", "def": "The entity about whom the kinship claim is made."}, {"uri": "iroko:featuresSacredAgent", "label": "features sacred agent", "type": "obj", "domain": "—", "range": "SacredAgent", "access": "pub", "def": "Links a narrative or variant to a sacred agent (spirit, ancestor) who appears as an actor within the narrative content."}, {"uri": "iroko:generatesKinship", "label": "generates kinship", "type": "obj", "domain": "InitiationEvent", "range": "Kinship Claim", "access": "init", "def": "Links an InitiationEvent to the KinshipClaim it creates. Covers initiation-based human kinship bonds: godfather/godson (padrino/ahijado), initiator/initiate, elder/junior lineage member. Unlike assertsKinship, this bond is generated by a documented event of record rather than narrated — the initiation created the bond. Access: initiated-only — initiation genealogy and godparent lineage are internal community records not appropriate for public or community-tier disclosure."}, {"uri": "iroko:hasStoryLineage", "label": "has story lineage", "type": "obj", "domain": "—", "range": "Story Lineage", "access": "pub", "def": "Links a Narrative or NarrativeVariant to a StoryLineage node documenting its transmission chain."}, {"uri": "iroko:interpretiveStance", "label": "interpretive stance", "type": "obj", "domain": "—", "range": "Interpretive Stance", "access": "pub", "def": "Tags a NarrativeVariant or Commentary with an interpretive hermeneutic frame."}, {"uri": "iroko:narratedBy", "label": "narrated by", "type": "obj", "domain": "NarrativeVariant", "range": "Agent", "access": "comm", "def": "The person or agent who narrated this variant. Range: foaf:Person or prov:Agent. For sovereignty-aligned archives: consider access governance on the identity of narrators."}, {"uri": "iroko:narrativeLanguage", "label": "narrative language", "type": "data", "domain": "NarrativeVariant", "range": "string", "access": "pub", "def": "BCP 47 language tag of the language in which the variant is expressed."}, {"uri": "iroko:narrativeRole", "label": "narrative role", "type": "obj", "domain": "—", "range": "Concept", "access": "pub", "def": "The role played by a participant in a narrative event — narrator, elder, witness, chorus, officiant, etc."}, {"uri": "iroko:narrativeText", "label": "narrative text", "type": "data", "domain": "NarrativeVariant", "range": "langString", "access": "comm", "def": "The text of this narrative variant. Language-tagged. Access governed by iroko:accessLevel on the variant instance."}, {"uri": "iroko:relatedAs", "label": "related as", "type": "obj", "domain": "Kinship Claim", "range": "Concept", "access": "pub", "def": "The type of kinship or relational bond asserted. Range: concepts from iroko:KinshipTypeScheme or tradition-specific kinship schemes."}, {"uri": "iroko:supportsAssertion", "label": "supports assertion", "type": "obj", "domain": "NarrativeVariant", "range": "Assertion", "access": "pub", "def": "Links a NarrativeVariant to iroko:Assertion nodes it supports or motivates. The narrative is the evidentiary basis for the assertion."}, {"uri": "iroko:transmissionDate", "label": "transmission date", "type": "data", "domain": "Story Lineage", "range": "date", "access": "comm", "def": "Date or date range of this transmission event."}, {"uri": "iroko:transmissionFrom", "label": "transmission from", "type": "obj", "domain": "Story Lineage", "range": "Agent", "access": "comm", "def": "The agent who transmitted this story to the next link in the chain."}, {"uri": "iroko:transmissionNote", "label": "transmission note", "type": "data", "domain": "Story Lineage", "range": "langString", "access": "comm", "def": "Free-text note on context, mode, or conditions of transmission."}, {"uri": "iroko:transmissionTo", "label": "transmission to", "type": "obj", "domain": "Story Lineage", "range": "Agent", "access": "comm", "def": "The agent who received this story."}, {"uri": "iroko:variantAuthority", "label": "variant authority", "type": "obj", "domain": "NarrativeVariant", "range": "RitualAuthority", "access": "comm", "def": "The Authority context recognized for this variant. Which lineage or house endorses this telling as authoritative."}, {"uri": "iroko:variantCreatedOn", "label": "variant created on", "type": "data", "domain": "NarrativeVariant", "range": "date", "access": "pub", "def": "Date on which this narrative variant was recorded, transcribed, or published."}, {"uri": "iroko:variantEvent", "label": "variant event", "type": "obj", "domain": "NarrativeVariant", "range": "FieldworkEvent", "access": "pub", "def": "The FieldworkEvent or ritual event that captured or generated this narrative variant."}, {"uri": "iroko:variantPlace", "label": "variant place", "type": "obj", "domain": "NarrativeVariant", "range": "—", "access": "pub", "def": "Place where the telling occurred or was recorded."}, {"uri": "iroko:variantRelation", "label": "variant relation", "type": "obj", "domain": "NarrativeVariant", "range": "NarrativeVariant", "access": "pub", "def": "Typed relationship between two NarrativeVariants. Range: iroko:VariantRelationTypeScheme concepts."}, {"uri": "iroko:variantRelationType", "label": "variant relation type", "type": "obj", "domain": "—", "range": "Concept", "access": "pub", "def": "Classifies the nature of a variant relationship — close variant, contested, derived, harmonized, lineage-bound."}];
+const CONCEPTS = {"stance-allegorical": {"id": "stance-allegorical", "uri": "iroko:stance-allegorical", "label": "Allegorical", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InterpretiveStanceScheme", "schemeId": "InterpretiveStanceScheme", "schemeLabel": "Interpretive Stances"}, "stance-analytic": {"id": "stance-analytic", "uri": "iroko:stance-analytic", "label": "Analytic", "definition": "Researcher or scholarly reading, necessarily outside community interpretive authority.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InterpretiveStanceScheme", "schemeId": "InterpretiveStanceScheme", "schemeLabel": "Interpretive Stances"}, "stance-diagnostic": {"id": "stance-diagnostic", "uri": "iroko:stance-diagnostic", "label": "Diagnostic", "definition": "Reading the narrative as a diagnostic tool — for divination, consultation, or situational assessment.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InterpretiveStanceScheme", "schemeId": "InterpretiveStanceScheme", "schemeLabel": "Interpretive Stances"}, "stance-initiatory": {"id": "stance-initiatory", "uri": "iroko:stance-initiatory", "label": "Initiatory", "definition": "Reading reserved for or shaped by initiatory context.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InterpretiveStanceScheme", "schemeId": "InterpretiveStanceScheme", "schemeLabel": "Interpretive Stances"}, "stance-literal": {"id": "stance-literal", "uri": "iroko:stance-literal", "label": "Literal", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InterpretiveStanceScheme", "schemeId": "InterpretiveStanceScheme", "schemeLabel": "Interpretive Stances"}, "stance-polemic": {"id": "stance-polemic", "uri": "iroko:stance-polemic", "label": "Polemic", "definition": "Narrative produced or shaped by an argument about tradition, authority, or lineage legitimacy.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InterpretiveStanceScheme", "schemeId": "InterpretiveStanceScheme", "schemeLabel": "Interpretive Stances"}, "kinship-ancestor": {"id": "kinship-ancestor", "uri": "iroko:kinship-ancestor", "label": "ancestor", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:KinshipTypeScheme", "schemeId": "KinshipTypeScheme", "schemeLabel": "Kinship Types"}, "kinship-brother": {"id": "kinship-brother", "uri": "iroko:kinship-brother", "label": "brother", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:KinshipTypeScheme", "schemeId": "KinshipTypeScheme", "schemeLabel": "Kinship Types"}, "kinship-child": {"id": "kinship-child", "uri": "iroko:kinship-child", "label": "child", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:KinshipTypeScheme", "schemeId": "KinshipTypeScheme", "schemeLabel": "Kinship Types"}, "kinship-father": {"id": "kinship-father", "uri": "iroko:kinship-father", "label": "father", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:KinshipTypeScheme", "schemeId": "KinshipTypeScheme", "schemeLabel": "Kinship Types"}, "kinship-mother": {"id": "kinship-mother", "uri": "iroko:kinship-mother", "label": "mother", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:KinshipTypeScheme", "schemeId": "KinshipTypeScheme", "schemeLabel": "Kinship Types"}, "kinship-owner": {"id": "kinship-owner", "uri": "iroko:kinship-owner", "label": "owner/patron", "definition": "Describes the relationship between an orisha or lwa and the practitioner over whom they have primary claim.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:KinshipTypeScheme", "schemeId": "KinshipTypeScheme", "schemeLabel": "Kinship Types"}, "kinship-road": {"id": "kinship-road", "uri": "iroko:kinship-road", "label": "road/camino", "definition": "Describes a relationship between aspects of a spirit or between a spirit and a tradition-specific manifestation.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:KinshipTypeScheme", "schemeId": "KinshipTypeScheme", "schemeLabel": "Kinship Types"}, "kinship-sister": {"id": "kinship-sister", "uri": "iroko:kinship-sister", "label": "sister", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:KinshipTypeScheme", "schemeId": "KinshipTypeScheme", "schemeLabel": "Kinship Types"}, "role-chorus": {"id": "role-chorus", "uri": "iroko:role-chorus", "label": "Chorus", "definition": "Collective voice responding to or accompanying the narrator.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:NarrativeRoleScheme", "schemeId": "NarrativeRoleScheme", "schemeLabel": "Narrative Roles"}, "role-community": {"id": "role-community", "uri": "iroko:role-community", "label": "Community", "definition": "Collective community voice or assembled participants.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:NarrativeRoleScheme", "schemeId": "NarrativeRoleScheme", "schemeLabel": "Narrative Roles"}, "role-narrator": {"id": "role-narrator", "uri": "iroko:role-narrator", "label": "Narrator", "definition": "Primary teller or transmitter of the narrative.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:NarrativeRoleScheme", "schemeId": "NarrativeRoleScheme", "schemeLabel": "Narrative Roles"}, "role-officiant": {"id": "role-officiant", "uri": "iroko:role-officiant", "label": "Officiant", "definition": "Ritual officiant whose role shapes the telling.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:NarrativeRoleScheme", "schemeId": "NarrativeRoleScheme", "schemeLabel": "Narrative Roles"}, "role-researcher": {"id": "role-researcher", "uri": "iroko:role-researcher", "label": "Researcher", "definition": "Ethnographer, archivist, or scholar whose authorship must be distinguished from community voice.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:NarrativeRoleScheme", "schemeId": "NarrativeRoleScheme", "schemeLabel": "Narrative Roles"}, "segType-chant-line": {"id": "segType-chant-line", "uri": "iroko:segType-chant-line", "label": "Chant Line", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SegmentTypeScheme", "schemeId": "SegmentTypeScheme", "schemeLabel": "Segment Types"}, "segType-episode": {"id": "segType-episode", "uri": "iroko:segType-episode", "label": "Episode", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SegmentTypeScheme", "schemeId": "SegmentTypeScheme", "schemeLabel": "Segment Types"}, "segType-gloss": {"id": "segType-gloss", "uri": "iroko:segType-gloss", "label": "Gloss", "definition": "An explanatory note or translation embedded within the narrative.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SegmentTypeScheme", "schemeId": "SegmentTypeScheme", "schemeLabel": "Segment Types"}, "segType-praise-name": {"id": "segType-praise-name", "uri": "iroko:segType-praise-name", "label": "Praise Name", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SegmentTypeScheme", "schemeId": "SegmentTypeScheme", "schemeLabel": "Segment Types"}, "segType-prayer": {"id": "segType-prayer", "uri": "iroko:segType-prayer", "label": "Prayer", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SegmentTypeScheme", "schemeId": "SegmentTypeScheme", "schemeLabel": "Segment Types"}, "segType-prohibition": {"id": "segType-prohibition", "uri": "iroko:segType-prohibition", "label": "Prohibition", "definition": "A stated prohibition or interdiction within the narrative.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SegmentTypeScheme", "schemeId": "SegmentTypeScheme", "schemeLabel": "Segment Types"}, "segType-rubric": {"id": "segType-rubric", "uri": "iroko:segType-rubric", "label": "Rubric", "definition": "A heading, liturgical direction, or structural marker in the narrative.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SegmentTypeScheme", "schemeId": "SegmentTypeScheme", "schemeLabel": "Segment Types"}, "segType-verse": {"id": "segType-verse", "uri": "iroko:segType-verse", "label": "Verse", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SegmentTypeScheme", "schemeId": "SegmentTypeScheme", "schemeLabel": "Segment Types"}, "varRel-close": {"id": "varRel-close", "uri": "iroko:varRel-close", "label": "Close Variant", "definition": "Two variants sharing the same core content with minor differences.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:VariantRelationTypeScheme", "schemeId": "VariantRelationTypeScheme", "schemeLabel": "Variant Relation Types"}, "varRel-contested": {"id": "varRel-contested", "uri": "iroko:varRel-contested", "label": "Contested", "definition": "Two variants that contradict each other on a key claim.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:VariantRelationTypeScheme", "schemeId": "VariantRelationTypeScheme", "schemeLabel": "Variant Relation Types"}, "varRel-derived": {"id": "varRel-derived", "uri": "iroko:varRel-derived", "label": "Derived", "definition": "One variant clearly derives from or expands upon the other.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:VariantRelationTypeScheme", "schemeId": "VariantRelationTypeScheme", "schemeLabel": "Variant Relation Types"}, "varRel-harmonized": {"id": "varRel-harmonized", "uri": "iroko:varRel-harmonized", "label": "Harmonized", "definition": "A variant produced by reconciling two or more divergent tellings.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:VariantRelationTypeScheme", "schemeId": "VariantRelationTypeScheme", "schemeLabel": "Variant Relation Types"}, "varRel-lineage-bound": {"id": "varRel-lineage-bound", "uri": "iroko:varRel-lineage-bound", "label": "Lineage-Bound", "definition": "A variant that applies only within a specific lineage — not a deviation, but a legitimate lineage-specific telling.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:VariantRelationTypeScheme", "schemeId": "VariantRelationTypeScheme", "schemeLabel": "Variant Relation Types"}, "varRel-translation": {"id": "varRel-translation", "uri": "iroko:varRel-translation", "label": "Translation", "definition": "A variant that is a translation into another language, which may introduce interpretive differences.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:VariantRelationTypeScheme", "schemeId": "VariantRelationTypeScheme", "schemeLabel": "Variant Relation Types"}};
 const MODULE_CROSS = [];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Narrative Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-narrative.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Narrative Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-narrative.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_narrative_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Narrative Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-narrative.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Narrative Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-narrative.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -669,7 +719,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -735,9 +852,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -765,7 +925,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -845,10 +1009,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>

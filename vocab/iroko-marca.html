@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -359,6 +389,25 @@
         Concept Schemes
         <span class="zone-hint">32 concepts across 4 schemes</span>
       </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
+      </div>
       <div class="scheme-block">
         <div class="scheme-head">
           <div>
@@ -368,31 +417,31 @@
             <span class="sh-count">7 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-medium-chamalongo-coconut">
+          <div class="chip" id="concept-medium-chamalongo-coconut" role="button" tabindex="0" aria-label="View concept Chamalongo (coconut shells)" onclick="activateConcept('medium-chamalongo-coconut', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-chamalongo-coconut', {push:true});}">
             <span class="chip-label">Chamalongo (coconut shells)</span>
             <span class="chip-id">iroko:medium-chamalongo-coconut</span>
           </div>
-          <div class="chip" id="concept-medium-chamalongo-bone">
+          <div class="chip" id="concept-medium-chamalongo-bone" role="button" tabindex="0" aria-label="View concept Chamalongo (prepared bones/discs)" onclick="activateConcept('medium-chamalongo-bone', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-chamalongo-bone', {push:true});}">
             <span class="chip-label">Chamalongo (prepared bones/discs)</span>
             <span class="chip-id">iroko:medium-chamalongo-bone</span>
           </div>
-          <div class="chip" id="concept-medium-ikin">
+          <div class="chip" id="concept-medium-ikin" role="button" tabindex="0" aria-label="View concept Ikin (palm nuts)" onclick="activateConcept('medium-ikin', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-ikin', {push:true});}">
             <span class="chip-label">Ikin (palm nuts)</span>
             <span class="chip-id">iroko:medium-ikin</span>
           </div>
-          <div class="chip" id="concept-medium-obi-coconut">
+          <div class="chip" id="concept-medium-obi-coconut" role="button" tabindex="0" aria-label="View concept Obi Abata (coconut)" onclick="activateConcept('medium-obi-coconut', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-obi-coconut', {push:true});}">
             <span class="chip-label">Obi Abata (coconut)</span>
             <span class="chip-id">iroko:medium-obi-coconut</span>
           </div>
-          <div class="chip" id="concept-medium-obi-kola">
+          <div class="chip" id="concept-medium-obi-kola" role="button" tabindex="0" aria-label="View concept Obi Kola (kola nut)" onclick="activateConcept('medium-obi-kola', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-obi-kola', {push:true});}">
             <span class="chip-label">Obi Kola (kola nut)</span>
             <span class="chip-id">iroko:medium-obi-kola</span>
           </div>
-          <div class="chip" id="concept-medium-okuele">
+          <div class="chip" id="concept-medium-okuele" role="button" tabindex="0" aria-label="View concept Okuele / Ekuele (divining chain)" onclick="activateConcept('medium-okuele', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-okuele', {push:true});}">
             <span class="chip-label">Okuele / Ekuele (divining chain)</span>
             <span class="chip-id">iroko:medium-okuele</span>
           </div>
-          <div class="chip" id="concept-medium-cowrie">
+          <div class="chip" id="concept-medium-cowrie" role="button" tabindex="0" aria-label="View concept Owó Dilogún (cowrie shells)" onclick="activateConcept('medium-cowrie', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-cowrie', {push:true});}">
             <span class="chip-label">Owó Dilogún (cowrie shells)</span>
             <span class="chip-id">iroko:medium-cowrie</span>
           </div>
@@ -407,39 +456,39 @@
             <span class="sh-count">9 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-outcome-ire">
+          <div class="chip" id="concept-outcome-ire" role="button" tabindex="0" aria-label="View concept Iré (positive)" onclick="activateConcept('outcome-ire', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('outcome-ire', {push:true});}">
             <span class="chip-label">Iré (positive)</span>
             <span class="chip-id">iroko:outcome-ire</span>
           </div>
-          <div class="chip" id="concept-outcome-ire-aiku">
+          <div class="chip" id="concept-outcome-ire-aiku" role="button" tabindex="0" aria-label="View concept Iré Aiku (long life)" onclick="activateConcept('outcome-ire-aiku', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('outcome-ire-aiku', {push:true});}">
             <span class="chip-label">Iré Aiku (long life)</span>
             <span class="chip-id">iroko:outcome-ire-aiku</span>
           </div>
-          <div class="chip" id="concept-outcome-ire-are">
+          <div class="chip" id="concept-outcome-ire-are" role="button" tabindex="0" aria-label="View concept Iré Aré (victory)" onclick="activateConcept('outcome-ire-are', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('outcome-ire-are', {push:true});}">
             <span class="chip-label">Iré Aré (victory)</span>
             <span class="chip-id">iroko:outcome-ire-are</span>
           </div>
-          <div class="chip" id="concept-outcome-ire-omo">
+          <div class="chip" id="concept-outcome-ire-omo" role="button" tabindex="0" aria-label="View concept Iré Omo (children)" onclick="activateConcept('outcome-ire-omo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('outcome-ire-omo', {push:true});}">
             <span class="chip-label">Iré Omo (children)</span>
             <span class="chip-id">iroko:outcome-ire-omo</span>
           </div>
-          <div class="chip" id="concept-outcome-ire-owo">
+          <div class="chip" id="concept-outcome-ire-owo" role="button" tabindex="0" aria-label="View concept Iré Owó (wealth)" onclick="activateConcept('outcome-ire-owo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('outcome-ire-owo', {push:true});}">
             <span class="chip-label">Iré Owó (wealth)</span>
             <span class="chip-id">iroko:outcome-ire-owo</span>
           </div>
-          <div class="chip" id="concept-outcome-osogbo">
+          <div class="chip" id="concept-outcome-osogbo" role="button" tabindex="0" aria-label="View concept Osogbo (negative)" onclick="activateConcept('outcome-osogbo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('outcome-osogbo', {push:true});}">
             <span class="chip-label">Osogbo (negative)</span>
             <span class="chip-id">iroko:outcome-osogbo</span>
           </div>
-          <div class="chip" id="concept-outcome-osogbo-arun">
+          <div class="chip" id="concept-outcome-osogbo-arun" role="button" tabindex="0" aria-label="View concept Osogbo Arun (illness)" onclick="activateConcept('outcome-osogbo-arun', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('outcome-osogbo-arun', {push:true});}">
             <span class="chip-label">Osogbo Arun (illness)</span>
             <span class="chip-id">iroko:outcome-osogbo-arun</span>
           </div>
-          <div class="chip" id="concept-outcome-osogbo-iku">
+          <div class="chip" id="concept-outcome-osogbo-iku" role="button" tabindex="0" aria-label="View concept Osogbo Ikú (death)" onclick="activateConcept('outcome-osogbo-iku', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('outcome-osogbo-iku', {push:true});}">
             <span class="chip-label">Osogbo Ikú (death)</span>
             <span class="chip-id">iroko:outcome-osogbo-iku</span>
           </div>
-          <div class="chip" id="concept-outcome-osogbo-ojú">
+          <div class="chip" id="concept-outcome-osogbo-ojú" role="button" tabindex="0" aria-label="View concept Osogbo Ojú (enmity)" onclick="activateConcept('outcome-osogbo-ojú', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('outcome-osogbo-ojú', {push:true});}">
             <span class="chip-label">Osogbo Ojú (enmity)</span>
             <span class="chip-id">iroko:outcome-osogbo-ojú</span>
           </div>
@@ -454,35 +503,35 @@
             <span class="sh-count">8 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-system-chamalongo">
+          <div class="chip" id="concept-system-chamalongo" role="button" tabindex="0" aria-label="View concept Chamalongo" onclick="activateConcept('system-chamalongo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-chamalongo', {push:true});}">
             <span class="chip-label">Chamalongo</span>
             <span class="chip-id">iroko:system-chamalongo</span>
           </div>
-          <div class="chip" id="concept-system-derle">
+          <div class="chip" id="concept-system-derle" role="button" tabindex="0" aria-label="View concept Derlé" onclick="activateConcept('system-derle', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-derle', {push:true});}">
             <span class="chip-label">Derlé</span>
             <span class="chip-id">iroko:system-derle</span>
           </div>
-          <div class="chip" id="concept-system-dilogún">
+          <div class="chip" id="concept-system-dilogún" role="button" tabindex="0" aria-label="View concept Dilogún" onclick="activateConcept('system-dilogún', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-dilogún', {push:true});}">
             <span class="chip-label">Dilogún</span>
             <span class="chip-id">iroko:system-dilogún</span>
           </div>
-          <div class="chip" id="concept-system-fa">
+          <div class="chip" id="concept-system-fa" role="button" tabindex="0" aria-label="View concept Fá" onclick="activateConcept('system-fa', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-fa', {push:true});}">
             <span class="chip-label">Fá</span>
             <span class="chip-id">iroko:system-fa</span>
           </div>
-          <div class="chip" id="concept-system-ifa">
+          <div class="chip" id="concept-system-ifa" role="button" tabindex="0" aria-label="View concept Ifá" onclick="activateConcept('system-ifa', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-ifa', {push:true});}">
             <span class="chip-label">Ifá</span>
             <span class="chip-id">iroko:system-ifa</span>
           </div>
-          <div class="chip" id="concept-system-ita">
+          <div class="chip" id="concept-system-ita" role="button" tabindex="0" aria-label="View concept Itá" onclick="activateConcept('system-ita', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-ita', {push:true});}">
             <span class="chip-label">Itá</span>
             <span class="chip-id">iroko:system-ita</span>
           </div>
-          <div class="chip" id="concept-system-obi">
+          <div class="chip" id="concept-system-obi" role="button" tabindex="0" aria-label="View concept Obi" onclick="activateConcept('system-obi', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-obi', {push:true});}">
             <span class="chip-label">Obi</span>
             <span class="chip-id">iroko:system-obi</span>
           </div>
-          <div class="chip" id="concept-system-vititi-nfinda">
+          <div class="chip" id="concept-system-vititi-nfinda" role="button" tabindex="0" aria-label="View concept Vititi Nfinda" onclick="activateConcept('system-vititi-nfinda', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-vititi-nfinda', {push:true});}">
             <span class="chip-label">Vititi Nfinda</span>
             <span class="chip-id">iroko:system-vititi-nfinda</span>
           </div>
@@ -497,35 +546,35 @@
             <span class="sh-count">8 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-ebo-abstention">
+          <div class="chip" id="concept-ebo-abstention" role="button" tabindex="0" aria-label="View concept Abstention / Prohibition" onclick="activateConcept('ebo-abstention', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('ebo-abstention', {push:true});}">
             <span class="chip-label">Abstention / Prohibition</span>
             <span class="chip-id">iroko:ebo-abstention</span>
           </div>
-          <div class="chip" id="concept-ebo-adimú">
+          <div class="chip" id="concept-ebo-adimú" role="button" tabindex="0" aria-label="View concept Adimu" onclick="activateConcept('ebo-adimú', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('ebo-adimú', {push:true});}">
             <span class="chip-label">Adimu</span>
             <span class="chip-id">iroko:ebo-adimú</span>
           </div>
-          <div class="chip" id="concept-ebo-sacrifice">
+          <div class="chip" id="concept-ebo-sacrifice" role="button" tabindex="0" aria-label="View concept Animal sacrifice" onclick="activateConcept('ebo-sacrifice', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('ebo-sacrifice', {push:true});}">
             <span class="chip-label">Animal sacrifice</span>
             <span class="chip-id">iroko:ebo-sacrifice</span>
           </div>
-          <div class="chip" id="concept-ebo-ebo">
+          <div class="chip" id="concept-ebo-ebo" role="button" tabindex="0" aria-label="View concept Ebó" onclick="activateConcept('ebo-ebo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('ebo-ebo', {push:true});}">
             <span class="chip-label">Ebó</span>
             <span class="chip-id">iroko:ebo-ebo</span>
           </div>
-          <div class="chip" id="concept-ebo-ceremony">
+          <div class="chip" id="concept-ebo-ceremony" role="button" tabindex="0" aria-label="View concept Full ceremony" onclick="activateConcept('ebo-ceremony', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('ebo-ceremony', {push:true});}">
             <span class="chip-label">Full ceremony</span>
             <span class="chip-id">iroko:ebo-ceremony</span>
           </div>
-          <div class="chip" id="concept-ebo-rogacion">
+          <div class="chip" id="concept-ebo-rogacion" role="button" tabindex="0" aria-label="View concept Head Rogation" onclick="activateConcept('ebo-rogacion', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('ebo-rogacion', {push:true});}">
             <span class="chip-label">Head Rogation</span>
             <span class="chip-id">iroko:ebo-rogacion</span>
           </div>
-          <div class="chip" id="concept-ebo-etutu">
+          <div class="chip" id="concept-ebo-etutu" role="button" tabindex="0" aria-label="View concept Itutu / Etutu" onclick="activateConcept('ebo-etutu', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('ebo-etutu', {push:true});}">
             <span class="chip-label">Itutu / Etutu</span>
             <span class="chip-id">iroko:ebo-etutu</span>
           </div>
-          <div class="chip" id="concept-ebo-cleansing">
+          <div class="chip" id="concept-ebo-cleansing" role="button" tabindex="0" aria-label="View concept Spiritual cleansing" onclick="activateConcept('ebo-cleansing', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('ebo-cleansing', {push:true});}">
             <span class="chip-label">Spiritual cleansing</span>
             <span class="chip-id">iroko:ebo-cleansing</span>
           </div>
@@ -619,6 +668,7 @@ const MODULE_STEM = "iroko-marca";
 const MOD_TITLE_SHORT = "Marca Module";
 const CLASSES = {"DivinationCorpus": {"uri": "iroko:DivinationCorpus", "label": "Divination Corpus", "definition": "The complete body of verses, prescriptions, proverbs, and interpretive commentary associated with a divination system as transmitted through a specific lineage. Distinct from the system itself (which is the abstract framework) and from individual verses (which are its units). A corpus is lineage-specific: Ifá lineages in Havana may hold different verse inventories than those in Lagos or Trinidad, each representing a distinct corpus.", "outgoing": [], "incoming": [{"uri": "iroko:signVerseCorpus", "label": "verse corpus", "type": "obj", "access": "init", "def": "The set of DivinationVerse instances in a specific lineage's corpus for this sign. The existence of a corpus is public; the verse content is initiated-elder only.", "domain": "Divination Sign", "from": "iroko:Divination Sign", "fromLabel": "Divination Sign", "module": "Marca Module", "stem": "iroko-marca"}, {"uri": "iroko:hasCorpus", "label": "has corpus", "type": "obj", "access": "pub", "def": "Links a DivinationSystem to its DivinationCorpus. The corpus is the complete body of verses, prescriptions, and commentary associated with this system within a specific lineage. A system may have multiple corpora across lineages — each lineage's corpus is a separate DivinationCorpus instance (subclass of LineageKnowledgeGraph). Access: public-unrestricted — the existence of a corpus associated with a system is public knowledge; the verse content within the corpus is governed at elder-initiated level on the DivinationVerse instances themselves.", "domain": "Divination System", "from": "iroko:Divination System", "fromLabel": "Divination System", "module": "Marca Module", "stem": "iroko-marca"}], "cross": []}, "DivinationReading": {"uri": "iroko:DivinationReading", "label": "Divination Reading", "definition": "A specific divination event performed for a recipient by an authorized diviner. Records the sign(s) that appeared, the outcome polarity (iré/osogbo), prescribed works, and the entities indicated. Reading records are among the most sensitive data in the framework: recipient identity is no-access; the date and officiant are community-restricted; the prescribed work and entity are initiated-only.", "outgoing": [{"uri": "iroko:prescribedEntity", "label": "prescribed entity", "type": "obj", "range": "SpiritualEntity", "access": "init", "def": "The spiritual entity indicated by the reading as requiring propitiation, attention, or ceremony. Range: iroko:SpiritualEntity."}, {"uri": "iroko:prescribedWork", "label": "prescribed work", "type": "obj", "range": "Concept", "access": "init", "def": "The ebó, rogation, ceremony, or spiritual work prescribed as a result of this reading. Range: iroko:EboTypeScheme. Among the most sensitive data: links divination outcome to specific prescribed action."}, {"uri": "iroko:readingDate", "label": "reading date", "type": "data", "range": "date", "access": "comm", "def": "readingDate"}, {"uri": "iroko:readingNotes", "label": "reading notes", "type": "data", "range": "langString", "access": "init", "def": "Free-text notes from the diviner. Elder-only: may contain specific operational detail."}, {"uri": "iroko:readingOfficiant", "label": "reading officiant", "type": "obj", "range": "Person", "access": "comm", "def": "The diviner who performed the reading. Range: foaf:Person. Community-restricted to protect practitioner privacy unless the officiant has consented to public attribution."}, {"uri": "iroko:readingOutcome", "label": "reading outcome", "type": "obj", "range": "Concept", "access": "init", "def": "Whether the sign came iré (positive polarity) or osogbo (negative polarity) in this reading. Range: iroko:OutcomeTypeScheme."}, {"uri": "iroko:readingRecipient", "label": "reading recipient", "type": "obj", "range": "Person", "access": "none", "def": "The person for whom the reading was performed. No-access: reading recipients have a reasonable expectation of confidentiality. Stored internally for provenance tracking only."}, {"uri": "iroko:signReceived", "label": "sign received", "type": "obj", "range": "Divination Sign", "access": "init", "def": "The divination sign(s) that appeared in this reading."}], "incoming": [], "cross": []}, "DivinationSign": {"uri": "iroko:DivinationSign", "label": "Divination Sign", "definition": "A discrete sign, figure, or configuration within a divination system. In Ifá: one of 256 odù (each identified by primary + secondary throw). In Dilogún: one of 16 principal signs (odù Dilogún, omieros, and their paths). In Fá: du figures. In Chamalongo: one of 5 configurations. Each sign has an associated corpus of verses, prescriptions, and spirit-entity relationships. The sign's name and number are public; verses and prescribed works are restricted.", "outgoing": [{"uri": "iroko:governingEntity", "label": "governing entity", "type": "obj", "range": "SpiritualEntity", "access": "comm", "def": "The spirit or deity principally associated with this sign across the tradition. In Ifá: Ogbe Meji is governed by Obatala; Oshé Meji by Oshun. This is a tradition-level association, not reading-specific. Range: iroko:SpiritualEntity."}, {"uri": "iroko:primarySign", "label": "primary sign", "type": "obj", "range": "Divination Sign", "access": "pub", "def": "In composite systems (Ifá), the sign generated by the first cast. The primary odù of a compound figure."}, {"uri": "iroko:secondarySign", "label": "secondary sign", "type": "obj", "range": "Divination Sign", "access": "pub", "def": "In composite systems (Ifá), the sign generated by the second cast. Together with primarySign, identifies the full odù compound."}, {"uri": "iroko:signNumber", "label": "sign number", "type": "data", "range": "string", "access": "pub", "def": "The numeric identifier for this sign within its system. For Dilogún: 1–16. For Ifá: the composite index of primary (1–16) and secondary (1–16) throw."}, {"uri": "iroko:signProverb", "label": "sign proverb", "type": "data", "range": "langString", "access": "comm", "def": "The principal proverb (owe) associated with this sign. Proverbs are often publicly known and shared in scholarly literature. Language-tagged."}, {"uri": "iroko:signTaboo", "label": "sign taboo", "type": "data", "range": "langString", "access": "init", "def": "A prohibition (eewo) traditionally associated with this sign. Taboos relate to foods, behaviors, materials, or associations that persons born under this sign or receiving this sign in reading should avoid."}, {"uri": "iroko:signVerseCorpus", "label": "verse corpus", "type": "obj", "range": "Divination Corpus", "access": "init", "def": "The set of DivinationVerse instances in a specific lineage's corpus for this sign. The existence of a corpus is public; the verse content is initiated-elder only."}], "incoming": [{"uri": "iroko:signReference", "label": "sign reference", "type": "obj", "access": "init", "def": "Divination sign that prescribes this plant. Links to Marca module.", "domain": "Plant", "from": "iroko:Plant", "fromLabel": "Plant", "module": "Ewé Module", "stem": "iroko-ewe"}, {"uri": "iroko:primarySign", "label": "primary sign", "type": "obj", "access": "pub", "def": "In composite systems (Ifá), the sign generated by the first cast. The primary odù of a compound figure.", "domain": "Divination Sign", "from": "iroko:Divination Sign", "fromLabel": "Divination Sign", "module": "Marca Module", "stem": "iroko-marca"}, {"uri": "iroko:secondarySign", "label": "secondary sign", "type": "obj", "access": "pub", "def": "In composite systems (Ifá), the sign generated by the second cast. Together with primarySign, identifies the full odù compound.", "domain": "Divination Sign", "from": "iroko:Divination Sign", "fromLabel": "Divination Sign", "module": "Marca Module", "stem": "iroko-marca"}, {"uri": "iroko:signReceived", "label": "sign received", "type": "obj", "access": "init", "def": "The divination sign(s) that appeared in this reading.", "domain": "Divination Reading", "from": "iroko:Divination Reading", "fromLabel": "Divination Reading", "module": "Marca Module", "stem": "iroko-marca"}, {"uri": "iroko:verseSign", "label": "verse sign", "type": "obj", "access": "pub", "def": "The divination sign to which this verse belongs.", "domain": "Divination Verse", "from": "iroko:Divination Verse", "fromLabel": "Divination Verse", "module": "Marca Module", "stem": "iroko-marca"}], "cross": [{"name": "Ewé Module", "dotCls": "dot-botanical", "via": "iroko:signReference", "dir": "referenced by"}]}, "DivinationSystem": {"uri": "iroko:DivinationSystem", "label": "Divination System", "definition": "A tradition-specific divination system consisting of a defined corpus of signs, casting methods, and interpretive frameworks. Examples: Ifá (256 odù, palm nut or chain casting), Dilogún (16 principal signs, cowrie casting), Fá (Fon parallel to Ifá), Obi (4-part binary coconut or kola reading), Chamalongo (Palo Kongo coconut/bone divination). A DivinationSystem belongs to one or more traditions and may have regional variants.", "outgoing": [{"uri": "iroko:authorizedPractitioner", "label": "authorized practitioner type", "type": "obj", "range": "Concept", "access": "pub", "def": "The authority title required to cast this system. In Ifá: Babalawo. In Dilogún: Olorisha with dilogún authorization. In Fá: Bokonon. Range: iroko:AuthorityTitleScheme."}, {"uri": "iroko:castingMedium", "label": "casting medium", "type": "obj", "range": "Concept", "access": "pub", "def": "The physical medium used to cast or generate the sign in this system. Examples: ikin (palm nuts), okuele/ekuele (divining chain), owó dilogún (cowries), obi (coconut), obi kola (kola nut), chamalongo (coconut shells or bones). Range: iroko:CastingMediumScheme."}, {"uri": "iroko:genderRestriction", "label": "gender restriction", "type": "data", "range": "langString", "access": "comm", "def": "Documents tradition-specific restrictions on who may cast this system, expressed as a free-text note. For Ifá in the Lucumí tradition: historically restricted to initiated men (Babalawos); contested in some lineages and Afro-Atlantic communities. This property records the documented practice of the lineage being described, not a normative judgment."}, {"uri": "iroko:hasCorpus", "label": "has corpus", "type": "obj", "range": "Divination Corpus", "access": "pub", "def": "Links a DivinationSystem to its DivinationCorpus. The corpus is the complete body of verses, prescriptions, and commentary associated with this system within a specific lineage. A system may have multiple corpora across lineages — each lineage's corpus is a separate DivinationCorpus instance (subclass of LineageKnowledgeGraph). Access: public-unrestricted — the existence of a corpus associated with a system is public knowledge; the verse content within the corpus is governed at elder-initiated level on the DivinationVerse instances themselves."}], "incoming": [], "cross": []}, "DivinationVerse": {"uri": "iroko:DivinationVerse", "label": "Divination Verse", "definition": "A single verse, story, or pataki within a sign's corpus. In Ifá: an ese Ifá. In Dilogún: a rezo or pataki. In Fá: a hwenoho. Verses carry narrative, ethical, prescriptive, and esoteric content. They are the primary means by which divination knowledge is transmitted and applied. Verse text is initiated-elder access; the existence of a verse corpus for a sign is public.", "outgoing": [{"uri": "iroko:verseLineage", "label": "verse lineage", "type": "obj", "range": "House", "access": "comm", "def": "The ile or lineage corpus from which this verse version derives. Different lineages may hold different versions of verses for the same sign."}, {"uri": "iroko:verseSign", "label": "verse sign", "type": "obj", "range": "Divination Sign", "access": "pub", "def": "The divination sign to which this verse belongs."}, {"uri": "iroko:verseSource", "label": "verse source", "type": "obj", "range": "DocumentaryEvidence", "access": "comm", "def": "Provenance of this verse record: oral transmission, field recording, published collection. Range: iroko:DocumentaryEvidence."}, {"uri": "iroko:verseText", "label": "verse text", "type": "data", "range": "langString", "access": "init", "def": "The full text of the verse. Elder-only: ese Ifá and analogous verses are among the most sacred and operationally powerful materials in the tradition. Their disclosure outside authorized transmission is a serious breach."}, {"uri": "iroko:verseTheme", "label": "verse theme", "type": "data", "range": "langString", "access": "init", "def": "Thematic summary of the verse's principal narrative or prescription, without reproducing the text. Initiated-only."}, {"uri": "iroko:verseTitle", "label": "verse title", "type": "data", "range": "langString", "access": "comm", "def": "The title or opening line of the verse as used within the lineage. Community-restricted: verse titles alone can partially disclose operational content."}], "incoming": [], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:authorizedPractitioner", "label": "authorized practitioner type", "type": "obj", "domain": "Divination System", "range": "Concept", "access": "pub", "def": "The authority title required to cast this system. In Ifá: Babalawo. In Dilogún: Olorisha with dilogún authorization. In Fá: Bokonon. Range: iroko:AuthorityTitleScheme."}, {"uri": "iroko:castingMedium", "label": "casting medium", "type": "obj", "domain": "Divination System", "range": "Concept", "access": "pub", "def": "The physical medium used to cast or generate the sign in this system. Examples: ikin (palm nuts), okuele/ekuele (divining chain), owó dilogún (cowries), obi (coconut), obi kola (kola nut), chamalongo (coconut shells or bones). Range: iroko:CastingMediumScheme."}, {"uri": "iroko:genderRestriction", "label": "gender restriction", "type": "data", "domain": "Divination System", "range": "langString", "access": "comm", "def": "Documents tradition-specific restrictions on who may cast this system, expressed as a free-text note. For Ifá in the Lucumí tradition: historically restricted to initiated men (Babalawos); contested in some lineages and Afro-Atlantic communities. This property records the documented practice of the lineage being described, not a normative judgment."}, {"uri": "iroko:governingEntity", "label": "governing entity", "type": "obj", "domain": "Divination Sign", "range": "SpiritualEntity", "access": "comm", "def": "The spirit or deity principally associated with this sign across the tradition. In Ifá: Ogbe Meji is governed by Obatala; Oshé Meji by Oshun. This is a tradition-level association, not reading-specific. Range: iroko:SpiritualEntity."}, {"uri": "iroko:hasCorpus", "label": "has corpus", "type": "obj", "domain": "Divination System", "range": "Divination Corpus", "access": "pub", "def": "Links a DivinationSystem to its DivinationCorpus. The corpus is the complete body of verses, prescriptions, and commentary associated with this system within a specific lineage. A system may have multiple corpora across lineages — each lineage's corpus is a separate DivinationCorpus instance (subclass of LineageKnowledgeGraph). Access: public-unrestricted — the existence of a corpus associated with a system is public knowledge; the verse content within the corpus is governed at elder-initiated level on the DivinationVerse instances themselves."}, {"uri": "iroko:prescribedEntity", "label": "prescribed entity", "type": "obj", "domain": "Divination Reading", "range": "SpiritualEntity", "access": "init", "def": "The spiritual entity indicated by the reading as requiring propitiation, attention, or ceremony. Range: iroko:SpiritualEntity."}, {"uri": "iroko:prescribedWork", "label": "prescribed work", "type": "obj", "domain": "Divination Reading", "range": "Concept", "access": "init", "def": "The ebó, rogation, ceremony, or spiritual work prescribed as a result of this reading. Range: iroko:EboTypeScheme. Among the most sensitive data: links divination outcome to specific prescribed action."}, {"uri": "iroko:primarySign", "label": "primary sign", "type": "obj", "domain": "Divination Sign", "range": "Divination Sign", "access": "pub", "def": "In composite systems (Ifá), the sign generated by the first cast. The primary odù of a compound figure."}, {"uri": "iroko:readingDate", "label": "reading date", "type": "data", "domain": "Divination Reading", "range": "date", "access": "comm", "def": "readingDate"}, {"uri": "iroko:readingNotes", "label": "reading notes", "type": "data", "domain": "Divination Reading", "range": "langString", "access": "init", "def": "Free-text notes from the diviner. Elder-only: may contain specific operational detail."}, {"uri": "iroko:readingOfficiant", "label": "reading officiant", "type": "obj", "domain": "Divination Reading", "range": "Person", "access": "comm", "def": "The diviner who performed the reading. Range: foaf:Person. Community-restricted to protect practitioner privacy unless the officiant has consented to public attribution."}, {"uri": "iroko:readingOutcome", "label": "reading outcome", "type": "obj", "domain": "Divination Reading", "range": "Concept", "access": "init", "def": "Whether the sign came iré (positive polarity) or osogbo (negative polarity) in this reading. Range: iroko:OutcomeTypeScheme."}, {"uri": "iroko:readingRecipient", "label": "reading recipient", "type": "obj", "domain": "Divination Reading", "range": "Person", "access": "none", "def": "The person for whom the reading was performed. No-access: reading recipients have a reasonable expectation of confidentiality. Stored internally for provenance tracking only."}, {"uri": "iroko:secondarySign", "label": "secondary sign", "type": "obj", "domain": "Divination Sign", "range": "Divination Sign", "access": "pub", "def": "In composite systems (Ifá), the sign generated by the second cast. Together with primarySign, identifies the full odù compound."}, {"uri": "iroko:signNumber", "label": "sign number", "type": "data", "domain": "Divination Sign", "range": "string", "access": "pub", "def": "The numeric identifier for this sign within its system. For Dilogún: 1–16. For Ifá: the composite index of primary (1–16) and secondary (1–16) throw."}, {"uri": "iroko:signProverb", "label": "sign proverb", "type": "data", "domain": "Divination Sign", "range": "langString", "access": "comm", "def": "The principal proverb (owe) associated with this sign. Proverbs are often publicly known and shared in scholarly literature. Language-tagged."}, {"uri": "iroko:signReceived", "label": "sign received", "type": "obj", "domain": "Divination Reading", "range": "Divination Sign", "access": "init", "def": "The divination sign(s) that appeared in this reading."}, {"uri": "iroko:signTaboo", "label": "sign taboo", "type": "data", "domain": "Divination Sign", "range": "langString", "access": "init", "def": "A prohibition (eewo) traditionally associated with this sign. Taboos relate to foods, behaviors, materials, or associations that persons born under this sign or receiving this sign in reading should avoid."}, {"uri": "iroko:signVerseCorpus", "label": "verse corpus", "type": "obj", "domain": "Divination Sign", "range": "Divination Corpus", "access": "init", "def": "The set of DivinationVerse instances in a specific lineage's corpus for this sign. The existence of a corpus is public; the verse content is initiated-elder only."}, {"uri": "iroko:verseLineage", "label": "verse lineage", "type": "obj", "domain": "Divination Verse", "range": "House", "access": "comm", "def": "The ile or lineage corpus from which this verse version derives. Different lineages may hold different versions of verses for the same sign."}, {"uri": "iroko:verseSign", "label": "verse sign", "type": "obj", "domain": "Divination Verse", "range": "Divination Sign", "access": "pub", "def": "The divination sign to which this verse belongs."}, {"uri": "iroko:verseSource", "label": "verse source", "type": "obj", "domain": "Divination Verse", "range": "DocumentaryEvidence", "access": "comm", "def": "Provenance of this verse record: oral transmission, field recording, published collection. Range: iroko:DocumentaryEvidence."}, {"uri": "iroko:verseText", "label": "verse text", "type": "data", "domain": "Divination Verse", "range": "langString", "access": "init", "def": "The full text of the verse. Elder-only: ese Ifá and analogous verses are among the most sacred and operationally powerful materials in the tradition. Their disclosure outside authorized transmission is a serious breach."}, {"uri": "iroko:verseTheme", "label": "verse theme", "type": "data", "domain": "Divination Verse", "range": "langString", "access": "init", "def": "Thematic summary of the verse's principal narrative or prescription, without reproducing the text. Initiated-only."}, {"uri": "iroko:verseTitle", "label": "verse title", "type": "data", "domain": "Divination Verse", "range": "langString", "access": "comm", "def": "The title or opening line of the verse as used within the lineage. Community-restricted: verse titles alone can partially disclose operational content."}];
+const CONCEPTS = {"medium-chamalongo-coconut": {"id": "medium-chamalongo-coconut", "uri": "iroko:medium-chamalongo-coconut", "label": "Chamalongo (coconut shells)", "definition": "Four coconut shell halves prepared and consecrated for Chamalongo divination in Palo traditions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:CastingMediumScheme", "schemeId": "CastingMediumScheme", "schemeLabel": "Casting Media"}, "medium-chamalongo-bone": {"id": "medium-chamalongo-bone", "uri": "iroko:medium-chamalongo-bone", "label": "Chamalongo (prepared bones/discs)", "definition": "Prepared bones or discs used as an alternative casting medium for Chamalongo. The specific preparation is lineage-specific and restricted.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:CastingMediumScheme", "schemeId": "CastingMediumScheme", "schemeLabel": "Casting Media"}, "medium-ikin": {"id": "medium-ikin", "uri": "iroko:medium-ikin", "label": "Ikin (palm nuts)", "definition": "Sacred palm nuts (ikin Ifá, obi Ifá) used by Babalawos for Ifá divination. Considered the highest-authority casting medium in Lucumí/Yorùbá tradition.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:CastingMediumScheme", "schemeId": "CastingMediumScheme", "schemeLabel": "Casting Media"}, "medium-obi-coconut": {"id": "medium-obi-coconut", "uri": "iroko:medium-obi-coconut", "label": "Obi Abata (coconut)", "definition": "Coconut divided into four pieces for Obi divination.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:CastingMediumScheme", "schemeId": "CastingMediumScheme", "schemeLabel": "Casting Media"}, "medium-obi-kola": {"id": "medium-obi-kola", "uri": "iroko:medium-obi-kola", "label": "Obi Kola (kola nut)", "definition": "Kola nut divided into lobes for Obi divination. More traditional form in continental Yorùbá practice.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:CastingMediumScheme", "schemeId": "CastingMediumScheme", "schemeLabel": "Casting Media"}, "medium-okuele": {"id": "medium-okuele", "uri": "iroko:medium-okuele", "label": "Okuele / Ekuele (divining chain)", "definition": "Eight-piece divining chain of alternating concave and convex seed halves used by Babalawos as a faster alternative to palm nut casting in Ifá.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:CastingMediumScheme", "schemeId": "CastingMediumScheme", "schemeLabel": "Casting Media"}, "medium-cowrie": {"id": "medium-cowrie", "uri": "iroko:medium-cowrie", "label": "Owó Dilogún (cowrie shells)", "definition": "Sixteen cowrie shells used in Dilogún divination by authorized Olorisha.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:CastingMediumScheme", "schemeId": "CastingMediumScheme", "schemeLabel": "Casting Media"}, "outcome-ire": {"id": "outcome-ire", "uri": "iroko:outcome-ire", "label": "Iré (positive)", "definition": "A sign comes with positive polarity. The indicated blessings are accessible. Prescribed works (ebó) confirm and open the path.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:OutcomeTypeScheme", "schemeId": "OutcomeTypeScheme", "schemeLabel": "Divination Outcome Types"}, "outcome-ire-aiku": {"id": "outcome-ire-aiku", "uri": "iroko:outcome-ire-aiku", "label": "Iré Aiku (long life)", "definition": "Iré of long life. The sign comes with the blessing of longevity.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:OutcomeTypeScheme", "schemeId": "OutcomeTypeScheme", "schemeLabel": "Divination Outcome Types"}, "outcome-ire-are": {"id": "outcome-ire-are", "uri": "iroko:outcome-ire-are", "label": "Iré Aré (victory)", "definition": "Iré of victory or achievement. The sign comes with the blessing of success in endeavor.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:OutcomeTypeScheme", "schemeId": "OutcomeTypeScheme", "schemeLabel": "Divination Outcome Types"}, "outcome-ire-omo": {"id": "outcome-ire-omo", "uri": "iroko:outcome-ire-omo", "label": "Iré Omo (children)", "definition": "Iré of children or generativity. The sign comes with the blessing of progeny or creative fruitfulness.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:OutcomeTypeScheme", "schemeId": "OutcomeTypeScheme", "schemeLabel": "Divination Outcome Types"}, "outcome-ire-owo": {"id": "outcome-ire-owo", "uri": "iroko:outcome-ire-owo", "label": "Iré Owó (wealth)", "definition": "Iré of prosperity. The sign comes with the blessing of material abundance.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:OutcomeTypeScheme", "schemeId": "OutcomeTypeScheme", "schemeLabel": "Divination Outcome Types"}, "outcome-osogbo": {"id": "outcome-osogbo", "uri": "iroko:outcome-osogbo", "label": "Osogbo (negative)", "definition": "A sign comes with negative polarity. The indicated difficulties or blockages are present. Prescribed works (ebó) are required to avert or mitigate.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:OutcomeTypeScheme", "schemeId": "OutcomeTypeScheme", "schemeLabel": "Divination Outcome Types"}, "outcome-osogbo-arun": {"id": "outcome-osogbo-arun", "uri": "iroko:outcome-osogbo-arun", "label": "Osogbo Arun (illness)", "definition": "Osogbo of illness or physical affliction.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:OutcomeTypeScheme", "schemeId": "OutcomeTypeScheme", "schemeLabel": "Divination Outcome Types"}, "outcome-osogbo-iku": {"id": "outcome-osogbo-iku", "uri": "iroko:outcome-osogbo-iku", "label": "Osogbo Ikú (death)", "definition": "Osogbo of death or severe loss. The most serious category; requires immediate and specific ebó.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:OutcomeTypeScheme", "schemeId": "OutcomeTypeScheme", "schemeLabel": "Divination Outcome Types"}, "outcome-osogbo-ojú": {"id": "outcome-osogbo-ojú", "uri": "iroko:outcome-osogbo-ojú", "label": "Osogbo Ojú (enmity)", "definition": "Osogbo of enemies or opposition. The negative force indicated involves interpersonal conflict or hostility.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:OutcomeTypeScheme", "schemeId": "OutcomeTypeScheme", "schemeLabel": "Divination Outcome Types"}, "system-chamalongo": {"id": "system-chamalongo", "uri": "iroko:system-chamalongo", "label": "Chamalongo", "definition": "Kongo-derived divination using four coconut shell halves or prepared bones/discs. Generates 5 configurations. Used in Palo Monte and related Bantu-Atlantic traditions. Practiced by authorized Paleros (Tatas and Yayas).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DivinationSystemScheme", "schemeId": "DivinationSystemScheme", "schemeLabel": "Divination System Types"}, "system-derle": {"id": "system-derle", "uri": "iroko:system-derle", "label": "Derlé", "definition": "Card-based or object-based divination associated with Espiritismo and Haitian Vodou mesa blanca practice. Distinct from African-derived binary casting systems.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DivinationSystemScheme", "schemeId": "DivinationSystemScheme", "schemeLabel": "Divination System Types"}, "system-dilogún": {"id": "system-dilogún", "uri": "iroko:system-dilogún", "label": "Dilogún", "definition": "Cowrie shell divination using 16 shells (owó dilogún) to generate 16 principal signs. Practiced by authorized Olorisha. Used in Lucumí/Ocha, Candomblé, and related traditions. Shares sign names with Ifá odù but distinct system, corpus, and authority structure.", "scope": "Lineage-specific variations exist in casting protocol, sign count, and authority requirements.", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DivinationSystemScheme", "schemeId": "DivinationSystemScheme", "schemeLabel": "Divination System Types"}, "system-fa": {"id": "system-fa", "uri": "iroko:system-fa", "label": "Fá", "definition": "The Fon and Ewe divination system cognate to Ifá, using palm nuts or a divining chain to generate du figures. Practiced by Bokonon (male diviners). The du corpus is distinct from but related to Yorùbá odù. Primary in Benin, Togo, and Haitian Vodou communities with Rada/Fon lineages.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DivinationSystemScheme", "schemeId": "DivinationSystemScheme", "schemeLabel": "Divination System Types"}, "system-ifa": {"id": "system-ifa", "uri": "iroko:system-ifa", "label": "Ifá", "definition": "The Yorùbá-derived divination system using ikin (palm nuts) or okuele (divining chain) to generate 256 binary odù configurations. Practiced by authorized Babalawos. Versions found in Lucumí (Cuba), Candomblé de Ifá (Brazil), Trinidadian Orisha, and continental Yorùbá communities.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DivinationSystemScheme", "schemeId": "DivinationSystemScheme", "schemeLabel": "Divination System Types"}, "system-ita": {"id": "system-ita", "uri": "iroko:system-ita", "label": "Itá", "definition": "The extended Ifá reading performed for an individual at initiation (kariosha, itá de kariosha) or as a life-path consultation. Typically multi-sign, conducted by a Babalawo, and interpreted by Olorisha elders. The itá record is among the most sensitive personal documents in the tradition.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DivinationSystemScheme", "schemeId": "DivinationSystemScheme", "schemeLabel": "Divination System Types"}, "system-obi": {"id": "system-obi", "uri": "iroko:system-obi", "label": "Obi", "definition": "Four-piece binary divination using coconut (obi abata) or kola nut (obi kola). Generates 5 configurations from the binary state of four pieces. Used across Lucumí, Candomblé, and Yorùbá traditions for confirmation and yes/no queries. Less elaborate than Ifá or Dilogún but widely practiced.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DivinationSystemScheme", "schemeId": "DivinationSystemScheme", "schemeLabel": "Divination System Types"}, "system-vititi-nfinda": {"id": "system-vititi-nfinda", "uri": "iroko:system-vititi-nfinda", "label": "Vititi Nfinda", "definition": "Mirror or reflective-surface divination used in Palo Monte for spiritual vision and consultation. Complementary to but distinct from Chamalongo; requires specific nganga authorization.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DivinationSystemScheme", "schemeId": "DivinationSystemScheme", "schemeLabel": "Divination System Types"}, "ebo-abstention": {"id": "ebo-abstention", "uri": "iroko:ebo-abstention", "label": "Abstention / Prohibition", "definition": "A behavioral abstention or avoidance prescribed by the reading: specific foods, colors, locations, or activities to avoid for a defined period.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:EboTypeScheme", "schemeId": "EboTypeScheme", "schemeLabel": "Prescribed Work Types"}, "ebo-adimú": {"id": "ebo-adimú", "uri": "iroko:ebo-adimú", "label": "Adimu", "definition": "A food or vegetable offering (without blood) to an Orisha. Accessible outside of full ebó; considered the first step in propitiation.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:EboTypeScheme", "schemeId": "EboTypeScheme", "schemeLabel": "Prescribed Work Types"}, "ebo-sacrifice": {"id": "ebo-sacrifice", "uri": "iroko:ebo-sacrifice", "label": "Animal sacrifice", "definition": "Ritual sacrifice of an animal specified by the reading. Species, preparation, and allocation are operational details held at initiated-only access.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:EboTypeScheme", "schemeId": "EboTypeScheme", "schemeLabel": "Prescribed Work Types"}, "ebo-ebo": {"id": "ebo-ebo", "uri": "iroko:ebo-ebo", "label": "Ebó", "definition": "A prescribed offering to the Orisha or Ifá indicated by the reading. Includes specific materials, animals, foods, or objects. Operational details are initiated-only.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:EboTypeScheme", "schemeId": "EboTypeScheme", "schemeLabel": "Prescribed Work Types"}, "ebo-ceremony": {"id": "ebo-ceremony", "uri": "iroko:ebo-ceremony", "label": "Full ceremony", "definition": "A prescribed ceremony (initiation, reception of Orisha, specific feast) indicated by the reading as necessary.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:EboTypeScheme", "schemeId": "EboTypeScheme", "schemeLabel": "Prescribed Work Types"}, "ebo-rogacion": {"id": "ebo-rogacion", "uri": "iroko:ebo-rogacion", "label": "Head Rogation", "definition": "A cleansing and feeding of the head (ori/eleda) using specific cool and white materials. One of the most commonly prescribed works across Lucumí and related traditions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:EboTypeScheme", "schemeId": "EboTypeScheme", "schemeLabel": "Prescribed Work Types"}, "ebo-etutu": {"id": "ebo-etutu", "uri": "iroko:ebo-etutu", "label": "Itutu / Etutu", "definition": "A cooling or pacifying ceremony, often performed after death, severe osogbo, or to address Egun. Requires specific authority and materials.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:EboTypeScheme", "schemeId": "EboTypeScheme", "schemeLabel": "Prescribed Work Types"}, "ebo-cleansing": {"id": "ebo-cleansing", "uri": "iroko:ebo-cleansing", "label": "Spiritual cleansing", "definition": "A full-body or environmental cleansing (despojo, limpieza) using herbs, waters, or other materials prescribed by the reading.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:EboTypeScheme", "schemeId": "EboTypeScheme", "schemeLabel": "Prescribed Work Types"}};
 const MODULE_CROSS = [{"name": "Ewé Module", "dotCls": "dot-botanical", "via": "iroko:signReference", "dir": "referenced by"}];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Marca Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-marca.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Marca Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-marca.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_marca_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Marca Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-marca.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Marca Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-marca.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -660,7 +710,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -726,9 +843,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -756,7 +916,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -836,10 +1000,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>

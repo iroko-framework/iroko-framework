@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -359,6 +389,25 @@
         Concept Schemes
         <span class="zone-hint">31 concepts across 4 schemes</span>
       </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
+      </div>
       <div class="scheme-block">
         <div class="scheme-head">
           <div>
@@ -368,35 +417,35 @@
             <span class="sh-count">8 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-inst-agogo">
+          <div class="chip" id="concept-inst-agogo" role="button" tabindex="0" aria-label="View concept Agogô (bell)" onclick="activateConcept('inst-agogo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('inst-agogo', {push:true});}">
             <span class="chip-label">Agogô (bell)</span>
             <span class="chip-id">iroko:inst-agogo</span>
           </div>
-          <div class="chip" id="concept-inst-atabaque">
+          <div class="chip" id="concept-inst-atabaque" role="button" tabindex="0" aria-label="View concept Atabaque" onclick="activateConcept('inst-atabaque', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('inst-atabaque', {push:true});}">
             <span class="chip-label">Atabaque</span>
             <span class="chip-id">iroko:inst-atabaque</span>
           </div>
-          <div class="chip" id="concept-inst-bata">
+          <div class="chip" id="concept-inst-bata" role="button" tabindex="0" aria-label="View concept Bàtá" onclick="activateConcept('inst-bata', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('inst-bata', {push:true});}">
             <span class="chip-label">Bàtá</span>
             <span class="chip-id">iroko:inst-bata</span>
           </div>
-          <div class="chip" id="concept-inst-nkomo">
+          <div class="chip" id="concept-inst-nkomo" role="button" tabindex="0" aria-label="View concept Nkómo (Palo)" onclick="activateConcept('inst-nkomo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('inst-nkomo', {push:true});}">
             <span class="chip-label">Nkómo (Palo)</span>
             <span class="chip-id">iroko:inst-nkomo</span>
           </div>
-          <div class="chip" id="concept-inst-other">
+          <div class="chip" id="concept-inst-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('inst-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('inst-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:inst-other</span>
           </div>
-          <div class="chip" id="concept-inst-petwo-drum">
+          <div class="chip" id="concept-inst-petwo-drum" role="button" tabindex="0" aria-label="View concept Petwo drum" onclick="activateConcept('inst-petwo-drum', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('inst-petwo-drum', {push:true});}">
             <span class="chip-label">Petwo drum</span>
             <span class="chip-id">iroko:inst-petwo-drum</span>
           </div>
-          <div class="chip" id="concept-inst-rada-drum">
+          <div class="chip" id="concept-inst-rada-drum" role="button" tabindex="0" aria-label="View concept Rada drum battery" onclick="activateConcept('inst-rada-drum', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('inst-rada-drum', {push:true});}">
             <span class="chip-label">Rada drum battery</span>
             <span class="chip-id">iroko:inst-rada-drum</span>
           </div>
-          <div class="chip" id="concept-inst-shekere">
+          <div class="chip" id="concept-inst-shekere" role="button" tabindex="0" aria-label="View concept Shekeré / Güiro" onclick="activateConcept('inst-shekere', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('inst-shekere', {push:true});}">
             <span class="chip-label">Shekeré / Güiro</span>
             <span class="chip-id">iroko:inst-shekere</span>
           </div>
@@ -411,39 +460,39 @@
             <span class="sh-count">9 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-family-candomble-angola">
+          <div class="chip" id="concept-family-candomble-angola" role="button" tabindex="0" aria-label="View concept Candomblé — Angola (Bantu)" onclick="activateConcept('family-candomble-angola', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('family-candomble-angola', {push:true});}">
             <span class="chip-label">Candomblé — Angola (Bantu)</span>
             <span class="chip-id">iroko:family-candomble-angola</span>
           </div>
-          <div class="chip" id="concept-family-candomble-ketu">
+          <div class="chip" id="concept-family-candomble-ketu" role="button" tabindex="0" aria-label="View concept Candomblé — Ketu (Yorùbá)" onclick="activateConcept('family-candomble-ketu', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('family-candomble-ketu', {push:true});}">
             <span class="chip-label">Candomblé — Ketu (Yorùbá)</span>
             <span class="chip-id">iroko:family-candomble-ketu</span>
           </div>
-          <div class="chip" id="concept-family-vodou-petwo">
+          <div class="chip" id="concept-family-vodou-petwo" role="button" tabindex="0" aria-label="View concept Haitian Vodou — Petwo" onclick="activateConcept('family-vodou-petwo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('family-vodou-petwo', {push:true});}">
             <span class="chip-label">Haitian Vodou — Petwo</span>
             <span class="chip-id">iroko:family-vodou-petwo</span>
           </div>
-          <div class="chip" id="concept-family-vodou-rada">
+          <div class="chip" id="concept-family-vodou-rada" role="button" tabindex="0" aria-label="View concept Haitian Vodou — Rada" onclick="activateConcept('family-vodou-rada', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('family-vodou-rada', {push:true});}">
             <span class="chip-label">Haitian Vodou — Rada</span>
             <span class="chip-id">iroko:family-vodou-rada</span>
           </div>
-          <div class="chip" id="concept-family-lucumi-bata">
+          <div class="chip" id="concept-family-lucumi-bata" role="button" tabindex="0" aria-label="View concept Lucumí — Bàtá (Añá)" onclick="activateConcept('family-lucumi-bata', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('family-lucumi-bata', {push:true});}">
             <span class="chip-label">Lucumí — Bàtá (Añá)</span>
             <span class="chip-id">iroko:family-lucumi-bata</span>
           </div>
-          <div class="chip" id="concept-family-lucumi-guiro">
+          <div class="chip" id="concept-family-lucumi-guiro" role="button" tabindex="0" aria-label="View concept Lucumí — Güiro / Cajón" onclick="activateConcept('family-lucumi-guiro', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('family-lucumi-guiro', {push:true});}">
             <span class="chip-label">Lucumí — Güiro / Cajón</span>
             <span class="chip-id">iroko:family-lucumi-guiro</span>
           </div>
-          <div class="chip" id="concept-family-other">
+          <div class="chip" id="concept-family-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('family-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('family-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:family-other</span>
           </div>
-          <div class="chip" id="concept-family-palo">
+          <div class="chip" id="concept-family-palo" role="button" tabindex="0" aria-label="View concept Palo Monte / Kongo-derived" onclick="activateConcept('family-palo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('family-palo', {push:true});}">
             <span class="chip-label">Palo Monte / Kongo-derived</span>
             <span class="chip-id">iroko:family-palo</span>
           </div>
-          <div class="chip" id="concept-family-yoruba-continental">
+          <div class="chip" id="concept-family-yoruba-continental" role="button" tabindex="0" aria-label="View concept Yorùbá (continental)" onclick="activateConcept('family-yoruba-continental', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('family-yoruba-continental', {push:true});}">
             <span class="chip-label">Yorùbá (continental)</span>
             <span class="chip-id">iroko:family-yoruba-continental</span>
           </div>
@@ -458,31 +507,31 @@
             <span class="sh-count">7 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-func-entertainment">
+          <div class="chip" id="concept-func-entertainment" role="button" tabindex="0" aria-label="View concept Entertainment / public" onclick="activateConcept('func-entertainment', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-entertainment', {push:true});}">
             <span class="chip-label">Entertainment / public</span>
             <span class="chip-id">iroko:func-entertainment</span>
           </div>
-          <div class="chip" id="concept-func-farewell">
+          <div class="chip" id="concept-func-farewell" role="button" tabindex="0" aria-label="View concept Farewell / departure" onclick="activateConcept('func-farewell', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-farewell', {push:true});}">
             <span class="chip-label">Farewell / departure</span>
             <span class="chip-id">iroko:func-farewell</span>
           </div>
-          <div class="chip" id="concept-func-funerary">
+          <div class="chip" id="concept-func-funerary" role="button" tabindex="0" aria-label="View concept Funerary / ancestral" onclick="activateConcept('func-funerary', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-funerary', {push:true});}">
             <span class="chip-label">Funerary / ancestral</span>
             <span class="chip-id">iroko:func-funerary</span>
           </div>
-          <div class="chip" id="concept-func-initiation">
+          <div class="chip" id="concept-func-initiation" role="button" tabindex="0" aria-label="View concept Initiation ceremony" onclick="activateConcept('func-initiation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-initiation', {push:true});}">
             <span class="chip-label">Initiation ceremony</span>
             <span class="chip-id">iroko:func-initiation</span>
           </div>
-          <div class="chip" id="concept-func-possession-induction">
+          <div class="chip" id="concept-func-possession-induction" role="button" tabindex="0" aria-label="View concept Possession induction" onclick="activateConcept('func-possession-induction', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-possession-induction', {push:true});}">
             <span class="chip-label">Possession induction</span>
             <span class="chip-id">iroko:func-possession-induction</span>
           </div>
-          <div class="chip" id="concept-func-processional">
+          <div class="chip" id="concept-func-processional" role="button" tabindex="0" aria-label="View concept Processional" onclick="activateConcept('func-processional', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-processional', {push:true});}">
             <span class="chip-label">Processional</span>
             <span class="chip-id">iroko:func-processional</span>
           </div>
-          <div class="chip" id="concept-func-salutation">
+          <div class="chip" id="concept-func-salutation" role="button" tabindex="0" aria-label="View concept Salutation / greeting" onclick="activateConcept('func-salutation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-salutation', {push:true});}">
             <span class="chip-label">Salutation / greeting</span>
             <span class="chip-id">iroko:func-salutation</span>
           </div>
@@ -497,31 +546,31 @@
             <span class="sh-count">7 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-song-funerary">
+          <div class="chip" id="concept-song-funerary" role="button" tabindex="0" aria-label="View concept Funerary / ancestral" onclick="activateConcept('song-funerary', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('song-funerary', {push:true});}">
             <span class="chip-label">Funerary / ancestral</span>
             <span class="chip-id">iroko:song-funerary</span>
           </div>
-          <div class="chip" id="concept-song-healing">
+          <div class="chip" id="concept-song-healing" role="button" tabindex="0" aria-label="View concept Healing" onclick="activateConcept('song-healing', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('song-healing', {push:true});}">
             <span class="chip-label">Healing</span>
             <span class="chip-id">iroko:song-healing</span>
           </div>
-          <div class="chip" id="concept-song-initiation">
+          <div class="chip" id="concept-song-initiation" role="button" tabindex="0" aria-label="View concept Initiation ceremony" onclick="activateConcept('song-initiation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('song-initiation', {push:true});}">
             <span class="chip-label">Initiation ceremony</span>
             <span class="chip-id">iroko:song-initiation</span>
           </div>
-          <div class="chip" id="concept-song-invocation">
+          <div class="chip" id="concept-song-invocation" role="button" tabindex="0" aria-label="View concept Invocation" onclick="activateConcept('song-invocation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('song-invocation', {push:true});}">
             <span class="chip-label">Invocation</span>
             <span class="chip-id">iroko:song-invocation</span>
           </div>
-          <div class="chip" id="concept-song-narrative">
+          <div class="chip" id="concept-song-narrative" role="button" tabindex="0" aria-label="View concept Narrative / Pataki" onclick="activateConcept('song-narrative', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('song-narrative', {push:true});}">
             <span class="chip-label">Narrative / Pataki</span>
             <span class="chip-id">iroko:song-narrative</span>
           </div>
-          <div class="chip" id="concept-song-other">
+          <div class="chip" id="concept-song-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('song-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('song-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:song-other</span>
           </div>
-          <div class="chip" id="concept-song-praise">
+          <div class="chip" id="concept-song-praise" role="button" tabindex="0" aria-label="View concept Praise / Oriki" onclick="activateConcept('song-praise', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('song-praise', {push:true});}">
             <span class="chip-label">Praise / Oriki</span>
             <span class="chip-id">iroko:song-praise</span>
           </div>
@@ -609,6 +658,7 @@ const MODULE_STEM = "iroko-ngoma";
 const MOD_TITLE_SHORT = "Ngoma Module";
 const CLASSES = {"MusicianLineage": {"uri": "iroko:MusicianLineage", "label": "Musician Lineage", "definition": "A documented chain of transmission from master musician to apprentice, governing the right to play specific sacred instruments, lead specific rhythms, or perform specific songs. In Lucumí: Olubatá lineages with specific Añá initiations. In Candomblé: ogan lineages. Musician lineages are community knowledge in general form; specific transmission records are initiated-only.", "outgoing": [{"uri": "iroko:authorityRequirement", "label": "authority requirement", "type": "obj", "range": "Concept", "access": "comm", "def": "The initiation or authority title required to perform in this lineage. Range: iroko:AuthorityTitleScheme concept."}, {"uri": "iroko:lineageFounder", "label": "lineage founder", "type": "obj", "range": "Person", "access": "comm", "def": "The founding master musician of this lineage. Range: foaf:Person."}, {"uri": "iroko:lineageHouse", "label": "lineage house", "type": "obj", "range": "House", "access": "comm", "def": "The religious house through which this musician lineage operates. Range: iroko:House."}, {"uri": "iroko:lineageName", "label": "lineage name", "type": "data", "range": "langString", "access": "comm", "def": "The name of this musician lineage or school. Community-restricted."}], "incoming": [{"uri": "iroko:setLineage", "label": "drum set lineage", "type": "obj", "access": "init", "def": "The musician lineage to which this drum set belongs. Particularly important for Añá bàtá: the Olubatá lineage determines performance rights and toque knowledge. Initiated-only.", "domain": "Sacred Drum Set", "from": "iroko:Sacred Drum Set", "fromLabel": "Sacred Drum Set", "module": "Ngoma Module", "stem": "iroko-ngoma"}, {"uri": "iroko:transmissionLineage", "label": "transmission lineage", "type": "obj", "access": "comm", "def": "The musician lineage through which this rhythm is transmitted. Range: iroko:MusicianLineage.", "domain": "Sacred Rhythm", "from": "iroko:Sacred Rhythm", "fromLabel": "Sacred Rhythm", "module": "Ngoma Module", "stem": "iroko-ngoma"}], "cross": []}, "SacredDrumSet": {"uri": "iroko:SacredDrumSet", "label": "Sacred Drum Set", "definition": "A formally recognized set of consecrated drums understood as a unified sacred entity within a tradition. In Lucumí: the Añá bàtá set, which holds the spirit of Añá and requires specific initiation (Aña or Olubatá) to play. In Haitian Vodou: the Rada drum battery (manman, seconde, bula). In Candomblé: the atabaque trio (rum, rumpi, lé). A drum set may have its own name, lineage, house affiliation, and reception date. The Añá bàtá in particular carries highly restricted esoteric status; set identity and lineage are initiated-only.", "outgoing": [{"uri": "iroko:setLineage", "label": "drum set lineage", "type": "obj", "range": "Musician Lineage", "access": "init", "def": "The musician lineage to which this drum set belongs. Particularly important for Añá bàtá: the Olubatá lineage determines performance rights and toque knowledge. Initiated-only."}, {"uri": "iroko:addaEspiritualStatus", "label": "esoteric status notes", "type": "data", "range": "langString", "access": "init", "def": "Free-text description of the esoteric or sacred status of this instrument, including any restrictions on who may touch, play, or be present. Initiated-elder only."}, {"uri": "iroko:setComponents", "label": "set components", "type": "data", "range": "langString", "access": "comm", "def": "Description of the drums in a consecrated set (e.g., iyá, itótele, okónkolo for bàtá). Community-restricted."}], "incoming": [], "cross": []}, "SacredInstrument": {"uri": "iroko:SacredInstrument", "label": "Sacred Instrument", "definition": "A musical instrument used in Afro-Atlantic sacred contexts, which may be consecrated, named, or otherwise distinguished from secular instruments of the same type. Examples: a set of consecrated bàtá drums; Vodou rada drums (manman, seconde, bula); Candomblé rum/rumpi/lé. An instrument may have its own name, lineage, and history. The instrument type is public; consecration status and internal names are community-restricted.", "outgoing": [{"uri": "iroko:consecrationDate", "label": "consecration date", "type": "data", "range": "date", "access": "comm", "def": "Date the instrument was consecrated or born. For Añá bàtá: the date of Aña reception."}, {"uri": "iroko:houseAffiliation", "label": "house affiliation", "type": "obj", "range": "House", "access": "comm", "def": "The religious house with which this instrument or drum set is affiliated. Range: iroko:House."}, {"uri": "iroko:instrumentName", "label": "instrument name", "type": "data", "range": "langString", "access": "comm", "def": "The name of this specific consecrated instrument or set. For Añá bàtá: the name of the drum set. Community-restricted."}, {"uri": "iroko:instrumentType", "label": "instrument type", "type": "obj", "range": "Concept", "access": "pub", "def": "The type of sacred instrument. Range: iroko:InstrumentTypeScheme."}, {"uri": "iroko:possessionTrigger", "label": "possession trigger", "type": "data", "range": "boolean", "access": "init", "def": "Whether this rhythm or instrument is understood to trigger or invite spirit possession when performed correctly. Domain broadened in v1.4.0 to include iroko:SacredInstrument as well as iroko:SacredRhythm: a consecrated drum set (SacredDrumSet) or individual sacred instrument may trigger possession independently of which specific rhythm is being played, as the instrument itself carries the invocation capacity. Initiated-only: this knowledge is operationally significant and not appropriate for public documentation."}], "incoming": [], "cross": []}, "SacredRhythm": {"uri": "iroko:SacredRhythm", "label": "Sacred Rhythm", "definition": "A tradition-specific ritual drumming pattern with defined entity associations, ceremonial function, and authority requirements for performance. In Lucumí: a toque or canto. In Haitian Vodou: a tanbou rhythm for a specific lwa. In Candomblé: a xirê toque. Each rhythm is identified by its name, entity association, tradition, and lineage variant. Rhythm names are community-restricted; possession-trigger status and toque sequences are initiated-only.", "outgoing": [{"uri": "iroko:rhythmAlternateName", "label": "alternate rhythm name", "type": "data", "range": "langString", "access": "comm", "def": "Alternative or regional names for this rhythm. Language-tagged."}, {"uri": "iroko:entityCalled", "label": "entity called", "type": "obj", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity primarily associated with this rhythm — the entity this rhythm is sung/played for or that it invites. Range: iroko:SpiritualEntity. Community-restricted."}, {"uri": "iroko:possessionTrigger", "label": "possession trigger", "type": "data", "range": "boolean", "access": "init", "def": "Whether this rhythm or instrument is understood to trigger or invite spirit possession when performed correctly. Domain broadened in v1.4.0 to include iroko:SacredInstrument as well as iroko:SacredRhythm: a consecrated drum set (SacredDrumSet) or individual sacred instrument may trigger possession independently of which specific rhythm is being played, as the instrument itself carries the invocation capacity. Initiated-only: this knowledge is operationally significant and not appropriate for public documentation."}, {"uri": "iroko:rhythmFamily", "label": "rhythm family", "type": "obj", "range": "Concept", "access": "pub", "def": "The broad rhythmic family or tradition category. Range: iroko:RhythmFamilyScheme."}, {"uri": "iroko:rhythmFunction", "label": "rhythm function", "type": "obj", "range": "Concept", "access": "comm", "def": "The ceremonial function of this rhythm. Range: iroko:RhythmFunctionScheme."}, {"uri": "iroko:rhythmName", "label": "rhythm name", "type": "data", "range": "langString", "access": "comm", "def": "The conventional name of the rhythm in the tradition's liturgical language. Language-tagged. Community-restricted."}, {"uri": "iroko:rhythmNotation", "label": "rhythm notation", "type": "data", "range": "langString", "access": "comm", "def": "Onomatopoeic or phonetic notation of the rhythm pattern (e.g., 'kon-ko-lo' for a specific bàtá pattern). Community-restricted."}, {"uri": "iroko:toqueSequence", "label": "toque sequence", "type": "data", "range": "langString", "access": "init", "def": "The full performance sequence: how this rhythm is introduced, developed, and resolved within a ceremony. Initiated-elder only: toque sequences are core esoteric knowledge of the musician lineage."}, {"uri": "iroko:transmissionLineage", "label": "transmission lineage", "type": "obj", "range": "Musician Lineage", "access": "comm", "def": "The musician lineage through which this rhythm is transmitted. Range: iroko:MusicianLineage."}], "incoming": [{"uri": "iroko:associatedRhythm", "label": "associated rhythm", "type": "obj", "access": "comm", "def": "The rhythm pattern that accompanies this song.", "domain": "Sacred Song", "from": "iroko:Sacred Song", "fromLabel": "Sacred Song", "module": "Ngoma Module", "stem": "iroko-ngoma"}], "cross": []}, "SacredSong": {"uri": "iroko:SacredSong", "label": "Sacred Song", "definition": "A song, chant, or liturgical vocal composition used in Afro-Atlantic ceremonial contexts. Includes oriki (Yorùbá praise poetry), canto de entrada (Lucumí invocation songs), chanson Vodou, and analogous forms. Songs may be classified by entity addressed, ceremony type, and liturgical language. Song text is among the most sensitive data in this module: song existence and entity association are community-restricted; text and melodic structure are initiated-only to elder-only.", "outgoing": [{"uri": "iroko:associatedRhythm", "label": "associated rhythm", "type": "obj", "range": "Sacred Rhythm", "access": "comm", "def": "The rhythm pattern that accompanies this song."}, {"uri": "iroko:songLanguage", "label": "liturgical language", "type": "data", "range": "language", "access": "comm", "def": "The liturgical language in which this song is performed (e.g., Lucumí/Yorùbá, Fon, Kikongo, Haitian Kreyòl). Language tag."}, {"uri": "iroko:songEntity", "label": "song entity", "type": "obj", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity addressed or invoked by this song. Range: iroko:SpiritualEntity."}, {"uri": "iroko:songFunction", "label": "song function", "type": "obj", "range": "Concept", "access": "comm", "def": "The ceremonial function of this song. Range: iroko:SongFunctionScheme."}, {"uri": "iroko:songText", "label": "song text", "type": "data", "range": "langString", "access": "init", "def": "The full text of the song as transmitted in the lineage. Initiated-elder only: sacred song texts are among the most sensitive items in this corpus, equivalent to verse corpora in the Marca module."}, {"uri": "iroko:songTitle", "label": "song title", "type": "data", "range": "langString", "access": "comm", "def": "The title or opening phrase identifying this song. Language-tagged. Community-restricted."}, {"uri": "iroko:songTranslation", "label": "song translation", "type": "data", "range": "langString", "access": "init", "def": "Translation of song text into a non-liturgical language. Initiated-only: translations reveal meaning even without the liturgical text."}], "incoming": [], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:rhythmAlternateName", "label": "alternate rhythm name", "type": "data", "domain": "Sacred Rhythm", "range": "langString", "access": "comm", "def": "Alternative or regional names for this rhythm. Language-tagged."}, {"uri": "iroko:associatedRhythm", "label": "associated rhythm", "type": "obj", "domain": "Sacred Song", "range": "Sacred Rhythm", "access": "comm", "def": "The rhythm pattern that accompanies this song."}, {"uri": "iroko:authorityRequirement", "label": "authority requirement", "type": "obj", "domain": "Musician Lineage", "range": "Concept", "access": "comm", "def": "The initiation or authority title required to perform in this lineage. Range: iroko:AuthorityTitleScheme concept."}, {"uri": "iroko:consecrationDate", "label": "consecration date", "type": "data", "domain": "Sacred Instrument", "range": "date", "access": "comm", "def": "Date the instrument was consecrated or born. For Añá bàtá: the date of Aña reception."}, {"uri": "iroko:setLineage", "label": "drum set lineage", "type": "obj", "domain": "Sacred Drum Set", "range": "Musician Lineage", "access": "init", "def": "The musician lineage to which this drum set belongs. Particularly important for Añá bàtá: the Olubatá lineage determines performance rights and toque knowledge. Initiated-only."}, {"uri": "iroko:entityCalled", "label": "entity called", "type": "obj", "domain": "Sacred Rhythm", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity primarily associated with this rhythm — the entity this rhythm is sung/played for or that it invites. Range: iroko:SpiritualEntity. Community-restricted."}, {"uri": "iroko:addaEspiritualStatus", "label": "esoteric status notes", "type": "data", "domain": "Sacred Drum Set", "range": "langString", "access": "init", "def": "Free-text description of the esoteric or sacred status of this instrument, including any restrictions on who may touch, play, or be present. Initiated-elder only."}, {"uri": "iroko:houseAffiliation", "label": "house affiliation", "type": "obj", "domain": "Sacred Instrument", "range": "House", "access": "comm", "def": "The religious house with which this instrument or drum set is affiliated. Range: iroko:House."}, {"uri": "iroko:instrumentName", "label": "instrument name", "type": "data", "domain": "Sacred Instrument", "range": "langString", "access": "comm", "def": "The name of this specific consecrated instrument or set. For Añá bàtá: the name of the drum set. Community-restricted."}, {"uri": "iroko:instrumentType", "label": "instrument type", "type": "obj", "domain": "Sacred Instrument", "range": "Concept", "access": "pub", "def": "The type of sacred instrument. Range: iroko:InstrumentTypeScheme."}, {"uri": "iroko:lineageFounder", "label": "lineage founder", "type": "obj", "domain": "Musician Lineage", "range": "Person", "access": "comm", "def": "The founding master musician of this lineage. Range: foaf:Person."}, {"uri": "iroko:lineageHouse", "label": "lineage house", "type": "obj", "domain": "Musician Lineage", "range": "House", "access": "comm", "def": "The religious house through which this musician lineage operates. Range: iroko:House."}, {"uri": "iroko:lineageName", "label": "lineage name", "type": "data", "domain": "Musician Lineage", "range": "langString", "access": "comm", "def": "The name of this musician lineage or school. Community-restricted."}, {"uri": "iroko:songLanguage", "label": "liturgical language", "type": "data", "domain": "Sacred Song", "range": "language", "access": "comm", "def": "The liturgical language in which this song is performed (e.g., Lucumí/Yorùbá, Fon, Kikongo, Haitian Kreyòl). Language tag."}, {"uri": "iroko:possessionTrigger", "label": "possession trigger", "type": "data", "domain": "SacredRhythm | SacredInstrument", "range": "boolean", "access": "init", "def": "Whether this rhythm or instrument is understood to trigger or invite spirit possession when performed correctly. Domain broadened in v1.4.0 to include iroko:SacredInstrument as well as iroko:SacredRhythm: a consecrated drum set (SacredDrumSet) or individual sacred instrument may trigger possession independently of which specific rhythm is being played, as the instrument itself carries the invocation capacity. Initiated-only: this knowledge is operationally significant and not appropriate for public documentation."}, {"uri": "iroko:rhythmFamily", "label": "rhythm family", "type": "obj", "domain": "Sacred Rhythm", "range": "Concept", "access": "pub", "def": "The broad rhythmic family or tradition category. Range: iroko:RhythmFamilyScheme."}, {"uri": "iroko:rhythmFunction", "label": "rhythm function", "type": "obj", "domain": "Sacred Rhythm", "range": "Concept", "access": "comm", "def": "The ceremonial function of this rhythm. Range: iroko:RhythmFunctionScheme."}, {"uri": "iroko:rhythmName", "label": "rhythm name", "type": "data", "domain": "Sacred Rhythm", "range": "langString", "access": "comm", "def": "The conventional name of the rhythm in the tradition's liturgical language. Language-tagged. Community-restricted."}, {"uri": "iroko:rhythmNotation", "label": "rhythm notation", "type": "data", "domain": "Sacred Rhythm", "range": "langString", "access": "comm", "def": "Onomatopoeic or phonetic notation of the rhythm pattern (e.g., 'kon-ko-lo' for a specific bàtá pattern). Community-restricted."}, {"uri": "iroko:setComponents", "label": "set components", "type": "data", "domain": "Sacred Drum Set", "range": "langString", "access": "comm", "def": "Description of the drums in a consecrated set (e.g., iyá, itótele, okónkolo for bàtá). Community-restricted."}, {"uri": "iroko:songEntity", "label": "song entity", "type": "obj", "domain": "Sacred Song", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity addressed or invoked by this song. Range: iroko:SpiritualEntity."}, {"uri": "iroko:songFunction", "label": "song function", "type": "obj", "domain": "Sacred Song", "range": "Concept", "access": "comm", "def": "The ceremonial function of this song. Range: iroko:SongFunctionScheme."}, {"uri": "iroko:songText", "label": "song text", "type": "data", "domain": "Sacred Song", "range": "langString", "access": "init", "def": "The full text of the song as transmitted in the lineage. Initiated-elder only: sacred song texts are among the most sensitive items in this corpus, equivalent to verse corpora in the Marca module."}, {"uri": "iroko:songTitle", "label": "song title", "type": "data", "domain": "Sacred Song", "range": "langString", "access": "comm", "def": "The title or opening phrase identifying this song. Language-tagged. Community-restricted."}, {"uri": "iroko:songTranslation", "label": "song translation", "type": "data", "domain": "Sacred Song", "range": "langString", "access": "init", "def": "Translation of song text into a non-liturgical language. Initiated-only: translations reveal meaning even without the liturgical text."}, {"uri": "iroko:toqueSequence", "label": "toque sequence", "type": "data", "domain": "Sacred Rhythm", "range": "langString", "access": "init", "def": "The full performance sequence: how this rhythm is introduced, developed, and resolved within a ceremony. Initiated-elder only: toque sequences are core esoteric knowledge of the musician lineage."}, {"uri": "iroko:transmissionLineage", "label": "transmission lineage", "type": "obj", "domain": "Sacred Rhythm", "range": "Musician Lineage", "access": "comm", "def": "The musician lineage through which this rhythm is transmitted. Range: iroko:MusicianLineage."}];
+const CONCEPTS = {"inst-agogo": {"id": "inst-agogo", "uri": "iroko:inst-agogo", "label": "Agogô (bell)", "definition": "Double or single iron bell providing the timeline in many Afro-Atlantic rhythm traditions. Associated with Ogun/Ogou in Lucumí and Vodou contexts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InstrumentTypeScheme", "schemeId": "InstrumentTypeScheme", "schemeLabel": "Instrument Types"}, "inst-atabaque": {"id": "inst-atabaque", "uri": "iroko:inst-atabaque", "label": "Atabaque", "definition": "Single-headed conical drum used in Candomblé in sets of three (rum/grande, rumpi/médio, lé/pequeno). May be consecrated; the rum (largest) typically leads.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InstrumentTypeScheme", "schemeId": "InstrumentTypeScheme", "schemeLabel": "Instrument Types"}, "inst-bata": {"id": "inst-bata", "uri": "iroko:inst-bata", "label": "Bàtá", "definition": "Two-headed conical hourglass drum of Yorùbá origin. In Lucumí tradition, the consecrated Añá bàtá set (iyá, itótele, okónkolo) is the highest-authority drum. Requires Olubatá/Aña initiation to play in sacred contexts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InstrumentTypeScheme", "schemeId": "InstrumentTypeScheme", "schemeLabel": "Instrument Types"}, "inst-nkomo": {"id": "inst-nkomo", "uri": "iroko:inst-nkomo", "label": "Nkómo (Palo)", "definition": "Drums used in Palo Monte ceremonies. The nkómo tradition derives from Bantu/Kongo drumming practice. Different preparation and restriction protocols than bàtá.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InstrumentTypeScheme", "schemeId": "InstrumentTypeScheme", "schemeLabel": "Instrument Types"}, "inst-other": {"id": "inst-other", "uri": "iroko:inst-other", "label": "Other", "definition": "Sacred instrument type not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InstrumentTypeScheme", "schemeId": "InstrumentTypeScheme", "schemeLabel": "Instrument Types"}, "inst-petwo-drum": {"id": "inst-petwo-drum", "uri": "iroko:inst-petwo-drum", "label": "Petwo drum", "definition": "Drums used in Haitian Vodou Petwo nation ceremonies. Prepared differently from Rada drums; tighter skin tuning and faster tempo.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InstrumentTypeScheme", "schemeId": "InstrumentTypeScheme", "schemeLabel": "Instrument Types"}, "inst-rada-drum": {"id": "inst-rada-drum", "uri": "iroko:inst-rada-drum", "label": "Rada drum battery", "definition": "The three-drum Haitian Vodou Rada battery: manman (largest), seconde (middle), bula (smallest). Associated with cool, Fon-derived lwa.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InstrumentTypeScheme", "schemeId": "InstrumentTypeScheme", "schemeLabel": "Instrument Types"}, "inst-shekere": {"id": "inst-shekere", "uri": "iroko:inst-shekere", "label": "Shekeré / Güiro", "definition": "Gourd rattle with bead netting used across Yorùbá-derived and related traditions. Consecrated shekeré are used in Orisha ceremonies; güiro refers to the Cuban variant.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InstrumentTypeScheme", "schemeId": "InstrumentTypeScheme", "schemeLabel": "Instrument Types"}, "family-candomble-angola": {"id": "family-candomble-angola", "uri": "iroko:family-candomble-angola", "label": "Candomblé — Angola (Bantu)", "definition": "Rhythms of the Angola (Bantu/Kongo-derived) nation in Candomblé. Maculelê, capoeira, and samba de roda exist in relationship with Angola ritual music.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFamilyScheme", "schemeId": "RhythmFamilyScheme", "schemeLabel": "Rhythm Families"}, "family-candomble-ketu": {"id": "family-candomble-ketu", "uri": "iroko:family-candomble-ketu", "label": "Candomblé — Ketu (Yorùbá)", "definition": "Rhythms of the Ketu (Yorùbá-derived) nation in Candomblé, performed on the atabaque trio (rum, rumpi, lé). The xirê sequence calls each Orixá in a defined order.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFamilyScheme", "schemeId": "RhythmFamilyScheme", "schemeLabel": "Rhythm Families"}, "family-vodou-petwo": {"id": "family-vodou-petwo", "uri": "iroko:family-vodou-petwo", "label": "Haitian Vodou — Petwo", "definition": "Rhythms of the Petwo nation in Haitian Vodou, associated with fiercer and more demanding lwa (often Kongo-derived). Distinguished by faster tempos and specific drum preparation practices.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFamilyScheme", "schemeId": "RhythmFamilyScheme", "schemeLabel": "Rhythm Families"}, "family-vodou-rada": {"id": "family-vodou-rada", "uri": "iroko:family-vodou-rada", "label": "Haitian Vodou — Rada", "definition": "Rhythms of the Rada nation in Haitian Vodou, associated with the cool, beneficent lwa (primarily Fon-derived: Lasirèn, Loko, Ayizan, Danbala). Performed on the Rada drum battery.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFamilyScheme", "schemeId": "RhythmFamilyScheme", "schemeLabel": "Rhythm Families"}, "family-lucumi-bata": {"id": "family-lucumi-bata", "uri": "iroko:family-lucumi-bata", "label": "Lucumí — Bàtá (Añá)", "definition": "Rhythms performed on the consecrated Añá bàtá drum set in Lucumí/Ocha tradition. Requires Olubatá authority and Aña initiation to lead. Considered the highest-authority drumming tradition in Lucumí; specific toques are associated with specific Orisha and are operationally significant.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFamilyScheme", "schemeId": "RhythmFamilyScheme", "schemeLabel": "Rhythm Families"}, "family-lucumi-guiro": {"id": "family-lucumi-guiro", "uri": "iroko:family-lucumi-guiro", "label": "Lucumí — Güiro / Cajón", "definition": "Rhythms performed on non-consecrated shakers, cajón, or güiro in Lucumí contexts. Used in güiro ceremonies and some Espiritismo-adjacent practice. Less restricted than bàtá but still tradition-specific.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFamilyScheme", "schemeId": "RhythmFamilyScheme", "schemeLabel": "Rhythm Families"}, "family-other": {"id": "family-other", "uri": "iroko:family-other", "label": "Other", "definition": "Rhythm family not covered by existing concepts. Use skos:scopeNote to describe.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFamilyScheme", "schemeId": "RhythmFamilyScheme", "schemeLabel": "Rhythm Families"}, "family-palo": {"id": "family-palo", "uri": "iroko:family-palo", "label": "Palo Monte / Kongo-derived", "definition": "Rhythms of Palo Monte and related Cuban Bantu-Atlantic traditions, performed on nkómo drums and associated percussion. Tata Nganga authority determines performance rights for restricted rhythms.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFamilyScheme", "schemeId": "RhythmFamilyScheme", "schemeLabel": "Rhythm Families"}, "family-yoruba-continental": {"id": "family-yoruba-continental", "uri": "iroko:family-yoruba-continental", "label": "Yorùbá (continental)", "definition": "Sacred rhythms in continental Yorùbá practice, including dundun (talking drum), bàtá, and sakara traditions as practiced in Nigeria and Benin.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFamilyScheme", "schemeId": "RhythmFamilyScheme", "schemeLabel": "Rhythm Families"}, "func-entertainment": {"id": "func-entertainment", "uri": "iroko:func-entertainment", "label": "Entertainment / public", "definition": "The rhythm has an accepted public or entertainment role alongside its sacred function (e.g., folkloric bàtá performances).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFunctionScheme", "schemeId": "RhythmFunctionScheme", "schemeLabel": "Rhythm Functions"}, "func-farewell": {"id": "func-farewell", "uri": "iroko:func-farewell", "label": "Farewell / departure", "definition": "The rhythm signals or facilitates the departure of a spiritual entity from the ceremonial space.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFunctionScheme", "schemeId": "RhythmFunctionScheme", "schemeLabel": "Rhythm Functions"}, "func-funerary": {"id": "func-funerary", "uri": "iroko:func-funerary", "label": "Funerary / ancestral", "definition": "The rhythm is performed in funerary, Egungun, or ancestral veneration contexts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFunctionScheme", "schemeId": "RhythmFunctionScheme", "schemeLabel": "Rhythm Functions"}, "func-initiation": {"id": "func-initiation", "uri": "iroko:func-initiation", "label": "Initiation ceremony", "definition": "The rhythm is performed specifically during initiatory ceremonies and is restricted to those contexts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFunctionScheme", "schemeId": "RhythmFunctionScheme", "schemeLabel": "Rhythm Functions"}, "func-possession-induction": {"id": "func-possession-induction", "uri": "iroko:func-possession-induction", "label": "Possession induction", "definition": "The rhythm is specifically associated with inducing or deepening spirit possession in a prepared recipient. Initiated-only detail.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFunctionScheme", "schemeId": "RhythmFunctionScheme", "schemeLabel": "Rhythm Functions"}, "func-processional": {"id": "func-processional", "uri": "iroko:func-processional", "label": "Processional", "definition": "The rhythm accompanies movement through ceremonial space or between spaces.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFunctionScheme", "schemeId": "RhythmFunctionScheme", "schemeLabel": "Rhythm Functions"}, "func-salutation": {"id": "func-salutation", "uri": "iroko:func-salutation", "label": "Salutation / greeting", "definition": "The rhythm formally greets and honors an entity without necessarily seeking possession. Often the opening toque in a sequence.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RhythmFunctionScheme", "schemeId": "RhythmFunctionScheme", "schemeLabel": "Rhythm Functions"}, "song-funerary": {"id": "song-funerary", "uri": "iroko:song-funerary", "label": "Funerary / ancestral", "definition": "Songs performed in Ituto, Egungun, or other funerary and ancestral contexts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SongFunctionScheme", "schemeId": "SongFunctionScheme", "schemeLabel": "Song Functions"}, "song-healing": {"id": "song-healing", "uri": "iroko:song-healing", "label": "Healing", "definition": "Songs performed as part of healing or cleansing interventions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SongFunctionScheme", "schemeId": "SongFunctionScheme", "schemeLabel": "Song Functions"}, "song-initiation": {"id": "song-initiation", "uri": "iroko:song-initiation", "label": "Initiation ceremony", "definition": "Songs performed specifically within initiatory rites, restricted to those contexts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SongFunctionScheme", "schemeId": "SongFunctionScheme", "schemeLabel": "Song Functions"}, "song-invocation": {"id": "song-invocation", "uri": "iroko:song-invocation", "label": "Invocation", "definition": "Song that calls or invites a spiritual entity. Primary function of canto de entrada and analogous opening songs.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SongFunctionScheme", "schemeId": "SongFunctionScheme", "schemeLabel": "Song Functions"}, "song-narrative": {"id": "song-narrative", "uri": "iroko:song-narrative", "label": "Narrative / Pataki", "definition": "Song that tells a story about an entity, an ancestor, or a sacred event.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SongFunctionScheme", "schemeId": "SongFunctionScheme", "schemeLabel": "Song Functions"}, "song-other": {"id": "song-other", "uri": "iroko:song-other", "label": "Other", "definition": "Song function not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SongFunctionScheme", "schemeId": "SongFunctionScheme", "schemeLabel": "Song Functions"}, "song-praise": {"id": "song-praise", "uri": "iroko:song-praise", "label": "Praise / Oriki", "definition": "Song that honors and praises an entity or ancestor without necessarily seeking presence. Oriki are the primary Yorùbá form.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SongFunctionScheme", "schemeId": "SongFunctionScheme", "schemeLabel": "Song Functions"}};
 const MODULE_CROSS = [];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Ngoma Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-ngoma.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Ngoma Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-ngoma.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_ngoma_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Ngoma Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-ngoma.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Ngoma Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-ngoma.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -650,7 +700,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -716,9 +833,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -746,7 +906,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -826,10 +990,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>

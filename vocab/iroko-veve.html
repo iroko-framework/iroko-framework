@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -353,6 +383,25 @@
         Concept Schemes
         <span class="zone-hint">44 concepts across 5 schemes</span>
       </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
+      </div>
       <div class="scheme-block">
         <div class="scheme-head">
           <div>
@@ -362,51 +411,51 @@
             <span class="sh-count">12 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-medium-ash">
+          <div class="chip" id="concept-medium-ash" role="button" tabindex="0" aria-label="View concept Ash" onclick="activateConcept('medium-ash', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-ash', {push:true});}">
             <span class="chip-label">Ash</span>
             <span class="chip-id">iroko:medium-ash</span>
           </div>
-          <div class="chip" id="concept-medium-blood">
+          <div class="chip" id="concept-medium-blood" role="button" tabindex="0" aria-label="View concept Blood" onclick="activateConcept('medium-blood', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-blood', {push:true});}">
             <span class="chip-label">Blood</span>
             <span class="chip-id">iroko:medium-blood</span>
           </div>
-          <div class="chip" id="concept-medium-carved">
+          <div class="chip" id="concept-medium-carved" role="button" tabindex="0" aria-label="View concept Carved / incised" onclick="activateConcept('medium-carved', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-carved', {push:true});}">
             <span class="chip-label">Carved / incised</span>
             <span class="chip-id">iroko:medium-carved</span>
           </div>
-          <div class="chip" id="concept-medium-cascarilla">
+          <div class="chip" id="concept-medium-cascarilla" role="button" tabindex="0" aria-label="View concept Cascarilla (eggshell powder)" onclick="activateConcept('medium-cascarilla', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-cascarilla', {push:true});}">
             <span class="chip-label">Cascarilla (eggshell powder)</span>
             <span class="chip-id">iroko:medium-cascarilla</span>
           </div>
-          <div class="chip" id="concept-medium-charcoal">
+          <div class="chip" id="concept-medium-charcoal" role="button" tabindex="0" aria-label="View concept Charcoal" onclick="activateConcept('medium-charcoal', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-charcoal', {push:true});}">
             <span class="chip-label">Charcoal</span>
             <span class="chip-id">iroko:medium-charcoal</span>
           </div>
-          <div class="chip" id="concept-medium-chalk-colored">
+          <div class="chip" id="concept-medium-chalk-colored" role="button" tabindex="0" aria-label="View concept Colored chalk" onclick="activateConcept('medium-chalk-colored', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-chalk-colored', {push:true});}">
             <span class="chip-label">Colored chalk</span>
             <span class="chip-id">iroko:medium-chalk-colored</span>
           </div>
-          <div class="chip" id="concept-medium-cornmeal">
+          <div class="chip" id="concept-medium-cornmeal" role="button" tabindex="0" aria-label="View concept Cornmeal" onclick="activateConcept('medium-cornmeal', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-cornmeal', {push:true});}">
             <span class="chip-label">Cornmeal</span>
             <span class="chip-id">iroko:medium-cornmeal</span>
           </div>
-          <div class="chip" id="concept-medium-gunpowder">
+          <div class="chip" id="concept-medium-gunpowder" role="button" tabindex="0" aria-label="View concept Gunpowder" onclick="activateConcept('medium-gunpowder', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-gunpowder', {push:true});}">
             <span class="chip-label">Gunpowder</span>
             <span class="chip-id">iroko:medium-gunpowder</span>
           </div>
-          <div class="chip" id="concept-medium-ink">
+          <div class="chip" id="concept-medium-ink" role="button" tabindex="0" aria-label="View concept Ink" onclick="activateConcept('medium-ink', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-ink', {push:true});}">
             <span class="chip-label">Ink</span>
             <span class="chip-id">iroko:medium-ink</span>
           </div>
-          <div class="chip" id="concept-medium-paint">
+          <div class="chip" id="concept-medium-paint" role="button" tabindex="0" aria-label="View concept Paint" onclick="activateConcept('medium-paint', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-paint', {push:true});}">
             <span class="chip-label">Paint</span>
             <span class="chip-id">iroko:medium-paint</span>
           </div>
-          <div class="chip" id="concept-medium-flour">
+          <div class="chip" id="concept-medium-flour" role="button" tabindex="0" aria-label="View concept Wheat flour" onclick="activateConcept('medium-flour', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-flour', {push:true});}">
             <span class="chip-label">Wheat flour</span>
             <span class="chip-id">iroko:medium-flour</span>
           </div>
-          <div class="chip" id="concept-medium-chalk-white">
+          <div class="chip" id="concept-medium-chalk-white" role="button" tabindex="0" aria-label="View concept White chalk (cascarilla)" onclick="activateConcept('medium-chalk-white', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('medium-chalk-white', {push:true});}">
             <span class="chip-label">White chalk (cascarilla)</span>
             <span class="chip-id">iroko:medium-chalk-white</span>
           </div>
@@ -421,51 +470,51 @@
             <span class="sh-count">12 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-surface-altar">
+          <div class="chip" id="concept-surface-altar" role="button" tabindex="0" aria-label="View concept Altar surface" onclick="activateConcept('surface-altar', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-altar', {push:true});}">
             <span class="chip-label">Altar surface</span>
             <span class="chip-id">iroko:surface-altar</span>
           </div>
-          <div class="chip" id="concept-surface-body">
+          <div class="chip" id="concept-surface-body" role="button" tabindex="0" aria-label="View concept Body (skin)" onclick="activateConcept('surface-body', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-body', {push:true});}">
             <span class="chip-label">Body (skin)</span>
             <span class="chip-id">iroko:surface-body</span>
           </div>
-          <div class="chip" id="concept-surface-cloth">
+          <div class="chip" id="concept-surface-cloth" role="button" tabindex="0" aria-label="View concept Cloth / fabric" onclick="activateConcept('surface-cloth', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-cloth', {push:true});}">
             <span class="chip-label">Cloth / fabric</span>
             <span class="chip-id">iroko:surface-cloth</span>
           </div>
-          <div class="chip" id="concept-surface-door">
+          <div class="chip" id="concept-surface-door" role="button" tabindex="0" aria-label="View concept Door / threshold" onclick="activateConcept('surface-door', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-door', {push:true});}">
             <span class="chip-label">Door / threshold</span>
             <span class="chip-id">iroko:surface-door</span>
           </div>
-          <div class="chip" id="concept-surface-floor">
+          <div class="chip" id="concept-surface-floor" role="button" tabindex="0" aria-label="View concept Floor (interior)" onclick="activateConcept('surface-floor', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-floor', {push:true});}">
             <span class="chip-label">Floor (interior)</span>
             <span class="chip-id">iroko:surface-floor</span>
           </div>
-          <div class="chip" id="concept-surface-ground">
+          <div class="chip" id="concept-surface-ground" role="button" tabindex="0" aria-label="View concept Ground / earth" onclick="activateConcept('surface-ground', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-ground', {push:true});}">
             <span class="chip-label">Ground / earth</span>
             <span class="chip-id">iroko:surface-ground</span>
           </div>
-          <div class="chip" id="concept-surface-other">
+          <div class="chip" id="concept-surface-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('surface-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:surface-other</span>
           </div>
-          <div class="chip" id="concept-surface-paper">
+          <div class="chip" id="concept-surface-paper" role="button" tabindex="0" aria-label="View concept Paper / document" onclick="activateConcept('surface-paper', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-paper', {push:true});}">
             <span class="chip-label">Paper / document</span>
             <span class="chip-id">iroko:surface-paper</span>
           </div>
-          <div class="chip" id="concept-surface-object">
+          <div class="chip" id="concept-surface-object" role="button" tabindex="0" aria-label="View concept Sacred object" onclick="activateConcept('surface-object', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-object', {push:true});}">
             <span class="chip-label">Sacred object</span>
             <span class="chip-id">iroko:surface-object</span>
           </div>
-          <div class="chip" id="concept-surface-tree">
+          <div class="chip" id="concept-surface-tree" role="button" tabindex="0" aria-label="View concept Tree / bark" onclick="activateConcept('surface-tree', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-tree', {push:true});}">
             <span class="chip-label">Tree / bark</span>
             <span class="chip-id">iroko:surface-tree</span>
           </div>
-          <div class="chip" id="concept-surface-wall">
+          <div class="chip" id="concept-surface-wall" role="button" tabindex="0" aria-label="View concept Wall" onclick="activateConcept('surface-wall', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-wall', {push:true});}">
             <span class="chip-label">Wall</span>
             <span class="chip-id">iroko:surface-wall</span>
           </div>
-          <div class="chip" id="concept-surface-water">
+          <div class="chip" id="concept-surface-water" role="button" tabindex="0" aria-label="View concept Water surface" onclick="activateConcept('surface-water', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('surface-water', {push:true});}">
             <span class="chip-label">Water surface</span>
             <span class="chip-id">iroko:surface-water</span>
           </div>
@@ -480,39 +529,39 @@
             <span class="sh-count">9 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-func-binding">
+          <div class="chip" id="concept-func-binding" role="button" tabindex="0" aria-label="View concept Binding" onclick="activateConcept('func-binding', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-binding', {push:true});}">
             <span class="chip-label">Binding</span>
             <span class="chip-id">iroko:func-binding</span>
           </div>
-          <div class="chip" id="concept-func-communication">
+          <div class="chip" id="concept-func-communication" role="button" tabindex="0" aria-label="View concept Communication" onclick="activateConcept('func-communication', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-communication', {push:true});}">
             <span class="chip-label">Communication</span>
             <span class="chip-id">iroko:func-communication</span>
           </div>
-          <div class="chip" id="concept-func-consecration">
+          <div class="chip" id="concept-func-consecration" role="button" tabindex="0" aria-label="View concept Consecration" onclick="activateConcept('func-consecration', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-consecration', {push:true});}">
             <span class="chip-label">Consecration</span>
             <span class="chip-id">iroko:func-consecration</span>
           </div>
-          <div class="chip" id="concept-func-identification">
+          <div class="chip" id="concept-func-identification" role="button" tabindex="0" aria-label="View concept Identification / Territory" onclick="activateConcept('func-identification', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-identification', {push:true});}">
             <span class="chip-label">Identification / Territory</span>
             <span class="chip-id">iroko:func-identification</span>
           </div>
-          <div class="chip" id="concept-func-narrative">
+          <div class="chip" id="concept-func-narrative" role="button" tabindex="0" aria-label="View concept Narrative / Recording" onclick="activateConcept('func-narrative', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-narrative', {push:true});}">
             <span class="chip-label">Narrative / Recording</span>
             <span class="chip-id">iroko:func-narrative</span>
           </div>
-          <div class="chip" id="concept-func-opening">
+          <div class="chip" id="concept-func-opening" role="button" tabindex="0" aria-label="View concept Opening" onclick="activateConcept('func-opening', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-opening', {push:true});}">
             <span class="chip-label">Opening</span>
             <span class="chip-id">iroko:func-opening</span>
           </div>
-          <div class="chip" id="concept-func-protection">
+          <div class="chip" id="concept-func-protection" role="button" tabindex="0" aria-label="View concept Protection" onclick="activateConcept('func-protection', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-protection', {push:true});}">
             <span class="chip-label">Protection</span>
             <span class="chip-id">iroko:func-protection</span>
           </div>
-          <div class="chip" id="concept-func-sealing">
+          <div class="chip" id="concept-func-sealing" role="button" tabindex="0" aria-label="View concept Sealing" onclick="activateConcept('func-sealing', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-sealing', {push:true});}">
             <span class="chip-label">Sealing</span>
             <span class="chip-id">iroko:func-sealing</span>
           </div>
-          <div class="chip" id="concept-func-territorial">
+          <div class="chip" id="concept-func-territorial" role="button" tabindex="0" aria-label="View concept Territorial marking" onclick="activateConcept('func-territorial', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('func-territorial', {push:true});}">
             <span class="chip-label">Territorial marking</span>
             <span class="chip-id">iroko:func-territorial</span>
           </div>
@@ -527,19 +576,19 @@
             <span class="sh-count">4 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-perm-ephemeral">
+          <div class="chip" id="concept-perm-ephemeral" role="button" tabindex="0" aria-label="View concept Ephemeral" onclick="activateConcept('perm-ephemeral', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('perm-ephemeral', {push:true});}">
             <span class="chip-label">Ephemeral</span>
             <span class="chip-id">iroko:perm-ephemeral</span>
           </div>
-          <div class="chip" id="concept-perm-permanent">
+          <div class="chip" id="concept-perm-permanent" role="button" tabindex="0" aria-label="View concept Permanent" onclick="activateConcept('perm-permanent', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('perm-permanent', {push:true});}">
             <span class="chip-label">Permanent</span>
             <span class="chip-id">iroko:perm-permanent</span>
           </div>
-          <div class="chip" id="concept-perm-semi-permanent">
+          <div class="chip" id="concept-perm-semi-permanent" role="button" tabindex="0" aria-label="View concept Semi-permanent" onclick="activateConcept('perm-semi-permanent', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('perm-semi-permanent', {push:true});}">
             <span class="chip-label">Semi-permanent</span>
             <span class="chip-id">iroko:perm-semi-permanent</span>
           </div>
-          <div class="chip" id="concept-perm-temporary">
+          <div class="chip" id="concept-perm-temporary" role="button" tabindex="0" aria-label="View concept Temporary" onclick="activateConcept('perm-temporary', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('perm-temporary', {push:true});}">
             <span class="chip-label">Temporary</span>
             <span class="chip-id">iroko:perm-temporary</span>
           </div>
@@ -554,31 +603,31 @@
             <span class="sh-count">7 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-system-adinkra">
+          <div class="chip" id="concept-system-adinkra" role="button" tabindex="0" aria-label="View concept Adinkra (Akan)" onclick="activateConcept('system-adinkra', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-adinkra', {push:true});}">
             <span class="chip-label">Adinkra (Akan)</span>
             <span class="chip-id">iroko:system-adinkra</span>
           </div>
-          <div class="chip" id="concept-system-anaforuana">
+          <div class="chip" id="concept-system-anaforuana" role="button" tabindex="0" aria-label="View concept Anaforuana (Abakuá)" onclick="activateConcept('system-anaforuana', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-anaforuana', {push:true});}">
             <span class="chip-label">Anaforuana (Abakuá)</span>
             <span class="chip-id">iroko:system-anaforuana</span>
           </div>
-          <div class="chip" id="concept-system-firma">
+          <div class="chip" id="concept-system-firma" role="button" tabindex="0" aria-label="View concept Firma / Patipemba (Palo Monte)" onclick="activateConcept('system-firma', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-firma', {push:true});}">
             <span class="chip-label">Firma / Patipemba (Palo Monte)</span>
             <span class="chip-id">iroko:system-firma</span>
           </div>
-          <div class="chip" id="concept-system-cosmogram">
+          <div class="chip" id="concept-system-cosmogram" role="button" tabindex="0" aria-label="View concept Kongo Cosmogram" onclick="activateConcept('system-cosmogram', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-cosmogram', {push:true});}">
             <span class="chip-label">Kongo Cosmogram</span>
             <span class="chip-id">iroko:system-cosmogram</span>
           </div>
-          <div class="chip" id="concept-system-nsibidi">
+          <div class="chip" id="concept-system-nsibidi" role="button" tabindex="0" aria-label="View concept Nsibidi (Ejagham/Cross River)" onclick="activateConcept('system-nsibidi', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-nsibidi', {push:true});}">
             <span class="chip-label">Nsibidi (Ejagham/Cross River)</span>
             <span class="chip-id">iroko:system-nsibidi</span>
           </div>
-          <div class="chip" id="concept-system-ponto-riscado">
+          <div class="chip" id="concept-system-ponto-riscado" role="button" tabindex="0" aria-label="View concept Ponto Riscado (Umbanda/Quimbanda)" onclick="activateConcept('system-ponto-riscado', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-ponto-riscado', {push:true});}">
             <span class="chip-label">Ponto Riscado (Umbanda/Quimbanda)</span>
             <span class="chip-id">iroko:system-ponto-riscado</span>
           </div>
-          <div class="chip" id="concept-system-veve">
+          <div class="chip" id="concept-system-veve" role="button" tabindex="0" aria-label="View concept Vèvè (Haitian Vodou)" onclick="activateConcept('system-veve', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('system-veve', {push:true});}">
             <span class="chip-label">Vèvè (Haitian Vodou)</span>
             <span class="chip-id">iroko:system-veve</span>
           </div>
@@ -672,6 +721,7 @@ const MODULE_STEM = "iroko-veve";
 const MOD_TITLE_SHORT = "Vèvè Module";
 const CLASSES = {"GraphicSign": {"uri": "iroko:GraphicSign", "label": "Graphic Sign", "definition": "A discrete ritual diagram, symbol, or graphic mark belonging to a sacred sign system. Each sign has a conventional form, a tradition-specific name, and one or more ceremonial functions. Examples: a specific Vodou vèvè drawn for Ogou Feray; an Abakuá Anaforuana sign protecting a potencia's territory; a Palo firma drawn to open a Nganga. The sign's form and name are community-restricted in active traditions; its operational use and drawing sequence are initiated-only.", "outgoing": [{"uri": "iroko:colorSignificance", "label": "color significance", "type": "data", "range": "langString", "access": "init", "def": "The ritual significance of colors used with this sign, where applicable. Initiated-only."}, {"uri": "iroko:directionality", "label": "directionality", "type": "data", "range": "langString", "access": "init", "def": "Whether and how orientation of the sign affects its function (e.g., inverted signs in some Palo and Kongo traditions activate opposite polarity). Initiated-only."}, {"uri": "iroko:drawingSequence", "label": "drawing sequence", "type": "data", "range": "langString", "access": "init", "def": "The step-by-step sequence in which the sign must be drawn. The directionality and order of strokes often carries operational significance. Initiated-elder only."}, {"uri": "iroko:invokedEntity", "label": "invoked entity", "type": "obj", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity primarily associated with or invoked by this sign. Range: iroko:SpiritualEntity. Community-restricted."}, {"uri": "iroko:relatedSign", "label": "related sign", "type": "obj", "range": "Graphic Sign", "access": "init", "def": "A sign within the same system that shares visual elements, modifies this sign's function, or is typically drawn in sequence with it."}, {"uri": "iroko:signFunction", "label": "sign function", "type": "obj", "range": "Concept", "access": "comm", "def": "The primary ceremonial function of this sign. Range: iroko:SignFunctionScheme."}, {"uri": "iroko:signMeaning", "label": "sign meaning", "type": "data", "range": "langString", "access": "init", "def": "The semantic or esoteric meaning of the sign as transmitted within the lineage. Initiated-only."}], "incoming": [{"uri": "iroko:gradeSign", "label": "grade sign", "type": "obj", "access": "init", "def": "The esoteric graphic sign or identifying mark associated with this grade. Range: iroko:GraphicSign — grade signs in Ékpè and cognate societies are drawn symbols belonging to a sacred sign system, not free-text strings. Initiated-elder only.", "domain": "Society Grade", "from": "iroko:Society Grade", "fromLabel": "Society Grade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:instanceSign", "label": "sign type", "type": "obj", "access": "pub", "def": "The abstract GraphicSign of which this is a specific drawn instance.", "domain": "Sign Instance", "from": "iroko:Sign Instance", "fromLabel": "Sign Instance", "module": "Vèvè Module", "stem": "iroko-veve"}, {"uri": "iroko:relatedSign", "label": "related sign", "type": "obj", "access": "init", "def": "A sign within the same system that shares visual elements, modifies this sign's function, or is typically drawn in sequence with it.", "domain": "Graphic Sign", "from": "iroko:Graphic Sign", "fromLabel": "Graphic Sign", "module": "Vèvè Module", "stem": "iroko-veve"}], "cross": [{"name": "Ékpè Module", "dotCls": "dot-societies", "via": "iroko:gradeSign", "dir": "referenced by"}]}, "SignCorpus": {"uri": "iroko:SignCorpus", "label": "Sign Corpus", "definition": "The complete inventory of graphic signs held and transmitted by a specific lineage, house, or tradition community. Different lineages within the same tradition may hold different signs or use the same sign with different operational meanings. A sign corpus is lineage-specific and represents a distinct LineageKnowledgeGraph.", "outgoing": [], "incoming": [], "cross": []}, "SignInstance": {"uri": "iroko:SignInstance", "label": "Sign Instance", "definition": "A specific documented occurrence of a graphic sign: a particular vèvè drawn at a specific ceremony, a firma traced before a consultation, an Adinkra stamped on cloth. Distinct from the abstract sign type (iroko:GraphicSign). Records medium, surface, date, ritual context, and photographer/recorder where available. Photographic documentation of sign instances is community-restricted; the sign's existence is public.", "outgoing": [{"uri": "iroko:documentationRecord", "label": "documentation record", "type": "obj", "range": "SacredMedia", "access": "comm", "def": "Photographic, rubbing, or tracing record of this sign instance. Range: iroko:SacredMedia. Community-restricted: documentation should not enable replication."}, {"uri": "iroko:drawingMedium", "label": "drawing medium", "type": "obj", "range": "Concept", "access": "comm", "def": "The material used to draw this instance. Range: iroko:DrawingMediumScheme."}, {"uri": "iroko:drawingSurface", "label": "drawing surface", "type": "obj", "range": "Concept", "access": "comm", "def": "The surface on or within which this instance was drawn. Range: iroko:DrawingSurfaceScheme."}, {"uri": "iroko:drawnBy", "label": "drawn by", "type": "obj", "range": "RitualPractitioner", "access": "comm", "def": "The practitioner who drew this sign instance. Range: iroko:RitualPractitioner — a vèvè, anaforuana, or other sacred graphic sign is always drawn by a human agent exercising ritual capacity, not merely any person. Community-restricted."}, {"uri": "iroko:permanence", "label": "permanence", "type": "obj", "range": "Concept", "access": "comm", "def": "Whether this instance is ephemeral, temporary, or permanent. Range: iroko:PermanenceScheme."}, {"uri": "iroko:instanceSign", "label": "sign type", "type": "obj", "range": "Graphic Sign", "access": "pub", "def": "The abstract GraphicSign of which this is a specific drawn instance."}], "incoming": [], "cross": []}, "SignSystem": {"uri": "iroko:SignSystem", "label": "Sign System", "definition": "A tradition-specific graphic communication system consisting of a defined corpus of signs with shared visual grammar, drawing conventions, and ceremonial functions. Examples: the Vodou vèvè corpus; the Palo Monte firma/patipemba tradition; Ejagham Nsibidi; Abakuá Anaforuana; Akan Adinkra. A sign system is identified by tradition, geographic origin, and governing authority. The existence of a system and its name are public; its internal grammar and full sign inventory may be restricted.", "outgoing": [{"uri": "iroko:governingAuthority", "label": "governing authority", "type": "obj", "range": "Concept", "access": "comm", "def": "The title or institution with authority over this sign system. For Anaforuana: the Abakuá potencia leadership. For Vodou vèvè: the Houngan/Mambo body. Community-restricted."}], "incoming": [], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:colorSignificance", "label": "color significance", "type": "data", "domain": "Graphic Sign", "range": "langString", "access": "init", "def": "The ritual significance of colors used with this sign, where applicable. Initiated-only."}, {"uri": "iroko:directionality", "label": "directionality", "type": "data", "domain": "Graphic Sign", "range": "langString", "access": "init", "def": "Whether and how orientation of the sign affects its function (e.g., inverted signs in some Palo and Kongo traditions activate opposite polarity). Initiated-only."}, {"uri": "iroko:documentationRecord", "label": "documentation record", "type": "obj", "domain": "Sign Instance", "range": "SacredMedia", "access": "comm", "def": "Photographic, rubbing, or tracing record of this sign instance. Range: iroko:SacredMedia. Community-restricted: documentation should not enable replication."}, {"uri": "iroko:drawingMedium", "label": "drawing medium", "type": "obj", "domain": "Sign Instance", "range": "Concept", "access": "comm", "def": "The material used to draw this instance. Range: iroko:DrawingMediumScheme."}, {"uri": "iroko:drawingSequence", "label": "drawing sequence", "type": "data", "domain": "Graphic Sign", "range": "langString", "access": "init", "def": "The step-by-step sequence in which the sign must be drawn. The directionality and order of strokes often carries operational significance. Initiated-elder only."}, {"uri": "iroko:drawingSurface", "label": "drawing surface", "type": "obj", "domain": "Sign Instance", "range": "Concept", "access": "comm", "def": "The surface on or within which this instance was drawn. Range: iroko:DrawingSurfaceScheme."}, {"uri": "iroko:drawnBy", "label": "drawn by", "type": "obj", "domain": "Sign Instance", "range": "RitualPractitioner", "access": "comm", "def": "The practitioner who drew this sign instance. Range: iroko:RitualPractitioner — a vèvè, anaforuana, or other sacred graphic sign is always drawn by a human agent exercising ritual capacity, not merely any person. Community-restricted."}, {"uri": "iroko:governingAuthority", "label": "governing authority", "type": "obj", "domain": "Sign System", "range": "Concept", "access": "comm", "def": "The title or institution with authority over this sign system. For Anaforuana: the Abakuá potencia leadership. For Vodou vèvè: the Houngan/Mambo body. Community-restricted."}, {"uri": "iroko:invokedEntity", "label": "invoked entity", "type": "obj", "domain": "Graphic Sign", "range": "SpiritualEntity", "access": "comm", "def": "The spiritual entity primarily associated with or invoked by this sign. Range: iroko:SpiritualEntity. Community-restricted."}, {"uri": "iroko:permanence", "label": "permanence", "type": "obj", "domain": "Sign Instance", "range": "Concept", "access": "comm", "def": "Whether this instance is ephemeral, temporary, or permanent. Range: iroko:PermanenceScheme."}, {"uri": "iroko:relatedSign", "label": "related sign", "type": "obj", "domain": "Graphic Sign", "range": "Graphic Sign", "access": "init", "def": "A sign within the same system that shares visual elements, modifies this sign's function, or is typically drawn in sequence with it."}, {"uri": "iroko:signFunction", "label": "sign function", "type": "obj", "domain": "Graphic Sign", "range": "Concept", "access": "comm", "def": "The primary ceremonial function of this sign. Range: iroko:SignFunctionScheme."}, {"uri": "iroko:signMeaning", "label": "sign meaning", "type": "data", "domain": "Graphic Sign", "range": "langString", "access": "init", "def": "The semantic or esoteric meaning of the sign as transmitted within the lineage. Initiated-only."}, {"uri": "iroko:instanceSign", "label": "sign type", "type": "obj", "domain": "Sign Instance", "range": "Graphic Sign", "access": "pub", "def": "The abstract GraphicSign of which this is a specific drawn instance."}];
+const CONCEPTS = {"medium-ash": {"id": "medium-ash", "uri": "iroko:medium-ash", "label": "Ash", "definition": "Wood ash or specific burned materials used for cooling, ancestral, and threshold-crossing signs.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-blood": {"id": "medium-blood", "uri": "iroko:medium-blood", "label": "Blood", "definition": "Animal or human blood used as a drawing medium in highly restricted ceremonies. Initiated-elder access for operational detail.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-carved": {"id": "medium-carved", "uri": "iroko:medium-carved", "label": "Carved / incised", "definition": "Signs carved or incised into wood, stone, metal, or other materials for permanent installation.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-cascarilla": {"id": "medium-cascarilla", "uri": "iroko:medium-cascarilla", "label": "Cascarilla (eggshell powder)", "definition": "Powdered eggshell (cascarilla), a cooling and purifying medium used across multiple Afro-Atlantic traditions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-charcoal": {"id": "medium-charcoal", "uri": "iroko:medium-charcoal", "label": "Charcoal", "definition": "Ground charcoal used for ancestral, funerary, and dark-force-related signs.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-chalk-colored": {"id": "medium-chalk-colored", "uri": "iroko:medium-chalk-colored", "label": "Colored chalk", "definition": "Pigmented chalk in tradition-specific colors, used for signs associated with particular spiritual forces or chromatic requirements.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-cornmeal": {"id": "medium-cornmeal", "uri": "iroko:medium-cornmeal", "label": "Cornmeal", "definition": "Ground cornmeal used for vèvè and some Lucumí ground drawings.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-gunpowder": {"id": "medium-gunpowder", "uri": "iroko:medium-gunpowder", "label": "Gunpowder", "definition": "Gunpowder used in Palo Monte firmás and some Vodou vèvè for Ogou/Oggun-family entities. Associated with warrior and fire forces.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-ink": {"id": "medium-ink", "uri": "iroko:medium-ink", "label": "Ink", "definition": "Ink applied with pen, brush, or stamp. Common in Nsibidi documentation and Adinkra cloth stamping.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-paint": {"id": "medium-paint", "uri": "iroko:medium-paint", "label": "Paint", "definition": "Commercial or natural paint used for wall murals, cloth stamping, or semi-permanent sign installation. Common in Adinkra cloth production.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-flour": {"id": "medium-flour", "uri": "iroko:medium-flour", "label": "Wheat flour", "definition": "Refined wheat flour, the most common medium for Haitian Vodou vèvè.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "medium-chalk-white": {"id": "medium-chalk-white", "uri": "iroko:medium-chalk-white", "label": "White chalk (cascarilla)", "definition": "White chalk or powdered eggshell (cascarilla/efun) used for protective and cooling signs in Lucumí, Palo, and Vodou traditions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingMediumScheme", "schemeId": "DrawingMediumScheme", "schemeLabel": "Drawing Media"}, "surface-altar": {"id": "surface-altar", "uri": "iroko:surface-altar", "label": "Altar surface", "definition": "The surface of an altar, throne, or ritual table.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-body": {"id": "surface-body", "uri": "iroko:surface-body", "label": "Body (skin)", "definition": "The skin of a practitioner or initiate. Used for protective and initiatory markings.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-cloth": {"id": "surface-cloth", "uri": "iroko:surface-cloth", "label": "Cloth / fabric", "definition": "Fabric or cloth, particularly for Adinkra stamping and some Vodou ceremonial use.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-door": {"id": "surface-door", "uri": "iroko:surface-door", "label": "Door / threshold", "definition": "Door, doorframe, or threshold — boundary surfaces with protective and liminal significance.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-floor": {"id": "surface-floor", "uri": "iroko:surface-floor", "label": "Floor (interior)", "definition": "Interior floor of a temple, hounfò, or ilé. The most common surface for Vodou vèvè.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-ground": {"id": "surface-ground", "uri": "iroko:surface-ground", "label": "Ground / earth", "definition": "Bare earth or dirt surface, often at crossroads or outdoor ceremony spaces.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-other": {"id": "surface-other", "uri": "iroko:surface-other", "label": "Other", "definition": "Drawing surface not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-paper": {"id": "surface-paper", "uri": "iroko:surface-paper", "label": "Paper / document", "definition": "Paper, parchment, or documentary material. Used in some Palo and Espiritismo contexts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-object": {"id": "surface-object", "uri": "iroko:surface-object", "label": "Sacred object", "definition": "A consecrated object, vessel, drum, or implement.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-tree": {"id": "surface-tree", "uri": "iroko:surface-tree", "label": "Tree / bark", "definition": "Living tree or bark surface. Used in some outdoor and forest-spirit ceremonies.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-wall": {"id": "surface-wall", "uri": "iroko:surface-wall", "label": "Wall", "definition": "Interior or exterior wall surface. Used for semi-permanent protective signs.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "surface-water": {"id": "surface-water", "uri": "iroko:surface-water", "label": "Water surface", "definition": "A body of water, basin, or liquid surface. Used in some healing and cooling ceremonies.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:DrawingSurfaceScheme", "schemeId": "DrawingSurfaceScheme", "schemeLabel": "Drawing Surfaces"}, "func-binding": {"id": "func-binding", "uri": "iroko:func-binding", "label": "Binding", "definition": "The sign constrains or binds a force or entity. Initiated-only detail.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignFunctionScheme", "schemeId": "SignFunctionScheme", "schemeLabel": "Sign Functions"}, "func-communication": {"id": "func-communication", "uri": "iroko:func-communication", "label": "Communication", "definition": "The sign transmits information or messages between practitioners or between practitioners and spiritual forces.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignFunctionScheme", "schemeId": "SignFunctionScheme", "schemeLabel": "Sign Functions"}, "func-consecration": {"id": "func-consecration", "uri": "iroko:func-consecration", "label": "Consecration", "definition": "The sign activates or consecrates an object, person, or space for sacred use.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignFunctionScheme", "schemeId": "SignFunctionScheme", "schemeLabel": "Sign Functions"}, "func-identification": {"id": "func-identification", "uri": "iroko:func-identification", "label": "Identification / Territory", "definition": "The sign identifies a house, potencia, lineage, or practitioner's affiliation. Primary function of Anaforuana territorial marks.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignFunctionScheme", "schemeId": "SignFunctionScheme", "schemeLabel": "Sign Functions"}, "func-narrative": {"id": "func-narrative", "uri": "iroko:func-narrative", "label": "Narrative / Recording", "definition": "The sign records an event, tells a story, or encodes historical knowledge. Characteristic of Nsibidi's documentary function.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignFunctionScheme", "schemeId": "SignFunctionScheme", "schemeLabel": "Sign Functions"}, "func-opening": {"id": "func-opening", "uri": "iroko:func-opening", "label": "Opening", "definition": "The sign opens a ceremony, a spiritual pathway, or a sacred space for work.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignFunctionScheme", "schemeId": "SignFunctionScheme", "schemeLabel": "Sign Functions"}, "func-protection": {"id": "func-protection", "uri": "iroko:func-protection", "label": "Protection", "definition": "The sign creates a boundary of spiritual protection around a person, object, or space.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignFunctionScheme", "schemeId": "SignFunctionScheme", "schemeLabel": "Sign Functions"}, "func-sealing": {"id": "func-sealing", "uri": "iroko:func-sealing", "label": "Sealing", "definition": "The sign closes or concludes a ceremony or seals a spiritual agreement.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignFunctionScheme", "schemeId": "SignFunctionScheme", "schemeLabel": "Sign Functions"}, "func-territorial": {"id": "func-territorial", "uri": "iroko:func-territorial", "label": "Territorial marking", "definition": "The sign marks the boundary or domain of a spiritual entity, house, or society. Particularly important in Abakuá Anaforuana.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignFunctionScheme", "schemeId": "SignFunctionScheme", "schemeLabel": "Sign Functions"}, "perm-ephemeral": {"id": "perm-ephemeral", "uri": "iroko:perm-ephemeral", "label": "Ephemeral", "definition": "Destroyed or erased immediately after use as part of the ceremony (e.g., vèvè covered by dance, flour swept away).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PermanenceScheme", "schemeId": "PermanenceScheme", "schemeLabel": "Sign Permanence"}, "perm-permanent": {"id": "perm-permanent", "uri": "iroko:perm-permanent", "label": "Permanent", "definition": "Intended to endure: carved stone or metal, tattooed or scarified body marks, Nsibidi on permanent objects.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PermanenceScheme", "schemeId": "PermanenceScheme", "schemeLabel": "Sign Permanence"}, "perm-semi-permanent": {"id": "perm-semi-permanent", "uri": "iroko:perm-semi-permanent", "label": "Semi-permanent", "definition": "Remains for an extended period but is understood to be renewable (e.g., wall signs, painted objects, cloth).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PermanenceScheme", "schemeId": "PermanenceScheme", "schemeLabel": "Sign Permanence"}, "perm-temporary": {"id": "perm-temporary", "uri": "iroko:perm-temporary", "label": "Temporary", "definition": "Fades naturally or is ritually removed after the ceremony concludes (e.g., ground drawings exposed to weather).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:PermanenceScheme", "schemeId": "PermanenceScheme", "schemeLabel": "Sign Permanence"}, "system-adinkra": {"id": "system-adinkra", "uri": "iroko:system-adinkra", "label": "Adinkra (Akan)", "definition": "A system of visual symbols originating among the Akan of Ghana and Côte d'Ivoire, each symbol encoding a proverb, concept, or value. Traditionally stamped on cloth for funerary and ceremonial use. More publicly documented than many Afro-Atlantic sign systems due to widespread commercial adoption, though ceremonial uses retain their gravity. Increasingly present in diaspora contexts.", "scope": "While many Adinkra symbols are widely published, their ceremonial and mortuary use context should be documented with appropriate respect for Akan tradition authority.", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignSystemTypeScheme", "schemeId": "SignSystemTypeScheme", "schemeLabel": "Sign System Types"}, "system-anaforuana": {"id": "system-anaforuana", "uri": "iroko:system-anaforuana", "label": "Anaforuana (Abakuá)", "definition": "The esoteric graphic script of the Abakuá society in Cuba, derived from Ejagham Nsibidi through enslaved Cross River practitioners. Anaforuana signs represent potencia territories, spiritual forces, and society knowledge. Among the most protected sign systems in the Afro-Atlantic world; specific signs are restricted to initiated members at specific grades. Related to but institutionally distinct from Nsibidi.", "scope": "Many Anaforuana signs are protected at initiated-only or no-access level by potencia authority. Researchers must obtain community approval before documenting or publishing specific signs.", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignSystemTypeScheme", "schemeId": "SignSystemTypeScheme", "schemeLabel": "Sign System Types"}, "system-firma": {"id": "system-firma", "uri": "iroko:system-firma", "label": "Firma / Patipemba (Palo Monte)", "definition": "The Kongo-derived graphic sign system of Palo Monte and related Cuban-Bantu traditions. Firmas are drawn to open, close, seal, and communicate with Nganga (spirit vessels) and their governing Mpungo. Patipemba are specific ground-drawing configurations. The directionality and polarity of firmas is operationally significant.", "scope": "", "notation": "", "altLabels": ["Prenda signature"], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignSystemTypeScheme", "schemeId": "SignSystemTypeScheme", "schemeLabel": "Sign System Types"}, "system-cosmogram": {"id": "system-cosmogram", "uri": "iroko:system-cosmogram", "label": "Kongo Cosmogram", "definition": "The foundational Kongo cosmological diagram (dikenga dia Kongo) representing the cyclical journey of the soul through the four moments of the sun. A cross-in-circle form that underlies both Palo Monte firmás and traces of Kongo spiritual geography throughout the Afro-Atlantic diaspora. Foundational to understanding other Kongo-derived sign systems.", "scope": "", "notation": "", "altLabels": ["Dikenga"], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignSystemTypeScheme", "schemeId": "SignSystemTypeScheme", "schemeLabel": "Sign System Types"}, "system-nsibidi": {"id": "system-nsibidi", "uri": "iroko:system-nsibidi", "label": "Nsibidi (Ejagham/Cross River)", "definition": "An ideographic script and graphic sign system originating among the Ejagham and neighboring Cross River peoples of Nigeria and Cameroon. Used by Ékpè society members for communication, record-keeping, and ceremonial marking. Nsibidi predates colonial contact; some signs are public while esoteric variants remain restricted to Ékpè initiates. Ancestor system to Cuban Abakuá Anaforuana.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignSystemTypeScheme", "schemeId": "SignSystemTypeScheme", "schemeLabel": "Sign System Types"}, "system-ponto-riscado": {"id": "system-ponto-riscado", "uri": "iroko:system-ponto-riscado", "label": "Ponto Riscado (Umbanda/Quimbanda)", "definition": "The graphic sign system of Brazilian Umbanda and Quimbanda, consisting of drawn points (pontos) associated with Orixás, Exus, and Pombagiras. Related to but distinct from Palo Monte firmás; developed in the Brazilian context with syncretic elements from African, Indigenous, and Spiritist sources.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignSystemTypeScheme", "schemeId": "SignSystemTypeScheme", "schemeLabel": "Sign System Types"}, "system-veve": {"id": "system-veve", "uri": "iroko:system-veve", "label": "Vèvè (Haitian Vodou)", "definition": "The graphic sign system of Haitian Vodou, consisting of elaborate diagrams drawn in flour, cornmeal, ash, or gunpowder on the ground or altar surface to invoke and represent specific lwa. Each lwa has one or more canonical vèvè; regional and lineage variations are well-documented. Drawn at the opening of ceremonies and during possession rites.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SignSystemTypeScheme", "schemeId": "SignSystemTypeScheme", "schemeLabel": "Sign System Types"}};
 const MODULE_CROSS = [{"name": "Ékpè Module", "dotCls": "dot-societies", "via": "iroko:gradeSign", "dir": "referenced by"}];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Vèvè Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-veve.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Vèvè Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-veve.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_veve_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Vèvè Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-veve.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Vèvè Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-veve.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -713,7 +763,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -779,9 +896,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -809,7 +969,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -889,10 +1053,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>

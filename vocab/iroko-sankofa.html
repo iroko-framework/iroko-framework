@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -359,6 +389,25 @@
         Concept Schemes
         <span class="zone-hint">49 concepts across 8 schemes</span>
       </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
+      </div>
       <div class="scheme-block">
         <div class="scheme-head">
           <div>
@@ -368,15 +417,15 @@
             <span class="sh-count">3 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-period-1808-1820">
+          <div class="chip" id="concept-period-1808-1820" role="button" tabindex="0" aria-label="View concept 1808–1820" onclick="activateConcept('period-1808-1820', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('period-1808-1820', {push:true});}">
             <span class="chip-label">1808–1820</span>
             <span class="chip-id">iroko:period-1808-1820</span>
           </div>
-          <div class="chip" id="concept-period-post-1820">
+          <div class="chip" id="concept-period-post-1820" role="button" tabindex="0" aria-label="View concept Post-1820" onclick="activateConcept('period-post-1820', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('period-post-1820', {push:true});}">
             <span class="chip-label">Post-1820</span>
             <span class="chip-id">iroko:period-post-1820</span>
           </div>
-          <div class="chip" id="concept-period-pre-1808">
+          <div class="chip" id="concept-period-pre-1808" role="button" tabindex="0" aria-label="View concept Pre-1808" onclick="activateConcept('period-pre-1808', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('period-pre-1808', {push:true});}">
             <span class="chip-label">Pre-1808</span>
             <span class="chip-id">iroko:period-pre-1808</span>
           </div>
@@ -391,27 +440,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-rel-claimed-disputed">
+          <div class="chip" id="concept-rel-claimed-disputed" role="button" tabindex="0" aria-label="View concept Claimed but contested" onclick="activateConcept('rel-claimed-disputed', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('rel-claimed-disputed', {push:true});}">
             <span class="chip-label">Claimed but contested</span>
             <span class="chip-id">iroko:rel-claimed-disputed</span>
           </div>
-          <div class="chip" id="concept-rel-direct-descent">
+          <div class="chip" id="concept-rel-direct-descent" role="button" tabindex="0" aria-label="View concept Direct descent (widely attested)" onclick="activateConcept('rel-direct-descent', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('rel-direct-descent', {push:true});}">
             <span class="chip-label">Direct descent (widely attested)</span>
             <span class="chip-id">iroko:rel-direct-descent</span>
           </div>
-          <div class="chip" id="concept-rel-influence">
+          <div class="chip" id="concept-rel-influence" role="button" tabindex="0" aria-label="View concept Historical influence" onclick="activateConcept('rel-influence', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('rel-influence', {push:true});}">
             <span class="chip-label">Historical influence</span>
             <span class="chip-id">iroko:rel-influence</span>
           </div>
-          <div class="chip" id="concept-rel-other">
+          <div class="chip" id="concept-rel-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('rel-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('rel-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:rel-other</span>
           </div>
-          <div class="chip" id="concept-rel-parallel-development">
+          <div class="chip" id="concept-rel-parallel-development" role="button" tabindex="0" aria-label="View concept Parallel development from shared source" onclick="activateConcept('rel-parallel-development', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('rel-parallel-development', {push:true});}">
             <span class="chip-label">Parallel development from shared source</span>
             <span class="chip-id">iroko:rel-parallel-development</span>
           </div>
-          <div class="chip" id="concept-rel-reconstructed">
+          <div class="chip" id="concept-rel-reconstructed" role="button" tabindex="0" aria-label="View concept Reconstructed / claimed" onclick="activateConcept('rel-reconstructed', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('rel-reconstructed', {push:true});}">
             <span class="chip-label">Reconstructed / claimed</span>
             <span class="chip-id">iroko:rel-reconstructed</span>
           </div>
@@ -426,35 +475,35 @@
             <span class="sh-count">8 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-type-decolonization">
+          <div class="chip" id="concept-type-decolonization" role="button" tabindex="0" aria-label="View concept Decolonization" onclick="activateConcept('type-decolonization', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('type-decolonization', {push:true});}">
             <span class="chip-label">Decolonization</span>
             <span class="chip-id">iroko:type-decolonization</span>
           </div>
-          <div class="chip" id="concept-type-heritage-tourism">
+          <div class="chip" id="concept-type-heritage-tourism" role="button" tabindex="0" aria-label="View concept Heritage tourism / pilgrimage" onclick="activateConcept('type-heritage-tourism', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('type-heritage-tourism', {push:true});}">
             <span class="chip-label">Heritage tourism / pilgrimage</span>
             <span class="chip-id">iroko:type-heritage-tourism</span>
           </div>
-          <div class="chip" id="concept-type-other">
+          <div class="chip" id="concept-type-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('type-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('type-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:type-other</span>
           </div>
-          <div class="chip" id="concept-type-purification">
+          <div class="chip" id="concept-type-purification" role="button" tabindex="0" aria-label="View concept Purification / orthodoxy movement" onclick="activateConcept('type-purification', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('type-purification', {push:true});}">
             <span class="chip-label">Purification / orthodoxy movement</span>
             <span class="chip-id">iroko:type-purification</span>
           </div>
-          <div class="chip" id="concept-type-re-africanization">
+          <div class="chip" id="concept-type-re-africanization" role="button" tabindex="0" aria-label="View concept Re-Africanization" onclick="activateConcept('type-re-africanization', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('type-re-africanization', {push:true});}">
             <span class="chip-label">Re-Africanization</span>
             <span class="chip-id">iroko:type-re-africanization</span>
           </div>
-          <div class="chip" id="concept-type-repatriation">
+          <div class="chip" id="concept-type-repatriation" role="button" tabindex="0" aria-label="View concept Repatriation" onclick="activateConcept('type-repatriation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('type-repatriation', {push:true});}">
             <span class="chip-label">Repatriation</span>
             <span class="chip-id">iroko:type-repatriation</span>
           </div>
-          <div class="chip" id="concept-type-reconstruction">
+          <div class="chip" id="concept-type-reconstruction" role="button" tabindex="0" aria-label="View concept Tradition reconstruction" onclick="activateConcept('type-reconstruction', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('type-reconstruction', {push:true});}">
             <span class="chip-label">Tradition reconstruction</span>
             <span class="chip-id">iroko:type-reconstruction</span>
           </div>
-          <div class="chip" id="concept-type-validation-seeking">
+          <div class="chip" id="concept-type-validation-seeking" role="button" tabindex="0" aria-label="View concept Validation-seeking" onclick="activateConcept('type-validation-seeking', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('type-validation-seeking', {push:true});}">
             <span class="chip-label">Validation-seeking</span>
             <span class="chip-id">iroko:type-validation-seeking</span>
           </div>
@@ -469,27 +518,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-recognition-disputed">
+          <div class="chip" id="concept-recognition-disputed" role="button" tabindex="0" aria-label="View concept Disputed" onclick="activateConcept('recognition-disputed', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('recognition-disputed', {push:true});}">
             <span class="chip-label">Disputed</span>
             <span class="chip-id">iroko:recognition-disputed</span>
           </div>
-          <div class="chip" id="concept-recognition-formally-recognized">
+          <div class="chip" id="concept-recognition-formally-recognized" role="button" tabindex="0" aria-label="View concept Formally recognized" onclick="activateConcept('recognition-formally-recognized', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('recognition-formally-recognized', {push:true});}">
             <span class="chip-label">Formally recognized</span>
             <span class="chip-id">iroko:recognition-formally-recognized</span>
           </div>
-          <div class="chip" id="concept-recognition-informally-recognized">
+          <div class="chip" id="concept-recognition-informally-recognized" role="button" tabindex="0" aria-label="View concept Informally recognized" onclick="activateConcept('recognition-informally-recognized', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('recognition-informally-recognized', {push:true});}">
             <span class="chip-label">Informally recognized</span>
             <span class="chip-id">iroko:recognition-informally-recognized</span>
           </div>
-          <div class="chip" id="concept-recognition-not-sought">
+          <div class="chip" id="concept-recognition-not-sought" role="button" tabindex="0" aria-label="View concept Not sought" onclick="activateConcept('recognition-not-sought', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('recognition-not-sought', {push:true});}">
             <span class="chip-label">Not sought</span>
             <span class="chip-id">iroko:recognition-not-sought</span>
           </div>
-          <div class="chip" id="concept-recognition-pending">
+          <div class="chip" id="concept-recognition-pending" role="button" tabindex="0" aria-label="View concept Pending" onclick="activateConcept('recognition-pending', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('recognition-pending', {push:true});}">
             <span class="chip-label">Pending</span>
             <span class="chip-id">iroko:recognition-pending</span>
           </div>
-          <div class="chip" id="concept-recognition-rejected">
+          <div class="chip" id="concept-recognition-rejected" role="button" tabindex="0" aria-label="View concept Rejected" onclick="activateConcept('recognition-rejected', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('recognition-rejected', {push:true});}">
             <span class="chip-label">Rejected</span>
             <span class="chip-id">iroko:recognition-rejected</span>
           </div>
@@ -504,27 +553,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-method-archival">
+          <div class="chip" id="concept-method-archival" role="button" tabindex="0" aria-label="View concept Archival / documentary sources" onclick="activateConcept('method-archival', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('method-archival', {push:true});}">
             <span class="chip-label">Archival / documentary sources</span>
             <span class="chip-id">iroko:method-archival</span>
           </div>
-          <div class="chip" id="concept-method-community-consensus">
+          <div class="chip" id="concept-method-community-consensus" role="button" tabindex="0" aria-label="View concept Community deliberation and consensus" onclick="activateConcept('method-community-consensus', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('method-community-consensus', {push:true});}">
             <span class="chip-label">Community deliberation and consensus</span>
             <span class="chip-id">iroko:method-community-consensus</span>
           </div>
-          <div class="chip" id="concept-method-cross-tradition-synthesis">
+          <div class="chip" id="concept-method-cross-tradition-synthesis" role="button" tabindex="0" aria-label="View concept Cross-tradition synthesis" onclick="activateConcept('method-cross-tradition-synthesis', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('method-cross-tradition-synthesis', {push:true});}">
             <span class="chip-label">Cross-tradition synthesis</span>
             <span class="chip-id">iroko:method-cross-tradition-synthesis</span>
           </div>
-          <div class="chip" id="concept-method-oral-tradition">
+          <div class="chip" id="concept-method-oral-tradition" role="button" tabindex="0" aria-label="View concept Oral tradition and living practitioners" onclick="activateConcept('method-oral-tradition', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('method-oral-tradition', {push:true});}">
             <span class="chip-label">Oral tradition and living practitioners</span>
             <span class="chip-id">iroko:method-oral-tradition</span>
           </div>
-          <div class="chip" id="concept-method-other">
+          <div class="chip" id="concept-method-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('method-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('method-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:method-other</span>
           </div>
-          <div class="chip" id="concept-method-ethnographic">
+          <div class="chip" id="concept-method-ethnographic" role="button" tabindex="0" aria-label="View concept Published ethnographic sources" onclick="activateConcept('method-ethnographic', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('method-ethnographic', {push:true});}">
             <span class="chip-label">Published ethnographic sources</span>
             <span class="chip-id">iroko:method-ethnographic</span>
           </div>
@@ -539,23 +588,23 @@
             <span class="sh-count">5 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-paper-function-chain-of-title">
+          <div class="chip" id="concept-paper-function-chain-of-title" role="button" tabindex="0" aria-label="View concept Chain-of-Title Link" onclick="activateConcept('paper-function-chain-of-title', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-function-chain-of-title', {push:true});}">
             <span class="chip-label">Chain-of-Title Link</span>
             <span class="chip-id">iroko:paper-function-chain-of-title</span>
           </div>
-          <div class="chip" id="concept-paper-function-freedom-basis">
+          <div class="chip" id="concept-paper-function-freedom-basis" role="button" tabindex="0" aria-label="View concept Freedom Basis" onclick="activateConcept('paper-function-freedom-basis', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-function-freedom-basis', {push:true});}">
             <span class="chip-label">Freedom Basis</span>
             <span class="chip-id">iroko:paper-function-freedom-basis</span>
           </div>
-          <div class="chip" id="concept-paper-function-identity-document">
+          <div class="chip" id="concept-paper-function-identity-document" role="button" tabindex="0" aria-label="View concept Identity Documentation" onclick="activateConcept('paper-function-identity-document', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-function-identity-document', {push:true});}">
             <span class="chip-label">Identity Documentation</span>
             <span class="chip-id">iroko:paper-function-identity-document</span>
           </div>
-          <div class="chip" id="concept-paper-function-ownership-challenge">
+          <div class="chip" id="concept-paper-function-ownership-challenge" role="button" tabindex="0" aria-label="View concept Ownership Challenge" onclick="activateConcept('paper-function-ownership-challenge', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-function-ownership-challenge', {push:true});}">
             <span class="chip-label">Ownership Challenge</span>
             <span class="chip-id">iroko:paper-function-ownership-challenge</span>
           </div>
-          <div class="chip" id="concept-paper-function-ownership-claim">
+          <div class="chip" id="concept-paper-function-ownership-claim" role="button" tabindex="0" aria-label="View concept Ownership Claim" onclick="activateConcept('paper-function-ownership-claim', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-function-ownership-claim', {push:true});}">
             <span class="chip-label">Ownership Claim</span>
             <span class="chip-id">iroko:paper-function-ownership-claim</span>
           </div>
@@ -570,39 +619,39 @@
             <span class="sh-count">9 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-paper-type-baptismal-register">
+          <div class="chip" id="concept-paper-type-baptismal-register" role="button" tabindex="0" aria-label="View concept Baptismal Register Entry" onclick="activateConcept('paper-type-baptismal-register', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-type-baptismal-register', {push:true});}">
             <span class="chip-label">Baptismal Register Entry</span>
             <span class="chip-id">iroko:paper-type-baptismal-register</span>
           </div>
-          <div class="chip" id="concept-paper-type-customs-certification">
+          <div class="chip" id="concept-paper-type-customs-certification" role="button" tabindex="0" aria-label="View concept Customs Certification" onclick="activateConcept('paper-type-customs-certification', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-type-customs-certification', {push:true});}">
             <span class="chip-label">Customs Certification</span>
             <span class="chip-id">iroko:paper-type-customs-certification</span>
           </div>
-          <div class="chip" id="concept-paper-type-freedom-petition">
+          <div class="chip" id="concept-paper-type-freedom-petition" role="button" tabindex="0" aria-label="View concept Freedom Petition" onclick="activateConcept('paper-type-freedom-petition', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-type-freedom-petition', {push:true});}">
             <span class="chip-label">Freedom Petition</span>
             <span class="chip-id">iroko:paper-type-freedom-petition</span>
           </div>
-          <div class="chip" id="concept-paper-type-irregular-forged">
+          <div class="chip" id="concept-paper-type-irregular-forged" role="button" tabindex="0" aria-label="View concept Irregular or Forged Paper" onclick="activateConcept('paper-type-irregular-forged', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-type-irregular-forged', {push:true});}">
             <span class="chip-label">Irregular or Forged Paper</span>
             <span class="chip-id">iroko:paper-type-irregular-forged</span>
           </div>
-          <div class="chip" id="concept-paper-type-judicial-filing">
+          <div class="chip" id="concept-paper-type-judicial-filing" role="button" tabindex="0" aria-label="View concept Judicial Filing" onclick="activateConcept('paper-type-judicial-filing', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-type-judicial-filing', {push:true});}">
             <span class="chip-label">Judicial Filing</span>
             <span class="chip-id">iroko:paper-type-judicial-filing</span>
           </div>
-          <div class="chip" id="concept-paper-type-manumission-instrument">
+          <div class="chip" id="concept-paper-type-manumission-instrument" role="button" tabindex="0" aria-label="View concept Manumission Instrument" onclick="activateConcept('paper-type-manumission-instrument', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-type-manumission-instrument', {push:true});}">
             <span class="chip-label">Manumission Instrument</span>
             <span class="chip-id">iroko:paper-type-manumission-instrument</span>
           </div>
-          <div class="chip" id="concept-paper-type-official-correspondence">
+          <div class="chip" id="concept-paper-type-official-correspondence" role="button" tabindex="0" aria-label="View concept Official Correspondence" onclick="activateConcept('paper-type-official-correspondence', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-type-official-correspondence', {push:true});}">
             <span class="chip-label">Official Correspondence</span>
             <span class="chip-id">iroko:paper-type-official-correspondence</span>
           </div>
-          <div class="chip" id="concept-paper-type-sale-record">
+          <div class="chip" id="concept-paper-type-sale-record" role="button" tabindex="0" aria-label="View concept Sale Record" onclick="activateConcept('paper-type-sale-record', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-type-sale-record', {push:true});}">
             <span class="chip-label">Sale Record</span>
             <span class="chip-id">iroko:paper-type-sale-record</span>
           </div>
-          <div class="chip" id="concept-paper-type-ship-manifest">
+          <div class="chip" id="concept-paper-type-ship-manifest" role="button" tabindex="0" aria-label="View concept Ship Manifest" onclick="activateConcept('paper-type-ship-manifest', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('paper-type-ship-manifest', {push:true});}">
             <span class="chip-label">Ship Manifest</span>
             <span class="chip-id">iroko:paper-type-ship-manifest</span>
           </div>
@@ -617,27 +666,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-return-initiation">
+          <div class="chip" id="concept-return-initiation" role="button" tabindex="0" aria-label="View concept African initiation" onclick="activateConcept('return-initiation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('return-initiation', {push:true});}">
             <span class="chip-label">African initiation</span>
             <span class="chip-id">iroko:return-initiation</span>
           </div>
-          <div class="chip" id="concept-return-ceremony-participation">
+          <div class="chip" id="concept-return-ceremony-participation" role="button" tabindex="0" aria-label="View concept Ceremony participation" onclick="activateConcept('return-ceremony-participation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('return-ceremony-participation', {push:true});}">
             <span class="chip-label">Ceremony participation</span>
             <span class="chip-id">iroko:return-ceremony-participation</span>
           </div>
-          <div class="chip" id="concept-return-consultation">
+          <div class="chip" id="concept-return-consultation" role="button" tabindex="0" aria-label="View concept Consultation / divination" onclick="activateConcept('return-consultation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('return-consultation', {push:true});}">
             <span class="chip-label">Consultation / divination</span>
             <span class="chip-id">iroko:return-consultation</span>
           </div>
-          <div class="chip" id="concept-return-other">
+          <div class="chip" id="concept-return-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('return-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('return-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:return-other</span>
           </div>
-          <div class="chip" id="concept-return-protocol-exchange">
+          <div class="chip" id="concept-return-protocol-exchange" role="button" tabindex="0" aria-label="View concept Protocol / knowledge exchange" onclick="activateConcept('return-protocol-exchange', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('return-protocol-exchange', {push:true});}">
             <span class="chip-label">Protocol / knowledge exchange</span>
             <span class="chip-id">iroko:return-protocol-exchange</span>
           </div>
-          <div class="chip" id="concept-return-research">
+          <div class="chip" id="concept-return-research" role="button" tabindex="0" aria-label="View concept Research / ethnographic" onclick="activateConcept('return-research', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('return-research', {push:true});}">
             <span class="chip-label">Research / ethnographic</span>
             <span class="chip-id">iroko:return-research</span>
           </div>
@@ -725,6 +774,7 @@ const MODULE_STEM = "iroko-sankofa";
 const MOD_TITLE_SHORT = "Sankofa Module";
 const CLASSES = {"HeritageRelationship": {"uri": "iroko:HeritageRelationship", "label": "Heritage Relationship", "definition": "A formal assertion of the relationship between a Afro-Atlantic tradition and its claimed African source tradition. Subclass of iroko:RelationshipAssertion: the claim is documented with its source, asserter, and status (widely attested, lineage-specific, or contested) without requiring resolution. Examples: the documented Yorùbá–Lucumí relationship; the contested specificity of Fon vs. Ewe sources for Haitian Vodou Rada; the debated connection between specific Cuban Abakuá potencias and Cross River Ékpè lodges.", "outgoing": [{"uri": "iroko:africanTradition", "label": "African source tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The African source tradition claimed in this heritage relationship. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:afroAtlanticTradition", "label": "Afro-Atlantic tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic side of the claimed heritage relationship. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:evidenceBase", "label": "evidence base", "type": "data", "range": "langString", "access": "pub", "def": "Summary of the scholarly and community evidence supporting or complicating this heritage relationship claim."}, {"uri": "iroko:relationshipType", "label": "relationship type", "type": "obj", "range": "Concept", "access": "pub", "def": "The type of heritage relationship claimed. Range: iroko:HeritageRelationshipTypeScheme."}, {"uri": "iroko:sourceRegion", "label": "source region", "type": "obj", "range": "Concept", "access": "pub", "def": "The continental African geographic region toward which this movement, return event, or heritage relationship is oriented. Range: iroko:TraditionScheme geographic region concepts (iroko:region-west-african, iroko:region-central-african, iroko:region-east-african, iroko:region-southern-african, iroko:region-north-african, iroko:region-nile-valley). Distinct from iroko:sourceTradition, which points to a specific cultural-linguistic tradition; sourceRegion carries the broader geographic orientation when the specific tradition is not identified or when the movement is pan-regionally oriented. A Garveyite movement asserting a general Africa-wide claim would use sourceRegion rather than sourceTradition. Both properties may be asserted simultaneously."}], "incoming": [{"uri": "iroko:groundedIn", "label": "grounded in", "type": "obj", "access": "pub", "def": "The heritage relationship assertion that grounds this return event or reclamation movement. A TransAfroAtlanticReturn or ReclamationMovement is typically predicated on a claimed relationship between an Afro-Atlantic tradition and an African source tradition; this property links the event or movement to that formal assertion. The heritage claim may be widely attested, lineage-specific, or contested — the property records the claim without adjudicating it.", "domain": "TransAfroAtlanticReturn | ReclamationMovement", "from": "iroko:TransAfroAtlanticReturn | ReclamationMovement", "fromLabel": "TransAfroAtlanticReturn | ReclamationMovement", "module": "Sankofa Module", "stem": "iroko-sankofa"}, {"uri": "iroko:evidencesHeritage", "label": "evidences heritage", "type": "obj", "access": "pub", "def": "Links a SlavePaper instance to the HeritageRelationship it evidences — typically because the document records the name, origin, or cultural identity of an enslaved person whose tradition can be traced. This is the ontological connection between the forced-departure documentation and the reclamation arc: the slave record that proves a transmission chain is the evidentiary link between forced removal and the heritage claim.", "domain": "Slave Paper", "from": "iroko:Slave Paper", "fromLabel": "Slave Paper", "module": "Sankofa Module", "stem": "iroko-sankofa"}], "cross": []}, "ReclamationMovement": {"uri": "iroko:ReclamationMovement", "label": "Reclamation Movement", "definition": "An organized or semi-organized community effort to recover, revitalize, or Africanize a Afro-Atlantic religious tradition. Examples: the Candomblé re-Africanization movement beginning in the 1930s–70s (Mãe Aninha, Martiniano do Bonfim, and later the SECNEB research agenda); the Lucumí decolonization efforts removing Catholic syncretism from Ocha practice; the Ifá revival in Trinidad and other Afro-Atlantic communities seeking direct Yorùbá validation; the African American Ifá reclamation beginning in the late 20th century. A movement is documented without adjudicating whether its claims of authenticity are correct.", "outgoing": [{"uri": "iroko:movementContestation", "label": "contestation notes", "type": "data", "range": "langString", "access": "pub", "def": "Notes on how this movement has been received, resisted, or debated within and outside the tradition community."}, {"uri": "iroko:geographicLocus", "label": "geographic locus", "type": "data", "range": "langString", "access": "pub", "def": "The city, country, or region where this movement, return event, or reconstructed practice was primarily based or most active. Language-tagged string. Examples: 'New York City (1920s–1940s)'@en for Garveyite reclamation; 'Bahia, Brazil'@pt for the Candomblé re-Africanization effort; 'Port-au-Prince, Haiti'@fr for a Vodou governance movement. For machine-readable geographic linking, use iroko:hasJurisdiction (from iroko-authority.ttl) instead of or in addition to this property."}, {"uri": "iroko:groundedIn", "label": "grounded in", "type": "obj", "range": "Heritage Relationship", "access": "pub", "def": "The heritage relationship assertion that grounds this return event or reclamation movement. A TransAfroAtlanticReturn or ReclamationMovement is typically predicated on a claimed relationship between an Afro-Atlantic tradition and an African source tradition; this property links the event or movement to that formal assertion. The heritage claim may be widely attested, lineage-specific, or contested — the property records the claim without adjudicating it."}, {"uri": "iroko:keyFigures", "label": "key figures", "type": "obj", "range": "Person", "access": "pub", "def": "Principal practitioners, scholars, or leaders associated with this movement. Range: foaf:Person."}, {"uri": "iroko:movementName", "label": "movement name", "type": "data", "range": "langString", "access": "pub", "def": "The name or designation of this reclamation or revitalization movement. Language-tagged."}, {"uri": "iroko:movementOutcome", "label": "movement outcome", "type": "obj", "range": "Concept", "access": "pub", "def": "The documented or ongoing result of this movement. Range: iroko:MovementOutcomeScheme."}, {"uri": "iroko:movementType", "label": "movement type", "type": "obj", "range": "Concept", "access": "pub", "def": "The typological category of this movement. Range: iroko:MovementTypeScheme."}, {"uri": "iroko:originDate", "label": "origin date", "type": "data", "range": "gYear", "access": "pub", "def": "Approximate date the movement began."}, {"uri": "iroko:sourceRegion", "label": "source region", "type": "obj", "range": "Concept", "access": "pub", "def": "The continental African geographic region toward which this movement, return event, or heritage relationship is oriented. Range: iroko:TraditionScheme geographic region concepts (iroko:region-west-african, iroko:region-central-african, iroko:region-east-african, iroko:region-southern-african, iroko:region-north-african, iroko:region-nile-valley). Distinct from iroko:sourceTradition, which points to a specific cultural-linguistic tradition; sourceRegion carries the broader geographic orientation when the specific tradition is not identified or when the movement is pan-regionally oriented. A Garveyite movement asserting a general Africa-wide claim would use sourceRegion rather than sourceTradition. Both properties may be asserted simultaneously."}, {"uri": "iroko:sourceTradition", "label": "source tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The African tradition identified as the reclamation's reference point. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:targetTradition", "label": "target tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic tradition this movement seeks to reclaim or revitalize. Range: iroko:TraditionScheme concept."}], "incoming": [], "cross": []}, "ReconstructedPractice": {"uri": "iroko:ReconstructedPractice", "label": "Reconstructed Practice", "definition": "A religious practice or tradition that has been assembled or restored from documentary sources, scholarly research, or cross-tradition synthesis rather than direct lineage transmission. Examples: reconstructed Yorùbá practice in communities without living initiatory lineage; synthesis traditions drawing on Farrow, Bascom, or Verger ethnographic documentation; Neo-African traditions developed from scholarly sources in North America or Europe. The reconstruction method and its evidentiary basis are the core data here; the framework makes no judgment about the resulting practice's validity.", "outgoing": [{"uri": "iroko:communityRecognition", "label": "community recognition status", "type": "obj", "range": "Concept", "access": "pub", "def": "Whether and how this reconstructed practice has been recognized by source tradition communities. Range: iroko:RecognitionStatusScheme."}, {"uri": "iroko:currentCommunity", "label": "current practicing community", "type": "obj", "range": "House", "access": "pub", "def": "The house or community practicing this reconstructed tradition. Range: iroko:House."}, {"uri": "iroko:evidentiarySources", "label": "evidentiary sources", "type": "obj", "range": "DocumentaryEvidence", "access": "pub", "def": "The documentary, scholarly, or oral sources used as the basis for reconstruction. Range: iroko:DocumentaryEvidence."}, {"uri": "iroko:geographicLocus", "label": "geographic locus", "type": "data", "range": "langString", "access": "pub", "def": "The city, country, or region where this movement, return event, or reconstructed practice was primarily based or most active. Language-tagged string. Examples: 'New York City (1920s–1940s)'@en for Garveyite reclamation; 'Bahia, Brazil'@pt for the Candomblé re-Africanization effort; 'Port-au-Prince, Haiti'@fr for a Vodou governance movement. For machine-readable geographic linking, use iroko:hasJurisdiction (from iroko-authority.ttl) instead of or in addition to this property."}, {"uri": "iroko:reconstructionMethod", "label": "reconstruction method", "type": "obj", "range": "Concept", "access": "pub", "def": "The primary method used to reconstruct this practice. Range: iroko:ReconstructionMethodScheme."}], "incoming": [], "cross": []}, "SlavePaper": {"uri": "iroko:SlavePaper", "label": "Slave Paper", "definition": "A colonial legal document — sale record, ship manifest, customs certification, baptismal register entry, judicial filing, manumission instrument, or freedom petition — that constituted, maintained, challenged, or forged an ownership claim over an enslaved person in the Atlantic world. The class name follows the TiSP (Trafficking in Slave Paper) project terminology, which foregrounds the documentary nature of the legal mechanism: slave paper was not merely a record of completed transactions but an active legal instrument through which status, ownership, and identity were continuously made and contested. Slave paper required perpetual renewal through notarial, customs, ecclesiastical, or judicial systems; the gap or absence in that chain was itself a legal event. SlavePaper instances may serve as iroko:evidentiarySources for iroko:ReconstructedPractice and populate iroko:evidenceBase on iroko:HeritageRelationship where the enslaved person's cultural or religious identity can be traced. Contributor roles for producers of slave paper (notary, scribe, commissioner) are modeled in iroko-authority.ttl via iroko:ContributorRoleScheme.", "outgoing": [{"uri": "iroko:archivalRepository", "label": "archival repository", "type": "data", "range": "langString", "access": "pub", "def": "The name and location of the physical archive or collection holding this slave paper or the document series from which it is drawn. Language-tagged string. Examples: 'Archivo General de la Nación, Mexico City'@es; 'Archivo Histórico del Estado de Veracruz'@es."}, {"uri": "iroko:corridorJurisdiction", "label": "corridor jurisdiction", "type": "obj", "range": "Jurisdiction", "access": "pub", "def": "The Atlantic trade corridor node at which this slave paper was issued, recorded, or enforced. Range: iroko:Jurisdiction (from iroko-authority.ttl). Use to link slave paper to specific port cities and colonial administrative territories in the TiSP corridor."}, {"uri": "iroko:evidencesHeritage", "label": "evidences heritage", "type": "obj", "range": "Heritage Relationship", "access": "pub", "def": "Links a SlavePaper instance to the HeritageRelationship it evidences — typically because the document records the name, origin, or cultural identity of an enslaved person whose tradition can be traced. This is the ontological connection between the forced-departure documentation and the reclamation arc: the slave record that proves a transmission chain is the evidentiary link between forced removal and the heritage claim."}, {"uri": "iroko:paperFunction", "label": "paper function", "type": "obj", "range": "Concept", "access": "pub", "def": "The legal or institutional function this slave paper instance served within the ownership claim chain. Range: iroko:SlavePaperFunctionScheme."}, {"uri": "iroko:slavePaperType", "label": "slave paper type", "type": "obj", "range": "Concept", "access": "pub", "def": "The document type classification for this slave paper instance. Range: iroko:SlavePaperTypeScheme."}, {"uri": "iroko:tradePeriod", "label": "trade period", "type": "obj", "range": "Concept", "access": "pub", "def": "The Atlantic slave trade chronological period in which this slave paper was produced or to which it belongs. Range: iroko:SlavePaperPeriodScheme. The three TiSP periods reflect distinct legal regimes: pre-1808 (open Atlantic trade), 1808-1820 (nominal suppression, ongoing trade), post-1820 (intensified illegal trade requiring more elaborate documentary apparatus)."}], "incoming": [], "cross": []}, "TransAfroAtlanticReturn": {"uri": "iroko:TransAfroAtlanticReturn", "label": "Trans-Afro-Atlantic Return", "definition": "A documented instance of a Afro-Atlantic practitioner or community making contact with, seeking validation from, or receiving initiation within an African source community. Examples: Cuban Babalawos traveling to Yorùbáland for Ifá validation; Haitian Vodouisants conducting ceremonies in Benin at Ouidah; Candomblé priests initiating in West Africa. A Trans-Afro-Atlantic return may be documented as an event, a relationship, or a formal protocol exchange. The outcomes of such encounters — including mutual recognition or rejection — should be documented without taking sides.", "outgoing": [{"uri": "iroko:returnContestation", "label": "contestation notes", "type": "data", "range": "langString", "access": "pub", "def": "How this return has been evaluated or contested within the broader tradition community."}, {"uri": "iroko:geographicLocus", "label": "geographic locus", "type": "data", "range": "langString", "access": "pub", "def": "The city, country, or region where this movement, return event, or reconstructed practice was primarily based or most active. Language-tagged string. Examples: 'New York City (1920s–1940s)'@en for Garveyite reclamation; 'Bahia, Brazil'@pt for the Candomblé re-Africanization effort; 'Port-au-Prince, Haiti'@fr for a Vodou governance movement. For machine-readable geographic linking, use iroko:hasJurisdiction (from iroko-authority.ttl) instead of or in addition to this property."}, {"uri": "iroko:groundedIn", "label": "grounded in", "type": "obj", "range": "Heritage Relationship", "access": "pub", "def": "The heritage relationship assertion that grounds this return event or reclamation movement. A TransAfroAtlanticReturn or ReclamationMovement is typically predicated on a claimed relationship between an Afro-Atlantic tradition and an African source tradition; this property links the event or movement to that formal assertion. The heritage claim may be widely attested, lineage-specific, or contested — the property records the claim without adjudicating it."}, {"uri": "iroko:hostCommunity", "label": "host community", "type": "obj", "range": "House", "access": "pub", "def": "The African community or institution receiving the Afro-Atlantic visitors. Range: iroko:House."}, {"uri": "iroko:returnDate", "label": "return date", "type": "data", "range": "date", "access": "pub", "def": "returnDate"}, {"uri": "iroko:returnOutcome", "label": "return outcome", "type": "data", "range": "langString", "access": "pub", "def": "The documented result of this return: mutual recognition, initiation, rejection, or ongoing relationship. Free-text."}, {"uri": "iroko:returnType", "label": "return type", "type": "obj", "range": "Concept", "access": "pub", "def": "The nature of the return encounter. Range: iroko:ReturnTypeScheme."}, {"uri": "iroko:returningCommunity", "label": "returning community", "type": "obj", "range": "House", "access": "pub", "def": "The Afro-Atlantic house or community making the return. Range: iroko:House."}, {"uri": "iroko:sourceRegion", "label": "source region", "type": "obj", "range": "Concept", "access": "pub", "def": "The continental African geographic region toward which this movement, return event, or heritage relationship is oriented. Range: iroko:TraditionScheme geographic region concepts (iroko:region-west-african, iroko:region-central-african, iroko:region-east-african, iroko:region-southern-african, iroko:region-north-african, iroko:region-nile-valley). Distinct from iroko:sourceTradition, which points to a specific cultural-linguistic tradition; sourceRegion carries the broader geographic orientation when the specific tradition is not identified or when the movement is pan-regionally oriented. A Garveyite movement asserting a general Africa-wide claim would use sourceRegion rather than sourceTradition. Both properties may be asserted simultaneously."}], "incoming": [], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:africanTradition", "label": "African source tradition", "type": "obj", "domain": "Heritage Relationship", "range": "Concept", "access": "pub", "def": "The African source tradition claimed in this heritage relationship. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:afroAtlanticTradition", "label": "Afro-Atlantic tradition", "type": "obj", "domain": "Heritage Relationship", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic side of the claimed heritage relationship. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:archivalRepository", "label": "archival repository", "type": "data", "domain": "Slave Paper", "range": "langString", "access": "pub", "def": "The name and location of the physical archive or collection holding this slave paper or the document series from which it is drawn. Language-tagged string. Examples: 'Archivo General de la Nación, Mexico City'@es; 'Archivo Histórico del Estado de Veracruz'@es."}, {"uri": "iroko:communityRecognition", "label": "community recognition status", "type": "obj", "domain": "Reconstructed Practice", "range": "Concept", "access": "pub", "def": "Whether and how this reconstructed practice has been recognized by source tradition communities. Range: iroko:RecognitionStatusScheme."}, {"uri": "iroko:movementContestation", "label": "contestation notes", "type": "data", "domain": "Reclamation Movement", "range": "langString", "access": "pub", "def": "Notes on how this movement has been received, resisted, or debated within and outside the tradition community."}, {"uri": "iroko:returnContestation", "label": "contestation notes", "type": "data", "domain": "Trans-Afro-Atlantic Return", "range": "langString", "access": "pub", "def": "How this return has been evaluated or contested within the broader tradition community."}, {"uri": "iroko:corridorJurisdiction", "label": "corridor jurisdiction", "type": "obj", "domain": "Slave Paper", "range": "Jurisdiction", "access": "pub", "def": "The Atlantic trade corridor node at which this slave paper was issued, recorded, or enforced. Range: iroko:Jurisdiction (from iroko-authority.ttl). Use to link slave paper to specific port cities and colonial administrative territories in the TiSP corridor."}, {"uri": "iroko:currentCommunity", "label": "current practicing community", "type": "obj", "domain": "Reconstructed Practice", "range": "House", "access": "pub", "def": "The house or community practicing this reconstructed tradition. Range: iroko:House."}, {"uri": "iroko:evidenceBase", "label": "evidence base", "type": "data", "domain": "Heritage Relationship", "range": "langString", "access": "pub", "def": "Summary of the scholarly and community evidence supporting or complicating this heritage relationship claim."}, {"uri": "iroko:evidencesHeritage", "label": "evidences heritage", "type": "obj", "domain": "Slave Paper", "range": "Heritage Relationship", "access": "pub", "def": "Links a SlavePaper instance to the HeritageRelationship it evidences — typically because the document records the name, origin, or cultural identity of an enslaved person whose tradition can be traced. This is the ontological connection between the forced-departure documentation and the reclamation arc: the slave record that proves a transmission chain is the evidentiary link between forced removal and the heritage claim."}, {"uri": "iroko:evidentiarySources", "label": "evidentiary sources", "type": "obj", "domain": "Reconstructed Practice", "range": "DocumentaryEvidence", "access": "pub", "def": "The documentary, scholarly, or oral sources used as the basis for reconstruction. Range: iroko:DocumentaryEvidence."}, {"uri": "iroko:geographicLocus", "label": "geographic locus", "type": "data", "domain": "ReclamationMovement | TransAfroAtlanticReturn | ReconstructedPractice", "range": "langString", "access": "pub", "def": "The city, country, or region where this movement, return event, or reconstructed practice was primarily based or most active. Language-tagged string. Examples: 'New York City (1920s–1940s)'@en for Garveyite reclamation; 'Bahia, Brazil'@pt for the Candomblé re-Africanization effort; 'Port-au-Prince, Haiti'@fr for a Vodou governance movement. For machine-readable geographic linking, use iroko:hasJurisdiction (from iroko-authority.ttl) instead of or in addition to this property."}, {"uri": "iroko:groundedIn", "label": "grounded in", "type": "obj", "domain": "TransAfroAtlanticReturn | ReclamationMovement", "range": "Heritage Relationship", "access": "pub", "def": "The heritage relationship assertion that grounds this return event or reclamation movement. A TransAfroAtlanticReturn or ReclamationMovement is typically predicated on a claimed relationship between an Afro-Atlantic tradition and an African source tradition; this property links the event or movement to that formal assertion. The heritage claim may be widely attested, lineage-specific, or contested — the property records the claim without adjudicating it."}, {"uri": "iroko:hostCommunity", "label": "host community", "type": "obj", "domain": "Trans-Afro-Atlantic Return", "range": "House", "access": "pub", "def": "The African community or institution receiving the Afro-Atlantic visitors. Range: iroko:House."}, {"uri": "iroko:keyFigures", "label": "key figures", "type": "obj", "domain": "Reclamation Movement", "range": "Person", "access": "pub", "def": "Principal practitioners, scholars, or leaders associated with this movement. Range: foaf:Person."}, {"uri": "iroko:movementName", "label": "movement name", "type": "data", "domain": "Reclamation Movement", "range": "langString", "access": "pub", "def": "The name or designation of this reclamation or revitalization movement. Language-tagged."}, {"uri": "iroko:movementOutcome", "label": "movement outcome", "type": "obj", "domain": "Reclamation Movement", "range": "Concept", "access": "pub", "def": "The documented or ongoing result of this movement. Range: iroko:MovementOutcomeScheme."}, {"uri": "iroko:movementType", "label": "movement type", "type": "obj", "domain": "Reclamation Movement", "range": "Concept", "access": "pub", "def": "The typological category of this movement. Range: iroko:MovementTypeScheme."}, {"uri": "iroko:originDate", "label": "origin date", "type": "data", "domain": "Reclamation Movement", "range": "gYear", "access": "pub", "def": "Approximate date the movement began."}, {"uri": "iroko:paperFunction", "label": "paper function", "type": "obj", "domain": "Slave Paper", "range": "Concept", "access": "pub", "def": "The legal or institutional function this slave paper instance served within the ownership claim chain. Range: iroko:SlavePaperFunctionScheme."}, {"uri": "iroko:reconstructionMethod", "label": "reconstruction method", "type": "obj", "domain": "Reconstructed Practice", "range": "Concept", "access": "pub", "def": "The primary method used to reconstruct this practice. Range: iroko:ReconstructionMethodScheme."}, {"uri": "iroko:relationshipType", "label": "relationship type", "type": "obj", "domain": "Heritage Relationship", "range": "Concept", "access": "pub", "def": "The type of heritage relationship claimed. Range: iroko:HeritageRelationshipTypeScheme."}, {"uri": "iroko:returnDate", "label": "return date", "type": "data", "domain": "Trans-Afro-Atlantic Return", "range": "date", "access": "pub", "def": "returnDate"}, {"uri": "iroko:returnOutcome", "label": "return outcome", "type": "data", "domain": "Trans-Afro-Atlantic Return", "range": "langString", "access": "pub", "def": "The documented result of this return: mutual recognition, initiation, rejection, or ongoing relationship. Free-text."}, {"uri": "iroko:returnType", "label": "return type", "type": "obj", "domain": "Trans-Afro-Atlantic Return", "range": "Concept", "access": "pub", "def": "The nature of the return encounter. Range: iroko:ReturnTypeScheme."}, {"uri": "iroko:returningCommunity", "label": "returning community", "type": "obj", "domain": "Trans-Afro-Atlantic Return", "range": "House", "access": "pub", "def": "The Afro-Atlantic house or community making the return. Range: iroko:House."}, {"uri": "iroko:slavePaperType", "label": "slave paper type", "type": "obj", "domain": "Slave Paper", "range": "Concept", "access": "pub", "def": "The document type classification for this slave paper instance. Range: iroko:SlavePaperTypeScheme."}, {"uri": "iroko:sourceRegion", "label": "source region", "type": "obj", "domain": "ReclamationMovement | TransAfroAtlanticReturn | HeritageRelationship", "range": "Concept", "access": "pub", "def": "The continental African geographic region toward which this movement, return event, or heritage relationship is oriented. Range: iroko:TraditionScheme geographic region concepts (iroko:region-west-african, iroko:region-central-african, iroko:region-east-african, iroko:region-southern-african, iroko:region-north-african, iroko:region-nile-valley). Distinct from iroko:sourceTradition, which points to a specific cultural-linguistic tradition; sourceRegion carries the broader geographic orientation when the specific tradition is not identified or when the movement is pan-regionally oriented. A Garveyite movement asserting a general Africa-wide claim would use sourceRegion rather than sourceTradition. Both properties may be asserted simultaneously."}, {"uri": "iroko:sourceTradition", "label": "source tradition", "type": "obj", "domain": "Reclamation Movement", "range": "Concept", "access": "pub", "def": "The African tradition identified as the reclamation's reference point. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:targetTradition", "label": "target tradition", "type": "obj", "domain": "Reclamation Movement", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic tradition this movement seeks to reclaim or revitalize. Range: iroko:TraditionScheme concept."}, {"uri": "iroko:tradePeriod", "label": "trade period", "type": "obj", "domain": "Slave Paper", "range": "Concept", "access": "pub", "def": "The Atlantic slave trade chronological period in which this slave paper was produced or to which it belongs. Range: iroko:SlavePaperPeriodScheme. The three TiSP periods reflect distinct legal regimes: pre-1808 (open Atlantic trade), 1808-1820 (nominal suppression, ongoing trade), post-1820 (intensified illegal trade requiring more elaborate documentary apparatus)."}];
+const CONCEPTS = {"period-1808-1820": {"id": "period-1808-1820", "uri": "iroko:period-1808-1820", "label": "1808–1820", "definition": "Nominal suppression period: the Atlantic trade was illegal under U.S. and British law but continued with reduced official documentation, irregular certifications, forged manifests, and fraudulent domestic sale records obscuring trans-Atlantic origins. Slave paper from this period reflects the legal fiction of domestic transfer masking ongoing trans-Atlantic trafficking.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperPeriodScheme", "schemeId": "SlavePaperPeriodScheme", "schemeLabel": "Atlantic Trade Periods (TiSP)"}, "period-post-1820": {"id": "period-post-1820", "uri": "iroko:period-post-1820", "label": "Post-1820", "definition": "Criminalization period: the U.S. Piracy Act of 1820 classified slave trading as a capital offense, forcing the trade into maximum clandestinity. Documentation became systematically destroyed, forged, or simply absent. Surviving slave paper from this period is often the product of legal challenges, freedom petitions, or judicial proceedings.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperPeriodScheme", "schemeId": "SlavePaperPeriodScheme", "schemeLabel": "Atlantic Trade Periods (TiSP)"}, "period-pre-1808": {"id": "period-pre-1808", "uri": "iroko:period-pre-1808", "label": "Pre-1808", "definition": "Legal trade period: the Atlantic slave trade operated within formal legal frameworks with extensive official documentation — bills of sale, ship manifests, customs declarations, baptismal registers, and notarial records. The full apparatus of slave paper as an active legal instrument of colonial property law. Documentation density is highest in this period.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperPeriodScheme", "schemeId": "SlavePaperPeriodScheme", "schemeLabel": "Atlantic Trade Periods (TiSP)"}, "rel-claimed-disputed": {"id": "rel-claimed-disputed", "uri": "iroko:rel-claimed-disputed", "label": "Claimed but contested", "definition": "The Afro-Atlantic tradition claims a relationship to the African source, but this claim is disputed by scholars, the African community, or other Afro-Atlantic communities.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:HeritageRelationshipTypeScheme", "schemeId": "HeritageRelationshipTypeScheme", "schemeLabel": "Heritage Relationship Types"}, "rel-direct-descent": {"id": "rel-direct-descent", "uri": "iroko:rel-direct-descent", "label": "Direct descent (widely attested)", "definition": "The Afro-Atlantic tradition descends directly from the African source tradition through documented enslaved practitioner transmission. Widely recognized by scholars and both communities.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:HeritageRelationshipTypeScheme", "schemeId": "HeritageRelationshipTypeScheme", "schemeLabel": "Heritage Relationship Types"}, "rel-influence": {"id": "rel-influence", "uri": "iroko:rel-influence", "label": "Historical influence", "definition": "The African tradition influenced the Afro-Atlantic tradition without a direct descent relationship. Elements were adopted or adapted.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:HeritageRelationshipTypeScheme", "schemeId": "HeritageRelationshipTypeScheme", "schemeLabel": "Heritage Relationship Types"}, "rel-other": {"id": "rel-other", "uri": "iroko:rel-other", "label": "Other", "definition": "Heritage relationship type not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:HeritageRelationshipTypeScheme", "schemeId": "HeritageRelationshipTypeScheme", "schemeLabel": "Heritage Relationship Types"}, "rel-parallel-development": {"id": "rel-parallel-development", "uri": "iroko:rel-parallel-development", "label": "Parallel development from shared source", "definition": "The Afro-Atlantic and African traditions share a common ancestor but developed in parallel rather than one descending from the other.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:HeritageRelationshipTypeScheme", "schemeId": "HeritageRelationshipTypeScheme", "schemeLabel": "Heritage Relationship Types"}, "rel-reconstructed": {"id": "rel-reconstructed", "uri": "iroko:rel-reconstructed", "label": "Reconstructed / claimed", "definition": "The relationship is based on reconstruction from historical evidence rather than surviving living transmission.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:HeritageRelationshipTypeScheme", "schemeId": "HeritageRelationshipTypeScheme", "schemeLabel": "Heritage Relationship Types"}, "type-decolonization": {"id": "type-decolonization", "uri": "iroko:type-decolonization", "label": "Decolonization", "definition": "Specifically framed efforts to identify and remove colonial impositions (Catholic syncretism, colonial-era secrecy requirements, European naming conventions) from a Afro-Atlantic tradition. Overlaps with re-Africanization but emphasizes the political critique of colonialism.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MovementTypeScheme", "schemeId": "MovementTypeScheme", "schemeLabel": "Reclamation Movement Types"}, "type-heritage-tourism": {"id": "type-heritage-tourism", "uri": "iroko:type-heritage-tourism", "label": "Heritage tourism / pilgrimage", "definition": "Organized or individual Afro-Atlantic visits to African source sites for spiritual, cultural, or commemorative purposes. Distinguished from TransAfroAtlanticReturn in being primarily observational rather than initiatory.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MovementTypeScheme", "schemeId": "MovementTypeScheme", "schemeLabel": "Reclamation Movement Types"}, "type-other": {"id": "type-other", "uri": "iroko:type-other", "label": "Other", "definition": "Movement type not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MovementTypeScheme", "schemeId": "MovementTypeScheme", "schemeLabel": "Reclamation Movement Types"}, "type-purification": {"id": "type-purification", "uri": "iroko:type-purification", "label": "Purification / orthodoxy movement", "definition": "Efforts within a tradition community to establish or enforce a more 'authentic' or 'pure' practice, often by marginalizing innovations perceived as non-traditional. May be conservative (defending existing Afro-Atlantic practice) or reformist (seeking African models).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MovementTypeScheme", "schemeId": "MovementTypeScheme", "schemeLabel": "Reclamation Movement Types"}, "type-re-africanization": {"id": "type-re-africanization", "uri": "iroko:type-re-africanization", "label": "Re-Africanization", "definition": "Efforts to restore African elements to Afro-Atlantic traditions that have been transformed by colonialism, syncretism, or assimilation. Exemplified by the Candomblé re-Africanization movement in Bahia and the movement to remove Catholic saint imagery from Lucumí/Ocha practice.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MovementTypeScheme", "schemeId": "MovementTypeScheme", "schemeLabel": "Reclamation Movement Types"}, "type-repatriation": {"id": "type-repatriation", "uri": "iroko:type-repatriation", "label": "Repatriation", "definition": "Physical return of Afro-Atlantic people to African source communities, creating new hybrid communities and exchanges. Examples: Brazilian returnee (aguda/tabom) communities in West Africa who brought Afro-Atlantic Candomblé elements back to Benin and Nigeria.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MovementTypeScheme", "schemeId": "MovementTypeScheme", "schemeLabel": "Reclamation Movement Types"}, "type-reconstruction": {"id": "type-reconstruction", "uri": "iroko:type-reconstruction", "label": "Tradition reconstruction", "definition": "Efforts to create or restore a practice from documentary, archaeological, or cross-tradition scholarly sources where direct lineage transmission has been lost.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MovementTypeScheme", "schemeId": "MovementTypeScheme", "schemeLabel": "Reclamation Movement Types"}, "type-validation-seeking": {"id": "type-validation-seeking", "uri": "iroko:type-validation-seeking", "label": "Validation-seeking", "definition": "Efforts by Afro-Atlantic practitioners to obtain formal recognition, initiation, or endorsement from African source communities or their representatives. May involve travel, correspondence, or receiving African elders in Afro-Atlantic contexts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MovementTypeScheme", "schemeId": "MovementTypeScheme", "schemeLabel": "Reclamation Movement Types"}, "recognition-disputed": {"id": "recognition-disputed", "uri": "iroko:recognition-disputed", "label": "Disputed", "definition": "Some source tradition representatives recognize the practice; others do not. Contested.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RecognitionStatusScheme", "schemeId": "RecognitionStatusScheme", "schemeLabel": "Recognition Status"}, "recognition-formally-recognized": {"id": "recognition-formally-recognized", "uri": "iroko:recognition-formally-recognized", "label": "Formally recognized", "definition": "The reconstructed or Afro-Atlantic practice has received formal recognition from a source tradition authority.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RecognitionStatusScheme", "schemeId": "RecognitionStatusScheme", "schemeLabel": "Recognition Status"}, "recognition-informally-recognized": {"id": "recognition-informally-recognized", "uri": "iroko:recognition-informally-recognized", "label": "Informally recognized", "definition": "Recognition exists through interpersonal relationships and mutual respect without formal institutional endorsement.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RecognitionStatusScheme", "schemeId": "RecognitionStatusScheme", "schemeLabel": "Recognition Status"}, "recognition-not-sought": {"id": "recognition-not-sought", "uri": "iroko:recognition-not-sought", "label": "Not sought", "definition": "The community practices without seeking external recognition, asserting autonomy over its own validity.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RecognitionStatusScheme", "schemeId": "RecognitionStatusScheme", "schemeLabel": "Recognition Status"}, "recognition-pending": {"id": "recognition-pending", "uri": "iroko:recognition-pending", "label": "Pending", "definition": "Recognition process is underway; outcome not yet determined.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RecognitionStatusScheme", "schemeId": "RecognitionStatusScheme", "schemeLabel": "Recognition Status"}, "recognition-rejected": {"id": "recognition-rejected", "uri": "iroko:recognition-rejected", "label": "Rejected", "definition": "Source tradition authorities have formally rejected or declined to recognize this practice or community.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RecognitionStatusScheme", "schemeId": "RecognitionStatusScheme", "schemeLabel": "Recognition Status"}, "method-archival": {"id": "method-archival", "uri": "iroko:method-archival", "label": "Archival / documentary sources", "definition": "Reconstruction based on primary archival sources: colonial records, religious registers, fieldwork notes, photographs.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReconstructionMethodScheme", "schemeId": "ReconstructionMethodScheme", "schemeLabel": "Reconstruction Methods"}, "method-community-consensus": {"id": "method-community-consensus", "uri": "iroko:method-community-consensus", "label": "Community deliberation and consensus", "definition": "Reconstruction through formal community process: elders and practitioners deliberating together to establish or restore practice.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReconstructionMethodScheme", "schemeId": "ReconstructionMethodScheme", "schemeLabel": "Reconstruction Methods"}, "method-cross-tradition-synthesis": {"id": "method-cross-tradition-synthesis", "uri": "iroko:method-cross-tradition-synthesis", "label": "Cross-tradition synthesis", "definition": "Reconstruction by synthesizing elements from multiple related surviving traditions to fill gaps in a fragmented one.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReconstructionMethodScheme", "schemeId": "ReconstructionMethodScheme", "schemeLabel": "Reconstruction Methods"}, "method-oral-tradition": {"id": "method-oral-tradition", "uri": "iroko:method-oral-tradition", "label": "Oral tradition and living practitioners", "definition": "Reconstruction based on oral transmission from living elders or communities with partial survival of the tradition.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReconstructionMethodScheme", "schemeId": "ReconstructionMethodScheme", "schemeLabel": "Reconstruction Methods"}, "method-other": {"id": "method-other", "uri": "iroko:method-other", "label": "Other", "definition": "Reconstruction method not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReconstructionMethodScheme", "schemeId": "ReconstructionMethodScheme", "schemeLabel": "Reconstruction Methods"}, "method-ethnographic": {"id": "method-ethnographic", "uri": "iroko:method-ethnographic", "label": "Published ethnographic sources", "definition": "Reconstruction based primarily on published ethnographic literature (Bascom, Farrow, Verger, Cabrera, Herskovits, etc.).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReconstructionMethodScheme", "schemeId": "ReconstructionMethodScheme", "schemeLabel": "Reconstruction Methods"}, "paper-function-chain-of-title": {"id": "paper-function-chain-of-title", "uri": "iroko:paper-function-chain-of-title", "label": "Chain-of-Title Link", "definition": "Document serves as a link in the chain of ownership title — establishing the legal sequence of transfers by which the current owner's claim derives from the original sale or entry.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperFunctionScheme", "schemeId": "SlavePaperFunctionScheme", "schemeLabel": "Slave Paper Functions"}, "paper-function-freedom-basis": {"id": "paper-function-freedom-basis", "uri": "iroko:paper-function-freedom-basis", "label": "Freedom Basis", "definition": "Document constitutes or supports the legal basis for an enslaved person's free status — manumission instruments, freedom petitions, and successful court rulings.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperFunctionScheme", "schemeId": "SlavePaperFunctionScheme", "schemeLabel": "Slave Paper Functions"}, "paper-function-identity-document": {"id": "paper-function-identity-document", "uri": "iroko:paper-function-identity-document", "label": "Identity Documentation", "definition": "Document establishes or records the name, origin, or identity of an enslaved person within the colonial bureaucratic system.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperFunctionScheme", "schemeId": "SlavePaperFunctionScheme", "schemeLabel": "Slave Paper Functions"}, "paper-function-ownership-challenge": {"id": "paper-function-ownership-challenge", "uri": "iroko:paper-function-ownership-challenge", "label": "Ownership Challenge", "definition": "Document contests or disrupts a claimed ownership right — through judicial petition, contested manumission, coartación claim, or challenge to the legality of original enslavement.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperFunctionScheme", "schemeId": "SlavePaperFunctionScheme", "schemeLabel": "Slave Paper Functions"}, "paper-function-ownership-claim": {"id": "paper-function-ownership-claim", "uri": "iroko:paper-function-ownership-claim", "label": "Ownership Claim", "definition": "Document asserts or transfers a legal ownership claim over an enslaved person.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperFunctionScheme", "schemeId": "SlavePaperFunctionScheme", "schemeLabel": "Slave Paper Functions"}, "paper-type-baptismal-register": {"id": "paper-type-baptismal-register", "uri": "iroko:paper-type-baptismal-register", "label": "Baptismal Register Entry", "definition": "An ecclesiastical record of an enslaved person's baptism. Critical for identity and status: in colonial Catholic systems, baptism established a Christian name and was often the first record of an enslaved person by name in the local documentary apparatus.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperTypeScheme", "schemeId": "SlavePaperTypeScheme", "schemeLabel": "Slave Paper Types"}, "paper-type-customs-certification": {"id": "paper-type-customs-certification", "uri": "iroko:paper-type-customs-certification", "label": "Customs Certification", "definition": "A document issued by colonial customs or port authorities certifying the legal introduction of enslaved persons into a jurisdiction. Particularly significant in the post-1808 period when trade illegality required fraudulent backdating or re-certification.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperTypeScheme", "schemeId": "SlavePaperTypeScheme", "schemeLabel": "Slave Paper Types"}, "paper-type-freedom-petition": {"id": "paper-type-freedom-petition", "uri": "iroko:paper-type-freedom-petition", "label": "Freedom Petition", "definition": "A legal petition filed by or on behalf of an enslaved person seeking recognition of free status, disputing ownership, or claiming coartación rights. Freedom petitions are the primary site of enslaved legal agency within the colonial documentary apparatus.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperTypeScheme", "schemeId": "SlavePaperTypeScheme", "schemeLabel": "Slave Paper Types"}, "paper-type-irregular-forged": {"id": "paper-type-irregular-forged", "uri": "iroko:paper-type-irregular-forged", "label": "Irregular or Forged Paper", "definition": "A document in the slave paper chain that was fraudulently produced, backdated, altered, or otherwise irregular. Analytically essential for the post-1820 period of illegal trade: the prevalence of forged documentation reveals the legal requirements of the official system and the networks that circumvented them.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperTypeScheme", "schemeId": "SlavePaperTypeScheme", "schemeLabel": "Slave Paper Types"}, "paper-type-judicial-filing": {"id": "paper-type-judicial-filing", "uri": "iroko:paper-type-judicial-filing", "label": "Judicial Filing", "definition": "A court record — complaint, testimony, judgment, or order — pertaining to the status, ownership, or freedom of an enslaved person. Judicial filings constitute the primary site where ownership claims were actively contested.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperTypeScheme", "schemeId": "SlavePaperTypeScheme", "schemeLabel": "Slave Paper Types"}, "paper-type-manumission-instrument": {"id": "paper-type-manumission-instrument", "uri": "iroko:paper-type-manumission-instrument", "label": "Manumission Instrument", "definition": "A legal instrument by which an enslaved person was formally freed by their enslaver. Coartación documents, cartas de libertad, and similar instruments. Manumission could be conditional, partial, or purchased (coartación) — the instrument type records the terms.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperTypeScheme", "schemeId": "SlavePaperTypeScheme", "schemeLabel": "Slave Paper Types"}, "paper-type-official-correspondence": {"id": "paper-type-official-correspondence", "uri": "iroko:paper-type-official-correspondence", "label": "Official Correspondence", "definition": "Letters, reports, or memoranda between colonial administrators, customs officials, port authorities, or clergy concerning the movement, legal status, or trade of enslaved persons. Includes instructions on trade suppression enforcement in the post-1808 period.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperTypeScheme", "schemeId": "SlavePaperTypeScheme", "schemeLabel": "Slave Paper Types"}, "paper-type-sale-record": {"id": "paper-type-sale-record", "uri": "iroko:paper-type-sale-record", "label": "Sale Record", "definition": "A notarized instrument documenting the sale or transfer of an enslaved person between owners. Core document in the Atlantic ownership chain; required notarial authentication in most colonial legal systems.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperTypeScheme", "schemeId": "SlavePaperTypeScheme", "schemeLabel": "Slave Paper Types"}, "paper-type-ship-manifest": {"id": "paper-type-ship-manifest", "uri": "iroko:paper-type-ship-manifest", "label": "Ship Manifest", "definition": "A customs or port document listing enslaved persons as cargo aboard a vessel. Required for transatlantic and coastal trade; used to collect duties and establish initial entry into the colonial documentary record.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SlavePaperTypeScheme", "schemeId": "SlavePaperTypeScheme", "schemeLabel": "Slave Paper Types"}, "return-initiation": {"id": "return-initiation", "uri": "iroko:return-initiation", "label": "African initiation", "definition": "Afro-Atlantic practitioner receives initiation in Africa within a source tradition.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReturnTypeScheme", "schemeId": "ReturnTypeScheme", "schemeLabel": "Trans-Afro-Atlantic Return Types"}, "return-ceremony-participation": {"id": "return-ceremony-participation", "uri": "iroko:return-ceremony-participation", "label": "Ceremony participation", "definition": "Afro-Atlantic practitioner participates in African ceremonies without receiving initiation.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReturnTypeScheme", "schemeId": "ReturnTypeScheme", "schemeLabel": "Trans-Afro-Atlantic Return Types"}, "return-consultation": {"id": "return-consultation", "uri": "iroko:return-consultation", "label": "Consultation / divination", "definition": "Afro-Atlantic practitioner receives divination or consultation from African authority figures.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReturnTypeScheme", "schemeId": "ReturnTypeScheme", "schemeLabel": "Trans-Afro-Atlantic Return Types"}, "return-other": {"id": "return-other", "uri": "iroko:return-other", "label": "Other", "definition": "Return type not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReturnTypeScheme", "schemeId": "ReturnTypeScheme", "schemeLabel": "Trans-Afro-Atlantic Return Types"}, "return-protocol-exchange": {"id": "return-protocol-exchange", "uri": "iroko:return-protocol-exchange", "label": "Protocol / knowledge exchange", "definition": "Formal exchange of liturgical, ceremonial, or governance knowledge between Afro-Atlantic and African communities.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReturnTypeScheme", "schemeId": "ReturnTypeScheme", "schemeLabel": "Trans-Afro-Atlantic Return Types"}, "return-research": {"id": "return-research", "uri": "iroko:return-research", "label": "Research / ethnographic", "definition": "Afro-Atlantic practitioner or scholar conducts fieldwork in African source communities.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ReturnTypeScheme", "schemeId": "ReturnTypeScheme", "schemeLabel": "Trans-Afro-Atlantic Return Types"}};
 const MODULE_CROSS = [];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Sankofa Module (v1.3.1). https://ontology.irokosociety.org/vocab/iroko-sankofa.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Sankofa Module</em> (v1.3.1). https://ontology.irokosociety.org/vocab/iroko-sankofa.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_sankofa_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Sankofa Module}},\n  year      = {2026},\n  version   = {1.3.1},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-sankofa.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Sankofa Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-sankofa.html\nVL  - 1.3.1\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -766,7 +816,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -832,9 +949,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -862,7 +1022,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -942,10 +1106,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>

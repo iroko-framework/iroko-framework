@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -365,6 +395,25 @@
         Concept Schemes
         <span class="zone-hint">31 concepts across 4 schemes</span>
       </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
+      </div>
       <div class="scheme-block">
         <div class="scheme-head">
           <div>
@@ -374,31 +423,31 @@
             <span class="sh-count">7 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-basis-appointment">
+          <div class="chip" id="concept-basis-appointment" role="button" tabindex="0" aria-label="View concept Appointment" onclick="activateConcept('basis-appointment', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('basis-appointment', {push:true});}">
             <span class="chip-label">Appointment</span>
             <span class="chip-id">iroko:basis-appointment</span>
           </div>
-          <div class="chip" id="concept-basis-community-recognition">
+          <div class="chip" id="concept-basis-community-recognition" role="button" tabindex="0" aria-label="View concept Community Recognition" onclick="activateConcept('basis-community-recognition', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('basis-community-recognition', {push:true});}">
             <span class="chip-label">Community Recognition</span>
             <span class="chip-id">iroko:basis-community-recognition</span>
           </div>
-          <div class="chip" id="concept-basis-consecration">
+          <div class="chip" id="concept-basis-consecration" role="button" tabindex="0" aria-label="View concept Consecration" onclick="activateConcept('basis-consecration', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('basis-consecration', {push:true});}">
             <span class="chip-label">Consecration</span>
             <span class="chip-id">iroko:basis-consecration</span>
           </div>
-          <div class="chip" id="concept-basis-contested">
+          <div class="chip" id="concept-basis-contested" role="button" tabindex="0" aria-label="View concept Contested Basis" onclick="activateConcept('basis-contested', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('basis-contested', {push:true});}">
             <span class="chip-label">Contested Basis</span>
             <span class="chip-id">iroko:basis-contested</span>
           </div>
-          <div class="chip" id="concept-basis-divinatory-selection">
+          <div class="chip" id="concept-basis-divinatory-selection" role="button" tabindex="0" aria-label="View concept Divinatory Selection" onclick="activateConcept('basis-divinatory-selection', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('basis-divinatory-selection', {push:true});}">
             <span class="chip-label">Divinatory Selection</span>
             <span class="chip-id">iroko:basis-divinatory-selection</span>
           </div>
-          <div class="chip" id="concept-basis-hereditary">
+          <div class="chip" id="concept-basis-hereditary" role="button" tabindex="0" aria-label="View concept Hereditary" onclick="activateConcept('basis-hereditary', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('basis-hereditary', {push:true});}">
             <span class="chip-label">Hereditary</span>
             <span class="chip-id">iroko:basis-hereditary</span>
           </div>
-          <div class="chip" id="concept-basis-succession">
+          <div class="chip" id="concept-basis-succession" role="button" tabindex="0" aria-label="View concept Lineage Succession" onclick="activateConcept('basis-succession', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('basis-succession', {push:true});}">
             <span class="chip-label">Lineage Succession</span>
             <span class="chip-id">iroko:basis-succession</span>
           </div>
@@ -413,27 +462,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-authorityType-cabildo">
+          <div class="chip" id="concept-authorityType-cabildo" role="button" tabindex="0" aria-label="View concept Cabildo Authority" onclick="activateConcept('authorityType-cabildo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('authorityType-cabildo', {push:true});}">
             <span class="chip-label">Cabildo Authority</span>
             <span class="chip-id">iroko:authorityType-cabildo</span>
           </div>
-          <div class="chip" id="concept-authorityType-council">
+          <div class="chip" id="concept-authorityType-council" role="button" tabindex="0" aria-label="View concept Council Authority" onclick="activateConcept('authorityType-council', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('authorityType-council', {push:true});}">
             <span class="chip-label">Council Authority</span>
             <span class="chip-id">iroko:authorityType-council</span>
           </div>
-          <div class="chip" id="concept-authorityType-divinatory-office">
+          <div class="chip" id="concept-authorityType-divinatory-office" role="button" tabindex="0" aria-label="View concept Divinatory Office" onclick="activateConcept('authorityType-divinatory-office', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('authorityType-divinatory-office', {push:true});}">
             <span class="chip-label">Divinatory Office</span>
             <span class="chip-id">iroko:authorityType-divinatory-office</span>
           </div>
-          <div class="chip" id="concept-authorityType-house">
+          <div class="chip" id="concept-authorityType-house" role="button" tabindex="0" aria-label="View concept House Authority" onclick="activateConcept('authorityType-house', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('authorityType-house', {push:true});}">
             <span class="chip-label">House Authority</span>
             <span class="chip-id">iroko:authorityType-house</span>
           </div>
-          <div class="chip" id="concept-authorityType-individual-elder">
+          <div class="chip" id="concept-authorityType-individual-elder" role="button" tabindex="0" aria-label="View concept Individual Elder Authority" onclick="activateConcept('authorityType-individual-elder', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('authorityType-individual-elder', {push:true});}">
             <span class="chip-label">Individual Elder Authority</span>
             <span class="chip-id">iroko:authorityType-individual-elder</span>
           </div>
-          <div class="chip" id="concept-authorityType-lineage">
+          <div class="chip" id="concept-authorityType-lineage" role="button" tabindex="0" aria-label="View concept Lineage Authority" onclick="activateConcept('authorityType-lineage', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('authorityType-lineage', {push:true});}">
             <span class="chip-label">Lineage Authority</span>
             <span class="chip-id">iroko:authorityType-lineage</span>
           </div>
@@ -448,59 +497,59 @@
             <span class="sh-count">14 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-role-contrib-artist">
+          <div class="chip" id="concept-role-contrib-artist" role="button" tabindex="0" aria-label="View concept Artist / Illuminator" onclick="activateConcept('role-contrib-artist', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-artist', {push:true});}">
             <span class="chip-label">Artist / Illuminator</span>
             <span class="chip-id">iroko:role-contrib-artist</span>
           </div>
-          <div class="chip" id="concept-role-contrib-attributed">
+          <div class="chip" id="concept-role-contrib-attributed" role="button" tabindex="0" aria-label="View concept Attributed" onclick="activateConcept('role-contrib-attributed', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-attributed', {push:true});}">
             <span class="chip-label">Attributed</span>
             <span class="chip-id">iroko:role-contrib-attributed</span>
           </div>
-          <div class="chip" id="concept-role-contrib-bookseller">
+          <div class="chip" id="concept-role-contrib-bookseller" role="button" tabindex="0" aria-label="View concept Bookseller" onclick="activateConcept('role-contrib-bookseller', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-bookseller', {push:true});}">
             <span class="chip-label">Bookseller</span>
             <span class="chip-id">iroko:role-contrib-bookseller</span>
           </div>
-          <div class="chip" id="concept-role-contrib-commissioner">
+          <div class="chip" id="concept-role-contrib-commissioner" role="button" tabindex="0" aria-label="View concept Commissioner" onclick="activateConcept('role-contrib-commissioner', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-commissioner', {push:true});}">
             <span class="chip-label">Commissioner</span>
             <span class="chip-id">iroko:role-contrib-commissioner</span>
           </div>
-          <div class="chip" id="concept-role-contrib-compiler">
+          <div class="chip" id="concept-role-contrib-compiler" role="button" tabindex="0" aria-label="View concept Compiler" onclick="activateConcept('role-contrib-compiler', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-compiler', {push:true});}">
             <span class="chip-label">Compiler</span>
             <span class="chip-id">iroko:role-contrib-compiler</span>
           </div>
-          <div class="chip" id="concept-role-contrib-unspecified">
+          <div class="chip" id="concept-role-contrib-unspecified" role="button" tabindex="0" aria-label="View concept Contributor (role unspecified)" onclick="activateConcept('role-contrib-unspecified', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-unspecified', {push:true});}">
             <span class="chip-label">Contributor (role unspecified)</span>
             <span class="chip-id">iroko:role-contrib-unspecified</span>
           </div>
-          <div class="chip" id="concept-role-contrib-dedicatee">
+          <div class="chip" id="concept-role-contrib-dedicatee" role="button" tabindex="0" aria-label="View concept Dedicatee" onclick="activateConcept('role-contrib-dedicatee', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-dedicatee', {push:true});}">
             <span class="chip-label">Dedicatee</span>
             <span class="chip-id">iroko:role-contrib-dedicatee</span>
           </div>
-          <div class="chip" id="concept-role-contrib-editor">
+          <div class="chip" id="concept-role-contrib-editor" role="button" tabindex="0" aria-label="View concept Editor" onclick="activateConcept('role-contrib-editor', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-editor', {push:true});}">
             <span class="chip-label">Editor</span>
             <span class="chip-id">iroko:role-contrib-editor</span>
           </div>
-          <div class="chip" id="concept-role-contrib-notary">
+          <div class="chip" id="concept-role-contrib-notary" role="button" tabindex="0" aria-label="View concept Notary" onclick="activateConcept('role-contrib-notary', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-notary', {push:true});}">
             <span class="chip-label">Notary</span>
             <span class="chip-id">iroko:role-contrib-notary</span>
           </div>
-          <div class="chip" id="concept-role-contrib-patron">
+          <div class="chip" id="concept-role-contrib-patron" role="button" tabindex="0" aria-label="View concept Patron" onclick="activateConcept('role-contrib-patron', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-patron', {push:true});}">
             <span class="chip-label">Patron</span>
             <span class="chip-id">iroko:role-contrib-patron</span>
           </div>
-          <div class="chip" id="concept-role-contrib-publisher">
+          <div class="chip" id="concept-role-contrib-publisher" role="button" tabindex="0" aria-label="View concept Publisher" onclick="activateConcept('role-contrib-publisher', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-publisher', {push:true});}">
             <span class="chip-label">Publisher</span>
             <span class="chip-id">iroko:role-contrib-publisher</span>
           </div>
-          <div class="chip" id="concept-role-contrib-recipient">
+          <div class="chip" id="concept-role-contrib-recipient" role="button" tabindex="0" aria-label="View concept Recipient" onclick="activateConcept('role-contrib-recipient', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-recipient', {push:true});}">
             <span class="chip-label">Recipient</span>
             <span class="chip-id">iroko:role-contrib-recipient</span>
           </div>
-          <div class="chip" id="concept-role-contrib-scribe">
+          <div class="chip" id="concept-role-contrib-scribe" role="button" tabindex="0" aria-label="View concept Scribe" onclick="activateConcept('role-contrib-scribe', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-scribe', {push:true});}">
             <span class="chip-label">Scribe</span>
             <span class="chip-id">iroko:role-contrib-scribe</span>
           </div>
-          <div class="chip" id="concept-role-contrib-translator">
+          <div class="chip" id="concept-role-contrib-translator" role="button" tabindex="0" aria-label="View concept Translator" onclick="activateConcept('role-contrib-translator', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-contrib-translator', {push:true});}">
             <span class="chip-label">Translator</span>
             <span class="chip-id">iroko:role-contrib-translator</span>
           </div>
@@ -515,19 +564,19 @@
             <span class="sh-count">4 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-role-archivist-steward">
+          <div class="chip" id="concept-role-archivist-steward" role="button" tabindex="0" aria-label="View concept Archivist-Steward" onclick="activateConcept('role-archivist-steward', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-archivist-steward', {push:true});}">
             <span class="chip-label">Archivist-Steward</span>
             <span class="chip-id">iroko:role-archivist-steward</span>
           </div>
-          <div class="chip" id="concept-role-community-delegate">
+          <div class="chip" id="concept-role-community-delegate" role="button" tabindex="0" aria-label="View concept Community Delegate" onclick="activateConcept('role-community-delegate', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-community-delegate', {push:true});}">
             <span class="chip-label">Community Delegate</span>
             <span class="chip-id">iroko:role-community-delegate</span>
           </div>
-          <div class="chip" id="concept-role-diviner">
+          <div class="chip" id="concept-role-diviner" role="button" tabindex="0" aria-label="View concept Diviner" onclick="activateConcept('role-diviner', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-diviner', {push:true});}">
             <span class="chip-label">Diviner</span>
             <span class="chip-id">iroko:role-diviner</span>
           </div>
-          <div class="chip" id="concept-role-priest">
+          <div class="chip" id="concept-role-priest" role="button" tabindex="0" aria-label="View concept Priest" onclick="activateConcept('role-priest', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('role-priest', {push:true});}">
             <span class="chip-label">Priest</span>
             <span class="chip-id">iroko:role-priest</span>
           </div>
@@ -621,6 +670,7 @@ const MODULE_STEM = "iroko-authority";
 const MOD_TITLE_SHORT = "Authority Module";
 const CLASSES = {"Authority": {"uri": "iroko:Authority", "label": "Authority", "definition": "A jurisdictional authority capable of authorizing assertion-level claims and governance decisions. May represent a lineage, cabildo, religious house, elder council, or recognized individual in a governance role. Extends the iroko:RitualAuthority stub in Core. For the individual's held credential (title, office), see ile:ReligiousOffice.", "outgoing": [{"uri": "iroko:authorityBasis", "label": "authority basis", "type": "obj", "range": "Authority Basis", "access": "pub", "def": "What the authority rests on — the epistemic or social foundation for its recognition."}, {"uri": "iroko:authorityNote", "label": "authority note", "type": "data", "range": "langString", "access": "comm", "def": "Free-text note on the nature, history, or contested aspects of this authority's standing."}, {"uri": "iroko:authorityType", "label": "authority type", "type": "obj", "range": "Authority Type", "access": "pub", "def": "Classifies an Authority instance by its structural form."}, {"uri": "iroko:culturalFrame", "label": "cultural frame", "type": "data", "range": "string", "access": "comm", "def": "Short label for the tradition frame within which this authority operates. Example: Lucumi, Palo, Espiritismo, Vodou, Candomble. Use iroko:tradition for linked-data-typed values."}, {"uri": "iroko:hasJurisdiction", "label": "has jurisdiction", "type": "obj", "range": "Jurisdiction", "access": "pub", "def": "Links an authority to the domain(s) where it is recognized."}, {"uri": "iroko:recognizedBy", "label": "recognized by", "type": "obj", "range": "Authority", "access": "pub", "def": "Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments."}, {"uri": "iroko:ritualRole", "label": "ritual role", "type": "obj", "range": "Ritual Role", "access": "pub", "def": "The functional governance role this authority occupies."}, {"uri": "iroko:validFrom", "label": "valid from", "type": "data", "range": "date", "access": "pub", "def": "Date from which the authority's governance standing is recognized or effective."}, {"uri": "iroko:validUntil", "label": "valid until", "type": "data", "range": "date", "access": "pub", "def": "Date until which the authority's governance standing is recognized. Absence of this property does not imply perpetual validity — use iroko:contestedStatus where appropriate."}], "incoming": [{"uri": "iroko:recognizedBy", "label": "recognized by", "type": "obj", "access": "pub", "def": "Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments.", "domain": "Authority", "from": "iroko:Authority", "fromLabel": "Authority", "module": "Authority Module", "stem": "iroko-authority"}], "cross": []}, "AuthorityBasis": {"uri": "iroko:AuthorityBasis", "label": "Authority Basis", "definition": "What the authority rests on: lineage succession, consecration, appointment, community recognition, divinatory selection, or other basis.", "outgoing": [], "incoming": [{"uri": "iroko:authorityBasis", "label": "authority basis", "type": "obj", "access": "pub", "def": "What the authority rests on — the epistemic or social foundation for its recognition.", "domain": "Authority", "from": "iroko:Authority", "fromLabel": "Authority", "module": "Authority Module", "stem": "iroko-authority"}], "cross": []}, "AuthorityType": {"uri": "iroko:AuthorityType", "label": "Authority Type", "definition": "Classifies the structural form of an authority — lineage, house, cabildo, council, individual elder, etc.", "outgoing": [], "incoming": [{"uri": "iroko:authorityType", "label": "authority type", "type": "obj", "access": "pub", "def": "Classifies an Authority instance by its structural form.", "domain": "Authority", "from": "iroko:Authority", "fromLabel": "Authority", "module": "Authority Module", "stem": "iroko-authority"}], "cross": []}, "ContributorRole": {"uri": "iroko:ContributorRole", "label": "Contributor Role", "definition": "A SKOS concept describing the function of a person in the production, transmission, or dissemination of a manuscript, archival object, or text. Covers roles from physical production (scribe, artist) through institutional and financial relationships (patron, commissioner) to textual transformation (translator, compiler, editor). Derived from the vHMML contributor role taxonomy (CC BY 4.0, Hill Museum and Manuscript Library) and extended for Iroko Framework use. Role concepts reside in iroko:ContributorRoleScheme.", "outgoing": [], "incoming": [{"uri": "iroko:hasContributorRole", "label": "has contributor role", "type": "obj", "access": "pub", "def": "Links a person in a specific manuscript or textual production context to their functional role. Range: iroko:ContributorRoleScheme concept. Because the role is context-dependent (the same person may be a patron for one manuscript and a recipient for another), this property is best used within a reification node or named graph associating the person, the role, and the specific object. When used directly on an iroko:ArchivalPerson instance, it asserts a general characterization rather than a context-specific one.", "domain": "—", "from": "iroko:—", "fromLabel": "—", "module": "Authority Module", "stem": "iroko-authority"}], "cross": []}, "Jurisdiction": {"uri": "iroko:Jurisdiction", "label": "Jurisdiction", "definition": "A place, house, cabildo, lineage territory, nation, or other bounded domain in which an authority is recognized. May be geographic, genealogical, or institutional.", "outgoing": [{"uri": "iroko:jurisdictionLabel", "label": "jurisdiction label", "type": "data", "range": "langString", "access": "pub", "def": "Human-readable name for this jurisdiction."}, {"uri": "iroko:jurisdictionType", "label": "jurisdiction type", "type": "data", "range": "string", "access": "pub", "def": "Short classifer for the jurisdiction type: 'geographic', 'genealogical', 'institutional', 'diasporic', etc."}], "incoming": [{"uri": "iroko:hasJurisdiction", "label": "has jurisdiction", "type": "obj", "access": "pub", "def": "Links an authority to the domain(s) where it is recognized.", "domain": "Authority", "from": "iroko:Authority", "fromLabel": "Authority", "module": "Authority Module", "stem": "iroko-authority"}, {"uri": "iroko:corridorJurisdiction", "label": "corridor jurisdiction", "type": "obj", "access": "pub", "def": "The Atlantic trade corridor node at which this slave paper was issued, recorded, or enforced. Range: iroko:Jurisdiction (from iroko-authority.ttl). Use to link slave paper to specific port cities and colonial administrative territories in the TiSP corridor.", "domain": "Slave Paper", "from": "iroko:Slave Paper", "fromLabel": "Slave Paper", "module": "Sankofa Module", "stem": "iroko-sankofa"}], "cross": [{"name": "Sankofa Module", "dotCls": "dot-other", "via": "iroko:corridorJurisdiction", "dir": "referenced by"}]}, "RitualRole": {"uri": "iroko:RitualRole", "label": "Ritual Role", "definition": "The functional role an authority occupies within a ritual governance system — elder, priest, archivist-steward, witness, etc. Distinct from ile:ReligiousOffice (specific held title) — RitualRole is a classification concept.", "outgoing": [], "incoming": [{"uri": "iroko:ritualRole", "label": "ritual role", "type": "obj", "access": "pub", "def": "The functional governance role this authority occupies.", "domain": "Authority", "from": "iroko:Authority", "fromLabel": "Authority", "module": "Authority Module", "stem": "iroko-authority"}], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:authorityBasis", "label": "authority basis", "type": "obj", "domain": "Authority", "range": "Authority Basis", "access": "pub", "def": "What the authority rests on — the epistemic or social foundation for its recognition."}, {"uri": "iroko:authorityNote", "label": "authority note", "type": "data", "domain": "Authority", "range": "langString", "access": "comm", "def": "Free-text note on the nature, history, or contested aspects of this authority's standing."}, {"uri": "iroko:authorityType", "label": "authority type", "type": "obj", "domain": "Authority", "range": "Authority Type", "access": "pub", "def": "Classifies an Authority instance by its structural form."}, {"uri": "iroko:culturalFrame", "label": "cultural frame", "type": "data", "domain": "Authority", "range": "string", "access": "comm", "def": "Short label for the tradition frame within which this authority operates. Example: Lucumi, Palo, Espiritismo, Vodou, Candomble. Use iroko:tradition for linked-data-typed values."}, {"uri": "iroko:hasContributorRole", "label": "has contributor role", "type": "obj", "domain": "—", "range": "Contributor Role", "access": "pub", "def": "Links a person in a specific manuscript or textual production context to their functional role. Range: iroko:ContributorRoleScheme concept. Because the role is context-dependent (the same person may be a patron for one manuscript and a recipient for another), this property is best used within a reification node or named graph associating the person, the role, and the specific object. When used directly on an iroko:ArchivalPerson instance, it asserts a general characterization rather than a context-specific one."}, {"uri": "iroko:hasJurisdiction", "label": "has jurisdiction", "type": "obj", "domain": "Authority", "range": "Jurisdiction", "access": "pub", "def": "Links an authority to the domain(s) where it is recognized."}, {"uri": "iroko:jurisdictionLabel", "label": "jurisdiction label", "type": "data", "domain": "Jurisdiction", "range": "langString", "access": "pub", "def": "Human-readable name for this jurisdiction."}, {"uri": "iroko:jurisdictionType", "label": "jurisdiction type", "type": "data", "domain": "Jurisdiction", "range": "string", "access": "pub", "def": "Short classifer for the jurisdiction type: 'geographic', 'genealogical', 'institutional', 'diasporic', etc."}, {"uri": "iroko:recognizedBy", "label": "recognized by", "type": "obj", "domain": "Authority", "range": "Authority", "access": "pub", "def": "Links one authority to a recognizing body, council, or adjacent authority. Used for documenting recognition networks and cross-lineage acknowledgments."}, {"uri": "iroko:ritualRole", "label": "ritual role", "type": "obj", "domain": "Authority", "range": "Ritual Role", "access": "pub", "def": "The functional governance role this authority occupies."}, {"uri": "iroko:validFrom", "label": "valid from", "type": "data", "domain": "Authority", "range": "date", "access": "pub", "def": "Date from which the authority's governance standing is recognized or effective."}, {"uri": "iroko:validUntil", "label": "valid until", "type": "data", "domain": "Authority", "range": "date", "access": "pub", "def": "Date until which the authority's governance standing is recognized. Absence of this property does not imply perpetual validity — use iroko:contestedStatus where appropriate."}];
+const CONCEPTS = {"basis-appointment": {"id": "basis-appointment", "uri": "iroko:basis-appointment", "label": "Appointment", "definition": "Authority derives from formal appointment by a recognized governing body.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityBasisScheme", "schemeId": "AuthorityBasisScheme", "schemeLabel": "Authority Bases"}, "basis-community-recognition": {"id": "basis-community-recognition", "uri": "iroko:basis-community-recognition", "label": "Community Recognition", "definition": "Authority derives from informal but sustained community acknowledgment.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityBasisScheme", "schemeId": "AuthorityBasisScheme", "schemeLabel": "Authority Bases"}, "basis-consecration": {"id": "basis-consecration", "uri": "iroko:basis-consecration", "label": "Consecration", "definition": "Authority derives from a ritual consecration event.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityBasisScheme", "schemeId": "AuthorityBasisScheme", "schemeLabel": "Authority Bases"}, "basis-contested": {"id": "basis-contested", "uri": "iroko:basis-contested", "label": "Contested Basis", "definition": "The basis of the authority is itself disputed across lineages or houses.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityBasisScheme", "schemeId": "AuthorityBasisScheme", "schemeLabel": "Authority Bases"}, "basis-divinatory-selection": {"id": "basis-divinatory-selection", "uri": "iroko:basis-divinatory-selection", "label": "Divinatory Selection", "definition": "Authority derives from selection through divination (Ifa, oracle, sortition, etc.).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityBasisScheme", "schemeId": "AuthorityBasisScheme", "schemeLabel": "Authority Bases"}, "basis-hereditary": {"id": "basis-hereditary", "uri": "iroko:basis-hereditary", "label": "Hereditary", "definition": "Authority derives from family lineage independent of formal consecration or appointment.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityBasisScheme", "schemeId": "AuthorityBasisScheme", "schemeLabel": "Authority Bases"}, "basis-succession": {"id": "basis-succession", "uri": "iroko:basis-succession", "label": "Lineage Succession", "definition": "Authority derives from recognized succession in a transmission line.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityBasisScheme", "schemeId": "AuthorityBasisScheme", "schemeLabel": "Authority Bases"}, "authorityType-cabildo": {"id": "authorityType-cabildo", "uri": "iroko:authorityType-cabildo", "label": "Cabildo Authority", "definition": "Authority vested in a cabildo or mutual aid association with ritual governance functions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityTypeScheme", "schemeId": "AuthorityTypeScheme", "schemeLabel": "Authority Types"}, "authorityType-council": {"id": "authorityType-council", "uri": "iroko:authorityType-council", "label": "Council Authority", "definition": "Authority vested in a collective governing council of elders or priests.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityTypeScheme", "schemeId": "AuthorityTypeScheme", "schemeLabel": "Authority Types"}, "authorityType-divinatory-office": {"id": "authorityType-divinatory-office", "uri": "iroko:authorityType-divinatory-office", "label": "Divinatory Office", "definition": "Authority vested in a specific divinatory office — Babalawo, Oluwo, Houngan Asogwe, etc. — rather than the individual holder.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityTypeScheme", "schemeId": "AuthorityTypeScheme", "schemeLabel": "Authority Types"}, "authorityType-house": {"id": "authorityType-house", "uri": "iroko:authorityType-house", "label": "House Authority", "definition": "Authority vested in a religious house (ile, sosyete, cabildo house, etc.).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityTypeScheme", "schemeId": "AuthorityTypeScheme", "schemeLabel": "Authority Types"}, "authorityType-individual-elder": {"id": "authorityType-individual-elder", "uri": "iroko:authorityType-individual-elder", "label": "Individual Elder Authority", "definition": "Authority vested in a recognized individual elder acting in their own governance capacity.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityTypeScheme", "schemeId": "AuthorityTypeScheme", "schemeLabel": "Authority Types"}, "authorityType-lineage": {"id": "authorityType-lineage", "uri": "iroko:authorityType-lineage", "label": "Lineage Authority", "definition": "Authority vested in a descent line or transmission chain.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:AuthorityTypeScheme", "schemeId": "AuthorityTypeScheme", "schemeLabel": "Authority Types"}, "role-contrib-artist": {"id": "role-contrib-artist", "uri": "iroko:role-contrib-artist", "label": "Artist / Illuminator", "definition": "The person responsible for illustrations, illuminations, diagrams, decorative elements, or graphic components of the manuscript. In Ethiopian and Nubian manuscript traditions, the artist may be documented separately from the scribe.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-attributed": {"id": "role-contrib-attributed", "uri": "iroko:role-contrib-attributed", "label": "Attributed", "definition": "A person to whom a role is attributed by tradition, later inscription, or scholarly inference, without direct documentation in the manuscript itself. Attribution is a scholarly or community claim — record the basis and asserter of the attribution separately. Distinct from all other roles, which are documented rather than inferred.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-bookseller": {"id": "role-contrib-bookseller", "uri": "iroko:role-contrib-bookseller", "label": "Bookseller", "definition": "A person involved in the commercial sale or distribution of the manuscript or printed work. Documents the commercial networks through which manuscripts traveled.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-commissioner": {"id": "role-contrib-commissioner", "uri": "iroko:role-contrib-commissioner", "label": "Commissioner", "definition": "A person who formally ordered or commissioned the production of this specific manuscript or the performance of this specific ceremony or text. Distinguished from patron by the directness and specificity of the commissioning relationship.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-compiler": {"id": "role-contrib-compiler", "uri": "iroko:role-contrib-compiler", "label": "Compiler", "definition": "A person who assembled a text from multiple sources without being the originating author of those sources. Relevant for anthologies, florilegia, and composite manuscripts bringing together materials from different traditions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-unspecified": {"id": "role-contrib-unspecified", "uri": "iroko:role-contrib-unspecified", "label": "Contributor (role unspecified)", "definition": "A person whose contribution to the manuscript is documented but whose specific function is not known or not recorded in the source. Use when a name appears in a colophon, marginal note, or catalog entry without a role designation.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-dedicatee": {"id": "role-contrib-dedicatee", "uri": "iroko:role-contrib-dedicatee", "label": "Dedicatee", "definition": "The person to whom the work is formally dedicated. The dedication relationship often carries political, patronage, or devotional significance that may illuminate the context of production.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-editor": {"id": "role-contrib-editor", "uri": "iroko:role-contrib-editor", "label": "Editor", "definition": "A person who prepared the text for transmission or publication, including revisions, additions, corrections, or redactions. Distinguished from compiler (who assembles source material) and from translator (who changes language).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-notary": {"id": "role-contrib-notary", "uri": "iroko:role-contrib-notary", "label": "Notary", "definition": "A person with official legal standing who authenticated, witnessed, or recorded the document in a formal legal capacity. Critical for colonial notarial records, manumission documents, legal instruments, and formal attestations in Afro-Atlantic archival contexts. The notarial function is administrative and legal; the notary may not be the scribe or author.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-patron": {"id": "role-contrib-patron", "uri": "iroko:role-contrib-patron", "label": "Patron", "definition": "A person who provided financial, political, or institutional support enabling the production or survival of the manuscript or the transmission of the tradition. The patron may or may not have directly commissioned the work — patronage may be ongoing rather than project-specific.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-publisher": {"id": "role-contrib-publisher", "uri": "iroko:role-contrib-publisher", "label": "Publisher", "definition": "A person or institution responsible for the formal publication or release of the work. Applies primarily to printed materials; for manuscripts, use commissioner or patron.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-recipient": {"id": "role-contrib-recipient", "uri": "iroko:role-contrib-recipient", "label": "Recipient", "definition": "The person for whom the manuscript was produced, as distinct from the dedicatee or commissioner. Common in gift manuscripts, royal commissions, and personal correspondence. The recipient is the intended reader or owner of this specific copy.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-scribe": {"id": "role-contrib-scribe", "uri": "iroko:role-contrib-scribe", "label": "Scribe", "definition": "The person who physically copied or wrote the text. Distinguished from the intellectual author (originator of the content) and from the translator. In manuscript traditions, the scribe is often the most directly documented contributor.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-contrib-translator": {"id": "role-contrib-translator", "uri": "iroko:role-contrib-translator", "label": "Translator", "definition": "The person who rendered the text from one language into another. The source and target languages should be recorded on the associated iroko:TextContent instance using iroko:textLanguage.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:ContributorRoleScheme", "schemeId": "ContributorRoleScheme", "schemeLabel": "Contributor Roles"}, "role-archivist-steward": {"id": "role-archivist-steward", "uri": "iroko:role-archivist-steward", "label": "Archivist-Steward", "definition": "Recognized steward of archival materials within a tradition or house.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RitualRoleScheme", "schemeId": "RitualRoleScheme", "schemeLabel": "Ritual Roles"}, "role-community-delegate": {"id": "role-community-delegate", "uri": "iroko:role-community-delegate", "label": "Community Delegate", "definition": "Person acting in an authorized representative capacity on behalf of a house or community.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RitualRoleScheme", "schemeId": "RitualRoleScheme", "schemeLabel": "Ritual Roles"}, "role-diviner": {"id": "role-diviner", "uri": "iroko:role-diviner", "label": "Diviner", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RitualRoleScheme", "schemeId": "RitualRoleScheme", "schemeLabel": "Ritual Roles"}, "role-priest": {"id": "role-priest", "uri": "iroko:role-priest", "label": "Priest", "definition": "", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:RitualRoleScheme", "schemeId": "RitualRoleScheme", "schemeLabel": "Ritual Roles"}};
 const MODULE_CROSS = [{"name": "Sankofa Module", "dotCls": "dot-other", "via": "iroko:corridorJurisdiction", "dir": "referenced by"}];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Authority Module (v1.3.1). https://ontology.irokosociety.org/vocab/iroko-authority.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Authority Module</em> (v1.3.1). https://ontology.irokosociety.org/vocab/iroko-authority.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_authority_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Authority Module}},\n  year      = {2026},\n  version   = {1.3.1},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-authority.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Authority Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-authority.html\nVL  - 1.3.1\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -662,7 +712,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -728,9 +845,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -758,7 +918,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -838,10 +1002,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>

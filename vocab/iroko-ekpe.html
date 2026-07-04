@@ -136,10 +136,40 @@
       border-radius:0 0 3px 3px; display:grid;
       grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); overflow:hidden; }
     .chip { padding:.55rem .9rem; border-right:1px solid var(--rule);
-      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s; }
+      border-bottom:1px solid var(--rule); background:var(--paper); transition:background .12s, border-color .12s;
+      cursor:pointer; }
     .chip:hover { background:var(--paper-warm); }
+    .chip.active { background:var(--green-light); box-shadow: inset 0 0 0 1px var(--green-mid); }
+    .chip:focus-visible { outline:2px solid var(--green-mid); outline-offset:-2px; }
     .chip-label { font-family:var(--sans); font-size:.82rem; font-weight:400; color:var(--ink); display:block; }
     .chip-id { font-family:var(--mono); font-size:.65rem; color:var(--green-mid); margin-top:.15rem; display:block; }
+    .concept-panel { display:none; border:1px solid var(--rule-strong); border-radius:3px;
+      margin:.85rem 0 1.2rem; overflow:hidden; background:var(--paper); scroll-margin-top:6rem; }
+    .concept-panel.visible { display:block; animation:panelIn 160ms ease forwards; }
+    .cp-head { background:var(--green); color:#fff; padding:.85rem 1rem;
+      display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .cp-uri { font-family:var(--mono); font-size:.7rem; color:rgba(255,255,255,.68); display:block; margin-bottom:.15rem; }
+    .cp-label { font-family:var(--serif); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.2; }
+    .cp-body { padding:.9rem 1rem 1rem; }
+    .cp-def { font-size:.86rem; color:var(--ink-mid); line-height:1.55; margin-bottom:.8rem; }
+    .cp-meta-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.55rem; margin-bottom:.8rem; }
+    .cp-meta { border:1px solid var(--rule); border-radius:3px; padding:.45rem .55rem; background:var(--paper-warm); }
+    .cp-meta-k { display:block; font-family:var(--mono); font-size:.58rem; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.15rem; }
+    .cp-meta-v { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-section { border-top:1px solid var(--rule); padding-top:.65rem; margin-top:.65rem; }
+    .cp-section-title { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--ink-soft); margin-bottom:.4rem; }
+    .cp-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .cp-tag, .cp-link { font-family:var(--mono); font-size:.66rem; color:var(--green-mid);
+      border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
+    button.cp-link { cursor:pointer; }
+    .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
+    .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
+    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
     .module-sidebar { position:sticky; top:2rem; }
@@ -371,6 +401,25 @@
         Concept Schemes
         <span class="zone-hint">34 concepts across 5 schemes</span>
       </div>
+      <div class="concept-panel" id="concept-panel">
+        <div class="cp-head">
+          <div>
+            <span class="cp-uri" id="cp-uri"></span>
+            <span class="cp-label" id="cp-label"></span>
+          </div>
+          <button class="pp-close" onclick="closeConcept()" title="Close">&times;</button>
+        </div>
+        <div class="cp-body">
+          <div class="cp-def" id="cp-def"></div>
+          <div class="cp-meta-grid" id="cp-meta"></div>
+          <div id="cp-sections"></div>
+          <div class="cp-actions">
+            <button class="btn-copy-sm" onclick="copyConcept(this,'uri')">Copy URI</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'link')">Copy Link</button>
+            <button class="btn-copy-sm" onclick="copyConcept(this,'turtle')">Copy Turtle</button>
+          </div>
+        </div>
+      </div>
       <div class="scheme-block">
         <div class="scheme-head">
           <div>
@@ -380,43 +429,43 @@
             <span class="sh-count">10 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-society-abakua">
+          <div class="chip" id="concept-society-abakua" role="button" tabindex="0" aria-label="View concept Abakuá" onclick="activateConcept('society-abakua', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-abakua', {push:true});}">
             <span class="chip-label">Abakuá</span>
             <span class="chip-id">iroko:society-abakua</span>
           </div>
-          <div class="chip" id="concept-society-agemo">
+          <div class="chip" id="concept-society-agemo" role="button" tabindex="0" aria-label="View concept Agemo" onclick="activateConcept('society-agemo', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-agemo', {push:true});}">
             <span class="chip-label">Agemo</span>
             <span class="chip-id">iroko:society-agemo</span>
           </div>
-          <div class="chip" id="concept-society-egungun">
+          <div class="chip" id="concept-society-egungun" role="button" tabindex="0" aria-label="View concept Egungun" onclick="activateConcept('society-egungun', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-egungun', {push:true});}">
             <span class="chip-label">Egungun</span>
             <span class="chip-id">iroko:society-egungun</span>
           </div>
-          <div class="chip" id="concept-society-gelede">
+          <div class="chip" id="concept-society-gelede" role="button" tabindex="0" aria-label="View concept Gelede" onclick="activateConcept('society-gelede', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-gelede', {push:true});}">
             <span class="chip-label">Gelede</span>
             <span class="chip-id">iroko:society-gelede</span>
           </div>
-          <div class="chip" id="concept-society-ogboni">
+          <div class="chip" id="concept-society-ogboni" role="button" tabindex="0" aria-label="View concept Ogboni / Oshugbo" onclick="activateConcept('society-ogboni', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-ogboni', {push:true});}">
             <span class="chip-label">Ogboni / Oshugbo</span>
             <span class="chip-id">iroko:society-ogboni</span>
           </div>
-          <div class="chip" id="concept-society-oro">
+          <div class="chip" id="concept-society-oro" role="button" tabindex="0" aria-label="View concept Oro" onclick="activateConcept('society-oro', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-oro', {push:true});}">
             <span class="chip-label">Oro</span>
             <span class="chip-id">iroko:society-oro</span>
           </div>
-          <div class="chip" id="concept-society-other">
+          <div class="chip" id="concept-society-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('society-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:society-other</span>
           </div>
-          <div class="chip" id="concept-society-poro">
+          <div class="chip" id="concept-society-poro" role="button" tabindex="0" aria-label="View concept Poro" onclick="activateConcept('society-poro', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-poro', {push:true});}">
             <span class="chip-label">Poro</span>
             <span class="chip-id">iroko:society-poro</span>
           </div>
-          <div class="chip" id="concept-society-sande">
+          <div class="chip" id="concept-society-sande" role="button" tabindex="0" aria-label="View concept Sande / Bundo" onclick="activateConcept('society-sande', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-sande', {push:true});}">
             <span class="chip-label">Sande / Bundo</span>
             <span class="chip-id">iroko:society-sande</span>
           </div>
-          <div class="chip" id="concept-society-ekpe">
+          <div class="chip" id="concept-society-ekpe" role="button" tabindex="0" aria-label="View concept Ékpè / Ngbe" onclick="activateConcept('society-ekpe', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('society-ekpe', {push:true});}">
             <span class="chip-label">Ékpè / Ngbe</span>
             <span class="chip-id">iroko:society-ekpe</span>
           </div>
@@ -431,35 +480,35 @@
             <span class="sh-count">8 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-mask-function-ancestral-embodiment">
+          <div class="chip" id="concept-mask-function-ancestral-embodiment" role="button" tabindex="0" aria-label="View concept Ancestral embodiment" onclick="activateConcept('mask-function-ancestral-embodiment', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mask-function-ancestral-embodiment', {push:true});}">
             <span class="chip-label">Ancestral embodiment</span>
             <span class="chip-id">iroko:mask-function-ancestral-embodiment</span>
           </div>
-          <div class="chip" id="concept-mask-function-communal-sanction">
+          <div class="chip" id="concept-mask-function-communal-sanction" role="button" tabindex="0" aria-label="View concept Communal sanction / enforcement" onclick="activateConcept('mask-function-communal-sanction', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mask-function-communal-sanction', {push:true});}">
             <span class="chip-label">Communal sanction / enforcement</span>
             <span class="chip-id">iroko:mask-function-communal-sanction</span>
           </div>
-          <div class="chip" id="concept-mask-function-entertainment">
+          <div class="chip" id="concept-mask-function-entertainment" role="button" tabindex="0" aria-label="View concept Entertainment / social satire" onclick="activateConcept('mask-function-entertainment', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mask-function-entertainment', {push:true});}">
             <span class="chip-label">Entertainment / social satire</span>
             <span class="chip-id">iroko:mask-function-entertainment</span>
           </div>
-          <div class="chip" id="concept-mask-function-funerary">
+          <div class="chip" id="concept-mask-function-funerary" role="button" tabindex="0" aria-label="View concept Funerary / transition rites" onclick="activateConcept('mask-function-funerary', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mask-function-funerary', {push:true});}">
             <span class="chip-label">Funerary / transition rites</span>
             <span class="chip-id">iroko:mask-function-funerary</span>
           </div>
-          <div class="chip" id="concept-mask-function-healing">
+          <div class="chip" id="concept-mask-function-healing" role="button" tabindex="0" aria-label="View concept Healing / protective" onclick="activateConcept('mask-function-healing', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mask-function-healing', {push:true});}">
             <span class="chip-label">Healing / protective</span>
             <span class="chip-id">iroko:mask-function-healing</span>
           </div>
-          <div class="chip" id="concept-mask-function-honor-mothers">
+          <div class="chip" id="concept-mask-function-honor-mothers" role="button" tabindex="0" aria-label="View concept Honoring the mothers" onclick="activateConcept('mask-function-honor-mothers', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mask-function-honor-mothers', {push:true});}">
             <span class="chip-label">Honoring the mothers</span>
             <span class="chip-id">iroko:mask-function-honor-mothers</span>
           </div>
-          <div class="chip" id="concept-mask-function-other">
+          <div class="chip" id="concept-mask-function-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('mask-function-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mask-function-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:mask-function-other</span>
           </div>
-          <div class="chip" id="concept-mask-function-society-voice">
+          <div class="chip" id="concept-mask-function-society-voice" role="button" tabindex="0" aria-label="View concept Society voice / announcement" onclick="activateConcept('mask-function-society-voice', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('mask-function-society-voice', {push:true});}">
             <span class="chip-label">Society voice / announcement</span>
             <span class="chip-id">iroko:mask-function-society-voice</span>
           </div>
@@ -474,27 +523,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-gov-consensus">
+          <div class="chip" id="concept-gov-consensus" role="button" tabindex="0" aria-label="View concept Consensus / deliberative" onclick="activateConcept('gov-consensus', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('gov-consensus', {push:true});}">
             <span class="chip-label">Consensus / deliberative</span>
             <span class="chip-id">iroko:gov-consensus</span>
           </div>
-          <div class="chip" id="concept-gov-council-of-elders">
+          <div class="chip" id="concept-gov-council-of-elders" role="button" tabindex="0" aria-label="View concept Council of elders" onclick="activateConcept('gov-council-of-elders', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('gov-council-of-elders', {push:true});}">
             <span class="chip-label">Council of elders</span>
             <span class="chip-id">iroko:gov-council-of-elders</span>
           </div>
-          <div class="chip" id="concept-gov-elected-officers">
+          <div class="chip" id="concept-gov-elected-officers" role="button" tabindex="0" aria-label="View concept Elected officers" onclick="activateConcept('gov-elected-officers', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('gov-elected-officers', {push:true});}">
             <span class="chip-label">Elected officers</span>
             <span class="chip-id">iroko:gov-elected-officers</span>
           </div>
-          <div class="chip" id="concept-gov-hereditary-title">
+          <div class="chip" id="concept-gov-hereditary-title" role="button" tabindex="0" aria-label="View concept Hereditary title succession" onclick="activateConcept('gov-hereditary-title', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('gov-hereditary-title', {push:true});}">
             <span class="chip-label">Hereditary title succession</span>
             <span class="chip-id">iroko:gov-hereditary-title</span>
           </div>
-          <div class="chip" id="concept-gov-hierarchical-grade">
+          <div class="chip" id="concept-gov-hierarchical-grade" role="button" tabindex="0" aria-label="View concept Hierarchical grade system" onclick="activateConcept('gov-hierarchical-grade', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('gov-hierarchical-grade', {push:true});}">
             <span class="chip-label">Hierarchical grade system</span>
             <span class="chip-id">iroko:gov-hierarchical-grade</span>
           </div>
-          <div class="chip" id="concept-gov-other">
+          <div class="chip" id="concept-gov-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('gov-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('gov-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:gov-other</span>
           </div>
@@ -509,19 +558,19 @@
             <span class="sh-count">4 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-societyStatus-active">
+          <div class="chip" id="concept-societyStatus-active" role="button" tabindex="0" aria-label="View concept active" onclick="activateConcept('societyStatus-active', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('societyStatus-active', {push:true});}">
             <span class="chip-label">active</span>
             <span class="chip-id">iroko:societyStatus-active</span>
           </div>
-          <div class="chip" id="concept-societyStatus-forcibly-dissolved">
+          <div class="chip" id="concept-societyStatus-forcibly-dissolved" role="button" tabindex="0" aria-label="View concept forcibly dissolved" onclick="activateConcept('societyStatus-forcibly-dissolved', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('societyStatus-forcibly-dissolved', {push:true});}">
             <span class="chip-label">forcibly dissolved</span>
             <span class="chip-id">iroko:societyStatus-forcibly-dissolved</span>
           </div>
-          <div class="chip" id="concept-societyStatus-historical">
+          <div class="chip" id="concept-societyStatus-historical" role="button" tabindex="0" aria-label="View concept historical" onclick="activateConcept('societyStatus-historical', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('societyStatus-historical', {push:true});}">
             <span class="chip-label">historical</span>
             <span class="chip-id">iroko:societyStatus-historical</span>
           </div>
-          <div class="chip" id="concept-societyStatus-reformed">
+          <div class="chip" id="concept-societyStatus-reformed" role="button" tabindex="0" aria-label="View concept reformed" onclick="activateConcept('societyStatus-reformed', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('societyStatus-reformed', {push:true});}">
             <span class="chip-label">reformed</span>
             <span class="chip-id">iroko:societyStatus-reformed</span>
           </div>
@@ -536,27 +585,27 @@
             <span class="sh-count">6 concepts</span>
         </div>
         <div class="concept-chips">
-          <div class="chip" id="concept-conferral-election">
+          <div class="chip" id="concept-conferral-election" role="button" tabindex="0" aria-label="View concept Election by membership" onclick="activateConcept('conferral-election', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('conferral-election', {push:true});}">
             <span class="chip-label">Election by membership</span>
             <span class="chip-id">iroko:conferral-election</span>
           </div>
-          <div class="chip" id="concept-conferral-hereditary">
+          <div class="chip" id="concept-conferral-hereditary" role="button" tabindex="0" aria-label="View concept Hereditary succession" onclick="activateConcept('conferral-hereditary', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('conferral-hereditary', {push:true});}">
             <span class="chip-label">Hereditary succession</span>
             <span class="chip-id">iroko:conferral-hereditary</span>
           </div>
-          <div class="chip" id="concept-conferral-other">
+          <div class="chip" id="concept-conferral-other" role="button" tabindex="0" aria-label="View concept Other" onclick="activateConcept('conferral-other', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('conferral-other', {push:true});}">
             <span class="chip-label">Other</span>
             <span class="chip-id">iroko:conferral-other</span>
           </div>
-          <div class="chip" id="concept-conferral-purchase">
+          <div class="chip" id="concept-conferral-purchase" role="button" tabindex="0" aria-label="View concept Purchase / fee-based conferral" onclick="activateConcept('conferral-purchase', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('conferral-purchase', {push:true});}">
             <span class="chip-label">Purchase / fee-based conferral</span>
             <span class="chip-id">iroko:conferral-purchase</span>
           </div>
-          <div class="chip" id="concept-conferral-senior-nomination">
+          <div class="chip" id="concept-conferral-senior-nomination" role="button" tabindex="0" aria-label="View concept Senior nomination" onclick="activateConcept('conferral-senior-nomination', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('conferral-senior-nomination', {push:true});}">
             <span class="chip-label">Senior nomination</span>
             <span class="chip-id">iroko:conferral-senior-nomination</span>
           </div>
-          <div class="chip" id="concept-conferral-spiritual-designation">
+          <div class="chip" id="concept-conferral-spiritual-designation" role="button" tabindex="0" aria-label="View concept Spiritual designation" onclick="activateConcept('conferral-spiritual-designation', {push:true})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();activateConcept('conferral-spiritual-designation', {push:true});}">
             <span class="chip-label">Spiritual designation</span>
             <span class="chip-id">iroko:conferral-spiritual-designation</span>
           </div>
@@ -644,6 +693,7 @@ const MODULE_STEM = "iroko-ekpe";
 const MOD_TITLE_SHORT = "Ékpè Module";
 const CLASSES = {"ForcedDissolution": {"uri": "iroko:ForcedDissolution", "label": "Forced Dissolution", "definition": "An event in which an initiatory society was suppressed, banned, or destroyed by an external authority. Enables structured documentation of state violence against sacred institutions. Primary case study: Machado-era suppression of Abakuá potencias in Cuba (1923). Key governance principle: forced dissolution by an external authority does not transfer custodial rights over the society's sacred materials, records, or knowledge to the suppressing state or to the public. Materials held by a forcibly dissolved society remain governed by iroko:Ritual Sovereignty under iroko:RitualPractitioner authority.", "outgoing": [{"uri": "iroko:dissolutionAuthority", "label": "dissolution authority", "type": "data", "range": "langString", "access": "pub", "def": "The external authority (state, colonial power, occupying government) that forced dissolution of the society. Free text, language-tagged."}, {"uri": "iroko:dissolutionDate", "label": "dissolution date", "type": "data", "range": "langString", "access": "pub", "def": "The date or approximate period of the forced dissolution event."}], "incoming": [{"uri": "iroko:dissolutionEvent", "label": "dissolution event", "type": "obj", "access": "pub", "def": "Links an InitiatorySociety to a ForcedDissolution event that ended or suspended its operation by external authority.", "domain": "Initiatory Society", "from": "iroko:Initiatory Society", "fromLabel": "Initiatory Society", "module": "Ékpè Module", "stem": "iroko-ekpe"}], "cross": []}, "InitiatorySociety": {"uri": "iroko:InitiatorySociety", "label": "Initiatory Society", "definition": "A sodality or secret society organized around graded initiation, with esoteric knowledge and authority distributed across hierarchical grades. Membership is earned through initiation rather than birth or lineage alone. Examples: Ékpè/Ngbe lodges (Ejagham, Cross River Nigeria/Cameroon), Abakuá potencias (Cuba), Ogboni chapters (Yorùbáland), Gelede societies (Yorùbá/Fon/Ewe), Egungun lineage associations. Subclasses schema:Organization for interoperability with external directories, and iroko:SacredEntity for access control. Distinguished from iroko:House (which organizes around founding-elder lineage) in that membership cross-cuts lineage boundaries.", "outgoing": [{"uri": "iroko:associatedHouse", "label": "associated house", "type": "obj", "range": "House", "access": "comm", "def": "A religious house (iroko:House) with which this society maintains an ongoing ceremonial relationship. In many traditions, society and house membership overlap for senior practitioners."}, {"uri": "iroko:dissolutionEvent", "label": "dissolution event", "type": "obj", "range": "Forced Dissolution", "access": "pub", "def": "Links an InitiatorySociety to a ForcedDissolution event that ended or suspended its operation by external authority."}, {"uri": "iroko:foundingLocation", "label": "founding location", "type": "data", "range": "langString", "access": "pub", "def": "Place of origin or founding of the society. City/country level is public; specific address is community-restricted."}, {"uri": "iroko:genderPolicy", "label": "gender policy", "type": "data", "range": "langString", "access": "comm", "def": "Documents tradition-specific rules regarding gender and membership. For Abakuá: historically male-only (juramento); for Ogboni: both male and female members, with distinct female titleholder roles (Iyalode); for Gelede: primarily concerns gender complementarity (mothers/fathers). Free-text, records documented practice without normative judgment."}, {"uri": "iroko:gradeCount", "label": "grade count", "type": "data", "range": "integer", "access": "comm", "def": "Number of grades in this society's hierarchy. The count is community-restricted in active societies; public for historical documentation."}, {"uri": "iroko:societyGovernanceStructure", "label": "society governance structure", "type": "obj", "range": "Concept", "access": "comm", "def": "The governance model of this society. Range: iroko:GovernanceStructureScheme."}, {"uri": "iroko:societyStatus", "label": "society status", "type": "obj", "range": "Concept", "access": "pub", "def": "The current operational status of an initiatory society. Range: iroko:SocietyStatusScheme concepts (active, historical, reformed, forcibly-dissolved). A forcibly-dissolved society's archival records retain their access restrictions — dissolution by external authority does not transfer governance to the suppressing power or to the public."}, {"uri": "iroko:societyTradition", "label": "society tradition", "type": "obj", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic tradition within which this society operates. Range: iroko:TraditionScheme."}, {"uri": "iroko:societyType", "label": "society type", "type": "obj", "range": "Concept", "access": "pub", "def": "Typological classification of the society. Range: iroko:InitiatorySocietyTypeScheme."}], "incoming": [{"uri": "iroko:gradeSociety", "label": "grade society", "type": "obj", "access": "comm", "def": "The initiatory society to which this grade belongs.", "domain": "Society Grade", "from": "iroko:Society Grade", "fromLabel": "Society Grade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:masqueradeSociety", "label": "masquerade society", "type": "obj", "access": "comm", "def": "The initiatory society to which this masquerade belongs.", "domain": "Society Masquerade", "from": "iroko:Society Masquerade", "fromLabel": "Society Masquerade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:membershipSociety", "label": "membership society", "type": "obj", "access": "comm", "def": "The society into which the individual was initiated.", "domain": "Membership Record", "from": "iroko:Membership Record", "fromLabel": "Membership Record", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:parentSociety", "label": "parent society", "type": "obj", "access": "pub", "def": "The broader society network or tradition of which this lodge is a chapter. A Havana Abakuá potencia links to the Abakuá tradition; a Calabar Ékpè lodge links to the Ékpè tradition. Subproperty of prov:wasDerivedFrom.", "domain": "Society Lodge", "from": "iroko:Society Lodge", "fromLabel": "Society Lodge", "module": "Ékpè Module", "stem": "iroko-ekpe"}], "cross": []}, "MembershipRecord": {"uri": "iroko:MembershipRecord", "label": "Membership Record", "definition": "A record documenting an individual's initiation into and progression through a society. Membership records are among the most sensitive data in this framework: the identity of initiates is strictly guarded by all documented traditions, and their disclosure to outsiders is a serious breach. Default access is no-access; date and grade level may be community-restricted in contexts where historical record-keeping is an accepted practice (e.g., Cuban Abakuá records kept since the 19th century).", "outgoing": [{"uri": "iroko:initiatingOfficiant", "label": "initiating officiant", "type": "obj", "range": "Person", "access": "none", "def": "The titleholder who performed the initiation. No-access."}, {"uri": "iroko:memberPerson", "label": "member person", "type": "obj", "range": "Person", "access": "none", "def": "The person to whom this membership record belongs. No-access: member identity is the most protected information in society records."}, {"uri": "iroko:membershipDate", "label": "membership date", "type": "data", "range": "date", "access": "comm", "def": "Date of initiation into this grade. Community-restricted for historical records."}, {"uri": "iroko:membershipGrade", "label": "membership grade", "type": "obj", "range": "Society Grade", "access": "init", "def": "The grade held by this member."}, {"uri": "iroko:membershipSociety", "label": "membership society", "type": "obj", "range": "Initiatory Society", "access": "comm", "def": "The society into which the individual was initiated."}, {"uri": "iroko:membershipTitle", "label": "membership title", "type": "obj", "range": "Society Title", "access": "init", "def": "A title held by this member within the society."}], "incoming": [], "cross": []}, "SocietyGrade": {"uri": "iroko:SocietyGrade", "label": "Society Grade", "definition": "A defined rank or level within an initiatory society's graded hierarchy. Each grade confers specific knowledge, privileges, obligations, and esoteric rights. Grade names, their sequence, and their content are among the most carefully protected knowledge in these traditions. The existence of a grade structure is public; grade names are community-restricted; grade content and sequence are initiated-only or initiated-elder.", "outgoing": [{"uri": "iroko:gradeLevel", "label": "grade level", "type": "data", "range": "integer", "access": "comm", "def": "Numeric position in the grade sequence. 1 = lowest/entry. Community-restricted."}, {"uri": "iroko:gradeName", "label": "grade name", "type": "data", "range": "langString", "access": "comm", "def": "The name of the grade in the tradition's language. Community-restricted for active societies."}, {"uri": "iroko:gradePrerequisite", "label": "grade prerequisite", "type": "obj", "range": "Society Grade", "access": "init", "def": "The grade that must be held before this grade may be received. Initiated-only: the sequencing of grades is esoteric knowledge."}, {"uri": "iroko:gradePrivileges", "label": "grade privileges", "type": "data", "range": "langString", "access": "init", "def": "The ritual, governance, or social privileges conferred by this grade. Initiated-elder only."}, {"uri": "iroko:gradeSign", "label": "grade sign", "type": "obj", "range": "GraphicSign", "access": "init", "def": "The esoteric graphic sign or identifying mark associated with this grade. Range: iroko:GraphicSign — grade signs in Ékpè and cognate societies are drawn symbols belonging to a sacred sign system, not free-text strings. Initiated-elder only."}, {"uri": "iroko:gradeSociety", "label": "grade society", "type": "obj", "range": "Initiatory Society", "access": "comm", "def": "The initiatory society to which this grade belongs."}], "incoming": [{"uri": "iroko:gradePrerequisite", "label": "grade prerequisite", "type": "obj", "access": "init", "def": "The grade that must be held before this grade may be received. Initiated-only: the sequencing of grades is esoteric knowledge.", "domain": "Society Grade", "from": "iroko:Society Grade", "fromLabel": "Society Grade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:masqueradeRequiredGrade", "label": "required grade for performance", "type": "obj", "access": "init", "def": "The minimum grade required to perform or wear this masquerade. Initiated-only.", "domain": "Society Masquerade", "from": "iroko:Society Masquerade", "fromLabel": "Society Masquerade", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:membershipGrade", "label": "membership grade", "type": "obj", "access": "init", "def": "The grade held by this member.", "domain": "Membership Record", "from": "iroko:Membership Record", "fromLabel": "Membership Record", "module": "Ékpè Module", "stem": "iroko-ekpe"}, {"uri": "iroko:titleRequiredGrade", "label": "required grade", "type": "obj", "access": "init", "def": "The minimum grade required to hold this title. Initiated-only.", "domain": "Society Title", "from": "iroko:Society Title", "fromLabel": "Society Title", "module": "Ékpè Module", "stem": "iroko-ekpe"}], "cross": []}, "SocietyLodge": {"uri": "iroko:SocietyLodge", "label": "Society Lodge", "definition": "A local chapter or lodge of an initiatory society. Ékpè lodges in Cross River; Abakuá potencias in Havana and Matanzas; Ogboni chapters in Yorùbá towns. Each lodge may have its own territory, titleholders, and charter, while being part of a broader society network. Uses iroko:parentSociety to link to the overarching tradition-level society.", "outgoing": [{"uri": "iroko:lodgeName", "label": "lodge name", "type": "data", "range": "langString", "access": "comm", "def": "The public name of the lodge or potencia. In Abakuá: the potencia name (e.g., Efik Butón, Efik Efor). Community-restricted for active lodges; public for historical lodges documented in scholarly sources."}, {"uri": "iroko:lodgeTerritory", "label": "lodge territory", "type": "data", "range": "langString", "access": "pub", "def": "The geographic or community territory over which a lodge exercises spiritual and social jurisdiction. Free-text description."}, {"uri": "iroko:parentSociety", "label": "parent society", "type": "obj", "range": "Initiatory Society", "access": "pub", "def": "The broader society network or tradition of which this lodge is a chapter. A Havana Abakuá potencia links to the Abakuá tradition; a Calabar Ékpè lodge links to the Ékpè tradition. Subproperty of prov:wasDerivedFrom."}], "incoming": [], "cross": []}, "SocietyMasquerade": {"uri": "iroko:SocietyMasquerade", "label": "Society Masquerade", "definition": "A masked or costumed ritual embodiment associated with an initiatory society, representing an ancestor, force, or principle. Examples: Abakuá íremes (diablitos) representing the voice of the fish Tanze; Egungun masquerades embodying ancestral spirits; Gelede masquerades honoring the mothers. The masquerade as a cultural form (name, tradition, function) is community-restricted; the identities of performers and operational sequences are initiated-only. Distinct from iroko:SpiritualEntity (which covers the spiritual force) and travay:CeremonialSequence (which covers the ritual sequence).", "outgoing": [{"uri": "iroko:masqueradeFunction", "label": "masquerade function", "type": "obj", "range": "Concept", "access": "comm", "def": "The ceremonial function of this masquerade. Range: iroko:MasqueradeFunctionScheme."}, {"uri": "iroko:masqueradeInsignia", "label": "masquerade insignia", "type": "data", "range": "langString", "access": "init", "def": "Description of costume elements, materials, and identifying features. Initiated-elder only."}, {"uri": "iroko:masqueradeName", "label": "masquerade name", "type": "data", "range": "langString", "access": "comm", "def": "The name of the masquerade or masked figure. Community-restricted."}, {"uri": "iroko:masqueradeSociety", "label": "masquerade society", "type": "obj", "range": "Initiatory Society", "access": "comm", "def": "The initiatory society to which this masquerade belongs."}, {"uri": "iroko:representedEntity", "label": "represented entity", "type": "obj", "range": "SpiritualEntity", "access": "init", "def": "The ancestral spirit, principle, or force embodied by this masquerade. Range: iroko:SpiritualEntity. Initiated-only: the identity of what a masquerade embodies is esoteric in many traditions."}, {"uri": "iroko:masqueradeRequiredGrade", "label": "required grade for performance", "type": "obj", "range": "Society Grade", "access": "init", "def": "The minimum grade required to perform or wear this masquerade. Initiated-only."}], "incoming": [], "cross": []}, "SocietyTitle": {"uri": "iroko:SocietyTitle", "label": "Society Title", "definition": "A named office or titled position within an initiatory society, distinct from grade level. Titles may be elected, inherited, purchased, or conferred. Examples: Iyamba (Abakuá), Isue (Abakuá), Ekueñón (Abakuá), Apetebi Ogboni, Olori Egungun. Each title carries specific ritual functions, insignia, and governance authority. Title names are community-restricted; the ritual functions attached to them are initiated-only.", "outgoing": [{"uri": "iroko:titleRequiredGrade", "label": "required grade", "type": "obj", "range": "Society Grade", "access": "init", "def": "The minimum grade required to hold this title. Initiated-only."}, {"uri": "iroko:titleConferralMethod", "label": "title conferral method", "type": "obj", "range": "Concept", "access": "comm", "def": "How this title is conferred: election, hereditary succession, purchase, senior nomination. Range: iroko:TitleConferralScheme."}, {"uri": "iroko:titleFunction", "label": "title function", "type": "data", "range": "langString", "access": "init", "def": "The ritual, ceremonial, or governance function of this title holder. Initiated-only."}, {"uri": "iroko:titleInsignia", "label": "title insignia", "type": "data", "range": "langString", "access": "init", "def": "Material objects, dress, or identifying marks associated with this title. Initiated-elder only: insignia descriptions can enable unauthorized imitation."}, {"uri": "iroko:titleName", "label": "title name", "type": "data", "range": "langString", "access": "comm", "def": "The name of the office or title in the tradition's language. Community-restricted."}], "incoming": [{"uri": "iroko:membershipTitle", "label": "membership title", "type": "obj", "access": "init", "def": "A title held by this member within the society.", "domain": "Membership Record", "from": "iroko:Membership Record", "fromLabel": "Membership Record", "module": "Ékpè Module", "stem": "iroko-ekpe"}], "cross": []}};
 const PROPERTIES = [{"uri": "iroko:associatedHouse", "label": "associated house", "type": "obj", "domain": "Initiatory Society", "range": "House", "access": "comm", "def": "A religious house (iroko:House) with which this society maintains an ongoing ceremonial relationship. In many traditions, society and house membership overlap for senior practitioners."}, {"uri": "iroko:dissolutionAuthority", "label": "dissolution authority", "type": "data", "domain": "Forced Dissolution", "range": "langString", "access": "pub", "def": "The external authority (state, colonial power, occupying government) that forced dissolution of the society. Free text, language-tagged."}, {"uri": "iroko:dissolutionDate", "label": "dissolution date", "type": "data", "domain": "Forced Dissolution", "range": "langString", "access": "pub", "def": "The date or approximate period of the forced dissolution event."}, {"uri": "iroko:dissolutionEvent", "label": "dissolution event", "type": "obj", "domain": "Initiatory Society", "range": "Forced Dissolution", "access": "pub", "def": "Links an InitiatorySociety to a ForcedDissolution event that ended or suspended its operation by external authority."}, {"uri": "iroko:foundingLocation", "label": "founding location", "type": "data", "domain": "Initiatory Society", "range": "langString", "access": "pub", "def": "Place of origin or founding of the society. City/country level is public; specific address is community-restricted."}, {"uri": "iroko:genderPolicy", "label": "gender policy", "type": "data", "domain": "Initiatory Society", "range": "langString", "access": "comm", "def": "Documents tradition-specific rules regarding gender and membership. For Abakuá: historically male-only (juramento); for Ogboni: both male and female members, with distinct female titleholder roles (Iyalode); for Gelede: primarily concerns gender complementarity (mothers/fathers). Free-text, records documented practice without normative judgment."}, {"uri": "iroko:gradeCount", "label": "grade count", "type": "data", "domain": "Initiatory Society", "range": "integer", "access": "comm", "def": "Number of grades in this society's hierarchy. The count is community-restricted in active societies; public for historical documentation."}, {"uri": "iroko:gradeLevel", "label": "grade level", "type": "data", "domain": "Society Grade", "range": "integer", "access": "comm", "def": "Numeric position in the grade sequence. 1 = lowest/entry. Community-restricted."}, {"uri": "iroko:gradeName", "label": "grade name", "type": "data", "domain": "Society Grade", "range": "langString", "access": "comm", "def": "The name of the grade in the tradition's language. Community-restricted for active societies."}, {"uri": "iroko:gradePrerequisite", "label": "grade prerequisite", "type": "obj", "domain": "Society Grade", "range": "Society Grade", "access": "init", "def": "The grade that must be held before this grade may be received. Initiated-only: the sequencing of grades is esoteric knowledge."}, {"uri": "iroko:gradePrivileges", "label": "grade privileges", "type": "data", "domain": "Society Grade", "range": "langString", "access": "init", "def": "The ritual, governance, or social privileges conferred by this grade. Initiated-elder only."}, {"uri": "iroko:gradeSign", "label": "grade sign", "type": "obj", "domain": "Society Grade", "range": "GraphicSign", "access": "init", "def": "The esoteric graphic sign or identifying mark associated with this grade. Range: iroko:GraphicSign — grade signs in Ékpè and cognate societies are drawn symbols belonging to a sacred sign system, not free-text strings. Initiated-elder only."}, {"uri": "iroko:gradeSociety", "label": "grade society", "type": "obj", "domain": "Society Grade", "range": "Initiatory Society", "access": "comm", "def": "The initiatory society to which this grade belongs."}, {"uri": "iroko:initiatingOfficiant", "label": "initiating officiant", "type": "obj", "domain": "Membership Record", "range": "Person", "access": "none", "def": "The titleholder who performed the initiation. No-access."}, {"uri": "iroko:lodgeName", "label": "lodge name", "type": "data", "domain": "Society Lodge", "range": "langString", "access": "comm", "def": "The public name of the lodge or potencia. In Abakuá: the potencia name (e.g., Efik Butón, Efik Efor). Community-restricted for active lodges; public for historical lodges documented in scholarly sources."}, {"uri": "iroko:lodgeTerritory", "label": "lodge territory", "type": "data", "domain": "Society Lodge", "range": "langString", "access": "pub", "def": "The geographic or community territory over which a lodge exercises spiritual and social jurisdiction. Free-text description."}, {"uri": "iroko:masqueradeFunction", "label": "masquerade function", "type": "obj", "domain": "Society Masquerade", "range": "Concept", "access": "comm", "def": "The ceremonial function of this masquerade. Range: iroko:MasqueradeFunctionScheme."}, {"uri": "iroko:masqueradeInsignia", "label": "masquerade insignia", "type": "data", "domain": "Society Masquerade", "range": "langString", "access": "init", "def": "Description of costume elements, materials, and identifying features. Initiated-elder only."}, {"uri": "iroko:masqueradeName", "label": "masquerade name", "type": "data", "domain": "Society Masquerade", "range": "langString", "access": "comm", "def": "The name of the masquerade or masked figure. Community-restricted."}, {"uri": "iroko:masqueradeSociety", "label": "masquerade society", "type": "obj", "domain": "Society Masquerade", "range": "Initiatory Society", "access": "comm", "def": "The initiatory society to which this masquerade belongs."}, {"uri": "iroko:memberPerson", "label": "member person", "type": "obj", "domain": "Membership Record", "range": "Person", "access": "none", "def": "The person to whom this membership record belongs. No-access: member identity is the most protected information in society records."}, {"uri": "iroko:membershipDate", "label": "membership date", "type": "data", "domain": "Membership Record", "range": "date", "access": "comm", "def": "Date of initiation into this grade. Community-restricted for historical records."}, {"uri": "iroko:membershipGrade", "label": "membership grade", "type": "obj", "domain": "Membership Record", "range": "Society Grade", "access": "init", "def": "The grade held by this member."}, {"uri": "iroko:membershipSociety", "label": "membership society", "type": "obj", "domain": "Membership Record", "range": "Initiatory Society", "access": "comm", "def": "The society into which the individual was initiated."}, {"uri": "iroko:membershipTitle", "label": "membership title", "type": "obj", "domain": "Membership Record", "range": "Society Title", "access": "init", "def": "A title held by this member within the society."}, {"uri": "iroko:parentSociety", "label": "parent society", "type": "obj", "domain": "Society Lodge", "range": "Initiatory Society", "access": "pub", "def": "The broader society network or tradition of which this lodge is a chapter. A Havana Abakuá potencia links to the Abakuá tradition; a Calabar Ékpè lodge links to the Ékpè tradition. Subproperty of prov:wasDerivedFrom."}, {"uri": "iroko:representedEntity", "label": "represented entity", "type": "obj", "domain": "Society Masquerade", "range": "SpiritualEntity", "access": "init", "def": "The ancestral spirit, principle, or force embodied by this masquerade. Range: iroko:SpiritualEntity. Initiated-only: the identity of what a masquerade embodies is esoteric in many traditions."}, {"uri": "iroko:titleRequiredGrade", "label": "required grade", "type": "obj", "domain": "Society Title", "range": "Society Grade", "access": "init", "def": "The minimum grade required to hold this title. Initiated-only."}, {"uri": "iroko:masqueradeRequiredGrade", "label": "required grade for performance", "type": "obj", "domain": "Society Masquerade", "range": "Society Grade", "access": "init", "def": "The minimum grade required to perform or wear this masquerade. Initiated-only."}, {"uri": "iroko:societyGovernanceStructure", "label": "society governance structure", "type": "obj", "domain": "Initiatory Society", "range": "Concept", "access": "comm", "def": "The governance model of this society. Range: iroko:GovernanceStructureScheme."}, {"uri": "iroko:societyStatus", "label": "society status", "type": "obj", "domain": "Initiatory Society", "range": "Concept", "access": "pub", "def": "The current operational status of an initiatory society. Range: iroko:SocietyStatusScheme concepts (active, historical, reformed, forcibly-dissolved). A forcibly-dissolved society's archival records retain their access restrictions — dissolution by external authority does not transfer governance to the suppressing power or to the public."}, {"uri": "iroko:societyTradition", "label": "society tradition", "type": "obj", "domain": "Initiatory Society", "range": "Concept", "access": "pub", "def": "The Afro-Atlantic tradition within which this society operates. Range: iroko:TraditionScheme."}, {"uri": "iroko:societyType", "label": "society type", "type": "obj", "domain": "Initiatory Society", "range": "Concept", "access": "pub", "def": "Typological classification of the society. Range: iroko:InitiatorySocietyTypeScheme."}, {"uri": "iroko:titleConferralMethod", "label": "title conferral method", "type": "obj", "domain": "Society Title", "range": "Concept", "access": "comm", "def": "How this title is conferred: election, hereditary succession, purchase, senior nomination. Range: iroko:TitleConferralScheme."}, {"uri": "iroko:titleFunction", "label": "title function", "type": "data", "domain": "Society Title", "range": "langString", "access": "init", "def": "The ritual, ceremonial, or governance function of this title holder. Initiated-only."}, {"uri": "iroko:titleInsignia", "label": "title insignia", "type": "data", "domain": "Society Title", "range": "langString", "access": "init", "def": "Material objects, dress, or identifying marks associated with this title. Initiated-elder only: insignia descriptions can enable unauthorized imitation."}, {"uri": "iroko:titleName", "label": "title name", "type": "data", "domain": "Society Title", "range": "langString", "access": "comm", "def": "The name of the office or title in the tradition's language. Community-restricted."}];
+const CONCEPTS = {"society-abakua": {"id": "society-abakua", "uri": "iroko:society-abakua", "label": "Abakuá", "definition": "The Abakuá mutual aid and initiatory society founded in Cuba in 1836, derived from Ékpè/Ngbe through enslaved Efik and Efut practitioners in Havana and Matanzas. Organized into potencias (lodges), each with a specific founding charter and ranked titleholders. Known in Cuban public life through the íremes (diablito masquerades) which appear at funerals and public ceremonies. Male-only by tradition (juramento).", "scope": "One of the most extensively documented Afro-Atlantic initiatory societies due to 19th-century Cuban court records and 20th-century ethnographic work (Cabrera, Sosa). Historical lodge names and early records are in the public domain; contemporary lodge governance and membership remain restricted.", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "society-agemo": {"id": "society-agemo", "uri": "iroko:society-agemo", "label": "Agemo", "definition": "An Ijebu Yorùbá priestly and masquerade society associated with Agemo, a deity of transformation and mediation between worlds. The Agemo festival cycle involves multiple masquerades representing aspects of Agemo's power. Restricted primarily to Ijebu initiates.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "society-egungun": {"id": "society-egungun", "uri": "iroko:society-egungun", "label": "Egungun", "definition": "The Yorùbá ancestral masquerade society responsible for summoning and embodying ancestral spirits (egungun). Membership and performance rights are typically hereditary through specific lineages. The masked figure is understood as a manifestation of the collective ancestral force, not a theatrical performance. Widespread across Yorùbáland and Afro-Atlantic.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "society-gelede": {"id": "society-gelede", "uri": "iroko:society-gelede", "label": "Gelede", "definition": "A masquerade society of the Yorùbá, Nago, and Fon peoples honoring the power of women, especially elder women, ancestresses, and the mothers (àwọn ìyá wa). Gelede festivals feature carved wooden masks worn by male dancers who embody female spiritual authority. UNESCO Intangible Cultural Heritage. Active in Nigeria, Benin, and Afro-Atlantic communities.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "society-ogboni": {"id": "society-ogboni", "uri": "iroko:society-ogboni", "label": "Ogboni / Oshugbo", "definition": "The Yorùbá earth-deity society organized around Onilé (the earth) and its representations. Historically a governance institution with judicial, political, and ritual authority in Yorùbá towns. Members include both men and women. The Reformed Ogboni Fraternity (ROF) is a Christianized offshoot. Distinct from the traditional Oshugbo lineages in Ijebu and other areas.", "scope": "", "notation": "", "altLabels": ["Reformed Ogboni Fraternity"], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "society-oro": {"id": "society-oro", "uri": "iroko:society-oro", "label": "Oro", "definition": "A Yorùbá male initiatory society associated with the voice of Oro (heard as a bullroarer), ancestral authority, and community sanction. Oro festivals enforce communal prohibitions and conduct ancestral rites. Strict gender separation is central to Oro practice: women must remain indoors when Oro goes out.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "society-other": {"id": "society-other", "uri": "iroko:society-other", "label": "Other", "definition": "Initiatory society type not covered by existing concepts. Use skos:scopeNote to describe.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "society-poro": {"id": "society-poro", "uri": "iroko:society-poro", "label": "Poro", "definition": "The male initiatory bush school society widespread among Mande, Kpelle, Temne, and neighboring peoples of Sierra Leone, Liberia, and Guinea. Poro manages male initiation, education, and community governance through a graded forest-based curriculum.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "society-sande": {"id": "society-sande", "uri": "iroko:society-sande", "label": "Sande / Bundo", "definition": "The female counterpart to Poro, managing female initiation among Mende, Temne, and neighboring peoples. Sande is distinctive in African contexts as a society where women wear and operate the sacred Sowei helmet mask.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "society-ekpe": {"id": "society-ekpe", "uri": "iroko:society-ekpe", "label": "Ékpè / Ngbe", "definition": "The Ékpè (also Ngbe) leopard society originating among Ejagham and neighboring Cross River peoples of Nigeria and Cameroon. One of the most widespread and influential initiatory societies in West Africa, with documented Afro-Atlantic presence through enslaved Africans in Cuba (Abakuá) and elsewhere. Organized around graded leopard-force initiation; Nsibidi script is associated with Ékpè esoteric communication.", "scope": "Ékpè and Abakuá are historically related but institutionally distinct. Use iroko:parentSociety to express the derived relationship.", "notation": "", "altLabels": ["Leopard Society"], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:InitiatorySocietyTypeScheme", "schemeId": "InitiatorySocietyTypeScheme", "schemeLabel": "Initiatory Society Types"}, "mask-function-ancestral-embodiment": {"id": "mask-function-ancestral-embodiment", "uri": "iroko:mask-function-ancestral-embodiment", "label": "Ancestral embodiment", "definition": "The masquerade manifests an ancestral spirit or collective ancestral force. Primary function of Egungun.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MasqueradeFunctionScheme", "schemeId": "MasqueradeFunctionScheme", "schemeLabel": "Masquerade Functions"}, "mask-function-communal-sanction": {"id": "mask-function-communal-sanction", "uri": "iroko:mask-function-communal-sanction", "label": "Communal sanction / enforcement", "definition": "The masquerade enforces community rules or social norms through symbolic or direct intervention. Function of Oro.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MasqueradeFunctionScheme", "schemeId": "MasqueradeFunctionScheme", "schemeLabel": "Masquerade Functions"}, "mask-function-entertainment": {"id": "mask-function-entertainment", "uri": "iroko:mask-function-entertainment", "label": "Entertainment / social satire", "definition": "The masquerade performs entertainment, social commentary, or satire as a secondary function. Often combined with sacred primary functions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MasqueradeFunctionScheme", "schemeId": "MasqueradeFunctionScheme", "schemeLabel": "Masquerade Functions"}, "mask-function-funerary": {"id": "mask-function-funerary", "uri": "iroko:mask-function-funerary", "label": "Funerary / transition rites", "definition": "The masquerade participates in funerary ceremonies, guiding the deceased or honoring the passing. Abakuá íremes appear at members' funerals.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MasqueradeFunctionScheme", "schemeId": "MasqueradeFunctionScheme", "schemeLabel": "Masquerade Functions"}, "mask-function-healing": {"id": "mask-function-healing", "uri": "iroko:mask-function-healing", "label": "Healing / protective", "definition": "The masquerade carries healing or protective power for the community or individual supplicants.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MasqueradeFunctionScheme", "schemeId": "MasqueradeFunctionScheme", "schemeLabel": "Masquerade Functions"}, "mask-function-honor-mothers": {"id": "mask-function-honor-mothers", "uri": "iroko:mask-function-honor-mothers", "label": "Honoring the mothers", "definition": "The masquerade pays tribute to the power of elder women, ancestresses, and female spiritual authority. Primary function of Gelede.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MasqueradeFunctionScheme", "schemeId": "MasqueradeFunctionScheme", "schemeLabel": "Masquerade Functions"}, "mask-function-other": {"id": "mask-function-other", "uri": "iroko:mask-function-other", "label": "Other", "definition": "Masquerade function not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MasqueradeFunctionScheme", "schemeId": "MasqueradeFunctionScheme", "schemeLabel": "Masquerade Functions"}, "mask-function-society-voice": {"id": "mask-function-society-voice", "uri": "iroko:mask-function-society-voice", "label": "Society voice / announcement", "definition": "The masquerade carries and communicates the voice or authority of the society. Function of Abakuá íremes and Ékpè masquerades.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:MasqueradeFunctionScheme", "schemeId": "MasqueradeFunctionScheme", "schemeLabel": "Masquerade Functions"}, "gov-consensus": {"id": "gov-consensus", "uri": "iroko:gov-consensus", "label": "Consensus / deliberative", "definition": "Decisions made through deliberation among all members or all senior members without fixed hierarchical authority.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:GovernanceStructureScheme", "schemeId": "GovernanceStructureScheme", "schemeLabel": "Society Governance Structures"}, "gov-council-of-elders": {"id": "gov-council-of-elders", "uri": "iroko:gov-council-of-elders", "label": "Council of elders", "definition": "Governance by a council of senior members without strict linear grade hierarchy. Characteristic of Ogboni and some Egungun lineages.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:GovernanceStructureScheme", "schemeId": "GovernanceStructureScheme", "schemeLabel": "Society Governance Structures"}, "gov-elected-officers": {"id": "gov-elected-officers", "uri": "iroko:gov-elected-officers", "label": "Elected officers", "definition": "Governance officers are elected by the membership for defined terms. More common in Afro-Atlantic adaptations (Reformed Ogboni Fraternity, some Abakuá mutual aid structures).", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:GovernanceStructureScheme", "schemeId": "GovernanceStructureScheme", "schemeLabel": "Society Governance Structures"}, "gov-hereditary-title": {"id": "gov-hereditary-title", "uri": "iroko:gov-hereditary-title", "label": "Hereditary title succession", "definition": "Key titles pass within specific families or lineages. Characteristic of some Egungun and Agemo societies.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:GovernanceStructureScheme", "schemeId": "GovernanceStructureScheme", "schemeLabel": "Society Governance Structures"}, "gov-hierarchical-grade": {"id": "gov-hierarchical-grade", "uri": "iroko:gov-hierarchical-grade", "label": "Hierarchical grade system", "definition": "Authority flows through a defined sequence of grades; higher grades govern lower. Characteristic of Ékpè, Abakuá, and similar tiered societies.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:GovernanceStructureScheme", "schemeId": "GovernanceStructureScheme", "schemeLabel": "Society Governance Structures"}, "gov-other": {"id": "gov-other", "uri": "iroko:gov-other", "label": "Other", "definition": "Governance structure not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:GovernanceStructureScheme", "schemeId": "GovernanceStructureScheme", "schemeLabel": "Society Governance Structures"}, "societyStatus-active": {"id": "societyStatus-active", "uri": "iroko:societyStatus-active", "label": "active", "definition": "The society is currently operating, initiating members, and exercising its governance functions.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SocietyStatusScheme", "schemeId": "SocietyStatusScheme", "schemeLabel": "Society Status Scheme"}, "societyStatus-forcibly-dissolved": {"id": "societyStatus-forcibly-dissolved", "uri": "iroko:societyStatus-forcibly-dissolved", "label": "forcibly dissolved", "definition": "The society was suppressed by an external authority — colonial administration, state government, or occupying power — rather than ceasing through internal process. Records held by a forcibly dissolved society do not become public as a result of the dissolution. See also: iroko:ForcedDissolution.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SocietyStatusScheme", "schemeId": "SocietyStatusScheme", "schemeLabel": "Society Status Scheme"}, "societyStatus-historical": {"id": "societyStatus-historical", "uri": "iroko:societyStatus-historical", "label": "historical", "definition": "The society is no longer operating but was not forcibly dissolved — it ceased through natural discontinuity, succession failure, or community decision.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SocietyStatusScheme", "schemeId": "SocietyStatusScheme", "schemeLabel": "Society Status Scheme"}, "societyStatus-reformed": {"id": "societyStatus-reformed", "uri": "iroko:societyStatus-reformed", "label": "reformed", "definition": "The society has been reconstituted after a period of dormancy or dissolution, with continuity of tradition but a break in institutional operation.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:SocietyStatusScheme", "schemeId": "SocietyStatusScheme", "schemeLabel": "Society Status Scheme"}, "conferral-election": {"id": "conferral-election", "uri": "iroko:conferral-election", "label": "Election by membership", "definition": "Title conferred by vote of eligible members.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:TitleConferralScheme", "schemeId": "TitleConferralScheme", "schemeLabel": "Title Conferral Methods"}, "conferral-hereditary": {"id": "conferral-hereditary", "uri": "iroko:conferral-hereditary", "label": "Hereditary succession", "definition": "Title passes within a family or lineage by birthright or elder designation.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:TitleConferralScheme", "schemeId": "TitleConferralScheme", "schemeLabel": "Title Conferral Methods"}, "conferral-other": {"id": "conferral-other", "uri": "iroko:conferral-other", "label": "Other", "definition": "Title conferral method not covered by existing concepts.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:TitleConferralScheme", "schemeId": "TitleConferralScheme", "schemeLabel": "Title Conferral Methods"}, "conferral-purchase": {"id": "conferral-purchase", "uri": "iroko:conferral-purchase", "label": "Purchase / fee-based conferral", "definition": "Title conferred in exchange for a defined payment or contribution to the society. Common in some Ékpè and Abakuá grade structures.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:TitleConferralScheme", "schemeId": "TitleConferralScheme", "schemeLabel": "Title Conferral Methods"}, "conferral-senior-nomination": {"id": "conferral-senior-nomination", "uri": "iroko:conferral-senior-nomination", "label": "Senior nomination", "definition": "Title conferred by nomination from existing titleholders or elders.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:TitleConferralScheme", "schemeId": "TitleConferralScheme", "schemeLabel": "Title Conferral Methods"}, "conferral-spiritual-designation": {"id": "conferral-spiritual-designation", "uri": "iroko:conferral-spiritual-designation", "label": "Spiritual designation", "definition": "Title conferred through divination or spiritual indication rather than human election.", "scope": "", "notation": "", "altLabels": [], "broader": [], "narrower": [], "related": [], "usedBy": [], "scheme": "iroko:TitleConferralScheme", "schemeId": "TitleConferralScheme", "schemeLabel": "Title Conferral Methods"}};
 const MODULE_CROSS = [];
 const CITE_FORMATS = {"plain": "Iroko Historical Society. (2026). Ékpè Module (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-ekpe.html. CC0 1.0 Universal.", "plainHTML": "Iroko Historical Society. (2026). <em>Iroko Framework: Ékpè Module</em> (v1.3.0). https://ontology.irokosociety.org/vocab/iroko-ekpe.html. CC0 1.0 Universal.", "bibtex": "@misc{iroko_ekpe_2026,\n  author    = {{Iroko Historical Society}},\n  title     = {{Iroko Framework: Ékpè Module}},\n  year      = {2026},\n  version   = {1.3.0},\n  url       = {https://ontology.irokosociety.org/vocab/iroko-ekpe.html},\n  note      = {CC0 1.0 Universal}\n}", "ris": "TY  - DATA\nAU  - Iroko Historical Society\nTI  - Iroko Framework: Ékpè Module\nPY  - 2026\nUR  - https://ontology.irokosociety.org/vocab/iroko-ekpe.html\nVL  - 1.3.0\nN1  - CC0 1.0 Universal\nER  -"};
 
@@ -685,7 +735,74 @@ function renderProp(p, isIncoming) {
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
+function escapeHTML(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+function conceptURI(c) {
+  return 'https://ontology.irokosociety.org/iroko#' + c.id;
+}
+
+function conceptPageLink(c) {
+  return window.location.href.split('#')[0] + '#concept-' + c.id;
+}
+
+function turtleLiteral(value) {
+  return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+}
+
+function conceptTurtle(c) {
+  const lines = [
+    `iroko:${c.id} a skos:Concept ;`,
+    `    skos:prefLabel "${turtleLiteral(c.label)}"@en ;`
+  ];
+  if (c.definition) lines.push(`    skos:definition "${turtleLiteral(c.definition)}"@en ;`);
+  lines.push(`    skos:inScheme ${c.scheme} .`);
+  return lines.join('\n');
+}
+
+function conceptRefHTML(item) {
+  const text = `${item.uri} - ${item.label}`;
+  if (CONCEPTS[item.id]) {
+    return `<button type="button" class="cp-link" onclick="activateConcept('${item.id}', {push:true})">${escapeHTML(text)}</button>`;
+  }
+  return `<span class="cp-tag">${escapeHTML(text)}</span>`;
+}
+
+function conceptSection(title, html) {
+  if (!html) return '';
+  return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
+}
+
+function renderConceptRelations(c) {
+  const sections = [];
+  if (c.altLabels && c.altLabels.length) {
+    sections.push(conceptSection('Alternate Labels',
+      `<div class="cp-tags">${c.altLabels.map(x=>`<span class="cp-tag">${escapeHTML(x)}</span>`).join('')}</div>`));
+  }
+  if (c.scope) {
+    sections.push(conceptSection('Scope Note', `<div class="cp-def">${escapeHTML(c.scope)}</div>`));
+  }
+  for (const [title, items] of [['Broader', c.broader], ['Narrower', c.narrower], ['Related', c.related]]) {
+    if (items && items.length) {
+      sections.push(conceptSection(title, `<div class="cp-tags">${items.map(conceptRefHTML).join('')}</div>`));
+    }
+  }
+  const used = c.usedBy || [];
+  if (used.length) {
+    const shown = used.slice(0, 8).map(u =>
+      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
+    ).join('');
+    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
+    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+  }
+  return sections.join('');
+}
+
 let activeClass = null;
+let activeConcept = null;
 let activeCiteFormat = 'plain';
 
 function activateClass(key, opts = {}) {
@@ -751,9 +868,52 @@ function activateProperty(p) {
   resetSidebar();
 }
 
+function activateConcept(key, opts = {}) {
+  const c = CONCEPTS[key];
+  if (!c) return;
+  if (activeConcept === key && !opts.force) { closeConcept(); return; }
+  activeConcept = key;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const chip = document.getElementById('concept-' + key);
+  chip?.classList.add('active');
+  const panel = document.getElementById('concept-panel');
+  const chips = chip?.closest('.concept-chips');
+  if (chips && chips.nextElementSibling !== panel) {
+    chips.insertAdjacentElement('afterend', panel);
+  }
+  panel.dataset.conceptId = key;
+  document.getElementById('cp-uri').textContent = c.uri;
+  document.getElementById('cp-label').textContent = c.label;
+  document.getElementById('cp-def').textContent = c.definition || 'No definition recorded yet.';
+  document.getElementById('cp-meta').innerHTML = `
+    <div class="cp-meta"><span class="cp-meta-k">Scheme</span><span class="cp-meta-v">${escapeHTML(c.scheme)}</span></div>
+    <div class="cp-meta"><span class="cp-meta-k">Canonical URI</span><span class="cp-meta-v">${escapeHTML(conceptURI(c))}</span></div>
+    ${c.notation ? `<div class="cp-meta"><span class="cp-meta-k">Notation</span><span class="cp-meta-v">${escapeHTML(c.notation)}</span></div>` : ''}
+  `;
+  document.getElementById('cp-sections').innerHTML = renderConceptRelations(c);
+  panel.classList.add('visible');
+  if (opts.push) history.pushState(null, '', '#concept-' + key);
+  const target = opts.scrollTarget === 'chip' ? chip : panel;
+  if (opts.scroll !== false) target?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function closeConcept(opts = {}) {
+  const oldKey = activeConcept;
+  activeConcept = null;
+  document.querySelectorAll('.chip').forEach(chip=>chip.classList.remove('active'));
+  const panel = document.getElementById('concept-panel');
+  if (panel) panel.classList.remove('visible');
+  if (opts.clearHash !== false && oldKey && window.location.hash === '#concept-' + oldKey) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+}
+
 function openFragmentTarget() {
   const hash = window.location.hash.replace('#','');
-  if (!hash) return;
+  if (!hash) {
+    closeConcept({clearHash:false, scroll:false});
+    return;
+  }
 
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
@@ -781,7 +941,11 @@ function openFragmentTarget() {
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    const conceptId = hash.slice(8);
+    if (CONCEPTS[conceptId]) {
+      activateConcept(conceptId, {force:true, scrollTarget:'chip'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
   }
 }
 
@@ -861,10 +1025,23 @@ function copyLink(btn) {
 }
 
 // ── Fragment URI auto-open ────────────────────────────────────────────────────
+function copyConcept(btn, kind) {
+  const c = CONCEPTS[document.getElementById('concept-panel')?.dataset.conceptId];
+  if (!c) return;
+  const text = kind === 'uri' ? conceptURI(c) : kind === 'turtle' ? conceptTurtle(c) : conceptPageLink(c);
+  const reset = btn.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent = reset; btn.classList.remove('copied');},2000);
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   openFragmentTarget();
 });
 window.addEventListener('hashchange', openFragmentTarget);
+window.addEventListener('popstate', openFragmentTarget);
 
 </script>
 </body>
