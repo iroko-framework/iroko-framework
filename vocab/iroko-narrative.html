@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,32 +288,32 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-Fieldnote"></span>
         <div class="cls-card" id="card-Fieldnote" onclick="activateClass('Fieldnote')">
+          <span class="term-anchor" id="cls-Fieldnote"></span>
           <span class="cls-uri">iroko:Fieldnote</span>
           <span class="cls-label">Fieldnote</span>
           <span class="cls-hint">subClassOf NarrativeVariant</span>
         </div>
-        <span class="term-anchor" id="cls-InterpretiveStance"></span>
         <div class="cls-card" id="card-InterpretiveStance" onclick="activateClass('InterpretiveStance')">
+          <span class="term-anchor" id="cls-InterpretiveStance"></span>
           <span class="cls-uri">iroko:InterpretiveStance</span>
           <span class="cls-label">Interpretive Stance</span>
           <span class="cls-hint">subClassOf Concept</span>
         </div>
-        <span class="term-anchor" id="cls-KinshipClaim"></span>
         <div class="cls-card" id="card-KinshipClaim" onclick="activateClass('KinshipClaim')">
+          <span class="term-anchor" id="cls-KinshipClaim"></span>
           <span class="cls-uri">iroko:KinshipClaim</span>
           <span class="cls-label">Kinship Claim</span>
           <span class="cls-hint">subClassOf Assertion</span>
         </div>
-        <span class="term-anchor" id="cls-StoryLineage"></span>
         <div class="cls-card" id="card-StoryLineage" onclick="activateClass('StoryLineage')">
+          <span class="term-anchor" id="cls-StoryLineage"></span>
           <span class="cls-uri">iroko:StoryLineage</span>
           <span class="cls-label">Story Lineage</span>
           
         </div>
-        <span class="term-anchor" id="cls-Testimony"></span>
         <div class="cls-card" id="card-Testimony" onclick="activateClass('Testimony')">
+          <span class="term-anchor" id="cls-Testimony"></span>
           <span class="cls-uri">iroko:Testimony</span>
           <span class="cls-label">Testimony</span>
           <span class="cls-hint">subClassOf NarrativeVariant</span>
@@ -741,7 +742,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -751,20 +752,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 

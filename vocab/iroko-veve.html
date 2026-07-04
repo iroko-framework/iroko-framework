@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,26 +288,26 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-GraphicSign"></span>
         <div class="cls-card" id="card-GraphicSign" onclick="activateClass('GraphicSign')">
+          <span class="term-anchor" id="cls-GraphicSign"></span>
           <span class="cls-uri">iroko:GraphicSign</span>
           <span class="cls-label">Graphic Sign</span>
           <span class="cls-hint">subClassOf Sign</span>
         </div>
-        <span class="term-anchor" id="cls-SignCorpus"></span>
         <div class="cls-card" id="card-SignCorpus" onclick="activateClass('SignCorpus')">
+          <span class="term-anchor" id="cls-SignCorpus"></span>
           <span class="cls-uri">iroko:SignCorpus</span>
           <span class="cls-label">Sign Corpus</span>
           <span class="cls-hint">subClassOf LineageKnowledgeGraph</span>
         </div>
-        <span class="term-anchor" id="cls-SignInstance"></span>
         <div class="cls-card" id="card-SignInstance" onclick="activateClass('SignInstance')">
+          <span class="term-anchor" id="cls-SignInstance"></span>
           <span class="cls-uri">iroko:SignInstance</span>
           <span class="cls-label">Sign Instance</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-SignSystem"></span>
         <div class="cls-card" id="card-SignSystem" onclick="activateClass('SignSystem')">
+          <span class="term-anchor" id="cls-SignSystem"></span>
           <span class="cls-uri">iroko:SignSystem</span>
           <span class="cls-label">Sign System</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
@@ -785,7 +786,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -795,20 +796,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 

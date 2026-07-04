@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,38 +288,38 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-Authority"></span>
         <div class="cls-card" id="card-Authority" onclick="activateClass('Authority')">
+          <span class="term-anchor" id="cls-Authority"></span>
           <span class="cls-uri">iroko:Authority</span>
           <span class="cls-label">Authority</span>
           <span class="cls-hint">subClassOf RitualAuthority</span>
         </div>
-        <span class="term-anchor" id="cls-AuthorityBasis"></span>
         <div class="cls-card" id="card-AuthorityBasis" onclick="activateClass('AuthorityBasis')">
+          <span class="term-anchor" id="cls-AuthorityBasis"></span>
           <span class="cls-uri">iroko:AuthorityBasis</span>
           <span class="cls-label">Authority Basis</span>
           <span class="cls-hint">subClassOf Concept</span>
         </div>
-        <span class="term-anchor" id="cls-AuthorityType"></span>
         <div class="cls-card" id="card-AuthorityType" onclick="activateClass('AuthorityType')">
+          <span class="term-anchor" id="cls-AuthorityType"></span>
           <span class="cls-uri">iroko:AuthorityType</span>
           <span class="cls-label">Authority Type</span>
           <span class="cls-hint">subClassOf Concept</span>
         </div>
-        <span class="term-anchor" id="cls-ContributorRole"></span>
         <div class="cls-card" id="card-ContributorRole" onclick="activateClass('ContributorRole')">
+          <span class="term-anchor" id="cls-ContributorRole"></span>
           <span class="cls-uri">iroko:ContributorRole</span>
           <span class="cls-label">Contributor Role</span>
           <span class="cls-hint">subClassOf Concept</span>
         </div>
-        <span class="term-anchor" id="cls-Jurisdiction"></span>
         <div class="cls-card" id="card-Jurisdiction" onclick="activateClass('Jurisdiction')">
+          <span class="term-anchor" id="cls-Jurisdiction"></span>
           <span class="cls-uri">iroko:Jurisdiction</span>
           <span class="cls-label">Jurisdiction</span>
           
         </div>
-        <span class="term-anchor" id="cls-RitualRole"></span>
         <div class="cls-card" id="card-RitualRole" onclick="activateClass('RitualRole')">
+          <span class="term-anchor" id="cls-RitualRole"></span>
           <span class="cls-uri">iroko:RitualRole</span>
           <span class="cls-label">Ritual Role</span>
           <span class="cls-hint">subClassOf Concept</span>
@@ -734,7 +735,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -744,20 +745,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 

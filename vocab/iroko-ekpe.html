@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,44 +288,44 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-ForcedDissolution"></span>
         <div class="cls-card" id="card-ForcedDissolution" onclick="activateClass('ForcedDissolution')">
+          <span class="term-anchor" id="cls-ForcedDissolution"></span>
           <span class="cls-uri">iroko:ForcedDissolution</span>
           <span class="cls-label">Forced Dissolution</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-InitiatorySociety"></span>
         <div class="cls-card" id="card-InitiatorySociety" onclick="activateClass('InitiatorySociety')">
+          <span class="term-anchor" id="cls-InitiatorySociety"></span>
           <span class="cls-uri">iroko:InitiatorySociety</span>
           <span class="cls-label">Initiatory Society</span>
           <span class="cls-hint">subClassOf Organization · subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-MembershipRecord"></span>
         <div class="cls-card" id="card-MembershipRecord" onclick="activateClass('MembershipRecord')">
+          <span class="term-anchor" id="cls-MembershipRecord"></span>
           <span class="cls-uri">iroko:MembershipRecord</span>
           <span class="cls-label">Membership Record</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-SocietyGrade"></span>
         <div class="cls-card" id="card-SocietyGrade" onclick="activateClass('SocietyGrade')">
+          <span class="term-anchor" id="cls-SocietyGrade"></span>
           <span class="cls-uri">iroko:SocietyGrade</span>
           <span class="cls-label">Society Grade</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-SocietyLodge"></span>
         <div class="cls-card" id="card-SocietyLodge" onclick="activateClass('SocietyLodge')">
+          <span class="term-anchor" id="cls-SocietyLodge"></span>
           <span class="cls-uri">iroko:SocietyLodge</span>
           <span class="cls-label">Society Lodge</span>
           <span class="cls-hint">subClassOf InitiatorySociety</span>
         </div>
-        <span class="term-anchor" id="cls-SocietyMasquerade"></span>
         <div class="cls-card" id="card-SocietyMasquerade" onclick="activateClass('SocietyMasquerade')">
+          <span class="term-anchor" id="cls-SocietyMasquerade"></span>
           <span class="cls-uri">iroko:SocietyMasquerade</span>
           <span class="cls-label">Society Masquerade</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-SocietyTitle"></span>
         <div class="cls-card" id="card-SocietyTitle" onclick="activateClass('SocietyTitle')">
+          <span class="term-anchor" id="cls-SocietyTitle"></span>
           <span class="cls-uri">iroko:SocietyTitle</span>
           <span class="cls-label">Society Title</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
@@ -757,7 +758,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -767,20 +768,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 

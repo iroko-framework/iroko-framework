@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,32 +288,32 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-ManifestationMode"></span>
         <div class="cls-card" id="card-ManifestationMode" onclick="activateClass('ManifestationMode')">
+          <span class="term-anchor" id="cls-ManifestationMode"></span>
           <span class="cls-uri">iroko:ManifestationMode</span>
           <span class="cls-label">Manifestation Mode</span>
           <span class="cls-hint">subClassOf Concept</span>
         </div>
-        <span class="term-anchor" id="cls-ManuscriptObject"></span>
         <div class="cls-card" id="card-ManuscriptObject" onclick="activateClass('ManuscriptObject')">
+          <span class="term-anchor" id="cls-ManuscriptObject"></span>
           <span class="cls-uri">iroko:ManuscriptObject</span>
           <span class="cls-label">Manuscript Object</span>
           <span class="cls-hint">subClassOf DocumentaryEvidence</span>
         </div>
-        <span class="term-anchor" id="cls-Medium"></span>
         <div class="cls-card" id="card-Medium" onclick="activateClass('Medium')">
+          <span class="term-anchor" id="cls-Medium"></span>
           <span class="cls-uri">iroko:Medium</span>
           <span class="cls-label">Medium</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-MediumType"></span>
         <div class="cls-card" id="card-MediumType" onclick="activateClass('MediumType')">
+          <span class="term-anchor" id="cls-MediumType"></span>
           <span class="cls-uri">iroko:MediumType</span>
           <span class="cls-label">Medium Type</span>
           <span class="cls-hint">subClassOf Concept</span>
         </div>
-        <span class="term-anchor" id="cls-TextContent"></span>
         <div class="cls-card" id="card-TextContent" onclick="activateClass('TextContent')">
+          <span class="term-anchor" id="cls-TextContent"></span>
           <span class="cls-uri">iroko:TextContent</span>
           <span class="cls-label">Text Content</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
@@ -683,7 +684,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -693,20 +694,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 

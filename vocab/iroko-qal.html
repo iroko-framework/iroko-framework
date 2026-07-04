@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,38 +288,38 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-LexicalEntry"></span>
         <div class="cls-card" id="card-LexicalEntry" onclick="activateClass('LexicalEntry')">
+          <span class="term-anchor" id="cls-LexicalEntry"></span>
           <span class="cls-uri">iroko:LexicalEntry</span>
           <span class="cls-label">Lexical Entry</span>
           <span class="cls-hint">subClassOf LexicalEntry · subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-LexicalSense"></span>
         <div class="cls-card" id="card-LexicalSense" onclick="activateClass('LexicalSense')">
+          <span class="term-anchor" id="cls-LexicalSense"></span>
           <span class="cls-uri">iroko:LexicalSense</span>
           <span class="cls-label">Lexical Sense</span>
           <span class="cls-hint">subClassOf LexicalSense · subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-LiturgicalPhrase"></span>
         <div class="cls-card" id="card-LiturgicalPhrase" onclick="activateClass('LiturgicalPhrase')">
+          <span class="term-anchor" id="cls-LiturgicalPhrase"></span>
           <span class="cls-uri">iroko:LiturgicalPhrase</span>
           <span class="cls-label">Liturgical Phrase</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-SacredLanguage"></span>
         <div class="cls-card" id="card-SacredLanguage" onclick="activateClass('SacredLanguage')">
+          <span class="term-anchor" id="cls-SacredLanguage"></span>
           <span class="cls-uri">iroko:SacredLanguage</span>
           <span class="cls-label">Sacred Language</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-SacredSpeechAct"></span>
         <div class="cls-card" id="card-SacredSpeechAct" onclick="activateClass('SacredSpeechAct')">
+          <span class="term-anchor" id="cls-SacredSpeechAct"></span>
           <span class="cls-uri">iroko:SacredSpeechAct</span>
           <span class="cls-label">Sacred Speech Act</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-SecretName"></span>
         <div class="cls-card" id="card-SecretName" onclick="activateClass('SecretName')">
+          <span class="term-anchor" id="cls-SecretName"></span>
           <span class="cls-uri">iroko:SecretName</span>
           <span class="cls-label">Secret Name</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
@@ -763,7 +764,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -773,20 +774,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 

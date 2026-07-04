@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,68 +288,68 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-AuthorizationChain"></span>
         <div class="cls-card" id="card-AuthorizationChain" onclick="activateClass('AuthorizationChain')">
+          <span class="term-anchor" id="cls-AuthorizationChain"></span>
           <span class="cls-uri">iroko:AuthorizationChain</span>
           <span class="cls-label">Authorization Chain</span>
           
         </div>
-        <span class="term-anchor" id="cls-AuthorizationEvent"></span>
         <div class="cls-card" id="card-AuthorizationEvent" onclick="activateClass('AuthorizationEvent')">
+          <span class="term-anchor" id="cls-AuthorizationEvent"></span>
           <span class="cls-uri">iroko:AuthorizationEvent</span>
           <span class="cls-label">Authorization Event</span>
           <span class="cls-hint">subClassOf RitualEvent</span>
         </div>
-        <span class="term-anchor" id="cls-ManifestationEvent"></span>
         <div class="cls-card" id="card-ManifestationEvent" onclick="activateClass('ManifestationEvent')">
+          <span class="term-anchor" id="cls-ManifestationEvent"></span>
           <span class="cls-uri">iroko:ManifestationEvent</span>
           <span class="cls-label">Manifestation Event</span>
           <span class="cls-hint">subClassOf RitualEvent</span>
         </div>
-        <span class="term-anchor" id="cls-RefusalEvent"></span>
         <div class="cls-card" id="card-RefusalEvent" onclick="activateClass('RefusalEvent')">
+          <span class="term-anchor" id="cls-RefusalEvent"></span>
           <span class="cls-uri">iroko:RefusalEvent</span>
           <span class="cls-label">Refusal Event</span>
           <span class="cls-hint">subClassOf RitualEvent</span>
         </div>
-        <span class="term-anchor" id="cls-RitualAction"></span>
         <div class="cls-card" id="card-RitualAction" onclick="activateClass('RitualAction')">
+          <span class="term-anchor" id="cls-RitualAction"></span>
           <span class="cls-uri">iroko:RitualAction</span>
           <span class="cls-label">Ritual Action</span>
           
         </div>
-        <span class="term-anchor" id="cls-RitualConsequence"></span>
         <div class="cls-card" id="card-RitualConsequence" onclick="activateClass('RitualConsequence')">
+          <span class="term-anchor" id="cls-RitualConsequence"></span>
           <span class="cls-uri">iroko:RitualConsequence</span>
           <span class="cls-label">Ritual Consequence</span>
           
         </div>
-        <span class="term-anchor" id="cls-RitualEvent"></span>
         <div class="cls-card" id="card-RitualEvent" onclick="activateClass('RitualEvent')">
+          <span class="term-anchor" id="cls-RitualEvent"></span>
           <span class="cls-uri">iroko:RitualEvent</span>
           <span class="cls-label">Ritual Event</span>
           
         </div>
-        <span class="term-anchor" id="cls-RitualPractitioner"></span>
         <div class="cls-card" id="card-RitualPractitioner" onclick="activateClass('RitualPractitioner')">
+          <span class="term-anchor" id="cls-RitualPractitioner"></span>
           <span class="cls-uri">iroko:RitualPractitioner</span>
           <span class="cls-label">Ritual Practitioner</span>
           <span class="cls-hint">subClassOf SacredAgent</span>
         </div>
-        <span class="term-anchor" id="cls-SacredAgent"></span>
         <div class="cls-card" id="card-SacredAgent" onclick="activateClass('SacredAgent')">
+          <span class="term-anchor" id="cls-SacredAgent"></span>
           <span class="cls-uri">iroko:SacredAgent</span>
           <span class="cls-label">Sacred Agent</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-Spirit"></span>
         <div class="cls-card" id="card-Spirit" onclick="activateClass('Spirit')">
+          <span class="term-anchor" id="cls-Spirit"></span>
           <span class="cls-uri">iroko:Spirit</span>
           <span class="cls-label">Spirit</span>
           <span class="cls-hint">subClassOf SacredAgent</span>
         </div>
-        <span class="term-anchor" id="cls-StewardshipMandate"></span>
         <div class="cls-card" id="card-StewardshipMandate" onclick="activateClass('StewardshipMandate')">
+          <span class="term-anchor" id="cls-StewardshipMandate"></span>
           <span class="cls-uri">iroko:StewardshipMandate</span>
           <span class="cls-label">Stewardship Mandate</span>
           
@@ -598,7 +599,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -608,20 +609,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 

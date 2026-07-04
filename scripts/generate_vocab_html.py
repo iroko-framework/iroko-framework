@@ -324,6 +324,7 @@ PAGE_CSS = """
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -617,7 +618,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -627,20 +628,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 
@@ -937,8 +938,8 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
       </div>
       <div class="class-grid">""")
     for cls in classes:
-        A(f"""        <span class="term-anchor" id="cls-{h(cls['id'])}"></span>
-        <div class="cls-card" id="card-{h(cls['id'])}" onclick="activateClass('{h(cls['id'])}')">
+        A(f"""        <div class="cls-card" id="card-{h(cls['id'])}" onclick="activateClass('{h(cls['id'])}')">
+          <span class="term-anchor" id="cls-{h(cls['id'])}"></span>
           <span class="cls-uri">iroko:{h(cls['id'])}</span>
           <span class="cls-label">{h(cls['label'])}</span>
           {f'<span class="cls-hint">{h(cls["hint"])}</span>' if cls['hint'] else ''}

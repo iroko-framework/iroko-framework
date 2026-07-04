@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,32 +288,32 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-DivinationCorpus"></span>
         <div class="cls-card" id="card-DivinationCorpus" onclick="activateClass('DivinationCorpus')">
+          <span class="term-anchor" id="cls-DivinationCorpus"></span>
           <span class="cls-uri">iroko:DivinationCorpus</span>
           <span class="cls-label">Divination Corpus</span>
           <span class="cls-hint">subClassOf LineageKnowledgeGraph</span>
         </div>
-        <span class="term-anchor" id="cls-DivinationReading"></span>
         <div class="cls-card" id="card-DivinationReading" onclick="activateClass('DivinationReading')">
+          <span class="term-anchor" id="cls-DivinationReading"></span>
           <span class="cls-uri">iroko:DivinationReading</span>
           <span class="cls-label">Divination Reading</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-DivinationSign"></span>
         <div class="cls-card" id="card-DivinationSign" onclick="activateClass('DivinationSign')">
+          <span class="term-anchor" id="cls-DivinationSign"></span>
           <span class="cls-uri">iroko:DivinationSign</span>
           <span class="cls-label">Divination Sign</span>
           <span class="cls-hint">subClassOf Sign</span>
         </div>
-        <span class="term-anchor" id="cls-DivinationSystem"></span>
         <div class="cls-card" id="card-DivinationSystem" onclick="activateClass('DivinationSystem')">
+          <span class="term-anchor" id="cls-DivinationSystem"></span>
           <span class="cls-uri">iroko:DivinationSystem</span>
           <span class="cls-label">Divination System</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-DivinationVerse"></span>
         <div class="cls-card" id="card-DivinationVerse" onclick="activateClass('DivinationVerse')">
+          <span class="term-anchor" id="cls-DivinationVerse"></span>
           <span class="cls-uri">iroko:DivinationVerse</span>
           <span class="cls-label">Divination Verse</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
@@ -732,7 +733,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -742,20 +743,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 

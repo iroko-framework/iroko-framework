@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,32 +288,32 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-ConstraintBasis"></span>
         <div class="cls-card" id="card-ConstraintBasis" onclick="activateClass('ConstraintBasis')">
+          <span class="term-anchor" id="cls-ConstraintBasis"></span>
           <span class="cls-uri">iroko:ConstraintBasis</span>
           <span class="cls-label">Constraint Basis</span>
           <span class="cls-hint">subClassOf Concept</span>
         </div>
-        <span class="term-anchor" id="cls-DisclosurePermission"></span>
         <div class="cls-card" id="card-DisclosurePermission" onclick="activateClass('DisclosurePermission')">
+          <span class="term-anchor" id="cls-DisclosurePermission"></span>
           <span class="cls-uri">iroko:DisclosurePermission</span>
           <span class="cls-label">Disclosure Permission</span>
           <span class="cls-hint">subClassOf EpistemicConstraint</span>
         </div>
-        <span class="term-anchor" id="cls-DisclosureRestriction"></span>
         <div class="cls-card" id="card-DisclosureRestriction" onclick="activateClass('DisclosureRestriction')">
+          <span class="term-anchor" id="cls-DisclosureRestriction"></span>
           <span class="cls-uri">iroko:DisclosureRestriction</span>
           <span class="cls-label">Disclosure Restriction</span>
           <span class="cls-hint">subClassOf EpistemicConstraint</span>
         </div>
-        <span class="term-anchor" id="cls-EpistemicConstraint"></span>
         <div class="cls-card" id="card-EpistemicConstraint" onclick="activateClass('EpistemicConstraint')">
+          <span class="term-anchor" id="cls-EpistemicConstraint"></span>
           <span class="cls-uri">iroko:EpistemicConstraint</span>
           <span class="cls-label">Epistemic Constraint</span>
           
         </div>
-        <span class="term-anchor" id="cls-SanctionedDisclosure"></span>
         <div class="cls-card" id="card-SanctionedDisclosure" onclick="activateClass('SanctionedDisclosure')">
+          <span class="term-anchor" id="cls-SanctionedDisclosure"></span>
           <span class="cls-uri">iroko:SanctionedDisclosure</span>
           <span class="cls-label">Sanctioned Disclosure</span>
           <span class="cls-hint">subClassOf EpistemicConstraint</span>
@@ -597,7 +598,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -607,20 +608,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 

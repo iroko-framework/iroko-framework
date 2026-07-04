@@ -53,6 +53,7 @@
       background: var(--paper); cursor: pointer;
       transition: border-color .15s, background .15s, box-shadow .15s; position: relative; }
     .term-anchor { display:block; height:0; overflow:hidden; scroll-margin-top:6rem; }
+    .cls-card, .pr-item, .chip { scroll-margin-top:6rem; }
     .cls-card:hover { background: var(--paper-warm); border-color: var(--green-mid); }
     .cls-card.active { border-color: var(--green); background: var(--green-light);
       box-shadow: 0 2px 8px rgba(46,74,30,.12); }
@@ -287,26 +288,26 @@
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
       <div class="class-grid">
-        <span class="term-anchor" id="cls-Offering"></span>
         <div class="cls-card" id="card-Offering" onclick="activateClass('Offering')">
+          <span class="term-anchor" id="cls-Offering"></span>
           <span class="cls-uri">iroko:Offering</span>
           <span class="cls-label">Offering</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-Path"></span>
         <div class="cls-card" id="card-Path" onclick="activateClass('Path')">
+          <span class="term-anchor" id="cls-Path"></span>
           <span class="cls-uri">iroko:Path</span>
           <span class="cls-label">Path</span>
           <span class="cls-hint">subClassOf SacredEntity</span>
         </div>
-        <span class="term-anchor" id="cls-Shrine"></span>
         <div class="cls-card" id="card-Shrine" onclick="activateClass('Shrine')">
+          <span class="term-anchor" id="cls-Shrine"></span>
           <span class="cls-uri">iroko:Shrine</span>
           <span class="cls-label">Shrine</span>
           <span class="cls-hint">subClassOf SacredSpecimen</span>
         </div>
-        <span class="term-anchor" id="cls-SpiritualEntity"></span>
         <div class="cls-card" id="card-SpiritualEntity" onclick="activateClass('SpiritualEntity')">
+          <span class="term-anchor" id="cls-SpiritualEntity"></span>
           <span class="cls-uri">iroko:SpiritualEntity</span>
           <span class="cls-label">Spiritual Entity</span>
           <span class="cls-hint">subClassOf Spirit</span>
@@ -878,7 +879,7 @@ function openFragmentTarget() {
   const classKey = hash.startsWith('cls-') ? hash.slice(4) : hash;
   if (CLASSES[classKey]) {
     activateClass(classKey, {force:true});
-    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('card-'+classKey)?.scrollIntoView({behavior:'smooth',block:'start'});
     return;
   }
 
@@ -888,20 +889,20 @@ function openFragmentTarget() {
       const props = [...(d.outgoing || []), ...(d.incoming || [])];
       if (props.some(p => localName(p.uri) === propId)) {
         activateClass(key, {force:true});
-        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+        document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
         return;
       }
     }
     const prop = PROPERTIES.find(p => localName(p.uri) === propId);
     if (prop) {
       activateProperty(prop);
-      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+      document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
       return;
     }
   }
 
   if (hash.startsWith('concept-')) {
-    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById(hash)?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 }
 
