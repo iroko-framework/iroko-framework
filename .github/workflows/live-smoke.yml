@@ -1,0 +1,35 @@
+name: Live Site Smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_run:
+    workflows: ["pages build and deployment"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install Python dependencies
+      run: pip install -r requirements.txt
+
+    - name: Allow Pages propagation
+      if: github.event_name == 'workflow_run'
+      run: sleep 30
+
+    - name: Smoke check live ontology site
+      run: python3 scripts/check_site.py --no-local --live-base https://ontology.irokosociety.org
