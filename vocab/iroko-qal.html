@@ -166,9 +166,19 @@
       padding:.25rem .45rem; text-decoration:none; overflow-wrap:anywhere; }
     button.cp-link { cursor:pointer; }
     .cp-link:hover { border-color:var(--green-mid); color:var(--green); }
+    .cp-used-group { border:1px solid var(--rule); border-radius:3px; background:var(--paper-warm);
+      padding:.5rem .6rem; margin-bottom:.45rem; }
+    .cp-used-head { display:flex; justify-content:space-between; gap:.75rem; align-items:baseline;
+      margin-bottom:.3rem; }
+    .cp-used-predicate { font-family:var(--mono); font-size:.66rem; color:var(--green-mid); overflow-wrap:anywhere; }
+    .cp-used-count { font-family:var(--mono); font-size:.58rem; letter-spacing:.08em;
+      text-transform:uppercase; color:var(--ink-soft); white-space:nowrap; }
     .cp-used { font-size:.76rem; color:var(--ink-mid); line-height:1.45; margin:.25rem 0; }
     .cp-used code { font-family:var(--mono); font-size:.68rem; color:var(--green-mid); }
-    .cp-more { font-size:.74rem; color:var(--ink-soft); font-style:italic; margin-top:.35rem; }
+    .cp-used-toggle { font-family:var(--mono); font-size:.66rem; letter-spacing:.08em;
+      text-transform:uppercase; color:var(--green-mid); background:var(--paper);
+      border:1px solid var(--rule); border-radius:3px; padding:.35rem .6rem; cursor:pointer; }
+    .cp-used-toggle:hover { border-color:var(--green-mid); color:var(--green); background:var(--green-light); }
     .cp-actions { display:flex; flex-wrap:wrap; gap:.45rem; border-top:1px solid var(--rule); margin-top:.8rem; padding-top:.75rem; }
 
     /* Sidebar */
@@ -782,6 +792,52 @@ function conceptSection(title, html) {
   return `<div class="cp-section"><div class="cp-section-title">${title}</div>${html}</div>`;
 }
 
+function renderUsedBy(used, visibleLimit = 8) {
+  const groups = [];
+  const byPredicate = new Map();
+  for (const item of used) {
+    const predicate = item.predicate || 'Referenced by';
+    if (!byPredicate.has(predicate)) {
+      byPredicate.set(predicate, []);
+      groups.push(predicate);
+    }
+    byPredicate.get(predicate).push(item);
+  }
+  let visibleCount = 0;
+  let hiddenCount = 0;
+  const groupHTML = groups.map(predicate => {
+    const items = byPredicate.get(predicate).slice().sort((a,b) => a.label.localeCompare(b.label));
+    const rows = items.map(u => {
+      const hidden = visibleCount >= visibleLimit;
+      if (hidden) hiddenCount += 1;
+      visibleCount += 1;
+      return `<div class="cp-used${hidden ? ' cp-used-extra' : ''}"${hidden ? ' hidden' : ''}>
+        <code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)}
+      </div>`;
+    }).join('');
+    return `<div class="cp-used-group">
+      <div class="cp-used-head">
+        <span class="cp-used-predicate">${escapeHTML(predicate)}</span>
+        <span class="cp-used-count">${items.length} ${items.length === 1 ? 'use' : 'uses'}</span>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+  const toggle = hiddenCount
+    ? `<button type="button" class="cp-used-toggle" onclick="toggleConceptUsedBy(this)" data-hidden-count="${hiddenCount}">Show ${hiddenCount} more</button>`
+    : '';
+  return groupHTML + toggle;
+}
+
+function toggleConceptUsedBy(btn) {
+  const section = btn.closest('.cp-section');
+  const rows = section ? Array.from(section.querySelectorAll('.cp-used-extra')) : [];
+  const expanded = btn.dataset.expanded === 'true';
+  rows.forEach(row => { row.hidden = expanded; });
+  btn.dataset.expanded = expanded ? 'false' : 'true';
+  btn.textContent = expanded ? `Show ${btn.dataset.hiddenCount} more` : 'Show fewer';
+}
+
 function renderConceptRelations(c) {
   const sections = [];
   if (c.altLabels && c.altLabels.length) {
@@ -798,11 +854,7 @@ function renderConceptRelations(c) {
   }
   const used = c.usedBy || [];
   if (used.length) {
-    const shown = used.slice(0, 8).map(u =>
-      `<div class="cp-used"><code>${escapeHTML(u.uri)}</code> ${escapeHTML(u.label)} <code>${escapeHTML(u.predicate)}</code></div>`
-    ).join('');
-    const more = used.length > 8 ? `<div class="cp-more">${used.length - 8} more local references</div>` : '';
-    sections.push(conceptSection(`Used By (${used.length})`, shown + more));
+    sections.push(conceptSection(`Used By (${used.length})`, renderUsedBy(used)));
   }
   return sections.join('');
 }

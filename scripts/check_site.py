@@ -36,8 +36,11 @@ MODULE_PAGE_EXCLUDES = {"iroko-termlist.html", "iroko-index.html"}
 REQUIRED_CORE_MARKERS = [
     'id="concept-panel"',
     "function activateConcept",
+    "function renderUsedBy",
+    "function toggleConceptUsedBy",
     "function copyConcept",
     "const CONCEPTS",
+    "cp-used-toggle",
     "Copy Turtle",
     'id="cls-AccessPolicy"',
 ]
@@ -45,7 +48,10 @@ LIVE_MARKERS = {
     "/vocab/iroko-core.html": [
         'id="concept-panel"',
         "function activateConcept",
+        "function renderUsedBy",
+        "function toggleConceptUsedBy",
         "const CONCEPTS",
+        "cp-used-toggle",
         "Copy Turtle",
     ],
     "/vocab/iroko-termlist.html": [
