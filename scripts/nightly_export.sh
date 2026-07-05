@@ -1,25 +1,21 @@
-#!/bin/bash
-# Run nightly to export public data to vocabulary repo
+#!/usr/bin/env bash
+#
+# Retired legacy helper.
+#
+# This script used to call export_minimal_public_data.py and commit data/*.ttl,
+# but those files are no longer part of this repository's active workflow.
 
-# Export minimal public data
-python3 scripts/export_minimal_public_data.py
+set -euo pipefail
 
-# Navigate to vocabulary repo
-cd ../iroko-framework
+cat <<'MSG'
+nightly_export.sh is retired.
 
-# Commit and push
-git add data/plants-public.ttl
-git commit -m "Update public plant data - $(date +%Y-%m-%d)"
-git push origin main
+Use the active ontology site workflow instead:
+  python scripts/build_all.py
+  python scripts/check_site.py
 
-echo "✓ Public data exported and pushed to GitHub Pages"
-```
+For publishing, run:
+  bash scripts/deploy.sh
+MSG
 
----
-
-## HTML Structure (Planned, Not Implemented Yet)
-
-Each vocabulary file gets a companion HTML file:
-```
-vocab/iroko-core.ttl     →  vocab/iroko-core.html
-vocab/iroko-ewe.ttl      →  vocab/iroko-ewe.html
+exit 1

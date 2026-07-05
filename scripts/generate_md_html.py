@@ -29,7 +29,6 @@ import argparse
 import sys
 import re
 from pathlib import Path
-from datetime import date
 import html as html_module
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -43,17 +42,22 @@ except ImportError:
     print("    pip install markdown --break-system-packages")
     sys.exit(1)
 
+from iroko_config import FRAMEWORK_VERSION, MONTH_YEAR
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
 
-# Docs directory to search for .md files when no stems are provided
-DOCS_DIR = Path(__file__).parent / "docs"
+# Repository paths
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SCRIPT_DIR = Path(__file__).resolve().parent
+DOCS_DIR = REPO_ROOT / "docs"
 
 # Fallback search paths when a stem is given without an explicit --input
 SEARCH_PATHS = [
-    Path(__file__).parent / "docs",
-    Path(__file__).parent,
+    DOCS_DIR,
+    REPO_ROOT,
+    SCRIPT_DIR,
 ]
 
 # Markdown extensions to enable
@@ -219,7 +223,7 @@ HTML_TEMPLATE = """\
     {toc_html}
 
     <div class="doc-content">
-      <p class="doc-meta">Iroko Framework v1.4.0 · {today}</p>
+      <p class="doc-meta">Iroko Framework v{version} · {month_year}</p>
       {content_html}
     </div>
 
@@ -283,7 +287,8 @@ def md_to_html(md_path: Path, css_depth: int = 1, include_toc: bool = True) -> s
         root_path=root_prefix,
         toc_html=toc_block,
         content_html=content_html,
-        today=date.today().strftime("%B %Y"),
+        version=FRAMEWORK_VERSION,
+        month_year=MONTH_YEAR,
     )
 
 
@@ -313,7 +318,7 @@ def convert_file(
     if dry_run:
         print(f"  [dry-run] Would write {out_path}  ({len(html_content):,} chars)")
     else:
-        out_path.write_text(html_content, encoding="utf-8")
+        out_path.write_text(html_content, encoding="utf-8", newline="\n")
         print(f"  ✓  {md_path.name}  →  {out_path}")
 
     return out_path

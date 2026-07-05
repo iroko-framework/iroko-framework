@@ -50,12 +50,14 @@ bash scripts/validate_ttl.sh
 
 # Generate HTML documentation
 python scripts/build_all.py
+
+# Check generated pages, links, JavaScript, RDF, sitemap, and robots policy
+python scripts/check_site.py
 ```
 
 You should see:
 ```
-✓ iroko-core.ttl valid
-✓ iroko-ewe.ttl valid
+SITE CHECK PASSED
 ```
 
 ## Workflow
@@ -76,11 +78,15 @@ Fix any syntax errors before proceeding.
 ### 3. Generate HTML Documentation
 ```bash
 python scripts/build_all.py
+python scripts/check_site.py
 ```
 
 This auto-generates:
-- `vocab/iroko-core.html`
-- `vocab/iroko-ewe.html`
+- module browse pages in `vocab/`
+- the full term list
+- RDF serializations
+- stable URI alias pages
+- `sitemap.xml`
 
 ### 4. Review Changes
 ```bash
@@ -97,13 +103,17 @@ bash scripts/deploy.sh
 
 This will:
 1. Validate TTL files
-2. Generate HTML
-3. Commit changes
-4. Push to GitHub
+2. Run the full build
+3. Run the generated site checks
+4. Ask before committing
+5. Ask before pushing to GitHub
 
 **Option B: Manual deployment**
 ```bash
-git add index.html docs/*.html docs/*.md vocab/*.ttl vocab/*.html vocab/*.jsonld vocab/*.rdf vocab/*.nt vocab/tradition-vocab.json iroko.html iroko-*.html iroko-framework/index.html
+python scripts/build_all.py
+python scripts/check_site.py
+git status --short
+git add -A
 git commit -m "Update vocabulary: [describe changes]"
 git push origin main
 ```
@@ -114,7 +124,7 @@ Changes will be live at https://ontology.irokosociety.org/ within a few minutes.
 
 ### Adding a Class
 ```turtle
-iroko:NewClass 
+iroko:NewClass
     a owl:Class ;
     rdfs:subClassOf iroko:SacredEntity ;
     rdfs:label "New Class"@en ;
@@ -124,7 +134,7 @@ iroko:NewClass
 
 ### Adding a Property
 ```turtle
-iroko:newProperty 
+iroko:newProperty
     a owl:ObjectProperty ;
     rdfs:label "new property"@en ;
     rdfs:comment "Description of the property."@en ;
@@ -136,7 +146,7 @@ iroko:newProperty
 
 ### Adding a Concept
 ```turtle
-iroko:ritual-new-use 
+iroko:ritual-new-use
     a skos:Concept ;
     skos:inScheme iroko:RitualUseScheme ;
     skos:prefLabel "New Ritual Use"@en ;
@@ -194,7 +204,7 @@ We use semantic versioning: `MAJOR.MINOR.PATCH`
 
 Update `owl:versionInfo` in the ontology declaration:
 ```turtle
-<https://ontology.irokosociety.org/iroko-core> 
+<https://ontology.irokosociety.org/iroko-core>
     a owl:Ontology ;
     owl:versionInfo "1.1.0" ;  # Update this
     dcterms:modified "2026-02-18"^^xsd:date ;  # Update this

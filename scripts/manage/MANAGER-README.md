@@ -55,7 +55,7 @@ Generated files (`vocab/*.html`, `vocab/*.jsonld`, etc.) are not updated
 until you run the build:
 
 - **In the manager:** Run Build page → Run Build button
-- **From the terminal:** `python scripts/build_all.py`
+- **From the terminal:** `python scripts/build_all.py`, then `python scripts/check_site.py`
 
 ---
 
@@ -89,4 +89,4 @@ Then run the build.
 - The manager runs on `localhost:5050` only — it is not accessible from other machines.
 - All writes are atomic: a `.tmp` file is validated before replacing the live TTL.
 - If a save produces invalid Turtle, the live file is untouched and the error surfaces in the flash message.
-- The manager does not push to GitHub. Use `scripts/deploy.sh` or git manually when ready to publish.
+- The manager does not push to GitHub. Use `scripts/deploy.sh` after the build/check pass, or commit and push manually when ready to publish.

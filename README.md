@@ -66,6 +66,13 @@ Run the full static build:
 
 ```bash
 python scripts/build_all.py
+python scripts/check_site.py
+```
+
+Publish after review:
+
+```bash
+bash scripts/deploy.sh
 ```
 
 Launch the local ontology manager:

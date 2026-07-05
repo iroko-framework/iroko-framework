@@ -1,38 +1,45 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# Deploy vocabulary updates to GitHub Pages
-# Validates TTL files, generates HTML, commits, and pushes
+# Canonical publish helper for the Iroko ontology site.
+# Runs validation, the full static build, and site QA before offering to commit/push.
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$SCRIPT_DIR/.."
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+if [ -n "${PYTHON:-}" ] && command -v "$PYTHON" >/dev/null 2>&1; then
+    PYTHON_BIN="$PYTHON"
+elif command -v python3 >/dev/null 2>&1; then
+    PYTHON_BIN="python3"
+elif command -v python >/dev/null 2>&1; then
+    PYTHON_BIN="python"
+else
+    echo "ERROR: Python was not found. Install Python, then run: pip install -r requirements.txt"
+    exit 1
+fi
 
 cd "$PROJECT_ROOT"
 
-echo "Iroko Framework Deployment"
+echo "Iroko Framework deployment"
 echo "=========================="
+echo "Python: $PYTHON_BIN"
 echo
 
-# Step 1: Validate TTL files
-echo "Step 1: Validating TTL files..."
-if ! bash "$SCRIPT_DIR/validate_ttl.sh"; then
-    echo "ERROR: TTL validation failed. Fix errors before deploying."
-    exit 1
-fi
+echo "Step 1: Validating Turtle files"
+bash "$SCRIPT_DIR/validate_ttl.sh"
 echo
 
-# Step 2: Generate HTML documentation
-echo "Step 2: Generating HTML documentation..."
-if ! python3 "$SCRIPT_DIR/generate_vocab_html.py"; then
-    echo "ERROR: HTML generation failed."
-    exit 1
-fi
+echo "Step 2: Running full site build"
+"$PYTHON_BIN" "$SCRIPT_DIR/build_all.py"
 echo
 
-# Step 3: Check for changes
-echo "Step 3: Checking for changes..."
-if git diff --quiet && git diff --cached --quiet; then
+echo "Step 3: Running generated site checks"
+"$PYTHON_BIN" "$SCRIPT_DIR/check_site.py"
+echo
+
+echo "Step 4: Reviewing changed files"
+if [ -z "$(git status --porcelain)" ]; then
     echo "No changes to deploy."
     exit 0
 fi
@@ -40,27 +47,32 @@ fi
 git status --short
 echo
 
-# Step 4: Commit changes
-echo "Step 4: Committing changes..."
-read -p "Enter commit message (or press Enter for default): " commit_msg
+read -r -p "Commit all listed changes? [y/N] " commit_confirm
+case "$commit_confirm" in
+    y|Y|yes|YES)
+        ;;
+    *)
+        echo "Build and checks passed. No commit made."
+        exit 0
+        ;;
+esac
 
-if [ -z "$commit_msg" ]; then
-    commit_msg="Update vocabulary - $(date +%Y-%m-%d)"
-fi
+default_msg="Update ontology site - $(date +%Y-%m-%d)"
+read -r -p "Commit message [$default_msg]: " commit_msg
+commit_msg="${commit_msg:-$default_msg}"
 
-git add vocab/*.ttl vocab/*.html data/*.ttl
+git add -A
 git commit -m "$commit_msg"
 echo
 
-# Step 5: Push to GitHub
-echo "Step 5: Pushing to GitHub..."
-read -p "Push to origin/main? (y/n): " confirm
-
-if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
-    git push origin main
-    echo
-    echo "✓ Deployed successfully!"
-    echo "Changes will be live at https://iroko-framework.github.io/iroko-framework/"
-else
-    echo "Deployment cancelled. Changes committed locally but not pushed."
-fi
+read -r -p "Push to origin/main? [y/N] " push_confirm
+case "$push_confirm" in
+    y|Y|yes|YES)
+        git push origin main
+        echo
+        echo "Deployed. GitHub Pages will update https://ontology.irokosociety.org/ shortly."
+        ;;
+    *)
+        echo "Commit created locally. Push later with: git push origin main"
+        ;;
+esac

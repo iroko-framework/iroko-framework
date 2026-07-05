@@ -121,6 +121,7 @@ def run_script(name: str, extra_args: list[str] | None = None) -> int:
         print(f"  ✗ {name} not found at {script}")
         return 1
     cmd = [sys.executable, str(script)] + (extra_args or [])
+    sys.stdout.flush()
     result = subprocess.run(cmd)
     return result.returncode
 
@@ -280,8 +281,9 @@ def main():
         print("       scripts/iroko_config.py  — title and subtitle")
         print("       index.html               — module-subtitle, module-version, module-desc")
         print("       vocab/index.html         — same three fields")
-        print("     Then rebuild that module's browse page:")
-        print("       python scripts/generate_vocab_html.py iroko-<stem>")
+        print("     Then run the canonical build and check:")
+        print("       python scripts/build_all.py")
+        print("       python scripts/check_site.py")
         print()
         print("     Step 5 naming warnings (region-* / Palo / Vodou altLabels)")
         print("     are pre-existing data issues — fix via the Iroko Manager.")

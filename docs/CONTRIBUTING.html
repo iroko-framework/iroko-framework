@@ -222,10 +222,12 @@ bash scripts/validate_ttl.sh
 
 # Generate HTML documentation
 python scripts/build_all.py
+
+# Check generated pages, links, JavaScript, RDF, sitemap, and robots policy
+python scripts/check_site.py
 </code></pre>
 <p>You should see:</p>
-<pre><code>✓ iroko-core.ttl valid
-✓ iroko-ewe.ttl valid
+<pre><code>SITE CHECK PASSED
 </code></pre>
 <h2 id="workflow">Workflow<a class="toc-anchor" href="#workflow" title="Permanent link">&para;</a></h2>
 <h3 id="1-edit-vocabulary-files">1. Edit Vocabulary Files<a class="toc-anchor" href="#1-edit-vocabulary-files" title="Permanent link">&para;</a></h3>
@@ -238,10 +240,14 @@ python scripts/build_all.py
 <p>Fix any syntax errors before proceeding.</p>
 <h3 id="3-generate-html-documentation">3. Generate HTML Documentation<a class="toc-anchor" href="#3-generate-html-documentation" title="Permanent link">&para;</a></h3>
 <pre><code class="language-bash">python scripts/build_all.py
+python scripts/check_site.py
 </code></pre>
 <p>This auto-generates:
-- <code>vocab/iroko-core.html</code>
-- <code>vocab/iroko-ewe.html</code></p>
+- module browse pages in <code>vocab/</code>
+- the full term list
+- RDF serializations
+- stable URI alias pages
+- <code>sitemap.xml</code></p>
 <h3 id="4-review-changes">4. Review Changes<a class="toc-anchor" href="#4-review-changes" title="Permanent link">&para;</a></h3>
 <pre><code class="language-bash">git status
 git diff vocab/
@@ -252,18 +258,22 @@ git diff vocab/
 </code></pre>
 <p>This will:
 1. Validate TTL files
-2. Generate HTML
-3. Commit changes
-4. Push to GitHub</p>
+2. Run the full build
+3. Run the generated site checks
+4. Ask before committing
+5. Ask before pushing to GitHub</p>
 <p><strong>Option B: Manual deployment</strong></p>
-<pre><code class="language-bash">git add index.html docs/*.html docs/*.md vocab/*.ttl vocab/*.html vocab/*.jsonld vocab/*.rdf vocab/*.nt vocab/tradition-vocab.json iroko.html iroko-*.html iroko-framework/index.html
+<pre><code class="language-bash">python scripts/build_all.py
+python scripts/check_site.py
+git status --short
+git add -A
 git commit -m &quot;Update vocabulary: [describe changes]&quot;
 git push origin main
 </code></pre>
 <p>Changes will be live at https://ontology.irokosociety.org/ within a few minutes.</p>
 <h2 id="adding-new-terms">Adding New Terms<a class="toc-anchor" href="#adding-new-terms" title="Permanent link">&para;</a></h2>
 <h3 id="adding-a-class">Adding a Class<a class="toc-anchor" href="#adding-a-class" title="Permanent link">&para;</a></h3>
-<pre><code class="language-turtle">iroko:NewClass 
+<pre><code class="language-turtle">iroko:NewClass
     a owl:Class ;
     rdfs:subClassOf iroko:SacredEntity ;
     rdfs:label &quot;New Class&quot;@en ;
@@ -271,7 +281,7 @@ git push origin main
     rdfs:isDefinedBy &lt;https://ontology.irokosociety.org/iroko-ewe&gt; .
 </code></pre>
 <h3 id="adding-a-property">Adding a Property<a class="toc-anchor" href="#adding-a-property" title="Permanent link">&para;</a></h3>
-<pre><code class="language-turtle">iroko:newProperty 
+<pre><code class="language-turtle">iroko:newProperty
     a owl:ObjectProperty ;
     rdfs:label &quot;new property&quot;@en ;
     rdfs:comment &quot;Description of the property.&quot;@en ;
@@ -281,7 +291,7 @@ git push origin main
     rdfs:isDefinedBy &lt;https://ontology.irokosociety.org/iroko-ewe&gt; .
 </code></pre>
 <h3 id="adding-a-concept">Adding a Concept<a class="toc-anchor" href="#adding-a-concept" title="Permanent link">&para;</a></h3>
-<pre><code class="language-turtle">iroko:ritual-new-use 
+<pre><code class="language-turtle">iroko:ritual-new-use
     a skos:Concept ;
     skos:inScheme iroko:RitualUseScheme ;
     skos:prefLabel &quot;New Ritual Use&quot;@en ;
@@ -324,7 +334,7 @@ git push origin main
 <li><strong>PATCH:</strong> Bug fixes, documentation improvements</li>
 </ul>
 <p>Update <code>owl:versionInfo</code> in the ontology declaration:</p>
-<pre><code class="language-turtle">&lt;https://ontology.irokosociety.org/iroko-core&gt; 
+<pre><code class="language-turtle">&lt;https://ontology.irokosociety.org/iroko-core&gt;
     a owl:Ontology ;
     owl:versionInfo &quot;1.1.0&quot; ;  # Update this
     dcterms:modified &quot;2026-02-18&quot;^^xsd:date ;  # Update this
