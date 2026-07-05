@@ -394,6 +394,59 @@ PAGE_CSS = """
       justify-content: space-between;
       align-items: baseline;
     }
+    .module-stats .stat-cell {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+    .module-stats a.stat-cell {
+      transition: background .15s, color .15s, box-shadow .15s;
+    }
+    .module-stats a.stat-cell:hover,
+    .module-stats a.stat-cell:focus {
+      background: var(--paper-warm);
+      color: var(--green);
+      outline: none;
+    }
+    .module-stats a.stat-cell:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--green-mid);
+    }
+    .module-stats .stat-cell-muted {
+      opacity: .55;
+    }
+    .module-jump {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+      margin: .75rem 0 0;
+    }
+    .module-jump a {
+      border: 1px solid var(--rule-strong);
+      border-radius: 3px;
+      background: var(--paper);
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .1em;
+      line-height: 1;
+      padding: .42rem .68rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background .15s, border-color .15s, color .15s, box-shadow .15s;
+    }
+    .module-jump a:hover,
+    .module-jump a:focus {
+      background: var(--paper-warm);
+      border-color: var(--green-mid);
+      color: var(--green);
+      outline: none;
+    }
+    .module-jump a:focus-visible {
+      box-shadow: 0 0 0 2px rgba(46,74,30,.18);
+    }
+    .module-section-anchor {
+      scroll-margin-top: 6rem;
+    }
     .zone-hint { font-size: .68rem; letter-spacing: 0; text-transform: none;
       color: var(--ink-soft); font-family: var(--serif); font-style: italic; opacity: .7; }
 
@@ -1090,6 +1143,32 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     n_concepts = sum(s["count"] for s in schemes)
     n_props    = len(properties)
 
+    def stat_cell(count: int, label: str, href: str | None = None) -> str:
+        inner = f'<span class="stat-n">{count}</span><span class="stat-label">{h(label)}</span>'
+        if href:
+            return (
+                f'<a class="stat-cell" href="{href}" '
+                f'aria-label="Jump to {h(label.lower())} section">{inner}</a>'
+            )
+        return f'<span class="stat-cell stat-cell-muted" aria-disabled="true">{inner}</span>'
+
+    concept_section_href = "#concepts" if schemes else None
+    stat_classes = stat_cell(n_classes, "Classes", "#classes")
+    stat_props = stat_cell(n_props, "Properties", "#properties")
+    stat_schemes = stat_cell(n_schemes, "Schemes", concept_section_href)
+    stat_concepts = stat_cell(n_concepts, "Concepts", concept_section_href)
+    jump_links = [
+        '<a href="#classes">Classes</a>',
+        '<a href="#properties">Properties</a>',
+    ]
+    if schemes:
+        jump_links.append('<a href="#concepts">Concepts</a>')
+    jump_links.extend([
+        '<a href="iroko-termlist.html">Term Index</a>',
+        f'<a href="{h(ttl_name)}">TTL</a>',
+    ])
+    module_jump = "\n    ".join(jump_links)
+
     # Date line
     date_line = ""
     if issued:
@@ -1216,11 +1295,15 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
   </header>
 
   <div class="module-stats" style="margin-top:1.5rem;">
-    <div class="stat-cell"><span class="stat-n">{n_classes}</span><span class="stat-label">Classes</span></div>
-    <div class="stat-cell"><span class="stat-n">{n_props}</span><span class="stat-label">Properties</span></div>
-    <div class="stat-cell"><span class="stat-n">{n_schemes}</span><span class="stat-label">Schemes</span></div>
-    <div class="stat-cell"><span class="stat-n">{n_concepts}</span><span class="stat-label">Concepts</span></div>
+    {stat_classes}
+    {stat_props}
+    {stat_schemes}
+    {stat_concepts}
   </div>
+
+  <nav class="module-jump" aria-label="Module sections">
+    {module_jump}
+  </nav>
 
   <div class="module-layout">
     <main class="module-main">
@@ -1228,7 +1311,7 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
 
     # Zone 1 — class grid
     A("""      <!-- ZONE 1: Classes -->
-      <div class="zone-head">
+      <div class="zone-head module-section-anchor" id="classes">
         Classes
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
@@ -1245,7 +1328,7 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     # Zone 2 — property panel shell
     A("""
       <!-- ZONE 2: Property panel -->
-      <div class="zone-head" style="margin-top:0;">
+      <div class="zone-head module-section-anchor" id="properties" style="margin-top:0;">
         Properties
         <span class="zone-hint" id="z2-hint">Click a class card above</span>
       </div>
@@ -1282,7 +1365,7 @@ def generate_html(ttl_path, output_path, cfg, incoming_index):
     # Zone 3 — concept schemes
     if schemes:
         A("""      <!-- ZONE 3: Concept Schemes -->
-      <div class="zone-head" style="margin-top:1rem;">
+      <div class="zone-head module-section-anchor" id="concepts" style="margin-top:1rem;">
         Concept Schemes
         <span class="zone-hint">""" + f"{n_concepts} concepts across {n_schemes} scheme{'s' if n_schemes!=1 else ''}" + """</span>
       </div>

@@ -34,6 +34,12 @@ from rdflib import Graph
 
 MODULE_PAGE_EXCLUDES = {"iroko-termlist.html", "iroko-index.html"}
 REQUIRED_CORE_MARKERS = [
+    'class="module-jump"',
+    'href="#classes"',
+    'href="#properties"',
+    'id="classes"',
+    'id="properties"',
+    'id="concepts"',
     'id="concept-panel"',
     "function activateConcept",
     "function renderUsedBy",
@@ -46,6 +52,12 @@ REQUIRED_CORE_MARKERS = [
 ]
 LIVE_MARKERS = {
     "/vocab/iroko-core.html": [
+        'class="module-jump"',
+        'href="#classes"',
+        'href="#properties"',
+        'id="classes"',
+        'id="properties"',
+        'id="concepts"',
         'id="concept-panel"',
         "function activateConcept",
         "function renderUsedBy",
@@ -160,6 +172,25 @@ class SiteCheck:
                     self.error(f"vocab/iroko-core.html missing marker: {marker}")
             if re.search(r'<div class="class-grid">\s*<span class="term-anchor"', core):
                 self.error("class grid has standalone term anchors; this breaks compact class layout")
+
+    def check_module_navigation(self) -> None:
+        for path in self.module_pages():
+            html = self.read_text(path)
+            required = [
+                'class="module-jump"',
+                'href="#classes"',
+                'href="#properties"',
+                'id="classes"',
+                'id="properties"',
+            ]
+            for marker in required:
+                if marker not in html:
+                    self.error(f"{path.name}: missing module navigation marker: {marker}")
+            has_concepts = 'id="concept-panel"' in html
+            if has_concepts and 'id="concepts"' not in html:
+                self.error(f"{path.name}: concepts panel exists but concepts section anchor is missing")
+            if 'href="#concepts"' in html and 'id="concepts"' not in html:
+                self.error(f"{path.name}: concepts jump link points to a missing anchor")
 
     def check_concept_data(self) -> None:
         pages = self.module_pages()
@@ -302,6 +333,7 @@ class SiteCheck:
 
     def run_local(self) -> bool:
         self.check_required_files_and_markers()
+        self.check_module_navigation()
         self.check_concept_data()
         self.check_term_links()
         self.check_js_syntax()

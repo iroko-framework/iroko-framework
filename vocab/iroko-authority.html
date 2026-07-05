@@ -43,6 +43,59 @@
       justify-content: space-between;
       align-items: baseline;
     }
+    .module-stats .stat-cell {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+    .module-stats a.stat-cell {
+      transition: background .15s, color .15s, box-shadow .15s;
+    }
+    .module-stats a.stat-cell:hover,
+    .module-stats a.stat-cell:focus {
+      background: var(--paper-warm);
+      color: var(--green);
+      outline: none;
+    }
+    .module-stats a.stat-cell:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--green-mid);
+    }
+    .module-stats .stat-cell-muted {
+      opacity: .55;
+    }
+    .module-jump {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+      margin: .75rem 0 0;
+    }
+    .module-jump a {
+      border: 1px solid var(--rule-strong);
+      border-radius: 3px;
+      background: var(--paper);
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .1em;
+      line-height: 1;
+      padding: .42rem .68rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background .15s, border-color .15s, color .15s, box-shadow .15s;
+    }
+    .module-jump a:hover,
+    .module-jump a:focus {
+      background: var(--paper-warm);
+      border-color: var(--green-mid);
+      color: var(--green);
+      outline: none;
+    }
+    .module-jump a:focus-visible {
+      box-shadow: 0 0 0 2px rgba(46,74,30,.18);
+    }
+    .module-section-anchor {
+      scroll-margin-top: 6rem;
+    }
     .zone-hint { font-size: .68rem; letter-spacing: 0; text-transform: none;
       color: var(--ink-soft); font-family: var(--serif); font-style: italic; opacity: .7; }
 
@@ -313,17 +366,25 @@
   </header>
 
   <div class="module-stats" style="margin-top:1.5rem;">
-    <div class="stat-cell"><span class="stat-n">6</span><span class="stat-label">Classes</span></div>
-    <div class="stat-cell"><span class="stat-n">12</span><span class="stat-label">Properties</span></div>
-    <div class="stat-cell"><span class="stat-n">4</span><span class="stat-label">Schemes</span></div>
-    <div class="stat-cell"><span class="stat-n">31</span><span class="stat-label">Concepts</span></div>
+    <a class="stat-cell" href="#classes" aria-label="Jump to classes section"><span class="stat-n">6</span><span class="stat-label">Classes</span></a>
+    <a class="stat-cell" href="#properties" aria-label="Jump to properties section"><span class="stat-n">12</span><span class="stat-label">Properties</span></a>
+    <a class="stat-cell" href="#concepts" aria-label="Jump to schemes section"><span class="stat-n">4</span><span class="stat-label">Schemes</span></a>
+    <a class="stat-cell" href="#concepts" aria-label="Jump to concepts section"><span class="stat-n">31</span><span class="stat-label">Concepts</span></a>
   </div>
+
+  <nav class="module-jump" aria-label="Module sections">
+    <a href="#classes">Classes</a>
+    <a href="#properties">Properties</a>
+    <a href="#concepts">Concepts</a>
+    <a href="iroko-termlist.html">Term Index</a>
+    <a href="iroko-authority.ttl">TTL</a>
+  </nav>
 
   <div class="module-layout">
     <main class="module-main">
 
       <!-- ZONE 1: Classes -->
-      <div class="zone-head">
+      <div class="zone-head module-section-anchor" id="classes">
         Classes
         <span class="zone-hint">Select a class to explore its properties</span>
       </div>
@@ -367,7 +428,7 @@
       </div>
 
       <!-- ZONE 2: Property panel -->
-      <div class="zone-head" style="margin-top:0;">
+      <div class="zone-head module-section-anchor" id="properties" style="margin-top:0;">
         Properties
         <span class="zone-hint" id="z2-hint">Click a class card above</span>
       </div>
@@ -401,7 +462,7 @@
       </div>
 
       <!-- ZONE 3: Concept Schemes -->
-      <div class="zone-head" style="margin-top:1rem;">
+      <div class="zone-head module-section-anchor" id="concepts" style="margin-top:1rem;">
         Concept Schemes
         <span class="zone-hint">31 concepts across 4 schemes</span>
       </div>
