@@ -292,25 +292,27 @@ All 413 properties across all 16 modules carry `iroko:minimumAccessLevel` annota
 
 ## Release Notes
 
-### v1.4.0 (March 2026)
+### v1.4.0 (May 2026)
 
-- **iroko-agency** — ...
-- **iroko-ekpe** — ...
-- **iroko-ngoma** — ...
-- **All modules** — ...
-- Zenodo deposit: [10.5281/zenodo.19157678](https://doi.org/10.5281/zenodo.19157678)
+- **iroko-core** — Added `iroko:Entity` as the neutral root class for the entire framework; `iroko:SacredEntity` now subclasses it, preserving all existing subclass relationships. Added `iroko:ArchivalPerson` for people documented by archival trace rather than personal attributes. Added `iroko:publicTitleType` sovereignty annotation with `iroko:PublicTitleTypeScheme` (five concepts). Added a four-property date precision model (`iroko:datePrecision`, `iroko:dateCentury`, `iroko:dateUncertain`, `iroko:nativeDateExpression`). Added six geographic region top concepts and six Afro-Atlantic/syncretic tradition top concepts to `iroko:TraditionScheme`.
+- **iroko-sankofa** — Added `iroko:sourceRegion` and `iroko:geographicLocus` properties for movement/return-event geography.
+- **iroko-manifestation** — Added `iroko:ManuscriptObject` and `iroko:TextContent` (FRBR-aligned), six supporting properties, and a ten-concept `PhysicalSupportScheme`.
+- **iroko-authority** — Added `iroko:ContributorRole` class and scheme (fourteen roles: scribe, patron, commissioner, translator, compiler, artist, notary, editor, dedicatee, recipient, bookseller, publisher, unspecified, attributed).
+- **iroko-ewe** — Version normalized from `2.1.0` to `1.4.0`.
+- **All changes additive** — no existing IRIs removed or altered; fully backward-compatible with v1.3.x.
+- Zenodo deposit: [10.5281/zenodo.20337228](https://doi.org/10.5281/zenodo.20337228)
 
-### v1.4.0 (March 2026)
+### v1.3.0 (March 2026)
 
 - **iroko-agency** — Added `iroko:RitualPractitioner` class (subclass of `iroko:SacredAgent`). Covers the full range of practitioners regardless of institutional recognition: consecrated title-holders (Babalawo, Manbo, Tata Nganga, Houngan, Iyalorisa) and those operating outside sanctioned structures. Legitimacy and jurisdiction modeled separately via `iroko:Authority`. Corrected pre-existing `owl:versionInfo` error (was `"2.0.0"`, now `"1.3.0"`).
 - **iroko-ekpe** — Added `iroko:ForcedDissolution` class for structured documentation of state suppression of sacred institutions. Added `iroko:societyStatus` property on `iroko:InitiatorySociety` with controlled vocabulary `iroko:SocietyStatusScheme` (four concepts: active, historical, reformed, forcibly-dissolved). Added supporting properties `iroko:dissolutionEvent`, `iroko:dissolutionAuthority`, `iroko:dissolutionDate`. Governance principle: forced dissolution by an external authority does not transfer custodial rights over sacred materials to the suppressing state or to the public. Primary case study: Machado-era suppression of Abakuá potencias in Cuba (1923).
 - **iroko-ngoma** — Broadened `iroko:possessionTrigger` domain from `iroko:SacredRhythm` only to `owl:unionOf (iroko:SacredRhythm iroko:SacredInstrument)`. A consecrated drum set or individual sacred instrument may trigger possession independently of the rhythm being played, as the instrument itself carries invocation capacity.
 - **All modules** — Version strings reconciled to `1.3.0`. `dcterms:modified` updated to `2026-03-21`.
+- Zenodo deposit: [10.5281/zenodo.19157679](https://doi.org/10.5281/zenodo.19157679)
 
 ### v1.2.0 (February 2026)
 
 - 93 classes, 379 properties, 69 schemes, 589 concepts. 1,068 total terms.
-- Zenodo deposit: [10.5281/zenodo.18826673](https://doi.org/10.5281/zenodo.18826673)
 
 ---
 
