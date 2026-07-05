@@ -289,7 +289,7 @@ PAGES = [
          og_url=f"{BASE_URL}/docs/REUSE.html"),
     dict(file="whitepaper/index.html", slug="og-onto-whitepaper",
          label="IROKO FRAMEWORK · WHITE PAPER",
-         title="White Paper",
+         title="Semantic Vocabulary Design\nWhite Paper",
          subtitle="The postcustodial argument for the\nIroko Framework's design",
          og_url=f"{BASE_URL}/whitepaper/"),
 ]

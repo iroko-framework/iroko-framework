@@ -20,6 +20,7 @@ Steps:
     4  generate_serializations.py     — JSON-LD, RDF/XML, N-Triples from each TTL
     5  generate_tradition_vocab.py    — vocab/tradition-vocab.json (catalog lookup)
     6  generate_uri_aliases.py        — stable /iroko and /iroko-* URI landing pages
+    7  generate_sitemap.py            — root sitemap.xml for public discovery
     +  update_docs_html()             — patch version/date in docs HTML
 
 All scripts are located in the same directory as build_all.py.
@@ -137,9 +138,9 @@ def build_parser():
     p.add_argument("--docs",   metavar="DIR", help="Path to docs/ directory")
     p.add_argument("--dry-run", action="store_true",
                    help="Print what would change without writing")
-    p.add_argument("--step", type=int, choices=[1, 2, 3, 4, 5, 6],
+    p.add_argument("--step", type=int, choices=[1, 2, 3, 4, 5, 6, 7],
                    action="append", dest="steps", metavar="N",
-                   help="Run only step N (1-6); repeat to run multiple, e.g. --step 2 --step 3")
+                   help="Run only step N (1-7); repeat to run multiple, e.g. --step 2 --step 3")
     return p
 
 
@@ -243,6 +244,18 @@ def main():
         rc = run_script("generate_uri_aliases.py", extra)
         if rc != 0:
             print(f"  ✗ generate_uri_aliases.py failed (exit {rc})")
+            errors += 1
+        print()
+
+    # Sitemap
+    if steps is None or 7 in steps:
+        print("── Step 7: Generating sitemap.xml ──────────────────────────────")
+        extra = ["--root", str(root_dir)]
+        if args.dry_run:
+            extra += ["--dry-run"]
+        rc = run_script("generate_sitemap.py", extra)
+        if rc != 0:
+            print(f"  ✗ generate_sitemap.py failed (exit {rc})")
             errors += 1
         print()
 

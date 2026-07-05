@@ -10,6 +10,7 @@ Default mode validates local generated artifacts:
   - concept chip data consistency
   - generated JavaScript syntax with node --check
   - RDF serializations parse and match Turtle triple counts
+  - sitemap.xml and robots.txt discovery policy
 
 Live mode can be used after GitHub Pages deploys:
   python scripts/check_site.py --no-local --live-base https://ontology.irokosociety.org
@@ -24,15 +25,30 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urlparse
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from rdflib import Graph
 
 
+SITE_BASE = "https://ontology.irokosociety.org"
 MODULE_PAGE_EXCLUDES = {"iroko-termlist.html", "iroko-index.html"}
+SITEMAP_REQUIRED_PATHS = [
+    "/",
+    "/iroko",
+    "/iroko-core",
+    "/vocab/",
+    "/vocab/iroko-core.html",
+    "/vocab/iroko-core.ttl",
+    "/vocab/iroko-core.jsonld",
+    "/vocab/iroko-termlist.html",
+    "/docs/",
+    "/whitepaper/",
+]
 REQUIRED_CORE_MARKERS = [
     'class="module-jump"',
     'href="#classes"',
@@ -73,6 +89,20 @@ LIVE_MARKERS = {
     "/vocab/iroko-core.ttl": [
         "iroko:AccessLevelScheme",
         "iroko:access-public-unrestricted",
+    ],
+    "/robots.txt": [
+        "Sitemap: https://ontology.irokosociety.org/sitemap.xml",
+        "User-agent: *",
+        "User-agent: OAI-SearchBot",
+        "Allow: /",
+        "User-agent: GPTBot",
+        "Disallow: /",
+    ],
+    "/sitemap.xml": [
+        "https://ontology.irokosociety.org/",
+        "https://ontology.irokosociety.org/iroko-core",
+        "https://ontology.irokosociety.org/vocab/iroko-core.html",
+        "https://ontology.irokosociety.org/vocab/iroko-core.ttl",
     ],
 }
 
@@ -150,6 +180,8 @@ class SiteCheck:
     def check_required_files_and_markers(self) -> None:
         required = [
             self.root / "index.html",
+            self.root / "robots.txt",
+            self.root / "sitemap.xml",
             self.root / "iroko.html",
             self.root / "iroko-core.html",
             self.vocab / "iroko-core.html",
@@ -331,6 +363,85 @@ class SiteCheck:
             f"RDF checked: {len(ttl_files)} Turtle files, {serializations_checked} serializations"
         )
 
+    def check_sitemap_and_robots(self) -> None:
+        robots_path = self.root / "robots.txt"
+        sitemap_path = self.root / "sitemap.xml"
+        if not robots_path.exists() or not sitemap_path.exists():
+            return
+
+        robots = self.read_text(robots_path)
+        robot_markers = [
+            f"Sitemap: {SITE_BASE}/sitemap.xml",
+            "User-agent: *",
+            "Allow: /",
+            "User-agent: OAI-SearchBot",
+            "User-agent: ChatGPT-User",
+            "User-agent: GPTBot",
+            "User-agent: Google-Extended",
+            "Disallow: /",
+        ]
+        for marker in robot_markers:
+            if marker not in robots:
+                self.error(f"robots.txt missing marker: {marker}")
+        if re.search(r"User-agent:\s*OAI-SearchBot\s+Disallow:\s*/", robots, re.I):
+            self.error("robots.txt blocks OAI-SearchBot; this reduces research discovery")
+        if re.search(r"User-agent:\s*GPTBot\s+Allow:\s*/", robots, re.I):
+            self.error("robots.txt allows GPTBot; expected AI-training opt-out")
+        try:
+            robots.encode("ascii")
+        except UnicodeEncodeError:
+            self.error("robots.txt should stay ASCII to avoid crawler parsing issues")
+
+        sitemap_text = self.read_text(sitemap_path)
+        try:
+            sitemap = ET.fromstring(sitemap_text)
+        except ET.ParseError as exc:
+            self.error(f"sitemap.xml is not valid XML: {exc}")
+            return
+
+        ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        locs = [node.text.strip() for node in sitemap.findall(".//sm:loc", ns) if node.text]
+        if not locs:
+            self.error("sitemap.xml has no <loc> entries")
+            return
+        if len(locs) != len(set(locs)):
+            self.error("sitemap.xml contains duplicate <loc> entries")
+
+        urls = set(locs)
+        for loc in locs:
+            parsed = urlparse(loc)
+            if f"{parsed.scheme}://{parsed.netloc}" != SITE_BASE:
+                self.error(f"sitemap.xml loc is outside canonical site: {loc}")
+            if parsed.fragment:
+                self.error(f"sitemap.xml loc contains a fragment: {loc}")
+            if " " in loc:
+                self.error(f"sitemap.xml loc contains an unescaped space: {loc}")
+
+        expected = {SITE_BASE + path for path in SITEMAP_REQUIRED_PATHS}
+        expected.update(SITE_BASE + f"/vocab/{path.name}" for path in self.module_pages())
+        for ext in (".ttl", ".jsonld", ".rdf", ".nt"):
+            expected.update(
+                SITE_BASE + f"/vocab/{path.name}"
+                for path in sorted(self.vocab.glob(f"iroko-*{ext}"))
+            )
+        expected.update(
+            SITE_BASE + f"/{path.stem}"
+            for path in sorted(self.root.glob("iroko*.html"))
+            if path.name != "index.html"
+        )
+        if (self.root / "iroko-framework" / "index.html").exists():
+            expected.add(SITE_BASE + "/iroko-framework/")
+
+        missing = sorted(expected - urls)
+        for loc in missing[:20]:
+            self.error(f"sitemap.xml missing expected URL: {loc}")
+        if len(missing) > 20:
+            self.error(f"sitemap.xml missing {len(missing) - 20} additional expected URLs")
+
+        if SITE_BASE + "/vocab/iroko-index.html" in urls:
+            self.error("sitemap.xml should not index vocab/iroko-index.html redirect")
+        self.note(f"sitemap checked: {len(locs)} URLs")
+
     def run_local(self) -> bool:
         self.check_required_files_and_markers()
         self.check_module_navigation()
@@ -338,6 +449,7 @@ class SiteCheck:
         self.check_term_links()
         self.check_js_syntax()
         self.check_rdf()
+        self.check_sitemap_and_robots()
         return not self.errors
 
 

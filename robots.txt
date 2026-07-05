@@ -1,25 +1,30 @@
-# robots.txt — ontology.irokosociety.org
-# Allow standard search indexing; block AI training, scraping, and summarization agents.
+# robots.txt - ontology.irokosociety.org
+# Public scholarly ontology site: allow search/discovery, opt out of AI training and bulk scraping.
 
-User-agent: Googlebot
+Sitemap: https://ontology.irokosociety.org/sitemap.xml
+
+# Standard public discovery.
+User-agent: *
 Allow: /
 
-User-agent: Bingbot
+# OpenAI search discovery is useful for researchers; GPTBot is the training crawler.
+User-agent: OAI-SearchBot
 Allow: /
 
-# ── AI Training & Data Collection ─────────────────────────────────────────────
+User-agent: ChatGPT-User
+Allow: /
 
-# OpenAI
 User-agent: GPTBot
 Disallow: /
 
-User-agent: ChatGPT-User
+# Google search remains open through Googlebot; Google-Extended is the AI training control.
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
 Disallow: /
 
-User-agent: OAI-SearchBot
-Disallow: /
-
-# Anthropic
+# Other AI training and bulk collection crawlers.
 User-agent: ClaudeBot
 Disallow: /
 
@@ -29,56 +34,39 @@ Disallow: /
 User-agent: anthropic-ai
 Disallow: /
 
-# Google AI training (separate from Googlebot search indexing)
-User-agent: Google-Extended
-Disallow: /
-
-# Apple AI training
 User-agent: Applebot-Extended
 Disallow: /
 
-# Meta / Facebook
 User-agent: meta-externalagent
 Disallow: /
 
 User-agent: FacebookBot
 Disallow: /
 
-# Amazon
 User-agent: Amazonbot
 Disallow: /
 
-# Cohere
 User-agent: cohere-ai
 Disallow: /
 
-# Common Crawl (feeds many AI datasets)
 User-agent: CCBot
 Disallow: /
 
-# Bytedance / TikTok
 User-agent: Bytespider
 Disallow: /
 
-# ── AI Search & Summary Providers ─────────────────────────────────────────────
-
-# Perplexity
+# AI search, summary, SEO, and large-scale extraction bots that do not serve core discovery.
 User-agent: PerplexityBot
 Disallow: /
 
-# You.com
 User-agent: YouBot
 Disallow: /
 
-# Diffbot
 User-agent: Diffbot
 Disallow: /
 
-# Timpi
 User-agent: Timpibot
 Disallow: /
-
-# ── General Scrapers & Harvesters ─────────────────────────────────────────────
 
 User-agent: AhrefsBot
 Disallow: /
@@ -103,5 +91,3 @@ Disallow: /
 
 User-agent: BLEXBot
 Disallow: /
-
-Sitemap: https://ontology.irokosociety.org/sitemap.xml
