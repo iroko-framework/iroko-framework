@@ -239,7 +239,7 @@ def make_og_image(page: dict) -> Image.Image:
     f_dom = get_font("sourcesans", SZ_DOMAIN)
     domain = "ontology.irokosociety.org"
     dh = _text_h(draw, domain, f_dom)
-    draw.text((text_x, H - 42 - dh), domain, font=f_dom, fill=COL_DOMAIN)
+    draw.text((text_x, H - 42 - dh), domain, font=f_dom, fill=page.get("footer_color", COL_DOMAIN))
     return img
 
 
@@ -287,11 +287,18 @@ PAGES = [
          title="Vocabulary Reuse Guide",
          subtitle="Terms of reuse for the Iroko Framework's\nCC0 vocabulary modules",
          og_url=f"{BASE_URL}/docs/REUSE.html"),
-    dict(file="whitepaper/index.html", slug="og-onto-whitepaper",
-         label="IROKO FRAMEWORK · WHITE PAPER",
-         title="Semantic Vocabulary Design\nWhite Paper",
-         subtitle="The postcustodial argument for the\nIroko Framework's design",
+    dict(file="whitepaper/index.html", slug="og-onto-whitepaper-2e",
+         label="WHITE PAPER · SECOND EDITION",
+         title="The Iroko Framework",
+         subtitle="Semantic Vocabularies for Governing Access\nto Afro-Atlantic Sacred Knowledge Systems",
+         footer_color=_blend(PALE_GOLD, 0.75, INDIGO),
          og_url=f"{BASE_URL}/whitepaper/"),
+    dict(file="whitepaper/second-edition/index.html", slug="og-onto-whitepaper-2e",
+         label="WHITE PAPER · SECOND EDITION",
+         title="The Iroko Framework",
+         subtitle="Semantic Vocabularies for Governing Access\nto Afro-Atlantic Sacred Knowledge Systems",
+         footer_color=_blend(PALE_GOLD, 0.75, INDIGO),
+         og_url=f"{BASE_URL}/whitepaper/second-edition/"),
 ]
 
 _LAYER_LABELS = {
