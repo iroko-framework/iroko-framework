@@ -19,26 +19,35 @@
     dcterms:description "Formal OWL and SKOS alignment declarations between Iroko Ewe Module terms and Darwin Core (dwc:) terms published by TDWG. This file is reference-only infrastructure: it contains no user-facing vocabulary terms. Import or cite alongside iroko-ewe when interoperating with herbarium, occurrence, and biodiversity informatics systems."@en ;
     dcterms:creator "Iroko Historical Society" ;
     dcterms:created "2026-03-08"^^xsd:date ;
-    dcterms:modified "2026-03-08"^^xsd:date ;
+    dcterms:modified "2026-11-11"^^xsd:date ;
     dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
     dcterms:isPartOf <https://ontology.irokosociety.org/iroko-framework/> ;
     rdfs:seeAlso <https://dwc.tdwg.org/terms/> ;
     owl:imports <https://ontology.irokosociety.org/iroko-ewe> ;
-    owl:versionIRI <https://ontology.irokosociety.org/iroko-align-dwc/1.0.0> ;
-    owl:versionInfo "1.0.0" .
+    owl:versionIRI <https://ontology.irokosociety.org/iroko-align-dwc/1.0.1> ;
+    owl:versionInfo "1.0.1" .
 
 # ── Class alignments ─────────────────────────────────────────────────────────
 
-# iroko:Plant / dwc:Occurrence
+# iroko:Plant / dwc:Taxon
 # iroko:Plant models a sacred plant entity with ritual, medicinal, and
-# linguistic dimensions. dwc:Occurrence models a recorded observation of an
-# organism at a place and time. The equivalence holds at the level of botanical
-# record-keeping: each iroko:Plant instance corresponds to an occurrence record
-# in Darwin Core terms, augmented with sacred knowledge governance.
-# Note: dwc:Taxon is NOT used here — iroko:Plant is not a purely taxonomic
-# concept; it is a governed cultural entity that corresponds to an Occurrence.
+# linguistic dimensions, used for abstract botanical entities and cross-module
+# joins. Its nearest Darwin Core counterpart is dwc:Taxon. The match is close
+# rather than exact: iroko:Plant also carries governed cultural dimensions that
+# dwc:Taxon does not model. skos:closeMatch signals interoperability without
+# asserting OWL equivalence.
 
-iroko:Plant owl:equivalentClass dwc:Occurrence .
+iroko:Plant skos:closeMatch dwc:Taxon .
+
+# iroko:HerbariumSheet / dwc:Occurrence
+# A herbarium sheet documents an organism collected at a place and time, which
+# Darwin Core records as an Occurrence with basisOfRecord PreservedSpecimen.
+# Close rather than exact: iroko:HerbariumSheet is a governed archival object.
+# Revised in 1.0.1: the earlier owl:equivalentClass between iroko:Plant and
+# dwc:Occurrence is withdrawn, since an Occurrence is an observation or
+# specimen event rather than a plant or taxon.
+
+iroko:HerbariumSheet skos:closeMatch dwc:Occurrence .
 
 # ── Property alignments ──────────────────────────────────────────────────────
 
@@ -66,6 +75,7 @@ iroko:photographicVoucher skos:closeMatch dwc:associatedMedia .
 # Noted here for implementers; no formal equivalence declared.
 
 # rdfs:comment on dwc terms (informational, non-normative)
-dwc:Occurrence rdfs:comment "In Iroko Framework context: equivalent to iroko:Plant. See iroko-align-dwc."@en .
+dwc:Taxon rdfs:comment "In Iroko Framework context: closeMatch to iroko:Plant. See iroko-align-dwc."@en .
+dwc:Occurrence rdfs:comment "In Iroko Framework context: closeMatch to iroko:HerbariumSheet. See iroko-align-dwc."@en .
 dwc:catalogNumber rdfs:comment "In Iroko Framework context: exactMatch to iroko:specimenNumber on iroko:HerbariumSheet instances."@en .
 dwc:associatedMedia rdfs:comment "In Iroko Framework context: closeMatch to iroko:photographicVoucher. Range difference: iroko:DocumentaryEvidence vs. free-text URI list."@en .

@@ -61,10 +61,13 @@ def count_module(ttl_path: Path) -> dict | None:
         1 for uri in g.subjects(RDF.type, SKOS.ConceptScheme)
         if str(uri).startswith(IROKO_NS)
     )
-    concepts = sum(
-        1 for uri in g.subjects(SKOS.inScheme, None)
-        if str(uri).startswith(IROKO_NS)
-    )
+    # Every declared concept counts: concepts in a scheme, concepts typed
+    # skos:Concept, and instances of skos:Concept subclasses (a set, so a
+    # concept in two schemes counts once). Matches the white paper's 655.
+    concept_uris = set(g.subjects(SKOS.inScheme, None)) | set(g.subjects(RDF.type, SKOS.Concept))
+    for cls in g.subjects(RDFS.subClassOf, SKOS.Concept):
+        concept_uris |= set(g.subjects(RDF.type, cls))
+    concepts = sum(1 for uri in concept_uris if str(uri).startswith(IROKO_NS))
 
     # Class names (local part, alphabetically sorted)
     class_names = sorted(str(u).split("#")[-1] for u in class_uris)
