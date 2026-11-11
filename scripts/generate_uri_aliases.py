@@ -46,6 +46,8 @@ def module_alias_page(stem: str, title: str) -> str:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{esc(title)} - Iroko Framework</title>
+  <link rel="icon" href="/assets/ihs-favicon.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="/assets/ihs-touch-icon.png">
   <link rel="canonical" href="{esc(target_abs)}">
   <link rel="alternate" type="text/turtle" href="{esc(ttl)}">
   <link rel="alternate" type="application/ld+json" href="vocab/{esc(stem)}.jsonld">
@@ -89,6 +91,8 @@ def namespace_page() -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Canonical RDF namespace document for Iroko Framework terms.">
   <title>Iroko RDF Namespace - Iroko Framework</title>
+  <link rel="icon" href="/assets/ihs-favicon.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="/assets/ihs-touch-icon.png">
   <link rel="canonical" href="{SITE}/iroko">
   <link rel="stylesheet" href="assets/iroko-style.css">
   <link rel="alternate" type="text/turtle" href="vocab/iroko-core.ttl">
@@ -136,6 +140,8 @@ def framework_alias_page() -> str:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iroko Framework</title>
+  <link rel="icon" href="/assets/ihs-favicon.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="/assets/ihs-touch-icon.png">
   <link rel="canonical" href="{SITE}/">
   <meta http-equiv="refresh" content="0; url=/">
   <script>location.replace('/');</script>

@@ -157,6 +157,8 @@ PAGE_HTML = """\
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Full Vocabulary Index — Iroko Framework</title>
+  <link rel="icon" href="/assets/ihs-favicon.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="/assets/ihs-touch-icon.png">
   <link rel="stylesheet" href="../assets/iroko-style.css">
   <style>
     /* ── Index page overrides ───────────────────────────────────────── */
@@ -485,6 +487,8 @@ def legacy_index_redirect(target_name: str) -> str:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Full Vocabulary Index - Iroko Framework</title>
+  <link rel="icon" href="/assets/ihs-favicon.png" type="image/png" sizes="48x48">
+  <link rel="apple-touch-icon" href="/assets/ihs-touch-icon.png">
   <link rel="canonical" href="{target}">
   <meta http-equiv="refresh" content="0; url={target}">
   <script>location.replace('{target}' + location.hash);</script>
